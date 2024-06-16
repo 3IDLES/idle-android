@@ -4,8 +4,14 @@ import com.idle.app.androidExtension
 import com.idle.app.libs
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.getByType
+import org.jetbrains.kotlin.compose.compiler.gradle.ComposeCompilerGradlePluginExtension
 
 internal fun Project.configureAndroidCompose() {
+    with(plugins) {
+        apply("org.jetbrains.kotlin.plugin.compose")
+    }
+
     val libs = extensions.libs
 
     androidExtension.apply {
