@@ -9,6 +9,10 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 internal fun Project.configureKotlinAndroid() {
+    with(plugins) {
+        apply("com.google.gms.google-services")
+    }
+
     pluginManager.apply("org.jetbrains.kotlin.android")
 
     androidExtension.apply {
@@ -37,6 +41,14 @@ internal fun Project.configureKotlinAndroid() {
             unitTests {
                 isIncludeAndroidResources = true
             }
+        }
+
+        val libs = extensions.libs
+
+        dependencies {
+            val bom = libs.findLibrary("firebase-bom").get()
+            add("implementation", platform(bom))
+            add("implementation", libs.findLibrary("firebase-analytics").get())
         }
     }
 
