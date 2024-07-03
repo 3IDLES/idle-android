@@ -1,6 +1,7 @@
 plugins {
     id("care.android.application")
     id("care.android.binding")
+    id("care.android.compose")
 }
 
 android {
