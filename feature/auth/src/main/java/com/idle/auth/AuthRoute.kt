@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class AuthFragment : Fragment() {
+internal class AuthFragment : Fragment() {
 
     private lateinit var composeView: ComposeView
 
@@ -32,13 +32,13 @@ class AuthFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         composeView.setContent {
-            AuthRoute()
+            AuthScreen()
         }
     }
 }
 
 @Composable
-fun AuthRoute() {
+internal fun AuthScreen() {
     Box(modifier = Modifier.fillMaxSize()) {
         Text(
             text = "init project",

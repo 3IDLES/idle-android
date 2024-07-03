@@ -8,7 +8,7 @@ androidxCore = "1.13.1"
 # https://developer.android.com/jetpack/androidx/releases/appcompat
 androidxAppCompat = "1.7.0"
 # https://developer.android.com/jetpack/androidx/releases/lifecycle
-androidxLifecycle = "2.8.1"
+androidxLifecycle = "2.8.3"
 # https://developer.android.com/jetpack/androidx/releases/activity
 androidxActivity = "1.9.0"
 # https://developer.android.com/jetpack/androidx/releases/datastore
@@ -18,9 +18,9 @@ androidXNavigation = "2.7.7"
 
 ## Compose
 # https://developer.android.com/develop/ui/compose/bom/bom-mapping
-androidxComposeBom = "2024.05.00"
+androidxComposeBom = "2024.06.00"
 # https://developer.android.com/jetpack/androidx/releases/navigation
-androidxComposeNavigation = "2.8.0-beta02"
+androidxComposeNavigation = "2.8.0-beta04"
 # https://developer.android.com/jetpack/androidx/releases/compose-material3
 androidxComposeMaterial3 = "1.2.1"
 
@@ -68,7 +68,8 @@ mockk = "1.13.11"
 ktlint = "12.1.1"
 
 googleServices = "4.4.2"
-firebaseBom = "33.1.0"
+firebaseBom = "33.1.1"
+material = "1.12.0"
 
 [libraries]
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
@@ -121,6 +122,7 @@ firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics
 
 # plugin
 androidx-datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "androidxDatastore" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [bundles]
 

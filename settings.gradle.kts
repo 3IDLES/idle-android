@@ -25,5 +25,6 @@ rootProject.name = "Care"
 include(":app")
 include(":core:domain")
 include(":core:data")
-include(":core:designsystem")
 include(":feature:auth")
+include(":core:designsystem:binding")
+include(":core:designsystem:compose")
