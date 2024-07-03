@@ -1,5 +1,5 @@
 plugins {
-    id("care.android.feature")
+    id("care.android.feature-compose")
 }
 
 android {

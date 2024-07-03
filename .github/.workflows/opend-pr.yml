@@ -1,4 +1,4 @@
-name: open-pr
+name: ktlint-check
 	
   on:
     push:
