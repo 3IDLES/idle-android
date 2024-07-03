@@ -1,24 +1,25 @@
 name: ktlint-check
-	
-  on:
-    push:
-      branches:
-      - develop
-      - release
-      - main
-    pull_request:
-      branches:
-      - develop
-      - release
-      - main
 
-  jobs:
-    build:
-      runs-on: ubuntu-latest
-	
-      steps:
+on:
+push:
+  branches:
+    - develop
+    - release
+    - main
+
+pull_request:
+  branches:
+    - develop
+    - release
+    - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
       - uses: actions/checkout@v2
-	
+
       - name: set up JDK 17
         uses: actions/setup-java@v3
         with:

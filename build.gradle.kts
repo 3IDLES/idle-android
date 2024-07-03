@@ -9,4 +9,5 @@ plugins {
     alias(libs.plugins.android.test) apply false
     alias(libs.plugins.google.services) apply false
     alias(libs.plugins.ktlint)
+    id("androidx.navigation.safeargs.kotlin") version "2.7.7" apply false
 }

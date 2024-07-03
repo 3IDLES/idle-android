@@ -1,6 +1,6 @@
 plugins {
     id("care.android.application")
-    id("care.android.compose")
+    id("care.android.binding")
 }
 
 android {
@@ -30,6 +30,6 @@ dependencies {
     implementation(projects.core.domain)
 
     implementation(projects.feature.auth)
-
-    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.navigation.fragment)
+    implementation(libs.androidx.navigation.ui)
 }
