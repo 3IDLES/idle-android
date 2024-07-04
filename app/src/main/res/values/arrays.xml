@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Hide bottom navigation view on these fragments -->
+    <array name="hideBottomNavDestinationIds">
+        <item>@id/authFragment</item>
+    </array>
+</resources>
