@@ -20,15 +20,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import com.idle.common_ui.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 internal class AuthFragment : Fragment() {
 
     private lateinit var composeView: ComposeView
-    val viewModel: AuthViewModel by viewModels()
+    private val viewModel: AuthViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,14 +45,30 @@ internal class AuthFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        composeView.setContent {
-            AuthScreen()
+
+        repeatOnStarted {
+            viewModel.eventFlow.collect { handleEvent(it) }
         }
+
+        composeView.setContent {
+            AuthScreen(
+                navigateToWorkerAuth = { viewModel.event(AuthEvent.NavigateTo("".toUri())) },
+                navigateToCenterAuth = { viewModel.event(AuthEvent.NavigateTo("".toUri())) },
+            )
+        }
+    }
+
+    private fun handleEvent(event: AuthEvent) = when (event) {
+        is AuthEvent.NavigateTo -> findNavController().navigate(event.destination)
     }
 }
 
+
 @Composable
-internal fun AuthScreen() {
+internal fun AuthScreen(
+    navigateToWorkerAuth: () -> Unit = {},
+    navigateToCenterAuth: () -> Unit = {},
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterVertically),
@@ -62,11 +81,11 @@ internal fun AuthScreen() {
                 .background(Color.Black)
         )
 
-        Button(onClick = {}) {
+        Button(onClick = navigateToWorkerAuth) {
             Text(text = "요양 보호사로 시작하기")
         }
 
-        Button(onClick = {}) {
+        Button(onClick = navigateToCenterAuth) {
             Text(text = "센터 관리자로 시작하기")
         }
     }

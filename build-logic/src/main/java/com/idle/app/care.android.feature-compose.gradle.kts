@@ -23,12 +23,13 @@ dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:designsystem:compose"))
     implementation(project(":core:domain"))
+    implementation(project(":core:common-ui"))
 
     val libs = project.extensions.libs
-    implementation(libs.findLibrary("hilt.navigation.compose").get())
     implementation(libs.findLibrary("androidx.compose.navigation").get())
     implementation(libs.findLibrary("androidx.appcompat").get())
     implementation(libs.findLibrary("androidx.fragment").get())
+    implementation(libs.findLibrary("androidx-navigation-fragment").get())
     implementation(libs.findLibrary("androidx.lifecycle.viewModelCompose").get())
     implementation(libs.findLibrary("androidx.lifecycle.runtimeCompose").get())
 }
