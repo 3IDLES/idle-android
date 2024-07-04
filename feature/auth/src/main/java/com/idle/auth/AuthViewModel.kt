@@ -1,8 +1,8 @@
 package com.idle.auth
 
-import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.idle.common_ui.DeepLinkDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -20,5 +20,5 @@ class AuthViewModel @Inject constructor() : ViewModel() {
 }
 
 sealed class AuthEvent {
-    data class NavigateTo(val destination: Uri) : AuthEvent()
+    data class NavigateTo(val destination: DeepLinkDestination) : AuthEvent()
 }
