@@ -27,6 +27,12 @@ class MainActivity : AppCompatActivity() {
         setDestinationListener()
     }
 
+    private fun setDestinationListener() {
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            binding.mainBNV.isVisible = (destination.id !in hideBottomNavDestinationIds)
+        }
+    }
+
     private val hideBottomNavDestinationIds: Set<Int> by lazy {
         resources.obtainTypedArray(R.array.hideBottomNavDestinationIds).let { typedArray ->
             val destinationIds = mutableSetOf<Int>()
@@ -37,12 +43,6 @@ class MainActivity : AppCompatActivity() {
 
             typedArray.recycle()
             destinationIds
-        }
-    }
-
-    private fun setDestinationListener() {
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            binding.mainBNV.isVisible = (destination.id !in hideBottomNavDestinationIds)
         }
     }
 }

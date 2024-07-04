@@ -28,6 +28,7 @@ dependencies {
     implementation(libs.findLibrary("hilt.navigation.compose").get())
     implementation(libs.findLibrary("androidx.compose.navigation").get())
     implementation(libs.findLibrary("androidx.appcompat").get())
+    implementation(libs.findLibrary("androidx.fragment").get())
     implementation(libs.findLibrary("androidx.lifecycle.viewModelCompose").get())
     implementation(libs.findLibrary("androidx.lifecycle.runtimeCompose").get())
 }
