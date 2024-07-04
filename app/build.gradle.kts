@@ -31,5 +31,4 @@ dependencies {
 
     implementation(projects.feature.auth)
     implementation(libs.androidx.navigation.fragment)
-    implementation(libs.androidx.navigation.ui)
 }
