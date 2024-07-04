@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             android:id="@+id/nav_auth">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_auth"
+    app:startDestination="@id/authFragment">
 
+    <fragment
+        android:id="@+id/authFragment"
+        android:name="com.idle.auth.AuthFragment"
+        android:label="AuthFragment" >
+        <deepLink app:uri="@string/auth_deeplink_url" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/centerAuthFragment"
+        android:name="com.idle.auth.center.CenterAuthFragment"
+        android:label="CenterAuthFragment" >
+        <deepLink app:uri="@string/center_auth_deeplink_url" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/workerAuthFragment"
+        android:name="com.idle.auth.center.WorkerAuthFragment"
+        android:label="WorkerAuthFragment" >
+        <deepLink app:uri="@string/worker_auth_deeplink_url" />
+    </fragment>
 </navigation>
