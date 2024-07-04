@@ -26,4 +26,5 @@ dependencies {
 
     val libs = project.extensions.libs
     implementation(libs.findLibrary("androidx.appcompat").get())
+    implementation(libs.findLibrary("androidx.fragment").get())
 }
