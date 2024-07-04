@@ -73,6 +73,7 @@ internal fun AuthScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterVertically),
         modifier = Modifier.fillMaxSize()
+            .background(Color.White)
             .padding(horizontal = 20.dp),
     ) {
         Spacer(

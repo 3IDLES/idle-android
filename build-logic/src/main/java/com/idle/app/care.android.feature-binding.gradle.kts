@@ -28,7 +28,9 @@ dependencies {
     val libs = project.extensions.libs
     implementation(libs.findLibrary("androidx.appcompat").get())
     implementation(libs.findLibrary("androidx.fragment").get())
+    implementation(libs.findLibrary("androidx.constraintlayout").get())
     implementation(libs.findLibrary("androidx-navigation-fragment").get())
     implementation(libs.findLibrary("androidx.lifecycle.viewModel").get())
     implementation(libs.findLibrary("androidx.lifecycle.runtime").get())
+    implementation(libs.findLibrary("material").get())
 }
