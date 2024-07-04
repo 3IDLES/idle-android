@@ -20,10 +20,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.idle.common_ui.DeepLinkDestination.CenterAuth
+import com.idle.common_ui.DeepLinkDestination.WorkerAuth
+import com.idle.common_ui.deepLinkNavigateTo
 import com.idle.common_ui.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -52,14 +54,19 @@ internal class AuthFragment : Fragment() {
 
         composeView.setContent {
             AuthScreen(
-                navigateToWorkerAuth = { viewModel.event(AuthEvent.NavigateTo("".toUri())) },
-                navigateToCenterAuth = { viewModel.event(AuthEvent.NavigateTo("".toUri())) },
+                navigateToWorkerAuth = {
+                    viewModel.event(AuthEvent.NavigateTo(WorkerAuth))
+                },
+                navigateToCenterAuth = {
+                    viewModel.event(AuthEvent.NavigateTo(CenterAuth))
+                },
             )
         }
     }
 
     private fun handleEvent(event: AuthEvent) = when (event) {
-        is AuthEvent.NavigateTo -> findNavController().navigate(event.destination)
+        is AuthEvent.NavigateTo -> findNavController()
+            .deepLinkNavigateTo(requireContext(), event.destination)
     }
 }
 
