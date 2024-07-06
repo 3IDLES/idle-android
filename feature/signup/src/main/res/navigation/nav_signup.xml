@@ -7,13 +7,13 @@
     <fragment
         android:id="@+id/centerSignUpFragment"
         android:name="com.idle.signin.center.CenterSignUpFragment"
-        android:label="CenterSignUpFragment" >
-        <deepLink app:uri="@string/center_signup_deeplink_url"/>
+        android:label="CenterSignUpFragment">
+        <deepLink app:uri="@string/center_signup_deeplink_url" />
     </fragment>
     <fragment
         android:id="@+id/workerSignUpFragment"
         android:name="com.idle.signin.worker.WorkerSignUpFragment"
-        android:label="WorkerSignUpFragment" >
-        <deepLink app:uri="@string/worker_signup_deeplink_url"/>
+        android:label="WorkerSignUpFragment">
+        <deepLink app:uri="@string/worker_signup_deeplink_url" />
     </fragment>
 </navigation>

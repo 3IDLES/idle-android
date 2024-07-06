@@ -23,9 +23,9 @@ import androidx.navigation.fragment.findNavController
 import com.idle.common_ui.deepLinkNavigateTo
 import com.idle.common_ui.repeatOnStarted
 import com.idle.signup.center.process.BusinessRegistrationScreen
+import com.idle.signup.center.process.CenterNameScreen
+import com.idle.signup.center.process.CenterPhoneNumberScreen
 import com.idle.signup.center.process.IdPasswordScreen
-import com.idle.signup.center.process.NameScreen
-import com.idle.signup.center.process.PhoneNumberScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -120,14 +120,14 @@ internal fun CenterSignUpScreen(
             .padding(horizontal = 20.dp),
     ) {
         when (signUpProcess) {
-            CenterSignUpProcess.NAME -> NameScreen(
+            CenterSignUpProcess.NAME -> CenterNameScreen(
                 centerName = centerName,
                 onCenterNameChanged = onCenterNameChanged,
                 setSignUpProcess = setSignUpProcess
             )
 
             CenterSignUpProcess.PHONE_NUMBER ->
-                PhoneNumberScreen(
+                CenterPhoneNumberScreen(
                     centerPhoneNumber = centerPhoneNumber,
                     centerCertificationNumber = centerCertificateNumber,
                     onCenterPhoneNumberChanged = onCenterPhoneNumberChanged,
@@ -149,7 +149,8 @@ internal fun CenterSignUpScreen(
                 onCenterIdChanged = onCenterIdChanged,
                 onCenterPasswordChanged = onCenterPasswordChanged,
                 onCenterPasswordForConfirmChanged = onCenterPasswordForConfirmChanged,
-                setSignUpProcess = setSignUpProcess)
+                setSignUpProcess = setSignUpProcess
+            )
         }
     }
 }

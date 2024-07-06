@@ -1,4 +1,4 @@
-package com.idle.signup.center.process
+package com.idle.signup.worker.process
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
@@ -11,14 +11,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.idle.signin.center.CenterSignUpProcess
+import com.idle.signin.worker.WorkerSignUpProcess
 
 @Composable
-internal fun NameScreen(
-    centerName: String,
-    onCenterNameChanged: (String) -> Unit,
-    setSignUpProcess: (CenterSignUpProcess) -> Unit,
+internal fun WorkerNameScreen(
+    workerName: String,
+    onWorkerNameChanged: (String) -> Unit,
+    setSignUpProcess: (WorkerSignUpProcess) -> Unit,
 ) {
+    BackHandler { setSignUpProcess(WorkerSignUpProcess.PHONE_NUMBER) }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterVertically),
@@ -27,11 +29,11 @@ internal fun NameScreen(
         Text(text = "성함을 입력해주세요")
 
         TextField(
-            value = centerName,
-            onValueChange = onCenterNameChanged
+            value = workerName,
+            onValueChange = onWorkerNameChanged
         )
 
-        Button(onClick = { setSignUpProcess(CenterSignUpProcess.PHONE_NUMBER) }) {
+        Button(onClick = { setSignUpProcess(WorkerSignUpProcess.GENDER) }) {
             Text(text = "다음")
         }
     }
