@@ -4,13 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -56,9 +54,12 @@ internal class CenterSignUpFragment : Fragment() {
 
         composeView.setContent {
             val signUpProcess by viewModel.signUpProcess.collectAsStateWithLifecycle()
+            val centerName by viewModel.centerName.collectAsStateWithLifecycle()
 
             CenterSignUpScreen(
                 signUpProcess = signUpProcess,
+                centerName = centerName,
+                onCenterNameChanged = viewModel::setCenterName,
                 setSignUpProcess = viewModel::setCenterSignUpProcess,
             )
         }
@@ -74,6 +75,8 @@ internal class CenterSignUpFragment : Fragment() {
 @Composable
 internal fun CenterSignUpScreen(
     signUpProcess: CenterSignUpProcess,
+    centerName: String,
+    onCenterNameChanged: (String) -> Unit,
     setSignUpProcess: (CenterSignUpProcess) -> Unit,
 ) {
     Column(
@@ -84,7 +87,11 @@ internal fun CenterSignUpScreen(
             .padding(horizontal = 20.dp),
     ) {
         when (signUpProcess) {
-            CenterSignUpProcess.NAME -> NameScreen(setSignUpProcess = setSignUpProcess)
+            CenterSignUpProcess.NAME -> NameScreen(
+                centerName = centerName,
+                onCenterNameChanged = onCenterNameChanged,
+                setSignUpProcess = setSignUpProcess
+            )
 
             CenterSignUpProcess.PHONE_NUMBER ->
                 PhoneNumberScreen(setSignUpProcess = setSignUpProcess)
@@ -92,7 +99,7 @@ internal fun CenterSignUpScreen(
             CenterSignUpProcess.BUSINESS_REGISTRAION_NUMBER ->
                 BusinessRegistrationScreen(setSignUpProcess = setSignUpProcess)
 
-            CenterSignUpProcess.ID_PASSWORD -> IdPasswordScreen()
+            CenterSignUpProcess.ID_PASSWORD -> IdPasswordScreen(setSignUpProcess = setSignUpProcess)
         }
     }
 }
