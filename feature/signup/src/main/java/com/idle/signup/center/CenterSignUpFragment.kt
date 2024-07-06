@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -54,10 +55,11 @@ internal class CenterSignUpFragment : Fragment() {
         }
 
         composeView.setContent {
-            val signUpProcess = viewModel.signUpProcess.collectAsStateWithLifecycle()
+            val signUpProcess by viewModel.signUpProcess.collectAsStateWithLifecycle()
 
             CenterSignUpScreen(
-                signUpProcess = signUpProcess
+                signUpProcess = signUpProcess,
+                setSignUpProcess = viewModel::setCenterSignUpProcess,
             )
         }
     }
@@ -71,7 +73,8 @@ internal class CenterSignUpFragment : Fragment() {
 
 @Composable
 internal fun CenterSignUpScreen(
-    signUpProcess: CenterSignUpProcess
+    signUpProcess: CenterSignUpProcess,
+    setSignUpProcess: (CenterSignUpProcess) -> Unit,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -81,9 +84,14 @@ internal fun CenterSignUpScreen(
             .padding(horizontal = 20.dp),
     ) {
         when (signUpProcess) {
-            CenterSignUpProcess.NAME -> NameScreen()
-            CenterSignUpProcess.PHONE_NUMBER -> PhoneNumberScreen()
-            CenterSignUpProcess.BUSINESS_REGISTRAION_NUMBER -> BusinessRegistrationScreen()
+            CenterSignUpProcess.NAME -> NameScreen(setSignUpProcess = setSignUpProcess)
+
+            CenterSignUpProcess.PHONE_NUMBER ->
+                PhoneNumberScreen(setSignUpProcess = setSignUpProcess)
+
+            CenterSignUpProcess.BUSINESS_REGISTRAION_NUMBER ->
+                BusinessRegistrationScreen(setSignUpProcess = setSignUpProcess)
+
             CenterSignUpProcess.ID_PASSWORD -> IdPasswordScreen()
         }
     }
