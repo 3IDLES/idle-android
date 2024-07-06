@@ -73,6 +73,7 @@ internal class CenterSignUpFragment : Fragment() {
                     centerId = centerId,
                     centerPassword = centerPassword,
                     centerPasswordForConfirm = centerPasswordForConfirm,
+                    setSignUpProcess = ::setCenterSignUpProcess,
                     onCenterNameChanged = ::setCenterName,
                     onCenterPhoneNumberChanged = ::setCenterPhoneNumber,
                     onCenterCertificateNumberChanged = ::setCenterCertificateNumber,
@@ -80,7 +81,6 @@ internal class CenterSignUpFragment : Fragment() {
                     onCenterIdChanged = ::setCenterId,
                     onCenterPasswordChanged = ::setCenterPassword,
                     onCenterPasswordForConfirmChanged = ::setCenterPasswordForConfirm,
-                    setSignUpProcess = ::setCenterSignUpProcess,
                 )
             }
         }
@@ -103,6 +103,7 @@ internal fun CenterSignUpScreen(
     centerId: String,
     centerPassword: String,
     centerPasswordForConfirm: String,
+    setSignUpProcess: (CenterSignUpProcess) -> Unit,
     onCenterNameChanged: (String) -> Unit,
     onCenterPhoneNumberChanged: (String) -> Unit,
     onCenterCertificateNumberChanged: (String) -> Unit,
@@ -110,7 +111,6 @@ internal fun CenterSignUpScreen(
     onCenterIdChanged: (String) -> Unit,
     onCenterPasswordChanged: (String) -> Unit,
     onCenterPasswordForConfirmChanged: (String) -> Unit,
-    setSignUpProcess: (CenterSignUpProcess) -> Unit,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,

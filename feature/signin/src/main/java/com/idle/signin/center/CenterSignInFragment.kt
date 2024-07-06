@@ -8,11 +8,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -28,8 +24,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
+import com.idle.common_ui.DeepLinkDestination.NewPassword
 import com.idle.common_ui.deepLinkNavigateTo
 import com.idle.common_ui.repeatOnStarted
+import com.idle.signin.center.CenterSignInEvent.NavigateTo
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -65,14 +63,14 @@ internal class CenterSignInFragment : Fragment() {
                     centerPassword = centerPassword,
                     onCenterIdChanged = ::setCenterId,
                     onCenterPasswordChanged = ::setCenterPassword,
+                    navigateToNewPassword = { event(NavigateTo(NewPassword)) }
                 )
             }
         }
     }
 
     private fun handleEvent(event: CenterSignInEvent) = when (event) {
-        is CenterSignInEvent.NavigateTo -> findNavController()
-            .deepLinkNavigateTo(requireContext(), event.destination)
+        is NavigateTo -> findNavController().deepLinkNavigateTo(requireContext(), event.destination)
     }
 }
 
@@ -83,6 +81,7 @@ internal fun CenterSignInScreen(
     centerPassword: String,
     onCenterIdChanged: (String) -> Unit,
     onCenterPasswordChanged: (String) -> Unit,
+    navigateToNewPassword: () -> Unit = {},
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -115,8 +114,10 @@ internal fun CenterSignInScreen(
             )
         }
 
-        Text(text = "비밀번호가 기억나지 않나요?",
-            modifier = Modifier.clickable {})
+        Text(
+            text = "비밀번호가 기억나지 않나요?",
+            modifier = Modifier.clickable { navigateToNewPassword() },
+        )
 
         Button(onClick = {}) {
             Text(text = "로그인")

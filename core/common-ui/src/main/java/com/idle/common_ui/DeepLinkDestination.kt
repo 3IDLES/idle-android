@@ -14,6 +14,7 @@ sealed class DeepLinkDestination(val addressRes: Int) {
     data object CenterAuth : DeepLinkDestination(R.string.center_auth_deeplink_url)
     data object CenterSignIn : DeepLinkDestination(R.string.center_signin_deeplink_url)
     data object CenterSignUp : DeepLinkDestination(R.string.center_signup_deeplink_url)
+    data object NewPassword : DeepLinkDestination(R.string.new_password_deeplink_url)
 
     data object WorkerAuth : DeepLinkDestination(R.string.worker_auth_deeplink_url)
     data object WorkerSignIn : DeepLinkDestination(R.string.worker_signin_deeplink_url)
