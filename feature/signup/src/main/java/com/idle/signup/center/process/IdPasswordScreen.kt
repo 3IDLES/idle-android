@@ -1,5 +1,6 @@
 package com.idle.signup.center.process
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,7 +13,9 @@ import androidx.compose.ui.unit.dp
 import com.idle.signin.center.CenterSignUpProcess
 
 @Composable
-internal fun IdPasswordScreen() {
+internal fun IdPasswordScreen(setSignUpProcess: (CenterSignUpProcess) -> Unit) {
+    BackHandler { setSignUpProcess(CenterSignUpProcess.BUSINESS_REGISTRAION_NUMBER) }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterVertically),

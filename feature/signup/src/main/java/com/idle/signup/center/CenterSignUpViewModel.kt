@@ -20,12 +20,19 @@ class CenterSignUpViewModel @Inject constructor() : ViewModel() {
     private val _signUpProcess = MutableStateFlow<CenterSignUpProcess>(NAME)
     val signUpProcess = _signUpProcess.asStateFlow()
 
+    private val _centerName = MutableStateFlow("")
+    val centerName = _centerName.asStateFlow()
+
     internal fun event(event: CenterSignUpEvent) = viewModelScope.launch {
         _eventFlow.emit(event)
     }
 
     internal fun setCenterSignUpProcess(process: CenterSignUpProcess) {
         _signUpProcess.value = process
+    }
+
+    internal fun setCenterName(name: String) {
+        _centerName.value = name
     }
 }
 
