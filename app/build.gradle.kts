@@ -27,9 +27,5 @@ android {
 dependencies {
     implementation(projects.core.data)
     implementation(projects.core.domain)
-
-    implementation(projects.feature.auth)
-    implementation(libs.androidx.navigation.fragment)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.material)
+    implementation(projects.presentation)
 }

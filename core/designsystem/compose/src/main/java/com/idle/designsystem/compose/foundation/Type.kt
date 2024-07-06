@@ -1,4 +1,4 @@
-package com.idle.designsystem.compose.theme
+package com.idle.designsystem.compose.foundation
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
