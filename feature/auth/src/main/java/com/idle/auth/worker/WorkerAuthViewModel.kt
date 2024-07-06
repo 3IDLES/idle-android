@@ -1,6 +1,5 @@
 package com.idle.auth.center
 
-import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.common_ui.DeepLinkDestination

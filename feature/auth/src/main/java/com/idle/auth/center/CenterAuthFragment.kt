@@ -21,7 +21,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.idle.auth.center.CenterAuthEvent.NavigateTo
-import com.idle.common_ui.DeepLinkDestination
 import com.idle.common_ui.DeepLinkDestination.CenterSignIn
 import com.idle.common_ui.DeepLinkDestination.CenterSignUp
 import com.idle.common_ui.deepLinkNavigateTo
