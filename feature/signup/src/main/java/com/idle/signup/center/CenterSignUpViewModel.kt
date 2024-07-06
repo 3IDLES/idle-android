@@ -23,6 +23,24 @@ class CenterSignUpViewModel @Inject constructor() : ViewModel() {
     private val _centerName = MutableStateFlow("")
     val centerName = _centerName.asStateFlow()
 
+    private val _centerPhoneNumber = MutableStateFlow("")
+    val centerPhoneNumber = _centerPhoneNumber.asStateFlow()
+
+    private val _centerCertificateNumber = MutableStateFlow("")
+    val centerCertificateNumber = _centerCertificateNumber.asStateFlow()
+
+    private val _businessRegistrationNumber = MutableStateFlow("")
+    val businessRegistrationNumber = _businessRegistrationNumber.asStateFlow()
+
+    private val _centerId = MutableStateFlow("")
+    val centerId = _centerId.asStateFlow()
+
+    private val _centerPassword = MutableStateFlow("")
+    val centerPassword = _centerPassword.asStateFlow()
+
+    private val _centerPasswordForConfirm = MutableStateFlow("")
+    val centerPasswordForConfirm = _centerPasswordForConfirm.asStateFlow()
+
     internal fun event(event: CenterSignUpEvent) = viewModelScope.launch {
         _eventFlow.emit(event)
     }
@@ -33,6 +51,30 @@ class CenterSignUpViewModel @Inject constructor() : ViewModel() {
 
     internal fun setCenterName(name: String) {
         _centerName.value = name
+    }
+
+    internal fun setCenterPhoneNumber(phoneNumber: String) {
+        _centerPhoneNumber.value = phoneNumber
+    }
+
+    internal fun setCenterCertificateNumber(certificateNumber: String) {
+        _centerCertificateNumber.value = certificateNumber
+    }
+
+    internal fun setBusinessRegistrationNumber(businessRegistrationNumber: String) {
+        _businessRegistrationNumber.value = businessRegistrationNumber
+    }
+
+    internal fun setCenterId(id: String) {
+        _centerId.value = id
+    }
+
+    internal fun setCenterPassword(password: String) {
+        _centerPassword.value = password
+    }
+
+    internal fun setCenterPasswordForConfirm(passwordForConfirm: String) {
+        _centerPasswordForConfirm.value = passwordForConfirm
     }
 }
 
