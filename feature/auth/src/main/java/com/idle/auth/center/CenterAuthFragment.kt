@@ -23,6 +23,7 @@ import androidx.navigation.fragment.findNavController
 import com.idle.auth.center.CenterAuthEvent.NavigateTo
 import com.idle.common_ui.DeepLinkDestination
 import com.idle.common_ui.DeepLinkDestination.CenterSignIn
+import com.idle.common_ui.DeepLinkDestination.CenterSignUp
 import com.idle.common_ui.deepLinkNavigateTo
 import com.idle.common_ui.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
@@ -52,7 +53,8 @@ internal class CenterAuthFragment : Fragment() {
 
         composeView.setContent {
             CenterAuthScreen(
-                navigateToCenterSignIn = { viewModel.event(NavigateTo(CenterSignIn)) }
+                navigateToCenterSignIn = { viewModel.event(NavigateTo(CenterSignIn)) },
+                navigateToCenterSignUp = { viewModel.event(NavigateTo(CenterSignUp)) },
             )
         }
     }
@@ -66,6 +68,7 @@ internal class CenterAuthFragment : Fragment() {
 @Composable
 internal fun CenterAuthScreen(
     navigateToCenterSignIn: () -> Unit,
+    navigateToCenterSignUp: () -> Unit,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -78,11 +81,11 @@ internal fun CenterAuthScreen(
 
         Text(text = "기타 환영 멘트")
 
-        Button(onClick = {}) {
+        Button(onClick = navigateToCenterSignIn) {
             Text(text = "로그인")
         }
 
-        Button(onClick = navigateToCenterSignIn) {
+        Button(onClick = navigateToCenterSignUp) {
             Text(text = "회원가입")
         }
     }

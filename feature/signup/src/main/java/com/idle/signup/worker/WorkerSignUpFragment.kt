@@ -26,10 +26,10 @@ import com.idle.common_ui.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-internal class WorkerSignInFragment : Fragment() {
+internal class WorkerSignUpFragment : Fragment() {
 
     private lateinit var composeView: ComposeView
-    private val viewModel: WorkerSignInViewModel by viewModels()
+    private val viewModel: WorkerSignUpViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,19 +49,19 @@ internal class WorkerSignInFragment : Fragment() {
         }
 
         composeView.setContent {
-            WorkerSignInScreen()
+            WorkerSignUpScreen()
         }
     }
 
-    private fun handleEvent(event: WorkerSignInEvent) = when (event) {
-        is WorkerSignInEvent.NavigateTo -> findNavController()
+    private fun handleEvent(event: WorkerSignUpEvent) = when (event) {
+        is WorkerSignUpEvent.NavigateTo -> findNavController()
             .deepLinkNavigateTo(requireContext(), event.destination)
     }
 }
 
 
 @Composable
-internal fun WorkerSignInScreen() {
+internal fun WorkerSignUpScreen() {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterVertically),

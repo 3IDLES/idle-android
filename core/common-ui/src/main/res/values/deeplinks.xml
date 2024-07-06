@@ -4,7 +4,9 @@
 
     <string name="worker_auth_deeplink_url">care://auth/worker</string>
     <string name="worker_signin_deeplink_url">care://signin/worker</string>
+    <string name="worker_signup_deeplink_url">care://signup/worker</string>
 
     <string name="center_auth_deeplink_url">care://auth/center</string>
     <string name="center_signin_deeplink_url">care://signin/center</string>
+    <string name="center_signup_deeplink_url">care://signup/center</string>
 </resources>

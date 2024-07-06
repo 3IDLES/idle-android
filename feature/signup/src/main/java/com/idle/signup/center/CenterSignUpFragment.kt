@@ -20,16 +20,21 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.idle.common_ui.deepLinkNavigateTo
 import com.idle.common_ui.repeatOnStarted
+import com.idle.signup.center.process.BusinessRegistrationScreen
+import com.idle.signup.center.process.IdPasswordScreen
+import com.idle.signup.center.process.NameScreen
+import com.idle.signup.center.process.PhoneNumberScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-internal class CenterSignInFragment : Fragment() {
+internal class CenterSignUpFragment : Fragment() {
 
     private lateinit var composeView: ComposeView
-    private val viewModel: CenterSignInViewModel by viewModels()
+    private val viewModel: CenterSignUpViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,19 +54,25 @@ internal class CenterSignInFragment : Fragment() {
         }
 
         composeView.setContent {
-            CenterSignInScreen()
+            val signUpProcess = viewModel.signUpProcess.collectAsStateWithLifecycle()
+
+            CenterSignUpScreen(
+                signUpProcess = signUpProcess
+            )
         }
     }
 
-    private fun handleEvent(event: CenterSignInEvent) = when (event) {
-        is CenterSignInEvent.NavigateTo -> findNavController()
+    private fun handleEvent(event: CenterSignUpEvent) = when (event) {
+        is CenterSignUpEvent.NavigateTo -> findNavController()
             .deepLinkNavigateTo(requireContext(), event.destination)
     }
 }
 
 
 @Composable
-internal fun CenterSignInScreen() {
+internal fun CenterSignUpScreen(
+    signUpProcess: CenterSignUpProcess
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterVertically),
@@ -69,10 +80,11 @@ internal fun CenterSignInScreen() {
             .background(Color.White)
             .padding(horizontal = 20.dp),
     ) {
-        Spacer(
-            modifier = Modifier.height(300.dp)
-                .fillMaxWidth()
-                .background(Color.Black)
-        )
+        when (signUpProcess) {
+            CenterSignUpProcess.NAME -> NameScreen()
+            CenterSignUpProcess.PHONE_NUMBER -> PhoneNumberScreen()
+            CenterSignUpProcess.BUSINESS_REGISTRAION_NUMBER -> BusinessRegistrationScreen()
+            CenterSignUpProcess.ID_PASSWORD -> IdPasswordScreen()
+        }
     }
 }
