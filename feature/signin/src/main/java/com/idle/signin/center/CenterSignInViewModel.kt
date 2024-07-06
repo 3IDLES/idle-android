@@ -14,13 +14,13 @@ import javax.inject.Inject
 @HiltViewModel
 class CenterSignInViewModel @Inject constructor() : ViewModel() {
     private val _eventFlow = MutableSharedFlow<CenterSignInEvent>()
-    val eventFlow = _eventFlow.asSharedFlow()
+    internal val eventFlow = _eventFlow.asSharedFlow()
 
     private val _centerId = MutableStateFlow("")
-    val centerId = _centerId.asStateFlow()
+    internal val centerId = _centerId.asStateFlow()
 
     private val _centerPassword = MutableStateFlow("")
-    val centerPassword = _centerPassword.asStateFlow()
+    internal val centerPassword = _centerPassword.asStateFlow()
 
     internal fun event(event: CenterSignInEvent) = viewModelScope.launch {
         _eventFlow.emit(event)

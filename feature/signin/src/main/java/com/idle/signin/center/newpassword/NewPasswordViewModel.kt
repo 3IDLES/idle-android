@@ -13,22 +13,22 @@ import javax.inject.Inject
 @HiltViewModel
 class NewPasswordViewModel @Inject constructor() : ViewModel() {
     private val _eventFlow = MutableSharedFlow<NewPasswordEvent>()
-    val eventFlow = _eventFlow.asSharedFlow()
+    internal val eventFlow = _eventFlow.asSharedFlow()
 
     private val _centerPhoneNumber = MutableStateFlow("")
-    val phoneNumber = _centerPhoneNumber.asStateFlow()
+    internal val phoneNumber = _centerPhoneNumber.asStateFlow()
 
     private val _centerCertificateNumber = MutableStateFlow("")
-    val certificationNumber = _centerCertificateNumber.asStateFlow()
+    internal val certificationNumber = _centerCertificateNumber.asStateFlow()
 
     private val _generateNewPasswordProcess = MutableStateFlow(PHONE_NUMBER)
-    val generateNewPasswordProcess = _generateNewPasswordProcess.asStateFlow()
+    internal val generateNewPasswordProcess = _generateNewPasswordProcess.asStateFlow()
 
     private val _newPassword = MutableStateFlow("")
-    val newPassword = _newPassword.asStateFlow()
+    internal val newPassword = _newPassword.asStateFlow()
 
     private val _newPasswordForConfirm = MutableStateFlow("")
-    val newPasswordForConfirm = _newPasswordForConfirm.asStateFlow()
+    internal val newPasswordForConfirm = _newPasswordForConfirm.asStateFlow()
 
     internal fun setPhoneNumber(phoneNumber: String) {
         _centerPhoneNumber.value = phoneNumber
