@@ -7,11 +7,10 @@ import android.view.ViewGroup
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,6 +20,9 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.idle.auth.center.WorkerAuthEvent.NavigateTo
+import com.idle.common_ui.DeepLinkDestination.WorkerSignIn
+import com.idle.common_ui.deepLinkNavigateTo
 import com.idle.common_ui.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -48,18 +50,23 @@ internal class WorkerAuthFragment : Fragment() {
         }
 
         composeView.setContent {
-            WorkerAuthScreen()
+            WorkerAuthScreen(
+                navigateToWorkerSignIn = { viewModel.event(NavigateTo(WorkerSignIn)) }
+            )
         }
     }
 
     private fun handleEvent(event: WorkerAuthEvent) = when (event) {
-        is WorkerAuthEvent.NavigateTo -> findNavController().navigate(event.destination)
+        is NavigateTo -> findNavController()
+            .deepLinkNavigateTo(requireContext(), event.destination)
     }
 }
 
 
 @Composable
-internal fun WorkerAuthScreen() {
+internal fun WorkerAuthScreen(
+    navigateToWorkerSignIn: () -> Unit,
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterVertically),
@@ -67,10 +74,12 @@ internal fun WorkerAuthScreen() {
             .background(Color.White)
             .padding(horizontal = 20.dp),
     ) {
-        Spacer(
-            modifier = Modifier.height(300.dp)
-                .fillMaxWidth()
-                .background(Color.Black)
-        )
+        Text(text = "요양 보호사님, 환영합니다!")
+
+        Text(text = "기타 환영 멘트")
+
+        Button(onClick = navigateToWorkerSignIn) {
+            Text(text = "휴대폰 번호로 시작하기")
+        }
     }
 }

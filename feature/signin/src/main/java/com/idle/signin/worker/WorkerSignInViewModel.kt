@@ -1,6 +1,5 @@
-package com.idle.auth.center
+package com.idle.signin.worker
 
-import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.common_ui.DeepLinkDestination
@@ -11,15 +10,15 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class WorkerAuthViewModel @Inject constructor() : ViewModel() {
-    private val _eventFlow = MutableSharedFlow<WorkerAuthEvent>()
+class WorkerSignInViewModel @Inject constructor() : ViewModel() {
+    private val _eventFlow = MutableSharedFlow<WorkerSignInEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
-    internal fun event(event: WorkerAuthEvent) = viewModelScope.launch {
+    internal fun event(event: WorkerSignInEvent) = viewModelScope.launch {
         _eventFlow.emit(event)
     }
 }
 
-sealed class WorkerAuthEvent {
-    data class NavigateTo(val destination: DeepLinkDestination) : WorkerAuthEvent()
+sealed class WorkerSignInEvent {
+    data class NavigateTo(val destination: DeepLinkDestination) : WorkerSignInEvent()
 }

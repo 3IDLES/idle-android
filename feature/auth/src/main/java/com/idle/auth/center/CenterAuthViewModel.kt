@@ -3,6 +3,7 @@ package com.idle.auth.center
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.idle.common_ui.DeepLinkDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -20,5 +21,5 @@ class CenterAuthViewModel @Inject constructor() : ViewModel() {
 }
 
 sealed class CenterAuthEvent {
-    data class NavigateTo(val destination: Uri) : CenterAuthEvent()
+    data class NavigateTo(val destination: DeepLinkDestination) : CenterAuthEvent()
 }

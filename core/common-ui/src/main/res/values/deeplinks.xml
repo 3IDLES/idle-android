@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="auth_deeplink_url">care://auth</string>
+
     <string name="worker_auth_deeplink_url">care://auth/worker</string>
+    <string name="worker_signin_deeplink_url">care://signin/worker</string>
+
     <string name="center_auth_deeplink_url">care://auth/center</string>
+    <string name="center_signin_deeplink_url">care://signin/center</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.idle.designsystem.compose.theme
+package com.idle.designsystem.compose.foundation
 
 import androidx.compose.ui.graphics.Color
 

@@ -3,5 +3,9 @@
     <!-- Hide bottom navigation view on these fragments -->
     <array name="hideBottomNavDestinationIds">
         <item>@id/authFragment</item>
+        <item>@id/centerAuthFragment</item>
+        <item>@id/workerAuthFragment</item>
+        <item>@id/centerSignInFragment</item>
+        <item>@id/workerSignInFragment</item>
     </array>
 </resources>
