@@ -12,7 +12,7 @@ import javax.inject.Inject
 @HiltViewModel
 class WorkerSignInViewModel @Inject constructor() : ViewModel() {
     private val _eventFlow = MutableSharedFlow<WorkerSignInEvent>()
-    val eventFlow = _eventFlow.asSharedFlow()
+    internal val eventFlow = _eventFlow.asSharedFlow()
 
     internal fun event(event: WorkerSignInEvent) = viewModelScope.launch {
         _eventFlow.emit(event)

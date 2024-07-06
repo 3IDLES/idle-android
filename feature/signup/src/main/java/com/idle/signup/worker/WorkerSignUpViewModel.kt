@@ -15,22 +15,22 @@ import javax.inject.Inject
 @HiltViewModel
 class WorkerSignUpViewModel @Inject constructor() : ViewModel() {
     private val _eventFlow = MutableSharedFlow<WorkerSignUpEvent>()
-    val eventFlow = _eventFlow.asSharedFlow()
+    internal val eventFlow = _eventFlow.asSharedFlow()
 
     private val _signUpProcess = MutableStateFlow<WorkerSignUpProcess>(PHONE_NUMBER)
-    val signUpProcess = _signUpProcess.asStateFlow()
+    internal val signUpProcess = _signUpProcess.asStateFlow()
 
     private val _workerName = MutableStateFlow("")
-    val workerName = _workerName.asStateFlow()
+    internal val workerName = _workerName.asStateFlow()
 
     private val _workerPhoneNumber = MutableStateFlow("")
-    val workerPhoneNumber = _workerPhoneNumber.asStateFlow()
+    internal val workerPhoneNumber = _workerPhoneNumber.asStateFlow()
 
     private val _workerCertificateNumber = MutableStateFlow("")
-    val workerCertificateNumber = _workerCertificateNumber.asStateFlow()
+    internal val workerCertificateNumber = _workerCertificateNumber.asStateFlow()
 
     private val _gender = MutableStateFlow(Gender.NONE)
-    val gender = _gender.asStateFlow()
+    internal val gender = _gender.asStateFlow()
 
     internal fun event(event: WorkerSignUpEvent) = viewModelScope.launch {
         _eventFlow.emit(event)
