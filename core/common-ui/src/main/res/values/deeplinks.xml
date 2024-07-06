@@ -9,4 +9,5 @@
     <string name="center_auth_deeplink_url">care://auth/center</string>
     <string name="center_signin_deeplink_url">care://signin/center</string>
     <string name="center_signup_deeplink_url">care://signup/center</string>
+    <string name="new_password_deeplink_url">care://newpassword</string>
 </resources>
