@@ -1,6 +1,5 @@
-package com.idle.signup.center.process
+package com.idle.signup.worker.process
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,18 +12,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.idle.signin.center.CenterSignUpProcess
+import com.idle.signin.worker.WorkerSignUpProcess
 
 @Composable
-internal fun PhoneNumberScreen(
-    centerPhoneNumber: String,
-    centerCertificationNumber: String,
-    onCenterPhoneNumberChanged: (String) -> Unit,
-    onCenterCertificationNumberChanged: (String) -> Unit,
-    setSignUpProcess: (CenterSignUpProcess) -> Unit,
+internal fun WorkerPhoneNumberScreen(
+    workerPhoneNumber: String,
+    workerCertificationNumber: String,
+    onWorkerPhoneNumberChanged: (String) -> Unit,
+    onWorkerCertificationNumberChanged: (String) -> Unit,
+    setSignUpProcess: (WorkerSignUpProcess) -> Unit,
 ) {
-    BackHandler { setSignUpProcess(CenterSignUpProcess.NAME) }
-
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterVertically),
@@ -40,8 +37,8 @@ internal fun PhoneNumberScreen(
 
             Row(modifier = Modifier.fillMaxWidth()) {
                 TextField(
-                    value = centerPhoneNumber,
-                    onValueChange = onCenterPhoneNumberChanged
+                    value = workerPhoneNumber,
+                    onValueChange = onWorkerPhoneNumberChanged
                 )
 
                 Button(onClick = { }) {
@@ -58,8 +55,8 @@ internal fun PhoneNumberScreen(
 
             Row(modifier = Modifier.fillMaxWidth()) {
                 TextField(
-                    value = centerCertificationNumber,
-                    onValueChange = onCenterCertificationNumberChanged
+                    value = workerCertificationNumber,
+                    onValueChange = onWorkerCertificationNumberChanged
                 )
 
                 Button(onClick = { }) {
@@ -68,7 +65,7 @@ internal fun PhoneNumberScreen(
             }
         }
 
-        Button(onClick = { setSignUpProcess(CenterSignUpProcess.BUSINESS_REGISTRAION_NUMBER) }) {
+        Button(onClick = { setSignUpProcess(WorkerSignUpProcess.NAME) }) {
             Text(text = "다음")
         }
     }

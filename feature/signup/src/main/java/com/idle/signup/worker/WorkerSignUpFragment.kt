@@ -7,12 +7,10 @@ import android.view.ViewGroup
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,9 +18,13 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.idle.common_ui.deepLinkNavigateTo
 import com.idle.common_ui.repeatOnStarted
+import com.idle.signup.worker.process.GenderScreen
+import com.idle.signup.worker.process.WorkerNameScreen
+import com.idle.signup.worker.process.WorkerPhoneNumberScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -49,7 +51,26 @@ internal class WorkerSignUpFragment : Fragment() {
         }
 
         composeView.setContent {
-            WorkerSignUpScreen()
+            viewModel.apply {
+                val signUpProcess by signUpProcess.collectAsStateWithLifecycle()
+                val workerName by workerName.collectAsStateWithLifecycle()
+                val workerPhoneNumber by workerPhoneNumber.collectAsStateWithLifecycle()
+                val workerCertificateNumber by workerCertificateNumber.collectAsStateWithLifecycle()
+                val gender by gender.collectAsStateWithLifecycle()
+
+                WorkerSignUpScreen(
+                    signUpProcess = signUpProcess,
+                    workerName = workerName,
+                    workerPhoneNumber = workerPhoneNumber,
+                    workerCertificateNumber = workerCertificateNumber,
+                    gender = gender,
+                    onWorkerNameChanged = ::setWorkerName,
+                    onWorkerPhoneNumberChanged = ::setWorkerPhoneNumber,
+                    onWorkerCertificateNumberChanged = ::setWorkerCertificateNumber,
+                    onGenderChanged = ::setGender,
+                    setSignUpProcess = ::setWorkerSignUpProcess,
+                )
+            }
         }
     }
 
@@ -61,7 +82,18 @@ internal class WorkerSignUpFragment : Fragment() {
 
 
 @Composable
-internal fun WorkerSignUpScreen() {
+internal fun WorkerSignUpScreen(
+    signUpProcess: WorkerSignUpProcess,
+    workerName: String,
+    workerPhoneNumber: String,
+    workerCertificateNumber: String,
+    gender: Gender,
+    onWorkerNameChanged: (String) -> Unit,
+    onWorkerPhoneNumberChanged: (String) -> Unit,
+    onWorkerCertificateNumberChanged: (String) -> Unit,
+    onGenderChanged: (Gender) -> Unit,
+    setSignUpProcess: (WorkerSignUpProcess) -> Unit,
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterVertically),
@@ -69,10 +101,26 @@ internal fun WorkerSignUpScreen() {
             .background(Color.White)
             .padding(horizontal = 20.dp),
     ) {
-        Spacer(
-            modifier = Modifier.height(300.dp)
-                .fillMaxWidth()
-                .background(Color.Black)
-        )
+        when (signUpProcess) {
+            WorkerSignUpProcess.NAME -> WorkerNameScreen(
+                workerName = workerName,
+                onWorkerNameChanged = onWorkerNameChanged,
+                setSignUpProcess = setSignUpProcess
+            )
+
+            WorkerSignUpProcess.PHONE_NUMBER -> WorkerPhoneNumberScreen(
+                workerPhoneNumber = workerPhoneNumber,
+                workerCertificationNumber = workerCertificateNumber,
+                onWorkerPhoneNumberChanged = onWorkerPhoneNumberChanged,
+                onWorkerCertificationNumberChanged = onWorkerCertificateNumberChanged,
+                setSignUpProcess = setSignUpProcess
+            )
+
+            WorkerSignUpProcess.GENDER -> GenderScreen(
+                gender = gender,
+                onGenderChanged = onGenderChanged,
+                setSignUpProcess = setSignUpProcess
+            )
+        }
     }
 }
