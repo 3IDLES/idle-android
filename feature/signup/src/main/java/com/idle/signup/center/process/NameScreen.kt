@@ -28,7 +28,8 @@ internal fun NameScreen(
 
         TextField(
             value = centerName,
-            onValueChange = onCenterNameChanged)
+            onValueChange = onCenterNameChanged
+        )
 
         Button(onClick = { setSignUpProcess(CenterSignUpProcess.PHONE_NUMBER) }) {
             Text(text = "다음")

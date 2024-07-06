@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -53,15 +52,37 @@ internal class CenterSignUpFragment : Fragment() {
         }
 
         composeView.setContent {
-            val signUpProcess by viewModel.signUpProcess.collectAsStateWithLifecycle()
-            val centerName by viewModel.centerName.collectAsStateWithLifecycle()
+            viewModel.apply {
+                val signUpProcess by signUpProcess.collectAsStateWithLifecycle()
+                val centerName by centerName.collectAsStateWithLifecycle()
+                val centerPhoneNumber by centerPhoneNumber.collectAsStateWithLifecycle()
+                val centerCertificateNumber by centerCertificateNumber.collectAsStateWithLifecycle()
+                val businessRegistrationNumber
+                        by businessRegistrationNumber.collectAsStateWithLifecycle()
+                val centerId by centerId.collectAsStateWithLifecycle()
+                val centerPassword by centerPassword.collectAsStateWithLifecycle()
+                val centerPasswordForConfirm
+                        by centerPasswordForConfirm.collectAsStateWithLifecycle()
 
-            CenterSignUpScreen(
-                signUpProcess = signUpProcess,
-                centerName = centerName,
-                onCenterNameChanged = viewModel::setCenterName,
-                setSignUpProcess = viewModel::setCenterSignUpProcess,
-            )
+                CenterSignUpScreen(
+                    signUpProcess = signUpProcess,
+                    centerName = centerName,
+                    centerPhoneNumber = centerPhoneNumber,
+                    centerCertificateNumber = centerCertificateNumber,
+                    businessRegistrationNumber = businessRegistrationNumber,
+                    centerId = centerId,
+                    centerPassword = centerPassword,
+                    centerPasswordForConfirm = centerPasswordForConfirm,
+                    onCenterNameChanged = ::setCenterName,
+                    onCenterPhoneNumberChanged = ::setCenterPhoneNumber,
+                    onCenterCertificateNumberChanged = ::setCenterCertificateNumber,
+                    onBusinessRegistrationNumberChanged = ::setBusinessRegistrationNumber,
+                    onCenterIdChanged = ::setCenterId,
+                    onCenterPasswordChanged = ::setCenterPassword,
+                    onCenterPasswordForConfirmChanged = ::setCenterPasswordForConfirm,
+                    setSignUpProcess = ::setCenterSignUpProcess,
+                )
+            }
         }
     }
 
@@ -76,7 +97,19 @@ internal class CenterSignUpFragment : Fragment() {
 internal fun CenterSignUpScreen(
     signUpProcess: CenterSignUpProcess,
     centerName: String,
+    centerPhoneNumber: String,
+    centerCertificateNumber: String,
+    businessRegistrationNumber: String,
+    centerId: String,
+    centerPassword: String,
+    centerPasswordForConfirm: String,
     onCenterNameChanged: (String) -> Unit,
+    onCenterPhoneNumberChanged: (String) -> Unit,
+    onCenterCertificateNumberChanged: (String) -> Unit,
+    onBusinessRegistrationNumberChanged: (String) -> Unit,
+    onCenterIdChanged: (String) -> Unit,
+    onCenterPasswordChanged: (String) -> Unit,
+    onCenterPasswordForConfirmChanged: (String) -> Unit,
     setSignUpProcess: (CenterSignUpProcess) -> Unit,
 ) {
     Column(
@@ -94,12 +127,29 @@ internal fun CenterSignUpScreen(
             )
 
             CenterSignUpProcess.PHONE_NUMBER ->
-                PhoneNumberScreen(setSignUpProcess = setSignUpProcess)
+                PhoneNumberScreen(
+                    centerPhoneNumber = centerPhoneNumber,
+                    centerCertificationNumber = centerCertificateNumber,
+                    onCenterPhoneNumberChanged = onCenterPhoneNumberChanged,
+                    onCenterCertificationNumberChanged = onCenterCertificateNumberChanged,
+                    setSignUpProcess = setSignUpProcess
+                )
 
             CenterSignUpProcess.BUSINESS_REGISTRAION_NUMBER ->
-                BusinessRegistrationScreen(setSignUpProcess = setSignUpProcess)
+                BusinessRegistrationScreen(
+                    businessRegistrationNumber = businessRegistrationNumber,
+                    onBusinessRegistrationNumberChanged = onBusinessRegistrationNumberChanged,
+                    setSignUpProcess = setSignUpProcess
+                )
 
-            CenterSignUpProcess.ID_PASSWORD -> IdPasswordScreen(setSignUpProcess = setSignUpProcess)
+            CenterSignUpProcess.ID_PASSWORD -> IdPasswordScreen(
+                centerId = centerId,
+                centerPassword = centerPassword,
+                centerPasswordForConfirm = centerPasswordForConfirm,
+                onCenterIdChanged = onCenterIdChanged,
+                onCenterPasswordChanged = onCenterPasswordChanged,
+                onCenterPasswordForConfirmChanged = onCenterPasswordForConfirmChanged,
+                setSignUpProcess = setSignUpProcess)
         }
     }
 }
