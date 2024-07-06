@@ -21,7 +21,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.idle.auth.center.WorkerAuthEvent.NavigateTo
-import com.idle.common_ui.DeepLinkDestination.WorkerSignIn
+import com.idle.common_ui.DeepLinkDestination.WorkerSignUp
 import com.idle.common_ui.deepLinkNavigateTo
 import com.idle.common_ui.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,7 +51,7 @@ internal class WorkerAuthFragment : Fragment() {
 
         composeView.setContent {
             WorkerAuthScreen(
-                navigateToWorkerSignIn = { viewModel.event(NavigateTo(WorkerSignIn)) }
+                navigateToWorkerSignUp = { viewModel.event(NavigateTo(WorkerSignUp)) }
             )
         }
     }
@@ -65,7 +65,7 @@ internal class WorkerAuthFragment : Fragment() {
 
 @Composable
 internal fun WorkerAuthScreen(
-    navigateToWorkerSignIn: () -> Unit,
+    navigateToWorkerSignUp: () -> Unit,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -78,7 +78,7 @@ internal fun WorkerAuthScreen(
 
         Text(text = "기타 환영 멘트")
 
-        Button(onClick = navigateToWorkerSignIn) {
+        Button(onClick = navigateToWorkerSignUp) {
             Text(text = "휴대폰 번호로 시작하기")
         }
     }

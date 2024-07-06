@@ -10,15 +10,15 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class WorkerSignInViewModel @Inject constructor() : ViewModel() {
-    private val _eventFlow = MutableSharedFlow<WorkerSignInEvent>()
+class WorkerSignUpViewModel @Inject constructor() : ViewModel() {
+    private val _eventFlow = MutableSharedFlow<WorkerSignUpEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
-    internal fun event(event: WorkerSignInEvent) = viewModelScope.launch {
+    internal fun event(event: WorkerSignUpEvent) = viewModelScope.launch {
         _eventFlow.emit(event)
     }
 }
 
-sealed class WorkerSignInEvent {
-    data class NavigateTo(val destination: DeepLinkDestination) : WorkerSignInEvent()
+sealed class WorkerSignUpEvent {
+    data class NavigateTo(val destination: DeepLinkDestination) : WorkerSignUpEvent()
 }
