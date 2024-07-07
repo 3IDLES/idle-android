@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("care.android.library")
     id("care.android.hilt")
@@ -6,6 +8,20 @@ plugins {
 
 android {
     namespace = "com.idle.network"
+
+    buildFeatures {
+        buildConfig = true
+    }
+
+    defaultConfig {
+        val properties = Properties()
+        properties.load(project.rootProject.file("local.properties").bufferedReader())
+        buildConfigField(
+            "String",
+            "CARE_BASE_URL",
+            "\"${properties["care_base_url"]}\"",
+        )
+    }
 }
 
 dependencies {

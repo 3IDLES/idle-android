@@ -1,5 +1,0 @@
-com.idle.signup
-id centerSignUpFragment
-id nav_signup
-id workerSignUpFragment
-navigation nav_signup

@@ -1,6 +1,0 @@
-com.idle.signin
-id centerSignInFragment
-id nav_signin
-id newPasswordFragment
-id workerSignInFragment
-navigation nav_signin

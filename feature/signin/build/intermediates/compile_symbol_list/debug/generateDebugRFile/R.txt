@@ -1,5 +1,0 @@
-int id centerSignInFragment 0x0
-int id nav_signin 0x0
-int id newPasswordFragment 0x0
-int id workerSignInFragment 0x0
-int navigation nav_signin 0x0
