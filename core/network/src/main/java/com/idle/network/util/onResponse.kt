@@ -8,7 +8,7 @@ internal fun <T> Response<T>.onResponse(): Result<T> {
     if (isSuccessful) {
         body()?.let { body ->
             return Result.success(body)
-        } ?: return Result.failure(Throwable("Response Body is Null"))
+        } ?: return Result.success(Unit as T)
     } else {
         val errorResponse = errorBody()?.string()?.let { errorBodyString ->
             try {

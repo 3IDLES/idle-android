@@ -21,6 +21,8 @@ internal fun WorkerPhoneNumberScreen(
     onWorkerPhoneNumberChanged: (String) -> Unit,
     onWorkerCertificationNumberChanged: (String) -> Unit,
     setSignUpProcess: (WorkerSignUpProcess) -> Unit,
+    sendAuthNumber: () -> Unit,
+    confirmAuthNumber: () -> Unit,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -41,7 +43,7 @@ internal fun WorkerPhoneNumberScreen(
                     onValueChange = onWorkerPhoneNumberChanged
                 )
 
-                Button(onClick = { }) {
+                Button(onClick = sendAuthNumber) {
                     Text(text = "인증")
                 }
             }
@@ -59,7 +61,7 @@ internal fun WorkerPhoneNumberScreen(
                     onValueChange = onWorkerCertificationNumberChanged
                 )
 
-                Button(onClick = { }) {
+                Button(onClick = confirmAuthNumber) {
                     Text(text = "확인")
                 }
             }
