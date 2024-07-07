@@ -81,6 +81,9 @@ internal class CenterSignUpFragment : Fragment() {
                     onCenterIdChanged = ::setCenterId,
                     onCenterPasswordChanged = ::setCenterPassword,
                     onCenterPasswordForConfirmChanged = ::setCenterPasswordForConfirm,
+                    sendPhoneNumber = ::sendPhoneNumber,
+                    confirmAuthCode = ::confirmAuthCode,
+                    signUpCenter = ::signUpCenter,
                 )
             }
         }
@@ -111,6 +114,9 @@ internal fun CenterSignUpScreen(
     onCenterIdChanged: (String) -> Unit,
     onCenterPasswordChanged: (String) -> Unit,
     onCenterPasswordForConfirmChanged: (String) -> Unit,
+    sendPhoneNumber: () -> Unit,
+    confirmAuthCode: () -> Unit,
+    signUpCenter: () -> Unit,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -123,7 +129,7 @@ internal fun CenterSignUpScreen(
             CenterSignUpProcess.NAME -> CenterNameScreen(
                 centerName = centerName,
                 onCenterNameChanged = onCenterNameChanged,
-                setSignUpProcess = setSignUpProcess
+                setSignUpProcess = setSignUpProcess,
             )
 
             CenterSignUpProcess.PHONE_NUMBER ->
@@ -132,14 +138,16 @@ internal fun CenterSignUpScreen(
                     centerCertificationNumber = centerCertificateNumber,
                     onCenterPhoneNumberChanged = onCenterPhoneNumberChanged,
                     onCenterAuthCodeChanged = onCenterAuthCodeChanged,
-                    setSignUpProcess = setSignUpProcess
+                    setSignUpProcess = setSignUpProcess,
+                    sendPhoneNumber = sendPhoneNumber,
+                    confirmAuthCode = confirmAuthCode,
                 )
 
             CenterSignUpProcess.BUSINESS_REGISTRAION_NUMBER ->
                 BusinessRegistrationScreen(
                     businessRegistrationNumber = businessRegistrationNumber,
                     onBusinessRegistrationNumberChanged = onBusinessRegistrationNumberChanged,
-                    setSignUpProcess = setSignUpProcess
+                    setSignUpProcess = setSignUpProcess,
                 )
 
             CenterSignUpProcess.ID_PASSWORD -> IdPasswordScreen(
@@ -149,7 +157,8 @@ internal fun CenterSignUpScreen(
                 onCenterIdChanged = onCenterIdChanged,
                 onCenterPasswordChanged = onCenterPasswordChanged,
                 onCenterPasswordForConfirmChanged = onCenterPasswordForConfirmChanged,
-                setSignUpProcess = setSignUpProcess
+                setSignUpProcess = setSignUpProcess,
+                signUpCenter = signUpCenter,
             )
         }
     }

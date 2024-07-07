@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.idle.common_ui.DeepLinkDestination
 import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
 import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
+import com.idle.domain.usecase.auth.SignUpCenterUseCase
 import com.idle.signin.center.CenterSignUpProcess.NAME
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -19,6 +20,7 @@ import javax.inject.Inject
 class CenterSignUpViewModel @Inject constructor(
     private val sendPhoneNumberUseCase: SendPhoneNumberUseCase,
     private val confirmAuthCodeUseCase: ConfirmAuthCodeUseCase,
+    private val signUpCenterUseCase: SignUpCenterUseCase,
 ) : ViewModel() {
     private val _eventFlow = MutableSharedFlow<CenterSignUpEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
@@ -91,6 +93,18 @@ class CenterSignUpViewModel @Inject constructor(
 
     internal fun confirmAuthCode() = viewModelScope.launch {
         confirmAuthCodeUseCase(_centerPhoneNumber.value, _centerAuthCode.value)
+            .onSuccess { Log.d("test", "성공!") }
+            .onFailure { Log.d("test", "실패! ${it}") }
+    }
+
+    internal fun signUpCenter() = viewModelScope.launch {
+        signUpCenterUseCase(
+            identifier = _centerId.value,
+            password = _centerPassword.value,
+            phoneNumber = _centerPhoneNumber.value,
+            managerName = _centerName.value,
+            businessRegistrationNumber = _businessRegistrationNumber.value,
+        )
             .onSuccess { Log.d("test", "성공!") }
             .onFailure { Log.d("test", "실패! ${it}") }
     }
