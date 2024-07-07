@@ -55,7 +55,7 @@ internal class WorkerSignUpFragment : Fragment() {
                 val signUpProcess by signUpProcess.collectAsStateWithLifecycle()
                 val workerName by workerName.collectAsStateWithLifecycle()
                 val workerPhoneNumber by workerPhoneNumber.collectAsStateWithLifecycle()
-                val workerCertificateNumber by workerCertificateNumber.collectAsStateWithLifecycle()
+                val workerCertificateNumber by workerConfirmNumber.collectAsStateWithLifecycle()
                 val gender by gender.collectAsStateWithLifecycle()
 
                 WorkerSignUpScreen(
@@ -69,6 +69,8 @@ internal class WorkerSignUpFragment : Fragment() {
                     onWorkerCertificateNumberChanged = ::setWorkerCertificateNumber,
                     onGenderChanged = ::setGender,
                     setSignUpProcess = ::setWorkerSignUpProcess,
+                    sendAuthNumber = ::sendAuthNumber,
+                    confirmAuthNumber = ::confirmAuthNumber,
                 )
             }
         }
@@ -93,6 +95,8 @@ internal fun WorkerSignUpScreen(
     onWorkerCertificateNumberChanged: (String) -> Unit,
     onGenderChanged: (Gender) -> Unit,
     setSignUpProcess: (WorkerSignUpProcess) -> Unit,
+    sendAuthNumber: () -> Unit,
+    confirmAuthNumber: () -> Unit,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -113,7 +117,9 @@ internal fun WorkerSignUpScreen(
                 workerCertificationNumber = workerCertificateNumber,
                 onWorkerPhoneNumberChanged = onWorkerPhoneNumberChanged,
                 onWorkerCertificationNumberChanged = onWorkerCertificateNumberChanged,
-                setSignUpProcess = setSignUpProcess
+                setSignUpProcess = setSignUpProcess,
+                sendAuthNumber = sendAuthNumber,
+                confirmAuthNumber = confirmAuthNumber,
             )
 
             WorkerSignUpProcess.GENDER -> GenderScreen(
