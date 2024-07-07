@@ -1,0 +1,9 @@
+com.idle.common.ui
+string auth_deeplink_url
+string center_auth_deeplink_url
+string center_signin_deeplink_url
+string center_signup_deeplink_url
+string new_password_deeplink_url
+string worker_auth_deeplink_url
+string worker_signin_deeplink_url
+string worker_signup_deeplink_url

@@ -1,0 +1,6 @@
+R_DEF: Internal format may change without notice
+local
+id centerSignUpFragment
+id nav_signup
+id workerSignUpFragment
+navigation nav_signup

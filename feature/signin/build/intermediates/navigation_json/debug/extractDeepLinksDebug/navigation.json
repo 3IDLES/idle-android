@@ -1,0 +1,80 @@
+[
+  {
+    "name": "nav_signin",
+    "navigationXmlIds": [],
+    "deepLinks": [
+      {
+        "schemes": [
+          "http",
+          "https"
+        ],
+        "host": "string",
+        "port": -1,
+        "path": "/center_signin_deeplink_url",
+        "sourceFilePosition": {
+          "mSourceFile": {
+            "mDescription": "nav_signin.xml"
+          },
+          "mSourcePosition": {
+            "mStartLine": 10,
+            "mStartColumn": 8,
+            "mStartOffset": 435,
+            "mEndLine": 10,
+            "mEndColumn": 65,
+            "mEndOffset": 492
+          }
+        },
+        "isAutoVerify": false,
+        "action": "android.intent.action.VIEW"
+      },
+      {
+        "schemes": [
+          "http",
+          "https"
+        ],
+        "host": "string",
+        "port": -1,
+        "path": "/new_password_deeplink_url",
+        "sourceFilePosition": {
+          "mSourceFile": {
+            "mDescription": "nav_signin.xml"
+          },
+          "mSourcePosition": {
+            "mStartLine": 17,
+            "mStartColumn": 8,
+            "mStartOffset": 701,
+            "mEndLine": 17,
+            "mEndColumn": 64,
+            "mEndOffset": 757
+          }
+        },
+        "isAutoVerify": false,
+        "action": "android.intent.action.VIEW"
+      },
+      {
+        "schemes": [
+          "http",
+          "https"
+        ],
+        "host": "string",
+        "port": -1,
+        "path": "/worker_signin_deeplink_url",
+        "sourceFilePosition": {
+          "mSourceFile": {
+            "mDescription": "nav_signin.xml"
+          },
+          "mSourcePosition": {
+            "mStartLine": 24,
+            "mStartColumn": 8,
+            "mStartOffset": 957,
+            "mEndLine": 24,
+            "mEndColumn": 65,
+            "mEndOffset": 1014
+          }
+        },
+        "isAutoVerify": false,
+        "action": "android.intent.action.VIEW"
+      }
+    ]
+  }
+]

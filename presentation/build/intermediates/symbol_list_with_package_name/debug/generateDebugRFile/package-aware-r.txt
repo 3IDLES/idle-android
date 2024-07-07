@@ -1,0 +1,8 @@
+com.idle.presentation
+array hideBottomNavDestinationIds
+id main_BNV
+id main_FCV
+id nav_main
+layout activity_main
+menu menu_main
+navigation nav_main

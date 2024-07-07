@@ -1,0 +1,7 @@
+int array hideBottomNavDestinationIds 0x0
+int id main_BNV 0x0
+int id main_FCV 0x0
+int id nav_main 0x0
+int layout activity_main 0x0
+int menu menu_main 0x0
+int navigation nav_main 0x0
