@@ -20,7 +20,7 @@ internal fun CenterPhoneNumberScreen(
     centerPhoneNumber: String,
     centerCertificationNumber: String,
     onCenterPhoneNumberChanged: (String) -> Unit,
-    onCenterCertificationNumberChanged: (String) -> Unit,
+    onCenterAuthCodeChanged: (String) -> Unit,
     setSignUpProcess: (CenterSignUpProcess) -> Unit,
 ) {
     BackHandler { setSignUpProcess(CenterSignUpProcess.NAME) }
@@ -59,7 +59,7 @@ internal fun CenterPhoneNumberScreen(
             Row(modifier = Modifier.fillMaxWidth()) {
                 TextField(
                     value = centerCertificationNumber,
-                    onValueChange = onCenterCertificationNumberChanged
+                    onValueChange = onCenterAuthCodeChanged
                 )
 
                 Button(onClick = { }) {

@@ -3,7 +3,7 @@ package com.idle.network.model.auth
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ConfirmRequest(
+data class ConfirmAuthCodeRequest(
     val phoneNumber: String,
-    val verificationNumber: String,
+    val authCode: String,
 )

@@ -4,8 +4,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.common_ui.DeepLinkDestination
-import com.idle.domain.usecase.auth.ConfirmAuthNumberUseCase
-import com.idle.domain.usecase.auth.SendAuthNumberUseCase
+import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
+import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
 import com.idle.signin.worker.WorkerSignUpProcess.PHONE_NUMBER
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -17,8 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WorkerSignUpViewModel @Inject constructor(
-    private val sendAuthNumberUseCase: SendAuthNumberUseCase,
-    private val confirmAuthNumberUseCase: ConfirmAuthNumberUseCase,
+    private val sendPhoneNumberUseCase: SendPhoneNumberUseCase,
+    private val confirmAuthCodeUseCase: ConfirmAuthCodeUseCase,
 ) : ViewModel() {
     private val _eventFlow = MutableSharedFlow<WorkerSignUpEvent>()
     internal val eventFlow = _eventFlow.asSharedFlow()
@@ -32,8 +32,8 @@ class WorkerSignUpViewModel @Inject constructor(
     private val _workerPhoneNumber = MutableStateFlow("")
     internal val workerPhoneNumber = _workerPhoneNumber.asStateFlow()
 
-    private val _workerConfirmNumber = MutableStateFlow("")
-    internal val workerConfirmNumber = _workerConfirmNumber.asStateFlow()
+    private val _workerAuthCode = MutableStateFlow("")
+    internal val workerConfirmNumber = _workerAuthCode.asStateFlow()
 
     private val _gender = MutableStateFlow(Gender.NONE)
     internal val gender = _gender.asStateFlow()
@@ -55,21 +55,21 @@ class WorkerSignUpViewModel @Inject constructor(
     }
 
     internal fun setWorkerCertificateNumber(certificateNumber: String) {
-        _workerConfirmNumber.value = certificateNumber
+        _workerAuthCode.value = certificateNumber
     }
 
     internal fun setGender(gender: Gender) {
         _gender.value = gender
     }
 
-    internal fun sendAuthNumber() = viewModelScope.launch {
-        sendAuthNumberUseCase(_workerPhoneNumber.value)
+    internal fun sendPhoneNumber() = viewModelScope.launch {
+        sendPhoneNumberUseCase(_workerPhoneNumber.value)
             .onSuccess { Log.d("test", "성공!") }
             .onFailure { Log.d("test", "실패! ${it}") }
     }
 
-    internal fun confirmAuthNumber() = viewModelScope.launch {
-        confirmAuthNumberUseCase(_workerPhoneNumber.value, _workerConfirmNumber.value)
+    internal fun confirmAuthCode() = viewModelScope.launch {
+        confirmAuthCodeUseCase(_workerPhoneNumber.value, _workerAuthCode.value)
             .onSuccess { Log.d("test", "성공!") }
             .onFailure { Log.d("test", "실패! ${it}") }
     }
