@@ -1,4 +1,0 @@
-int id centerSignUpFragment 0x0
-int id nav_signup 0x0
-int id workerSignUpFragment 0x0
-int navigation nav_signup 0x0
