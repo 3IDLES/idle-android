@@ -22,6 +22,8 @@ internal fun CenterPhoneNumberScreen(
     onCenterPhoneNumberChanged: (String) -> Unit,
     onCenterAuthCodeChanged: (String) -> Unit,
     setSignUpProcess: (CenterSignUpProcess) -> Unit,
+    sendPhoneNumber: () -> Unit,
+    confirmAuthCode: () -> Unit,
 ) {
     BackHandler { setSignUpProcess(CenterSignUpProcess.NAME) }
 
@@ -44,7 +46,7 @@ internal fun CenterPhoneNumberScreen(
                     onValueChange = onCenterPhoneNumberChanged
                 )
 
-                Button(onClick = { }) {
+                Button(onClick = sendPhoneNumber) {
                     Text(text = "인증")
                 }
             }
@@ -62,7 +64,7 @@ internal fun CenterPhoneNumberScreen(
                     onValueChange = onCenterAuthCodeChanged
                 )
 
-                Button(onClick = { }) {
+                Button(onClick = confirmAuthCode) {
                     Text(text = "확인")
                 }
             }

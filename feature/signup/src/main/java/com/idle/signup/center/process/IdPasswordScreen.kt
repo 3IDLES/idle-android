@@ -23,7 +23,8 @@ internal fun IdPasswordScreen(
     onCenterIdChanged: (String) -> Unit,
     onCenterPasswordChanged: (String) -> Unit,
     onCenterPasswordForConfirmChanged: (String) -> Unit,
-    setSignUpProcess: (CenterSignUpProcess) -> Unit
+    setSignUpProcess: (CenterSignUpProcess) -> Unit,
+    signUpCenter: () -> Unit,
 ) {
     BackHandler { setSignUpProcess(CenterSignUpProcess.BUSINESS_REGISTRAION_NUMBER) }
 
@@ -76,7 +77,7 @@ internal fun IdPasswordScreen(
             )
         }
 
-        Button(onClick = { }) {
+        Button(onClick = signUpCenter) {
             Text(text = "완료")
         }
     }
