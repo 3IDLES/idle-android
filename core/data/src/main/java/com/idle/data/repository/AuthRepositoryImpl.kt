@@ -1,20 +1,20 @@
 package com.idle.data.repository
 
 import com.idle.domain.repositorry.auth.AuthRepository
-import com.idle.network.model.auth.AuthRequest
-import com.idle.network.model.auth.ConfirmRequest
+import com.idle.network.model.auth.SendPhoneRequest
+import com.idle.network.model.auth.ConfirmAuthCodeRequest
 import com.idle.network.source.AuthDataSource
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
     private val authDataSource: AuthDataSource,
 ) : AuthRepository {
-    override suspend fun sendAuthNumber(phoneNumber: String): Result<Unit> =
-        authDataSource.sendAuthNumber(AuthRequest(phoneNumber))
+    override suspend fun sendPhoneNumber(phoneNumber: String): Result<Unit> =
+        authDataSource.sendPhoneNumber(SendPhoneRequest(phoneNumber))
 
-    override suspend fun confirmAuthNumber(
+    override suspend fun confirmAuthCode(
         phoneNumber: String,
-        verificationNumber: String,
+        authCode: String,
     ): Result<Unit> =
-        authDataSource.confirmAuthNumber(ConfirmRequest(phoneNumber, verificationNumber))
+        authDataSource.confirmAuthCode(ConfirmAuthCodeRequest(phoneNumber, authCode))
 }

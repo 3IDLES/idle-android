@@ -56,7 +56,7 @@ internal class CenterSignUpFragment : Fragment() {
                 val signUpProcess by signUpProcess.collectAsStateWithLifecycle()
                 val centerName by centerName.collectAsStateWithLifecycle()
                 val centerPhoneNumber by centerPhoneNumber.collectAsStateWithLifecycle()
-                val centerCertificateNumber by centerCertificateNumber.collectAsStateWithLifecycle()
+                val centerCertificateNumber by centerConfirmNumber.collectAsStateWithLifecycle()
                 val businessRegistrationNumber
                         by businessRegistrationNumber.collectAsStateWithLifecycle()
                 val centerId by centerId.collectAsStateWithLifecycle()
@@ -76,7 +76,7 @@ internal class CenterSignUpFragment : Fragment() {
                     setSignUpProcess = ::setCenterSignUpProcess,
                     onCenterNameChanged = ::setCenterName,
                     onCenterPhoneNumberChanged = ::setCenterPhoneNumber,
-                    onCenterCertificateNumberChanged = ::setCenterCertificateNumber,
+                    onCenterAuthCodeChanged = ::setCenterAuthCode,
                     onBusinessRegistrationNumberChanged = ::setBusinessRegistrationNumber,
                     onCenterIdChanged = ::setCenterId,
                     onCenterPasswordChanged = ::setCenterPassword,
@@ -106,7 +106,7 @@ internal fun CenterSignUpScreen(
     setSignUpProcess: (CenterSignUpProcess) -> Unit,
     onCenterNameChanged: (String) -> Unit,
     onCenterPhoneNumberChanged: (String) -> Unit,
-    onCenterCertificateNumberChanged: (String) -> Unit,
+    onCenterAuthCodeChanged: (String) -> Unit,
     onBusinessRegistrationNumberChanged: (String) -> Unit,
     onCenterIdChanged: (String) -> Unit,
     onCenterPasswordChanged: (String) -> Unit,
@@ -131,7 +131,7 @@ internal fun CenterSignUpScreen(
                     centerPhoneNumber = centerPhoneNumber,
                     centerCertificationNumber = centerCertificateNumber,
                     onCenterPhoneNumberChanged = onCenterPhoneNumberChanged,
-                    onCenterCertificationNumberChanged = onCenterCertificateNumberChanged,
+                    onCenterAuthCodeChanged = onCenterAuthCodeChanged,
                     setSignUpProcess = setSignUpProcess
                 )
 

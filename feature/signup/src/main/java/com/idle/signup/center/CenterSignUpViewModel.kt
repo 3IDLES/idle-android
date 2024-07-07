@@ -1,8 +1,11 @@
 package com.idle.signin.center
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.common_ui.DeepLinkDestination
+import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
+import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
 import com.idle.signin.center.CenterSignUpProcess.NAME
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -13,7 +16,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CenterSignUpViewModel @Inject constructor() : ViewModel() {
+class CenterSignUpViewModel @Inject constructor(
+    private val sendPhoneNumberUseCase: SendPhoneNumberUseCase,
+    private val confirmAuthCodeUseCase: ConfirmAuthCodeUseCase,
+) : ViewModel() {
     private val _eventFlow = MutableSharedFlow<CenterSignUpEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
@@ -26,8 +32,8 @@ class CenterSignUpViewModel @Inject constructor() : ViewModel() {
     private val _centerPhoneNumber = MutableStateFlow("")
     val centerPhoneNumber = _centerPhoneNumber.asStateFlow()
 
-    private val _centerCertificateNumber = MutableStateFlow("")
-    val centerCertificateNumber = _centerCertificateNumber.asStateFlow()
+    private val _centerAuthCode = MutableStateFlow("")
+    val centerConfirmNumber = _centerAuthCode.asStateFlow()
 
     private val _businessRegistrationNumber = MutableStateFlow("")
     val businessRegistrationNumber = _businessRegistrationNumber.asStateFlow()
@@ -57,8 +63,8 @@ class CenterSignUpViewModel @Inject constructor() : ViewModel() {
         _centerPhoneNumber.value = phoneNumber
     }
 
-    internal fun setCenterCertificateNumber(certificateNumber: String) {
-        _centerCertificateNumber.value = certificateNumber
+    internal fun setCenterAuthCode(authCode: String) {
+        _centerAuthCode.value = authCode
     }
 
     internal fun setBusinessRegistrationNumber(businessRegistrationNumber: String) {
@@ -75,6 +81,18 @@ class CenterSignUpViewModel @Inject constructor() : ViewModel() {
 
     internal fun setCenterPasswordForConfirm(passwordForConfirm: String) {
         _centerPasswordForConfirm.value = passwordForConfirm
+    }
+
+    internal fun sendPhoneNumber() = viewModelScope.launch {
+        sendPhoneNumberUseCase(_centerPhoneNumber.value)
+            .onSuccess { Log.d("test", "성공!") }
+            .onFailure { Log.d("test", "실패! ${it}") }
+    }
+
+    internal fun confirmAuthCode() = viewModelScope.launch {
+        confirmAuthCodeUseCase(_centerPhoneNumber.value, _centerAuthCode.value)
+            .onSuccess { Log.d("test", "성공!") }
+            .onFailure { Log.d("test", "실패! ${it}") }
     }
 }
 

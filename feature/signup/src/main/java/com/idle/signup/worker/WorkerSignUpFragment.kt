@@ -69,8 +69,8 @@ internal class WorkerSignUpFragment : Fragment() {
                     onWorkerCertificateNumberChanged = ::setWorkerCertificateNumber,
                     onGenderChanged = ::setGender,
                     setSignUpProcess = ::setWorkerSignUpProcess,
-                    sendAuthNumber = ::sendAuthNumber,
-                    confirmAuthNumber = ::confirmAuthNumber,
+                    sendPhoneNumber = ::sendPhoneNumber,
+                    confirmAuthCode = ::confirmAuthCode,
                 )
             }
         }
@@ -95,8 +95,8 @@ internal fun WorkerSignUpScreen(
     onWorkerCertificateNumberChanged: (String) -> Unit,
     onGenderChanged: (Gender) -> Unit,
     setSignUpProcess: (WorkerSignUpProcess) -> Unit,
-    sendAuthNumber: () -> Unit,
-    confirmAuthNumber: () -> Unit,
+    sendPhoneNumber: () -> Unit,
+    confirmAuthCode: () -> Unit,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -118,8 +118,8 @@ internal fun WorkerSignUpScreen(
                 onWorkerPhoneNumberChanged = onWorkerPhoneNumberChanged,
                 onWorkerCertificationNumberChanged = onWorkerCertificateNumberChanged,
                 setSignUpProcess = setSignUpProcess,
-                sendAuthNumber = sendAuthNumber,
-                confirmAuthNumber = confirmAuthNumber,
+                sendPhoneNumber = sendPhoneNumber,
+                confirmAuthCode = confirmAuthCode,
             )
 
             WorkerSignUpProcess.GENDER -> GenderScreen(
