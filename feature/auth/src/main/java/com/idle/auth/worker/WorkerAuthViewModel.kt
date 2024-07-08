@@ -2,7 +2,7 @@ package com.idle.auth.center
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.idle.common_ui.DeepLinkDestination
+import com.idle.binding.DeepLinkDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -20,5 +20,5 @@ class WorkerAuthViewModel @Inject constructor() : ViewModel() {
 }
 
 sealed class WorkerAuthEvent {
-    data class NavigateTo(val destination: DeepLinkDestination) : WorkerAuthEvent()
+    data class NavigateTo(val destination: com.idle.binding.DeepLinkDestination) : WorkerAuthEvent()
 }

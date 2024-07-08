@@ -23,10 +23,10 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.idle.common_ui.DeepLinkDestination.CenterAuth
-import com.idle.common_ui.DeepLinkDestination.WorkerAuth
-import com.idle.common_ui.deepLinkNavigateTo
-import com.idle.common_ui.repeatOnStarted
+import com.idle.binding.DeepLinkDestination.CenterAuth
+import com.idle.binding.DeepLinkDestination.WorkerAuth
+import com.idle.binding.deepLinkNavigateTo
+import com.idle.binding.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

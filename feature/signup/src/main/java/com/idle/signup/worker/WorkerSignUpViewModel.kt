@@ -3,7 +3,7 @@ package com.idle.signin.worker
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.idle.common_ui.DeepLinkDestination
+import com.idle.binding.DeepLinkDestination
 import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
 import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
 import com.idle.signin.worker.WorkerSignUpProcess.PHONE_NUMBER
@@ -76,7 +76,7 @@ class WorkerSignUpViewModel @Inject constructor(
 }
 
 sealed class WorkerSignUpEvent {
-    data class NavigateTo(val destination: DeepLinkDestination) : WorkerSignUpEvent()
+    data class NavigateTo(val destination: com.idle.binding.DeepLinkDestination) : WorkerSignUpEvent()
 }
 
 enum class WorkerSignUpProcess {

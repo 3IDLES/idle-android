@@ -1,11 +1,11 @@
-package com.idle.common_ui
+package com.idle.binding
 
 import android.content.Context
 import androidx.core.net.toUri
 import androidx.navigation.NavController
 import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.NavOptions
-import com.idle.common.ui.R
+import com.idle.common.ui.binding.R
 
 // DeepLinkDestination.kt
 sealed class DeepLinkDestination(val addressRes: Int) {

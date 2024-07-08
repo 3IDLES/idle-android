@@ -21,9 +21,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.idle.auth.center.WorkerAuthEvent.NavigateTo
-import com.idle.common_ui.DeepLinkDestination.WorkerSignUp
-import com.idle.common_ui.deepLinkNavigateTo
-import com.idle.common_ui.repeatOnStarted
+import com.idle.binding.DeepLinkDestination.WorkerSignUp
+import com.idle.binding.deepLinkNavigateTo
+import com.idle.binding.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

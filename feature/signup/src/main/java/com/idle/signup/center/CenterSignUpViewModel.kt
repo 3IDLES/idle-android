@@ -3,7 +3,7 @@ package com.idle.signin.center
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.idle.common_ui.DeepLinkDestination
+import com.idle.binding.DeepLinkDestination
 import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
 import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
 import com.idle.domain.usecase.auth.SignUpCenterUseCase
@@ -111,9 +111,9 @@ class CenterSignUpViewModel @Inject constructor(
 }
 
 sealed class CenterSignUpEvent {
-    data class NavigateTo(val destination: DeepLinkDestination) : CenterSignUpEvent()
+    data class NavigateTo(val destination: com.idle.binding.DeepLinkDestination) : CenterSignUpEvent()
 }
 
-enum class CenterSignUpProcess {
-    NAME, PHONE_NUMBER, BUSINESS_REGISTRAION_NUMBER, ID_PASSWORD
+enum class CenterSignUpProcess(val step: Int) {
+    NAME(1), PHONE_NUMBER(2), BUSINESS_REGISTRAION_NUMBER(3), ID_PASSWORD(4)
 }
