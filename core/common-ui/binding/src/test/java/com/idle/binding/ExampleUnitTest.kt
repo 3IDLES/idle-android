@@ -1,7 +1,8 @@
-package com.idle.common_ui
+package com.idle.binding
 
-import org.junit.Assert.assertEquals
 import org.junit.Test
+
+import org.junit.Assert.*
 
 /**
  * Example local unit test, which will execute on the development machine (host).

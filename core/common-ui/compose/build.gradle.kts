@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.idle.designsystem.compose"
+    namespace = "com.idle.common.ui.compose"
 }
 
 dependencies {

@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.idle.common.ui"
+    namespace = "com.idle.common.ui.binding"
 }
 
 dependencies {

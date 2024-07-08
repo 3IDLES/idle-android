@@ -11,8 +11,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
-import com.idle.common_ui.deepLinkNavigateTo
-import com.idle.common_ui.repeatOnStarted
+import com.idle.binding.deepLinkNavigateTo
+import com.idle.binding.repeatOnStarted
 import com.idle.signin.center.newpassword.process.GenerateNewPasswordScreen
 import com.idle.signin.center.newpassword.process.PhoneNumberScreen
 

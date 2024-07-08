@@ -1,7 +1,7 @@
 package com.idle.signin.center.newpassword
 
 import androidx.lifecycle.ViewModel
-import com.idle.common_ui.DeepLinkDestination
+import com.idle.binding.DeepLinkDestination
 import com.idle.signin.center.newpassword.GenerateNewPasswordProcess.PHONE_NUMBER
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -52,7 +52,7 @@ class NewPasswordViewModel @Inject constructor() : ViewModel() {
 }
 
 sealed class NewPasswordEvent {
-    data class NavigateTo(val destination: DeepLinkDestination) : NewPasswordEvent()
+    data class NavigateTo(val destination: com.idle.binding.DeepLinkDestination) : NewPasswordEvent()
 }
 
 enum class GenerateNewPasswordProcess {

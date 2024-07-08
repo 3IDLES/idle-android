@@ -8,7 +8,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -20,8 +22,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
-import com.idle.common_ui.deepLinkNavigateTo
-import com.idle.common_ui.repeatOnStarted
+import com.idle.binding.deepLinkNavigateTo
+import com.idle.binding.repeatOnStarted
+import com.idle.designsystem.compose.component.CareProgressBar
+import com.idle.designsystem.compose.component.CareTopAppBar
 import com.idle.signup.center.process.BusinessRegistrationScreen
 import com.idle.signup.center.process.CenterNameScreen
 import com.idle.signup.center.process.CenterPhoneNumberScreen
@@ -118,48 +122,66 @@ internal fun CenterSignUpScreen(
     confirmAuthCode: () -> Unit,
     signUpCenter: () -> Unit,
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterVertically),
-        modifier = Modifier.fillMaxSize()
-            .background(Color.White)
-            .padding(horizontal = 20.dp),
-    ) {
-        when (signUpProcess) {
-            CenterSignUpProcess.NAME -> CenterNameScreen(
-                centerName = centerName,
-                onCenterNameChanged = onCenterNameChanged,
-                setSignUpProcess = setSignUpProcess,
+    Scaffold(
+        topBar = {
+            CareTopAppBar(
+                title = "센터 회원가입",
+                onNavigationClick = {},
+                modifier = Modifier.fillMaxWidth()
+                    .padding(top = 20.dp, start = 12.dp)
+            )
+        }
+    ) { paddingValue ->
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterVertically),
+            modifier = Modifier.fillMaxSize()
+                .background(Color.White)
+                .padding(paddingValue)
+                .padding(horizontal = 20.dp),
+        ) {
+            CareProgressBar(
+                currentStep = signUpProcess.step,
+                totalSteps = CenterSignUpProcess.entries.size,
+                modifier = Modifier.fillMaxWidth(),
             )
 
-            CenterSignUpProcess.PHONE_NUMBER ->
-                CenterPhoneNumberScreen(
-                    centerPhoneNumber = centerPhoneNumber,
-                    centerCertificationNumber = centerCertificateNumber,
-                    onCenterPhoneNumberChanged = onCenterPhoneNumberChanged,
-                    onCenterAuthCodeChanged = onCenterAuthCodeChanged,
-                    setSignUpProcess = setSignUpProcess,
-                    sendPhoneNumber = sendPhoneNumber,
-                    confirmAuthCode = confirmAuthCode,
-                )
-
-            CenterSignUpProcess.BUSINESS_REGISTRAION_NUMBER ->
-                BusinessRegistrationScreen(
-                    businessRegistrationNumber = businessRegistrationNumber,
-                    onBusinessRegistrationNumberChanged = onBusinessRegistrationNumberChanged,
+            when (signUpProcess) {
+                CenterSignUpProcess.NAME -> CenterNameScreen(
+                    centerName = centerName,
+                    onCenterNameChanged = onCenterNameChanged,
                     setSignUpProcess = setSignUpProcess,
                 )
 
-            CenterSignUpProcess.ID_PASSWORD -> IdPasswordScreen(
-                centerId = centerId,
-                centerPassword = centerPassword,
-                centerPasswordForConfirm = centerPasswordForConfirm,
-                onCenterIdChanged = onCenterIdChanged,
-                onCenterPasswordChanged = onCenterPasswordChanged,
-                onCenterPasswordForConfirmChanged = onCenterPasswordForConfirmChanged,
-                setSignUpProcess = setSignUpProcess,
-                signUpCenter = signUpCenter,
-            )
+                CenterSignUpProcess.PHONE_NUMBER ->
+                    CenterPhoneNumberScreen(
+                        centerPhoneNumber = centerPhoneNumber,
+                        centerCertificationNumber = centerCertificateNumber,
+                        onCenterPhoneNumberChanged = onCenterPhoneNumberChanged,
+                        onCenterAuthCodeChanged = onCenterAuthCodeChanged,
+                        setSignUpProcess = setSignUpProcess,
+                        sendPhoneNumber = sendPhoneNumber,
+                        confirmAuthCode = confirmAuthCode,
+                    )
+
+                CenterSignUpProcess.BUSINESS_REGISTRAION_NUMBER ->
+                    BusinessRegistrationScreen(
+                        businessRegistrationNumber = businessRegistrationNumber,
+                        onBusinessRegistrationNumberChanged = onBusinessRegistrationNumberChanged,
+                        setSignUpProcess = setSignUpProcess,
+                    )
+
+                CenterSignUpProcess.ID_PASSWORD -> IdPasswordScreen(
+                    centerId = centerId,
+                    centerPassword = centerPassword,
+                    centerPasswordForConfirm = centerPasswordForConfirm,
+                    onCenterIdChanged = onCenterIdChanged,
+                    onCenterPasswordChanged = onCenterPasswordChanged,
+                    onCenterPasswordForConfirmChanged = onCenterPasswordForConfirmChanged,
+                    setSignUpProcess = setSignUpProcess,
+                    signUpCenter = signUpCenter,
+                )
+            }
         }
     }
 }

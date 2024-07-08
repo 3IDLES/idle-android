@@ -23,7 +23,8 @@ dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:designsystem:compose"))
     implementation(project(":core:domain"))
-    implementation(project(":core:common-ui"))
+    implementation(project(":core:common-ui:binding"))
+    implementation(project(":core:common-ui:compose"))
 
     val libs = project.extensions.libs
     implementation(libs.findLibrary("androidx.compose.navigation").get())

@@ -1,4 +1,4 @@
-package com.idle.common_ui
+package com.idle.binding
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
