@@ -5,12 +5,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.idle.designsystem.compose.component.CareButton
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.signin.center.CenterSignUpProcess
@@ -41,8 +41,11 @@ internal fun CenterNameScreen(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        Button(onClick = { setSignUpProcess(CenterSignUpProcess.PHONE_NUMBER) }) {
-            Text(text = "다음")
-        }
+        CareButton(
+            text = "다음",
+            enable = centerName.isNotBlank(),
+            onClick = { setSignUpProcess(CenterSignUpProcess.PHONE_NUMBER) },
+            modifier = Modifier.fillMaxWidth(),
+        )
     }
 }

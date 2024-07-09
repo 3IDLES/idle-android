@@ -134,11 +134,11 @@ internal fun CenterSignUpScreen(
     ) { paddingValue ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterVertically),
+            verticalArrangement = Arrangement.spacedBy(32.dp, Alignment.CenterVertically),
             modifier = Modifier.fillMaxSize()
                 .background(Color.White)
                 .padding(paddingValue)
-                .padding(horizontal = 20.dp),
+                .padding(start = 20.dp, end = 20.dp, bottom = 30.dp),
         ) {
             CareProgressBar(
                 currentStep = signUpProcess.step,
