@@ -11,6 +11,7 @@ val Orange500 = Color(0xffFF7A00)
 val Orange600 = Color(0xffCC6200)
 val Orange700 = Color(0xff994900)
 
+val White000 = Color(0xffffffff)
 val Gray050 = Color(0xffF1F2F4)
 val Gray100 = Color(0xffDFE0E3)
 val Gray200 = Color(0xffBFC1C7)
@@ -31,6 +32,7 @@ data class CareColors(
     val orange500: Color = Orange500,
     val orange600: Color = Orange600,
     val orange700: Color = Orange700,
+    val white000: Color = White000,
     val gray050: Color = Gray050,
     val gray100: Color = Gray100,
     val gray200: Color = Gray200,

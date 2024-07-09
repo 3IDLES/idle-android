@@ -128,7 +128,7 @@ internal fun CenterSignUpScreen(
                 title = "센터 회원가입",
                 onNavigationClick = {},
                 modifier = Modifier.fillMaxWidth()
-                    .padding(top = 20.dp, start = 12.dp)
+                    .padding(start = 12.dp, top = 20.dp, bottom = 8.dp)
             )
         }
     ) { paddingValue ->
