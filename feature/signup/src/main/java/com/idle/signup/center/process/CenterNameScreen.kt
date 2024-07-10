@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.unit.dp
-import com.idle.designsystem.compose.component.CareButton
+import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.signin.center.CenterSignUpProcess
@@ -53,7 +53,7 @@ internal fun CenterNameScreen(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        CareButton(
+        CareButtonLarge(
             text = "다음",
             enable = centerName.isNotBlank(),
             onClick = { setSignUpProcess(CenterSignUpProcess.PHONE_NUMBER) },
