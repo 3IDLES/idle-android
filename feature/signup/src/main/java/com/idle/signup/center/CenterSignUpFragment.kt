@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -24,6 +25,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.idle.binding.deepLinkNavigateTo
 import com.idle.binding.repeatOnStarted
+import com.idle.compose.addFocusCleaner
 import com.idle.designsystem.compose.component.CareProgressBar
 import com.idle.designsystem.compose.component.CareTopAppBar
 import com.idle.signup.center.process.BusinessRegistrationScreen
@@ -122,15 +124,18 @@ internal fun CenterSignUpScreen(
     confirmAuthCode: () -> Unit,
     signUpCenter: () -> Unit,
 ) {
+    val focusManager = LocalFocusManager.current
+
     Scaffold(
         topBar = {
             CareTopAppBar(
                 title = "센터 회원가입",
                 onNavigationClick = {},
                 modifier = Modifier.fillMaxWidth()
-                    .padding(start = 12.dp, top = 20.dp, bottom = 8.dp)
+                    .padding(start = 12.dp, top = 48.dp, bottom = 8.dp)
             )
-        }
+        },
+        modifier = Modifier.addFocusCleaner(focusManager),
     ) { paddingValue ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
