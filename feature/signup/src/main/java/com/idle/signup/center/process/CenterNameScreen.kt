@@ -7,8 +7,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.unit.dp
 import com.idle.designsystem.compose.component.CareButton
 import com.idle.designsystem.compose.component.CareTextField
@@ -21,6 +25,12 @@ internal fun CenterNameScreen(
     onCenterNameChanged: (String) -> Unit,
     setSignUpProcess: (CenterSignUpProcess) -> Unit,
 ) {
+    val focusRequester = remember { FocusRequester() }
+
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
+
     Column(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(32.dp),
@@ -37,6 +47,7 @@ internal fun CenterNameScreen(
             hint = "성함을 입력해주세요.",
             onValueChanged = onCenterNameChanged,
             modifier = Modifier.fillMaxWidth()
+                .focusRequester(focusRequester)
         )
 
         Spacer(modifier = Modifier.weight(1f))
