@@ -154,16 +154,17 @@ internal fun CenterSignUpScreen(
             )
 
             when (signUpProcess) {
-                CenterSignUpProcess.NAME -> CenterNameScreen(
-                    centerName = centerName,
-                    onCenterNameChanged = onCenterNameChanged,
-                    setSignUpProcess = setSignUpProcess,
-                )
+                CenterSignUpProcess.NAME ->
+                    CenterNameScreen(
+                        centerName = centerName,
+                        onCenterNameChanged = onCenterNameChanged,
+                        setSignUpProcess = setSignUpProcess,
+                    )
 
                 CenterSignUpProcess.PHONE_NUMBER ->
                     CenterPhoneNumberScreen(
                         centerPhoneNumber = centerPhoneNumber,
-                        centerCertificationNumber = centerCertificateNumber,
+                        centerAuthCode = centerCertificateNumber,
                         onCenterPhoneNumberChanged = onCenterPhoneNumberChanged,
                         onCenterAuthCodeChanged = onCenterAuthCodeChanged,
                         setSignUpProcess = setSignUpProcess,
@@ -178,16 +179,17 @@ internal fun CenterSignUpScreen(
                         setSignUpProcess = setSignUpProcess,
                     )
 
-                CenterSignUpProcess.ID_PASSWORD -> IdPasswordScreen(
-                    centerId = centerId,
-                    centerPassword = centerPassword,
-                    centerPasswordForConfirm = centerPasswordForConfirm,
-                    onCenterIdChanged = onCenterIdChanged,
-                    onCenterPasswordChanged = onCenterPasswordChanged,
-                    onCenterPasswordForConfirmChanged = onCenterPasswordForConfirmChanged,
-                    setSignUpProcess = setSignUpProcess,
-                    signUpCenter = signUpCenter,
-                )
+                CenterSignUpProcess.ID_PASSWORD ->
+                    IdPasswordScreen(
+                        centerId = centerId,
+                        centerPassword = centerPassword,
+                        centerPasswordForConfirm = centerPasswordForConfirm,
+                        onCenterIdChanged = onCenterIdChanged,
+                        onCenterPasswordChanged = onCenterPasswordChanged,
+                        onCenterPasswordForConfirmChanged = onCenterPasswordForConfirmChanged,
+                        setSignUpProcess = setSignUpProcess,
+                        signUpCenter = signUpCenter,
+                    )
             }
         }
     }

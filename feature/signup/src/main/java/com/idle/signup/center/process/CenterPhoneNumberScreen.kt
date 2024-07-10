@@ -4,11 +4,10 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -17,6 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.unit.dp
+import com.idle.designsystem.compose.component.CareButtonLarge
+import com.idle.designsystem.compose.component.CareButtonSmall
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.signin.center.CenterSignUpProcess
@@ -24,7 +25,7 @@ import com.idle.signin.center.CenterSignUpProcess
 @Composable
 internal fun CenterPhoneNumberScreen(
     centerPhoneNumber: String,
-    centerCertificationNumber: String,
+    centerAuthCode: String,
     onCenterPhoneNumberChanged: (String) -> Unit,
     onCenterAuthCodeChanged: (String) -> Unit,
     setSignUpProcess: (CenterSignUpProcess) -> Unit,
@@ -60,19 +61,25 @@ internal fun CenterPhoneNumberScreen(
                 color = CareTheme.colors.gray500,
             )
 
-            Row(modifier = Modifier.fillMaxWidth()) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 CareTextField(
                     value = centerPhoneNumber,
                     hint = "전화번호를 입력해주세요.",
                     onValueChanged = onCenterPhoneNumberChanged,
-                    onDone = { },
-                    modifier = Modifier.fillMaxWidth()
-                        .focusRequester(focusRequester)
+                    onDone = { sendPhoneNumber() },
+                    modifier = Modifier.weight(1f)
+                        .focusRequester(focusRequester),
                 )
 
-                Button(onClick = sendPhoneNumber) {
-                    Text(text = "인증")
-                }
+                CareButtonSmall(
+                    enable = centerPhoneNumber.length == 13,
+                    text = "인증",
+                    onClick = sendPhoneNumber,
+                )
             }
         }
 
@@ -80,22 +87,40 @@ internal fun CenterPhoneNumberScreen(
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
         ) {
-            Text(text = "인증번호")
+            Text(
+                text = "인증번호",
+                style = CareTheme.typography.subtitle4,
+                color = CareTheme.colors.gray500,
+            )
 
-            Row(modifier = Modifier.fillMaxWidth()) {
-                TextField(
-                    value = centerCertificationNumber,
-                    onValueChange = onCenterAuthCodeChanged
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                CareTextField(
+                    value = centerAuthCode,
+                    hint = "",
+                    onValueChanged = onCenterAuthCodeChanged,
+                    onDone = { confirmAuthCode() },
+                    modifier = Modifier.weight(1f),
                 )
 
-                Button(onClick = confirmAuthCode) {
-                    Text(text = "확인")
-                }
+                CareButtonSmall(
+                    enable = centerAuthCode.isNotBlank(),
+                    text = "확인",
+                    onClick = confirmAuthCode,
+                )
             }
         }
 
-        Button(onClick = { setSignUpProcess(CenterSignUpProcess.BUSINESS_REGISTRAION_NUMBER) }) {
-            Text(text = "다음")
-        }
+        Spacer(modifier = Modifier.weight(1f))
+
+        CareButtonLarge(
+            text = "다음",
+            enable = centerAuthCode.isNotBlank(),
+            onClick = { setSignUpProcess(CenterSignUpProcess.BUSINESS_REGISTRAION_NUMBER) },
+            modifier = Modifier.fillMaxWidth(),
+        )
     }
 }
