@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -124,13 +125,14 @@ internal fun CenterSignUpScreen(
     confirmAuthCode: () -> Unit,
     signUpCenter: () -> Unit,
 ) {
+    val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val focusManager = LocalFocusManager.current
 
     Scaffold(
         topBar = {
             CareTopAppBar(
                 title = "센터 회원가입",
-                onNavigationClick = {},
+                onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
                 modifier = Modifier.fillMaxWidth()
                     .padding(start = 12.dp, top = 48.dp, bottom = 8.dp)
             )

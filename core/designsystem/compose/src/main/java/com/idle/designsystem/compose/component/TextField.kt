@@ -23,6 +23,7 @@ fun CareTextField(
     value: String,
     hint: String,
     onValueChanged: (String) -> Unit,
+    onDone: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -32,7 +33,11 @@ fun CareTextField(
         modifier = modifier
             .height(44.dp)
             .background(color = CareTheme.colors.white000, shape = RoundedCornerShape(6.dp))
-            .border(width = 1.dp, color = CareTheme.colors.gray100, shape = RoundedCornerShape(6.dp))
+            .border(
+                width = 1.dp,
+                color = CareTheme.colors.gray100,
+                shape = RoundedCornerShape(6.dp)
+            )
             .padding(horizontal = 16.dp, vertical = 10.dp)
     ) {
         BasicTextField(
@@ -41,7 +46,10 @@ fun CareTextField(
             textStyle = CareTheme.typography.body3,
             singleLine = true,
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-            keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
+            keyboardActions = KeyboardActions(onDone = {
+                onDone()
+                keyboardController?.hide()
+            }),
             decorationBox = { innerTextField ->
                 if (value.isEmpty()) {
                     Text(
