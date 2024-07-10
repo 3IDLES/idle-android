@@ -10,9 +10,15 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.unit.dp
+import com.idle.designsystem.compose.component.CareTextField
+import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.signin.center.CenterSignUpProcess
 
 @Composable
@@ -25,25 +31,43 @@ internal fun CenterPhoneNumberScreen(
     sendPhoneNumber: () -> Unit,
     confirmAuthCode: () -> Unit,
 ) {
+    val focusRequester = remember { FocusRequester() }
+
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
+
     BackHandler { setSignUpProcess(CenterSignUpProcess.NAME) }
 
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterVertically),
+        horizontalAlignment = Alignment.Start,
+        verticalArrangement = Arrangement.spacedBy(32.dp),
         modifier = Modifier.fillMaxSize()
     ) {
-        Text(text = "전화번호를 입력해주세요")
+        Text(
+            text = "전화번호를 입력해주세요",
+            style = CareTheme.typography.heading2,
+            color = CareTheme.colors.gray900,
+        )
 
         Column(
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
         ) {
-            Text(text = "전화번호")
+            Text(
+                text = "전화번호",
+                style = CareTheme.typography.subtitle4,
+                color = CareTheme.colors.gray500,
+            )
 
             Row(modifier = Modifier.fillMaxWidth()) {
-                TextField(
+                CareTextField(
                     value = centerPhoneNumber,
-                    onValueChange = onCenterPhoneNumberChanged
+                    hint = "전화번호를 입력해주세요.",
+                    onValueChanged = onCenterPhoneNumberChanged,
+                    onDone = { },
+                    modifier = Modifier.fillMaxWidth()
+                        .focusRequester(focusRequester)
                 )
 
                 Button(onClick = sendPhoneNumber) {
