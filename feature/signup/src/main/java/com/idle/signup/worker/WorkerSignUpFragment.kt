@@ -64,19 +64,25 @@ internal class WorkerSignUpFragment : Fragment() {
                 val signUpProcess by signUpProcess.collectAsStateWithLifecycle()
                 val workerName by workerName.collectAsStateWithLifecycle()
                 val workerPhoneNumber by workerPhoneNumber.collectAsStateWithLifecycle()
-                val workerCertificateNumber by workerConfirmNumber.collectAsStateWithLifecycle()
+                val workerAuthCode by workerAuthCode.collectAsStateWithLifecycle()
                 val gender by gender.collectAsStateWithLifecycle()
+                val address by address.collectAsStateWithLifecycle()
+                val addressDetail by addressDetail.collectAsStateWithLifecycle()
 
                 WorkerSignUpScreen(
                     signUpProcess = signUpProcess,
                     workerName = workerName,
                     workerPhoneNumber = workerPhoneNumber,
-                    workerCertificateNumber = workerCertificateNumber,
+                    workerAuthCode = workerAuthCode,
                     gender = gender,
+                    address = address,
+                    addressDetail = addressDetail,
                     onWorkerNameChanged = ::setWorkerName,
                     onWorkerPhoneNumberChanged = ::setWorkerPhoneNumber,
-                    onWorkerCertificateNumberChanged = ::setWorkerCertificateNumber,
+                    onWorkerAuthCodeChanged = ::setWorkerAuthCode,
                     onGenderChanged = ::setGender,
+                    onAddressChanged = ::setAddress,
+                    onAddressDetailChanged = ::setAddressDetail,
                     setSignUpProcess = ::setWorkerSignUpProcess,
                     sendPhoneNumber = ::sendPhoneNumber,
                     confirmAuthCode = ::confirmAuthCode,
@@ -97,12 +103,16 @@ internal fun WorkerSignUpScreen(
     signUpProcess: WorkerSignUpProcess,
     workerName: String,
     workerPhoneNumber: String,
-    workerCertificateNumber: String,
+    workerAuthCode: String,
     gender: Gender,
+    address: String,
+    addressDetail: String,
     onWorkerNameChanged: (String) -> Unit,
     onWorkerPhoneNumberChanged: (String) -> Unit,
-    onWorkerCertificateNumberChanged: (String) -> Unit,
+    onWorkerAuthCodeChanged: (String) -> Unit,
     onGenderChanged: (Gender) -> Unit,
+    onAddressChanged: (String) -> Unit,
+    onAddressDetailChanged: (String) -> Unit,
     setSignUpProcess: (WorkerSignUpProcess) -> Unit,
     sendPhoneNumber: () -> Unit,
     confirmAuthCode: () -> Unit,
@@ -150,16 +160,19 @@ internal fun WorkerSignUpScreen(
 
                 WorkerSignUpProcess.PHONE_NUMBER -> WorkerPhoneNumberScreen(
                     workerPhoneNumber = workerPhoneNumber,
-                    workerCertificationNumber = workerCertificateNumber,
+                    workerAuthCode = workerAuthCode,
                     onWorkerPhoneNumberChanged = onWorkerPhoneNumberChanged,
-                    onWorkerCertificationNumberChanged = onWorkerCertificateNumberChanged,
+                    onWorkerAuthCodeChanged = onWorkerAuthCodeChanged,
                     setSignUpProcess = setSignUpProcess,
                     sendPhoneNumber = sendPhoneNumber,
                     confirmAuthCode = confirmAuthCode,
                 )
 
                 WorkerSignUpProcess.ADDRESS -> AddressScreen(
-                    onAddressDetailChanged = {},
+                    address = address,
+                    addressDetail = addressDetail,
+                    onAddressChanged = onAddressChanged,
+                    onAddressDetailChanged = onAddressDetailChanged,
                     setSignUpProcess = setSignUpProcess,
                 )
             }
