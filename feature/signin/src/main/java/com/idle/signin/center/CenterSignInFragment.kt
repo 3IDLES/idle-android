@@ -4,21 +4,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -27,6 +30,11 @@ import androidx.navigation.fragment.findNavController
 import com.idle.binding.DeepLinkDestination.NewPassword
 import com.idle.binding.deepLinkNavigateTo
 import com.idle.binding.repeatOnStarted
+import com.idle.compose.addFocusCleaner
+import com.idle.designsystem.compose.component.CareButtonLarge
+import com.idle.designsystem.compose.component.CareTextField
+import com.idle.designsystem.compose.component.CareTopAppBar
+import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.signin.center.CenterSignInEvent.NavigateTo
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -83,44 +91,87 @@ internal fun CenterSignInScreen(
     onCenterPasswordChanged: (String) -> Unit,
     navigateToNewPassword: () -> Unit = {},
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterVertically),
-        modifier = Modifier.fillMaxSize()
-            .background(Color.White)
-            .padding(horizontal = 20.dp),
-    ) {
-        Column(
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
-        ) {
-            Text(text = "아이디 설정 (영문+숫자 조합 10자리 이상 등 조건)")
+    val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
+    val focusManager = LocalFocusManager.current
 
-            TextField(
-                value = centerId,
-                onValueChange = onCenterIdChanged,
+    Scaffold(
+        topBar = {
+            CareTopAppBar(
+                title = "로그인",
+                onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
+                modifier = Modifier.fillMaxWidth()
+                    .padding(start = 12.dp, top = 48.dp)
             )
-        }
-
+        },
+        modifier = Modifier.addFocusCleaner(focusManager),
+    ) { paddingValue ->
         Column(
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
+            modifier = Modifier.fillMaxSize()
+                .background(CareTheme.colors.white000)
+                .padding(paddingValue)
+                .padding(start = 20.dp, end = 20.dp, bottom = 30.dp),
         ) {
-            Text(text = "비밀번호 설정 (영문+숫자 조합 10자리 이상 등 조건)")
+            Spacer(modifier = Modifier.weight(1f))
 
-            TextField(
-                value = centerPassword,
-                onValueChange = onCenterPasswordChanged
+            Column(
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
+                modifier = Modifier.padding(bottom = 16.dp),
+            ) {
+                Text(
+                    text = "아이디",
+                    style = CareTheme.typography.subtitle4,
+                    color = CareTheme.colors.gray500,
+                )
+
+
+                CareTextField(
+                    value = centerId,
+                    hint = "아이디를 입력해주세요.",
+                    onValueChanged = onCenterIdChanged,
+                    onDone = { },
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
+
+            Column(
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
+            ) {
+                Text(
+                    text = "비밀번호",
+                    style = CareTheme.typography.subtitle4,
+                    color = CareTheme.colors.gray500,
+                )
+
+
+                CareTextField(
+                    value = centerPassword,
+                    hint = "비밀번호를 입력해주세요.",
+                    onValueChanged = onCenterPasswordChanged,
+                    onDone = { },
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
+
+            Spacer(modifier = Modifier.weight(2f))
+
+            Text(
+                text = "비밀번호가 기억나지 않나요?",
+                textDecoration = TextDecoration.Underline,
+                style = CareTheme.typography.body3,
+                color = CareTheme.colors.gray500,
+                modifier = Modifier.clickable { navigateToNewPassword() }
             )
-        }
 
-        Text(
-            text = "비밀번호가 기억나지 않나요?",
-            modifier = Modifier.clickable { navigateToNewPassword() },
-        )
-
-        Button(onClick = {}) {
-            Text(text = "로그인")
+            CareButtonLarge(
+                text = "로그인",
+                enable = centerPassword.isNotBlank(),
+                onClick = {},
+                modifier = Modifier.fillMaxWidth(),
+            )
         }
     }
 }
