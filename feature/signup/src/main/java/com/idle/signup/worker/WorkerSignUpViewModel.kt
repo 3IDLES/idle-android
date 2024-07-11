@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.idle.binding.DeepLinkDestination
 import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
 import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
-import com.idle.signin.worker.WorkerSignUpProcess.PHONE_NUMBER
+import com.idle.signin.worker.WorkerSignUpProcess.NAME
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +23,7 @@ class WorkerSignUpViewModel @Inject constructor(
     private val _eventFlow = MutableSharedFlow<WorkerSignUpEvent>()
     internal val eventFlow = _eventFlow.asSharedFlow()
 
-    private val _signUpProcess = MutableStateFlow<WorkerSignUpProcess>(PHONE_NUMBER)
+    private val _signUpProcess = MutableStateFlow<WorkerSignUpProcess>(NAME)
     internal val signUpProcess = _signUpProcess.asStateFlow()
 
     private val _workerName = MutableStateFlow("")
@@ -76,13 +76,13 @@ class WorkerSignUpViewModel @Inject constructor(
 }
 
 sealed class WorkerSignUpEvent {
-    data class NavigateTo(val destination: com.idle.binding.DeepLinkDestination) : WorkerSignUpEvent()
+    data class NavigateTo(val destination: DeepLinkDestination) : WorkerSignUpEvent()
 }
 
-enum class WorkerSignUpProcess {
-    PHONE_NUMBER, NAME, GENDER
+enum class WorkerSignUpProcess(val step: Int) {
+    NAME(1), GENDER(2), PHONE_NUMBER(3), ADDRESS(4)
 }
 
-enum class Gender {
-    MALE, FEMALE, NONE
+enum class Gender(val displayName: String) {
+    MALE("남성"), FEMALE("여성"), NONE("")
 }

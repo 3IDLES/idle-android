@@ -3,7 +3,7 @@ package com.idle.designsystem.compose.foundation
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 
-val Orange100 = Color(0xff131417)
+val Orange100 = Color(0xffFFE4CC)
 val Orange200 = Color(0xffFFCA99)
 val Orange300 = Color(0xffFFAF66)
 val Orange400 = Color(0xffFF9533)

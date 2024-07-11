@@ -67,7 +67,7 @@ internal fun WorkerPhoneNumberScreen(
             }
         }
 
-        Button(onClick = { setSignUpProcess(WorkerSignUpProcess.NAME) }) {
+        Button(onClick = { setSignUpProcess(WorkerSignUpProcess.ADDRESS) }) {
             Text(text = "다음")
         }
     }
