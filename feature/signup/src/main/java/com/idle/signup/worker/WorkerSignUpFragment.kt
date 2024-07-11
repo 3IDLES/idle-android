@@ -4,17 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -22,6 +26,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.idle.binding.deepLinkNavigateTo
 import com.idle.binding.repeatOnStarted
+import com.idle.compose.addFocusCleaner
+import com.idle.designsystem.compose.component.CareProgressBar
+import com.idle.designsystem.compose.component.CareTopAppBar
+import com.idle.signin.center.CenterSignUpProcess
+import com.idle.signup.worker.process.AddressScreen
 import com.idle.signup.worker.process.GenderScreen
 import com.idle.signup.worker.process.WorkerNameScreen
 import com.idle.signup.worker.process.WorkerPhoneNumberScreen
@@ -98,35 +107,62 @@ internal fun WorkerSignUpScreen(
     sendPhoneNumber: () -> Unit,
     confirmAuthCode: () -> Unit,
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterVertically),
-        modifier = Modifier.fillMaxSize()
-            .background(Color.White)
-            .padding(horizontal = 20.dp),
-    ) {
-        when (signUpProcess) {
-            WorkerSignUpProcess.NAME -> WorkerNameScreen(
-                workerName = workerName,
-                onWorkerNameChanged = onWorkerNameChanged,
-                setSignUpProcess = setSignUpProcess
+    val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
+    val focusManager = LocalFocusManager.current
+
+    Scaffold(
+        topBar = {
+            CareTopAppBar(
+                title = "요양보호사 회원가입",
+                onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
+                modifier = Modifier.fillMaxWidth()
+                    .padding(start = 12.dp, top = 48.dp, bottom = 8.dp)
+            )
+        },
+        modifier = Modifier.addFocusCleaner(focusManager),
+    ) { paddingValue ->
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(32.dp, Alignment.CenterVertically),
+            modifier = Modifier.fillMaxSize()
+                .background(Color.White)
+                .padding(paddingValue)
+                .padding(start = 20.dp, end = 20.dp, bottom = 30.dp),
+        ) {
+            CareProgressBar(
+                currentStep = signUpProcess.step,
+                totalSteps = CenterSignUpProcess.entries.size,
+                modifier = Modifier.fillMaxWidth(),
             )
 
-            WorkerSignUpProcess.PHONE_NUMBER -> WorkerPhoneNumberScreen(
-                workerPhoneNumber = workerPhoneNumber,
-                workerCertificationNumber = workerCertificateNumber,
-                onWorkerPhoneNumberChanged = onWorkerPhoneNumberChanged,
-                onWorkerCertificationNumberChanged = onWorkerCertificateNumberChanged,
-                setSignUpProcess = setSignUpProcess,
-                sendPhoneNumber = sendPhoneNumber,
-                confirmAuthCode = confirmAuthCode,
-            )
+            when (signUpProcess) {
+                WorkerSignUpProcess.NAME -> WorkerNameScreen(
+                    workerName = workerName,
+                    onWorkerNameChanged = onWorkerNameChanged,
+                    setSignUpProcess = setSignUpProcess
+                )
 
-            WorkerSignUpProcess.GENDER -> GenderScreen(
-                gender = gender,
-                onGenderChanged = onGenderChanged,
-                setSignUpProcess = setSignUpProcess
-            )
+                WorkerSignUpProcess.GENDER -> GenderScreen(
+                    gender = gender,
+                    onGenderChanged = onGenderChanged,
+                    setSignUpProcess = setSignUpProcess
+                )
+
+                WorkerSignUpProcess.PHONE_NUMBER -> WorkerPhoneNumberScreen(
+                    workerPhoneNumber = workerPhoneNumber,
+                    workerCertificationNumber = workerCertificateNumber,
+                    onWorkerPhoneNumberChanged = onWorkerPhoneNumberChanged,
+                    onWorkerCertificationNumberChanged = onWorkerCertificateNumberChanged,
+                    setSignUpProcess = setSignUpProcess,
+                    sendPhoneNumber = sendPhoneNumber,
+                    confirmAuthCode = confirmAuthCode,
+                )
+
+                WorkerSignUpProcess.ADDRESS -> AddressScreen(
+                    onAddressDetailChanged = {},
+                    setSignUpProcess = setSignUpProcess,
+                )
+            }
         }
     }
 }

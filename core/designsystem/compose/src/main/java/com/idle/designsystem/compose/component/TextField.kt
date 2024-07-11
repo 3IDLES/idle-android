@@ -38,8 +38,7 @@ fun CareTextField(
                 width = 1.dp,
                 color = CareTheme.colors.gray100,
                 shape = RoundedCornerShape(6.dp)
-            )
-            .padding(horizontal = 16.dp, vertical = 10.dp)
+            ),
     ) {
         BasicTextField(
             value = value,
@@ -51,7 +50,8 @@ fun CareTextField(
                 onDone()
                 keyboardController?.hide()
             }),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 10.dp),
             decorationBox = { innerTextField ->
                 if (value.isEmpty()) {
                     Text(

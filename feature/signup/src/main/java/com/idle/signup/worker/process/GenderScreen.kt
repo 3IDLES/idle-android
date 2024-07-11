@@ -4,13 +4,17 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.idle.designsystem.compose.component.CareButtonLarge
+import com.idle.designsystem.compose.component.CareChip
+import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.signin.worker.Gender
 import com.idle.signin.worker.WorkerSignUpProcess
 
@@ -23,24 +27,43 @@ internal fun GenderScreen(
     BackHandler { setSignUpProcess(WorkerSignUpProcess.NAME) }
 
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterVertically),
+        horizontalAlignment = Alignment.Start,
+        verticalArrangement = Arrangement.spacedBy(32.dp),
         modifier = Modifier.fillMaxSize()
     ) {
-        Text(text = "성별을 알려주세요")
+        Text(
+            text = "본인의 성별을 선택해주세요",
+            style = CareTheme.typography.heading2,
+            color = CareTheme.colors.gray900,
+        )
 
-        Row {
-            Button(onClick = { onGenderChanged(Gender.MALE) }) {
-                Text(text = "남성")
-            }
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            CareChip(
+                value = Gender.FEMALE.displayName,
+                onClick = { onGenderChanged(Gender.FEMALE) },
+                enable = gender == Gender.FEMALE,
+                modifier = Modifier.weight(1f),
+            )
 
-            Button(onClick = { onGenderChanged(Gender.FEMALE) }) {
-                Text(text = "여성")
-            }
+            CareChip(
+                value = Gender.MALE.displayName,
+                onClick = { onGenderChanged(Gender.MALE) },
+                enable = gender == Gender.MALE,
+                modifier = Modifier.weight(1f),
+            )
         }
 
-        Button(onClick = { }) {
-            Text(text = "가입완료")
-        }
+        Spacer(modifier = Modifier.weight(1f))
+
+        CareButtonLarge(
+            text = "다음",
+            enable = gender != Gender.NONE,
+            onClick = { setSignUpProcess(WorkerSignUpProcess.PHONE_NUMBER) },
+            modifier = Modifier.fillMaxWidth(),
+        )
     }
 }
