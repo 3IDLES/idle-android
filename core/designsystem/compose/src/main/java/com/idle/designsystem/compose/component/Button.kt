@@ -69,7 +69,7 @@ fun CareButtonMedium(
 fun CareButtonLarge(
     text: String,
     onClick: () -> Unit,
-    enable: Boolean,
+    enable: Boolean = true,
     modifier: Modifier = Modifier,
 ) {
     Button(
