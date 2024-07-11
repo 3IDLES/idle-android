@@ -33,10 +33,16 @@ class WorkerSignUpViewModel @Inject constructor(
     internal val workerPhoneNumber = _workerPhoneNumber.asStateFlow()
 
     private val _workerAuthCode = MutableStateFlow("")
-    internal val workerConfirmNumber = _workerAuthCode.asStateFlow()
+    internal val workerAuthCode = _workerAuthCode.asStateFlow()
 
     private val _gender = MutableStateFlow(Gender.NONE)
     internal val gender = _gender.asStateFlow()
+
+    private val _address = MutableStateFlow("")
+    internal val address = _address.asStateFlow()
+
+    private val _addressDetail = MutableStateFlow("")
+    internal val addressDetail = _addressDetail.asStateFlow()
 
     internal fun event(event: WorkerSignUpEvent) = viewModelScope.launch {
         _eventFlow.emit(event)
@@ -54,12 +60,20 @@ class WorkerSignUpViewModel @Inject constructor(
         _workerPhoneNumber.value = phoneNumber
     }
 
-    internal fun setWorkerCertificateNumber(certificateNumber: String) {
+    internal fun setWorkerAuthCode(certificateNumber: String) {
         _workerAuthCode.value = certificateNumber
     }
 
     internal fun setGender(gender: Gender) {
         _gender.value = gender
+    }
+
+    internal fun setAddress(address: String) {
+        _address.value = address
+    }
+
+    internal fun setAddressDetail(addressDetail: String) {
+        _addressDetail.value = addressDetail
     }
 
     internal fun sendPhoneNumber() = viewModelScope.launch {
