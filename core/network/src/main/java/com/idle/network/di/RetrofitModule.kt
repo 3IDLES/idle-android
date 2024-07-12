@@ -1,9 +1,7 @@
 package com.idle.network.di
 
 import com.idle.network.BuildConfig
-import com.idle.network.model.auth.ConfirmAuthCodeRequest
-import com.idle.network.model.auth.SendPhoneRequest
-import com.idle.network.model.auth.SignUpCenterRequest
+import com.idle.network.api.CareNetworkApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,11 +10,8 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.POST
 import javax.inject.Singleton
 
 @Module
@@ -47,15 +42,4 @@ object RetrofitModule {
             .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
             .baseUrl(BuildConfig.CARE_BASE_URL).build()
             .create(CareNetworkApi::class.java)
-}
-
-interface CareNetworkApi {
-    @POST("/api/v1/auth/core/send")
-    suspend fun sendPhoneNumber(@Body sendPhoneRequest: SendPhoneRequest): Response<Unit>
-
-    @POST("/api/v1/auth/core/confirm")
-    suspend fun confirmAuthCode(@Body confirmAuthCodeRequest: ConfirmAuthCodeRequest): Response<Unit>
-
-    @POST("/api/v1/auth/center/join")
-    suspend fun signUpCenter(@Body signUpCenterRequest: SignUpCenterRequest): Response<Unit>
 }

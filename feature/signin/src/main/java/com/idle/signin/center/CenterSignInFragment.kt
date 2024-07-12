@@ -52,6 +52,7 @@ internal class CenterSignInFragment : BaseComposeFragment() {
                 centerPassword = centerPassword,
                 onCenterIdChanged = ::setCenterId,
                 onCenterPasswordChanged = ::setCenterPassword,
+                signInCenter = ::signInCenter,
                 navigateToNewPassword = { event(NavigateTo(NewPassword)) }
             )
         }
@@ -69,6 +70,7 @@ internal fun CenterSignInScreen(
     centerPassword: String,
     onCenterIdChanged: (String) -> Unit,
     onCenterPasswordChanged: (String) -> Unit,
+    signInCenter: () -> Unit,
     navigateToNewPassword: () -> Unit = {},
 ) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
@@ -147,7 +149,7 @@ internal fun CenterSignInScreen(
             CareButtonLarge(
                 text = "로그인",
                 enable = centerPassword.isNotBlank(),
-                onClick = {},
+                onClick = signInCenter,
                 modifier = Modifier.fillMaxWidth(),
             )
         }

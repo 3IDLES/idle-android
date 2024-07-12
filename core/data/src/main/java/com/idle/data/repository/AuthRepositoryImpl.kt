@@ -1,8 +1,10 @@
 package com.idle.data.repository
 
+import android.util.Log
 import com.idle.domain.repositorry.auth.AuthRepository
 import com.idle.network.model.auth.ConfirmAuthCodeRequest
 import com.idle.network.model.auth.SendPhoneRequest
+import com.idle.network.model.auth.SignInCenterRequest
 import com.idle.network.model.auth.SignUpCenterRequest
 import com.idle.network.source.AuthDataSource
 import javax.inject.Inject
@@ -39,4 +41,18 @@ class AuthRepositoryImpl @Inject constructor(
             businessRegistrationNumber = businessRegistrationNumber,
         )
     )
+
+    override suspend fun signInCenter(identifier: String, password: String): Result<Unit> =
+        runCatching {
+            authDataSource.signInCenter(
+                SignInCenterRequest(
+                    identifier = identifier,
+                    password = password
+                )
+            )
+                .onSuccess { Log.d("test", it.toString()) }
+                .onFailure { Log.d("test", "센터 로그인 실패") }
+
+            Unit
+        }
 }

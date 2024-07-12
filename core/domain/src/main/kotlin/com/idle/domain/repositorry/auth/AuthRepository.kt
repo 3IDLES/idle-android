@@ -12,4 +12,9 @@ interface AuthRepository {
         managerName: String,
         businessRegistrationNumber: String,
     ): Result<Unit>
+
+    suspend fun signInCenter(
+        identifier: String,
+        password: String,
+    ): Result<Unit>
 }
