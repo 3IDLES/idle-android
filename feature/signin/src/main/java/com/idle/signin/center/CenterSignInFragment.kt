@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -31,6 +30,7 @@ import com.idle.binding.DeepLinkDestination.NewPassword
 import com.idle.binding.deepLinkNavigateTo
 import com.idle.binding.repeatOnStarted
 import com.idle.compose.addFocusCleaner
+import com.idle.compose.clickable
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.CareTopAppBar
