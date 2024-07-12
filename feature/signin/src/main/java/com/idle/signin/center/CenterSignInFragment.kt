@@ -111,10 +111,8 @@ internal fun CenterSignInScreen(
             modifier = Modifier.fillMaxSize()
                 .background(CareTheme.colors.white000)
                 .padding(paddingValue)
-                .padding(start = 20.dp, end = 20.dp, bottom = 30.dp),
+                .padding(start = 20.dp, end = 20.dp, top = 125.dp, bottom = 30.dp),
         ) {
-            Spacer(modifier = Modifier.weight(1f))
-
             Column(
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
@@ -156,7 +154,7 @@ internal fun CenterSignInScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.weight(2f))
+            Spacer(modifier = Modifier.weight(1f))
 
             Text(
                 text = "비밀번호가 기억나지 않나요?",
