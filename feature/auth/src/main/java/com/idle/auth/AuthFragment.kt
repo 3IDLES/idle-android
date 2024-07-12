@@ -1,9 +1,5 @@
 package com.idle.auth
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -20,52 +16,32 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.idle.binding.DeepLinkDestination.CenterAuth
 import com.idle.binding.DeepLinkDestination.WorkerAuth
 import com.idle.binding.deepLinkNavigateTo
 import com.idle.binding.repeatOnStarted
+import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.foundation.CareTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-internal class AuthFragment : Fragment() {
+internal class AuthFragment : BaseComposeFragment() {
+    override val viewModel: AuthViewModel by viewModels()
 
-    private lateinit var composeView: ComposeView
-    private val viewModel: AuthViewModel by viewModels()
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View {
-        return ComposeView(requireContext()).also {
-            composeView = it
-        }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+    @Composable
+    override fun ComposeLayout() {
         repeatOnStarted {
             viewModel.eventFlow.collect { handleEvent(it) }
         }
 
-        composeView.setContent {
-            AuthScreen(
-                navigateToWorkerAuth = {
-                    viewModel.event(AuthEvent.NavigateTo(WorkerAuth))
-                },
-                navigateToCenterAuth = {
-                    viewModel.event(AuthEvent.NavigateTo(CenterAuth))
-                },
-            )
-        }
+        AuthScreen(
+            navigateToWorkerAuth = { viewModel.event(AuthEvent.NavigateTo(WorkerAuth)) },
+            navigateToCenterAuth = { viewModel.event(AuthEvent.NavigateTo(CenterAuth)) },
+        )
     }
 
     private fun handleEvent(event: AuthEvent) = when (event) {

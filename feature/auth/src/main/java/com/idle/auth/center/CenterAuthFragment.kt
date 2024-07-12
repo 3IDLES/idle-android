@@ -1,9 +1,5 @@
 package com.idle.auth.center
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,12 +13,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.idle.auth.center.CenterAuthEvent.NavigateTo
@@ -30,6 +24,7 @@ import com.idle.binding.DeepLinkDestination.CenterSignIn
 import com.idle.binding.DeepLinkDestination.CenterSignUp
 import com.idle.binding.deepLinkNavigateTo
 import com.idle.binding.repeatOnStarted
+import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.foundation.CareTheme
@@ -37,34 +32,20 @@ import com.idle.designsystem.compose.foundation.PretendardMedium
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-internal class CenterAuthFragment : Fragment() {
+internal class CenterAuthFragment : BaseComposeFragment() {
 
-    private lateinit var composeView: ComposeView
-    private val viewModel: CenterAuthViewModel by viewModels()
+    override val viewModel: CenterAuthViewModel by viewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View {
-        return ComposeView(requireContext()).also {
-            composeView = it
-        }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+    @Composable
+    override fun ComposeLayout() {
         repeatOnStarted {
             viewModel.eventFlow.collect { handleEvent(it) }
         }
 
-        composeView.setContent {
-            CenterAuthScreen(
-                navigateToCenterSignIn = { viewModel.event(NavigateTo(CenterSignIn)) },
-                navigateToCenterSignUp = { viewModel.event(NavigateTo(CenterSignUp)) },
-            )
-        }
+        CenterAuthScreen(
+            navigateToCenterSignIn = { viewModel.event(NavigateTo(CenterSignIn)) },
+            navigateToCenterSignUp = { viewModel.event(NavigateTo(CenterSignUp)) },
+        )
     }
 
     private fun handleEvent(event: CenterAuthEvent) = when (event) {
