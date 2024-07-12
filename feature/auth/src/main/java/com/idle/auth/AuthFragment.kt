@@ -34,7 +34,7 @@ internal class AuthFragment : BaseComposeFragment() {
 
     @Composable
     override fun ComposeLayout() {
-        repeatOnStarted {
+        viewLifecycleOwner.repeatOnStarted {
             viewModel.eventFlow.collect { handleEvent(it) }
         }
 

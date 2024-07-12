@@ -30,7 +30,7 @@ internal class WorkerSignInFragment : BaseComposeFragment() {
     override val viewModel: WorkerSignInViewModel by viewModels()
 
     @Composable override fun ComposeLayout() {
-        repeatOnStarted {
+        viewLifecycleOwner.repeatOnStarted {
             viewModel.eventFlow.collect { handleEvent(it) }
         }
 

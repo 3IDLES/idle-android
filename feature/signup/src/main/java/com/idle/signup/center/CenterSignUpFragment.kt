@@ -38,7 +38,7 @@ internal class CenterSignUpFragment : BaseComposeFragment() {
 
     @Composable override fun ComposeLayout() {
         viewModel.apply {
-            repeatOnStarted {
+            viewLifecycleOwner.repeatOnStarted {
                 eventFlow.collect { handleEvent(it) }
             }
 

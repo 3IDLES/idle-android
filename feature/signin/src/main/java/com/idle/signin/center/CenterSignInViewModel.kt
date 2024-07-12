@@ -2,7 +2,7 @@ package com.idle.signin.center
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.idle.domain.usecase.auth.SignInCenterUseCase
+import com.idle.domain.usecase.th.SignInCenterUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow

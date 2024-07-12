@@ -38,7 +38,7 @@ internal class CenterAuthFragment : BaseComposeFragment() {
 
     @Composable
     override fun ComposeLayout() {
-        repeatOnStarted {
+        viewLifecycleOwner.repeatOnStarted {
             viewModel.eventFlow.collect { handleEvent(it) }
         }
 
