@@ -18,39 +18,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.idle.binding.deepLinkNavigateTo
 import com.idle.binding.repeatOnStarted
+import com.idle.compose.base.BaseComposeFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-internal class WorkerSignInFragment : Fragment() {
+internal class WorkerSignInFragment : BaseComposeFragment() {
+    override val viewModel: WorkerSignInViewModel by viewModels()
 
-    private lateinit var composeView: ComposeView
-    private val viewModel: WorkerSignInViewModel by viewModels()
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View {
-        return ComposeView(requireContext()).also {
-            composeView = it
-        }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+    @Composable override fun ComposeLayout() {
         repeatOnStarted {
             viewModel.eventFlow.collect { handleEvent(it) }
         }
 
-        composeView.setContent {
-            WorkerSignInScreen()
-        }
+        WorkerSignInScreen()
     }
 
     private fun handleEvent(event: WorkerSignInEvent) = when (event) {

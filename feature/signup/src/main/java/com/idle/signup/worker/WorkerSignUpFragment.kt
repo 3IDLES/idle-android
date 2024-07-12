@@ -1,9 +1,5 @@
 package com.idle.signin.worker
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,16 +13,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.idle.binding.deepLinkNavigateTo
 import com.idle.binding.repeatOnStarted
 import com.idle.compose.addFocusCleaner
+import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.component.CareProgressBar
 import com.idle.designsystem.compose.component.CareTopAppBar
 import com.idle.signin.center.CenterSignUpProcess
@@ -37,57 +32,42 @@ import com.idle.signup.worker.process.WorkerPhoneNumberScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-internal class WorkerSignUpFragment : Fragment() {
+internal class WorkerSignUpFragment : BaseComposeFragment() {
+    override val viewModel: WorkerSignUpViewModel by viewModels()
 
-    private lateinit var composeView: ComposeView
-    private val viewModel: WorkerSignUpViewModel by viewModels()
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View {
-        return ComposeView(requireContext()).also {
-            composeView = it
-        }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        repeatOnStarted {
-            viewModel.eventFlow.collect { handleEvent(it) }
-        }
-
-        composeView.setContent {
-            viewModel.apply {
-                val signUpProcess by signUpProcess.collectAsStateWithLifecycle()
-                val workerName by workerName.collectAsStateWithLifecycle()
-                val workerPhoneNumber by workerPhoneNumber.collectAsStateWithLifecycle()
-                val workerAuthCode by workerAuthCode.collectAsStateWithLifecycle()
-                val gender by gender.collectAsStateWithLifecycle()
-                val address by address.collectAsStateWithLifecycle()
-                val addressDetail by addressDetail.collectAsStateWithLifecycle()
-
-                WorkerSignUpScreen(
-                    signUpProcess = signUpProcess,
-                    workerName = workerName,
-                    workerPhoneNumber = workerPhoneNumber,
-                    workerAuthCode = workerAuthCode,
-                    gender = gender,
-                    address = address,
-                    addressDetail = addressDetail,
-                    onWorkerNameChanged = ::setWorkerName,
-                    onWorkerPhoneNumberChanged = ::setWorkerPhoneNumber,
-                    onWorkerAuthCodeChanged = ::setWorkerAuthCode,
-                    onGenderChanged = ::setGender,
-                    onAddressChanged = ::setAddress,
-                    onAddressDetailChanged = ::setAddressDetail,
-                    setSignUpProcess = ::setWorkerSignUpProcess,
-                    sendPhoneNumber = ::sendPhoneNumber,
-                    confirmAuthCode = ::confirmAuthCode,
-                )
+    @Composable
+    override fun ComposeLayout() {
+        viewModel.apply {
+            repeatOnStarted {
+                eventFlow.collect { handleEvent(it) }
             }
+
+            val signUpProcess by signUpProcess.collectAsStateWithLifecycle()
+            val workerName by workerName.collectAsStateWithLifecycle()
+            val workerPhoneNumber by workerPhoneNumber.collectAsStateWithLifecycle()
+            val workerAuthCode by workerAuthCode.collectAsStateWithLifecycle()
+            val gender by gender.collectAsStateWithLifecycle()
+            val address by address.collectAsStateWithLifecycle()
+            val addressDetail by addressDetail.collectAsStateWithLifecycle()
+
+            WorkerSignUpScreen(
+                signUpProcess = signUpProcess,
+                workerName = workerName,
+                workerPhoneNumber = workerPhoneNumber,
+                workerAuthCode = workerAuthCode,
+                gender = gender,
+                address = address,
+                addressDetail = addressDetail,
+                onWorkerNameChanged = ::setWorkerName,
+                onWorkerPhoneNumberChanged = ::setWorkerPhoneNumber,
+                onWorkerAuthCodeChanged = ::setWorkerAuthCode,
+                onGenderChanged = ::setGender,
+                onAddressChanged = ::setAddress,
+                onAddressDetailChanged = ::setAddressDetail,
+                setSignUpProcess = ::setWorkerSignUpProcess,
+                sendPhoneNumber = ::sendPhoneNumber,
+                confirmAuthCode = ::confirmAuthCode,
+            )
         }
     }
 

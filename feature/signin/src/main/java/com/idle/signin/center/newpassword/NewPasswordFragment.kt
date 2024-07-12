@@ -1,9 +1,5 @@
 package com.idle.signin.center.newpassword
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -16,16 +12,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.idle.binding.deepLinkNavigateTo
 import com.idle.binding.repeatOnStarted
 import com.idle.compose.addFocusCleaner
+import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.component.CareTopAppBar
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.signin.center.newpassword.process.GenerateNewPasswordScreen
@@ -33,50 +28,36 @@ import com.idle.signin.center.newpassword.process.PhoneNumberScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class NewPasswordFragment : Fragment() {
-    private lateinit var composeView: ComposeView
-    private val viewModel: NewPasswordViewModel by viewModels()
+class NewPasswordFragment : BaseComposeFragment() {
+    override val viewModel: NewPasswordViewModel by viewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View {
-        return ComposeView(requireContext()).also {
-            composeView = it
-        }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        repeatOnStarted {
-            viewModel.eventFlow.collect { handleEvent(it) }
-        }
-
-        composeView.setContent {
-            viewModel.apply {
-                val phoneNumber by phoneNumber.collectAsStateWithLifecycle()
-                val authCode by centerAuthCode.collectAsStateWithLifecycle()
-                val generateNewPasswordProcess by generateNewPasswordProcess.collectAsStateWithLifecycle()
-                val newPassword by newPassword.collectAsStateWithLifecycle()
-                val newPasswordForConfirm by newPasswordForConfirm.collectAsStateWithLifecycle()
-
-                NewPasswordScreen(
-                    generateNewPasswordProcess = generateNewPasswordProcess,
-                    phoneNumber = phoneNumber,
-                    certificationNumber = authCode,
-                    newPassword = newPassword,
-                    newPasswordForConfirm = newPasswordForConfirm,
-                    setGenerateNewPasswordProcess = ::setGenerateNewPasswordProcess,
-                    onPhoneNumberChanged = ::setPhoneNumber,
-                    onAuthCodeChanged = ::setAuthCode,
-                    sendPhoneNumber = ::sendPhoneNumber,
-                    confirmAuthCode = ::confirmAuthCode,
-                    onNewPasswordChanged = ::setNewPassword,
-                    onNewPasswordForConfirmChanged = ::setNewPasswordForConfirm,
-                )
+    @Composable
+    override fun ComposeLayout() {
+        viewModel.apply {
+            repeatOnStarted {
+                eventFlow.collect { handleEvent(it) }
             }
+
+            val phoneNumber by phoneNumber.collectAsStateWithLifecycle()
+            val authCode by centerAuthCode.collectAsStateWithLifecycle()
+            val generateNewPasswordProcess by generateNewPasswordProcess.collectAsStateWithLifecycle()
+            val newPassword by newPassword.collectAsStateWithLifecycle()
+            val newPasswordForConfirm by newPasswordForConfirm.collectAsStateWithLifecycle()
+
+            NewPasswordScreen(
+                generateNewPasswordProcess = generateNewPasswordProcess,
+                phoneNumber = phoneNumber,
+                certificationNumber = authCode,
+                newPassword = newPassword,
+                newPasswordForConfirm = newPasswordForConfirm,
+                setGenerateNewPasswordProcess = ::setGenerateNewPasswordProcess,
+                onPhoneNumberChanged = ::setPhoneNumber,
+                onAuthCodeChanged = ::setAuthCode,
+                sendPhoneNumber = ::sendPhoneNumber,
+                confirmAuthCode = ::confirmAuthCode,
+                onNewPasswordChanged = ::setNewPassword,
+                onNewPasswordForConfirmChanged = ::setNewPasswordForConfirm,
+            )
         }
     }
 

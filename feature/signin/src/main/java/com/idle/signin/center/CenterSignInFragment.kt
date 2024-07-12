@@ -1,9 +1,5 @@
 package com.idle.signin.center
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -18,11 +14,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
@@ -30,6 +24,7 @@ import com.idle.binding.DeepLinkDestination.NewPassword
 import com.idle.binding.deepLinkNavigateTo
 import com.idle.binding.repeatOnStarted
 import com.idle.compose.addFocusCleaner
+import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareTextField
@@ -39,41 +34,26 @@ import com.idle.signin.center.CenterSignInEvent.NavigateTo
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-internal class CenterSignInFragment : Fragment() {
+internal class CenterSignInFragment : BaseComposeFragment() {
+    override val viewModel: CenterSignInViewModel by viewModels()
 
-    private lateinit var composeView: ComposeView
-    private val viewModel: CenterSignInViewModel by viewModels()
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View {
-        return ComposeView(requireContext()).also {
-            composeView = it
-        }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        repeatOnStarted {
-            viewModel.eventFlow.collect { handleEvent(it) }
-        }
-
-        composeView.setContent {
-            viewModel.apply {
-                val centerId by centerId.collectAsStateWithLifecycle()
-                val centerPassword by centerPassword.collectAsStateWithLifecycle()
-
-                CenterSignInScreen(
-                    centerId = centerId,
-                    centerPassword = centerPassword,
-                    onCenterIdChanged = ::setCenterId,
-                    onCenterPasswordChanged = ::setCenterPassword,
-                    navigateToNewPassword = { event(NavigateTo(NewPassword)) }
-                )
+    @Composable
+    override fun ComposeLayout() {
+        viewModel.apply {
+            repeatOnStarted {
+                eventFlow.collect { handleEvent(it) }
             }
+
+            val centerId by centerId.collectAsStateWithLifecycle()
+            val centerPassword by centerPassword.collectAsStateWithLifecycle()
+
+            CenterSignInScreen(
+                centerId = centerId,
+                centerPassword = centerPassword,
+                onCenterIdChanged = ::setCenterId,
+                onCenterPasswordChanged = ::setCenterPassword,
+                navigateToNewPassword = { event(NavigateTo(NewPassword)) }
+            )
         }
     }
 
