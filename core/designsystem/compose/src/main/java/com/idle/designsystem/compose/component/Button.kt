@@ -1,5 +1,6 @@
 package com.idle.designsystem.compose.component
 
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,7 +29,7 @@ fun CareButtonSmall(
             disabledContentColor = CareTheme.colors.gray200,
             disabledContainerColor = CareTheme.colors.gray200,
         ),
-        modifier = modifier.sizeIn(minWidth = 72.dp, minHeight = 44.dp),
+        modifier = modifier.height(44.dp),
     ) {
         Text(
             text = text,
@@ -55,7 +56,7 @@ fun CareButtonMedium(
             disabledContentColor = CareTheme.colors.gray200,
             disabledContainerColor = CareTheme.colors.gray200,
         ),
-        modifier = modifier.sizeIn(minWidth = 165.dp, minHeight = 52.dp),
+        modifier = modifier.height(52.dp),
     ) {
         Text(
             text = text,
@@ -82,7 +83,7 @@ fun CareButtonLarge(
             disabledContentColor = CareTheme.colors.gray200,
             disabledContainerColor = CareTheme.colors.gray200,
         ),
-        modifier = modifier.sizeIn(minWidth = 328.dp, minHeight = 58.dp),
+        modifier = modifier.height(58.dp),
     ) {
         Text(
             text = text,

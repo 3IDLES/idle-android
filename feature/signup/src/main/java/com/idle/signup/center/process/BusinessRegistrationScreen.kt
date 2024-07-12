@@ -1,6 +1,7 @@
 package com.idle.signup.center.process
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,16 +24,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareButtonSmall
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.signin.center.CenterSignUpProcess
+import com.idle.signup.R
 
 @Composable
 internal fun BusinessRegistrationScreen(
@@ -111,11 +110,11 @@ internal fun BusinessRegistrationScreen(
                     Column(
                         horizontalAlignment = Alignment.Start,
                         verticalArrangement = Arrangement.spacedBy(
-                            4.dp,
-                            Alignment.CenterVertically
+                            space = 4.dp,
+                            alignment = Alignment.CenterVertically
                         ),
                         modifier = Modifier.fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 16.dp)
+                            .padding(horizontal = 20.dp, vertical = 16.dp)
                     ) {
                         Text(
                             "세얼간이 요양보호소",
@@ -123,17 +122,21 @@ internal fun BusinessRegistrationScreen(
                             color = CareTheme.colors.gray900,
                         )
 
-                        Text(
-                            text = buildAnnotatedString {
-                                withStyle(style = SpanStyle(color = CareTheme.colors.gray300)) {
-                                    append("주소  ")
-                                }
-                                withStyle(style = SpanStyle(color = CareTheme.colors.gray900)) {
-                                    append("용인시 어쩌고 저쩌고")
-                                }
-                            },
-                            style = CareTheme.typography.body3,
-                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Image(
+                                painter = painterResource(R.drawable.ic_address_pin),
+                                contentDescription = null,
+                            )
+
+                            Text(
+                                text = "용인시 어쩌고 저쩌고",
+                                style = CareTheme.typography.body3,
+                                color = CareTheme.colors.gray900,
+                            )
+                        }
                     }
                 }
             }

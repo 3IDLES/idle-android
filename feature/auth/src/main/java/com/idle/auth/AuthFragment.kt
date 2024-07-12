@@ -10,7 +10,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,8 +21,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -90,14 +89,14 @@ internal fun AuthScreen(
     ) {
         Text(
             text = "어플 소개 한 줄 정도\n그리고 어플 이름",
-            style = CareTheme.typography.heading1.copy(fontSize = 28.sp),
-            modifier = Modifier.padding(top = 108.dp),
+            style = CareTheme.typography.heading1,
+            color = CareTheme.colors.gray900,
         )
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(4.dp),
             modifier = Modifier.fillMaxWidth()
-                .padding(top = 130.dp, bottom = 200.dp),
+                .padding(top = 142.dp),
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -119,6 +118,7 @@ internal fun AuthScreen(
                     text = "센터 관리자로\n시작하기",
                     style = CareTheme.typography.subtitle2,
                     color = CareTheme.colors.gray900,
+                    textAlign = TextAlign.Center,
                 )
             }
 
@@ -142,6 +142,7 @@ internal fun AuthScreen(
                     text = "요양 보호사로\n시작하기",
                     style = CareTheme.typography.subtitle2,
                     color = CareTheme.colors.gray900,
+                    textAlign = TextAlign.Center,
                 )
             }
         }
