@@ -2,39 +2,24 @@ package com.idle.datastore.datasource
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.idle.datastore.util.handleException
-import kotlinx.coroutines.flow.map
+import com.idle.datastore.util.getValue
+import com.idle.datastore.util.setValue
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Named
 
 class TokenDataSource @Inject constructor(
     @Named("token") private val dataStore: DataStore<Preferences>
 ) {
-    val accessToken = dataStore.data
-        .handleException()
-        .map { preferences ->
-            preferences[ACCESS_TOKEN] ?: ""
-        }
+    val accessToken: Flow<String> = dataStore.getValue(ACCESS_TOKEN, "")
+    val refreshToken: Flow<String> = dataStore.getValue(REFRESH_TOKEN, "")
 
-    val refreshToken = dataStore.data
-        .handleException()
-        .map { preferences ->
-            preferences[REFRESH_TOKEN] ?: ""
-        }
+    suspend fun setAccessToken(accessToken: String) =
+        dataStore.setValue(ACCESS_TOKEN, accessToken)
 
-    suspend fun setAccessToken(accessToken: String) {
-        dataStore.edit { preferences ->
-            preferences[ACCESS_TOKEN] = accessToken
-        }
-    }
-
-    suspend fun setRefreshToken(refreshToken: String) {
-        dataStore.edit { preferences ->
-            preferences[REFRESH_TOKEN] = refreshToken
-        }
-    }
+    suspend fun setRefreshToken(refreshToken: String) =
+        dataStore.setValue(REFRESH_TOKEN, refreshToken)
 
     companion object {
         private val ACCESS_TOKEN = stringPreferencesKey("ACCESS_TOKEN")
