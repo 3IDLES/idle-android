@@ -23,4 +23,7 @@ class AuthDataSource @Inject constructor(
 
     suspend fun signInCenter(signInCenterRequest: SignInCenterRequest): Result<TokenResponse> =
         careNetworkApi.signInCenter(signInCenterRequest).onResponse()
+
+    suspend fun validateIdentifier(identifier: String): Result<Unit> =
+        careNetworkApi.validateIdentifier(identifier).onResponse()
 }

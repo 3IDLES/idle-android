@@ -3,10 +3,10 @@ package com.idle.signin.center
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.idle.binding.DeepLinkDestination
 import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
 import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
 import com.idle.domain.usecase.auth.SignUpCenterUseCase
+import com.idle.domain.usecase.auth.ValidateIdentifierUseCase
 import com.idle.signin.center.CenterSignUpProcess.NAME
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -21,6 +21,7 @@ class CenterSignUpViewModel @Inject constructor(
     private val sendPhoneNumberUseCase: SendPhoneNumberUseCase,
     private val confirmAuthCodeUseCase: ConfirmAuthCodeUseCase,
     private val signUpCenterUseCase: SignUpCenterUseCase,
+    private val validateIdentifierUseCase: ValidateIdentifierUseCase,
 ) : ViewModel() {
     private val _eventFlow = MutableSharedFlow<CenterSignUpEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
@@ -108,10 +109,17 @@ class CenterSignUpViewModel @Inject constructor(
             .onSuccess { Log.d("test", "성공!") }
             .onFailure { Log.d("test", "실패! ${it}") }
     }
+
+    internal fun validateIdentifier() = viewModelScope.launch {
+        validateIdentifierUseCase(identifier = _centerId.value)
+            .onSuccess { Log.d("test", "성공!") }
+            .onFailure { Log.d("test", it.toString()) }
+    }
 }
 
 sealed class CenterSignUpEvent {
-    data class NavigateTo(val destination: com.idle.binding.DeepLinkDestination) : CenterSignUpEvent()
+    data class NavigateTo(val destination: com.idle.binding.DeepLinkDestination) :
+        CenterSignUpEvent()
 }
 
 enum class CenterSignUpProcess(val step: Int) {

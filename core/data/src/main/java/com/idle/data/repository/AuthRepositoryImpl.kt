@@ -56,4 +56,7 @@ class AuthRepositoryImpl @Inject constructor(
                 tokenDataSource.setRefreshToken(tokenResponse.refreshToken)
             }.onFailure { Log.d("test", "센터 로그인 실패" + it.toString()) }
         }
+
+    override suspend fun validateIdentifier(identifier: String): Result<Unit> =
+        authDataSource.validateIdentifier(identifier)
 }

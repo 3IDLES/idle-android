@@ -36,6 +36,7 @@ internal fun IdPasswordScreen(
     onCenterPasswordForConfirmChanged: (String) -> Unit,
     setSignUpProcess: (CenterSignUpProcess) -> Unit,
     signUpCenter: () -> Unit,
+    validateIdentifier: () -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
 
@@ -96,7 +97,7 @@ internal fun IdPasswordScreen(
                 CareButtonSmall(
                     enable = centerId.isNotBlank(),
                     text = "중복 확인",
-                    onClick = { },
+                    onClick = validateIdentifier,
                 )
             }
         }

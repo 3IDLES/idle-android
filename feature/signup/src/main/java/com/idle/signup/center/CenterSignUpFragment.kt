@@ -1,7 +1,5 @@
 package com.idle.signin.center
 
-import android.os.Bundle
-import android.view.View
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -36,7 +34,8 @@ import dagger.hilt.android.AndroidEntryPoint
 internal class CenterSignUpFragment : BaseComposeFragment() {
     override val viewModel: CenterSignUpViewModel by viewModels()
 
-    @Composable override fun ComposeLayout() {
+    @Composable
+    override fun ComposeLayout() {
         viewModel.apply {
             viewLifecycleOwner.repeatOnStarted {
                 eventFlow.collect { handleEvent(it) }
@@ -73,6 +72,7 @@ internal class CenterSignUpFragment : BaseComposeFragment() {
                 sendPhoneNumber = ::sendPhoneNumber,
                 confirmAuthCode = ::confirmAuthCode,
                 signUpCenter = ::signUpCenter,
+                validateIdentifier = ::validateIdentifier,
             )
         }
     }
@@ -105,6 +105,7 @@ internal fun CenterSignUpScreen(
     sendPhoneNumber: () -> Unit,
     confirmAuthCode: () -> Unit,
     signUpCenter: () -> Unit,
+    validateIdentifier: () -> Unit,
 ) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val focusManager = LocalFocusManager.current
@@ -169,6 +170,7 @@ internal fun CenterSignUpScreen(
                         onCenterPasswordChanged = onCenterPasswordChanged,
                         onCenterPasswordForConfirmChanged = onCenterPasswordForConfirmChanged,
                         setSignUpProcess = setSignUpProcess,
+                        validateIdentifier = validateIdentifier,
                         signUpCenter = signUpCenter,
                     )
             }

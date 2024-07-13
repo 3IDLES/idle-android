@@ -17,4 +17,6 @@ interface AuthRepository {
         identifier: String,
         password: String,
     ): Result<Unit>
+
+    suspend fun validateIdentifier(identifier: String): Result<Unit>
 }
