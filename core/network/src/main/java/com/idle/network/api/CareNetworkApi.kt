@@ -14,10 +14,10 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface CareNetworkApi {
-    @POST("/api/v1/auth/core/send")
+    @POST("/api/v1/auth/common/send")
     suspend fun sendPhoneNumber(@Body sendPhoneRequest: SendPhoneRequest): Response<Unit>
 
-    @POST("/api/v1/auth/core/confirm")
+    @POST("/api/v1/auth/common/confirm")
     suspend fun confirmAuthCode(@Body confirmAuthCodeRequest: ConfirmAuthCodeRequest): Response<Unit>
 
     @POST("/api/v1/auth/center/join")
