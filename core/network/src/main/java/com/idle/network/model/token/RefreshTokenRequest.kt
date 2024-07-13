@@ -1,4 +1,4 @@
-package com.idle.network.model.auth
+package com.idle.network.model.token
 
 import kotlinx.serialization.Serializable
 

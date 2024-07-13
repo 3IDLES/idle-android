@@ -6,18 +6,18 @@ import okhttp3.Response
 import javax.inject.Inject
 
 class TokenInterceptor @Inject constructor(
-    private val tokenProvider: TokenProvider
+    private val tokenManager: TokenManager
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
-        val request = chain.request()
-        val authRequest = if (isAccessTokenUsed(request)) {
-            request.newBuilder()
-                .addHeader("Authorization", tokenProvider.getAccessToken())
+        val originRequest = chain.request()
+        val newRequest = if (isAccessTokenUsed(originRequest)) {
+            originRequest.newBuilder()
+                .addHeader("Authorization", tokenManager.getAccessToken())
                 .build()
         } else {
-            request
+            originRequest
         }
-        return chain.proceed(authRequest)
+        return chain.proceed(newRequest)
     }
 
     private fun isAccessTokenUsed(request: Request): Boolean {
@@ -34,7 +34,6 @@ class TokenInterceptor @Inject constructor(
             "/api/v1/auth/common/confirm" -> false
             "/api/v1/auth/center/join" -> false
             "/api/v1/auth/center/login" -> false
-            "/api/v1/auth/center/refresh" -> false
             else -> true
         }
     }
