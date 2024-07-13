@@ -49,7 +49,7 @@ internal fun IdPasswordScreen(
         focusRequester.requestFocus()
     }
 
-    BackHandler { setSignUpProcess(CenterSignUpProcess.BUSINESS_REGISTRAION_NUMBER) }
+    BackHandler { setSignUpProcess(CenterSignUpProcess.BUSINESS_REGISTRATION_NUMBER) }
 
     Column(
         horizontalAlignment = Alignment.Start,

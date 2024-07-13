@@ -1,6 +1,12 @@
 package com.idle.signin.worker
 
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -125,36 +131,50 @@ internal fun WorkerSignUpScreen(
                 modifier = Modifier.fillMaxWidth(),
             )
 
-            when (signUpProcess) {
-                WorkerSignUpProcess.NAME -> WorkerNameScreen(
-                    workerName = workerName,
-                    onWorkerNameChanged = onWorkerNameChanged,
-                    setSignUpProcess = setSignUpProcess
-                )
+            AnimatedContent(
+                targetState = signUpProcess,
+                transitionSpec = {
+                    if (targetState.ordinal > initialState.ordinal) {
+                        slideInHorizontally(initialOffsetX = { it }) + fadeIn() togetherWith
+                                slideOutHorizontally(targetOffsetX = { -it }) + fadeOut()
+                    } else {
+                        slideInHorizontally(initialOffsetX = { -it }) + fadeIn() togetherWith
+                                slideOutHorizontally(targetOffsetX = { it }) + fadeOut()
+                    }
+                },
+                label = "요양 보호사의 회원가입을 관리하는 애니메이션",
+            ) { signUpProcess ->
+                when (signUpProcess) {
+                    WorkerSignUpProcess.NAME -> WorkerNameScreen(
+                        workerName = workerName,
+                        onWorkerNameChanged = onWorkerNameChanged,
+                        setSignUpProcess = setSignUpProcess
+                    )
 
-                WorkerSignUpProcess.GENDER -> GenderScreen(
-                    gender = gender,
-                    onGenderChanged = onGenderChanged,
-                    setSignUpProcess = setSignUpProcess
-                )
+                    WorkerSignUpProcess.GENDER -> GenderScreen(
+                        gender = gender,
+                        onGenderChanged = onGenderChanged,
+                        setSignUpProcess = setSignUpProcess
+                    )
 
-                WorkerSignUpProcess.PHONE_NUMBER -> WorkerPhoneNumberScreen(
-                    workerPhoneNumber = workerPhoneNumber,
-                    workerAuthCode = workerAuthCode,
-                    onWorkerPhoneNumberChanged = onWorkerPhoneNumberChanged,
-                    onWorkerAuthCodeChanged = onWorkerAuthCodeChanged,
-                    setSignUpProcess = setSignUpProcess,
-                    sendPhoneNumber = sendPhoneNumber,
-                    confirmAuthCode = confirmAuthCode,
-                )
+                    WorkerSignUpProcess.PHONE_NUMBER -> WorkerPhoneNumberScreen(
+                        workerPhoneNumber = workerPhoneNumber,
+                        workerAuthCode = workerAuthCode,
+                        onWorkerPhoneNumberChanged = onWorkerPhoneNumberChanged,
+                        onWorkerAuthCodeChanged = onWorkerAuthCodeChanged,
+                        setSignUpProcess = setSignUpProcess,
+                        sendPhoneNumber = sendPhoneNumber,
+                        confirmAuthCode = confirmAuthCode,
+                    )
 
-                WorkerSignUpProcess.ADDRESS -> AddressScreen(
-                    address = address,
-                    addressDetail = addressDetail,
-                    onAddressChanged = onAddressChanged,
-                    onAddressDetailChanged = onAddressDetailChanged,
-                    setSignUpProcess = setSignUpProcess,
-                )
+                    WorkerSignUpProcess.ADDRESS -> AddressScreen(
+                        address = address,
+                        addressDetail = addressDetail,
+                        onAddressChanged = onAddressChanged,
+                        onAddressDetailChanged = onAddressDetailChanged,
+                        setSignUpProcess = setSignUpProcess,
+                    )
+                }
             }
         }
     }

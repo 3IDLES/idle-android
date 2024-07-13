@@ -119,7 +119,7 @@ internal fun CenterPhoneNumberScreen(
         CareButtonLarge(
             text = "다음",
             enable = centerAuthCode.isNotBlank(),
-            onClick = { setSignUpProcess(CenterSignUpProcess.BUSINESS_REGISTRAION_NUMBER) },
+            onClick = { setSignUpProcess(CenterSignUpProcess.BUSINESS_REGISTRATION_NUMBER) },
             modifier = Modifier.fillMaxWidth(),
         )
     }

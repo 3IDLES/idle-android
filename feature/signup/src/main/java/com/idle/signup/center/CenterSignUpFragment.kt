@@ -1,6 +1,12 @@
 package com.idle.signin.center
 
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -140,46 +146,60 @@ internal fun CenterSignUpScreen(
                 modifier = Modifier.fillMaxWidth(),
             )
 
-            when (signUpProcess) {
-                CenterSignUpProcess.NAME ->
-                    CenterNameScreen(
-                        centerName = centerName,
-                        onCenterNameChanged = onCenterNameChanged,
-                        setSignUpProcess = setSignUpProcess,
-                    )
+            AnimatedContent(
+                targetState = signUpProcess,
+                transitionSpec = {
+                    if (targetState.ordinal > initialState.ordinal) {
+                        slideInHorizontally(initialOffsetX = { it }) + fadeIn() togetherWith
+                                slideOutHorizontally(targetOffsetX = { -it }) + fadeOut()
+                    } else {
+                        slideInHorizontally(initialOffsetX = { -it }) + fadeIn() togetherWith
+                                slideOutHorizontally(targetOffsetX = { it }) + fadeOut()
+                    }
+                },
+                label = "센터의 회원가입을 관리하는 애니메이션",
+            ) { signUpProcess ->
+                when (signUpProcess) {
+                    CenterSignUpProcess.NAME ->
+                        CenterNameScreen(
+                            centerName = centerName,
+                            onCenterNameChanged = onCenterNameChanged,
+                            setSignUpProcess = setSignUpProcess,
+                        )
 
-                CenterSignUpProcess.PHONE_NUMBER ->
-                    CenterPhoneNumberScreen(
-                        centerPhoneNumber = centerPhoneNumber,
-                        centerAuthCode = centerCertificateNumber,
-                        onCenterPhoneNumberChanged = onCenterPhoneNumberChanged,
-                        onCenterAuthCodeChanged = onCenterAuthCodeChanged,
-                        setSignUpProcess = setSignUpProcess,
-                        sendPhoneNumber = sendPhoneNumber,
-                        confirmAuthCode = confirmAuthCode,
-                    )
+                    CenterSignUpProcess.PHONE_NUMBER ->
+                        CenterPhoneNumberScreen(
+                            centerPhoneNumber = centerPhoneNumber,
+                            centerAuthCode = centerCertificateNumber,
+                            onCenterPhoneNumberChanged = onCenterPhoneNumberChanged,
+                            onCenterAuthCodeChanged = onCenterAuthCodeChanged,
+                            setSignUpProcess = setSignUpProcess,
+                            sendPhoneNumber = sendPhoneNumber,
+                            confirmAuthCode = confirmAuthCode,
+                        )
 
-                CenterSignUpProcess.BUSINESS_REGISTRAION_NUMBER ->
-                    BusinessRegistrationScreen(
-                        businessRegistrationNumber = businessRegistrationNumber,
-                        businessRegistrationInfo = businessRegistrationInfo,
-                        onBusinessRegistrationNumberChanged = onBusinessRegistrationNumberChanged,
-                        validateBusinessRegistrationNumber = validateBusinessRegistrationNumber,
-                        setSignUpProcess = setSignUpProcess,
-                    )
+                    CenterSignUpProcess.BUSINESS_REGISTRATION_NUMBER ->
+                        BusinessRegistrationScreen(
+                            businessRegistrationNumber = businessRegistrationNumber,
+                            businessRegistrationInfo = businessRegistrationInfo,
+                            onBusinessRegistrationNumberChanged = onBusinessRegistrationNumberChanged,
+                            validateBusinessRegistrationNumber = validateBusinessRegistrationNumber,
+                            setSignUpProcess = setSignUpProcess,
+                        )
 
-                CenterSignUpProcess.ID_PASSWORD ->
-                    IdPasswordScreen(
-                        centerId = centerId,
-                        centerPassword = centerPassword,
-                        centerPasswordForConfirm = centerPasswordForConfirm,
-                        onCenterIdChanged = onCenterIdChanged,
-                        onCenterPasswordChanged = onCenterPasswordChanged,
-                        onCenterPasswordForConfirmChanged = onCenterPasswordForConfirmChanged,
-                        setSignUpProcess = setSignUpProcess,
-                        validateIdentifier = validateIdentifier,
-                        signUpCenter = signUpCenter,
-                    )
+                    CenterSignUpProcess.ID_PASSWORD ->
+                        IdPasswordScreen(
+                            centerId = centerId,
+                            centerPassword = centerPassword,
+                            centerPasswordForConfirm = centerPasswordForConfirm,
+                            onCenterIdChanged = onCenterIdChanged,
+                            onCenterPasswordChanged = onCenterPasswordChanged,
+                            onCenterPasswordForConfirmChanged = onCenterPasswordForConfirmChanged,
+                            setSignUpProcess = setSignUpProcess,
+                            validateIdentifier = validateIdentifier,
+                            signUpCenter = signUpCenter,
+                        )
+                }
             }
         }
     }
