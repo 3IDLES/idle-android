@@ -4,8 +4,9 @@ plugins {
 }
 
 android {
-    namespace = "com.idle.database"
+    namespace = "com.idle.datastore"
 }
 
 dependencies {
+    implementation(libs.androidx.datastore)
 }

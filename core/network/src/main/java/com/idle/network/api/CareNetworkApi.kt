@@ -1,9 +1,6 @@
 package com.idle.network.api
 
-import com.idle.network.model.auth.ConfirmAuthCodeRequest
-import com.idle.network.model.auth.SendPhoneRequest
 import com.idle.network.model.auth.SignInCenterRequest
-import com.idle.network.model.auth.SignUpCenterRequest
 import com.idle.network.model.token.TokenResponse
 import retrofit2.Response
 import retrofit2.http.Body

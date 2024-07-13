@@ -10,5 +10,5 @@ android {
 dependencies {
     implementation(projects.core.domain)
     implementation(projects.core.network)
-    implementation(projects.core.database)
+    implementation(projects.core.datastore)
 }
