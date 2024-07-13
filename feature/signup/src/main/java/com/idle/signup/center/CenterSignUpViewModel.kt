@@ -3,9 +3,11 @@ package com.idle.signin.center
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.idle.domain.model.auth.BusinessRegistrationInfo
 import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
 import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
 import com.idle.domain.usecase.auth.SignUpCenterUseCase
+import com.idle.domain.usecase.auth.ValidateBusinessRegistrationNumberUseCase
 import com.idle.domain.usecase.auth.ValidateIdentifierUseCase
 import com.idle.signin.center.CenterSignUpProcess.NAME
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,6 +24,7 @@ class CenterSignUpViewModel @Inject constructor(
     private val confirmAuthCodeUseCase: ConfirmAuthCodeUseCase,
     private val signUpCenterUseCase: SignUpCenterUseCase,
     private val validateIdentifierUseCase: ValidateIdentifierUseCase,
+    private val validateBusinessRegistrationNumberUseCase: ValidateBusinessRegistrationNumberUseCase,
 ) : ViewModel() {
     private val _eventFlow = MutableSharedFlow<CenterSignUpEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
@@ -49,6 +52,10 @@ class CenterSignUpViewModel @Inject constructor(
 
     private val _centerPasswordForConfirm = MutableStateFlow("")
     val centerPasswordForConfirm = _centerPasswordForConfirm.asStateFlow()
+
+    private val _businessRegistrationInfo: MutableStateFlow<BusinessRegistrationInfo?> =
+        MutableStateFlow(null)
+    val businessRegistrationInfo = _businessRegistrationInfo.asStateFlow()
 
     internal fun event(event: CenterSignUpEvent) = viewModelScope.launch {
         _eventFlow.emit(event)
@@ -111,8 +118,14 @@ class CenterSignUpViewModel @Inject constructor(
     }
 
     internal fun validateIdentifier() = viewModelScope.launch {
-        validateIdentifierUseCase(identifier = _centerId.value)
+        validateIdentifierUseCase(_centerId.value)
             .onSuccess { Log.d("test", "성공!") }
+            .onFailure { Log.d("test", it.toString()) }
+    }
+
+    internal fun validateBusinessRegistrationNumber() = viewModelScope.launch {
+        validateBusinessRegistrationNumberUseCase(_businessRegistrationNumber.value)
+            .onSuccess { _businessRegistrationInfo.value = it }
             .onFailure { Log.d("test", it.toString()) }
     }
 }

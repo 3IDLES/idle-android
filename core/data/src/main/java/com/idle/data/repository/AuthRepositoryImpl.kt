@@ -2,6 +2,7 @@ package com.idle.data.repository
 
 import android.util.Log
 import com.idle.datastore.datasource.TokenDataSource
+import com.idle.domain.model.auth.BusinessRegistrationInfo
 import com.idle.domain.repositorry.auth.AuthRepository
 import com.idle.network.model.auth.ConfirmAuthCodeRequest
 import com.idle.network.model.auth.SendPhoneRequest
@@ -59,4 +60,10 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun validateIdentifier(identifier: String): Result<Unit> =
         authDataSource.validateIdentifier(identifier)
+
+    override suspend fun validateBusinessRegistrationNumber(
+        businessRegistrationNumber: String,
+    ): Result<BusinessRegistrationInfo> =
+        authDataSource.validateBusinessRegistrationNumber(businessRegistrationNumber)
+            .mapCatching { it.toVO() }
 }

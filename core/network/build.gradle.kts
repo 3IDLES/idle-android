@@ -26,6 +26,7 @@ android {
 
 dependencies {
     implementation(projects.core.datastore)
+    implementation(projects.core.domain)
 
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.kotlin.serialization)

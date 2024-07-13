@@ -1,5 +1,6 @@
 package com.idle.network.api
 
+import com.idle.network.model.auth.BusinessRegistrationResponse
 import com.idle.network.model.auth.ConfirmAuthCodeRequest
 import com.idle.network.model.auth.SendPhoneRequest
 import com.idle.network.model.auth.SignInCenterRequest
@@ -26,4 +27,9 @@ interface CareNetworkApi {
 
     @GET("/api/v1/auth/center/validation/{identifier}")
     suspend fun validateIdentifier(@Path("identifier") identifier: String): Response<Unit>
+
+    @GET("/api/v1/auth/center/authentication/{businessRegistrationNumber}")
+    suspend fun validateBusinessRegistrationNumber(
+        @Path("businessRegistrationNumber") businessRegistrationNumber: String
+    ): Response<BusinessRegistrationResponse>
 }

@@ -30,13 +30,16 @@ import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareButtonSmall
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.foundation.CareTheme
+import com.idle.domain.model.auth.BusinessRegistrationInfo
 import com.idle.signin.center.CenterSignUpProcess
 import com.idle.signup.R
 
 @Composable
 internal fun BusinessRegistrationScreen(
     businessRegistrationNumber: String,
+    businessRegistrationInfo: BusinessRegistrationInfo?,
     onBusinessRegistrationNumberChanged: (String) -> Unit,
+    validateBusinessRegistrationNumber: () -> Unit,
     setSignUpProcess: (CenterSignUpProcess) -> Unit,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -82,14 +85,14 @@ internal fun BusinessRegistrationScreen(
                     enable = businessRegistrationNumber.isNotBlank(),
                     text = "검색",
                     onClick = {
-                        forTest = true
+                        validateBusinessRegistrationNumber()
                         keyboardController?.hide()
                     },
                 )
             }
         }
 
-        if (forTest) {
+        if (businessRegistrationInfo != null) {
             Column(
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
@@ -117,7 +120,7 @@ internal fun BusinessRegistrationScreen(
                             .padding(horizontal = 20.dp, vertical = 16.dp)
                     ) {
                         Text(
-                            "세얼간이 요양보호소",
+                            businessRegistrationInfo.companyName,
                             style = CareTheme.typography.subtitle3,
                             color = CareTheme.colors.gray900,
                         )
@@ -132,7 +135,7 @@ internal fun BusinessRegistrationScreen(
                             )
 
                             Text(
-                                text = "용인시 어쩌고 저쩌고",
+                                text = businessRegistrationInfo.businessRegistrationNumber,
                                 style = CareTheme.typography.body3,
                                 color = CareTheme.colors.gray900,
                             )
@@ -146,7 +149,7 @@ internal fun BusinessRegistrationScreen(
 
         CareButtonLarge(
             text = "다음",
-            enable = forTest,
+            enable = businessRegistrationInfo != null,
             onClick = { setSignUpProcess(CenterSignUpProcess.ID_PASSWORD) },
             modifier = Modifier.fillMaxWidth(),
         )

@@ -24,6 +24,7 @@ import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.component.CareProgressBar
 import com.idle.designsystem.compose.component.CareTopAppBar
+import com.idle.domain.model.auth.BusinessRegistrationInfo
 import com.idle.signup.center.process.BusinessRegistrationScreen
 import com.idle.signup.center.process.CenterNameScreen
 import com.idle.signup.center.process.CenterPhoneNumberScreen
@@ -47,10 +48,10 @@ internal class CenterSignUpFragment : BaseComposeFragment() {
             val centerCertificateNumber by centerConfirmNumber.collectAsStateWithLifecycle()
             val businessRegistrationNumber
                     by businessRegistrationNumber.collectAsStateWithLifecycle()
+            val businessRegistrationInfo by businessRegistrationInfo.collectAsStateWithLifecycle()
             val centerId by centerId.collectAsStateWithLifecycle()
             val centerPassword by centerPassword.collectAsStateWithLifecycle()
-            val centerPasswordForConfirm
-                    by centerPasswordForConfirm.collectAsStateWithLifecycle()
+            val centerPasswordForConfirm by centerPasswordForConfirm.collectAsStateWithLifecycle()
 
             CenterSignUpScreen(
                 signUpProcess = signUpProcess,
@@ -58,6 +59,7 @@ internal class CenterSignUpFragment : BaseComposeFragment() {
                 centerPhoneNumber = centerPhoneNumber,
                 centerCertificateNumber = centerCertificateNumber,
                 businessRegistrationNumber = businessRegistrationNumber,
+                businessRegistrationInfo = businessRegistrationInfo,
                 centerId = centerId,
                 centerPassword = centerPassword,
                 centerPasswordForConfirm = centerPasswordForConfirm,
@@ -73,6 +75,7 @@ internal class CenterSignUpFragment : BaseComposeFragment() {
                 confirmAuthCode = ::confirmAuthCode,
                 signUpCenter = ::signUpCenter,
                 validateIdentifier = ::validateIdentifier,
+                validateBusinessRegistrationNumber = ::validateBusinessRegistrationNumber,
             )
         }
     }
@@ -91,6 +94,7 @@ internal fun CenterSignUpScreen(
     centerPhoneNumber: String,
     centerCertificateNumber: String,
     businessRegistrationNumber: String,
+    businessRegistrationInfo: BusinessRegistrationInfo?,
     centerId: String,
     centerPassword: String,
     centerPasswordForConfirm: String,
@@ -106,6 +110,7 @@ internal fun CenterSignUpScreen(
     confirmAuthCode: () -> Unit,
     signUpCenter: () -> Unit,
     validateIdentifier: () -> Unit,
+    validateBusinessRegistrationNumber: () -> Unit,
 ) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val focusManager = LocalFocusManager.current
@@ -157,7 +162,9 @@ internal fun CenterSignUpScreen(
                 CenterSignUpProcess.BUSINESS_REGISTRAION_NUMBER ->
                     BusinessRegistrationScreen(
                         businessRegistrationNumber = businessRegistrationNumber,
+                        businessRegistrationInfo = businessRegistrationInfo,
                         onBusinessRegistrationNumberChanged = onBusinessRegistrationNumberChanged,
+                        validateBusinessRegistrationNumber = validateBusinessRegistrationNumber,
                         setSignUpProcess = setSignUpProcess,
                     )
 

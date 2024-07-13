@@ -1,6 +1,7 @@
 package com.idle.network.source
 
 import com.idle.network.api.CareNetworkApi
+import com.idle.network.model.auth.BusinessRegistrationResponse
 import com.idle.network.model.auth.ConfirmAuthCodeRequest
 import com.idle.network.model.auth.SendPhoneRequest
 import com.idle.network.model.auth.SignInCenterRequest
@@ -26,4 +27,9 @@ class AuthDataSource @Inject constructor(
 
     suspend fun validateIdentifier(identifier: String): Result<Unit> =
         careNetworkApi.validateIdentifier(identifier).onResponse()
+
+    suspend fun validateBusinessRegistrationNumber(
+        businessRegistrationNumber: String
+    ): Result<BusinessRegistrationResponse> =
+        careNetworkApi.validateBusinessRegistrationNumber(businessRegistrationNumber).onResponse()
 }
