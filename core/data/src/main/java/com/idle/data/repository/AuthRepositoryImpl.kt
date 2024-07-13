@@ -1,6 +1,7 @@
 package com.idle.data.repository
 
 import android.util.Log
+import com.idle.datastore.datasource.TokenDataSource
 import com.idle.domain.repositorry.auth.AuthRepository
 import com.idle.network.model.auth.ConfirmAuthCodeRequest
 import com.idle.network.model.auth.SendPhoneRequest
@@ -11,6 +12,7 @@ import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
     private val authDataSource: AuthDataSource,
+    private val tokenDataSource: TokenDataSource,
 ) : AuthRepository {
     override suspend fun sendPhoneNumber(phoneNumber: String): Result<Unit> =
         authDataSource.sendPhoneNumber(SendPhoneRequest(phoneNumber))
@@ -47,12 +49,11 @@ class AuthRepositoryImpl @Inject constructor(
             authDataSource.signInCenter(
                 SignInCenterRequest(
                     identifier = identifier,
-                    password = password
+                    password = password,
                 )
-            )
-                .onSuccess { Log.d("test", it.toString()) }
-                .onFailure { Log.d("test", "센터 로그인 실패") }
-
-            Unit
+            ).onSuccess { tokenResponse ->
+                tokenDataSource.setAccessToken(tokenResponse.accessToken)
+                tokenDataSource.setRefreshToken(tokenResponse.refreshToken)
+            }.onFailure { Log.d("test", "센터 로그인 실패" + it.toString()) }
         }
 }

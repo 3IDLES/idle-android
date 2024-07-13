@@ -1,5 +1,6 @@
 package com.idle.datastore.datasource
 
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -15,11 +16,13 @@ class TokenDataSource @Inject constructor(
     val accessToken: Flow<String> = dataStore.getValue(ACCESS_TOKEN, "")
     val refreshToken: Flow<String> = dataStore.getValue(REFRESH_TOKEN, "")
 
-    suspend fun setAccessToken(accessToken: String) =
+    suspend fun setAccessToken(accessToken: String) {
         dataStore.setValue(ACCESS_TOKEN, accessToken)
+    }
 
-    suspend fun setRefreshToken(refreshToken: String) =
+    suspend fun setRefreshToken(refreshToken: String) {
         dataStore.setValue(REFRESH_TOKEN, refreshToken)
+    }
 
     companion object {
         private val ACCESS_TOKEN = stringPreferencesKey("ACCESS_TOKEN")
