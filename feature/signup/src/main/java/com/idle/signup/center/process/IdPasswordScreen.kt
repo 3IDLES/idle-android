@@ -1,12 +1,18 @@
 package com.idle.signup.center.process
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -21,7 +27,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.idle.designsystem.compose.component.CareButtonLarge
-import com.idle.designsystem.compose.component.CareButtonSmall
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.signin.center.CenterSignUpProcess
@@ -94,11 +99,26 @@ internal fun IdPasswordScreen(
                         .focusRequester(focusRequester),
                 )
 
-                CareButtonSmall(
-                    enable = centerId.isNotBlank(),
-                    text = "중복 확인",
+                Button(
                     onClick = validateIdentifier,
-                )
+                    enabled = centerId.isNotBlank(),
+                    shape = RoundedCornerShape(6.dp),
+                    contentPadding = PaddingValues(10.dp),
+                    colors = ButtonColors(
+                        containerColor = CareTheme.colors.white000,
+                        contentColor = CareTheme.colors.white000,
+                        disabledContentColor = CareTheme.colors.white000,
+                        disabledContainerColor = CareTheme.colors.white000,
+                    ),
+                    border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
+                    modifier = Modifier.size(width = 76.dp, height = 44.dp),
+                ) {
+                    Text(
+                        text = "중복 확인",
+                        style = CareTheme.typography.subtitle4,
+                        color = CareTheme.colors.gray300,
+                    )
+                }
             }
         }
 
