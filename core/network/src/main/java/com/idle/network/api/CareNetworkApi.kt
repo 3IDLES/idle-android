@@ -2,7 +2,6 @@ package com.idle.network.api
 
 import com.idle.network.model.auth.BusinessRegistrationResponse
 import com.idle.network.model.auth.ConfirmAuthCodeRequest
-import com.idle.network.model.auth.RefreshTokenRequest
 import com.idle.network.model.auth.SendPhoneRequest
 import com.idle.network.model.auth.SignInCenterRequest
 import com.idle.network.model.auth.SignUpCenterRequest
@@ -25,9 +24,6 @@ interface CareNetworkApi {
 
     @POST("/api/v1/auth/center/login")
     suspend fun signInCenter(@Body signInCenterRequest: SignInCenterRequest): Response<TokenResponse>
-
-    @POST("/api/v1/auth/center/refresh")
-    suspend fun refreshToken(@Body refreshTokenRequest: RefreshTokenRequest): Response<TokenResponse>
 
     @GET("/api/v1/auth/center/validation/{identifier}")
     suspend fun validateIdentifier(@Path("identifier") identifier: String): Response<Unit>
