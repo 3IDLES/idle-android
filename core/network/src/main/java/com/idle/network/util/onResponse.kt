@@ -24,5 +24,6 @@ internal fun <T> Response<T>.onResponse(): Result<T> {
             )
         } ?: return Result.failure(
             HttpResponseException(status = HttpResponseStatus.create(-1), rawCode = "UNKNOWN")
+        )
     }
 }
