@@ -43,8 +43,11 @@ class CenterSignUpViewModel @Inject constructor(
     private val _centerPhoneNumber = MutableStateFlow("")
     val centerPhoneNumber = _centerPhoneNumber.asStateFlow()
 
-    private val _centerAuthCodeTimer = MutableStateFlow<Long?>(null)
-    val centerAuthCodeTimer = _centerAuthCodeTimer.asStateFlow()
+    private val _centerAuthCodeTimerMinute = MutableStateFlow("")
+    val centerAuthCodeTimerMinute = _centerAuthCodeTimerMinute.asStateFlow()
+
+    private val _centerAuthCodeTimerSeconds = MutableStateFlow("")
+    val centerAuthCodeTimerSeconds = _centerAuthCodeTimerSeconds.asStateFlow()
 
     private var timerJob: Job? = null
 
@@ -113,14 +116,27 @@ class CenterSignUpViewModel @Inject constructor(
     }
 
     private fun startTimer() {
+        cancelTimer()
+
         timerJob = viewModelScope.launch {
             countDownTimer.start(limitTime = TICK_INTERVAL * SECONDS_PER_MINUTE * 5)
-                .collect { _centerAuthCodeTimer.value = it }
+                .collect { timeMillis ->
+                    updateTimerDisplay(timeMillis)
+                }
         }
+    }
+
+    private fun updateTimerDisplay(timeMillis: Long) {
+        val minutes = (timeMillis / (TICK_INTERVAL * SECONDS_PER_MINUTE)).toString().padStart(2, '0')
+        val seconds = ((timeMillis % (TICK_INTERVAL * SECONDS_PER_MINUTE)) / TICK_INTERVAL).toString().padStart(2, '0')
+
+        _centerAuthCodeTimerMinute.value = minutes
+        _centerAuthCodeTimerSeconds.value = seconds
     }
 
     private fun cancelTimer() {
         timerJob?.cancel()
+        timerJob = null
     }
 
     internal fun confirmAuthCode() = viewModelScope.launch {
