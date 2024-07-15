@@ -25,7 +25,8 @@ import com.idle.signin.center.CenterSignUpProcess
 @Composable
 internal fun CenterPhoneNumberScreen(
     centerPhoneNumber: String,
-    centerAuthCodeTimer: Long?,
+    centerAuthCodeTimerMinute: String,
+    centerAuthCodeTimerSeconds: String,
     centerAuthCode: String,
     onCenterPhoneNumberChanged: (String) -> Unit,
     onCenterAuthCodeChanged: (String) -> Unit,
@@ -105,8 +106,12 @@ internal fun CenterPhoneNumberScreen(
                     onValueChanged = onCenterAuthCodeChanged,
                     onDone = { confirmAuthCode() },
                     leftComponent = {
-                        if (centerAuthCodeTimer != null) {
-                            Text(text = centerAuthCodeTimer.toString())
+                        if (centerAuthCodeTimerMinute != "" && centerAuthCodeTimerSeconds != "") {
+                            Text(
+                                text = "$centerAuthCodeTimerMinute:$centerAuthCodeTimerSeconds",
+                                style = CareTheme.typography.body3,
+                                color = CareTheme.colors.gray500,
+                            )
                         }
                     },
                     modifier = Modifier.weight(1f),

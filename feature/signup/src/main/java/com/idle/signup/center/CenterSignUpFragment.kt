@@ -51,7 +51,8 @@ internal class CenterSignUpFragment : BaseComposeFragment() {
             val signUpProcess by signUpProcess.collectAsStateWithLifecycle()
             val centerName by centerName.collectAsStateWithLifecycle()
             val centerPhoneNumber by centerPhoneNumber.collectAsStateWithLifecycle()
-            val centerAuthCodeTimer by centerAuthCodeTimer.collectAsStateWithLifecycle()
+            val centerAuthCodeTimerMinute by centerAuthCodeTimerMinute.collectAsStateWithLifecycle()
+            val centerAuthCodeTimerSeconds by centerAuthCodeTimerSeconds.collectAsStateWithLifecycle()
             val centerAuthCode by centerAuthCode.collectAsStateWithLifecycle()
             val businessRegistrationNumber
                     by businessRegistrationNumber.collectAsStateWithLifecycle()
@@ -64,7 +65,8 @@ internal class CenterSignUpFragment : BaseComposeFragment() {
                 signUpProcess = signUpProcess,
                 centerName = centerName,
                 centerPhoneNumber = centerPhoneNumber,
-                centerAuthCodeTimer = centerAuthCodeTimer,
+                centerAuthCodeTimerMinute = centerAuthCodeTimerMinute,
+                centerAuthCodeTimerSeconds = centerAuthCodeTimerSeconds,
                 centerAuthCode = centerAuthCode,
                 businessRegistrationNumber = businessRegistrationNumber,
                 businessRegistrationInfo = businessRegistrationInfo,
@@ -100,7 +102,8 @@ internal fun CenterSignUpScreen(
     signUpProcess: CenterSignUpProcess,
     centerName: String,
     centerPhoneNumber: String,
-    centerAuthCodeTimer: Long?,
+    centerAuthCodeTimerMinute: String,
+    centerAuthCodeTimerSeconds: String,
     centerAuthCode: String,
     businessRegistrationNumber: String,
     businessRegistrationInfo: BusinessRegistrationInfo?,
@@ -173,7 +176,8 @@ internal fun CenterSignUpScreen(
                     CenterSignUpProcess.PHONE_NUMBER ->
                         CenterPhoneNumberScreen(
                             centerPhoneNumber = centerPhoneNumber,
-                            centerAuthCodeTimer = centerAuthCodeTimer,
+                            centerAuthCodeTimerMinute = centerAuthCodeTimerMinute,
+                            centerAuthCodeTimerSeconds = centerAuthCodeTimerSeconds,
                             centerAuthCode = centerAuthCode,
                             onCenterPhoneNumberChanged = onCenterPhoneNumberChanged,
                             onCenterAuthCodeChanged = onCenterAuthCodeChanged,
