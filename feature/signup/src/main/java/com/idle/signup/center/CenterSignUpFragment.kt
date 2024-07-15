@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -129,6 +131,8 @@ internal fun CenterSignUpScreen(
 ) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val focusManager = LocalFocusManager.current
+    var (businessRegistrationProcessed, setBusinessRegistrationProcessed)
+            = remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -183,11 +187,13 @@ internal fun CenterSignUpScreen(
                             centerAuthCodeTimerSeconds = centerAuthCodeTimerSeconds,
                             centerAuthCode = centerAuthCode,
                             isConfirmAuthCode = isConfirmAuthCode,
+                            businessRegistrationProcessed = businessRegistrationProcessed,
                             onCenterPhoneNumberChanged = onCenterPhoneNumberChanged,
                             onCenterAuthCodeChanged = onCenterAuthCodeChanged,
                             setSignUpProcess = setSignUpProcess,
                             sendPhoneNumber = sendPhoneNumber,
                             confirmAuthCode = confirmAuthCode,
+                            setBusinessRegistrationProcessed = setBusinessRegistrationProcessed,
                         )
 
                     CenterSignUpProcess.BUSINESS_REGISTRATION_NUMBER ->

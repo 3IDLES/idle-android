@@ -15,10 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -44,7 +41,6 @@ internal fun BusinessRegistrationScreen(
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
-    var forTest by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
@@ -76,7 +72,11 @@ internal fun BusinessRegistrationScreen(
                     value = businessRegistrationNumber,
                     hint = "사업자 등록번호를 입력해주세요.",
                     onValueChanged = onBusinessRegistrationNumberChanged,
-                    onDone = { forTest = true },
+                    onDone = {
+                        if (businessRegistrationNumber.isNotBlank()) {
+                            validateBusinessRegistrationNumber()
+                        }
+                    },
                     modifier = Modifier.weight(1f)
                         .focusRequester(focusRequester),
                 )
