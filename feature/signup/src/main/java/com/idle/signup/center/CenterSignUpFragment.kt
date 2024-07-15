@@ -51,7 +51,8 @@ internal class CenterSignUpFragment : BaseComposeFragment() {
             val signUpProcess by signUpProcess.collectAsStateWithLifecycle()
             val centerName by centerName.collectAsStateWithLifecycle()
             val centerPhoneNumber by centerPhoneNumber.collectAsStateWithLifecycle()
-            val centerCertificateNumber by centerConfirmNumber.collectAsStateWithLifecycle()
+            val centerAuthCodeTimer by centerAuthCodeTimer.collectAsStateWithLifecycle()
+            val centerAuthCode by centerAuthCode.collectAsStateWithLifecycle()
             val businessRegistrationNumber
                     by businessRegistrationNumber.collectAsStateWithLifecycle()
             val businessRegistrationInfo by businessRegistrationInfo.collectAsStateWithLifecycle()
@@ -63,7 +64,8 @@ internal class CenterSignUpFragment : BaseComposeFragment() {
                 signUpProcess = signUpProcess,
                 centerName = centerName,
                 centerPhoneNumber = centerPhoneNumber,
-                centerCertificateNumber = centerCertificateNumber,
+                centerAuthCodeTimer = centerAuthCodeTimer,
+                centerAuthCode = centerAuthCode,
                 businessRegistrationNumber = businessRegistrationNumber,
                 businessRegistrationInfo = businessRegistrationInfo,
                 centerId = centerId,
@@ -98,7 +100,8 @@ internal fun CenterSignUpScreen(
     signUpProcess: CenterSignUpProcess,
     centerName: String,
     centerPhoneNumber: String,
-    centerCertificateNumber: String,
+    centerAuthCodeTimer: Long?,
+    centerAuthCode: String,
     businessRegistrationNumber: String,
     businessRegistrationInfo: BusinessRegistrationInfo?,
     centerId: String,
@@ -170,7 +173,8 @@ internal fun CenterSignUpScreen(
                     CenterSignUpProcess.PHONE_NUMBER ->
                         CenterPhoneNumberScreen(
                             centerPhoneNumber = centerPhoneNumber,
-                            centerAuthCode = centerCertificateNumber,
+                            centerAuthCodeTimer = centerAuthCodeTimer,
+                            centerAuthCode = centerAuthCode,
                             onCenterPhoneNumberChanged = onCenterPhoneNumberChanged,
                             onCenterAuthCodeChanged = onCenterAuthCodeChanged,
                             setSignUpProcess = setSignUpProcess,

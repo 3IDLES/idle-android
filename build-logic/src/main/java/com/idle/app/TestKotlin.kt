@@ -9,7 +9,9 @@ internal fun Project.configureTest() {
     configureJUnit()
     val libs = extensions.libs
     dependencies {
-        add("testImplementation",libs.findLibrary("junit4").get())
+        add("testImplementation", libs.findLibrary("junit4").get())
+        add("testImplementation", libs.findLibrary("junit-jupiter").get())
+        add("testImplementation", libs.findLibrary("coroutines-test").get())
     }
 }
 

@@ -2,8 +2,7 @@ package com.idle.designsystem.compose.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,12 +24,13 @@ fun CareTextField(
     hint: String,
     onValueChanged: (String) -> Unit,
     onDone: () -> Unit = {},
+    leftComponent: @Composable () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    Box(
-        contentAlignment = Alignment.CenterStart,
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .height(44.dp)
             .background(color = CareTheme.colors.white000, shape = RoundedCornerShape(6.dp))
@@ -50,7 +50,7 @@ fun CareTextField(
                 onDone()
                 keyboardController?.hide()
             }),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.weight(1f)
                 .padding(horizontal = 16.dp, vertical = 10.dp),
             decorationBox = { innerTextField ->
                 if (value.isEmpty()) {
@@ -63,5 +63,7 @@ fun CareTextField(
                 innerTextField()
             }
         )
+
+        leftComponent()
     }
 }

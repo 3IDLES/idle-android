@@ -3,15 +3,18 @@ package com.idle.signin.center
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.idle.domain.model.CountDownTimer
+import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
+import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
 import com.idle.domain.model.auth.BusinessRegistrationInfo
 import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
 import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
 import com.idle.domain.usecase.auth.SignUpCenterUseCase
-import com.idle.domain.usecase.auth.CountDownTimer
 import com.idle.domain.usecase.auth.ValidateBusinessRegistrationNumberUseCase
 import com.idle.domain.usecase.auth.ValidateIdentifierUseCase
 import com.idle.signin.center.CenterSignUpProcess.NAME
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -43,8 +46,10 @@ class CenterSignUpViewModel @Inject constructor(
     private val _centerAuthCodeTimer = MutableStateFlow<Long?>(null)
     val centerAuthCodeTimer = _centerAuthCodeTimer.asStateFlow()
 
+    private var timerJob: Job? = null
+
     private val _centerAuthCode = MutableStateFlow("")
-    val centerConfirmNumber = _centerAuthCode.asStateFlow()
+    val centerAuthCode = _centerAuthCode.asStateFlow()
 
     private val _businessRegistrationNumber = MutableStateFlow("")
     val businessRegistrationNumber = _businessRegistrationNumber.asStateFlow()
@@ -100,15 +105,27 @@ class CenterSignUpViewModel @Inject constructor(
 
     internal fun sendPhoneNumber() = viewModelScope.launch {
         sendPhoneNumberUseCase(_centerPhoneNumber.value)
-            .onSuccess { Log.d("test", "성공!") }
+            .onSuccess {
+                Log.d("test", "성공!")
+                startTimer()
+            }
             .onFailure { Log.d("test", "실패! ${it}") }
     }
 
-    internal fun startTimer() = viewModelScope.launch {
+    private fun startTimer() {
+        timerJob = viewModelScope.launch {
+            countDownTimer.start(limitTime = TICK_INTERVAL * SECONDS_PER_MINUTE * 5)
+                .collect { _centerAuthCodeTimer.value = it }
+        }
+    }
 
+    private fun cancelTimer() {
+        timerJob?.cancel()
     }
 
     internal fun confirmAuthCode() = viewModelScope.launch {
+        cancelTimer()
+
         confirmAuthCodeUseCase(_centerPhoneNumber.value, _centerAuthCode.value)
             .onSuccess { Log.d("test", "성공!") }
             .onFailure { Log.d("test", "실패! ${it}") }
