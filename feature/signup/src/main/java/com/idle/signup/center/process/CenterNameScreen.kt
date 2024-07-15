@@ -46,7 +46,11 @@ internal fun CenterNameScreen(
             value = centerName,
             hint = "성함을 입력해주세요.",
             onValueChanged = onCenterNameChanged,
-            onDone = { setSignUpProcess(CenterSignUpProcess.PHONE_NUMBER) },
+            onDone = {
+                if (centerName.isNotBlank()) {
+                    setSignUpProcess(CenterSignUpProcess.PHONE_NUMBER)
+                }
+            },
             modifier = Modifier.fillMaxWidth()
                 .focusRequester(focusRequester)
         )

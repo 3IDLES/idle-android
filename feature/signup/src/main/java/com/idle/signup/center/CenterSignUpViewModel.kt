@@ -54,6 +54,9 @@ class CenterSignUpViewModel @Inject constructor(
     private val _centerAuthCode = MutableStateFlow("")
     val centerAuthCode = _centerAuthCode.asStateFlow()
 
+    private val _isConfirmAuthCode = MutableStateFlow(false)
+    val isConfirmAuthCode = _isConfirmAuthCode.asStateFlow()
+
     private val _businessRegistrationNumber = MutableStateFlow("")
     val businessRegistrationNumber = _businessRegistrationNumber.asStateFlow()
 
@@ -108,10 +111,7 @@ class CenterSignUpViewModel @Inject constructor(
 
     internal fun sendPhoneNumber() = viewModelScope.launch {
         sendPhoneNumberUseCase(_centerPhoneNumber.value)
-            .onSuccess {
-                Log.d("test", "성공!")
-                startTimer()
-            }
+            .onSuccess { startTimer() }
             .onFailure { Log.d("test", "실패! ${it}") }
     }
 
@@ -127,8 +127,11 @@ class CenterSignUpViewModel @Inject constructor(
     }
 
     private fun updateTimerDisplay(timeMillis: Long) {
-        val minutes = (timeMillis / (TICK_INTERVAL * SECONDS_PER_MINUTE)).toString().padStart(2, '0')
-        val seconds = ((timeMillis % (TICK_INTERVAL * SECONDS_PER_MINUTE)) / TICK_INTERVAL).toString().padStart(2, '0')
+        val minutes =
+            (timeMillis / (TICK_INTERVAL * SECONDS_PER_MINUTE)).toString().padStart(2, '0')
+        val seconds =
+            ((timeMillis % (TICK_INTERVAL * SECONDS_PER_MINUTE)) / TICK_INTERVAL).toString()
+                .padStart(2, '0')
 
         _centerAuthCodeTimerMinute.value = minutes
         _centerAuthCodeTimerSeconds.value = seconds
@@ -140,10 +143,11 @@ class CenterSignUpViewModel @Inject constructor(
     }
 
     internal fun confirmAuthCode() = viewModelScope.launch {
-        cancelTimer()
-
         confirmAuthCodeUseCase(_centerPhoneNumber.value, _centerAuthCode.value)
-            .onSuccess { Log.d("test", "성공!") }
+            .onSuccess {
+                cancelTimer()
+                _isConfirmAuthCode.value = true
+            }
             .onFailure { Log.d("test", "실패! ${it}") }
     }
 

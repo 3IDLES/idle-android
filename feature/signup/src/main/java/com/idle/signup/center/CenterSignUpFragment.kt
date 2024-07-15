@@ -54,6 +54,7 @@ internal class CenterSignUpFragment : BaseComposeFragment() {
             val centerAuthCodeTimerMinute by centerAuthCodeTimerMinute.collectAsStateWithLifecycle()
             val centerAuthCodeTimerSeconds by centerAuthCodeTimerSeconds.collectAsStateWithLifecycle()
             val centerAuthCode by centerAuthCode.collectAsStateWithLifecycle()
+            val isConfirmAuthCode by isConfirmAuthCode.collectAsStateWithLifecycle()
             val businessRegistrationNumber
                     by businessRegistrationNumber.collectAsStateWithLifecycle()
             val businessRegistrationInfo by businessRegistrationInfo.collectAsStateWithLifecycle()
@@ -68,6 +69,7 @@ internal class CenterSignUpFragment : BaseComposeFragment() {
                 centerAuthCodeTimerMinute = centerAuthCodeTimerMinute,
                 centerAuthCodeTimerSeconds = centerAuthCodeTimerSeconds,
                 centerAuthCode = centerAuthCode,
+                isConfirmAuthCode = isConfirmAuthCode,
                 businessRegistrationNumber = businessRegistrationNumber,
                 businessRegistrationInfo = businessRegistrationInfo,
                 centerId = centerId,
@@ -105,6 +107,7 @@ internal fun CenterSignUpScreen(
     centerAuthCodeTimerMinute: String,
     centerAuthCodeTimerSeconds: String,
     centerAuthCode: String,
+    isConfirmAuthCode: Boolean,
     businessRegistrationNumber: String,
     businessRegistrationInfo: BusinessRegistrationInfo?,
     centerId: String,
@@ -179,6 +182,7 @@ internal fun CenterSignUpScreen(
                             centerAuthCodeTimerMinute = centerAuthCodeTimerMinute,
                             centerAuthCodeTimerSeconds = centerAuthCodeTimerSeconds,
                             centerAuthCode = centerAuthCode,
+                            isConfirmAuthCode = isConfirmAuthCode,
                             onCenterPhoneNumberChanged = onCenterPhoneNumberChanged,
                             onCenterAuthCodeChanged = onCenterAuthCodeChanged,
                             setSignUpProcess = setSignUpProcess,
