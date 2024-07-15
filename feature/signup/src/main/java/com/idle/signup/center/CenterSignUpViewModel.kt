@@ -7,6 +7,7 @@ import com.idle.domain.model.auth.BusinessRegistrationInfo
 import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
 import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
 import com.idle.domain.usecase.auth.SignUpCenterUseCase
+import com.idle.domain.usecase.auth.CountDownTimer
 import com.idle.domain.usecase.auth.ValidateBusinessRegistrationNumberUseCase
 import com.idle.domain.usecase.auth.ValidateIdentifierUseCase
 import com.idle.signin.center.CenterSignUpProcess.NAME
@@ -25,6 +26,7 @@ class CenterSignUpViewModel @Inject constructor(
     private val signUpCenterUseCase: SignUpCenterUseCase,
     private val validateIdentifierUseCase: ValidateIdentifierUseCase,
     private val validateBusinessRegistrationNumberUseCase: ValidateBusinessRegistrationNumberUseCase,
+    private val countDownTimer: CountDownTimer,
 ) : ViewModel() {
     private val _eventFlow = MutableSharedFlow<CenterSignUpEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
@@ -37,6 +39,9 @@ class CenterSignUpViewModel @Inject constructor(
 
     private val _centerPhoneNumber = MutableStateFlow("")
     val centerPhoneNumber = _centerPhoneNumber.asStateFlow()
+
+    private val _centerAuthCodeTimer = MutableStateFlow<Long?>(null)
+    val centerAuthCodeTimer = _centerAuthCodeTimer.asStateFlow()
 
     private val _centerAuthCode = MutableStateFlow("")
     val centerConfirmNumber = _centerAuthCode.asStateFlow()
@@ -97,6 +102,10 @@ class CenterSignUpViewModel @Inject constructor(
         sendPhoneNumberUseCase(_centerPhoneNumber.value)
             .onSuccess { Log.d("test", "성공!") }
             .onFailure { Log.d("test", "실패! ${it}") }
+    }
+
+    internal fun startTimer() = viewModelScope.launch {
+
     }
 
     internal fun confirmAuthCode() = viewModelScope.launch {

@@ -3,4 +3,6 @@ plugins {
     id("care.kotlin.hilt")
 }
 
-dependencies { }
+dependencies {
+    implementation(libs.coroutines.core)
+}
