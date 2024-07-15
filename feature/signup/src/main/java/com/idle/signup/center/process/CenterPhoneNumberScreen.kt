@@ -3,10 +3,12 @@ package com.idle.signup.center.process
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -28,6 +30,7 @@ internal fun CenterPhoneNumberScreen(
     centerAuthCodeTimerMinute: String,
     centerAuthCodeTimerSeconds: String,
     centerAuthCode: String,
+    isConfirmAuthCode: Boolean,
     onCenterPhoneNumberChanged: (String) -> Unit,
     onCenterAuthCodeChanged: (String) -> Unit,
     setSignUpProcess: (CenterSignUpProcess) -> Unit,
@@ -66,19 +69,22 @@ internal fun CenterPhoneNumberScreen(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 CareTextField(
                     value = centerPhoneNumber,
                     hint = "전화번호를 입력해주세요.",
                     onValueChanged = onCenterPhoneNumberChanged,
+                    readOnly = (centerAuthCodeTimerMinute != "" && centerAuthCodeTimerSeconds != ""),
+                    supportingText = if (isConfirmAuthCode) "인증이 완료되었습니다." else "",
                     onDone = { sendPhoneNumber() },
                     modifier = Modifier.weight(1f)
                         .focusRequester(focusRequester),
                 )
 
                 CareButtonSmall(
-                    enable = centerPhoneNumber.length == 13,
+                    enable = centerPhoneNumber.length == 11 &&
+                            !(centerAuthCodeTimerMinute != "" && centerAuthCodeTimerSeconds != ""),
                     text = "인증",
                     onClick = sendPhoneNumber,
                 )
@@ -99,12 +105,18 @@ internal fun CenterPhoneNumberScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                 modifier = Modifier.fillMaxWidth()
+                    .height(IntrinsicSize.Min),
             ) {
                 CareTextField(
                     value = centerAuthCode,
                     hint = "",
                     onValueChanged = onCenterAuthCodeChanged,
-                    onDone = { confirmAuthCode() },
+                    readOnly = !(centerAuthCodeTimerMinute != "" && centerAuthCodeTimerSeconds != ""),
+                    onDone = {
+                        if (centerAuthCode.isNotBlank()) {
+                            confirmAuthCode()
+                        }
+                    },
                     leftComponent = {
                         if (centerAuthCodeTimerMinute != "" && centerAuthCodeTimerSeconds != "") {
                             Text(
@@ -129,7 +141,7 @@ internal fun CenterPhoneNumberScreen(
 
         CareButtonLarge(
             text = "다음",
-            enable = centerAuthCode.isNotBlank(),
+            enable = isConfirmAuthCode,
             onClick = { setSignUpProcess(CenterSignUpProcess.BUSINESS_REGISTRATION_NUMBER) },
             modifier = Modifier.fillMaxWidth(),
         )

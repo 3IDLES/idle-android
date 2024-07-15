@@ -3,6 +3,7 @@ package com.idle.designsystem.compose.foundation
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 
+val Red = Color(0xffFD4F43)
 val Orange100 = Color(0xffFFE4CC)
 val Orange200 = Color(0xffFFCA99)
 val Orange300 = Color(0xffFFAF66)
@@ -25,6 +26,7 @@ val Gray900 = Color(0xff131417)
 
 @Immutable
 data class CareColors(
+    val red: Color = Red,
     val orange100: Color = Orange100,
     val orange200: Color = Orange200,
     val orange300: Color = Orange300,
