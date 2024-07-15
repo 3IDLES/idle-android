@@ -12,7 +12,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -22,6 +25,7 @@ import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareButtonSmall
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.foundation.CareTheme
+import com.idle.domain.usecase.auth.ValidateBusinessRegistrationNumberUseCase
 import com.idle.signin.center.CenterSignUpProcess
 
 @Composable
@@ -31,16 +35,25 @@ internal fun CenterPhoneNumberScreen(
     centerAuthCodeTimerSeconds: String,
     centerAuthCode: String,
     isConfirmAuthCode: Boolean,
+    businessRegistrationProcessed: Boolean,
     onCenterPhoneNumberChanged: (String) -> Unit,
     onCenterAuthCodeChanged: (String) -> Unit,
     setSignUpProcess: (CenterSignUpProcess) -> Unit,
     sendPhoneNumber: () -> Unit,
     confirmAuthCode: () -> Unit,
+    setBusinessRegistrationProcessed: (Boolean) -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
+    }
+
+    LaunchedEffect(isConfirmAuthCode) {
+        if (isConfirmAuthCode && !businessRegistrationProcessed) {
+            setSignUpProcess(CenterSignUpProcess.BUSINESS_REGISTRATION_NUMBER)
+            setBusinessRegistrationProcessed(true)
+        }
     }
 
     BackHandler { setSignUpProcess(CenterSignUpProcess.NAME) }
@@ -76,8 +89,7 @@ internal fun CenterPhoneNumberScreen(
                     hint = "전화번호를 입력해주세요.",
                     onValueChanged = onCenterPhoneNumberChanged,
                     readOnly = (centerAuthCodeTimerMinute != "" && centerAuthCodeTimerSeconds != ""),
-                    supportingText = if (isConfirmAuthCode) "인증이 완료되었습니다." else "",
-                    onDone = { sendPhoneNumber() },
+                    onDone = { if (centerPhoneNumber.length == 11) sendPhoneNumber() },
                     modifier = Modifier.weight(1f)
                         .focusRequester(focusRequester),
                 )
@@ -102,7 +114,7 @@ internal fun CenterPhoneNumberScreen(
             )
 
             Row(
-                verticalAlignment = Alignment.CenterVertically,
+                verticalAlignment = Alignment.Top,
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                 modifier = Modifier.fillMaxWidth()
                     .height(IntrinsicSize.Min),
@@ -111,18 +123,15 @@ internal fun CenterPhoneNumberScreen(
                     value = centerAuthCode,
                     hint = "",
                     onValueChanged = onCenterAuthCodeChanged,
-                    readOnly = !(centerAuthCodeTimerMinute != "" && centerAuthCodeTimerSeconds != ""),
-                    onDone = {
-                        if (centerAuthCode.isNotBlank()) {
-                            confirmAuthCode()
-                        }
-                    },
+                    supportingText = if (isConfirmAuthCode) "인증이 완료되었습니다." else "",
+                    readOnly = !(centerAuthCodeTimerMinute != "" && centerAuthCodeTimerSeconds != "") || isConfirmAuthCode,
+                    onDone = { if (centerAuthCode.isNotBlank()) confirmAuthCode() },
                     leftComponent = {
                         if (centerAuthCodeTimerMinute != "" && centerAuthCodeTimerSeconds != "") {
                             Text(
                                 text = "$centerAuthCodeTimerMinute:$centerAuthCodeTimerSeconds",
                                 style = CareTheme.typography.body3,
-                                color = CareTheme.colors.gray500,
+                                color = if (!isConfirmAuthCode) CareTheme.colors.gray500 else CareTheme.colors.gray200,
                             )
                         }
                     },
@@ -130,7 +139,7 @@ internal fun CenterPhoneNumberScreen(
                 )
 
                 CareButtonSmall(
-                    enable = centerAuthCode.isNotBlank(),
+                    enable = centerAuthCode.isNotBlank() && !isConfirmAuthCode,
                     text = "확인",
                     onClick = confirmAuthCode,
                 )
