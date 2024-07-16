@@ -20,6 +20,7 @@ sealed class DeepLinkDestination(val addressRes: Int) {
     data object WorkerSignIn : DeepLinkDestination(R.string.worker_signin_deeplink_url)
     data object WorkerSignUp : DeepLinkDestination(R.string.worker_signup_deeplink_url)
 
+    data object CenterHome: DeepLinkDestination(R.string.center_home_deeplink_url)
 }
 
 fun DeepLinkDestination.getDeepLink(context: Context) = context.getString(this.addressRes)

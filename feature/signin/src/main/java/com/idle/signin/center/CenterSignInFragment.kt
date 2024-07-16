@@ -15,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
@@ -120,7 +121,8 @@ internal fun CenterSignInScreen(
                     value = centerPassword,
                     hint = "비밀번호를 입력해주세요.",
                     onValueChanged = onCenterPasswordChanged,
-                    onDone = { },
+                    visualTransformation = PasswordVisualTransformation(),
+                    onDone = { if (centerPassword.isNotBlank()) signInCenter() },
                     modifier = Modifier.fillMaxWidth(),
                 )
             }

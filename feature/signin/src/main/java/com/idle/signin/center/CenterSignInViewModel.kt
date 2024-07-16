@@ -1,7 +1,9 @@
 package com.idle.signin.center
 
 import androidx.lifecycle.viewModelScope
+import com.idle.binding.DeepLinkDestination
 import com.idle.binding.base.BaseViewModel
+import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.domain.usecase.th.SignInCenterUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +15,6 @@ import javax.inject.Inject
 class CenterSignInViewModel @Inject constructor(
     private val signInCenterUseCase: SignInCenterUseCase,
 ) : BaseViewModel() {
-
     private val _centerId = MutableStateFlow("")
     internal val centerId = _centerId.asStateFlow()
 
@@ -30,7 +31,7 @@ class CenterSignInViewModel @Inject constructor(
 
     internal fun signInCenter() = viewModelScope.launch {
         signInCenterUseCase(identifier = _centerId.value, password = _centerPassword.value)
-            .onSuccess { }
+            .onSuccess { baseEvent(NavigateTo(DeepLinkDestination.CenterHome)) }
             .onFailure { }
     }
 }

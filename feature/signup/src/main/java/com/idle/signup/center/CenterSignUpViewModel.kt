@@ -2,7 +2,9 @@ package com.idle.signin.center
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
+import com.idle.binding.DeepLinkDestination
 import com.idle.binding.base.BaseViewModel
+import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.CountDownTimer
 import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
@@ -156,7 +158,7 @@ class CenterSignUpViewModel @Inject constructor(
             managerName = _centerName.value,
             businessRegistrationNumber = _businessRegistrationNumber.value,
         )
-            .onSuccess { Log.d("test", "성공!") }
+            .onSuccess { baseEvent(CareBaseEvent.NavigateTo(DeepLinkDestination.CenterHome, true)) }
             .onFailure { Log.d("test", "실패! ${it}") }
     }
 

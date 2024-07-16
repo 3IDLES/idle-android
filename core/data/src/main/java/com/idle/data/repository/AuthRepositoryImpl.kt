@@ -1,6 +1,5 @@
 package com.idle.data.repository
 
-import android.util.Log
 import com.idle.datastore.datasource.TokenDataSource
 import com.idle.domain.model.auth.BusinessRegistrationInfo
 import com.idle.domain.repositorry.auth.AuthRepository
@@ -46,17 +45,20 @@ class AuthRepositoryImpl @Inject constructor(
     )
 
     override suspend fun signInCenter(identifier: String, password: String): Result<Unit> =
-        runCatching {
-            authDataSource.signInCenter(
-                SignInCenterRequest(
-                    identifier = identifier,
-                    password = password,
-                )
-            ).onSuccess { tokenResponse ->
+        authDataSource.signInCenter(
+            SignInCenterRequest(
+                identifier = identifier,
+                password = password,
+            )
+        ).fold(
+            onSuccess = { tokenResponse ->
                 tokenDataSource.setAccessToken(tokenResponse.accessToken)
                 tokenDataSource.setRefreshToken(tokenResponse.refreshToken)
-            }.onFailure { Log.d("test", "센터 로그인 실패" + it.toString()) }
-        }
+                return Result.success(Unit)
+            },
+            onFailure = { Result.failure(it) }
+        )
+
 
     override suspend fun validateIdentifier(identifier: String): Result<Unit> =
         authDataSource.validateIdentifier(identifier)
