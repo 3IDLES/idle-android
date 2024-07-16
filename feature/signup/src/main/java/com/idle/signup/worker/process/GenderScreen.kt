@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -21,10 +22,19 @@ import com.idle.signin.worker.WorkerSignUpProcess
 @Composable
 internal fun GenderScreen(
     gender: Gender,
+    phoneNumberProcessed: Boolean,
     onGenderChanged: (Gender) -> Unit,
     setSignUpProcess: (WorkerSignUpProcess) -> Unit,
+    setPhoneNumberProcessed: (Boolean) -> Unit,
 ) {
     BackHandler { setSignUpProcess(WorkerSignUpProcess.NAME) }
+
+    LaunchedEffect(gender) {
+        if (gender != Gender.NONE && !phoneNumberProcessed) {
+            setSignUpProcess(WorkerSignUpProcess.PHONE_NUMBER)
+            setPhoneNumberProcessed(true)
+        }
+    }
 
     Column(
         horizontalAlignment = Alignment.Start,

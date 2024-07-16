@@ -116,6 +116,7 @@ internal fun WorkerSignUpScreen(
 ) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val focusManager = LocalFocusManager.current
+    val (phoneNumberProcessed, setPhoneNumberProcessed)     = remember { mutableStateOf(false) }
     val (addressProcessed, setAddressProcessed)     = remember { mutableStateOf(false) }
 
     Scaffold(
@@ -165,8 +166,10 @@ internal fun WorkerSignUpScreen(
 
                     WorkerSignUpProcess.GENDER -> GenderScreen(
                         gender = gender,
+                        phoneNumberProcessed = phoneNumberProcessed,
                         onGenderChanged = onGenderChanged,
-                        setSignUpProcess = setSignUpProcess
+                        setSignUpProcess = setSignUpProcess,
+                        setPhoneNumberProcessed = setPhoneNumberProcessed,
                     )
 
                     WorkerSignUpProcess.PHONE_NUMBER -> WorkerPhoneNumberScreen(
