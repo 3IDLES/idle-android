@@ -20,7 +20,6 @@ import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareButtonSmall
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.foundation.CareTheme
-import com.idle.signin.center.CenterSignUpProcess
 import com.idle.signin.worker.WorkerSignUpProcess
 
 @Composable

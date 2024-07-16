@@ -1,9 +1,5 @@
 package com.idle.signin.worker
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,12 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
-import com.idle.binding.deepLinkNavigateTo
-import com.idle.binding.repeatOnStarted
 import com.idle.compose.base.BaseComposeFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -29,17 +21,9 @@ import dagger.hilt.android.AndroidEntryPoint
 internal class WorkerSignInFragment : BaseComposeFragment() {
     override val viewModel: WorkerSignInViewModel by viewModels()
 
-    @Composable override fun ComposeLayout() {
-        viewLifecycleOwner.repeatOnStarted {
-            viewModel.eventFlow.collect { handleEvent(it) }
-        }
-
+    @Composable
+    override fun ComposeLayout() {
         WorkerSignInScreen()
-    }
-
-    private fun handleEvent(event: WorkerSignInEvent) = when (event) {
-        is WorkerSignInEvent.NavigateTo -> findNavController()
-            .deepLinkNavigateTo(requireContext(), event.destination)
     }
 }
 

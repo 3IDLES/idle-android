@@ -1,8 +1,8 @@
 package com.idle.signin.center
 
 import android.util.Log
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.CountDownTimer
 import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
@@ -15,9 +15,7 @@ import com.idle.domain.usecase.auth.ValidateIdentifierUseCase
 import com.idle.signin.center.CenterSignUpProcess.NAME
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -30,9 +28,7 @@ class CenterSignUpViewModel @Inject constructor(
     private val validateIdentifierUseCase: ValidateIdentifierUseCase,
     private val validateBusinessRegistrationNumberUseCase: ValidateBusinessRegistrationNumberUseCase,
     private val countDownTimer: CountDownTimer,
-) : ViewModel() {
-    private val _eventFlow = MutableSharedFlow<CenterSignUpEvent>()
-    val eventFlow = _eventFlow.asSharedFlow()
+) : BaseViewModel() {
 
     private val _signUpProcess = MutableStateFlow<CenterSignUpProcess>(NAME)
     val signUpProcess = _signUpProcess.asStateFlow()
@@ -75,10 +71,6 @@ class CenterSignUpViewModel @Inject constructor(
 
     private val _centerPasswordForConfirm = MutableStateFlow("")
     val centerPasswordForConfirm = _centerPasswordForConfirm.asStateFlow()
-
-    internal fun event(event: CenterSignUpEvent) = viewModelScope.launch {
-        _eventFlow.emit(event)
-    }
 
     internal fun setCenterSignUpProcess(process: CenterSignUpProcess) {
         _signUpProcess.value = process
@@ -179,11 +171,6 @@ class CenterSignUpViewModel @Inject constructor(
             .onSuccess { _businessRegistrationInfo.value = it }
             .onFailure { Log.d("test", it.toString()) }
     }
-}
-
-sealed class CenterSignUpEvent {
-    data class NavigateTo(val destination: com.idle.binding.DeepLinkDestination) :
-        CenterSignUpEvent()
 }
 
 enum class CenterSignUpProcess(val step: Int) {

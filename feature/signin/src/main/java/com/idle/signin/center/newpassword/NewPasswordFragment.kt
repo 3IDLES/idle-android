@@ -16,9 +16,6 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.fragment.findNavController
-import com.idle.binding.deepLinkNavigateTo
-import com.idle.binding.repeatOnStarted
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.component.CareTopAppBar
@@ -34,10 +31,6 @@ class NewPasswordFragment : BaseComposeFragment() {
     @Composable
     override fun ComposeLayout() {
         viewModel.apply {
-            viewLifecycleOwner.repeatOnStarted {
-                eventFlow.collect { handleEvent(it) }
-            }
-
             val phoneNumber by phoneNumber.collectAsStateWithLifecycle()
             val authCode by centerAuthCode.collectAsStateWithLifecycle()
             val generateNewPasswordProcess by generateNewPasswordProcess.collectAsStateWithLifecycle()
@@ -59,11 +52,6 @@ class NewPasswordFragment : BaseComposeFragment() {
                 onNewPasswordForConfirmChanged = ::setNewPasswordForConfirm,
             )
         }
-    }
-
-    private fun handleEvent(event: NewPasswordEvent) = when (event) {
-        is NewPasswordEvent.NavigateTo -> findNavController()
-            .deepLinkNavigateTo(requireContext(), event.destination)
     }
 }
 

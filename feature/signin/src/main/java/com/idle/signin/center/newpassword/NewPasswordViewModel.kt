@@ -1,15 +1,13 @@
 package com.idle.signin.center.newpassword
 
 import android.util.Log
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.idle.binding.base.BaseViewModel
 import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
 import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
 import com.idle.signin.center.newpassword.GenerateNewPasswordProcess.PHONE_NUMBER
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,10 +16,7 @@ import javax.inject.Inject
 class NewPasswordViewModel @Inject constructor(
     private val sendPhoneNumberUseCase: SendPhoneNumberUseCase,
     private val confirmAuthCodeUseCase: ConfirmAuthCodeUseCase,
-) : ViewModel() {
-    private val _eventFlow = MutableSharedFlow<NewPasswordEvent>()
-    internal val eventFlow = _eventFlow.asSharedFlow()
-
+) : BaseViewModel() {
     private val _centerPhoneNumber = MutableStateFlow("")
     internal val phoneNumber = _centerPhoneNumber.asStateFlow()
 
@@ -68,11 +63,6 @@ class NewPasswordViewModel @Inject constructor(
             .onSuccess { Log.d("test", "성공!") }
             .onFailure { Log.d("test", "실패! ${it}") }
     }
-}
-
-sealed class NewPasswordEvent {
-    data class NavigateTo(val destination: com.idle.binding.DeepLinkDestination) :
-        NewPasswordEvent()
 }
 
 enum class GenerateNewPasswordProcess {

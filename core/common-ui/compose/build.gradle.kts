@@ -8,4 +8,6 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.commonUi.binding)
+    implementation(libs.androidx.navigation.fragment)
 }

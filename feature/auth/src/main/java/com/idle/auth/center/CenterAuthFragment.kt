@@ -18,12 +18,9 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
-import com.idle.auth.center.CenterAuthEvent.NavigateTo
 import com.idle.binding.DeepLinkDestination.CenterSignIn
 import com.idle.binding.DeepLinkDestination.CenterSignUp
-import com.idle.binding.deepLinkNavigateTo
-import com.idle.binding.repeatOnStarted
+import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designsystem.compose.component.CareButtonLarge
@@ -38,18 +35,11 @@ internal class CenterAuthFragment : BaseComposeFragment() {
 
     @Composable
     override fun ComposeLayout() {
-        viewLifecycleOwner.repeatOnStarted {
-            viewModel.eventFlow.collect { handleEvent(it) }
-        }
 
         CenterAuthScreen(
-            navigateToCenterSignIn = { viewModel.event(NavigateTo(CenterSignIn)) },
-            navigateToCenterSignUp = { viewModel.event(NavigateTo(CenterSignUp)) },
+            navigateToCenterSignIn = { viewModel.baseEvent(NavigateTo(CenterSignIn)) },
+            navigateToCenterSignUp = { viewModel.baseEvent(NavigateTo(CenterSignUp)) },
         )
-    }
-
-    private fun handleEvent(event: CenterAuthEvent) = when (event) {
-        is NavigateTo -> findNavController().deepLinkNavigateTo(requireContext(), event.destination)
     }
 }
 

@@ -1,9 +1,8 @@
 package com.idle.signin.worker
 
 import android.util.Log
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.idle.binding.DeepLinkDestination
+import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.CountDownTimer
 import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
@@ -12,9 +11,7 @@ import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
 import com.idle.signin.worker.WorkerSignUpProcess.NAME
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,10 +21,7 @@ class WorkerSignUpViewModel @Inject constructor(
     private val sendPhoneNumberUseCase: SendPhoneNumberUseCase,
     private val confirmAuthCodeUseCase: ConfirmAuthCodeUseCase,
     private val countDownTimer: CountDownTimer,
-) : ViewModel() {
-    private val _eventFlow = MutableSharedFlow<WorkerSignUpEvent>()
-    internal val eventFlow = _eventFlow.asSharedFlow()
-
+) : BaseViewModel() {
     private val _signUpProcess = MutableStateFlow<WorkerSignUpProcess>(NAME)
     internal val signUpProcess = _signUpProcess.asStateFlow()
 
@@ -59,10 +53,6 @@ class WorkerSignUpViewModel @Inject constructor(
 
     private val _addressDetail = MutableStateFlow("")
     internal val addressDetail = _addressDetail.asStateFlow()
-
-    internal fun event(event: WorkerSignUpEvent) = viewModelScope.launch {
-        _eventFlow.emit(event)
-    }
 
     internal fun setWorkerSignUpProcess(process: WorkerSignUpProcess) {
         _signUpProcess.value = process
@@ -133,10 +123,6 @@ class WorkerSignUpViewModel @Inject constructor(
             }
             .onFailure { Log.d("test", "실패! ${it}") }
     }
-}
-
-sealed class WorkerSignUpEvent {
-    data class NavigateTo(val destination: DeepLinkDestination) : WorkerSignUpEvent()
 }
 
 enum class WorkerSignUpProcess(val step: Int) {

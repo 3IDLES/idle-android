@@ -19,10 +19,8 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.fragment.findNavController
 import com.idle.binding.DeepLinkDestination.NewPassword
-import com.idle.binding.deepLinkNavigateTo
-import com.idle.binding.repeatOnStarted
+import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
@@ -30,7 +28,6 @@ import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.CareTopAppBar
 import com.idle.designsystem.compose.foundation.CareTheme
-import com.idle.signin.center.CenterSignInEvent.NavigateTo
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -40,10 +37,6 @@ internal class CenterSignInFragment : BaseComposeFragment() {
     @Composable
     override fun ComposeLayout() {
         viewModel.apply {
-            viewLifecycleOwner.repeatOnStarted {
-                eventFlow.collect { handleEvent(it) }
-            }
-
             val centerId by centerId.collectAsStateWithLifecycle()
             val centerPassword by centerPassword.collectAsStateWithLifecycle()
 
@@ -53,13 +46,9 @@ internal class CenterSignInFragment : BaseComposeFragment() {
                 onCenterIdChanged = ::setCenterId,
                 onCenterPasswordChanged = ::setCenterPassword,
                 signInCenter = ::signInCenter,
-                navigateToNewPassword = { event(NavigateTo(NewPassword)) }
+                navigateToNewPassword = { baseEvent(NavigateTo(NewPassword)) }
             )
         }
-    }
-
-    private fun handleEvent(event: CenterSignInEvent) = when (event) {
-        is NavigateTo -> findNavController().deepLinkNavigateTo(requireContext(), event.destination)
     }
 }
 

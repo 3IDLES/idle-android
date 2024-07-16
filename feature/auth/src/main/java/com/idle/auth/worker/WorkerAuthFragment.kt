@@ -1,7 +1,5 @@
 package com.idle.auth.center
 
-import android.os.Bundle
-import android.view.View
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,11 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
-import com.idle.auth.center.WorkerAuthEvent.NavigateTo
 import com.idle.binding.DeepLinkDestination.WorkerSignUp
-import com.idle.binding.deepLinkNavigateTo
-import com.idle.binding.repeatOnStarted
+import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.foundation.CareTheme
@@ -33,18 +28,9 @@ internal class WorkerAuthFragment : BaseComposeFragment() {
 
     @Composable
     override fun ComposeLayout() {
-        repeatOnStarted {
-            viewModel.eventFlow.collect { handleEvent(it) }
-        }
-
         WorkerAuthScreen(
-            navigateToWorkerSignUp = { viewModel.event(NavigateTo(WorkerSignUp)) }
+            navigateToWorkerSignUp = { viewModel.baseEvent(NavigateTo(WorkerSignUp)) }
         )
-    }
-
-    private fun handleEvent(event: WorkerAuthEvent) = when (event) {
-        is NavigateTo -> findNavController()
-            .deepLinkNavigateTo(requireContext(), event.destination)
     }
 }
 

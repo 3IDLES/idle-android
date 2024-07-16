@@ -25,9 +25,6 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.fragment.findNavController
-import com.idle.binding.deepLinkNavigateTo
-import com.idle.binding.repeatOnStarted
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.component.CareProgressBar
@@ -46,9 +43,6 @@ internal class CenterSignUpFragment : BaseComposeFragment() {
     @Composable
     override fun ComposeLayout() {
         viewModel.apply {
-            viewLifecycleOwner.repeatOnStarted {
-                eventFlow.collect { handleEvent(it) }
-            }
 
             val signUpProcess by signUpProcess.collectAsStateWithLifecycle()
             val centerName by centerName.collectAsStateWithLifecycle()
@@ -94,11 +88,6 @@ internal class CenterSignUpFragment : BaseComposeFragment() {
                 validateBusinessRegistrationNumber = ::validateBusinessRegistrationNumber,
             )
         }
-    }
-
-    private fun handleEvent(event: CenterSignUpEvent) = when (event) {
-        is CenterSignUpEvent.NavigateTo -> findNavController()
-            .deepLinkNavigateTo(requireContext(), event.destination)
     }
 }
 

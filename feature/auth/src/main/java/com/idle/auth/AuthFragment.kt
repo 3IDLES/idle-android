@@ -19,11 +19,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.idle.binding.DeepLinkDestination.CenterAuth
 import com.idle.binding.DeepLinkDestination.WorkerAuth
-import com.idle.binding.deepLinkNavigateTo
-import com.idle.binding.repeatOnStarted
+import com.idle.binding.base.CareBaseEvent
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.foundation.CareTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,19 +32,11 @@ internal class AuthFragment : BaseComposeFragment() {
 
     @Composable
     override fun ComposeLayout() {
-        viewLifecycleOwner.repeatOnStarted {
-            viewModel.eventFlow.collect { handleEvent(it) }
-        }
 
         AuthScreen(
-            navigateToWorkerAuth = { viewModel.event(AuthEvent.NavigateTo(WorkerAuth)) },
-            navigateToCenterAuth = { viewModel.event(AuthEvent.NavigateTo(CenterAuth)) },
+            navigateToWorkerAuth = { viewModel.baseEvent(CareBaseEvent.NavigateTo(WorkerAuth)) },
+            navigateToCenterAuth = { viewModel.baseEvent(CareBaseEvent.NavigateTo(CenterAuth)) },
         )
-    }
-
-    private fun handleEvent(event: AuthEvent) = when (event) {
-        is AuthEvent.NavigateTo -> findNavController()
-            .deepLinkNavigateTo(requireContext(), event.destination)
     }
 }
 

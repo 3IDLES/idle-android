@@ -25,9 +25,6 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.fragment.findNavController
-import com.idle.binding.deepLinkNavigateTo
-import com.idle.binding.repeatOnStarted
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.component.CareProgressBar
@@ -46,10 +43,6 @@ internal class WorkerSignUpFragment : BaseComposeFragment() {
     @Composable
     override fun ComposeLayout() {
         viewModel.apply {
-            viewLifecycleOwner.repeatOnStarted {
-                eventFlow.collect { handleEvent(it) }
-            }
-
             val signUpProcess by signUpProcess.collectAsStateWithLifecycle()
             val workerName by workerName.collectAsStateWithLifecycle()
             val workerPhoneNumber by workerPhoneNumber.collectAsStateWithLifecycle()
@@ -84,11 +77,6 @@ internal class WorkerSignUpFragment : BaseComposeFragment() {
             )
         }
     }
-
-    private fun handleEvent(event: WorkerSignUpEvent) = when (event) {
-        is WorkerSignUpEvent.NavigateTo -> findNavController()
-            .deepLinkNavigateTo(requireContext(), event.destination)
-    }
 }
 
 
@@ -116,8 +104,8 @@ internal fun WorkerSignUpScreen(
 ) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val focusManager = LocalFocusManager.current
-    val (phoneNumberProcessed, setPhoneNumberProcessed)     = remember { mutableStateOf(false) }
-    val (addressProcessed, setAddressProcessed)     = remember { mutableStateOf(false) }
+    val (phoneNumberProcessed, setPhoneNumberProcessed) = remember { mutableStateOf(false) }
+    val (addressProcessed, setAddressProcessed) = remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
