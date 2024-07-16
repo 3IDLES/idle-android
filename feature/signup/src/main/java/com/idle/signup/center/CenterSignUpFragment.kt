@@ -134,7 +134,7 @@ internal fun CenterSignUpScreen(
 ) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val focusManager = LocalFocusManager.current
-    var (businessRegistrationProcessed, setBusinessRegistrationProcessed)
+    val (businessRegistrationProcessed, setBusinessRegistrationProcessed)
             = remember { mutableStateOf(false) }
 
     Scaffold(

@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -51,7 +53,10 @@ internal class WorkerSignUpFragment : BaseComposeFragment() {
             val signUpProcess by signUpProcess.collectAsStateWithLifecycle()
             val workerName by workerName.collectAsStateWithLifecycle()
             val workerPhoneNumber by workerPhoneNumber.collectAsStateWithLifecycle()
+            val workerAuthCodeTimerMinute by workerAuthCodeTimerMinute.collectAsStateWithLifecycle()
+            val workerAuthCodeTimerSeconds by workerAuthCodeTimerSeconds.collectAsStateWithLifecycle()
             val workerAuthCode by workerAuthCode.collectAsStateWithLifecycle()
+            val isConfirmAuthCode by isConfirmAuthCode.collectAsStateWithLifecycle()
             val gender by gender.collectAsStateWithLifecycle()
             val address by address.collectAsStateWithLifecycle()
             val addressDetail by addressDetail.collectAsStateWithLifecycle()
@@ -60,7 +65,10 @@ internal class WorkerSignUpFragment : BaseComposeFragment() {
                 signUpProcess = signUpProcess,
                 workerName = workerName,
                 workerPhoneNumber = workerPhoneNumber,
+                workerAuthCodeTimerMinute = workerAuthCodeTimerMinute,
+                workerAuthCodeTimerSeconds = workerAuthCodeTimerSeconds,
                 workerAuthCode = workerAuthCode,
+                isConfirmAuthCode = isConfirmAuthCode,
                 gender = gender,
                 address = address,
                 addressDetail = addressDetail,
@@ -89,7 +97,10 @@ internal fun WorkerSignUpScreen(
     signUpProcess: WorkerSignUpProcess,
     workerName: String,
     workerPhoneNumber: String,
+    workerAuthCodeTimerMinute: String,
+    workerAuthCodeTimerSeconds: String,
     workerAuthCode: String,
+    isConfirmAuthCode: Boolean,
     gender: Gender,
     address: String,
     addressDetail: String,
@@ -105,6 +116,7 @@ internal fun WorkerSignUpScreen(
 ) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val focusManager = LocalFocusManager.current
+    val (addressProcessed, setAddressProcessed)     = remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -159,12 +171,17 @@ internal fun WorkerSignUpScreen(
 
                     WorkerSignUpProcess.PHONE_NUMBER -> WorkerPhoneNumberScreen(
                         workerPhoneNumber = workerPhoneNumber,
+                        workerAuthCodeTimerMinute = workerAuthCodeTimerMinute,
+                        workerAuthCodeTimerSeconds = workerAuthCodeTimerSeconds,
                         workerAuthCode = workerAuthCode,
+                        isConfirmAuthCode = isConfirmAuthCode,
+                        addressProcessed = addressProcessed,
                         onWorkerPhoneNumberChanged = onWorkerPhoneNumberChanged,
                         onWorkerAuthCodeChanged = onWorkerAuthCodeChanged,
                         setSignUpProcess = setSignUpProcess,
                         sendPhoneNumber = sendPhoneNumber,
                         confirmAuthCode = confirmAuthCode,
+                        setAddressProcessed = setAddressProcessed,
                     )
 
                     WorkerSignUpProcess.ADDRESS -> AddressScreen(

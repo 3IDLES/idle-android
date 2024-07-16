@@ -46,7 +46,7 @@ internal fun WorkerNameScreen(
             value = workerName,
             hint = "성함을 입력해주세요.",
             onValueChanged = onWorkerNameChanged,
-            onDone = { setSignUpProcess(WorkerSignUpProcess.GENDER) },
+            onDone = { if(workerName.isNotBlank()) setSignUpProcess(WorkerSignUpProcess.GENDER) },
             modifier = Modifier.fillMaxWidth()
                 .focusRequester(focusRequester)
         )
@@ -56,7 +56,7 @@ internal fun WorkerNameScreen(
         CareButtonLarge(
             text = "다음",
             enable = workerName.isNotBlank(),
-            onClick = { setSignUpProcess(WorkerSignUpProcess.GENDER) },
+            onClick = { if(workerName.isNotBlank()) setSignUpProcess(WorkerSignUpProcess.GENDER) },
             modifier = Modifier.fillMaxWidth(),
         )
     }
