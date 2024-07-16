@@ -61,6 +61,7 @@ internal class CenterSignUpFragment : BaseComposeFragment() {
                     by businessRegistrationNumber.collectAsStateWithLifecycle()
             val businessRegistrationInfo by businessRegistrationInfo.collectAsStateWithLifecycle()
             val centerId by centerId.collectAsStateWithLifecycle()
+            val centerIdResult by centerIdResult.collectAsStateWithLifecycle()
             val centerPassword by centerPassword.collectAsStateWithLifecycle()
             val centerPasswordForConfirm by centerPasswordForConfirm.collectAsStateWithLifecycle()
 
@@ -75,6 +76,7 @@ internal class CenterSignUpFragment : BaseComposeFragment() {
                 businessRegistrationNumber = businessRegistrationNumber,
                 businessRegistrationInfo = businessRegistrationInfo,
                 centerId = centerId,
+                centerIdResult = centerIdResult,
                 centerPassword = centerPassword,
                 centerPasswordForConfirm = centerPasswordForConfirm,
                 setSignUpProcess = ::setCenterSignUpProcess,
@@ -113,6 +115,7 @@ internal fun CenterSignUpScreen(
     businessRegistrationNumber: String,
     businessRegistrationInfo: BusinessRegistrationInfo?,
     centerId: String,
+    centerIdResult: Boolean,
     centerPassword: String,
     centerPasswordForConfirm: String,
     setSignUpProcess: (CenterSignUpProcess) -> Unit,
@@ -208,6 +211,7 @@ internal fun CenterSignUpScreen(
                     CenterSignUpProcess.ID_PASSWORD ->
                         IdPasswordScreen(
                             centerId = centerId,
+                            centerIdResult = centerIdResult,
                             centerPassword = centerPassword,
                             centerPasswordForConfirm = centerPasswordForConfirm,
                             onCenterIdChanged = onCenterIdChanged,
