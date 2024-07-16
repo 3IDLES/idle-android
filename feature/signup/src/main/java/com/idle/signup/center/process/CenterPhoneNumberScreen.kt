@@ -116,8 +116,7 @@ internal fun CenterPhoneNumberScreen(
             Row(
                 verticalAlignment = Alignment.Top,
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
-                modifier = Modifier.fillMaxWidth()
-                    .height(IntrinsicSize.Min),
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 CareTextField(
                     value = centerAuthCode,
