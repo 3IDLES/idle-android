@@ -60,18 +60,21 @@ class CenterSignUpViewModel @Inject constructor(
     private val _businessRegistrationNumber = MutableStateFlow("")
     val businessRegistrationNumber = _businessRegistrationNumber.asStateFlow()
 
+    private val _businessRegistrationInfo: MutableStateFlow<BusinessRegistrationInfo?> =
+        MutableStateFlow(null)
+    val businessRegistrationInfo = _businessRegistrationInfo.asStateFlow()
+
     private val _centerId = MutableStateFlow("")
     val centerId = _centerId.asStateFlow()
+
+    private val _centerIdResult = MutableStateFlow(false)
+    val centerIdResult = _centerIdResult.asStateFlow()
 
     private val _centerPassword = MutableStateFlow("")
     val centerPassword = _centerPassword.asStateFlow()
 
     private val _centerPasswordForConfirm = MutableStateFlow("")
     val centerPasswordForConfirm = _centerPasswordForConfirm.asStateFlow()
-
-    private val _businessRegistrationInfo: MutableStateFlow<BusinessRegistrationInfo?> =
-        MutableStateFlow(null)
-    val businessRegistrationInfo = _businessRegistrationInfo.asStateFlow()
 
     internal fun event(event: CenterSignUpEvent) = viewModelScope.launch {
         _eventFlow.emit(event)
@@ -95,10 +98,12 @@ class CenterSignUpViewModel @Inject constructor(
 
     internal fun setBusinessRegistrationNumber(businessRegistrationNumber: String) {
         _businessRegistrationNumber.value = businessRegistrationNumber
+        _businessRegistrationInfo.value = null
     }
 
     internal fun setCenterId(id: String) {
         _centerId.value = id
+        _centerIdResult.value = false
     }
 
     internal fun setCenterPassword(password: String) {
@@ -165,7 +170,7 @@ class CenterSignUpViewModel @Inject constructor(
 
     internal fun validateIdentifier() = viewModelScope.launch {
         validateIdentifierUseCase(_centerId.value)
-            .onSuccess { Log.d("test", "성공!") }
+            .onSuccess { _centerIdResult.value = true }
             .onFailure { Log.d("test", it.toString()) }
     }
 

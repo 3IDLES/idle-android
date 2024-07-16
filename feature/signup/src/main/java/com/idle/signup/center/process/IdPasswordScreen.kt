@@ -21,8 +21,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,6 +36,7 @@ import com.idle.signin.center.CenterSignUpProcess
 @Composable
 internal fun IdPasswordScreen(
     centerId: String,
+    centerIdResult: Boolean,
     centerPassword: String,
     centerPasswordForConfirm: String,
     onCenterIdChanged: (String) -> Unit,
@@ -43,7 +46,10 @@ internal fun IdPasswordScreen(
     signUpCenter: () -> Unit,
     validateIdentifier: () -> Unit,
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
+    val idValidationResult = validateId(centerId)
+    val passwordValidationResult = validatePassword(centerPassword)
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
@@ -86,7 +92,7 @@ internal fun IdPasswordScreen(
             )
 
             Row(
-                verticalAlignment = Alignment.CenterVertically,
+                verticalAlignment = Alignment.Top,
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -94,13 +100,17 @@ internal fun IdPasswordScreen(
                     value = centerId,
                     hint = "아이디를 입력해주세요.",
                     onValueChanged = onCenterIdChanged,
-                    onDone = { },
+                    supportingText = if (centerIdResult) "사용 가능한 아이디 입니다" else "",
+                    onDone = { if (idValidationResult.isValid) validateIdentifier() },
                     modifier = Modifier.weight(1f)
                         .focusRequester(focusRequester),
                 )
 
                 Button(
-                    onClick = validateIdentifier,
+                    onClick = {
+                        validateIdentifier()
+                        keyboardController?.hide()
+                    },
                     enabled = centerId.isNotBlank(),
                     shape = RoundedCornerShape(6.dp),
                     contentPadding = PaddingValues(10.dp),
@@ -148,6 +158,8 @@ internal fun IdPasswordScreen(
             CareTextField(
                 value = centerPassword,
                 hint = "비밀번호를 입력해주세요.",
+                visualTransformation = PasswordVisualTransformation(),
+                supportingText = if (passwordValidationResult.isValid) "사용 가능한 비밀번호 입니다." else "",
                 onValueChanged = onCenterPasswordChanged,
                 onDone = { },
                 modifier = Modifier.fillMaxWidth(),
@@ -168,6 +180,8 @@ internal fun IdPasswordScreen(
             CareTextField(
                 value = centerPasswordForConfirm,
                 hint = "비밀번호를 한번 더 입력해주세요.",
+                visualTransformation = PasswordVisualTransformation(),
+                supportingText = if (centerPassword != centerPasswordForConfirm) "비밀번호가 일치하지 않습니다." else "",
                 onValueChanged = onCenterPasswordForConfirmChanged,
                 onDone = { },
                 modifier = Modifier.fillMaxWidth(),
@@ -179,9 +193,55 @@ internal fun IdPasswordScreen(
 
         CareButtonLarge(
             text = "완료",
-            enable = centerPasswordForConfirm.isNotBlank(),
+            enable = idValidationResult.isValid && passwordValidationResult.isValid &&
+                    (centerPassword == centerPasswordForConfirm),
             onClick = signUpCenter,
             modifier = Modifier.fillMaxWidth(),
         )
     }
 }
+
+private fun validateId(id: String): ValidationResult {
+    if (id.length !in 6..20) return ValidationResult(false, "아이디는 6자 이상 20자 이하이어야 합니다.")
+    if (!id.matches(Regex("^[A-Za-z0-9]+$"))) return ValidationResult(
+        false,
+        "아이디는 영문 대소문자와 숫자만 사용 가능합니다."
+    )
+    return ValidationResult(true, "유효한 아이디입니다.")
+}
+
+private fun validatePassword(password: String): ValidationResult {
+    if (password.length !in 8..20) return ValidationResult(false, "비밀번호는 8자 이상 20자 이하이어야 합니다.")
+    if (!password.matches(Regex("^[A-Za-z0-9!@#\$%^&*()_+=-]+$"))) return ValidationResult(
+        false,
+        "비밀번호는 영문, 숫자 및 특수문자만 사용 가능합니다."
+    )
+    if (!password.matches(Regex(".*[A-Za-z].*")) || !password.matches(Regex(".*\\d.*"))) return ValidationResult(
+        false,
+        "비밀번호는 최소 하나의 영문자와 숫자를 포함해야 합니다."
+    )
+    if (password.contains(" ")) return ValidationResult(false, "비밀번호에 공백 문자를 사용할 수 없습니다.")
+    if (containsSequentialCharacters(password)) return ValidationResult(
+        false,
+        "비밀번호에 연속된 문자를 3개 이상 사용할 수 없습니다."
+    )
+
+    return ValidationResult(true, "유효한 비밀번호입니다.")
+}
+
+private fun containsSequentialCharacters(password: String): Boolean {
+    val limit = 3
+    var maxSequence = 1
+
+    for (i in 1 until password.length) {
+        if (password[i] == password[i - 1]) {
+            maxSequence += 1
+            if (maxSequence >= limit) return true
+        } else {
+            maxSequence = 1
+        }
+    }
+    return false
+}
+
+data class ValidationResult(val isValid: Boolean, val message: String)

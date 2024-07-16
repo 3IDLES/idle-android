@@ -17,16 +17,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.idle.designsystem.compose.foundation.CareTheme
 
 @Composable
 fun CareTextField(
     value: String,
-    hint: String,
+    hint: String = "",
     readOnly: Boolean = false,
     isError: Boolean = false,
     supportingText: String = "",
+    visualTransformation: VisualTransformation = VisualTransformation.None,
     onValueChanged: (String) -> Unit,
     onDone: () -> Unit = {},
     leftComponent: @Composable () -> Unit = {},
@@ -72,6 +74,7 @@ fun CareTextField(
                 ),
                 singleLine = true,
                 readOnly = readOnly,
+                visualTransformation = visualTransformation,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 keyboardActions = KeyboardActions(onDone = {
                     onDone()
@@ -94,16 +97,14 @@ fun CareTextField(
             leftComponent()
         }
 
-        if (supportingText.isNotBlank()) {
-            Text(
-                text = supportingText,
-                style = CareTheme.typography.caption,
-                color = if (isError) {
-                    CareTheme.colors.red
-                } else {
-                    CareTheme.colors.gray300
-                },
-            )
-        }
+        Text(
+            text = supportingText,
+            style = CareTheme.typography.caption,
+            color = if (isError) {
+                CareTheme.colors.red
+            } else {
+                CareTheme.colors.gray300
+            },
+        )
     }
 }

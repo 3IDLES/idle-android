@@ -80,7 +80,7 @@ internal fun CenterPhoneNumberScreen(
             )
 
             Row(
-                verticalAlignment = Alignment.CenterVertically,
+                verticalAlignment = Alignment.Top,
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                 modifier = Modifier.fillMaxWidth(),
             ) {
@@ -105,7 +105,7 @@ internal fun CenterPhoneNumberScreen(
 
         Column(
             horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
+            verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.Top),
         ) {
             Text(
                 text = "인증번호",
