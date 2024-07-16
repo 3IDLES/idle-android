@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation"
+    app:startDestination="@id/centerHomeFragment">
+
+    <fragment
+        android:id="@+id/centerHomeFragment"
+        android:name="com.idle.center.home.CenterHomeFragment"
+        android:label="CenterHomeFragment">
+        <deepLink app:uri="@string/center_home_deeplink_url" />
+    </fragment>
+</navigation>
