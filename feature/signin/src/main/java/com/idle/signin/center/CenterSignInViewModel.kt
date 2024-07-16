@@ -31,7 +31,7 @@ class CenterSignInViewModel @Inject constructor(
 
     internal fun signInCenter() = viewModelScope.launch {
         signInCenterUseCase(identifier = _centerId.value, password = _centerPassword.value)
-            .onSuccess { baseEvent(NavigateTo(DeepLinkDestination.CenterHome)) }
+            .onSuccess { baseEvent(NavigateTo(DeepLinkDestination.CenterHome, true)) }
             .onFailure { }
     }
 }

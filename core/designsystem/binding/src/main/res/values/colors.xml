@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Main Colors -->
+    <color name="orange_100">#FFEACC</color>
+    <color name="orange_200">#FFCA99</color>
+    <color name="orange_300">#FFAF66</color>
+    <color name="orange_400">#FF9533</color>
+    <color name="orange_500">#FF7A00</color>
+    <color name="orange_600">#CC6200</color>
+    <color name="orange_700">#994900</color>
+
+    <!-- Gray Scale -->
+    <color name="gray_050">#F1F2F4</color>
+    <color name="gray_100">#DFE0E3</color>
+    <color name="gray_200">#BFC1C7</color>
+    <color name="gray_300">#9EA3AB</color>
+    <color name="gray_400">#7E848F</color>
+    <color name="gray_500">#5E6573</color>
+    <color name="gray_600">#4B515C</color>
+    <color name="gray_700">#383D45</color>
+    <color name="gray_800">#26282E</color>
+    <color name="gray_900">#131417</color>
+
+    <!-- Additional Color -->
+    <color name="red">#DF4A43</color>
+</resources>

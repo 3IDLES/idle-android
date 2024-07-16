@@ -158,7 +158,7 @@ class CenterSignUpViewModel @Inject constructor(
             managerName = _centerName.value,
             businessRegistrationNumber = _businessRegistrationNumber.value,
         )
-            .onSuccess { baseEvent(CareBaseEvent.NavigateTo(DeepLinkDestination.CenterHome, true)) }
+            .onSuccess { baseEvent(CareBaseEvent.NavigateTo(DeepLinkDestination.CenterSignIn, true)) }
             .onFailure { Log.d("test", "실패! ${it}") }
     }
 
