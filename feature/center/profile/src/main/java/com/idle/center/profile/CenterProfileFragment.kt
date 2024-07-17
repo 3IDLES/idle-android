@@ -1,6 +1,6 @@
-package com.idle.center.home
+package com.idle.center.profile
 
-import androidx.compose.foundation.background
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -11,23 +11,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.fragment.app.viewModels
 import com.idle.compose.base.BaseComposeFragment
-import com.idle.designsystem.compose.foundation.CareTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-internal class CenterHomeFragment : BaseComposeFragment() {
-    override val fragmentViewModel: CenterHomeViewModel by viewModels()
+internal class CenterProfileFragment : BaseComposeFragment() {
+    override val fragmentViewModel: CenterProfileViewModel by viewModels()
 
     @Composable
     override fun ComposeLayout() {
         fragmentViewModel.apply {
-            CenterHomeScreen()
+            CenterProfileScreen()
         }
     }
 }
 
 @Composable
-internal fun CenterHomeScreen(
+internal fun CenterProfileScreen(
 ) {
     Scaffold { paddingValue ->
         Box(
@@ -35,7 +34,7 @@ internal fun CenterHomeScreen(
                 .fillMaxSize()
         ) {
             Text(
-                text = "센터 홈...!",
+                text = "센터 프로필...!",
                 modifier = Modifier.align(Alignment.Center)
             )
         }

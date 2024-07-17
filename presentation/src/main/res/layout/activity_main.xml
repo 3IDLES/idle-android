@@ -20,9 +20,10 @@
             android:id="@+id/main_BNV"
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            app:labelVisibilityMode="labeled"
             android:background="@color/gray_050"
+            app:itemTextColor="@color/gray_900"
+            app:labelVisibilityMode="labeled"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:menu="@menu/menu_main" />
+            app:menu="@menu/menu_center" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
