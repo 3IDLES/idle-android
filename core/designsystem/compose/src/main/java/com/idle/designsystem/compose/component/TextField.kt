@@ -1,7 +1,10 @@
 package com.idle.designsystem.compose.component
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,6 +16,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -35,6 +39,18 @@ fun CareTextField(
     modifier: Modifier = Modifier,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
+    val interactionSource = remember { MutableInteractionSource() }
+    val isFocused = interactionSource.collectIsFocusedAsState().value
+    val boarderStroke = BorderStroke(
+        width = 1.dp,
+        color = if (isError) {
+            CareTheme.colors.red
+        } else if (isFocused) {
+            CareTheme.colors.gray700
+        } else {
+            CareTheme.colors.gray100
+        },
+    )
 
     Column(
         verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -52,12 +68,7 @@ fun CareTextField(
                     }, shape = RoundedCornerShape(6.dp)
                 )
                 .border(
-                    width = 1.dp,
-                    color = if (isError) {
-                        CareTheme.colors.red
-                    } else {
-                        CareTheme.colors.gray100
-                    },
+                    border = boarderStroke,
                     shape = RoundedCornerShape(6.dp)
                 )
                 .padding(horizontal = 16.dp),
@@ -74,6 +85,7 @@ fun CareTextField(
                 ),
                 singleLine = true,
                 readOnly = readOnly,
+                interactionSource = interactionSource,
                 visualTransformation = visualTransformation,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 keyboardActions = KeyboardActions(onDone = {

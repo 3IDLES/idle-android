@@ -9,5 +9,6 @@
         <item>@id/centerSignUpFragment</item>
         <item>@id/workerSignUpFragment</item>
         <item>@id/newPasswordFragment</item>
+        <item>@id/centerProfileFragment</item>
     </array>
 </resources>

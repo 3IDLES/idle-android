@@ -1,5 +1,7 @@
 package com.idle.designsystem.compose.component
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -88,6 +90,35 @@ fun CareButtonLarge(
             text = text,
             style = CareTheme.typography.heading4,
             color = CareTheme.colors.white000,
+        )
+    }
+}
+
+@Composable
+fun CareButtonStrokeSmall(
+    text: String,
+    onClick: () -> Unit,
+    enable: Boolean = true,
+    modifier: Modifier = Modifier,
+) {
+    Button(
+        onClick = onClick,
+        enabled = enable,
+        shape = RoundedCornerShape(19.dp),
+        border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
+        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 5.5.dp),
+        colors = ButtonColors(
+            containerColor = CareTheme.colors.white000,
+            contentColor = CareTheme.colors.white000,
+            disabledContentColor = CareTheme.colors.white000,
+            disabledContainerColor = CareTheme.colors.white000,
+        ),
+        modifier = modifier,
+    ) {
+        Text(
+            text = text,
+            style = CareTheme.typography.body3,
+            color = CareTheme.colors.gray300,
         )
     }
 }
