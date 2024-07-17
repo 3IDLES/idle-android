@@ -12,6 +12,7 @@ dependencies {
     implementation(projects.feature.signup)
     implementation(projects.feature.center.home)
     implementation(projects.feature.center.profile)
+    implementation(projects.feature.worker.home)
 
     implementation(libs.androidx.navigation.ui)
 }

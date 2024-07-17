@@ -19,8 +19,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
-import com.idle.binding.DeepLinkDestination
+import com.idle.binding.DeepLinkDestination.CenterAuth
+import com.idle.binding.DeepLinkDestination.CenterHome
 import com.idle.binding.DeepLinkDestination.WorkerAuth
+import com.idle.binding.DeepLinkDestination.WorkerHome
 import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.foundation.CareTheme
@@ -37,13 +39,13 @@ internal class AuthFragment : BaseComposeFragment() {
             navigateToWorkerAuth = {
                 fragmentViewModel.handleTokenNavigation(
                     defaultDestination = NavigateTo(WorkerAuth),
-                    authenticatedDestination = NavigateTo(WorkerAuth),
+                    authenticatedDestination = NavigateTo(WorkerHome, true),
                 )
             },
             navigateToCenterAuth = {
                 fragmentViewModel.handleTokenNavigation(
-                    defaultDestination = NavigateTo(DeepLinkDestination.CenterAuth),
-                    authenticatedDestination = NavigateTo(DeepLinkDestination.CenterHome, true),
+                    defaultDestination = NavigateTo(CenterAuth),
+                    authenticatedDestination = NavigateTo(CenterHome, true),
                 )
             },
         )

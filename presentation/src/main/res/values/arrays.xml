@@ -11,4 +11,13 @@
         <item>@id/newPasswordFragment</item>
         <item>@id/centerProfileFragment</item>
     </array>
+
+    <array name="centerNavDestinationIds">
+        <item>@id/centerHomeFragment</item>
+        <item>@id/centerProfileFragment</item>
+    </array>
+
+    <array name="workerNavDestinationIds">
+        <item>@id/workerHomeFragment</item>
+    </array>
 </resources>
