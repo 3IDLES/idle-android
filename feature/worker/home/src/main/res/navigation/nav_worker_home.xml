@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_worker_home"
+    app:startDestination="@id/workerHomeFragment">
+
+    <fragment
+        android:id="@+id/workerHomeFragment"
+        android:name="com.idle.worker.home.WorkerHomeFragment"
+        android:label="WorkerHomeFragment" >
+        <deepLink app:uri="@string/worker_home_deeplink_url"/>
+    </fragment>
+</navigation>
