@@ -26,11 +26,11 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class NewPasswordFragment : BaseComposeFragment() {
-    override val viewModel: NewPasswordViewModel by viewModels()
+    override val fragmentViewModel: NewPasswordViewModel by viewModels()
 
     @Composable
     override fun ComposeLayout() {
-        viewModel.apply {
+        fragmentViewModel.apply {
             val phoneNumber by phoneNumber.collectAsStateWithLifecycle()
             val authCode by centerAuthCode.collectAsStateWithLifecycle()
             val generateNewPasswordProcess by generateNewPasswordProcess.collectAsStateWithLifecycle()

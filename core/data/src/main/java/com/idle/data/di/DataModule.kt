@@ -1,8 +1,10 @@
 package com.idle.data.di
 
-import com.idle.data.TokenManagerImpl
-import com.idle.data.repository.AuthRepositoryImpl
+import com.idle.data.repository.auth.AuthRepositoryImpl
+import com.idle.data.repository.auth.TokenManagerImpl
+import com.idle.data.repository.auth.TokenRepositoryImpl
 import com.idle.domain.repositorry.auth.AuthRepository
+import com.idle.domain.repositorry.auth.TokenRepository
 import com.idle.network.token.TokenManager
 import dagger.Binds
 import dagger.Module
@@ -18,6 +20,12 @@ abstract class DataModule {
     abstract fun bindsAuthRepository(
         authRepositoryImpl: AuthRepositoryImpl,
     ): AuthRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindsTokenRepository(
+        tokenRepositoryImpl: TokenRepositoryImpl,
+    ): TokenRepository
 
     @Binds
     @Singleton

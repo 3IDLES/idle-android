@@ -31,14 +31,14 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 internal class CenterAuthFragment : BaseComposeFragment() {
 
-    override val viewModel: CenterAuthViewModel by viewModels()
+    override val fragmentViewModel: CenterAuthViewModel by viewModels()
 
     @Composable
     override fun ComposeLayout() {
 
         CenterAuthScreen(
-            navigateToCenterSignIn = { viewModel.baseEvent(NavigateTo(CenterSignIn)) },
-            navigateToCenterSignUp = { viewModel.baseEvent(NavigateTo(CenterSignUp)) },
+            navigateToCenterSignIn = { fragmentViewModel.baseEvent(NavigateTo(CenterSignIn)) },
+            navigateToCenterSignUp = { fragmentViewModel.baseEvent(NavigateTo(CenterSignUp)) },
         )
     }
 }

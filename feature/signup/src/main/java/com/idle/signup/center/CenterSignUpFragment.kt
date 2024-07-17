@@ -38,11 +38,11 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 internal class CenterSignUpFragment : BaseComposeFragment() {
-    override val viewModel: CenterSignUpViewModel by viewModels()
+    override val fragmentViewModel: CenterSignUpViewModel by viewModels()
 
     @Composable
     override fun ComposeLayout() {
-        viewModel.apply {
+        fragmentViewModel.apply {
 
             val signUpProcess by signUpProcess.collectAsStateWithLifecycle()
             val centerName by centerName.collectAsStateWithLifecycle()

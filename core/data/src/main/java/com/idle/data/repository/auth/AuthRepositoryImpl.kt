@@ -1,4 +1,4 @@
-package com.idle.data.repository
+package com.idle.data.repository.auth
 
 import com.idle.datastore.datasource.TokenDataSource
 import com.idle.domain.model.auth.BusinessRegistrationInfo

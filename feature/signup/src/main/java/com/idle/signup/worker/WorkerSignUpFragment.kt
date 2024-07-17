@@ -38,11 +38,11 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 internal class WorkerSignUpFragment : BaseComposeFragment() {
-    override val viewModel: WorkerSignUpViewModel by viewModels()
+    override val fragmentViewModel: WorkerSignUpViewModel by viewModels()
 
     @Composable
     override fun ComposeLayout() {
-        viewModel.apply {
+        fragmentViewModel.apply {
             val signUpProcess by signUpProcess.collectAsStateWithLifecycle()
             val workerName by workerName.collectAsStateWithLifecycle()
             val workerPhoneNumber by workerPhoneNumber.collectAsStateWithLifecycle()

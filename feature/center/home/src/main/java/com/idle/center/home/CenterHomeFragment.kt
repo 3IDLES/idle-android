@@ -16,11 +16,11 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 internal class CenterHomeFragment : BaseComposeFragment() {
-    override val viewModel: CenterHomeViewModel by viewModels()
+    override val fragmentViewModel: CenterHomeViewModel by viewModels()
 
     @Composable
     override fun ComposeLayout() {
-        viewModel.apply {
+        fragmentViewModel.apply {
             CenterHomeScreen()
         }
     }

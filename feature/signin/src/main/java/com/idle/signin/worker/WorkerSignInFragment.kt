@@ -19,7 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 internal class WorkerSignInFragment : BaseComposeFragment() {
-    override val viewModel: WorkerSignInViewModel by viewModels()
+    override val fragmentViewModel: WorkerSignInViewModel by viewModels()
 
     @Composable
     override fun ComposeLayout() {

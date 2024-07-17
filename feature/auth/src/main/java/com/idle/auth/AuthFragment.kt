@@ -19,23 +19,33 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
-import com.idle.binding.DeepLinkDestination.CenterAuth
+import com.idle.binding.DeepLinkDestination
 import com.idle.binding.DeepLinkDestination.WorkerAuth
-import com.idle.binding.base.CareBaseEvent
+import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.foundation.CareTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 internal class AuthFragment : BaseComposeFragment() {
-    override val viewModel: AuthViewModel by viewModels()
+    override val fragmentViewModel: AuthViewModel by viewModels()
 
     @Composable
     override fun ComposeLayout() {
 
         AuthScreen(
-            navigateToWorkerAuth = { viewModel.baseEvent(CareBaseEvent.NavigateTo(WorkerAuth)) },
-            navigateToCenterAuth = { viewModel.baseEvent(CareBaseEvent.NavigateTo(CenterAuth)) },
+            navigateToWorkerAuth = {
+                fragmentViewModel.handleTokenNavigation(
+                    defaultDestination = NavigateTo(WorkerAuth),
+                    authenticatedDestination = NavigateTo(WorkerAuth),
+                )
+            },
+            navigateToCenterAuth = {
+                fragmentViewModel.handleTokenNavigation(
+                    defaultDestination = NavigateTo(DeepLinkDestination.CenterAuth),
+                    authenticatedDestination = NavigateTo(DeepLinkDestination.CenterHome, true),
+                )
+            },
         )
     }
 }

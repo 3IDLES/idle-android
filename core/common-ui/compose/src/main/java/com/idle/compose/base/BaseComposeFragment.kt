@@ -15,7 +15,7 @@ import com.idle.binding.repeatOnStarted
 
 abstract class BaseComposeFragment : Fragment() {
 
-    abstract val viewModel: BaseViewModel
+    protected abstract val fragmentViewModel: BaseViewModel
     private lateinit var composeView: ComposeView
 
     @Composable
@@ -34,7 +34,7 @@ abstract class BaseComposeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewLifecycleOwner.repeatOnStarted { viewModel.baseEventFlow.collect { handleEvent(it) } }
+        viewLifecycleOwner.repeatOnStarted { fragmentViewModel.baseEventFlow.collect { handleEvent(it) } }
 
         composeView.setContent {
             ComposeLayout()

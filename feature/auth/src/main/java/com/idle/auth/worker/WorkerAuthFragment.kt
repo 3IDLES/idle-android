@@ -24,12 +24,12 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 internal class WorkerAuthFragment : BaseComposeFragment() {
-    override val viewModel: WorkerAuthViewModel by viewModels()
+    override val fragmentViewModel: WorkerAuthViewModel by viewModels()
 
     @Composable
     override fun ComposeLayout() {
         WorkerAuthScreen(
-            navigateToWorkerSignUp = { viewModel.baseEvent(NavigateTo(WorkerSignUp)) }
+            navigateToWorkerSignUp = { fragmentViewModel.baseEvent(NavigateTo(WorkerSignUp)) }
         )
     }
 }

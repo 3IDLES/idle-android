@@ -1,8 +1,29 @@
 package com.idle.auth
 
+import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
+import com.idle.binding.base.CareBaseEvent
+import com.idle.binding.base.CareBaseEvent.NavigateTo
+import com.idle.domain.usecase.auth.GetAccessTokenUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AuthViewModel @Inject constructor() : BaseViewModel() {}
+class AuthViewModel @Inject constructor(
+    private val getAccessTokenUseCase: GetAccessTokenUseCase,
+) : BaseViewModel() {
+
+    fun handleTokenNavigation(defaultDestination: NavigateTo, authenticatedDestination: NavigateTo) =
+        viewModelScope.launch(Dispatchers.IO) {
+            val accessToken = getAccessTokenUseCase()
+
+            if (accessToken.isNotBlank()) {
+                baseEvent(authenticatedDestination)
+                return@launch
+            }
+
+            baseEvent(defaultDestination)
+        }
+}

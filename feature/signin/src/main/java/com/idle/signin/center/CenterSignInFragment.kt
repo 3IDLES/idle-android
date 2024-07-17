@@ -33,11 +33,11 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 internal class CenterSignInFragment : BaseComposeFragment() {
-    override val viewModel: CenterSignInViewModel by viewModels()
+    override val fragmentViewModel: CenterSignInViewModel by viewModels()
 
     @Composable
     override fun ComposeLayout() {
-        viewModel.apply {
+        fragmentViewModel.apply {
             val centerId by centerId.collectAsStateWithLifecycle()
             val centerPassword by centerPassword.collectAsStateWithLifecycle()
 
