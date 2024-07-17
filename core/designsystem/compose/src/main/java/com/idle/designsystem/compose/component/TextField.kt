@@ -192,8 +192,19 @@ fun CareTextFieldLong(
                         color = CareTheme.colors.gray200,
                     )
                 }
-                innerTextField()
-            }
+            )
+
+            leftComponent()
+        }
+
+        Text(
+            text = supportingText,
+            style = CareTheme.typography.caption,
+            color = if (isError) {
+                CareTheme.colors.red
+            } else {
+                CareTheme.colors.gray300
+            },
         )
     }
 }
