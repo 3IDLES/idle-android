@@ -192,6 +192,7 @@ fun CareTextFieldLong(
                         color = CareTheme.colors.gray200,
                     )
                 }
+
                 innerTextField()
             }
         )

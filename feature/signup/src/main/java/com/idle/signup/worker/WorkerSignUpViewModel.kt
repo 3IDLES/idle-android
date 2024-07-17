@@ -22,6 +22,7 @@ class WorkerSignUpViewModel @Inject constructor(
     private val confirmAuthCodeUseCase: ConfirmAuthCodeUseCase,
     private val countDownTimer: CountDownTimer,
 ) : BaseViewModel() {
+
     private val _signUpProcess = MutableStateFlow<WorkerSignUpProcess>(NAME)
     internal val signUpProcess = _signUpProcess.asStateFlow()
 
