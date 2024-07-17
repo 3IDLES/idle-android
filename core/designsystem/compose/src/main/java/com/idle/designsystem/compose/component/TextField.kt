@@ -6,8 +6,10 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -117,6 +119,81 @@ fun CareTextField(
             } else {
                 CareTheme.colors.gray300
             },
+        )
+    }
+}
+
+@Composable
+fun CareTextFieldLong(
+    value: String,
+    hint: String = "",
+    readOnly: Boolean = false,
+    isError: Boolean = false,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    onValueChanged: (String) -> Unit,
+    onDone: () -> Unit = {},
+    modifier: Modifier = Modifier,
+) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val interactionSource = remember { MutableInteractionSource() }
+    val isFocused = interactionSource.collectIsFocusedAsState().value
+    val boarderStroke = BorderStroke(
+        width = 1.dp,
+        color = if (isError) {
+            CareTheme.colors.red
+        } else if (isFocused) {
+            CareTheme.colors.gray700
+        } else {
+            CareTheme.colors.gray100
+        },
+    )
+
+    Box(
+        modifier = modifier
+            .height(156.dp)
+            .background(
+                color = if (readOnly) {
+                    CareTheme.colors.gray050
+                } else {
+                    CareTheme.colors.white000
+                }, shape = RoundedCornerShape(6.dp)
+            )
+            .border(
+                border = boarderStroke,
+                shape = RoundedCornerShape(6.dp)
+            )
+            .padding(vertical = 12.dp, horizontal = 16.dp),
+    ) {
+        BasicTextField(
+            value = value,
+            onValueChange = onValueChanged,
+            textStyle = CareTheme.typography.body3.copy(
+                color = if (readOnly) {
+                    CareTheme.colors.gray300
+                } else {
+                    CareTheme.colors.gray900
+                },
+            ),
+            singleLine = true,
+            readOnly = readOnly,
+            interactionSource = interactionSource,
+            visualTransformation = visualTransformation,
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(onDone = {
+                onDone()
+                keyboardController?.hide()
+            }),
+            modifier = Modifier.fillMaxWidth(),
+            decorationBox = { innerTextField ->
+                if (value.isEmpty()) {
+                    Text(
+                        text = hint,
+                        style = CareTheme.typography.body3,
+                        color = CareTheme.colors.gray200,
+                    )
+                }
+                innerTextField()
+            }
         )
     }
 }

@@ -3,11 +3,16 @@ package com.idle.center.profile
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -16,6 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -27,6 +33,7 @@ import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designsystem.compose.component.CareButtonStrokeSmall
 import com.idle.designsystem.compose.component.CareTextField
+import com.idle.designsystem.compose.component.CareTextFieldLong
 import com.idle.designsystem.compose.component.CareTopAppBar
 import com.idle.designsystem.compose.foundation.CareTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -54,6 +61,7 @@ internal fun CenterProfileScreen(
 ) {
     val focusManager = LocalFocusManager.current
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
+    val scrollState = rememberScrollState()
 
     Scaffold(
         topBar = {
@@ -82,7 +90,8 @@ internal fun CenterProfileScreen(
         Column(
             verticalArrangement = Arrangement.spacedBy(20.dp),
             modifier = Modifier.padding(paddingValues)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .verticalScroll(scrollState),
         ) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -172,10 +181,10 @@ internal fun CenterProfileScreen(
                             color = CareTheme.colors.gray900,
                         )
                     } else {
-                        CareTextField(
+                        CareTextFieldLong(
                             value = "안녕하세요 반갑습니다!",
                             onValueChanged = {},
-                            modifier = Modifier.fillMaxWidth().height(156.dp),
+                            modifier = Modifier.fillMaxWidth(),
                         )
                     }
                 }
@@ -187,12 +196,27 @@ internal fun CenterProfileScreen(
                         color = CareTheme.colors.gray500,
                     )
 
-                    Image(
-                        painter = painterResource(com.idle.center.profile.R.drawable.ic_temp_center),
-                        contentDescription = "",
-                        contentScale = ContentScale.FillWidth,
-                        modifier = Modifier.fillMaxWidth()
-                    )
+                    Box(
+                        modifier = Modifier.wrapContentSize()
+                            .clip(RoundedCornerShape(6.dp))
+                            .padding(bottom = 60.dp),
+                    ) {
+                        Image(
+                            painter = painterResource(com.idle.center.profile.R.drawable.ic_temp_center),
+                            contentDescription = "",
+                            contentScale = ContentScale.FillWidth,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        if (isEditState) {
+                            Image(
+                                painter = painterResource(R.drawable.ic_edit_pencil),
+                                contentDescription = "",
+                                modifier = Modifier.align(Alignment.BottomEnd)
+                                    .padding(16.dp)
+                            )
+                        }
+                    }
                 }
             }
         }
