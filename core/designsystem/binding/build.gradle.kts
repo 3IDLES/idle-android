@@ -8,5 +8,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.commonUi.binding)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.constraintlayout)
 }
