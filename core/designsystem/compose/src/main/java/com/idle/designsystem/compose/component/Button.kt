@@ -10,6 +10,7 @@ import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.idle.designsystem.compose.foundation.CareTheme
 
@@ -119,6 +120,38 @@ fun CareButtonStrokeSmall(
             text = text,
             style = CareTheme.typography.body3,
             color = CareTheme.colors.gray300,
+        )
+    }
+}
+
+@Composable
+internal fun CareDialogButton(
+    text: String,
+    onClick: () -> Unit,
+    containerColor: Color,
+    textColor: Color,
+    border: BorderStroke? = null,
+    enable: Boolean = true,
+    modifier: Modifier = Modifier,
+) {
+    Button(
+        onClick = onClick,
+        enabled = enable,
+        shape = RoundedCornerShape(6.dp),
+        border = border,
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
+        colors = ButtonColors(
+            containerColor = containerColor,
+            contentColor = containerColor,
+            disabledContentColor = containerColor,
+            disabledContainerColor = containerColor,
+        ),
+        modifier = modifier,
+    ) {
+        Text(
+            text = text,
+            style = CareTheme.typography.heading4,
+            color = textColor,
         )
     }
 }

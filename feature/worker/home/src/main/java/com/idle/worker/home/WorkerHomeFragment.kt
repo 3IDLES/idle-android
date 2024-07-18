@@ -92,6 +92,7 @@ internal fun WorkerHomeScreen(
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Row(
+                            verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(4.dp),
                             modifier = Modifier.fillMaxWidth()
                                 .padding(bottom = 8.dp)
