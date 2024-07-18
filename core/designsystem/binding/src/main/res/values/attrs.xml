@@ -13,6 +13,10 @@
         <attr name="showArrow" format="boolean" />
         <attr name="showSwitch" format="boolean" />
         <attr name="switchState" format="boolean" />
-        <attr name="onClick" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="CareCenterInfoCard">
+        <attr name="CenterName" format="string|reference" />
+        <attr name="CenterAddress" format="string|reference" />
     </declare-styleable>
 </resources>

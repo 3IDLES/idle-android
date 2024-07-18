@@ -12,4 +12,5 @@ dependencies {
     implementation(projects.core.designresource)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.material)
 }
