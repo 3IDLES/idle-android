@@ -37,8 +37,9 @@ class CareRow @JvmOverloads constructor(
             val showArrow = getBoolean(R.styleable.CareRow_showArrow, true)
             arrowImageView.isVisible = showArrow
 
-            val showSwitch = getBoolean(R.styleable.CareRow_showSwitch, true)
+            val showSwitch = getBoolean(R.styleable.CareRow_showSwitch, false)
             switchView.isVisible = showSwitch
+            if (showSwitch) arrowImageView.visibility = View.GONE
 
             val switchState = getBoolean(R.styleable.CareRow_switchState, false)
             switchView.isChecked = switchState

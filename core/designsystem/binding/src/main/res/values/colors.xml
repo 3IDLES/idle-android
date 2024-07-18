@@ -22,5 +22,6 @@
     <color name="gray_900">#131417</color>
 
     <!-- Additional Color -->
+    <color name="white">#FFFFFF</color>
     <color name="red">#DF4A43</color>
 </resources>
