@@ -1,9 +1,24 @@
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="20dp"
-    android:height="20dp"
-    android:viewportWidth="20"
-    android:viewportHeight="20">
-  <path
-      android:pathData="M10,0L10,0A10,10 0,0 1,20 10L20,10A10,10 0,0 1,10 20L10,20A10,10 0,0 1,0 10L0,10A10,10 0,0 1,10 0z"
-      android:fillColor="#ffffff"/>
-</vector>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_checked="true">
+        <layer-list>
+            <item android:bottom="2dp" android:left="2dp" android:right="2dp" android:top="2dp">
+                <shape android:shape="oval">
+                    <size android:width="20dp" android:height="20dp" />
+                    <solid android:color="@color/white" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+
+
+    <item android:state_checked="false">
+        <layer-list>
+            <item android:bottom="2dp" android:left="2dp" android:right="2dp" android:top="2dp">
+                <shape android:shape="oval">
+                    <size android:width="20dp" android:height="20dp" />
+                    <solid android:color="@color/white" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+</selector>

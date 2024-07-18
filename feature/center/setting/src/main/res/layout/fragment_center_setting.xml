@@ -22,5 +22,31 @@
             app:showBackIcon="true"
             app:title="설정" />
 
+        <com.idle.designsystem.binding.component.CareRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="32dp"
+            app:title="내 센터 정보" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:layout_marginVertical="12dp"
+            app:dividerColor="@color/gray_050" />
+
+        <com.idle.designsystem.binding.component.CareRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="32dp"
+            app:showSwitch="true"
+            app:title="알림 설정" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:layout_marginVertical="12dp"
+            app:dividerColor="@color/gray_050" />
     </LinearLayout>
 </layout>
