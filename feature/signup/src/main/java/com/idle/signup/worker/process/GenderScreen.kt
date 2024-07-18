@@ -53,14 +53,14 @@ internal fun GenderScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             CareChip(
-                value = Gender.FEMALE.displayName,
+                text = Gender.FEMALE.displayName,
                 onClick = { onGenderChanged(Gender.FEMALE) },
                 enable = gender == Gender.FEMALE,
                 modifier = Modifier.weight(1f),
             )
 
             CareChip(
-                value = Gender.MALE.displayName,
+                text = Gender.MALE.displayName,
                 onClick = { onGenderChanged(Gender.MALE) },
                 enable = gender == Gender.MALE,
                 modifier = Modifier.weight(1f),

@@ -28,7 +28,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.component.CareProgressBar
-import com.idle.designsystem.compose.component.CareTopAppBar
+import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
 import com.idle.domain.model.auth.BusinessRegistrationInfo
 import com.idle.signup.center.process.BusinessRegistrationScreen
 import com.idle.signup.center.process.CenterNameScreen
@@ -128,7 +128,7 @@ internal fun CenterSignUpScreen(
 
     Scaffold(
         topBar = {
-            CareTopAppBar(
+            CareSubtitleTopAppBar(
                 title = "센터 회원가입",
                 onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
                 modifier = Modifier.fillMaxWidth()
