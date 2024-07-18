@@ -26,7 +26,7 @@ fun CareSubtitleTopAppBar(
         modifier = modifier
     ) {
         Image(
-            painter = painterResource(com.idle.designresource.R.drawable.ic_back),
+            painter = painterResource(com.idle.designresource.R.drawable.ic_arrow_left),
             contentDescription = null,
             modifier = Modifier.clickable { onNavigationClick() }
         )
