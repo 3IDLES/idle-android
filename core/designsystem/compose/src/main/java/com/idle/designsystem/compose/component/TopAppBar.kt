@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.idle.compose.clickable
-import com.idle.designsystem.compose.R
 import com.idle.designsystem.compose.foundation.CareTheme
 
 @Composable
@@ -27,7 +26,7 @@ fun CareSubtitleTopAppBar(
         modifier = modifier
     ) {
         Image(
-            painter = painterResource(R.drawable.ic_back),
+            painter = painterResource(com.idle.designresource.R.drawable.ic_back),
             contentDescription = null,
             modifier = Modifier.clickable { onNavigationClick() }
         )

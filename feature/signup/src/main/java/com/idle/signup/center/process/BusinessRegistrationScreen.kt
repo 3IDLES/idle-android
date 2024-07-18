@@ -23,7 +23,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.idle.common.ui.binding.R
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareButtonSmall
 import com.idle.designsystem.compose.component.CareTextField
@@ -130,7 +129,7 @@ internal fun BusinessRegistrationScreen(
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
                             Image(
-                                painter = painterResource(R.drawable.ic_address_pin),
+                                painter = painterResource(com.idle.designresource.R.drawable.ic_address_pin),
                                 contentDescription = null,
                             )
 

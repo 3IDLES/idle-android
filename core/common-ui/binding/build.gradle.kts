@@ -8,6 +8,8 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.designresource)
+
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.lifecycle.runtime)

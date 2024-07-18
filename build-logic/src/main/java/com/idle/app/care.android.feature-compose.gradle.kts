@@ -23,6 +23,7 @@ dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:designsystem:compose"))
     implementation(project(":core:domain"))
+    implementation(project(":core:designresource"))
     implementation(project(":core:common-ui:binding"))
     implementation(project(":core:common-ui:compose"))
 

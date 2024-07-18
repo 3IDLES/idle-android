@@ -27,7 +27,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
-import com.idle.common.ui.binding.R
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.component.CareHeadingTopAppBar
 import com.idle.designsystem.compose.component.CareTag
@@ -57,7 +56,7 @@ internal fun WorkerHomeScreen(
                     title = "강남구 신사동",
                     rightComponent = {
                         Image(
-                            painter = painterResource(R.drawable.ic_address_pin_big),
+                            painter = painterResource(com.idle.designresource.R.drawable.ic_address_pin_big),
                             contentDescription = null,
                         )
                     },
@@ -112,7 +111,7 @@ internal fun WorkerHomeScreen(
                             Spacer(modifier = Modifier.weight(1f))
 
                             Image(
-                                painter = painterResource(R.drawable.ic_star_gray),
+                                painter = painterResource(com.idle.designresource.R.drawable.ic_star_gray),
                                 contentDescription = null,
                             )
                         }
@@ -153,7 +152,7 @@ internal fun WorkerHomeScreen(
                                 .padding(bottom = 2.dp)
                         ) {
                             Image(
-                                painter = painterResource(R.drawable.ic_clock),
+                                painter = painterResource(com.idle.designresource.R.drawable.ic_clock),
                                 contentDescription = null,
                             )
 
@@ -170,7 +169,7 @@ internal fun WorkerHomeScreen(
                                 .padding(bottom = 8.dp),
                         ) {
                             Image(
-                                painter = painterResource(R.drawable.ic_money),
+                                painter = painterResource(com.idle.designresource.R.drawable.ic_money),
                                 contentDescription = null,
                             )
 

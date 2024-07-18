@@ -22,10 +22,10 @@
         android:layout_height="wrap_content"
         android:maxLines="1"
         android:textColor="@color/gray_900"
-        app:layout_constraintBottom_toBottomOf="@id/bar_back_IV"
-        app:layout_constraintHorizontal_weight="1f"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/left_component_placeholder_FL"
         app:layout_constraintStart_toEndOf="@id/bar_back_IV"
-        app:layout_constraintTop_toTopOf="@id/bar_back_IV" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
         android:id="@+id/left_component_placeholder_FL"
