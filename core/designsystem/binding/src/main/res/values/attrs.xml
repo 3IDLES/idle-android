@@ -5,4 +5,12 @@
         <attr name="showBackIcon" format="boolean" />
         <attr name="onBackClick" format="string" />
     </declare-styleable>
+
+    <declare-styleable name="CareRow">
+        <attr name="title" format="string" />
+        <attr name="showArrow" format="boolean" />
+        <attr name="showSwitch" format="boolean" />
+        <attr name="switchState" format="boolean" />
+        <attr name="onClick" format="string" />
+    </declare-styleable>
 </resources>

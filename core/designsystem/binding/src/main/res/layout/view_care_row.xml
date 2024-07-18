@@ -1,38 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/row_CL"
     android:layout_width="match_parent"
-    android:layout_height="32dp">
-
-    <ImageView
-        android:id="@+id/bar_back_IV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:contentDescription="뒤로가는 버튼 입니다."
-        android:src="@drawable/ic_arrow_left"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    android:layout_height="25dp">
 
     <TextView
-        android:id="@+id/bar_title_TV"
-        style="@style/Subtitle1"
+        android:id="@+id/row_title_TV"
+        style="@style/Body2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:maxLines="1"
         android:textAlignment="viewStart"
         android:textColor="@color/gray_900"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/left_component_placeholder_FL"
-        app:layout_constraintStart_toEndOf="@id/bar_back_IV"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <FrameLayout
-        android:id="@+id/left_component_placeholder_FL"
+    <ImageView
+        android:id="@+id/row_arrow_IV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:clickable="true"
+        android:contentDescription="해당 탭으로 이동하는 버튼입니다."
+        android:src="@drawable/ic_arrow_right"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/row_switch_SC"
+        android:layout_width="44dp"
+        android:layout_height="24dp"
+        android:thumb="@drawable/shape_switch_thumb"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:track="@drawable/selector_switch" />
 </androidx.constraintlayout.widget.ConstraintLayout>
