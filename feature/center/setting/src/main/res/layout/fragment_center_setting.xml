@@ -30,6 +30,14 @@
             android:layout_marginTop="20dp"
             app:title="내 센터 정보" />
 
+        <com.idle.designsystem.binding.component.CareCenterInfoCard
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginBottom="4dp"
+            app:centerAddress="용인시 어쩌고 저쩌고"
+            app:centerName="세얼간이 요양보호소" />
+
         <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
             android:layout_height="8dp"
@@ -107,6 +115,6 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@color/gray_050"/>
+            android:background="@color/gray_050" />
     </LinearLayout>
 </layout>
