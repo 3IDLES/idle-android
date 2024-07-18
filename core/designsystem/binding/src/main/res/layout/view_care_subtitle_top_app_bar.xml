@@ -18,9 +18,10 @@
     <TextView
         android:id="@+id/bar_title_TV"
         style="@style/Subtitle1"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:maxLines="1"
+        android:textAlignment="viewStart"
         android:textColor="@color/gray_900"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/left_component_placeholder_FL"
