@@ -9,4 +9,5 @@ android {
 
 dependencies {
     implementation(projects.core.commonUi.compose)
+    implementation(platform(libs.androidx.compose.bom))
 }

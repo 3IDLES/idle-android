@@ -1,7 +1,6 @@
 package com.idle.presentation
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +17,45 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private val viewModel: MainViewModel by viewModels()
+
+    private val hideBottomNavDestinationIds: Set<Int> by lazy {
+        resources.obtainTypedArray(R.array.hideBottomNavDestinationIds).let { typedArray ->
+            val destinationIds = mutableSetOf<Int>()
+
+            for (index in 0 until typedArray.length()) {
+                destinationIds.add(typedArray.getResourceId(index, 0))
+            }
+
+            typedArray.recycle()
+            destinationIds
+        }
+    }
+
+    private val centerBottomNavDestinationIds: Set<Int> by lazy {
+        resources.obtainTypedArray(R.array.centerNavDestinationIds).let { typedArray ->
+            val destinationIds = mutableSetOf<Int>()
+
+            for (index in 0 until typedArray.length()) {
+                destinationIds.add(typedArray.getResourceId(index, 0))
+            }
+
+            typedArray.recycle()
+            destinationIds
+        }
+    }
+
+    private val workerBottomNavDestinationIds: Set<Int> by lazy {
+        resources.obtainTypedArray(R.array.workerNavDestinationIds).let { typedArray ->
+            val destinationIds = mutableSetOf<Int>()
+
+            for (index in 0 until typedArray.length()) {
+                destinationIds.add(typedArray.getResourceId(index, 0))
+            }
+
+            typedArray.recycle()
+            destinationIds
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,73 +98,19 @@ class MainActivity : AppCompatActivity() {
     private fun setDestinationListener() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             binding.apply {
-                mainBNVCenter.apply {
-                    isVisible = (destination.id !in hideBottomNavDestinationIds)
+                mainBNVCenter.isVisible = (destination.id !in hideBottomNavDestinationIds)
+                mainBNVWorker.isVisible = (destination.id !in hideBottomNavDestinationIds)
 
-                    val navMenuType = if (destination.id in centerBottomNavDestinationIds) {
-                        NavigationMenuType.CENTER
-                    } else if (destination.id in workerBottomNavDestinationIds) {
-                        NavigationMenuType.WORKER
-                    } else {
-                        NavigationMenuType.NONE
-                    }
-
-                    viewModel.setNavigationMenuType(navMenuType)
+                val navMenuType = if (destination.id in centerBottomNavDestinationIds) {
+                    NavigationMenuType.CENTER
+                } else if (destination.id in workerBottomNavDestinationIds) {
+                    NavigationMenuType.WORKER
+                } else {
+                    NavigationMenuType.NONE
                 }
 
-                mainBNVWorker.apply {
-                    isVisible = (destination.id !in hideBottomNavDestinationIds)
-
-                    val navMenuType = if (destination.id in centerBottomNavDestinationIds) {
-                        NavigationMenuType.CENTER
-                    } else if (destination.id in workerBottomNavDestinationIds) {
-                        NavigationMenuType.WORKER
-                    } else {
-                        NavigationMenuType.NONE
-                    }
-
-                    viewModel.setNavigationMenuType(navMenuType)
-                }
+                viewModel.setNavigationMenuType(navMenuType)
             }
-        }
-    }
-
-    private val hideBottomNavDestinationIds: Set<Int> by lazy {
-        resources.obtainTypedArray(R.array.hideBottomNavDestinationIds).let { typedArray ->
-            val destinationIds = mutableSetOf<Int>()
-
-            for (index in 0 until typedArray.length()) {
-                destinationIds.add(typedArray.getResourceId(index, 0))
-            }
-
-            typedArray.recycle()
-            destinationIds
-        }
-    }
-
-    private val centerBottomNavDestinationIds: Set<Int> by lazy {
-        resources.obtainTypedArray(R.array.centerNavDestinationIds).let { typedArray ->
-            val destinationIds = mutableSetOf<Int>()
-
-            for (index in 0 until typedArray.length()) {
-                destinationIds.add(typedArray.getResourceId(index, 0))
-            }
-
-            typedArray.recycle()
-            destinationIds
-        }
-    }
-
-    private val workerBottomNavDestinationIds: Set<Int> by lazy {
-        resources.obtainTypedArray(R.array.workerNavDestinationIds).let { typedArray ->
-            val destinationIds = mutableSetOf<Int>()
-
-            for (index in 0 until typedArray.length()) {
-                destinationIds.add(typedArray.getResourceId(index, 0))
-            }
-
-            typedArray.recycle()
-            destinationIds
         }
     }
 }
