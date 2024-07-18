@@ -5,7 +5,7 @@ import androidx.core.net.toUri
 import androidx.navigation.NavController
 import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.NavOptions
-import com.idle.common.ui.binding.R
+import com.idle.designresource.R
 
 // DeepLinkDestination.kt
 sealed class DeepLinkDestination(val addressRes: Int) {

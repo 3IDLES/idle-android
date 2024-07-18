@@ -27,14 +27,13 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
-import com.idle.common.ui.binding.R
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designsystem.compose.component.CareButtonStrokeSmall
+import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.CareTextFieldLong
-import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
 import com.idle.designsystem.compose.foundation.CareTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -108,7 +107,7 @@ internal fun CenterProfileScreen(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Image(
-                        painter = painterResource(R.drawable.ic_address_pin),
+                        painter = painterResource(com.idle.designresource.R.drawable.ic_address_pin),
                         contentDescription = "위치를 알려주는 핀 이미지 입니다.",
                     )
 
@@ -210,7 +209,7 @@ internal fun CenterProfileScreen(
 
                         if (isEditState) {
                             Image(
-                                painter = painterResource(R.drawable.ic_edit_pencil),
+                                painter = painterResource(com.idle.designresource.R.drawable.ic_edit_pencil),
                                 contentDescription = "",
                                 modifier = Modifier.align(Alignment.BottomEnd)
                                     .padding(16.dp)

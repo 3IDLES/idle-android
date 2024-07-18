@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -13,9 +14,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <com.idle.designsystem.binding.component.CareSubtitleTopAppBar
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="센터 설정 화면 입니다." />
+            android:layout_marginStart="12.dp"
+            app:showBackIcon="true"
+            app:title="설정" />
+
     </LinearLayout>
 </layout>
