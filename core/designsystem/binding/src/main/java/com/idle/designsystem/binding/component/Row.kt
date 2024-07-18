@@ -18,14 +18,12 @@ class CareRow @JvmOverloads constructor(
     @AttrRes defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
-    private var careRow: ConstraintLayout
     private var titleTextView: TextView
     private var arrowImageView: ImageView
     private var switchView: SwitchCompat
 
     init {
         LayoutInflater.from(context).inflate(R.layout.view_care_row, this, true)
-        careRow = findViewById(R.id.row_CL)
         arrowImageView = findViewById(R.id.row_arrow_IV)
         titleTextView = findViewById(R.id.row_title_TV)
         switchView = findViewById(R.id.row_switch_SC)
@@ -44,19 +42,9 @@ class CareRow @JvmOverloads constructor(
             val switchState = getBoolean(R.styleable.CareRow_switchState, false)
             switchView.isChecked = switchState
 
-            val onClickMethodName = getString(R.styleable.CareRow_onClick)
-            if (!onClickMethodName.isNullOrEmpty()) {
-                setOnClickListener {
-                    invokeMethodByName(onClickMethodName)
-                }
-            }
-
-            careRow.setOnClickListener { onClick?.invoke() }
             recycle()
         }
     }
-
-    private var onClick: (() -> Unit)? = null
 
     fun setTitle(title: String) {
         titleTextView.text = title
@@ -76,18 +64,5 @@ class CareRow @JvmOverloads constructor(
 
     fun getSwitchState(): Boolean {
         return switchView.isChecked
-    }
-
-    fun setOnClickListener(listener: () -> Unit) {
-        onClick = listener
-    }
-
-    private fun invokeMethodByName(methodName: String) {
-        try {
-            val method = context.javaClass.getMethod(methodName)
-            method.invoke(context)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
     }
 }
