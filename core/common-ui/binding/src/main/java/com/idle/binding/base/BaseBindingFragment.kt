@@ -1,4 +1,4 @@
-package com.idle.designsystem.binding.base
+package com.idle.binding.base
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModel
 
 typealias Inflate<T> = (LayoutInflater, ViewGroup?, Boolean) -> T
 
-abstract class BaseBindingFragment<T : ViewDataBinding, V : ViewModel>
+abstract class BaseBindingFragment<T : ViewDataBinding, V : BaseViewModel>
     (private val inflate: Inflate<T>) : Fragment() {
 
     private var _binding: T? = null

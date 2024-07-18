@@ -1,20 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <array name="hideBottomNavDestinationIds">
-        <item>@id/authFragment</item>
-        <item>@id/centerAuthFragment</item>
-        <item>@id/workerAuthFragment</item>
-        <item>@id/centerSignInFragment</item>
-        <item>@id/workerSignInFragment</item>
-        <item>@id/centerSignUpFragment</item>
-        <item>@id/workerSignUpFragment</item>
-        <item>@id/newPasswordFragment</item>
-        <item>@id/centerProfileFragment</item>
-    </array>
-
     <array name="centerNavDestinationIds">
         <item>@id/centerHomeFragment</item>
         <item>@id/centerProfileFragment</item>
+        <item>@id/centerSettingFragment</item>
     </array>
 
     <array name="workerNavDestinationIds">

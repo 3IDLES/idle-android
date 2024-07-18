@@ -8,13 +8,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor() : ViewModel() {
-    private val _navigationMenuType = MutableStateFlow(NavigationMenuType.NONE)
+    private val _navigationMenuType =
+        MutableStateFlow<NavigationMenuType>(NavigationMenuType.Hide)
     val navigationMenuType = _navigationMenuType.asStateFlow()
 
     fun setNavigationMenuType(navigationMenuType: NavigationMenuType) {
-        _navigationMenuType.value = navigationMenuType    }
+        _navigationMenuType.value = navigationMenuType
+    }
 }
 
-enum class NavigationMenuType {
-    CENTER, WORKER, NONE
+sealed class NavigationMenuType {
+    data class Center(val destinationId: Int) : NavigationMenuType()
+    data class Worker(val destinationId: Int) : NavigationMenuType()
+    data object Hide : NavigationMenuType()
 }
