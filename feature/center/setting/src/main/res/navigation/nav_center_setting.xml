@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_center_setting"
+    app:startDestination="@id/centerSettingFragment">
+
+    <fragment
+        android:id="@+id/centerSettingFragment"
+        android:name="com.idle.center.setting.CenterSettingFragment"
+        android:label="CenterSettingFragment">
+        <deepLink app:uri="@string/center_setting_deeplink_url" />
+    </fragment>
+</navigation>

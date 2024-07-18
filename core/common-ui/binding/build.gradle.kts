@@ -1,5 +1,6 @@
 plugins {
     id("care.android.library")
+    id("care.android.binding")
 }
 
 android {
