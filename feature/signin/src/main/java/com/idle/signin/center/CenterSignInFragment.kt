@@ -27,7 +27,7 @@ import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareTextField
-import com.idle.designsystem.compose.component.CareTopAppBar
+import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
 import com.idle.designsystem.compose.foundation.CareTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -68,7 +68,7 @@ internal fun CenterSignInScreen(
 
     Scaffold(
         topBar = {
-            CareTopAppBar(
+            CareSubtitleTopAppBar(
                 title = "로그인",
                 onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
                 modifier = Modifier.fillMaxWidth()

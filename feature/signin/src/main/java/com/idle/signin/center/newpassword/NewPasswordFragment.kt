@@ -18,7 +18,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
-import com.idle.designsystem.compose.component.CareTopAppBar
+import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.signin.center.newpassword.process.GenerateNewPasswordScreen
 import com.idle.signin.center.newpassword.process.PhoneNumberScreen
@@ -75,7 +75,7 @@ internal fun NewPasswordScreen(
 
     Scaffold(
         topBar = {
-            CareTopAppBar(
+            CareSubtitleTopAppBar(
                 title = "신규 비밀번호 발급",
                 onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
                 modifier = Modifier.fillMaxWidth()

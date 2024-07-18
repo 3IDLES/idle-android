@@ -15,7 +15,7 @@ import com.idle.designsystem.compose.foundation.CareTheme
 
 @Composable
 fun CareChip(
-    value: String,
+    text: String,
     enable: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -36,7 +36,7 @@ fun CareChip(
             .clickable { onClick() },
     ) {
         Text(
-            text = value,
+            text = text,
             style = CareTheme.typography.body3,
             color = if (enable) CareTheme.colors.orange400 else CareTheme.colors.gray400,
         )

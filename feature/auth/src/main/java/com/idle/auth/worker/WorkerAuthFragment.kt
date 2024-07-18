@@ -29,7 +29,7 @@ internal class WorkerAuthFragment : BaseComposeFragment() {
     @Composable
     override fun ComposeLayout() {
         WorkerAuthScreen(
-            navigateToWorkerSignUp = { fragmentViewModel.baseEvent(NavigateTo(WorkerSignUp)) }
+            navigateToWorkerSignUp = { fragmentViewModel.baseEvent(NavigateTo(WorkerSignUp)) },
         )
     }
 }

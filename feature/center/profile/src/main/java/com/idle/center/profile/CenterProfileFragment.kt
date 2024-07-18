@@ -34,7 +34,7 @@ import com.idle.compose.clickable
 import com.idle.designsystem.compose.component.CareButtonStrokeSmall
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.CareTextFieldLong
-import com.idle.designsystem.compose.component.CareTopAppBar
+import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
 import com.idle.designsystem.compose.foundation.CareTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -65,7 +65,7 @@ internal fun CenterProfileScreen(
 
     Scaffold(
         topBar = {
-            CareTopAppBar(
+            CareSubtitleTopAppBar(
                 title = "내 센터 정보",
                 onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
                 leftComponent = {
