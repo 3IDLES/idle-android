@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:paddingHorizontal="20dp"
         android:paddingVertical="16dp"
+        android:theme="@style/Theme.MaterialComponents.Light"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="8dp"
         app:strokeColor="@color/gray_100"
@@ -47,5 +48,4 @@
             </LinearLayout>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
-
 </FrameLayout>
