@@ -13,24 +13,12 @@ class CenterProfileRepositoryImpl @Inject constructor(
         centerProfileDataSource.getMyCenterProfile().mapCatching { it.toVO() }
 
     override suspend fun updateMyCenterProfile(
-        centerName: String,
         officeNumber: String,
-        lotNumberAddress: String,
-        detailedAddress: String,
-        longitude: Double,
-        latitude: Double,
         introduce: String?,
-        profileImageUrl: String?
     ): Result<Unit> = centerProfileDataSource.updateMyCenterProfile(
         CenterProfileRequest(
-            centerName = centerName,
             officeNumber = officeNumber,
-            lotNumberAddress = lotNumberAddress,
-            detailedAddress = detailedAddress,
-            longitude = longitude,
-            latitude = latitude,
             introduce = introduce,
-            profileImageUrl = profileImageUrl,
         )
     )
 }

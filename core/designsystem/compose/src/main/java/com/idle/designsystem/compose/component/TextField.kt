@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.idle.designsystem.compose.foundation.CareTheme
@@ -33,6 +34,7 @@ fun CareTextField(
     hint: String = "",
     readOnly: Boolean = false,
     isError: Boolean = false,
+    keyboardType: KeyboardType = KeyboardType.Text,
     supportingText: String = "",
     visualTransformation: VisualTransformation = VisualTransformation.None,
     onValueChanged: (String) -> Unit,
@@ -89,7 +91,10 @@ fun CareTextField(
                 readOnly = readOnly,
                 interactionSource = interactionSource,
                 visualTransformation = visualTransformation,
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = keyboardType,
+                    imeAction = ImeAction.Done
+                ),
                 keyboardActions = KeyboardActions(onDone = {
                     onDone()
                     keyboardController?.hide()
