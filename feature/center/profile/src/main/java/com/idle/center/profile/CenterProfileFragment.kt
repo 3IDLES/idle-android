@@ -222,7 +222,7 @@ internal fun CenterProfileScreen(
                             .padding(bottom = 60.dp),
                     ) {
                         Image(
-                            painter = painterResource(com.idle.center.profile.R.drawable.ic_temp_center),
+                            painter = painterResource(R.drawable.ic_temp_center),
                             contentDescription = "",
                             contentScale = ContentScale.FillWidth,
                             modifier = Modifier.fillMaxWidth()
