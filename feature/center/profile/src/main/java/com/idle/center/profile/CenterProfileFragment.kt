@@ -18,8 +18,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,6 +28,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.AsyncImage
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
@@ -221,11 +220,13 @@ internal fun CenterProfileScreen(
                             .clip(RoundedCornerShape(6.dp))
                             .padding(bottom = 60.dp),
                     ) {
-                        Image(
-                            painter = painterResource(R.drawable.ic_temp_center),
+                        AsyncImage(
+                            model = centerProfile.profileImageUrl,
                             contentDescription = "",
+                            placeholder = painterResource(R.drawable.ic_temp_center),
                             contentScale = ContentScale.FillWidth,
                             modifier = Modifier.fillMaxWidth()
+                                .clip(RoundedCornerShape(6.dp))
                         )
 
                         if (isEditState) {
