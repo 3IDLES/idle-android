@@ -17,6 +17,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -25,8 +26,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
@@ -35,6 +38,7 @@ import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.CareTextFieldLong
 import com.idle.designsystem.compose.foundation.CareTheme
+import com.idle.domain.model.profile.CenterProfile
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -44,10 +48,20 @@ internal class CenterProfileFragment : BaseComposeFragment() {
     @Composable
     override fun ComposeLayout() {
         fragmentViewModel.apply {
-            val (isEditState, setEditState) = remember { mutableStateOf(false) }
+            val centerProfile by centerProfile.collectAsStateWithLifecycle()
+            val centerOfficeNumber by centerOfficeNumber.collectAsStateWithLifecycle()
+            val centerIntroduce by centerIntroduce.collectAsStateWithLifecycle()
+            val isEditState by isEditState.collectAsStateWithLifecycle()
+
             CenterProfileScreen(
+                centerProfile = centerProfile,
+                centerOfficeNumber = centerOfficeNumber,
+                centerIntroduce = centerIntroduce,
                 isEditState = isEditState,
-                setEditState = setEditState,
+                onCenterOfficeNumberChanged = ::setCenterOfficeNumber,
+                onCenterIntroduceChanged = ::setCenterIntroduce,
+                updateCenterProfile = ::updateCenterProfile,
+                setEditState = ::setEditState,
             )
         }
     }
@@ -55,8 +69,14 @@ internal class CenterProfileFragment : BaseComposeFragment() {
 
 @Composable
 internal fun CenterProfileScreen(
+    centerProfile: CenterProfile,
+    centerOfficeNumber: String,
+    centerIntroduce: String,
     isEditState: Boolean,
     setEditState: (Boolean) -> Unit,
+    onCenterOfficeNumberChanged: (String) -> Unit,
+    onCenterIntroduceChanged: (String) -> Unit,
+    updateCenterProfile: () -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
@@ -74,7 +94,7 @@ internal fun CenterProfileScreen(
                             style = CareTheme.typography.subtitle2,
                             color = CareTheme.colors.orange500,
                             modifier = Modifier.clickable {
-                                setEditState(false)
+                                updateCenterProfile()
                             }
                         )
                     }
@@ -97,7 +117,7 @@ internal fun CenterProfileScreen(
                 modifier = Modifier.padding(horizontal = 20.dp)
             ) {
                 Text(
-                    text = "네 얼간이 방문요양센터",
+                    text = centerProfile.centerName,
                     style = CareTheme.typography.heading1,
                     color = CareTheme.colors.gray900,
                 )
@@ -153,14 +173,15 @@ internal fun CenterProfileScreen(
 
                     if (!isEditState) {
                         Text(
-                            text = "(02) 123-4567",
+                            text = centerOfficeNumber,
                             style = CareTheme.typography.body3,
                             color = CareTheme.colors.gray900,
                         )
                     } else {
                         CareTextField(
-                            value = "(02) 123-4567",
-                            onValueChanged = {},
+                            value = centerOfficeNumber,
+                            keyboardType = KeyboardType.Number,
+                            onValueChanged = onCenterOfficeNumberChanged,
                             modifier = Modifier.fillMaxWidth(),
                         )
                     }
@@ -175,14 +196,14 @@ internal fun CenterProfileScreen(
 
                     if (!isEditState) {
                         Text(
-                            text = "안녕하세요 반갑습니다!",
+                            text = centerIntroduce,
                             style = CareTheme.typography.body3,
                             color = CareTheme.colors.gray900,
                         )
                     } else {
                         CareTextFieldLong(
-                            value = "안녕하세요 반갑습니다!",
-                            onValueChanged = {},
+                            value = centerIntroduce,
+                            onValueChanged = onCenterIntroduceChanged,
                             modifier = Modifier.fillMaxWidth(),
                         )
                     }
