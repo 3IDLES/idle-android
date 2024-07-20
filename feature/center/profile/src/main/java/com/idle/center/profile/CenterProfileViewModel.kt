@@ -30,8 +30,8 @@ class CenterProfileViewModel @Inject constructor(
     private val _isEditState = MutableStateFlow(false)
     val isEditState = _isEditState.asStateFlow()
 
-    private val _profileImageUri = MutableStateFlow<ImageFileInfo?>(null)
-    val profileImageUri = _profileImageUri.asStateFlow()
+    private val _profileImageFileInfo = MutableStateFlow<ImageFileInfo?>(null)
+    val profileImageFileInfo = _profileImageFileInfo.asStateFlow()
 
     init {
         getMyCenterProfile()
@@ -60,19 +60,19 @@ class CenterProfileViewModel @Inject constructor(
         updateCenterProfileUseCase(
             officeNumber = _centerOfficeNumber.value,
             introduce = _centerIntroduce.value.ifBlank { null },
-            profileImageUri = _profileImageUri.value,
+            imageFileInfo = _profileImageFileInfo.value,
         ).onSuccess {
             setEditState(false)
             Log.d("test", "업데이트 성공!")
         }.onFailure {
             Log.d("test", "업데이트 실패!")
-        }
+        }.also { _profileImageFileInfo.value?.imageInputStream?.close() }
     }
 
     private fun isCenterProfileUnchanged(): Boolean {
         return _centerOfficeNumber.value == _centerProfile.value.officeNumber &&
                 _centerIntroduce.value == _centerProfile.value.introduce &&
-                profileImageUri.value == null
+                profileImageFileInfo.value == null
     }
 
     fun setCenterOfficeNumber(number: String) {
@@ -88,7 +88,6 @@ class CenterProfileViewModel @Inject constructor(
     }
 
     fun setProfileImageUrl(imageFileInfo: ImageFileInfo) {
-        Log.d("test", imageFileInfo.toString())
-        _profileImageUri.value = imageFileInfo
+        _profileImageFileInfo.value = imageFileInfo
     }
 }

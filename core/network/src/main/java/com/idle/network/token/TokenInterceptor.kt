@@ -29,6 +29,10 @@ class TokenInterceptor @Inject constructor(
             return false
         }
 
+        if (request.url.host.contains("idle-bucket.s3.ap-northeast-2.amazonaws.com")) {
+            return false
+        }
+
         return when (request.url.encodedPath) {
             "/api/v1/auth/common/send" -> false
             "/api/v1/auth/common/confirm" -> false

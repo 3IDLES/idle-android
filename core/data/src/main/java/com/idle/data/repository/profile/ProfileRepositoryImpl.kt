@@ -1,9 +1,11 @@
 package com.idle.data.repository.profile
 
-import android.util.Log
 import com.idle.domain.model.profile.CenterProfile
+import com.idle.domain.model.profile.ImageFileInfo
 import com.idle.domain.repositorry.profile.ProfileRepository
+import com.idle.network.model.profile.CallbackImageUploadRequest
 import com.idle.network.model.profile.CenterProfileRequest
+import com.idle.network.model.profile.ProfileImageUploadUrlResponse
 import com.idle.network.source.CenterProfileDataSource
 import javax.inject.Inject
 
@@ -23,17 +25,45 @@ class ProfileRepositoryImpl @Inject constructor(
         )
     )
 
-    override suspend fun updateCenterProfileImage(
+    override suspend fun updateProfileImage(
         userType: String,
-        imageFileExtension: String
+        imageFileInfo: ImageFileInfo,
     ): Result<Unit> = runCatching {
-        val profileImageUploadUrlResponse = centerProfileDataSource.getProfileImageUploadUrl(
-            userType = userType,
-            imageFileExtension = imageFileExtension
+        val profileImageUploadUrlResponse =
+            getProfileImageUploadUrl(userType, imageFileInfo.imageFileExtension.name).getOrThrow()
+
+        uploadProfileImage(
+            uploadUrl = profileImageUploadUrlResponse.uploadUrl,
+            imageFileInfo = imageFileInfo
         ).getOrThrow()
 
-        Log.d("test", profileImageUploadUrlResponse.toString())
-//        centerProfileDataSource.uploadProfileImage(profileImageUploadUrlResponse.uploadUrl)
-//            .getOrThrow()
+        callbackImageUpload(
+            userType = userType,
+            imageId = profileImageUploadUrlResponse.imageId,
+            imageFileExtension = profileImageUploadUrlResponse.imageFileExtension
+        )
     }
+
+    private suspend fun getProfileImageUploadUrl(
+        userType: String,
+        imageFileExtension: String
+    ): Result<ProfileImageUploadUrlResponse> =
+        centerProfileDataSource.getProfileImageUploadUrl(userType, imageFileExtension)
+
+    private suspend fun uploadProfileImage(
+        uploadUrl: String,
+        imageFileInfo: ImageFileInfo
+    ): Result<Unit> = centerProfileDataSource.uploadProfileImage(uploadUrl, imageFileInfo)
+
+    private suspend fun callbackImageUpload(
+        userType: String,
+        imageId: String,
+        imageFileExtension: String
+    ): Result<Unit> = centerProfileDataSource.callbackImageUpload(
+        userType = userType,
+        callbackImageUploadRequest = CallbackImageUploadRequest(
+            imageId = imageId,
+            imageFileExtension = imageFileExtension,
+        )
+    )
 }

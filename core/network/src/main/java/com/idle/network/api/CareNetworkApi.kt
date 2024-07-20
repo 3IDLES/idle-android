@@ -5,10 +5,12 @@ import com.idle.network.model.auth.ConfirmAuthCodeRequest
 import com.idle.network.model.auth.SendPhoneRequest
 import com.idle.network.model.auth.SignInCenterRequest
 import com.idle.network.model.auth.SignUpCenterRequest
+import com.idle.network.model.profile.CallbackImageUploadRequest
 import com.idle.network.model.profile.CenterProfileRequest
 import com.idle.network.model.profile.CenterProfileResponse
 import com.idle.network.model.profile.ProfileImageUploadUrlResponse
 import com.idle.network.model.token.TokenResponse
+import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -55,6 +57,14 @@ interface CareNetworkApi {
     ): Response<ProfileImageUploadUrlResponse>
 
     @PUT
-    suspend fun uploadProfileImage(@Url uploadUrl: String): Response<Unit>
+    suspend fun uploadProfileImage(
+        @Url uploadUrl: String,
+        @Body requestImage: RequestBody,
+    ): Response<Unit>
 
+    @POST("/api/v1/users/{user-type}/my/profile-image/upload-callback")
+    suspend fun callbackImageUpload(
+        @Path("user-type") userType: String,
+        @Body callbackImageUploadRequest: CallbackImageUploadRequest,
+    ): Response<Unit>
 }
