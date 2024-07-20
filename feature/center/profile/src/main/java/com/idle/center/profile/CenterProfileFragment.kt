@@ -49,14 +49,8 @@ import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.model.profile.ImageFileInfo
 import com.idle.domain.model.profile.MIMEType
-import com.idle.domain.model.profile.MIMEType.GIF
-import com.idle.domain.model.profile.MIMEType.JPEG
-import com.idle.domain.model.profile.MIMEType.JPG
-import com.idle.domain.model.profile.MIMEType.PNG
-import com.idle.domain.model.profile.MIMEType.SVG
-import com.idle.domain.model.profile.MIMEType.UNKNOWN
-import com.idle.domain.model.profile.MIMEType.WEBP
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.InputStream
 
 @AndroidEntryPoint
 internal class CenterProfileFragment : BaseComposeFragment() {
@@ -69,19 +63,22 @@ internal class CenterProfileFragment : BaseComposeFragment() {
             val centerOfficeNumber by centerOfficeNumber.collectAsStateWithLifecycle()
             val centerIntroduce by centerIntroduce.collectAsStateWithLifecycle()
             val isEditState by isEditState.collectAsStateWithLifecycle()
-            val profileImageUri by profileImageUri.collectAsStateWithLifecycle()
+            val profileImageUri by profileImageFileInfo.collectAsStateWithLifecycle()
 
             val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.PickVisualMedia(),
-                onResult = { uri ->
-                    uri?.let {
-                        val imageFormat = getImageFormat(requireContext(), it)
-                        setProfileImageUrl(
-                            ImageFileInfo(
+                onResult = {
+                    it?.let { uri ->
+                        getImageInputStream(requireContext(), uri)?.let { inputStream ->
+                            val imageFormat = getImageFormat(requireContext(), uri)
+                            val imageFile = ImageFileInfo(
                                 imageUrl = uri.toString(),
                                 imageFileExtension = imageFormat,
+                                imageInputStream = inputStream,
                             )
-                        )
+
+                            setProfileImageUrl(imageFile)
+                        }
                     }
                 }
             )
@@ -104,16 +101,11 @@ internal class CenterProfileFragment : BaseComposeFragment() {
     private fun getImageFormat(context: Context, uri: Uri): MIMEType {
         val contentResolver = context.contentResolver
         val mimeType = contentResolver.getType(uri)
-        return when (mimeType) {
-            "image/jpeg" -> JPEG
-            "image/png" -> PNG
-            "image/gif" -> GIF
-            "image/svg+xml" -> SVG
-            "image/webp" -> WEBP
-            else -> {
-                if (uri.toString().endsWith(".jpg", ignoreCase = true)) JPG else UNKNOWN
-            }
-        }
+        return MIMEType.create(mimeType)
+    }
+
+    private fun getImageInputStream(context: Context, uri: Uri): InputStream? {
+        return context.contentResolver.openInputStream(uri)
     }
 }
 

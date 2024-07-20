@@ -13,24 +13,27 @@ class UpdateCenterProfileUseCase @Inject constructor(
     suspend operator fun invoke(
         officeNumber: String,
         introduce: String?,
-        profileImageUri: ImageFileInfo?,
-    ): Result<Unit> = coroutineScope {
-        val updateProfileDeferred = async {
-            profileRepository.updateCenterProfile(
-                officeNumber = officeNumber,
-                introduce = introduce,
-            )
-        }
+        imageFileInfo: ImageFileInfo?,
+    ): Result<Unit> = runCatching {
+        coroutineScope {
+            val updateProfileDeferred = async {
+                profileRepository.updateCenterProfile(
+                    officeNumber = officeNumber,
+                    introduce = introduce,
+                ).getOrThrow()
+            }
 
-        profileImageUri?.let {
-            async {
-                profileRepository.updateCenterProfileImage(
-                    userType = UserRole.CENTER.apiValue,
-                    imageFileExtension = profileImageUri.imageFileExtension.name,
-                )
-            }.await()
-        }
+            val updateProfileImageDeferred = imageFileInfo?.let {
+                async {
+                    profileRepository.updateProfileImage(
+                        userType = UserRole.CENTER.apiValue,
+                        imageFileInfo = it,
+                    ).getOrThrow()
+                }
+            }
 
-        updateProfileDeferred.await()
+            updateProfileDeferred.await()
+            updateProfileImageDeferred?.await()
+        }
     }
 }
