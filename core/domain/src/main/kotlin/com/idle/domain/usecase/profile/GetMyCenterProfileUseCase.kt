@@ -1,10 +1,10 @@
 package com.idle.domain.usecase.profile
 
-import com.idle.domain.repositorry.profile.CenterProfileRepository
+import com.idle.domain.repositorry.profile.ProfileRepository
 import javax.inject.Inject
 
 class GetMyCenterProfileUseCase @Inject constructor(
-    private val centerProfileRepository: CenterProfileRepository
+    private val profileRepository: ProfileRepository
 ) {
-    suspend operator fun invoke() = centerProfileRepository.getMyCenterProfile()
+    suspend operator fun invoke() = profileRepository.getMyCenterProfile()
 }

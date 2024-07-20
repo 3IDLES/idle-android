@@ -24,7 +24,7 @@ object RetrofitModule {
 
     @Singleton
     @Provides
-    @Named("Common")
+    @Named("common")
     fun provideOkHttpClient(
         tokenInterceptor: TokenInterceptor,
         tokenAuthenticator: TokenAuthenticator,
@@ -44,7 +44,7 @@ object RetrofitModule {
 
     @Singleton
     @Provides
-    @Named("Token")
+    @Named("token")
     fun provideTokenOkHttpClient(): OkHttpClient {
         val builder = OkHttpClient.Builder()
 
@@ -60,23 +60,23 @@ object RetrofitModule {
     @Singleton
     @Provides
     fun providesCareNetworkApi(
-        @Named("Common") okHttpClient: OkHttpClient,
-    ): CareNetworkApi =
-        Retrofit.Builder()
-            .client(okHttpClient)
-            .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
-            .baseUrl(BuildConfig.CARE_BASE_URL).build()
-            .create(CareNetworkApi::class.java)
+        @Named("common") okHttpClient: OkHttpClient,
+    ): CareNetworkApi = Retrofit.Builder()
+        .client(okHttpClient)
+        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+        .baseUrl(BuildConfig.CARE_BASE_URL)
+        .build()
+        .create(CareNetworkApi::class.java)
 
 
     @Singleton
     @Provides
     fun providesTokenNetworkApi(
-        @Named("Token") okHttpClient: OkHttpClient,
-    ): TokenNetworkApi =
-        Retrofit.Builder()
-            .client(okHttpClient)
-            .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
-            .baseUrl(BuildConfig.CARE_BASE_URL).build()
-            .create(TokenNetworkApi::class.java)
+        @Named("token") okHttpClient: OkHttpClient,
+    ): TokenNetworkApi = Retrofit.Builder()
+        .client(okHttpClient)
+        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+        .baseUrl(BuildConfig.CARE_BASE_URL)
+        .build()
+        .create(TokenNetworkApi::class.java)
 }

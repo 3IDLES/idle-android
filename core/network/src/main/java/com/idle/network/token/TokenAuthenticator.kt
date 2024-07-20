@@ -22,6 +22,11 @@ class TokenAuthenticator @Inject constructor(
             return null
         }
 
+        val retryCount = originRequest.header(RETRY_HEADER)?.toIntOrNull() ?: 0
+        if (retryCount >= MAX_RETRY_COUNT) {
+            return null
+        }
+
         if (response.code != 401) {
             return null
         }
@@ -40,9 +45,17 @@ class TokenAuthenticator @Inject constructor(
             launch { tokenManager.setRefreshToken(token.refreshToken) }
         }
 
-        return response.request
+        val newRequest = response.request
             .newBuilder()
-            .header("Authorization", tokenManager.getAccessToken())
+            .header("Authorization", "Bearer ${token.accessToken}")
+            .header(RETRY_HEADER, (retryCount + 1).toString())
             .build()
+
+        return newRequest
+    }
+
+    companion object {
+        private const val MAX_RETRY_COUNT = 3
+        private const val RETRY_HEADER = "Retry-Count"
     }
 }

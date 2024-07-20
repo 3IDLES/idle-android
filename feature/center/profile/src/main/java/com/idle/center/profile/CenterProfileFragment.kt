@@ -1,6 +1,12 @@
 package com.idle.center.profile
 
+import android.content.Context
+import android.net.Uri
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -41,6 +47,15 @@ import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.CareTextFieldLong
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.profile.CenterProfile
+import com.idle.domain.model.profile.ImageFileInfo
+import com.idle.domain.model.profile.MIMEType
+import com.idle.domain.model.profile.MIMEType.GIF
+import com.idle.domain.model.profile.MIMEType.JPEG
+import com.idle.domain.model.profile.MIMEType.JPG
+import com.idle.domain.model.profile.MIMEType.PNG
+import com.idle.domain.model.profile.MIMEType.SVG
+import com.idle.domain.model.profile.MIMEType.UNKNOWN
+import com.idle.domain.model.profile.MIMEType.WEBP
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -54,17 +69,50 @@ internal class CenterProfileFragment : BaseComposeFragment() {
             val centerOfficeNumber by centerOfficeNumber.collectAsStateWithLifecycle()
             val centerIntroduce by centerIntroduce.collectAsStateWithLifecycle()
             val isEditState by isEditState.collectAsStateWithLifecycle()
+            val profileImageUri by profileImageUri.collectAsStateWithLifecycle()
+
+            val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
+                contract = ActivityResultContracts.PickVisualMedia(),
+                onResult = { uri ->
+                    uri?.let {
+                        val imageFormat = getImageFormat(requireContext(), it)
+                        setProfileImageUrl(
+                            ImageFileInfo(
+                                imageUrl = uri.toString(),
+                                imageFileExtension = imageFormat,
+                            )
+                        )
+                    }
+                }
+            )
 
             CenterProfileScreen(
                 centerProfile = centerProfile,
                 centerOfficeNumber = centerOfficeNumber,
                 centerIntroduce = centerIntroduce,
+                profileImageUri = profileImageUri?.imageUrl,
                 isEditState = isEditState,
+                singlePhotoPickerLauncher = singlePhotoPickerLauncher,
                 onCenterOfficeNumberChanged = ::setCenterOfficeNumber,
                 onCenterIntroduceChanged = ::setCenterIntroduce,
                 updateCenterProfile = ::updateCenterProfile,
                 setEditState = ::setEditState,
             )
+        }
+    }
+
+    private fun getImageFormat(context: Context, uri: Uri): MIMEType {
+        val contentResolver = context.contentResolver
+        val mimeType = contentResolver.getType(uri)
+        return when (mimeType) {
+            "image/jpeg" -> JPEG
+            "image/png" -> PNG
+            "image/gif" -> GIF
+            "image/svg+xml" -> SVG
+            "image/webp" -> WEBP
+            else -> {
+                if (uri.toString().endsWith(".jpg", ignoreCase = true)) JPG else UNKNOWN
+            }
         }
     }
 }
@@ -74,7 +122,9 @@ internal fun CenterProfileScreen(
     centerProfile: CenterProfile,
     centerOfficeNumber: String,
     centerIntroduce: String,
+    profileImageUri: String?,
     isEditState: Boolean,
+    singlePhotoPickerLauncher: ManagedActivityResultLauncher<PickVisualMediaRequest, Uri?>,
     setEditState: (Boolean) -> Unit,
     onCenterOfficeNumberChanged: (String) -> Unit,
     onCenterIntroduceChanged: (String) -> Unit,
@@ -218,7 +268,12 @@ internal fun CenterProfileScreen(
                         color = CareTheme.colors.gray500,
                     )
 
-                    Box(modifier = Modifier.padding(bottom = 60.dp)) {
+                    Box(modifier = Modifier.padding(bottom = 60.dp)
+                        .clickable {
+                            if (isEditState) singlePhotoPickerLauncher.launch(
+                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                            )
+                        }) {
                         if (centerProfile.profileImageUrl.isBlank()) {
                             if (!isEditState) {
                                 Image(
@@ -240,7 +295,7 @@ internal fun CenterProfileScreen(
                             }
                         } else {
                             AsyncImage(
-                                model = centerProfile.profileImageUrl,
+                                model = profileImageUri ?: centerProfile.profileImageUrl,
                                 contentDescription = "",
                                 placeholder = painterResource(R.drawable.ic_profile_empty),
                                 contentScale = ContentScale.FillWidth,

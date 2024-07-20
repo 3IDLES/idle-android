@@ -3,10 +3,10 @@ package com.idle.data.di
 import com.idle.data.repository.auth.AuthRepositoryImpl
 import com.idle.data.repository.auth.TokenManagerImpl
 import com.idle.data.repository.auth.TokenRepositoryImpl
-import com.idle.data.repository.profile.CenterProfileRepositoryImpl
+import com.idle.data.repository.profile.ProfileRepositoryImpl
 import com.idle.domain.repositorry.auth.AuthRepository
 import com.idle.domain.repositorry.auth.TokenRepository
-import com.idle.domain.repositorry.profile.CenterProfileRepository
+import com.idle.domain.repositorry.profile.ProfileRepository
 import com.idle.network.token.TokenManager
 import dagger.Binds
 import dagger.Module
@@ -32,8 +32,8 @@ abstract class DataModule {
     @Binds
     @Singleton
     abstract fun bindsCenterProfileRepository(
-        centerProfileRepositoryImpl: CenterProfileRepositoryImpl
-    ): CenterProfileRepository
+        centerProfileRepositoryImpl: ProfileRepositoryImpl
+    ): ProfileRepository
 
     @Binds
     @Singleton

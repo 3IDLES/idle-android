@@ -12,7 +12,7 @@ class TokenInterceptor @Inject constructor(
         val originRequest = chain.request()
         val newRequest = if (isAccessTokenUsed(originRequest)) {
             originRequest.newBuilder()
-                .addHeader("Authorization", tokenManager.getAccessToken())
+                .addHeader("Authorization", "Bearer ${tokenManager.getAccessToken()}")
                 .build()
         } else {
             originRequest

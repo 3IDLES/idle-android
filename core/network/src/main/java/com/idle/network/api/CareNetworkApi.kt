@@ -7,13 +7,17 @@ import com.idle.network.model.auth.SignInCenterRequest
 import com.idle.network.model.auth.SignUpCenterRequest
 import com.idle.network.model.profile.CenterProfileRequest
 import com.idle.network.model.profile.CenterProfileResponse
+import com.idle.network.model.profile.ProfileImageUploadUrlResponse
 import com.idle.network.model.token.TokenResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Query
+import retrofit2.http.Url
 
 interface CareNetworkApi {
     @POST("/api/v1/auth/common/send")
@@ -43,4 +47,14 @@ interface CareNetworkApi {
     suspend fun updateMyCenterProfile(
         @Body centerProfileRequest: CenterProfileRequest
     ): Response<Unit>
+
+    @GET("/api/v1/users/{user-type}/my/profile-image/upload-url")
+    suspend fun getImageUploadUrl(
+        @Path("user-type") userType: String,
+        @Query("imageFileExtension") imageFileExtension: String,
+    ): Response<ProfileImageUploadUrlResponse>
+
+    @PUT
+    suspend fun uploadProfileImage(@Url uploadUrl: String): Response<Unit>
+
 }

@@ -4,8 +4,9 @@ import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.profile.CenterProfile
+import com.idle.domain.model.profile.ImageFileInfo
 import com.idle.domain.usecase.profile.GetMyCenterProfileUseCase
-import com.idle.domain.usecase.profile.UpdateMyCenterProfileUseCase
+import com.idle.domain.usecase.profile.UpdateCenterProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CenterProfileViewModel @Inject constructor(
     private val getMyCenterProfileUseCase: GetMyCenterProfileUseCase,
-    private val updateMyCenterProfileUseCase: UpdateMyCenterProfileUseCase,
+    private val updateCenterProfileUseCase: UpdateCenterProfileUseCase,
 ) : BaseViewModel() {
     private val _centerProfile = MutableStateFlow(CenterProfile())
     val centerProfile = _centerProfile.asStateFlow()
@@ -28,6 +29,9 @@ class CenterProfileViewModel @Inject constructor(
 
     private val _isEditState = MutableStateFlow(false)
     val isEditState = _isEditState.asStateFlow()
+
+    private val _profileImageUri = MutableStateFlow<ImageFileInfo?>(null)
+    val profileImageUri = _profileImageUri.asStateFlow()
 
     init {
         getMyCenterProfile()
@@ -53,9 +57,10 @@ class CenterProfileViewModel @Inject constructor(
             return@launch
         }
 
-        updateMyCenterProfileUseCase(
+        updateCenterProfileUseCase(
             officeNumber = _centerOfficeNumber.value,
             introduce = _centerIntroduce.value.ifBlank { null },
+            profileImageUri = _profileImageUri.value,
         ).onSuccess {
             setEditState(false)
             Log.d("test", "업데이트 성공!")
@@ -66,7 +71,8 @@ class CenterProfileViewModel @Inject constructor(
 
     private fun isCenterProfileUnchanged(): Boolean {
         return _centerOfficeNumber.value == _centerProfile.value.officeNumber &&
-                _centerIntroduce.value == _centerProfile.value.introduce
+                _centerIntroduce.value == _centerProfile.value.introduce &&
+                profileImageUri.value == null
     }
 
     fun setCenterOfficeNumber(number: String) {
@@ -79,5 +85,9 @@ class CenterProfileViewModel @Inject constructor(
 
     fun setEditState(state: Boolean) {
         _isEditState.value = state
+    }
+
+    fun setProfileImageUrl(imageFileInfo: ImageFileInfo) {
+        _profileImageUri.value = imageFileInfo
     }
 }
