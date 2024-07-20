@@ -32,6 +32,7 @@ import coil.compose.AsyncImage
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
+import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonStrokeSmall
 import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
 import com.idle.designsystem.compose.component.CareTextField
@@ -126,7 +127,7 @@ internal fun CenterProfileScreen(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Image(
-                        painter = painterResource(com.idle.designresource.R.drawable.ic_address_pin),
+                        painter = painterResource(R.drawable.ic_address_pin),
                         contentDescription = "위치를 알려주는 핀 이미지 입니다.",
                     )
 
@@ -217,25 +218,45 @@ internal fun CenterProfileScreen(
 
                     Box(
                         modifier = Modifier.wrapContentSize()
-                            .clip(RoundedCornerShape(6.dp))
                             .padding(bottom = 60.dp),
                     ) {
-                        AsyncImage(
-                            model = centerProfile.profileImageUrl,
-                            contentDescription = "",
-                            placeholder = painterResource(R.drawable.ic_temp_center),
-                            contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.fillMaxWidth()
-                                .clip(RoundedCornerShape(6.dp))
-                        )
+                        if (centerProfile.profileImageUrl.isBlank()) {
+                            if (!isEditState) {
+                                Image(
+                                    painter = painterResource(R.drawable.ic_profile_empty),
+                                    contentDescription = null,
+                                    contentScale = ContentScale.FillWidth,
+                                    modifier = Modifier.fillMaxWidth()
+                                        .clip(RoundedCornerShape(6.dp))
+                                )
 
-                        if (isEditState) {
-                            Image(
-                                painter = painterResource(com.idle.designresource.R.drawable.ic_edit_pencil),
+                            } else {
+                                Image(
+                                    painter = painterResource(R.drawable.ic_profile_empty_edit),
+                                    contentDescription = null,
+                                    contentScale = ContentScale.FillWidth,
+                                    modifier = Modifier.fillMaxWidth()
+                                        .clip(RoundedCornerShape(6.dp))
+                                )
+                            }
+                        } else {
+                            AsyncImage(
+                                model = centerProfile.profileImageUrl,
                                 contentDescription = "",
-                                modifier = Modifier.align(Alignment.BottomEnd)
-                                    .padding(16.dp)
+                                placeholder = painterResource(R.drawable.ic_profile_empty),
+                                contentScale = ContentScale.FillWidth,
+                                modifier = Modifier.fillMaxWidth()
+                                    .clip(RoundedCornerShape(6.dp))
                             )
+
+                            if (isEditState) {
+                                Image(
+                                    painter = painterResource(R.drawable.ic_edit_pencil),
+                                    contentDescription = "",
+                                    modifier = Modifier.align(Alignment.BottomEnd)
+                                        .padding(16.dp)
+                                )
+                            }
                         }
                     }
                 }
