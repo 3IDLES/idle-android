@@ -88,6 +88,7 @@ class CenterProfileViewModel @Inject constructor(
     }
 
     fun setProfileImageUrl(imageFileInfo: ImageFileInfo) {
+        Log.d("test", imageFileInfo.toString())
         _profileImageUri.value = imageFileInfo
     }
 }

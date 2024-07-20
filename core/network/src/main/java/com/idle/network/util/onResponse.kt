@@ -13,7 +13,8 @@ internal fun <T> Response<T>.onResponse(): Result<T> {
         } ?: return Result.success(Unit as T)
     } else {
         errorBody()?.let {
-            val errorResponse = Json.decodeFromString<ErrorResponse>(it.string())
+            val json = Json { ignoreUnknownKeys = true }
+            val errorResponse = json.decodeFromString<ErrorResponse>(it.string())
 
             return Result.failure(
                 HttpResponseException(

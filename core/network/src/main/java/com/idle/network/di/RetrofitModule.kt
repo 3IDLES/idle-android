@@ -22,6 +22,10 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object RetrofitModule {
 
+    val json = Json {
+        ignoreUnknownKeys = true
+    }
+
     @Singleton
     @Provides
     @Named("common")
@@ -63,7 +67,7 @@ object RetrofitModule {
         @Named("common") okHttpClient: OkHttpClient,
     ): CareNetworkApi = Retrofit.Builder()
         .client(okHttpClient)
-        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+        .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
         .baseUrl(BuildConfig.CARE_BASE_URL)
         .build()
         .create(CareNetworkApi::class.java)
@@ -75,7 +79,7 @@ object RetrofitModule {
         @Named("token") okHttpClient: OkHttpClient,
     ): TokenNetworkApi = Retrofit.Builder()
         .client(okHttpClient)
-        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+        .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
         .baseUrl(BuildConfig.CARE_BASE_URL)
         .build()
         .create(TokenNetworkApi::class.java)

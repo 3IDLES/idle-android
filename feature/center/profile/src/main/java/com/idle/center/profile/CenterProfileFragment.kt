@@ -274,7 +274,7 @@ internal fun CenterProfileScreen(
                                 PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
                             )
                         }) {
-                        if (centerProfile.profileImageUrl.isBlank()) {
+                        if (centerProfile.profileImageUrl.isBlank() && profileImageUri == null) {
                             if (!isEditState) {
                                 Image(
                                     painter = painterResource(R.drawable.ic_profile_empty),
