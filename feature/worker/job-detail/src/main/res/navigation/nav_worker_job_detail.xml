@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_worker_job_detail"
+    app:startDestination="@id/workerJobDetailFragment">
+
+    <fragment
+        android:id="@+id/workerJobDetailFragment"
+        android:name="com.idle.worker.job.detail.WorkerJobDetailFragment"
+        android:label="WorkerJobDetailFragment" >
+        <deepLink app:uri="@string/worker_job_detail_deeplink_url"/>
+    </fragment>
+</navigation>

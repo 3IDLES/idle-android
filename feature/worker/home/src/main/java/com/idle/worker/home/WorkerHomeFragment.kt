@@ -27,7 +27,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
+import com.idle.binding.DeepLinkDestination.WorkerJobDetail
+import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.compose.base.BaseComposeFragment
+import com.idle.compose.clickable
 import com.idle.designsystem.compose.component.CareHeadingTopAppBar
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.foundation.CareTheme
@@ -40,13 +43,18 @@ internal class WorkerHomeFragment : BaseComposeFragment() {
     @Composable
     override fun ComposeLayout() {
         fragmentViewModel.apply {
-            WorkerHomeScreen()
+            WorkerHomeScreen(
+                navigateToJobDetail = { jobId ->
+                    fragmentViewModel.baseEvent(NavigateTo(WorkerJobDetail))
+                }
+            )
         }
     }
 }
 
 @Composable
 internal fun WorkerHomeScreen(
+    navigateToJobDetail: (String) -> Unit,
 ) {
     Scaffold(
         containerColor = CareTheme.colors.white000,
@@ -88,6 +96,7 @@ internal fun WorkerHomeScreen(
                         disabledContentColor = CareTheme.colors.white000,
                     ),
                     border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
+                    modifier = Modifier.clickable { navigateToJobDetail(it.toString()) }
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Row(

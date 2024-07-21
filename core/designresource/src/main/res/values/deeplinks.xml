@@ -16,4 +16,5 @@
     <string name="center_setting_deeplink_url">care://center/setting</string>
 
     <string name="worker_home_deeplink_url">care://worker/home</string>
+    <string name="worker_job_detail_deeplink_url">care://worker/job/detail</string>
 </resources>
