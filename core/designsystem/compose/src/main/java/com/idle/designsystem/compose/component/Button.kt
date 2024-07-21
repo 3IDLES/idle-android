@@ -125,6 +125,37 @@ fun CareButtonStrokeSmall(
 }
 
 @Composable
+fun CareButtonLine(
+    text: String,
+    onClick: () -> Unit,
+    enable: Boolean = true,
+    border: BorderStroke? = null,
+    containerColor: Color = CareTheme.colors.white000,
+    textColor: Color = CareTheme.colors.orange400,
+    modifier: Modifier = Modifier,
+) {
+    Button(
+        onClick = onClick,
+        enabled = enable,
+        shape = RoundedCornerShape(6.dp),
+        border = border,
+        colors = ButtonColors(
+            containerColor = containerColor,
+            contentColor = CareTheme.colors.white000,
+            disabledContentColor = CareTheme.colors.gray300,
+            disabledContainerColor = CareTheme.colors.gray200,
+        ),
+        modifier = modifier,
+    ) {
+        Text(
+            text = text,
+            style = CareTheme.typography.body3,
+            color = CareTheme.colors.gray300,
+        )
+    }
+}
+
+@Composable
 internal fun CareDialogButton(
     text: String,
     onClick: () -> Unit,
