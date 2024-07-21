@@ -1,10 +1,10 @@
 package com.idle.center.profile
 
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.profile.CenterProfile
-import com.idle.domain.model.profile.ImageFileInfo
 import com.idle.domain.usecase.profile.GetMyCenterProfileUseCase
 import com.idle.domain.usecase.profile.UpdateCenterProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,8 +30,8 @@ class CenterProfileViewModel @Inject constructor(
     private val _isEditState = MutableStateFlow(false)
     val isEditState = _isEditState.asStateFlow()
 
-    private val _profileImageFileInfo = MutableStateFlow<ImageFileInfo?>(null)
-    val profileImageFileInfo = _profileImageFileInfo.asStateFlow()
+    private val _profileImageUri = MutableStateFlow<Uri?>(null)
+    val profileImageUri = _profileImageUri.asStateFlow()
 
     init {
         getMyCenterProfile()
@@ -60,19 +60,19 @@ class CenterProfileViewModel @Inject constructor(
         updateCenterProfileUseCase(
             officeNumber = _centerOfficeNumber.value,
             introduce = _centerIntroduce.value.ifBlank { null },
-            imageFileInfo = _profileImageFileInfo.value,
+            imageFileUri = _profileImageUri.value.toString(),
         ).onSuccess {
             setEditState(false)
             Log.d("test", "업데이트 성공!")
         }.onFailure {
             Log.d("test", "업데이트 실패!")
-        }.also { _profileImageFileInfo.value?.imageInputStream?.close() }
+        }
     }
 
     private fun isCenterProfileUnchanged(): Boolean {
         return _centerOfficeNumber.value == _centerProfile.value.officeNumber &&
                 _centerIntroduce.value == _centerProfile.value.introduce &&
-                profileImageFileInfo.value == null
+                profileImageUri.value == null
     }
 
     fun setCenterOfficeNumber(number: String) {
@@ -87,7 +87,7 @@ class CenterProfileViewModel @Inject constructor(
         _isEditState.value = state
     }
 
-    fun setProfileImageUrl(imageFileInfo: ImageFileInfo) {
-        _profileImageFileInfo.value = imageFileInfo
+    fun setProfileImageUrl(uri: Uri?) {
+        _profileImageUri.value = uri
     }
 }

@@ -1,11 +1,8 @@
 package com.idle.domain.model.profile
 
-import java.io.InputStream
-
 data class ImageFileInfo(
     val imageUrl: String,
     val imageFileExtension: MIMEType,
-    val imageInputStream: InputStream,
 )
 
 enum class MIMEType(val value: String) {

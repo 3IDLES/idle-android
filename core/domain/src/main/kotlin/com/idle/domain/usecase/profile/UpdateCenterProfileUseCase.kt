@@ -1,7 +1,6 @@
 package com.idle.domain.usecase.profile
 
 import com.idle.domain.model.auth.UserRole
-import com.idle.domain.model.profile.ImageFileInfo
 import com.idle.domain.repositorry.profile.ProfileRepository
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -13,7 +12,7 @@ class UpdateCenterProfileUseCase @Inject constructor(
     suspend operator fun invoke(
         officeNumber: String,
         introduce: String?,
-        imageFileInfo: ImageFileInfo?,
+        imageFileUri: String?,
     ): Result<Unit> = runCatching {
         coroutineScope {
             val updateProfileDeferred = async {
@@ -23,11 +22,11 @@ class UpdateCenterProfileUseCase @Inject constructor(
                 ).getOrThrow()
             }
 
-            val updateProfileImageDeferred = imageFileInfo?.let {
+            val updateProfileImageDeferred = imageFileUri?.let {
                 async {
                     profileRepository.updateProfileImage(
                         userType = UserRole.CENTER.apiValue,
-                        imageFileInfo = it,
+                        imageFileUri = imageFileUri,
                     ).getOrThrow()
                 }
             }
