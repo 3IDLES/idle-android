@@ -1,9 +1,7 @@
 package com.idle.auth
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.base.CareBaseEvent
 import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.domain.usecase.auth.GetAccessTokenUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,15 +17,14 @@ class AuthViewModel @Inject constructor(
     fun handleTokenNavigation(
         defaultDestination: NavigateTo,
         authenticatedDestination: NavigateTo
-    ) =
-        viewModelScope.launch(Dispatchers.IO) {
-            val accessToken = getAccessTokenUseCase()
+    ) = viewModelScope.launch(Dispatchers.IO) {
+        val accessToken = getAccessTokenUseCase()
 
-            if (accessToken.isNotBlank()) {
-                baseEvent(authenticatedDestination)
-                return@launch
-            }
-
-            baseEvent(defaultDestination)
+        if (accessToken.isNotBlank()) {
+            baseEvent(authenticatedDestination)
+            return@launch
         }
+
+        baseEvent(defaultDestination)
+    }
 }

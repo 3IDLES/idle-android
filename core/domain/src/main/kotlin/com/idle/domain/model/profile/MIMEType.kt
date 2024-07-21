@@ -1,10 +1,5 @@
 package com.idle.domain.model.profile
 
-data class ImageFileInfo(
-    val imageUrl: String,
-    val imageFileExtension: MIMEType,
-)
-
 enum class MIMEType(val value: String) {
     JPG("image/jpeg"),
     PNG("image/png"),
