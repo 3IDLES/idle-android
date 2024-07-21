@@ -26,6 +26,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import com.idle.compose.base.BaseComposeFragment
+import com.idle.designsystem.compose.component.CareButtonStrokeSmall
 import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.component.CareTextFieldLong
@@ -595,6 +596,7 @@ internal fun WorkerJobDetailScreen(
             }
 
             Row(modifier = Modifier.padding(top = 16.dp, bottom = 30.dp)){
+                CareButtonStrokeSmall()
             }
         }
     }
