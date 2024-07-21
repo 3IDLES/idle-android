@@ -129,28 +129,28 @@ fun CareButtonLine(
     text: String,
     onClick: () -> Unit,
     enable: Boolean = true,
-    border: BorderStroke? = null,
+    borderColor: Color = CareTheme.colors.orange400,
     containerColor: Color = CareTheme.colors.white000,
-    textColor: Color = CareTheme.colors.orange400,
+    textColor: Color = CareTheme.colors.orange500,
     modifier: Modifier = Modifier,
 ) {
     Button(
         onClick = onClick,
         enabled = enable,
         shape = RoundedCornerShape(6.dp),
-        border = border,
+        border = BorderStroke(width = 1.dp, color = borderColor),
         colors = ButtonColors(
             containerColor = containerColor,
             contentColor = CareTheme.colors.white000,
             disabledContentColor = CareTheme.colors.gray300,
             disabledContainerColor = CareTheme.colors.gray200,
         ),
-        modifier = modifier,
+        modifier = modifier.height(56.dp),
     ) {
         Text(
             text = text,
             style = CareTheme.typography.body3,
-            color = CareTheme.colors.gray300,
+            color = textColor,
         )
     }
 }
