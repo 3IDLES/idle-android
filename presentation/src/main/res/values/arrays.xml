@@ -8,5 +8,6 @@
 
     <array name="workerNavDestinationIds">
         <item>@id/workerHomeFragment</item>
+        <item>@id/workerJobDetailFragment</item>
     </array>
 </resources>
