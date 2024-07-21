@@ -31,8 +31,8 @@ abstract class DataModule {
 
     @Binds
     @Singleton
-    abstract fun bindsCenterProfileRepository(
-        centerProfileRepositoryImpl: ProfileRepositoryImpl
+    abstract fun bindsProfileRepository(
+        profileRepositoryImpl: ProfileRepositoryImpl
     ): ProfileRepository
 
     @Binds

@@ -1,7 +1,6 @@
 package com.idle.domain.repositorry.profile
 
 import com.idle.domain.model.profile.CenterProfile
-import com.idle.domain.model.profile.ImageFileInfo
 
 interface ProfileRepository {
     suspend fun getMyCenterProfile(): Result<CenterProfile>
@@ -10,6 +9,6 @@ interface ProfileRepository {
 
     suspend fun updateProfileImage(
         userType: String,
-        imageFileInfo: ImageFileInfo,
+        imageFileUri: String,
     ): Result<Unit>
 }

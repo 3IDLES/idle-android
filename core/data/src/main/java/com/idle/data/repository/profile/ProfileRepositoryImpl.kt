@@ -1,16 +1,22 @@
 package com.idle.data.repository.profile
 
+import android.content.Context
+import android.net.Uri
+import androidx.core.net.toUri
 import com.idle.domain.model.profile.CenterProfile
-import com.idle.domain.model.profile.ImageFileInfo
+import com.idle.domain.model.profile.MIMEType
 import com.idle.domain.repositorry.profile.ProfileRepository
 import com.idle.network.model.profile.CallbackImageUploadRequest
 import com.idle.network.model.profile.CenterProfileRequest
 import com.idle.network.model.profile.ProfileImageUploadUrlResponse
 import com.idle.network.source.CenterProfileDataSource
+import dagger.hilt.android.qualifiers.ApplicationContext
+import java.io.InputStream
 import javax.inject.Inject
 
 class ProfileRepositoryImpl @Inject constructor(
     private val centerProfileDataSource: CenterProfileDataSource,
+    @ApplicationContext private val context: Context,
 ) : ProfileRepository {
     override suspend fun getMyCenterProfile(): Result<CenterProfile> =
         centerProfileDataSource.getMyCenterProfile().mapCatching { it.toVO() }
@@ -27,21 +33,38 @@ class ProfileRepositoryImpl @Inject constructor(
 
     override suspend fun updateProfileImage(
         userType: String,
-        imageFileInfo: ImageFileInfo,
+        imageFileUri: String,
     ): Result<Unit> = runCatching {
-        val profileImageUploadUrlResponse =
-            getProfileImageUploadUrl(userType, imageFileInfo.imageFileExtension.name).getOrThrow()
+        getImageInputStream(context, imageFileUri.toUri())?.use { inputStream ->
+            val imageFormat = getImageFormat(context, imageFileUri.toUri())
 
-        uploadProfileImage(
-            uploadUrl = profileImageUploadUrlResponse.uploadUrl,
-            imageFileInfo = imageFileInfo
-        ).getOrThrow()
+            val profileImageUploadUrlResponse = getProfileImageUploadUrl(
+                userType = userType,
+                imageFileExtension = imageFormat.name,
+            ).getOrThrow()
 
-        callbackImageUpload(
-            userType = userType,
-            imageId = profileImageUploadUrlResponse.imageId,
-            imageFileExtension = profileImageUploadUrlResponse.imageFileExtension
-        )
+            uploadProfileImage(
+                uploadUrl = profileImageUploadUrlResponse.uploadUrl,
+                imageFileExtension = profileImageUploadUrlResponse.imageFileExtension,
+                imageInputStream = inputStream,
+            ).getOrThrow()
+
+            callbackImageUpload(
+                userType = userType,
+                imageId = profileImageUploadUrlResponse.imageId,
+                imageFileExtension = profileImageUploadUrlResponse.imageFileExtension
+            )
+        }
+    }
+
+    private fun getImageFormat(context: Context, uri: Uri): MIMEType {
+        val contentResolver = context.contentResolver
+        val mimeType = contentResolver.getType(uri)
+        return MIMEType.create(mimeType)
+    }
+
+    private fun getImageInputStream(context: Context, uri: Uri): InputStream? {
+        return context.contentResolver.openInputStream(uri)
     }
 
     private suspend fun getProfileImageUploadUrl(
@@ -52,8 +75,13 @@ class ProfileRepositoryImpl @Inject constructor(
 
     private suspend fun uploadProfileImage(
         uploadUrl: String,
-        imageFileInfo: ImageFileInfo
-    ): Result<Unit> = centerProfileDataSource.uploadProfileImage(uploadUrl, imageFileInfo)
+        imageFileExtension: String,
+        imageInputStream: InputStream,
+    ): Result<Unit> = centerProfileDataSource.uploadProfileImage(
+        uploadUrl = uploadUrl,
+        imageFileExtension = imageFileExtension,
+        imageInputStream = imageInputStream,
+    )
 
     private suspend fun callbackImageUpload(
         userType: String,

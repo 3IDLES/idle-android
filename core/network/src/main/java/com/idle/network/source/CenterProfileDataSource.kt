@@ -1,6 +1,5 @@
 package com.idle.network.source
 
-import com.idle.domain.model.profile.ImageFileInfo
 import com.idle.network.api.CareNetworkApi
 import com.idle.network.model.profile.CallbackImageUploadRequest
 import com.idle.network.model.profile.CenterProfileRequest
@@ -9,6 +8,7 @@ import com.idle.network.model.profile.ProfileImageUploadUrlResponse
 import com.idle.network.util.onResponse
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.InputStream
 import javax.inject.Inject
 
 class CenterProfileDataSource @Inject constructor(
@@ -30,12 +30,11 @@ class CenterProfileDataSource @Inject constructor(
 
     suspend fun uploadProfileImage(
         uploadUrl: String,
-        imageFileInfo: ImageFileInfo,
+        imageFileExtension: String,
+        imageInputStream: InputStream,
     ): Result<Unit> {
-        val requestImage = imageFileInfo.run {
-            imageInputStream.readBytes()
-                .toRequestBody(imageFileExtension.value.toMediaTypeOrNull())
-        }
+        val requestImage = imageInputStream.readBytes()
+            .toRequestBody(imageFileExtension.toMediaTypeOrNull())
 
         return careNetworkApi.uploadProfileImage(
             uploadUrl = uploadUrl,
