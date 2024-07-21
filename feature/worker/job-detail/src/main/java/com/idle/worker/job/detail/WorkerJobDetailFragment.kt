@@ -26,7 +26,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import com.idle.compose.base.BaseComposeFragment
-import com.idle.designsystem.compose.component.CareButtonStrokeSmall
+import com.idle.designsystem.compose.component.CareButtonLine
 import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.component.CareTextFieldLong
@@ -595,8 +595,27 @@ internal fun WorkerJobDetailScreen(
                 }
             }
 
-            Row(modifier = Modifier.padding(top = 16.dp, bottom = 30.dp)){
-                CareButtonStrokeSmall()
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.fillMaxWidth()
+                    .padding(top = 16.dp, bottom = 30.dp, start = 20.dp, end = 20.dp),
+            ) {
+                CareButtonLine(
+                    text = "문의하기",
+                    onClick = {},
+                    borderColor = CareTheme.colors.orange400,
+                    textColor = CareTheme.colors.orange500,
+                    modifier = Modifier.weight(1f),
+                )
+
+                CareButtonLine(
+                    text = "지원하기",
+                    onClick = {},
+                    containerColor = CareTheme.colors.orange500,
+                    borderColor = CareTheme.colors.orange500,
+                    textColor = CareTheme.colors.white000,
+                    modifier = Modifier.weight(1f),
+                )
             }
         }
     }
