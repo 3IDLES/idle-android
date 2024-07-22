@@ -29,6 +29,7 @@ import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.component.CareProgressBar
 import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
+import com.idle.domain.model.auth.Gender
 import com.idle.signin.center.CenterSignUpProcess
 import com.idle.signup.worker.process.AddressScreen
 import com.idle.signup.worker.process.GenderScreen

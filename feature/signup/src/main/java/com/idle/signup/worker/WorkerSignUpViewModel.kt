@@ -6,6 +6,7 @@ import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.CountDownTimer
 import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
+import com.idle.domain.model.auth.Gender
 import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
 import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
 import com.idle.signin.worker.WorkerSignUpProcess.NAME
@@ -128,8 +129,4 @@ class WorkerSignUpViewModel @Inject constructor(
 
 enum class WorkerSignUpProcess(val step: Int) {
     NAME(1), GENDER(2), PHONE_NUMBER(3), ADDRESS(4)
-}
-
-enum class Gender(val displayName: String) {
-    MALE("남성"), FEMALE("여성"), NONE("")
 }
