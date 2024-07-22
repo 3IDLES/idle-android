@@ -149,7 +149,7 @@ fun CareButtonLine(
     ) {
         Text(
             text = text,
-            style = CareTheme.typography.body3,
+            style = CareTheme.typography.heading4,
             color = textColor,
         )
     }
