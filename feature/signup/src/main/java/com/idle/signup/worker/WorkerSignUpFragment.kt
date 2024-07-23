@@ -75,6 +75,7 @@ internal class WorkerSignUpFragment : BaseComposeFragment() {
                 setSignUpProcess = ::setWorkerSignUpProcess,
                 sendPhoneNumber = ::sendPhoneNumber,
                 confirmAuthCode = ::confirmAuthCode,
+                signUpWorker = ::signUpWorker,
             )
         }
     }
@@ -102,6 +103,7 @@ internal fun WorkerSignUpScreen(
     setSignUpProcess: (WorkerSignUpProcess) -> Unit,
     sendPhoneNumber: () -> Unit,
     confirmAuthCode: () -> Unit,
+    signUpWorker: () -> Unit,
 ) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val focusManager = LocalFocusManager.current
@@ -182,6 +184,7 @@ internal fun WorkerSignUpScreen(
                         onAddressChanged = onAddressChanged,
                         onAddressDetailChanged = onAddressDetailChanged,
                         setSignUpProcess = setSignUpProcess,
+                        signUpWorker = signUpWorker,
                     )
                 }
             }

@@ -7,6 +7,7 @@ import com.idle.network.model.auth.ConfirmAuthCodeRequest
 import com.idle.network.model.auth.SendPhoneRequest
 import com.idle.network.model.auth.SignInCenterRequest
 import com.idle.network.model.auth.SignUpCenterRequest
+import com.idle.network.model.auth.SignUpWorkerRequest
 import com.idle.network.source.AuthDataSource
 import javax.inject.Inject
 
@@ -48,7 +49,7 @@ class AuthRepositoryImpl @Inject constructor(
         authDataSource.signInCenter(
             SignInCenterRequest(
                 identifier = identifier,
-                password = password,
+                password = password
             )
         ).fold(
             onSuccess = { tokenResponse ->
@@ -68,4 +69,26 @@ class AuthRepositoryImpl @Inject constructor(
     ): Result<BusinessRegistrationInfo> =
         authDataSource.validateBusinessRegistrationNumber(businessRegistrationNumber)
             .mapCatching { it.toVO() }
+
+    override suspend fun signUpWorker(
+        name: String,
+        birthYear: Int,
+        genderType: String,
+        phoneNumber: String,
+        roadNameAddress: String,
+        lotNumberAddress: String,
+        longitude: String,
+        latitude: String,
+    ): Result<Unit> = authDataSource.signUpWorker(
+        SignUpWorkerRequest(
+            name = name,
+            birthYear = birthYear,
+            genderType = genderType,
+            phoneNumber = phoneNumber,
+            roadNameAddress = roadNameAddress,
+            lotNumberAddress = lotNumberAddress,
+            longitude = longitude,
+            latitude = latitude
+        )
+    )
 }

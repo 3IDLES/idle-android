@@ -24,4 +24,15 @@ interface AuthRepository {
 
     suspend fun validateBusinessRegistrationNumber(businessRegistrationNumber: String):
             Result<BusinessRegistrationInfo>
+
+    suspend fun signUpWorker(
+        name: String,
+        birthYear: Int,
+        genderType: String,
+        phoneNumber: String,
+        roadNameAddress: String,
+        lotNumberAddress: String,
+        longitude: String,
+        latitude: String,
+    ): Result<Unit>
 }

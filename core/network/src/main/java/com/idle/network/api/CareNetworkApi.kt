@@ -5,6 +5,7 @@ import com.idle.network.model.auth.ConfirmAuthCodeRequest
 import com.idle.network.model.auth.SendPhoneRequest
 import com.idle.network.model.auth.SignInCenterRequest
 import com.idle.network.model.auth.SignUpCenterRequest
+import com.idle.network.model.auth.SignUpWorkerRequest
 import com.idle.network.model.profile.CallbackImageUploadRequest
 import com.idle.network.model.profile.CenterProfileRequest
 import com.idle.network.model.profile.CenterProfileResponse
@@ -67,4 +68,7 @@ interface CareNetworkApi {
         @Path("user-type") userType: String,
         @Body callbackImageUploadRequest: CallbackImageUploadRequest,
     ): Response<Unit>
+
+    @POST("/api/v1/auth/carer/join")
+    suspend fun signUpWorker(@Body signUpWorkerRequset: SignUpWorkerRequest): Response<Unit>
 }
