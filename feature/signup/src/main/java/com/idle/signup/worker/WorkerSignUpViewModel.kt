@@ -3,6 +3,7 @@ package com.idle.signin.worker
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.DeepLinkDestination.WorkerAuth
+import com.idle.binding.DeepLinkDestination.WorkerHome
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.CountDownTimer
@@ -11,6 +12,7 @@ import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
 import com.idle.domain.model.auth.Gender
 import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
 import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
+import com.idle.domain.usecase.auth.SignInWorkerUseCase
 import com.idle.domain.usecase.auth.SignUpWorkerUseCase
 import com.idle.signin.worker.WorkerSignUpProcess.NAME
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,6 +25,7 @@ import javax.inject.Inject
 @HiltViewModel
 class WorkerSignUpViewModel @Inject constructor(
     private val signUpWorkerUseCase: SignUpWorkerUseCase,
+    private val signInWorkerUseCase: SignInWorkerUseCase,
     private val sendPhoneNumberUseCase: SendPhoneNumberUseCase,
     private val confirmAuthCodeUseCase: ConfirmAuthCodeUseCase,
     private val countDownTimer: CountDownTimer,
@@ -122,12 +125,19 @@ class WorkerSignUpViewModel @Inject constructor(
     }
 
     internal fun confirmAuthCode() = viewModelScope.launch {
-        confirmAuthCodeUseCase(_workerPhoneNumber.value, _workerAuthCode.value)
-            .onSuccess {
-                cancelTimer()
-                _isConfirmAuthCode.value = true
+        signInWorkerUseCase(
+            phoneNumber = _workerPhoneNumber.value,
+            authCode = _workerAuthCode.value,
+        )
+            .onSuccess { baseEvent(CareBaseEvent.NavigateTo(WorkerHome, true)) }
+            .onFailure {
+                confirmAuthCodeUseCase(_workerPhoneNumber.value, _workerAuthCode.value)
+                    .onSuccess {
+                        cancelTimer()
+                        _isConfirmAuthCode.value = true
+                    }
+                    .onFailure { Log.d("test", "실패! ${it}") }
             }
-            .onFailure { Log.d("test", "실패! ${it}") }
     }
 
     internal fun signUpWorker() = viewModelScope.launch {
@@ -143,6 +153,9 @@ class WorkerSignUpViewModel @Inject constructor(
         )
             .onSuccess { baseEvent(CareBaseEvent.NavigateTo(WorkerAuth, true)) }
             .onFailure { Log.d("test", "실패! ${it}") }
+    }
+
+    internal fun signInWorker() = viewModelScope.launch {
     }
 }
 

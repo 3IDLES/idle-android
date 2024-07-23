@@ -4,6 +4,7 @@ import com.idle.network.model.auth.BusinessRegistrationResponse
 import com.idle.network.model.auth.ConfirmAuthCodeRequest
 import com.idle.network.model.auth.SendPhoneRequest
 import com.idle.network.model.auth.SignInCenterRequest
+import com.idle.network.model.auth.SignInWorkerRequest
 import com.idle.network.model.auth.SignUpCenterRequest
 import com.idle.network.model.auth.SignUpWorkerRequest
 import com.idle.network.model.profile.CallbackImageUploadRequest
@@ -34,6 +35,12 @@ interface CareNetworkApi {
 
     @POST("/api/v1/auth/center/login")
     suspend fun signInCenter(@Body signInCenterRequest: SignInCenterRequest): Response<TokenResponse>
+
+    @POST("/api/v1/auth/carer/join")
+    suspend fun signUpWorker(@Body signUpWorkerRequest: SignUpWorkerRequest): Response<Unit>
+
+    @POST("/api/v1/auth/carer/login")
+    suspend fun signInWorker(@Body signInWorkerRequest: SignInWorkerRequest): Response<TokenResponse>
 
     @GET("/api/v1/auth/center/validation/{identifier}")
     suspend fun validateIdentifier(@Path("identifier") identifier: String): Response<Unit>
@@ -68,7 +75,4 @@ interface CareNetworkApi {
         @Path("user-type") userType: String,
         @Body callbackImageUploadRequest: CallbackImageUploadRequest,
     ): Response<Unit>
-
-    @POST("/api/v1/auth/carer/join")
-    suspend fun signUpWorker(@Body signUpWorkerRequset: SignUpWorkerRequest): Response<Unit>
 }

@@ -5,6 +5,7 @@ import com.idle.network.model.auth.BusinessRegistrationResponse
 import com.idle.network.model.auth.ConfirmAuthCodeRequest
 import com.idle.network.model.auth.SendPhoneRequest
 import com.idle.network.model.auth.SignInCenterRequest
+import com.idle.network.model.auth.SignInWorkerRequest
 import com.idle.network.model.auth.SignUpCenterRequest
 import com.idle.network.model.auth.SignUpWorkerRequest
 import com.idle.network.model.token.TokenResponse
@@ -26,6 +27,12 @@ class AuthDataSource @Inject constructor(
     suspend fun signInCenter(signInCenterRequest: SignInCenterRequest): Result<TokenResponse> =
         careNetworkApi.signInCenter(signInCenterRequest).onResponse()
 
+    suspend fun signUpWorker(signUpWorkerRequest: SignUpWorkerRequest): Result<Unit> =
+        careNetworkApi.signUpWorker(signUpWorkerRequest).onResponse()
+
+    suspend fun signInWorker(signInWorkerRequest: SignInWorkerRequest): Result<TokenResponse> =
+        careNetworkApi.signInWorker(signInWorkerRequest).onResponse()
+
     suspend fun validateIdentifier(identifier: String): Result<Unit> =
         careNetworkApi.validateIdentifier(identifier).onResponse()
 
@@ -33,7 +40,4 @@ class AuthDataSource @Inject constructor(
         businessRegistrationNumber: String
     ): Result<BusinessRegistrationResponse> =
         careNetworkApi.validateBusinessRegistrationNumber(businessRegistrationNumber).onResponse()
-
-    suspend fun signUpWorker(signUpWorkerRequest: SignUpWorkerRequest): Result<Unit> =
-        careNetworkApi.signUpWorker(signUpWorkerRequest).onResponse()
 }

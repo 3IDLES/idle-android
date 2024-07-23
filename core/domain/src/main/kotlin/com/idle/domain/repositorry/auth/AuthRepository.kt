@@ -35,4 +35,6 @@ interface AuthRepository {
         longitude: String,
         latitude: String,
     ): Result<Unit>
+
+    suspend fun signInWorker(phoneNumber: String, authCode: String): Result<Unit>
 }
