@@ -2,7 +2,9 @@ package com.idle.signin.worker
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
+import com.idle.binding.DeepLinkDestination.WorkerAuth
 import com.idle.binding.base.BaseViewModel
+import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.CountDownTimer
 import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
@@ -139,7 +141,7 @@ class WorkerSignUpViewModel @Inject constructor(
             longitude = "127.0276",
             latitude = "37.4979",
         )
-            .onSuccess { Log.d("test", "회원가입 성공!") }
+            .onSuccess { baseEvent(CareBaseEvent.NavigateTo(WorkerAuth, true)) }
             .onFailure { Log.d("test", "실패! ${it}") }
     }
 }

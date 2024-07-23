@@ -34,7 +34,13 @@ abstract class BaseComposeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewLifecycleOwner.repeatOnStarted { fragmentViewModel.baseEventFlow.collect { handleEvent(it) } }
+        viewLifecycleOwner.repeatOnStarted {
+            fragmentViewModel.baseEventFlow.collect {
+                handleEvent(
+                    it
+                )
+            }
+        }
 
         composeView.setContent {
             ComposeLayout()
@@ -43,6 +49,10 @@ abstract class BaseComposeFragment : Fragment() {
 
     private fun handleEvent(event: CareBaseEvent) = when (event) {
         is CareBaseEvent.NavigateTo -> findNavController()
-            .deepLinkNavigateTo(requireContext(), event.destination)
+            .deepLinkNavigateTo(
+                context = requireContext(),
+                deepLinkDestination = event.destination,
+                popUpTo = event.popUpTo,
+            )
     }
 }
