@@ -6,6 +6,7 @@ import com.idle.domain.repositorry.auth.AuthRepository
 import com.idle.network.model.auth.ConfirmAuthCodeRequest
 import com.idle.network.model.auth.SendPhoneRequest
 import com.idle.network.model.auth.SignInCenterRequest
+import com.idle.network.model.auth.SignInWorkerRequest
 import com.idle.network.model.auth.SignUpCenterRequest
 import com.idle.network.model.auth.SignUpWorkerRequest
 import com.idle.network.source.AuthDataSource
@@ -90,5 +91,22 @@ class AuthRepositoryImpl @Inject constructor(
             longitude = longitude,
             latitude = latitude
         )
+    )
+
+    override suspend fun signInWorker(
+        phoneNumber: String,
+        authCode: String,
+    ): Result<Unit> = authDataSource.signInWorker(
+        SignInWorkerRequest(
+            phoneNumber = phoneNumber,
+            authCode = authCode,
+        )
+    ).fold(
+        onSuccess = { tokenResponse ->
+            tokenDataSource.setAccessToken(tokenResponse.accessToken)
+            tokenDataSource.setRefreshToken(tokenResponse.refreshToken)
+            return Result.success(Unit)
+        },
+        onFailure = { Result.failure(it) }
     )
 }
