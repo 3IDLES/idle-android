@@ -23,6 +23,7 @@ internal fun AddressScreen(
     onAddressChanged: (String) -> Unit,
     onAddressDetailChanged: (String) -> Unit,
     setSignUpProcess: (WorkerSignUpProcess) -> Unit,
+    signUpWorker: () -> Unit,
 ) {
     BackHandler { setSignUpProcess(WorkerSignUpProcess.PHONE_NUMBER) }
 
@@ -78,9 +79,9 @@ internal fun AddressScreen(
         Spacer(modifier = Modifier.weight(1f))
 
         CareButtonLarge(
-            text = "다음",
+            text = "완료",
             enable = addressDetail.isNotBlank(),
-            onClick = { },
+            onClick = signUpWorker,
             modifier = Modifier.fillMaxWidth(),
         )
     }

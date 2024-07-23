@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareChip
 import com.idle.designsystem.compose.foundation.CareTheme
-import com.idle.signin.worker.Gender
+import com.idle.domain.model.auth.Gender
 import com.idle.signin.worker.WorkerSignUpProcess
 
 @Composable

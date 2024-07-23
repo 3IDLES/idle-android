@@ -12,7 +12,7 @@ class SignUpCenterUseCase @Inject constructor(
         phoneNumber: String,
         managerName: String,
         businessRegistrationNumber: String,
-    ): Result<Unit> = runCatching {
+    ): Result<Unit> {
         val formattedPhoneNumber = formatPhoneNumber(phoneNumber)
         val formattedNumber = when (businessRegistrationNumber.length) {
             10 -> formatTenDigitNumber(businessRegistrationNumber)

@@ -9,6 +9,7 @@ import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
 import com.idle.domain.model.auth.Gender
 import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
 import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
+import com.idle.domain.usecase.auth.SignUpWorkerUseCase
 import com.idle.signin.worker.WorkerSignUpProcess.NAME
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -19,6 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WorkerSignUpViewModel @Inject constructor(
+    private val signUpWorkerUseCase: SignUpWorkerUseCase,
     private val sendPhoneNumberUseCase: SendPhoneNumberUseCase,
     private val confirmAuthCodeUseCase: ConfirmAuthCodeUseCase,
     private val countDownTimer: CountDownTimer,
@@ -123,6 +125,21 @@ class WorkerSignUpViewModel @Inject constructor(
                 cancelTimer()
                 _isConfirmAuthCode.value = true
             }
+            .onFailure { Log.d("test", "실패! ${it}") }
+    }
+
+    internal fun signUpWorker() = viewModelScope.launch {
+        signUpWorkerUseCase(
+            name = _workerName.value,
+            birthYear = 2000,
+            genderType = _gender.value.name,
+            phoneNumber = _workerPhoneNumber.value,
+            roadNameAddress = "서울특별시 강남구 테헤란로 123",
+            lotNumberAddress = "서울특별시 강남구 역삼동 456-78",
+            longitude = "127.0276",
+            latitude = "37.4979",
+        )
+            .onSuccess { Log.d("test", "회원가입 성공!") }
             .onFailure { Log.d("test", "실패! ${it}") }
     }
 }
