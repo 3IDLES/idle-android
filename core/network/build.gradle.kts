@@ -19,7 +19,7 @@ android {
         buildConfigField(
             "String",
             "CARE_BASE_URL",
-            "\"${properties["care_base_url"]}\"",
+            "\"${properties["CARE_BASE_URL"]}\"",
         )
     }
 }

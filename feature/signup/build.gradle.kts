@@ -5,7 +5,3 @@ plugins {
 android {
     namespace = "com.idle.signup"
 }
-
-dependencies {
-    implementation(libs.naver.map)
-}
