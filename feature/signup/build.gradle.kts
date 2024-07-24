@@ -6,4 +6,6 @@ android {
     namespace = "com.idle.signup"
 }
 
-dependencies {}
+dependencies {
+    implementation(libs.naver.map)
+}
