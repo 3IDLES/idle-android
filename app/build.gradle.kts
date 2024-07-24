@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("care.android.application")
     id("care.android.binding")
@@ -9,6 +11,10 @@ android {
     defaultConfig {
         versionCode = 1
         versionName = "1.0"
+
+        val properties = Properties()
+        properties.load(project.rootProject.file("local.properties").bufferedReader())
+        manifestPlaceholders["NAVER_CLIENT_ID"] = properties["NAVER_CLIENT_ID"] as String
     }
 
     packaging {
