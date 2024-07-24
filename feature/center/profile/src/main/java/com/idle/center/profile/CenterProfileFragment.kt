@@ -118,7 +118,7 @@ internal fun CenterProfileScreen(
                     }
                 },
                 modifier = Modifier.fillMaxWidth()
-                    .padding(start = 12.dp, top = 20.dp, bottom = 25.dp, end = 28.dp),
+                    .padding(start = 12.dp, top = 48.dp, bottom = 25.dp, end = 28.dp),
             )
         },
         containerColor = CareTheme.colors.white000,

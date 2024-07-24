@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_worker_profile"
+    app:startDestination="@id/workerProfileFragment">
+
+    <fragment
+        android:id="@+id/workerProfileFragment"
+        android:name="com.idle.worker.profile.WorkerProfileFragment"
+        android:label="WorkerProfileFragment" >
+        <deepLink app:uri="@string/worker_profile_deeplink_url"/>
+    </fragment>
+</navigation>
