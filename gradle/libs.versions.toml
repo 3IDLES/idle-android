@@ -82,6 +82,9 @@ firebaseBom = "33.1.2"
 # https://coil-kt.github.io/coil/#jetpack-compose
 coil = "2.7.0"
 
+# https://navermaps.github.io/android-map-sdk/guide-ko/1.html
+naverMap = "3.18.0"
+
 [libraries]
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -138,6 +141,8 @@ firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.r
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
 
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+
+naver-map = { module = "com.naver.maps:map-sdk", version.ref = "naverMap" }
 
 [bundles]
 
