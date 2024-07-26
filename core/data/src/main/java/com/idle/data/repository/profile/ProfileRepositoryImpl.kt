@@ -5,27 +5,31 @@ import android.net.Uri
 import androidx.core.net.toUri
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.model.profile.MIMEType
+import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.repositorry.profile.ProfileRepository
 import com.idle.network.model.profile.CallbackImageUploadRequest
-import com.idle.network.model.profile.CenterProfileRequest
-import com.idle.network.model.profile.ProfileImageUploadUrlResponse
-import com.idle.network.source.CenterProfileDataSource
+import com.idle.network.model.profile.UpdateCenterProfileRequest
+import com.idle.network.model.profile.UploadProfileImageUrlResponse
+import com.idle.network.source.profile.ProfileDataSource
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.InputStream
 import javax.inject.Inject
 
 class ProfileRepositoryImpl @Inject constructor(
-    private val centerProfileDataSource: CenterProfileDataSource,
+    private val profileDataSource: ProfileDataSource,
     @ApplicationContext private val context: Context,
 ) : ProfileRepository {
     override suspend fun getMyCenterProfile(): Result<CenterProfile> =
-        centerProfileDataSource.getMyCenterProfile().mapCatching { it.toVO() }
+        profileDataSource.getMyCenterProfile().mapCatching { it.toVO() }
+
+    override suspend fun getMyWorkerProfile(): Result<WorkerProfile> =
+        profileDataSource.getWorkerProfile().mapCatching { it.toVo() }
 
     override suspend fun updateCenterProfile(
         officeNumber: String,
         introduce: String?,
-    ): Result<Unit> = centerProfileDataSource.updateMyCenterProfile(
-        CenterProfileRequest(
+    ): Result<Unit> = profileDataSource.updateMyCenterProfile(
+        UpdateCenterProfileRequest(
             officeNumber = officeNumber,
             introduce = introduce,
         )
@@ -70,14 +74,14 @@ class ProfileRepositoryImpl @Inject constructor(
     private suspend fun getProfileImageUploadUrl(
         userType: String,
         imageFileExtension: String
-    ): Result<ProfileImageUploadUrlResponse> =
-        centerProfileDataSource.getProfileImageUploadUrl(userType, imageFileExtension)
+    ): Result<UploadProfileImageUrlResponse> =
+        profileDataSource.getProfileImageUploadUrl(userType, imageFileExtension)
 
     private suspend fun uploadProfileImage(
         uploadUrl: String,
         imageFileExtension: String,
         imageInputStream: InputStream,
-    ): Result<Unit> = centerProfileDataSource.uploadProfileImage(
+    ): Result<Unit> = profileDataSource.uploadProfileImage(
         uploadUrl = uploadUrl,
         imageFileExtension = imageFileExtension,
         imageInputStream = imageInputStream,
@@ -87,7 +91,7 @@ class ProfileRepositoryImpl @Inject constructor(
         userType: String,
         imageId: String,
         imageFileExtension: String
-    ): Result<Unit> = centerProfileDataSource.callbackImageUpload(
+    ): Result<Unit> = profileDataSource.callbackImageUpload(
         userType = userType,
         callbackImageUploadRequest = CallbackImageUploadRequest(
             imageId = imageId,

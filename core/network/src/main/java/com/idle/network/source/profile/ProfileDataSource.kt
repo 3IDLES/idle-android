@@ -1,29 +1,30 @@
-package com.idle.network.source
+package com.idle.network.source.profile
 
 import com.idle.network.api.CareNetworkApi
 import com.idle.network.model.profile.CallbackImageUploadRequest
-import com.idle.network.model.profile.CenterProfileRequest
-import com.idle.network.model.profile.CenterProfileResponse
-import com.idle.network.model.profile.ProfileImageUploadUrlResponse
+import com.idle.network.model.profile.UpdateCenterProfileRequest
+import com.idle.network.model.profile.GetCenterProfileResponse
+import com.idle.network.model.profile.GetWorkerProfileResponse
+import com.idle.network.model.profile.UploadProfileImageUrlResponse
 import com.idle.network.util.onResponse
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.InputStream
 import javax.inject.Inject
 
-class CenterProfileDataSource @Inject constructor(
+class ProfileDataSource @Inject constructor(
     private val careNetworkApi: CareNetworkApi,
 ) {
-    suspend fun getMyCenterProfile(): Result<CenterProfileResponse> =
+    suspend fun getMyCenterProfile(): Result<GetCenterProfileResponse> =
         careNetworkApi.getMyCenterProfile().onResponse()
 
-    suspend fun updateMyCenterProfile(centerProfileRequest: CenterProfileRequest): Result<Unit> =
-        careNetworkApi.updateMyCenterProfile(centerProfileRequest).onResponse()
+    suspend fun updateMyCenterProfile(updateCenterProfileRequest: UpdateCenterProfileRequest): Result<Unit> =
+        careNetworkApi.updateMyCenterProfile(updateCenterProfileRequest).onResponse()
 
     suspend fun getProfileImageUploadUrl(
         userType: String,
         imageFileExtension: String
-    ): Result<ProfileImageUploadUrlResponse> = careNetworkApi.getImageUploadUrl(
+    ): Result<UploadProfileImageUrlResponse> = careNetworkApi.getImageUploadUrl(
         userType = userType,
         imageFileExtension = imageFileExtension,
     ).onResponse()
@@ -49,4 +50,7 @@ class CenterProfileDataSource @Inject constructor(
         userType = userType,
         callbackImageUploadRequest = callbackImageUploadRequest,
     ).onResponse()
+
+    suspend fun getWorkerProfile(): Result<GetWorkerProfileResponse> =
+        careNetworkApi.getWorkerProfile().onResponse()
 }

@@ -1,4 +1,4 @@
-package com.idle.network.source
+package com.idle.network.source.auth
 
 import com.idle.network.api.CareNetworkApi
 import com.idle.network.model.auth.BusinessRegistrationResponse

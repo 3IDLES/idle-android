@@ -9,7 +9,7 @@ import com.idle.network.model.auth.SignInCenterRequest
 import com.idle.network.model.auth.SignInWorkerRequest
 import com.idle.network.model.auth.SignUpCenterRequest
 import com.idle.network.model.auth.SignUpWorkerRequest
-import com.idle.network.source.AuthDataSource
+import com.idle.network.source.auth.AuthDataSource
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
@@ -22,13 +22,12 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun confirmAuthCode(
         phoneNumber: String,
         authCode: String,
-    ): Result<Unit> =
-        authDataSource.confirmAuthCode(
-            ConfirmAuthCodeRequest(
-                phoneNumber = phoneNumber,
-                authCode = authCode,
-            )
+    ): Result<Unit> = authDataSource.confirmAuthCode(
+        ConfirmAuthCodeRequest(
+            phoneNumber = phoneNumber,
+            authCode = authCode,
         )
+    )
 
     override suspend fun signUpCenter(
         identifier: String,

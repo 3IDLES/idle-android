@@ -2,11 +2,12 @@ package com.idle.worker.profile
 
 import android.net.Uri
 import android.util.Log
+import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.auth.Gender
-import com.idle.domain.model.profile.CenterProfile
-import com.idle.domain.usecase.profile.GetMyCenterProfileUseCase
+import com.idle.domain.model.profile.WorkerProfile
+import com.idle.domain.usecase.profile.GetMyWorkerProfileUseCase
 import com.idle.domain.usecase.profile.UpdateCenterProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,10 +17,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WorkerProfileViewModel @Inject constructor(
-    private val getMyCenterProfileUseCase: GetMyCenterProfileUseCase,
+    private val getMyWorkerProfileUseCase: GetMyWorkerProfileUseCase,
     private val updateCenterProfileUseCase: UpdateCenterProfileUseCase,
 ) : BaseViewModel() {
-    private val _workerProfile = MutableStateFlow(CenterProfile())
+    private val _workerProfile = MutableStateFlow(WorkerProfile())
     val workerProfile = _workerProfile.asStateFlow()
 
     private val _specialty = MutableStateFlow("")
@@ -42,10 +43,12 @@ class WorkerProfileViewModel @Inject constructor(
     }
 
     private fun getMyWorkerProfile() = viewModelScope.launch {
-        getMyCenterProfileUseCase().onSuccess {
+        getMyWorkerProfileUseCase().onSuccess {
             _workerProfile.value = it
-            _workerIntroduce.value = it.introduce
-            _specialty.value = it.officeNumber
+            _workerIntroduce.value = it.introduce ?: ""
+            _specialty.value = it.speciality ?: ""
+            _gender.value = it.gender
+            _profileImageUri.value = it.profileImageUrl?.toUri()
         }.onFailure {
             Log.d("test", "조회 실패!")
         }

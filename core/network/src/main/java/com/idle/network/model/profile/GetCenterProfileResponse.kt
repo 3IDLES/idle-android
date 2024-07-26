@@ -4,7 +4,7 @@ import com.idle.domain.model.profile.CenterProfile
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CenterProfileResponse(
+data class GetCenterProfileResponse(
     val centerName: String = "",
     val officeNumber: String = "",
     val roadNameAddress: String = "",

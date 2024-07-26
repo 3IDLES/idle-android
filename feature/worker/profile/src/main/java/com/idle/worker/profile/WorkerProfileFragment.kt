@@ -46,7 +46,7 @@ import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.CareTextFieldLong
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.Gender
-import com.idle.domain.model.profile.CenterProfile
+import com.idle.domain.model.profile.WorkerProfile
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -87,7 +87,7 @@ internal class WorkerProfileFragment : BaseComposeFragment() {
 
 @Composable
 internal fun WorkerProfileScreen(
-    workerProfile: CenterProfile,
+    workerProfile: WorkerProfile,
     workerIntroduce: String,
     specialty: String,
     profileImageUri: Uri?,
@@ -301,6 +301,7 @@ internal fun WorkerProfileScreen(
                         )
                     }
                 } else {
+
                     Column(
                         horizontalAlignment = Alignment.Start,
                         verticalArrangement = Arrangement.spacedBy(6.dp),

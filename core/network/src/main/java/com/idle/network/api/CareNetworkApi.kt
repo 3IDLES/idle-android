@@ -8,9 +8,10 @@ import com.idle.network.model.auth.SignInWorkerRequest
 import com.idle.network.model.auth.SignUpCenterRequest
 import com.idle.network.model.auth.SignUpWorkerRequest
 import com.idle.network.model.profile.CallbackImageUploadRequest
-import com.idle.network.model.profile.CenterProfileRequest
-import com.idle.network.model.profile.CenterProfileResponse
-import com.idle.network.model.profile.ProfileImageUploadUrlResponse
+import com.idle.network.model.profile.UpdateCenterProfileRequest
+import com.idle.network.model.profile.GetCenterProfileResponse
+import com.idle.network.model.profile.UploadProfileImageUrlResponse
+import com.idle.network.model.profile.GetWorkerProfileResponse
 import com.idle.network.model.token.TokenResponse
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -51,18 +52,18 @@ interface CareNetworkApi {
     ): Response<BusinessRegistrationResponse>
 
     @GET("/api/v1/users/center/my/profile")
-    suspend fun getMyCenterProfile(): Response<CenterProfileResponse>
+    suspend fun getMyCenterProfile(): Response<GetCenterProfileResponse>
 
     @PATCH("/api/v1/users/center/my/profile")
     suspend fun updateMyCenterProfile(
-        @Body centerProfileRequest: CenterProfileRequest
+        @Body updateCenterProfileRequest: UpdateCenterProfileRequest
     ): Response<Unit>
 
     @GET("/api/v1/users/{user-type}/my/profile-image/upload-url")
     suspend fun getImageUploadUrl(
         @Path("user-type") userType: String,
         @Query("imageFileExtension") imageFileExtension: String,
-    ): Response<ProfileImageUploadUrlResponse>
+    ): Response<UploadProfileImageUrlResponse>
 
     @PUT
     suspend fun uploadProfileImage(
@@ -75,4 +76,7 @@ interface CareNetworkApi {
         @Path("user-type") userType: String,
         @Body callbackImageUploadRequest: CallbackImageUploadRequest,
     ): Response<Unit>
+
+    @GET("/api/v1/users/carer/my/profile")
+    suspend fun getWorkerProfile(): Response<GetWorkerProfileResponse>
 }
