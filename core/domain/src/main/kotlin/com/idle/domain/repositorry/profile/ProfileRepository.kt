@@ -1,6 +1,7 @@
 package com.idle.domain.repositorry.profile
 
 import com.idle.domain.model.profile.CenterProfile
+import com.idle.domain.model.profile.JobSearchStatus
 import com.idle.domain.model.profile.WorkerProfile
 
 interface ProfileRepository {
@@ -14,6 +15,7 @@ interface ProfileRepository {
         experienceYear: Int?,
         roadNameAddress: String,
         lotNumberAddress: String,
+        jobSearchStatus: JobSearchStatus,
         longitude: String,
         latitude: String,
         introduce: String?,

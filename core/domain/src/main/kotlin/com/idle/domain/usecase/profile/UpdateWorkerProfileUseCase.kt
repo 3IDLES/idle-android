@@ -1,6 +1,7 @@
 package com.idle.domain.usecase.profile
 
 import com.idle.domain.model.auth.UserRole
+import com.idle.domain.model.profile.JobSearchStatus
 import com.idle.domain.repositorry.profile.ProfileRepository
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -17,6 +18,7 @@ class UpdateWorkerProfileUseCase @Inject constructor(
         latitude: String,
         introduce: String?,
         speciality: String,
+        jobSearchStatus: JobSearchStatus,
         imageFileUri: String?,
     ) = runCatching {
         coroutineScope {
@@ -27,6 +29,7 @@ class UpdateWorkerProfileUseCase @Inject constructor(
                     lotNumberAddress = lotNumberAddress,
                     longitude = longitude,
                     latitude = latitude,
+                    jobSearchStatus = jobSearchStatus,
                     introduce = introduce,
                     speciality = speciality
                 ).getOrThrow()

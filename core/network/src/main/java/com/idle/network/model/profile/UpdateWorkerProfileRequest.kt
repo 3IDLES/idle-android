@@ -8,6 +8,7 @@ data class UpdateWorkerProfileRequest(
     val roadNameAddress: String,
     val lotNumberAddress: String,
     val longitude: String,
+    val jobSearchStatus: String,
     val latitude: String,
     val introduce: String?,
     val speciality: String,

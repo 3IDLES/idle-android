@@ -2,9 +2,9 @@ package com.idle.data.repository.profile
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import androidx.core.net.toUri
 import com.idle.domain.model.profile.CenterProfile
+import com.idle.domain.model.profile.JobSearchStatus
 import com.idle.domain.model.profile.MIMEType
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.repositorry.profile.ProfileRepository
@@ -41,6 +41,7 @@ class ProfileRepositoryImpl @Inject constructor(
         experienceYear: Int?,
         roadNameAddress: String,
         lotNumberAddress: String,
+        jobSearchStatus: JobSearchStatus,
         longitude: String,
         latitude: String,
         introduce: String?,
@@ -51,6 +52,7 @@ class ProfileRepositoryImpl @Inject constructor(
             roadNameAddress = roadNameAddress,
             lotNumberAddress = lotNumberAddress,
             longitude = longitude,
+            jobSearchStatus = jobSearchStatus.name,
             latitude = latitude,
             introduce = introduce,
             speciality = speciality
