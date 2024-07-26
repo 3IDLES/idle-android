@@ -2,7 +2,6 @@ package com.idle.signin.worker
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
-import com.idle.binding.DeepLinkDestination.WorkerAuth
 import com.idle.binding.DeepLinkDestination.WorkerHome
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
@@ -151,7 +150,7 @@ class WorkerSignUpViewModel @Inject constructor(
             longitude = "127.0276",
             latitude = "37.4979",
         )
-            .onSuccess { baseEvent(CareBaseEvent.NavigateTo(WorkerAuth, true)) }
+            .onSuccess { baseEvent(CareBaseEvent.NavigateTo(WorkerHome, true)) }
             .onFailure { Log.d("test", "실패! ${it}") }
     }
 

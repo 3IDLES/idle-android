@@ -60,7 +60,7 @@ class CenterProfileViewModel @Inject constructor(
         updateCenterProfileUseCase(
             officeNumber = _centerOfficeNumber.value,
             introduce = _centerIntroduce.value.ifBlank { null },
-            imageFileUri = _profileImageUri.value.toString(),
+            imageFileUri = _profileImageUri.value?.toString(),
         ).onSuccess {
             setEditState(false)
             Log.d("test", "업데이트 성공!")

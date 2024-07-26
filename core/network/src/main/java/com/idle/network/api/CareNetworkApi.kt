@@ -8,10 +8,11 @@ import com.idle.network.model.auth.SignInWorkerRequest
 import com.idle.network.model.auth.SignUpCenterRequest
 import com.idle.network.model.auth.SignUpWorkerRequest
 import com.idle.network.model.profile.CallbackImageUploadRequest
-import com.idle.network.model.profile.UpdateCenterProfileRequest
 import com.idle.network.model.profile.GetCenterProfileResponse
-import com.idle.network.model.profile.UploadProfileImageUrlResponse
 import com.idle.network.model.profile.GetWorkerProfileResponse
+import com.idle.network.model.profile.UpdateCenterProfileRequest
+import com.idle.network.model.profile.UpdateWorkerProfileRequest
+import com.idle.network.model.profile.UploadProfileImageUrlResponse
 import com.idle.network.model.token.TokenResponse
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -38,10 +39,10 @@ interface CareNetworkApi {
     suspend fun signInCenter(@Body signInCenterRequest: SignInCenterRequest): Response<TokenResponse>
 
     @POST("/api/v1/auth/carer/join")
-    suspend fun signUpWorker(@Body signUpWorkerRequest: SignUpWorkerRequest): Response<Unit>
+    suspend fun signUpWorker(@Body signUpWorkerRequest: SignUpWorkerRequest): Response<TokenResponse>
 
     @POST("/api/v1/auth/carer/login")
-    suspend fun signInWorker(@Body signInWorkerRequest: SignInWorkerRequest): Response<TokenResponse>
+    suspend fun signInWorker(@Body signInWorkerRequest: SignInWorkerRequest): Response<Unit>
 
     @GET("/api/v1/auth/center/validation/{identifier}")
     suspend fun validateIdentifier(@Path("identifier") identifier: String): Response<Unit>
@@ -79,4 +80,9 @@ interface CareNetworkApi {
 
     @GET("/api/v1/users/carer/my/profile")
     suspend fun getWorkerProfile(): Response<GetWorkerProfileResponse>
+
+    @PATCH("/api/v1/users/carer/my/profile")
+    suspend fun updateWorkerProfile(
+        @Body updateWorkerProfileRequest: UpdateWorkerProfileRequest
+    ): Response<Unit>
 }

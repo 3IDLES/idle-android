@@ -18,7 +18,7 @@ class MainViewModel @Inject constructor() : ViewModel() {
 }
 
 sealed class NavigationMenuType {
-    data class Center(val destinationId: Int) : NavigationMenuType()
-    data class Worker(val destinationId: Int) : NavigationMenuType()
+    data object Center : NavigationMenuType()
+    data object Worker : NavigationMenuType()
     data object Hide : NavigationMenuType()
 }

@@ -10,6 +10,16 @@ interface ProfileRepository {
 
     suspend fun updateCenterProfile(officeNumber: String, introduce: String?): Result<Unit>
 
+    suspend fun updateWorkerProfile(
+        experienceYear: Int?,
+        roadNameAddress: String,
+        lotNumberAddress: String,
+        longitude: String,
+        latitude: String,
+        introduce: String?,
+        speciality: String,
+    ): Result<Unit>
+
     suspend fun updateProfileImage(
         userType: String,
         imageFileUri: String,

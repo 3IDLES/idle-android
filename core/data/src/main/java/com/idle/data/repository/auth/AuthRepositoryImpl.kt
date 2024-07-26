@@ -90,6 +90,13 @@ class AuthRepositoryImpl @Inject constructor(
             longitude = longitude,
             latitude = latitude
         )
+    ).fold(
+        onSuccess = { tokenResponse ->
+            tokenDataSource.setAccessToken(tokenResponse.accessToken)
+            tokenDataSource.setRefreshToken(tokenResponse.refreshToken)
+            return Result.success(Unit)
+        },
+        onFailure = { Result.failure(it) }
     )
 
     override suspend fun signInWorker(
@@ -100,12 +107,5 @@ class AuthRepositoryImpl @Inject constructor(
             phoneNumber = phoneNumber,
             authCode = authCode,
         )
-    ).fold(
-        onSuccess = { tokenResponse ->
-            tokenDataSource.setAccessToken(tokenResponse.accessToken)
-            tokenDataSource.setRefreshToken(tokenResponse.refreshToken)
-            return Result.success(Unit)
-        },
-        onFailure = { Result.failure(it) }
     )
 }

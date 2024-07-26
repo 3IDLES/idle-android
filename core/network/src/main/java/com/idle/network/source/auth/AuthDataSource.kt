@@ -27,10 +27,10 @@ class AuthDataSource @Inject constructor(
     suspend fun signInCenter(signInCenterRequest: SignInCenterRequest): Result<TokenResponse> =
         careNetworkApi.signInCenter(signInCenterRequest).onResponse()
 
-    suspend fun signUpWorker(signUpWorkerRequest: SignUpWorkerRequest): Result<Unit> =
+    suspend fun signUpWorker(signUpWorkerRequest: SignUpWorkerRequest): Result<TokenResponse> =
         careNetworkApi.signUpWorker(signUpWorkerRequest).onResponse()
 
-    suspend fun signInWorker(signInWorkerRequest: SignInWorkerRequest): Result<TokenResponse> =
+    suspend fun signInWorker(signInWorkerRequest: SignInWorkerRequest): Result<Unit> =
         careNetworkApi.signInWorker(signInWorkerRequest).onResponse()
 
     suspend fun validateIdentifier(identifier: String): Result<Unit> =

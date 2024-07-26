@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.idle.worker.job.detail"
+    namespace = "com.idle.worker.recruitment.detail"
 }
 
 dependencies {}

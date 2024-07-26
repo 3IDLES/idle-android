@@ -2,6 +2,7 @@ package com.idle.data.repository.profile
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.core.net.toUri
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.model.profile.MIMEType
@@ -9,6 +10,7 @@ import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.repositorry.profile.ProfileRepository
 import com.idle.network.model.profile.CallbackImageUploadRequest
 import com.idle.network.model.profile.UpdateCenterProfileRequest
+import com.idle.network.model.profile.UpdateWorkerProfileRequest
 import com.idle.network.model.profile.UploadProfileImageUrlResponse
 import com.idle.network.source.profile.ProfileDataSource
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -32,6 +34,26 @@ class ProfileRepositoryImpl @Inject constructor(
         UpdateCenterProfileRequest(
             officeNumber = officeNumber,
             introduce = introduce,
+        )
+    )
+
+    override suspend fun updateWorkerProfile(
+        experienceYear: Int?,
+        roadNameAddress: String,
+        lotNumberAddress: String,
+        longitude: String,
+        latitude: String,
+        introduce: String?,
+        speciality: String
+    ): Result<Unit> = profileDataSource.updateWorkerProfile(
+        UpdateWorkerProfileRequest(
+            experienceYear = experienceYear,
+            roadNameAddress = roadNameAddress,
+            lotNumberAddress = lotNumberAddress,
+            longitude = longitude,
+            latitude = latitude,
+            introduce = introduce,
+            speciality = speciality
         )
     )
 

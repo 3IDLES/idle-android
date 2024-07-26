@@ -65,9 +65,9 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             binding.apply {
                 val navMenuType = if (destination.id in centerBottomNavDestinationIds) {
-                    NavigationMenuType.Center(destination.id)
+                    NavigationMenuType.Center
                 } else if (destination.id in workerBottomNavDestinationIds) {
-                    NavigationMenuType.Worker(destination.id)
+                    NavigationMenuType.Worker
                 } else {
                     NavigationMenuType.Hide
                 }
@@ -78,14 +78,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setNavigationMenuType(menuType: NavigationMenuType) = when (menuType) {
-        is NavigationMenuType.Center -> binding.apply {
+        NavigationMenuType.Center -> binding.apply {
             mainBNVWorker.visibility = View.INVISIBLE
             mainBNVCenter.visibility = View.VISIBLE
             mainBNVCenter.setupWithNavController(navController)
         }
 
 
-        is NavigationMenuType.Worker -> binding.apply {
+        NavigationMenuType.Worker -> binding.apply {
             mainBNVCenter.visibility = View.INVISIBLE
             mainBNVWorker.visibility = View.VISIBLE
             mainBNVWorker.setupWithNavController(navController)

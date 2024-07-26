@@ -1,6 +1,7 @@
 package com.idle.network.model.profile
 
 import com.idle.domain.model.auth.Gender
+import com.idle.domain.model.profile.JobSearchStatus
 import com.idle.domain.model.profile.WorkerProfile
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -8,9 +9,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class GetWorkerProfileResponse(
     @SerialName("carerName") val workerName: String = "",
-    val age: String = "",
+    val age: Int = -1,
     val gender: String = "",
-    val experienceYear: String = "",
+    val experienceYear: Int? = null,
     val phoneNumber: String = "",
     val roadNameAddress: String,
     val lotNumberAddress: String,
@@ -31,6 +32,6 @@ data class GetWorkerProfileResponse(
         lotNumberAddress = lotNumberAddress,
         longitude = longitude,
         latitude = latitude,
-        jobSearchStatus = jobSearchStatus
+        jobSearchStatus = JobSearchStatus.create(jobSearchStatus),
     )
 }

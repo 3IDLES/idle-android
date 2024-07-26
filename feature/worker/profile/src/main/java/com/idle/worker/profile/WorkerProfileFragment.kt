@@ -46,6 +46,9 @@ import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.CareTextFieldLong
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.Gender
+import com.idle.domain.model.profile.JobSearchStatus.NO
+import com.idle.domain.model.profile.JobSearchStatus.UNKNOWN
+import com.idle.domain.model.profile.JobSearchStatus.YES
 import com.idle.domain.model.profile.WorkerProfile
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -62,6 +65,7 @@ internal class WorkerProfileFragment : BaseComposeFragment() {
             val gender by gender.collectAsStateWithLifecycle()
             val isEditState by isEditState.collectAsStateWithLifecycle()
             val profileImageUri by profileImageUri.collectAsStateWithLifecycle()
+            val experienceYear by experienceYear.collectAsStateWithLifecycle()
 
             val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.PickVisualMedia(),
@@ -74,6 +78,7 @@ internal class WorkerProfileFragment : BaseComposeFragment() {
                 workerIntroduce = workerIntroduce,
                 specialty = specialty,
                 gender = gender,
+                experienceYear = experienceYear,
                 profileImageUri = profileImageUri,
                 singlePhotoPickerLauncher = singlePhotoPickerLauncher,
                 onSpecialtyChanged = ::setSpecialty,
@@ -91,12 +96,13 @@ internal fun WorkerProfileScreen(
     workerIntroduce: String,
     specialty: String,
     profileImageUri: Uri?,
+    experienceYear: Int?,
+    gender: Gender,
     isEditState: Boolean,
     singlePhotoPickerLauncher: ManagedActivityResultLauncher<PickVisualMediaRequest, Uri?>,
     setEditState: (Boolean) -> Unit,
     onSpecialtyChanged: (String) -> Unit,
     onWorkerIntroduceChanged: (String) -> Unit,
-    gender: Gender,
     updateWorkerProfile: () -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
@@ -196,12 +202,28 @@ internal fun WorkerProfileScreen(
                 }
 
                 if (!isEditState) {
-                    CareTag(
-                        text = "구인중",
-                        textColor = CareTheme.colors.orange500,
-                        backgroundColor = CareTheme.colors.orange100,
-                        modifier = Modifier.padding(top = 16.dp),
-                    )
+                    when (workerProfile.jobSearchStatus) {
+                        YES -> CareTag(
+                            text = "구인중",
+                            textColor = CareTheme.colors.orange500,
+                            backgroundColor = CareTheme.colors.orange100,
+                            modifier = Modifier.padding(top = 16.dp),
+                        )
+
+                        NO -> CareTag(
+                            text = "구인중",
+                            textColor = CareTheme.colors.gray300,
+                            backgroundColor = CareTheme.colors.gray050,
+                            modifier = Modifier.padding(top = 16.dp),
+                        )
+
+                        UNKNOWN -> CareTag(
+                            text = "로드중",
+                            textColor = CareTheme.colors.gray300,
+                            backgroundColor = CareTheme.colors.gray100,
+                            modifier = Modifier.padding(top = 16.dp),
+                        )
+                    }
                 }
 
                 if (!isEditState) {
@@ -211,7 +233,7 @@ internal fun WorkerProfileScreen(
                         modifier = Modifier.padding(bottom = 4.dp),
                     ) {
                         Text(
-                            text = "홍길동",
+                            text = workerProfile.workerName,
                             style = CareTheme.typography.heading2,
                             color = CareTheme.colors.gray900,
                         )
@@ -236,7 +258,7 @@ internal fun WorkerProfileScreen(
                         )
 
                         CareTextField(
-                            value = "홍길동",
+                            value = workerProfile.workerName,
                             onValueChanged = { },
                             modifier = Modifier.fillMaxWidth(),
                         )
@@ -257,7 +279,7 @@ internal fun WorkerProfileScreen(
                         )
 
                         Text(
-                            text = "58세",
+                            text = "${workerProfile.age}세",
                             style = CareTheme.typography.body3,
                             color = CareTheme.colors.gray900,
                         )
@@ -276,29 +298,31 @@ internal fun WorkerProfileScreen(
                         )
 
                         Text(
-                            text = "여성",
+                            text = workerProfile.gender.displayName,
                             style = CareTheme.typography.body3,
                             color = CareTheme.colors.gray900,
                         )
 
-                        VerticalDivider(
-                            thickness = 1.dp,
-                            color = CareTheme.colors.gray100,
-                            modifier = Modifier.padding(horizontal = 8.dp),
-                        )
+                        if (experienceYear != null) {
+                            VerticalDivider(
+                                thickness = 1.dp,
+                                color = CareTheme.colors.gray100,
+                                modifier = Modifier.padding(horizontal = 8.dp),
+                            )
 
-                        Text(
-                            text = "경력",
-                            style = CareTheme.typography.body3,
-                            color = CareTheme.colors.gray500,
-                            modifier = Modifier.padding(end = 4.dp),
-                        )
+                            Text(
+                                text = "경력",
+                                style = CareTheme.typography.body3,
+                                color = CareTheme.colors.gray500,
+                                modifier = Modifier.padding(end = 4.dp),
+                            )
 
-                        Text(
-                            text = "1년차",
-                            style = CareTheme.typography.body3,
-                            color = CareTheme.colors.gray900,
-                        )
+                            Text(
+                                text = "${workerProfile.experienceYear}년차",
+                                style = CareTheme.typography.body3,
+                                color = CareTheme.colors.gray900,
+                            )
+                        }
                     }
                 } else {
 

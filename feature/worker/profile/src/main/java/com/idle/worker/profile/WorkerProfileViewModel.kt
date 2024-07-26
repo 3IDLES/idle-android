@@ -8,7 +8,7 @@ import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.auth.Gender
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.usecase.profile.GetMyWorkerProfileUseCase
-import com.idle.domain.usecase.profile.UpdateCenterProfileUseCase
+import com.idle.domain.usecase.profile.UpdateWorkerProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class WorkerProfileViewModel @Inject constructor(
     private val getMyWorkerProfileUseCase: GetMyWorkerProfileUseCase,
-    private val updateCenterProfileUseCase: UpdateCenterProfileUseCase,
+    private val updateWorkerProfileUseCase: UpdateWorkerProfileUseCase,
 ) : BaseViewModel() {
     private val _workerProfile = MutableStateFlow(WorkerProfile())
     val workerProfile = _workerProfile.asStateFlow()
@@ -28,6 +28,9 @@ class WorkerProfileViewModel @Inject constructor(
 
     private val _workerIntroduce = MutableStateFlow("")
     val workerIntroduce = _workerIntroduce.asStateFlow()
+
+    private val _experienceYear = MutableStateFlow<Int?>(null)
+    val experienceYear = _experienceYear.asStateFlow()
 
     private val _isEditState = MutableStateFlow(false)
     val isEditState = _isEditState.asStateFlow()
@@ -49,6 +52,7 @@ class WorkerProfileViewModel @Inject constructor(
             _specialty.value = it.speciality ?: ""
             _gender.value = it.gender
             _profileImageUri.value = it.profileImageUrl?.toUri()
+            _experienceYear.value = it.experienceYear
         }.onFailure {
             Log.d("test", "조회 실패!")
         }
@@ -59,15 +63,20 @@ class WorkerProfileViewModel @Inject constructor(
             return@launch
         }
 
-        updateCenterProfileUseCase(
-            officeNumber = _specialty.value,
+        updateWorkerProfileUseCase(
+            experienceYear = _experienceYear.value,
+            roadNameAddress = "",
+            lotNumberAddress = "",
+            longitude = "",
+            latitude = "",
+            speciality = _specialty.value,
             introduce = _workerIntroduce.value.ifBlank { null },
-            imageFileUri = _profileImageUri.value.toString(),
+            imageFileUri = _profileImageUri.value?.toString(),
         ).onSuccess {
             setEditState(false)
             Log.d("test", "업데이트 성공!")
         }.onFailure {
-            Log.d("test", "업데이트 실패!")
+            Log.d("test", "업데이트 실패! $it")
         }
     }
 

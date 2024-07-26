@@ -15,6 +15,6 @@ dependencies {
     implementation(projects.feature.center.setting)
     implementation(projects.feature.worker.home)
     implementation(projects.feature.worker.profile)
-    implementation(projects.feature.worker.jobDetail)
+    implementation(projects.feature.worker.recruitmentDetail)
     implementation(libs.androidx.navigation.ui)
 }
