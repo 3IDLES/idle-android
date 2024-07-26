@@ -72,6 +72,7 @@ class WorkerProfileViewModel @Inject constructor(
             speciality = _specialty.value,
             introduce = _workerIntroduce.value.ifBlank { null },
             imageFileUri = _profileImageUri.value?.toString(),
+            jobSearchStatus = _workerProfile.value.jobSearchStatus,
         ).onSuccess {
             setEditState(false)
             Log.d("test", "업데이트 성공!")

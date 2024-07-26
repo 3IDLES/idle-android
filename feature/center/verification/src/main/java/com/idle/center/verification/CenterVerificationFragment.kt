@@ -30,6 +30,9 @@ import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.component.CareProgressBar
 import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
+import com.idle.signup.center.process.CenterAddressScreen
+import com.idle.signup.center.process.CenterInfoScreen
+import com.idle.signup.center.process.CenterIntroduceScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -117,9 +120,22 @@ internal fun CenterVerificationScreen(
                 label = "센터의 회원가입을 관리하는 애니메이션",
             ) { verificationProcess ->
                 when (verificationProcess) {
-                    VerificationProcess.INFO -> Unit
-                    VerificationProcess.ADDRESS -> Unit
-                    VerificationProcess.INTRODUCE -> Unit
+                    VerificationProcess.INFO -> CenterInfoScreen(
+                        centerName = centerName,
+                        centerNumber = centerNumber,
+                        onCenterNameChanged = onCenterNameChanged,
+                        onCenterNumberChanged = onCenterNumberChanged,
+                        setVerificationProcess = setVerificationProcess
+                    )
+
+                    VerificationProcess.ADDRESS -> CenterAddressScreen(setVerificationProcess)
+
+                    VerificationProcess.INTRODUCE -> CenterIntroduceScreen(
+                        centerIntroduce = centerIntroduce,
+                        centerProfileImageUri = centerProfileImageUri,
+                        onCenterIntroduceChanged = onCenterIntroduceChanged,
+                        setVerificationProcess = setVerificationProcess
+                    )
                 }
             }
         }
