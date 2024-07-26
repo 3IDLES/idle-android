@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -56,14 +57,16 @@ internal fun GenderScreen(
                 text = Gender.WOMAN.displayName,
                 onClick = { onGenderChanged(Gender.WOMAN) },
                 enable = gender == Gender.WOMAN,
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f)
+                    .height(56.dp),
             )
 
             CareChip(
                 text = Gender.MAN.displayName,
                 onClick = { onGenderChanged(Gender.MAN) },
                 enable = gender == Gender.MAN,
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f)
+                    .height(56.dp),
             )
         }
 

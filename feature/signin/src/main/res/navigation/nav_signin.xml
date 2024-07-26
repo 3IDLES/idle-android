@@ -17,12 +17,4 @@
         android:label="NewPasswordFragment">
         <deepLink app:uri="@string/new_password_deeplink_url" />
     </fragment>
-
-    <fragment
-        android:id="@+id/workerSignInFragment"
-        android:name="com.idle.signin.worker.WorkerSignInFragment"
-        android:label="WorkerSignInFragment">
-        <deepLink app:uri="@string/worker_signin_deeplink_url" />
-    </fragment>
-
 </navigation>

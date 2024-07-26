@@ -3,7 +3,6 @@
     <string name="auth_deeplink_url">care://auth</string>
 
     <string name="worker_auth_deeplink_url">care://auth/worker</string>
-    <string name="worker_signin_deeplink_url">care://signin/worker</string>
     <string name="worker_signup_deeplink_url">care://signup/worker</string>
 
     <string name="center_auth_deeplink_url">care://auth/center</string>

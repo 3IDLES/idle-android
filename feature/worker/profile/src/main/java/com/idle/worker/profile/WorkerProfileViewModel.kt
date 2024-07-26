@@ -4,6 +4,7 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
+import com.idle.domain.model.auth.Gender
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.usecase.profile.GetMyCenterProfileUseCase
 import com.idle.domain.usecase.profile.UpdateCenterProfileUseCase
@@ -32,6 +33,9 @@ class WorkerProfileViewModel @Inject constructor(
 
     private val _profileImageUri = MutableStateFlow<Uri?>(null)
     val profileImageUri = _profileImageUri.asStateFlow()
+
+    private val _gender = MutableStateFlow(Gender.NONE)
+    internal val gender = _gender.asStateFlow()
 
     init {
         getMyWorkerProfile()
@@ -78,5 +82,9 @@ class WorkerProfileViewModel @Inject constructor(
 
     fun setProfileImageUrl(uri: Uri?) {
         _profileImageUri.value = uri
+    }
+
+    internal fun setGender(gender: Gender) {
+        _gender.value = gender
     }
 }

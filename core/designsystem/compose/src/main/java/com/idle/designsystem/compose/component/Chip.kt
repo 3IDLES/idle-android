@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,13 +16,12 @@ import com.idle.designsystem.compose.foundation.CareTheme
 fun CareChip(
     text: String,
     enable: Boolean,
-    onClick: () -> Unit,
+    onClick: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
-            .height(56.dp)
             .background(
                 color = if (enable) CareTheme.colors.orange100 else CareTheme.colors.white000,
                 shape = RoundedCornerShape(6.dp),
