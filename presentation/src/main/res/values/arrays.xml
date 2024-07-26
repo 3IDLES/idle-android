@@ -4,6 +4,7 @@
         <item>@id/centerHomeFragment</item>
         <item>@id/centerProfileFragment</item>
         <item>@id/centerSettingFragment</item>
+        <item>@id/centerVerificationFragment</item>
     </array>
 
     <array name="workerNavDestinationIds">

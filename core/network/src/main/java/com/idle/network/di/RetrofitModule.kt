@@ -22,7 +22,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object RetrofitModule {
 
-    val json = Json {
+    private val json = Json {
         ignoreUnknownKeys = true
     }
 
