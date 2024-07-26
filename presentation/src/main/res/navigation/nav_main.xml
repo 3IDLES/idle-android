@@ -10,6 +10,7 @@
     <include app:graph="@navigation/nav_center_home" />
     <include app:graph="@navigation/nav_center_profile" />
     <include app:graph="@navigation/nav_center_setting" />
+    <include app:graph="@navigation/nav_center_verification" />
     <include app:graph="@navigation/nav_worker_home" />
     <include app:graph="@navigation/nav_worker_profile" />
     <include app:graph="@navigation/nav_worker_job_detail" />
