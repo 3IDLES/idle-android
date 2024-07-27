@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -58,7 +57,7 @@ internal fun CenterAddressScreen(
                 hint = "도로명 주소을 입력해주세요.",
                 onValueChanged = {},
                 onDone = {
-                    if(centerAddress.isNotBlank()){
+                    if (centerAddress.isNotBlank()) {
                         focusManager.moveFocus(FocusDirection.Down)
                         keyboardController?.show()
                     }
