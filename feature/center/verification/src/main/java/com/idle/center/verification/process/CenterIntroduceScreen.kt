@@ -39,7 +39,7 @@ internal fun CenterIntroduceScreen(
         focusRequester.requestFocus()
     }
 
-    BackHandler { setVerificationProcess(VerificationProcess.INFO) }
+    BackHandler { setVerificationProcess(VerificationProcess.ADDRESS) }
 
     Column(
         horizontalAlignment = Alignment.Start,

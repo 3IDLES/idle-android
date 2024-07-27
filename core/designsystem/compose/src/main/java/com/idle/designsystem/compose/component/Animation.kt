@@ -1,0 +1,32 @@
+package com.idle.designsystem.compose.component
+
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
+import androidx.compose.runtime.Composable
+
+@Composable
+fun <S : Enum<S>> CareStateAnimator(
+    targetState: S,
+    label : String = "AnimatedContent",
+    content: @Composable() AnimatedContentScope.(targetState: S) -> Unit
+) {
+    AnimatedContent(
+        targetState = targetState,
+        transitionSpec = {
+            if (targetState.ordinal > initialState.ordinal) {
+                slideInHorizontally(initialOffsetX = { it }) + fadeIn() togetherWith
+                        slideOutHorizontally(targetOffsetX = { -it }) + fadeOut()
+            } else {
+                slideInHorizontally(initialOffsetX = { -it }) + fadeIn() togetherWith
+                        slideOutHorizontally(targetOffsetX = { it }) + fadeOut()
+            }
+        },
+        label = "센터의 회원가입을 관리하는 애니메이션",
+        content = content,
+    )
+}
