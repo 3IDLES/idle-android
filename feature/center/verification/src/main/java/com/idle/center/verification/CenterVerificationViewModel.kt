@@ -22,6 +22,12 @@ class CenterVerificationViewModel @Inject constructor() : BaseViewModel() {
     private val _centerIntroduce = MutableStateFlow("")
     val centerIntroduce = _centerIntroduce.asStateFlow()
 
+    private val _centerAddress = MutableStateFlow("")
+    val centerAddress = _centerAddress.asStateFlow()
+
+    private val _centerDetailAddress = MutableStateFlow("")
+    val centerDetailAddress = _centerDetailAddress.asStateFlow()
+
     private val _centerProfileImageUri = MutableStateFlow<Uri?>(null)
     val centerProfileImageUri = _centerProfileImageUri.asStateFlow()
 
@@ -43,6 +49,14 @@ class CenterVerificationViewModel @Inject constructor() : BaseViewModel() {
 
     internal fun setCenterIntroduce(introduce: String) {
         _centerIntroduce.value = introduce
+    }
+
+    internal fun setCenterAddress(address: String) {
+        _centerAddress.value = address
+    }
+
+    internal fun setCenterDetailAddress(address: String) {
+        _centerDetailAddress.value = address
     }
 }
 

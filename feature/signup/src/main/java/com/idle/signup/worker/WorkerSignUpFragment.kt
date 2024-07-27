@@ -1,12 +1,6 @@
 package com.idle.signin.worker
 
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -28,6 +22,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.component.CareProgressBar
+import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
 import com.idle.domain.model.auth.Gender
 import com.idle.signin.center.CenterSignUpProcess
@@ -135,17 +130,8 @@ internal fun WorkerSignUpScreen(
                 modifier = Modifier.fillMaxWidth(),
             )
 
-            AnimatedContent(
+            CareStateAnimator(
                 targetState = signUpProcess,
-                transitionSpec = {
-                    if (targetState.ordinal > initialState.ordinal) {
-                        slideInHorizontally(initialOffsetX = { it }) + fadeIn() togetherWith
-                                slideOutHorizontally(targetOffsetX = { -it }) + fadeOut()
-                    } else {
-                        slideInHorizontally(initialOffsetX = { -it }) + fadeIn() togetherWith
-                                slideOutHorizontally(targetOffsetX = { it }) + fadeOut()
-                    }
-                },
                 label = "요양 보호사의 회원가입을 관리하는 애니메이션",
             ) { signUpProcess ->
                 when (signUpProcess) {

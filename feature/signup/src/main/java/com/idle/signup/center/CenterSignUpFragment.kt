@@ -28,6 +28,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.component.CareProgressBar
+import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
 import com.idle.domain.model.auth.BusinessRegistrationInfo
 import com.idle.signup.center.process.BusinessRegistrationScreen
@@ -151,17 +152,8 @@ internal fun CenterSignUpScreen(
                 modifier = Modifier.fillMaxWidth(),
             )
 
-            AnimatedContent(
+            CareStateAnimator(
                 targetState = signUpProcess,
-                transitionSpec = {
-                    if (targetState.ordinal > initialState.ordinal) {
-                        slideInHorizontally(initialOffsetX = { it }) + fadeIn() togetherWith
-                                slideOutHorizontally(targetOffsetX = { -it }) + fadeOut()
-                    } else {
-                        slideInHorizontally(initialOffsetX = { -it }) + fadeIn() togetherWith
-                                slideOutHorizontally(targetOffsetX = { it }) + fadeOut()
-                    }
-                },
                 label = "센터의 회원가입을 관리하는 애니메이션",
             ) { signUpProcess ->
                 when (signUpProcess) {

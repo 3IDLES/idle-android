@@ -3,6 +3,7 @@ package com.idle.center.verification
 import android.net.Uri
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
@@ -17,8 +18,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,6 +28,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.component.CareProgressBar
+import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
 import com.idle.signup.center.process.CenterAddressScreen
 import com.idle.signup.center.process.CenterInfoScreen
@@ -47,6 +47,8 @@ internal class CenterVerificationFragment : BaseComposeFragment() {
             val centerNumber by centerNumber.collectAsStateWithLifecycle()
             val centerIntroduce by centerIntroduce.collectAsStateWithLifecycle()
             val centerProfileImageUri by centerProfileImageUri.collectAsStateWithLifecycle()
+            val centerAddress by centerAddress.collectAsStateWithLifecycle()
+            val centerDetailAddress by centerDetailAddress.collectAsStateWithLifecycle()
 
             CenterVerificationScreen(
                 verificationProcess = verificationProcess,
@@ -54,10 +56,13 @@ internal class CenterVerificationFragment : BaseComposeFragment() {
                 centerNumber = centerNumber,
                 centerIntroduce = centerIntroduce,
                 centerProfileImageUri = centerProfileImageUri,
+                centerAddress = centerAddress,
+                centerDetailAddress = centerDetailAddress,
                 setVerificationProcess = ::setVerificationProcess,
                 onCenterNameChanged = ::setCenterName,
                 onCenterNumberChanged = ::setCenterNumber,
                 onCenterIntroduceChanged = ::setCenterIntroduce,
+                onCenterDetailAddressChanged = ::setCenterDetailAddress,
             )
         }
     }
@@ -71,15 +76,16 @@ internal fun CenterVerificationScreen(
     centerNumber: String,
     centerIntroduce: String,
     centerProfileImageUri: Uri?,
+    centerAddress: String,
+    centerDetailAddress: String,
     onCenterNameChanged: (String) -> Unit,
     onCenterNumberChanged: (String) -> Unit,
     onCenterIntroduceChanged: (String) -> Unit,
+    onCenterDetailAddressChanged: (String) -> Unit,
     setVerificationProcess: (VerificationProcess) -> Unit,
 ) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val focusManager = LocalFocusManager.current
-    val (businessRegistrationProcessed, setBusinessRegistrationProcessed)
-            = remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -106,18 +112,9 @@ internal fun CenterVerificationScreen(
                 modifier = Modifier.fillMaxWidth(),
             )
 
-            AnimatedContent(
+            CareStateAnimator(
                 targetState = verificationProcess,
-                transitionSpec = {
-                    if (targetState.ordinal > initialState.ordinal) {
-                        slideInHorizontally(initialOffsetX = { it }) + fadeIn() togetherWith
-                                slideOutHorizontally(targetOffsetX = { -it }) + fadeOut()
-                    } else {
-                        slideInHorizontally(initialOffsetX = { -it }) + fadeIn() togetherWith
-                                slideOutHorizontally(targetOffsetX = { it }) + fadeOut()
-                    }
-                },
-                label = "센터의 회원가입을 관리하는 애니메이션",
+                label = "센터 정보 입력을 관리하는 애니메이션",
             ) { verificationProcess ->
                 when (verificationProcess) {
                     VerificationProcess.INFO -> CenterInfoScreen(
@@ -128,7 +125,12 @@ internal fun CenterVerificationScreen(
                         setVerificationProcess = setVerificationProcess
                     )
 
-                    VerificationProcess.ADDRESS -> CenterAddressScreen(setVerificationProcess)
+                    VerificationProcess.ADDRESS -> CenterAddressScreen(
+                        centerAddress = centerAddress,
+                        centerDetailAddress = centerDetailAddress,
+                        onCenterDetailAddressChanged = onCenterDetailAddressChanged,
+                        setVerificationProcess = setVerificationProcess,
+                    )
 
                     VerificationProcess.INTRODUCE -> CenterIntroduceScreen(
                         centerIntroduce = centerIntroduce,

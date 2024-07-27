@@ -6,11 +6,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import com.idle.center.verification.VerificationProcess
 import com.idle.designsystem.compose.component.CareButtonLarge
@@ -19,8 +22,14 @@ import com.idle.designsystem.compose.foundation.CareTheme
 
 @Composable
 internal fun CenterAddressScreen(
+    centerAddress: String,
+    centerDetailAddress: String,
+    onCenterDetailAddressChanged: (String) -> Unit,
     setVerificationProcess: (VerificationProcess) -> Unit,
 ) {
+    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     BackHandler { setVerificationProcess(VerificationProcess.INFO) }
 
     Column(
@@ -45,10 +54,15 @@ internal fun CenterAddressScreen(
             )
 
             CareTextField(
-                value = "",
+                value = centerAddress,
                 hint = "도로명 주소을 입력해주세요.",
                 onValueChanged = {},
-                onDone = {},
+                onDone = {
+                    if(centerAddress.isNotBlank()){
+                        focusManager.moveFocus(FocusDirection.Down)
+                        keyboardController?.show()
+                    }
+                },
                 modifier = Modifier.fillMaxWidth()
             )
         }
@@ -64,10 +78,13 @@ internal fun CenterAddressScreen(
             )
 
             CareTextField(
-                value = "",
+                value = centerDetailAddress,
                 hint = "상세 주소를 입력해주세요. (예: 2층 204호)",
-                onValueChanged = {},
-                onDone = {},
+                onValueChanged = onCenterDetailAddressChanged,
+                onDone = {
+                    if (centerAddress.isNotBlank() && centerDetailAddress.isNotBlank())
+                        setVerificationProcess(VerificationProcess.INTRODUCE)
+                },
                 modifier = Modifier.fillMaxWidth()
             )
         }
@@ -76,6 +93,7 @@ internal fun CenterAddressScreen(
 
         CareButtonLarge(
             text = "다음",
+            enable = centerDetailAddress.isNotBlank(),
             onClick = { setVerificationProcess(VerificationProcess.INTRODUCE) },
             modifier = Modifier.fillMaxWidth(),
         )

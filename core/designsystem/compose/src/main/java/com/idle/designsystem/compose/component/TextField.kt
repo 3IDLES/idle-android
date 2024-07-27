@@ -97,8 +97,8 @@ fun CareTextField(
                     imeAction = ImeAction.Done
                 ),
                 keyboardActions = KeyboardActions(onDone = {
-                    onDone()
                     keyboardController?.hide()
+                    onDone()
                 }),
                 modifier = Modifier.weight(1f)
                     .padding(top = 10.dp, bottom = 10.dp, end = 8.dp),
