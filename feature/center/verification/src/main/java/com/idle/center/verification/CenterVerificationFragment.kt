@@ -2,13 +2,6 @@ package com.idle.center.verification
 
 import android.net.Uri
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedContentScope
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -63,6 +56,7 @@ internal class CenterVerificationFragment : BaseComposeFragment() {
                 onCenterNumberChanged = ::setCenterNumber,
                 onCenterIntroduceChanged = ::setCenterIntroduce,
                 onCenterDetailAddressChanged = ::setCenterDetailAddress,
+                onProfileImageUriChanged = ::setProfileImageUri,
             )
         }
     }
@@ -82,6 +76,7 @@ internal fun CenterVerificationScreen(
     onCenterNumberChanged: (String) -> Unit,
     onCenterIntroduceChanged: (String) -> Unit,
     onCenterDetailAddressChanged: (String) -> Unit,
+    onProfileImageUriChanged: (Uri?) -> Unit,
     setVerificationProcess: (VerificationProcess) -> Unit,
 ) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
@@ -136,6 +131,7 @@ internal fun CenterVerificationScreen(
                         centerIntroduce = centerIntroduce,
                         centerProfileImageUri = centerProfileImageUri,
                         onCenterIntroduceChanged = onCenterIntroduceChanged,
+                        onProfileImageUriChanged = onProfileImageUriChanged,
                         setVerificationProcess = setVerificationProcess
                     )
                 }

@@ -2,8 +2,12 @@ package com.idle.signup.center.process
 
 import android.net.Uri
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -21,6 +25,8 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.idle.center.verification.VerificationProcess
+import com.idle.compose.clickable
+import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareTextFieldLong
 import com.idle.designsystem.compose.foundation.CareTheme
@@ -30,10 +36,16 @@ internal fun CenterIntroduceScreen(
     centerIntroduce: String,
     centerProfileImageUri: Uri?,
     onCenterIntroduceChanged: (String) -> Unit,
+    onProfileImageUriChanged: (Uri?) -> Unit,
     setVerificationProcess: (VerificationProcess) -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
     val scrollState = rememberScrollState()
+
+    val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = { uri -> onProfileImageUriChanged(uri) }
+    )
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
@@ -43,7 +55,7 @@ internal fun CenterIntroduceScreen(
 
     Column(
         horizontalAlignment = Alignment.Start,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxSize()
             .verticalScroll(scrollState),
     ) {
 
@@ -94,10 +106,15 @@ internal fun CenterIntroduceScreen(
             )
 
             AsyncImage(
-                model = com.idle.designresource.R.drawable.ic_profile_empty_edit,
+                model = centerProfileImageUri ?: R.drawable.ic_profile_empty_edit,
                 contentDescription = null,
                 modifier = Modifier.fillMaxWidth()
                     .clip(RoundedCornerShape(6.dp))
+                    .clickable {
+                        singlePhotoPickerLauncher.launch(
+                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                        )
+                    }
             )
         }
 

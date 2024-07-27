@@ -100,7 +100,7 @@ internal fun CenterInfoScreen(
 
         CareButtonLarge(
             text = "다음",
-            enable = centerNumber.isNotBlank(),
+            enable = centerName.isNotBlank() && centerNumber.isNotBlank(),
             onClick = { setVerificationProcess(VerificationProcess.ADDRESS) },
             modifier = Modifier.fillMaxWidth(),
         )

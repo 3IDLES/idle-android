@@ -1,9 +1,7 @@
 package com.idle.center.profile
 
 import android.net.Uri
-import android.util.Log
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
-import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -62,20 +60,15 @@ internal class CenterProfileFragment : BaseComposeFragment() {
             val isEditState by isEditState.collectAsStateWithLifecycle()
             val profileImageUri by profileImageUri.collectAsStateWithLifecycle()
 
-            val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
-                contract = ActivityResultContracts.PickVisualMedia(),
-                onResult = { uri -> setProfileImageUrl(uri) }
-            )
-
             CenterProfileScreen(
                 centerProfile = centerProfile,
                 centerOfficeNumber = centerOfficeNumber,
                 centerIntroduce = centerIntroduce,
                 profileImageUri = profileImageUri,
                 isEditState = isEditState,
-                singlePhotoPickerLauncher = singlePhotoPickerLauncher,
                 onCenterOfficeNumberChanged = ::setCenterOfficeNumber,
                 onCenterIntroduceChanged = ::setCenterIntroduce,
+                onProfileImageUriChanged = ::setProfileImageUrl,
                 updateCenterProfile = ::updateCenterProfile,
                 setEditState = ::setEditState,
             )
@@ -90,15 +83,19 @@ internal fun CenterProfileScreen(
     centerIntroduce: String,
     profileImageUri: Uri?,
     isEditState: Boolean,
-    singlePhotoPickerLauncher: ManagedActivityResultLauncher<PickVisualMediaRequest, Uri?>,
     setEditState: (Boolean) -> Unit,
     onCenterOfficeNumberChanged: (String) -> Unit,
     onCenterIntroduceChanged: (String) -> Unit,
+    onProfileImageUriChanged: (Uri?) -> Unit,
     updateCenterProfile: () -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val scrollState = rememberScrollState()
+    val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = { uri -> onProfileImageUriChanged(uri) }
+    )
 
     Scaffold(
         topBar = {

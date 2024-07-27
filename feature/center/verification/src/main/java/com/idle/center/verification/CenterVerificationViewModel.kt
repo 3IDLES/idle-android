@@ -43,7 +43,7 @@ class CenterVerificationViewModel @Inject constructor() : BaseViewModel() {
         _centerNumber.value = phoneNumber
     }
 
-    internal fun setCenterProfileImageUri(uri: Uri) {
+    internal fun setProfileImageUri(uri: Uri?) {
         _centerProfileImageUri.value = uri
     }
 

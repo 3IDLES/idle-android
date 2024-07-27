@@ -26,7 +26,7 @@ fun <S : Enum<S>> CareStateAnimator(
                         slideOutHorizontally(targetOffsetX = { it }) + fadeOut()
             }
         },
-        label = "센터의 회원가입을 관리하는 애니메이션",
+        label = label,
         content = content,
     )
 }
