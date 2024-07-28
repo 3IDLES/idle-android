@@ -29,13 +29,13 @@ import com.idle.signup.center.process.CenterIntroduceScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-internal class CenterVerificationFragment : BaseComposeFragment() {
+internal class CenterRegisterFragment : BaseComposeFragment() {
     override val fragmentViewModel: CenterVerificationViewModel by viewModels()
 
     @Composable
     override fun ComposeLayout() {
         fragmentViewModel.apply {
-            val verificationProcess by verificationProcess.collectAsStateWithLifecycle()
+            val registerProcess by registerProcess.collectAsStateWithLifecycle()
             val centerName by centerName.collectAsStateWithLifecycle()
             val centerNumber by centerNumber.collectAsStateWithLifecycle()
             val centerIntroduce by centerIntroduce.collectAsStateWithLifecycle()
@@ -43,15 +43,15 @@ internal class CenterVerificationFragment : BaseComposeFragment() {
             val centerAddress by centerAddress.collectAsStateWithLifecycle()
             val centerDetailAddress by centerDetailAddress.collectAsStateWithLifecycle()
 
-            CenterVerificationScreen(
-                verificationProcess = verificationProcess,
+            CenterRegisterScreen(
+                registerProcess = registerProcess,
                 centerName = centerName,
                 centerNumber = centerNumber,
                 centerIntroduce = centerIntroduce,
                 centerProfileImageUri = centerProfileImageUri,
                 centerAddress = centerAddress,
                 centerDetailAddress = centerDetailAddress,
-                setVerificationProcess = ::setVerificationProcess,
+                setRegisterProcess = ::setRegisterProcess,
                 onCenterNameChanged = ::setCenterName,
                 onCenterNumberChanged = ::setCenterNumber,
                 onCenterIntroduceChanged = ::setCenterIntroduce,
@@ -65,8 +65,8 @@ internal class CenterVerificationFragment : BaseComposeFragment() {
 
 
 @Composable
-internal fun CenterVerificationScreen(
-    verificationProcess: VerificationProcess,
+internal fun CenterRegisterScreen(
+    registerProcess: RegisterProcess,
     centerName: String,
     centerNumber: String,
     centerIntroduce: String,
@@ -78,7 +78,7 @@ internal fun CenterVerificationScreen(
     onCenterIntroduceChanged: (String) -> Unit,
     onCenterDetailAddressChanged: (String) -> Unit,
     onProfileImageUriChanged: (Uri?) -> Unit,
-    setVerificationProcess: (VerificationProcess) -> Unit,
+    setRegisterProcess: (RegisterProcess) -> Unit,
     registerCenterProfile: () -> Unit,
 ) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
@@ -104,37 +104,37 @@ internal fun CenterVerificationScreen(
                 .padding(start = 20.dp, end = 20.dp, bottom = 30.dp),
         ) {
             CareProgressBar(
-                currentStep = verificationProcess.step,
-                totalSteps = VerificationProcess.entries.size,
+                currentStep = registerProcess.step,
+                totalSteps = RegisterProcess.entries.size,
                 modifier = Modifier.fillMaxWidth(),
             )
 
             CareStateAnimator(
-                targetState = verificationProcess,
+                targetState = registerProcess,
                 label = "센터 정보 입력을 관리하는 애니메이션",
             ) { verificationProcess ->
                 when (verificationProcess) {
-                    VerificationProcess.INFO -> CenterInfoScreen(
+                    RegisterProcess.INFO -> CenterInfoScreen(
                         centerName = centerName,
                         centerNumber = centerNumber,
                         onCenterNameChanged = onCenterNameChanged,
                         onCenterNumberChanged = onCenterNumberChanged,
-                        setVerificationProcess = setVerificationProcess
+                        setRegisterProcess = setRegisterProcess
                     )
 
-                    VerificationProcess.ADDRESS -> CenterAddressScreen(
+                    RegisterProcess.ADDRESS -> CenterAddressScreen(
                         centerAddress = centerAddress,
                         centerDetailAddress = centerDetailAddress,
                         onCenterDetailAddressChanged = onCenterDetailAddressChanged,
-                        setVerificationProcess = setVerificationProcess,
+                        setRegisterProcess = setRegisterProcess,
                     )
 
-                    VerificationProcess.INTRODUCE -> CenterIntroduceScreen(
+                    RegisterProcess.INTRODUCE -> CenterIntroduceScreen(
                         centerIntroduce = centerIntroduce,
                         centerProfileImageUri = centerProfileImageUri,
                         onCenterIntroduceChanged = onCenterIntroduceChanged,
                         onProfileImageUriChanged = onProfileImageUriChanged,
-                        setVerificationProcess = setVerificationProcess,
+                        setRegisterProcess = setRegisterProcess,
                         registerCenterProfile = registerCenterProfile,
                     )
                 }

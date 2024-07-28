@@ -15,8 +15,8 @@ class CenterVerificationViewModel @Inject constructor(
     private val registerCenterProfileUseCase: RegisterCenterProfileUseCase,
 ) : BaseViewModel() {
 
-    private val _verificationProcess = MutableStateFlow(VerificationProcess.INFO)
-    val verificationProcess = _verificationProcess.asStateFlow()
+    private val _registerProcess = MutableStateFlow(RegisterProcess.INFO)
+    val registerProcess = _registerProcess.asStateFlow()
 
     private val _centerName = MutableStateFlow("")
     val centerName = _centerName.asStateFlow()
@@ -49,8 +49,8 @@ class CenterVerificationViewModel @Inject constructor(
         )
     }
 
-    internal fun setVerificationProcess(process: VerificationProcess) {
-        _verificationProcess.value = process
+    internal fun setRegisterProcess(process: RegisterProcess) {
+        _registerProcess.value = process
     }
 
     internal fun setCenterName(name: String) {
@@ -78,6 +78,6 @@ class CenterVerificationViewModel @Inject constructor(
     }
 }
 
-enum class VerificationProcess(val step: Int) {
+enum class RegisterProcess(val step: Int) {
     INFO(1), ADDRESS(2), INTRODUCE(3)
 }
