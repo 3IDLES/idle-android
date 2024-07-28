@@ -9,6 +9,7 @@ import com.idle.domain.model.profile.MIMEType
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.repositorry.profile.ProfileRepository
 import com.idle.network.model.profile.CallbackImageUploadRequest
+import com.idle.network.model.profile.RegisterCenterProfileRequest
 import com.idle.network.model.profile.UpdateCenterProfileRequest
 import com.idle.network.model.profile.UpdateWorkerProfileRequest
 import com.idle.network.model.profile.UploadProfileImageUrlResponse
@@ -56,6 +57,28 @@ class ProfileRepositoryImpl @Inject constructor(
             latitude = latitude,
             introduce = introduce,
             speciality = speciality
+        )
+    )
+
+    override suspend fun registerCenterProfile(
+        centerName: String,
+        detailedAddress: String,
+        introduce: String,
+        latitude: String,
+        longitude: String,
+        lotNumberAddress: String,
+        officeNumber: String,
+        roadNameAddress: String
+    ): Result<Unit> = profileDataSource.registerCenterProfile(
+        RegisterCenterProfileRequest(
+            centerName = centerName,
+            detailedAddress = detailedAddress,
+            introduce = introduce,
+            latitude = latitude,
+            longitude = longitude,
+            lotNumberAddress = lotNumberAddress,
+            officeNumber = officeNumber,
+            roadNameAddress = roadNameAddress,
         )
     )
 

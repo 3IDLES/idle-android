@@ -13,7 +13,7 @@ dependencies {
     implementation(projects.feature.center.home)
     implementation(projects.feature.center.profile)
     implementation(projects.feature.center.setting)
-    implementation(projects.feature.center.verification)
+    implementation(projects.feature.center.register)
     implementation(projects.feature.worker.home)
     implementation(projects.feature.worker.profile)
     implementation(projects.feature.worker.recruitmentDetail)

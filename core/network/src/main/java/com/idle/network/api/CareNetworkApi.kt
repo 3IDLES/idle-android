@@ -10,6 +10,7 @@ import com.idle.network.model.auth.SignUpWorkerRequest
 import com.idle.network.model.profile.CallbackImageUploadRequest
 import com.idle.network.model.profile.GetCenterProfileResponse
 import com.idle.network.model.profile.GetWorkerProfileResponse
+import com.idle.network.model.profile.RegisterCenterProfileRequest
 import com.idle.network.model.profile.UpdateCenterProfileRequest
 import com.idle.network.model.profile.UpdateWorkerProfileRequest
 import com.idle.network.model.profile.UploadProfileImageUrlResponse
@@ -84,5 +85,10 @@ interface CareNetworkApi {
     @PATCH("/api/v1/users/carer/my/profile")
     suspend fun updateWorkerProfile(
         @Body updateWorkerProfileRequest: UpdateWorkerProfileRequest
+    ): Response<Unit>
+
+    @POST("/api/v1/users/center/my/profile")
+    suspend fun registerCenterProfile(
+        @Body registerCenterProfileRequest: RegisterCenterProfileRequest
     ): Response<Unit>
 }

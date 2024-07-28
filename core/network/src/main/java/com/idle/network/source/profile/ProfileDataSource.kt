@@ -4,6 +4,7 @@ import com.idle.network.api.CareNetworkApi
 import com.idle.network.model.profile.CallbackImageUploadRequest
 import com.idle.network.model.profile.GetCenterProfileResponse
 import com.idle.network.model.profile.GetWorkerProfileResponse
+import com.idle.network.model.profile.RegisterCenterProfileRequest
 import com.idle.network.model.profile.UpdateCenterProfileRequest
 import com.idle.network.model.profile.UpdateWorkerProfileRequest
 import com.idle.network.model.profile.UploadProfileImageUrlResponse
@@ -59,4 +60,9 @@ class ProfileDataSource @Inject constructor(
         updateWorkerProfileRequest: UpdateWorkerProfileRequest
     ): Result<Unit> = careNetworkApi.updateWorkerProfile(updateWorkerProfileRequest)
         .onResponse()
+
+    suspend fun registerCenterProfile(
+        registerCenterProfileRequest: RegisterCenterProfileRequest
+    ): Result<Unit> =
+        careNetworkApi.registerCenterProfile(registerCenterProfileRequest).onResponse()
 }

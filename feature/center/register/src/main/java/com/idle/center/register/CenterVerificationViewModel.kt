@@ -1,14 +1,19 @@
-package com.idle.center.verification
+package com.idle.center.register
 
 import android.net.Uri
+import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
+import com.idle.domain.usecase.profile.RegisterCenterProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CenterVerificationViewModel @Inject constructor() : BaseViewModel() {
+class CenterVerificationViewModel @Inject constructor(
+    private val registerCenterProfileUseCase: RegisterCenterProfileUseCase,
+) : BaseViewModel() {
 
     private val _verificationProcess = MutableStateFlow(VerificationProcess.INFO)
     val verificationProcess = _verificationProcess.asStateFlow()
@@ -30,6 +35,19 @@ class CenterVerificationViewModel @Inject constructor() : BaseViewModel() {
 
     private val _centerProfileImageUri = MutableStateFlow<Uri?>(null)
     val centerProfileImageUri = _centerProfileImageUri.asStateFlow()
+
+    internal fun registerCenterProfile() = viewModelScope.launch {
+        registerCenterProfileUseCase(
+            centerName = _centerName.value,
+            detailedAddress = _centerDetailAddress.value,
+            introduce = _centerIntroduce.value,
+            latitude = "",
+            longitude = "",
+            lotNumberAddress = "",
+            officeNumber = _centerNumber.value,
+            roadNameAddress = _centerAddress.value
+        )
+    }
 
     internal fun setVerificationProcess(process: VerificationProcess) {
         _verificationProcess.value = process
