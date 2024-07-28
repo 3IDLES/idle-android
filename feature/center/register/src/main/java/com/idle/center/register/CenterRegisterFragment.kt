@@ -18,6 +18,8 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.idle.binding.DeepLinkDestination.Postcode
+import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.component.CareProgressBar
@@ -55,6 +57,7 @@ internal class CenterRegisterFragment : BaseComposeFragment() {
                 onCenterNameChanged = ::setCenterName,
                 onCenterNumberChanged = ::setCenterNumber,
                 onCenterIntroduceChanged = ::setCenterIntroduce,
+                navigateToPostCode = { baseEvent(NavigateTo(Postcode)) },
                 onCenterDetailAddressChanged = ::setCenterDetailAddress,
                 onProfileImageUriChanged = ::setProfileImageUri,
                 registerCenterProfile = ::registerCenterProfile,
@@ -76,6 +79,7 @@ internal fun CenterRegisterScreen(
     onCenterNameChanged: (String) -> Unit,
     onCenterNumberChanged: (String) -> Unit,
     onCenterIntroduceChanged: (String) -> Unit,
+    navigateToPostCode: () -> Unit,
     onCenterDetailAddressChanged: (String) -> Unit,
     onProfileImageUriChanged: (Uri?) -> Unit,
     setRegisterProcess: (RegisterProcess) -> Unit,
@@ -125,6 +129,7 @@ internal fun CenterRegisterScreen(
                     RegisterProcess.ADDRESS -> CenterAddressScreen(
                         centerAddress = centerAddress,
                         centerDetailAddress = centerDetailAddress,
+                        navigateToPostCode = navigateToPostCode,
                         onCenterDetailAddressChanged = onCenterDetailAddressChanged,
                         setRegisterProcess = setRegisterProcess,
                     )

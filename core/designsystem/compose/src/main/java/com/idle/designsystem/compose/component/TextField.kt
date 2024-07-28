@@ -27,6 +27,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import com.idle.compose.clickable
 import com.idle.designsystem.compose.foundation.CareTheme
 
 @Composable
@@ -34,6 +35,7 @@ fun CareTextField(
     value: String,
     hint: String = "",
     readOnly: Boolean = false,
+    enabled: Boolean = true,
     isError: Boolean = false,
     keyboardType: KeyboardType = KeyboardType.Text,
     supportingText: String = "",
@@ -204,5 +206,40 @@ fun CareTextFieldLong(
                 innerTextField()
             }
         )
+    }
+}
+
+@Composable
+fun CareClickableTextField(
+    value: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    hint: String = "",
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .height(44.dp)
+            .background(color = CareTheme.colors.white000, shape = RoundedCornerShape(6.dp))
+            .border(
+                border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
+                shape = RoundedCornerShape(6.dp)
+            )
+            .clickable(onClick)
+            .padding(horizontal = 16.dp),
+    ) {
+        Text(
+            text = value,
+            style = CareTheme.typography.body3,
+            color = CareTheme.colors.gray900,
+        )
+
+        if (value.isBlank()) {
+            Text(
+                text = hint,
+                style = CareTheme.typography.body3,
+                color = CareTheme.colors.gray300,
+            )
+        }
     }
 }
