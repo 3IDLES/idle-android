@@ -8,6 +8,7 @@ android {
 
 dependencies {
     implementation(projects.feature.auth)
+    implementation(projects.feature.postcode)
     implementation(projects.feature.signin)
     implementation(projects.feature.signup)
     implementation(projects.feature.center.home)

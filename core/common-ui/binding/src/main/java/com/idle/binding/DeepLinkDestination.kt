@@ -7,9 +7,9 @@ import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.NavOptions
 import com.idle.designresource.R
 
-// DeepLinkDestination.kt
 sealed class DeepLinkDestination(val addressRes: Int) {
     data object Auth : DeepLinkDestination(R.string.auth_deeplink_url)
+    data object Postcode : DeepLinkDestination(R.string.postcode_deeplink_url)
     data object NewPassword : DeepLinkDestination(R.string.new_password_deeplink_url)
 
     data object CenterAuth : DeepLinkDestination(R.string.center_auth_deeplink_url)

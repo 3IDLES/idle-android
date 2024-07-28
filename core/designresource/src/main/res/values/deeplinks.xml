@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="auth_deeplink_url">care://auth</string>
+    <string name="postcode_deeplink_url">care://postcode</string>
 
     <string name="worker_auth_deeplink_url">care://auth/worker</string>
     <string name="worker_signup_deeplink_url">care://signup/worker</string>
