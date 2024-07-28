@@ -14,7 +14,7 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
-import com.idle.center.register.VerificationProcess
+import com.idle.center.register.RegisterProcess
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.foundation.CareTheme
@@ -24,12 +24,12 @@ internal fun CenterAddressScreen(
     centerAddress: String,
     centerDetailAddress: String,
     onCenterDetailAddressChanged: (String) -> Unit,
-    setVerificationProcess: (VerificationProcess) -> Unit,
+    setRegisterProcess: (RegisterProcess) -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    BackHandler { setVerificationProcess(VerificationProcess.INFO) }
+    BackHandler { setRegisterProcess(RegisterProcess.INFO) }
 
     Column(
         horizontalAlignment = Alignment.Start,
@@ -82,7 +82,7 @@ internal fun CenterAddressScreen(
                 onValueChanged = onCenterDetailAddressChanged,
                 onDone = {
                     if (centerAddress.isNotBlank() && centerDetailAddress.isNotBlank())
-                        setVerificationProcess(VerificationProcess.INTRODUCE)
+                        setRegisterProcess(RegisterProcess.INTRODUCE)
                 },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -93,7 +93,7 @@ internal fun CenterAddressScreen(
         CareButtonLarge(
             text = "다음",
             enable = centerDetailAddress.isNotBlank(),
-            onClick = { setVerificationProcess(VerificationProcess.INTRODUCE) },
+            onClick = { setRegisterProcess(RegisterProcess.INTRODUCE) },
             modifier = Modifier.fillMaxWidth(),
         )
     }
