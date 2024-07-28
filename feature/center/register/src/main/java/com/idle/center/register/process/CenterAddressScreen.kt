@@ -10,12 +10,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import com.idle.center.register.RegisterProcess
 import com.idle.designsystem.compose.component.CareButtonLarge
+import com.idle.designsystem.compose.component.CareClickableTextField
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.foundation.CareTheme
 
@@ -23,12 +21,10 @@ import com.idle.designsystem.compose.foundation.CareTheme
 internal fun CenterAddressScreen(
     centerAddress: String,
     centerDetailAddress: String,
+    navigateToPostCode: () -> Unit,
     onCenterDetailAddressChanged: (String) -> Unit,
     setRegisterProcess: (RegisterProcess) -> Unit,
 ) {
-    val focusManager = LocalFocusManager.current
-    val keyboardController = LocalSoftwareKeyboardController.current
-
     BackHandler { setRegisterProcess(RegisterProcess.INFO) }
 
     Column(
@@ -47,22 +43,16 @@ internal fun CenterAddressScreen(
             verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
         ) {
             Text(
-                text = "이름",
+                text = "도로명 주소",
                 style = CareTheme.typography.subtitle4,
                 color = CareTheme.colors.gray500,
             )
 
-            CareTextField(
+            CareClickableTextField(
                 value = centerAddress,
-                hint = "도로명 주소을 입력해주세요.",
-                onValueChanged = {},
-                onDone = {
-                    if (centerAddress.isNotBlank()) {
-                        focusManager.moveFocus(FocusDirection.Down)
-                        keyboardController?.show()
-                    }
-                },
-                modifier = Modifier.fillMaxWidth()
+                hint = "도로명 주소를 입력해주세요.",
+                onClick = navigateToPostCode,
+                modifier = Modifier.fillMaxWidth(),
             )
         }
 
