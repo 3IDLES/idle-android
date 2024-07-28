@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/centerVerificationFragment"
-        android:name="com.idle.center.verification.CenterVerificationFragment"
+        android:name="com.idle.center.register.CenterVerificationFragment"
         android:label="CenterVerificationFragment">
         <deepLink app:uri="@string/center_verification_deeplink_url" />
     </fragment>

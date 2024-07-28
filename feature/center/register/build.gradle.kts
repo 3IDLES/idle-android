@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.idle.center.verification"
+    namespace = "com.idle.center.register"
 }
 
 dependencies {

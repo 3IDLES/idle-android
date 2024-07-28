@@ -22,6 +22,17 @@ interface ProfileRepository {
         speciality: String,
     ): Result<Unit>
 
+    suspend fun registerCenterProfile(
+        centerName: String,
+        detailedAddress: String,
+        introduce: String,
+        latitude: String,
+        longitude: String,
+        lotNumberAddress: String,
+        officeNumber: String,
+        roadNameAddress: String,
+    ): Result<Unit>
+
     suspend fun updateProfileImage(
         userType: String,
         imageFileUri: String,

@@ -1,4 +1,4 @@
-package com.idle.center.verification
+package com.idle.center.register
 
 import android.net.Uri
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
@@ -57,6 +57,7 @@ internal class CenterVerificationFragment : BaseComposeFragment() {
                 onCenterIntroduceChanged = ::setCenterIntroduce,
                 onCenterDetailAddressChanged = ::setCenterDetailAddress,
                 onProfileImageUriChanged = ::setProfileImageUri,
+                registerCenterProfile = ::registerCenterProfile,
             )
         }
     }
@@ -78,6 +79,7 @@ internal fun CenterVerificationScreen(
     onCenterDetailAddressChanged: (String) -> Unit,
     onProfileImageUriChanged: (Uri?) -> Unit,
     setVerificationProcess: (VerificationProcess) -> Unit,
+    registerCenterProfile: () -> Unit,
 ) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val focusManager = LocalFocusManager.current
@@ -132,7 +134,8 @@ internal fun CenterVerificationScreen(
                         centerProfileImageUri = centerProfileImageUri,
                         onCenterIntroduceChanged = onCenterIntroduceChanged,
                         onProfileImageUriChanged = onProfileImageUriChanged,
-                        setVerificationProcess = setVerificationProcess
+                        setVerificationProcess = setVerificationProcess,
+                        registerCenterProfile = registerCenterProfile,
                     )
                 }
             }

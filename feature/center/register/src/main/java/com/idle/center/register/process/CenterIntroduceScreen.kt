@@ -24,7 +24,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.idle.center.verification.VerificationProcess
+import com.idle.center.register.VerificationProcess
 import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
@@ -38,6 +38,7 @@ internal fun CenterIntroduceScreen(
     onCenterIntroduceChanged: (String) -> Unit,
     onProfileImageUriChanged: (Uri?) -> Unit,
     setVerificationProcess: (VerificationProcess) -> Unit,
+    registerCenterProfile: () -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
     val scrollState = rememberScrollState()
@@ -120,7 +121,7 @@ internal fun CenterIntroduceScreen(
 
         CareButtonLarge(
             text = "다음",
-            onClick = { setVerificationProcess(VerificationProcess.INTRODUCE) },
+            onClick = { if (centerIntroduce.isNotBlank()) registerCenterProfile() },
             modifier = Modifier.fillMaxWidth(),
         )
     }
