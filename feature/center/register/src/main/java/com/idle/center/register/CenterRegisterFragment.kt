@@ -18,13 +18,13 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.idle.binding.DeepLinkDestination.Postcode
-import com.idle.binding.base.CareBaseEvent.NavigateTo
+import androidx.navigation.fragment.findNavController
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.component.CareProgressBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
+import com.idle.post.code.PostCodeFragment
 import com.idle.signup.center.process.CenterAddressScreen
 import com.idle.signup.center.process.CenterInfoScreen
 import com.idle.signup.center.process.CenterIntroduceScreen
@@ -32,7 +32,23 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 internal class CenterRegisterFragment : BaseComposeFragment() {
+
     override val fragmentViewModel: CenterVerificationViewModel by viewModels()
+
+    private val postCodeDialog: PostCodeFragment? by lazy {
+        PostCodeFragment().apply {
+            onDismissCallback =
+                {
+                    findNavController().currentBackStackEntry?.savedStateHandle?.let {
+                        val roadNameAddress = it.get<String>("roadNameAddress")
+                        val lotNumberAddress = it.get<String>("lotNumberAddress")
+
+                        fragmentViewModel.setRoadNameAddress(roadNameAddress ?: "")
+                        fragmentViewModel.setLotNumberAddress(lotNumberAddress ?: "")
+                    }
+                }
+        }
+    }
 
     @Composable
     override fun ComposeLayout() {
@@ -42,7 +58,7 @@ internal class CenterRegisterFragment : BaseComposeFragment() {
             val centerNumber by centerNumber.collectAsStateWithLifecycle()
             val centerIntroduce by centerIntroduce.collectAsStateWithLifecycle()
             val centerProfileImageUri by centerProfileImageUri.collectAsStateWithLifecycle()
-            val centerAddress by centerAddress.collectAsStateWithLifecycle()
+            val roadNameAddress by roadNameAddress.collectAsStateWithLifecycle()
             val centerDetailAddress by centerDetailAddress.collectAsStateWithLifecycle()
 
             CenterRegisterScreen(
@@ -51,13 +67,17 @@ internal class CenterRegisterFragment : BaseComposeFragment() {
                 centerNumber = centerNumber,
                 centerIntroduce = centerIntroduce,
                 centerProfileImageUri = centerProfileImageUri,
-                centerAddress = centerAddress,
+                roadNameAddress = roadNameAddress,
                 centerDetailAddress = centerDetailAddress,
                 setRegisterProcess = ::setRegisterProcess,
                 onCenterNameChanged = ::setCenterName,
                 onCenterNumberChanged = ::setCenterNumber,
                 onCenterIntroduceChanged = ::setCenterIntroduce,
-                navigateToPostCode = { baseEvent(NavigateTo(Postcode)) },
+                showPostCodeDialog = {
+                    if (!(postCodeDialog?.isAdded == true || postCodeDialog?.isVisible == true)) {
+                        postCodeDialog?.show(parentFragmentManager, "PostCodeFragment")
+                    }
+                },
                 onCenterDetailAddressChanged = ::setCenterDetailAddress,
                 onProfileImageUriChanged = ::setProfileImageUri,
                 registerCenterProfile = ::registerCenterProfile,
@@ -74,12 +94,12 @@ internal fun CenterRegisterScreen(
     centerNumber: String,
     centerIntroduce: String,
     centerProfileImageUri: Uri?,
-    centerAddress: String,
+    roadNameAddress: String,
     centerDetailAddress: String,
     onCenterNameChanged: (String) -> Unit,
     onCenterNumberChanged: (String) -> Unit,
     onCenterIntroduceChanged: (String) -> Unit,
-    navigateToPostCode: () -> Unit,
+    showPostCodeDialog: () -> Unit,
     onCenterDetailAddressChanged: (String) -> Unit,
     onProfileImageUriChanged: (Uri?) -> Unit,
     setRegisterProcess: (RegisterProcess) -> Unit,
@@ -127,9 +147,9 @@ internal fun CenterRegisterScreen(
                     )
 
                     RegisterProcess.ADDRESS -> CenterAddressScreen(
-                        centerAddress = centerAddress,
+                        roadNameAddress = roadNameAddress,
                         centerDetailAddress = centerDetailAddress,
-                        navigateToPostCode = navigateToPostCode,
+                        navigateToPostCode = showPostCodeDialog,
                         onCenterDetailAddressChanged = onCenterDetailAddressChanged,
                         setRegisterProcess = setRegisterProcess,
                     )

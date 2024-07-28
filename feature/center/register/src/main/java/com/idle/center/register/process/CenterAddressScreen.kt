@@ -19,7 +19,7 @@ import com.idle.designsystem.compose.foundation.CareTheme
 
 @Composable
 internal fun CenterAddressScreen(
-    centerAddress: String,
+    roadNameAddress: String,
     centerDetailAddress: String,
     navigateToPostCode: () -> Unit,
     onCenterDetailAddressChanged: (String) -> Unit,
@@ -49,7 +49,7 @@ internal fun CenterAddressScreen(
             )
 
             CareClickableTextField(
-                value = centerAddress,
+                value = roadNameAddress,
                 hint = "도로명 주소를 입력해주세요.",
                 onClick = navigateToPostCode,
                 modifier = Modifier.fillMaxWidth(),
@@ -71,7 +71,7 @@ internal fun CenterAddressScreen(
                 hint = "상세 주소를 입력해주세요. (예: 2층 204호)",
                 onValueChanged = onCenterDetailAddressChanged,
                 onDone = {
-                    if (centerAddress.isNotBlank() && centerDetailAddress.isNotBlank())
+                    if (roadNameAddress.isNotBlank() && centerDetailAddress.isNotBlank())
                         setRegisterProcess(RegisterProcess.INTRODUCE)
                 },
                 modifier = Modifier.fillMaxWidth()

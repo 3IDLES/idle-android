@@ -27,8 +27,11 @@ class CenterVerificationViewModel @Inject constructor(
     private val _centerIntroduce = MutableStateFlow("")
     val centerIntroduce = _centerIntroduce.asStateFlow()
 
-    private val _centerAddress = MutableStateFlow("")
-    val centerAddress = _centerAddress.asStateFlow()
+    private val _roadNameAddress = MutableStateFlow("")
+    val roadNameAddress = _roadNameAddress.asStateFlow()
+
+    private val _lotNumberAddress = MutableStateFlow("")
+    val lotNumberAddress = _lotNumberAddress.asStateFlow()
 
     private val _centerDetailAddress = MutableStateFlow("")
     val centerDetailAddress = _centerDetailAddress.asStateFlow()
@@ -45,7 +48,7 @@ class CenterVerificationViewModel @Inject constructor(
             longitude = "",
             lotNumberAddress = "",
             officeNumber = _centerNumber.value,
-            roadNameAddress = _centerAddress.value
+            roadNameAddress = _roadNameAddress.value
         )
     }
 
@@ -69,8 +72,12 @@ class CenterVerificationViewModel @Inject constructor(
         _centerIntroduce.value = introduce
     }
 
-    internal fun setCenterAddress(address: String) {
-        _centerAddress.value = address
+    internal fun setRoadNameAddress(address: String) {
+        _roadNameAddress.value = address
+    }
+
+    internal fun setLotNumberAddress(address: String) {
+        _lotNumberAddress.value = address
     }
 
     internal fun setCenterDetailAddress(address: String) {

@@ -1,20 +1,31 @@
 package com.idle.post.code
 
+import android.annotation.SuppressLint
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.webkit.JavascriptInterface
+import android.webkit.WebChromeClient
+import android.webkit.WebSettings
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.idle.postcode.databinding.FragmentPostCodeBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class PostCodeFragment : DialogFragment() {
-    private val fragmentViewModel: PostCodeViewModel by viewModels()
 
     private var _binding: FragmentPostCodeBinding? = null
     private val binding get() = _binding!!
+    var onDismissCallback: (() -> Unit)? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,11 +39,55 @@ class PostCodeFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.viewModel = fragmentViewModel
+        setupWebView()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.setLayout(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.MATCH_PARENT
+        )
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        onDismissCallback?.invoke()
+        super.onDismiss(dialog)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    private fun setupWebView() {
+        binding.postcodeWV.apply {
+            settings.javaScriptEnabled = true
+
+            webViewClient = WebViewClient()
+            webChromeClient = WebChromeClient()
+
+            addJavascriptInterface(AndroidBridge(), "android")
+            loadUrl("https://tgyuuan.github.io/DaumAddressApi")
+        }
+    }
+
+    private inner class AndroidBridge {
+        @JavascriptInterface
+        fun onPostCodeReceived(roadNameAddress: String, lotNumberAddress: String) {
+            lifecycleScope.launch(Dispatchers.Main) {
+                findNavController().currentBackStackEntry?.savedStateHandle?.set(
+                    key = "roadNameAddress",
+                    value = roadNameAddress,
+                )
+                findNavController().currentBackStackEntry?.savedStateHandle?.set(
+                    key = "lotNumberAddress",
+                    value = lotNumberAddress,
+                )
+
+                dismiss()
+            }
+        }
     }
 }
