@@ -1,8 +1,11 @@
 package com.idle.center.register
 
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.viewModelScope
+import com.idle.binding.DeepLinkDestination.CenterRegisterComplete
 import com.idle.binding.base.BaseViewModel
+import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.usecase.profile.RegisterCenterProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,7 +34,6 @@ class CenterVerificationViewModel @Inject constructor(
     val roadNameAddress = _roadNameAddress.asStateFlow()
 
     private val _lotNumberAddress = MutableStateFlow("")
-    val lotNumberAddress = _lotNumberAddress.asStateFlow()
 
     private val _centerDetailAddress = MutableStateFlow("")
     val centerDetailAddress = _centerDetailAddress.asStateFlow()
@@ -44,12 +46,14 @@ class CenterVerificationViewModel @Inject constructor(
             centerName = _centerName.value,
             detailedAddress = _centerDetailAddress.value,
             introduce = _centerIntroduce.value,
-            latitude = "",
-            longitude = "",
-            lotNumberAddress = "",
+            lotNumberAddress = _lotNumberAddress.value,
             officeNumber = _centerNumber.value,
             roadNameAddress = _roadNameAddress.value
-        )
+        ).onSuccess {
+            baseEvent(CareBaseEvent.NavigateTo(CenterRegisterComplete, true))
+        }.onFailure {
+            Log.d("test", "센터 정보 등록 실패! $it")
+        }
     }
 
     internal fun setRegisterProcess(process: RegisterProcess) {

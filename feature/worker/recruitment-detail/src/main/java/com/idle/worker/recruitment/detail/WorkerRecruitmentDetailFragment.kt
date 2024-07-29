@@ -1,6 +1,5 @@
-package com.idle.worker.job.detail
+package com.idle.worker.recruitment.detail
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,8 +12,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -28,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.component.CareButtonLine
+import com.idle.designsystem.compose.component.CareCard
 import com.idle.designsystem.compose.component.CareMap
 import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
 import com.idle.designsystem.compose.component.CareTag
@@ -36,19 +34,19 @@ import com.idle.designsystem.compose.foundation.CareTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-internal class WorkerJobDetailFragment : BaseComposeFragment() {
-    override val fragmentViewModel: WorkerJobDetailViewModel by viewModels()
+internal class WorkerRecruitmentDetailFragment : BaseComposeFragment() {
+    override val fragmentViewModel: WorkerRecruitmentDetailViewModel by viewModels()
 
     @Composable
     override fun ComposeLayout() {
         fragmentViewModel.apply {
-            WorkerJobDetailScreen()
+            WorkerRecruitmentDetailScreen()
         }
     }
 }
 
 @Composable
-internal fun WorkerJobDetailScreen(
+internal fun WorkerRecruitmentDetailScreen(
 ) {
     val scrollState = rememberScrollState()
 
@@ -550,50 +548,10 @@ internal fun WorkerJobDetailScreen(
                     modifier = Modifier.padding(bottom = 12.dp),
                 )
 
-                Card(
-                    shape = RoundedCornerShape(8.dp),
-                    border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
-                    colors = CardColors(
-                        containerColor = CareTheme.colors.white000,
-                        contentColor = CareTheme.colors.white000,
-                        disabledContentColor = CareTheme.colors.white000,
-                        disabledContainerColor = CareTheme.colors.white000,
-                    ),
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth()
-                            .padding(horizontal = 20.dp, vertical = 16.dp)
-                    ) {
-                        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                            Text(
-                                text = "네얼간이 요양보호소",
-                                style = CareTheme.typography.subtitle3,
-                                color = CareTheme.colors.gray900,
-                            )
-
-                            Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
-                                Image(
-                                    painter = painterResource(com.idle.designresource.R.drawable.ic_address_pin),
-                                    contentDescription = null,
-                                )
-
-                                Text(
-                                    text = "용인시 어쩌고 저쩌고",
-                                    style = CareTheme.typography.body3,
-                                    color = CareTheme.colors.gray500,
-                                )
-                            }
-                        }
-
-                        Spacer(modifier = Modifier.weight(1f))
-
-                        Image(
-                            painter = painterResource(com.idle.designresource.R.drawable.ic_arrow_right),
-                            contentDescription = null,
-                        )
-                    }
-                }
+                CareCard(
+                    name = "네얼간이 요양보호소",
+                    address = "용인시 어쩌고 저쩌고",
+                )
             }
 
             Row(

@@ -10,4 +10,11 @@
         android:label="CenterRegisterFragment">
         <deepLink app:uri="@string/center_register_deeplink_url" />
     </fragment>
+
+    <fragment
+        android:id="@+id/centerRegisterCompleteFragment"
+        android:name="com.idle.center.register.complete.CenterRegisterCompleteFragment"
+        android:label="CenterRegisterCompleteFragment" >
+        <deepLink app:uri="@string/center_register_complete_deeplink_url" />
+    </fragment>
 </navigation>

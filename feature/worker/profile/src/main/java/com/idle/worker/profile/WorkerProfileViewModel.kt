@@ -32,6 +32,11 @@ class WorkerProfileViewModel @Inject constructor(
     private val _experienceYear = MutableStateFlow<Int?>(null)
     val experienceYear = _experienceYear.asStateFlow()
 
+    private val _roadNameAddress = MutableStateFlow("")
+    val roadNameAddress = _roadNameAddress.asStateFlow()
+
+    private val _lotNumberAddress = MutableStateFlow("")
+
     private val _isEditState = MutableStateFlow(false)
     val isEditState = _isEditState.asStateFlow()
 
@@ -97,5 +102,13 @@ class WorkerProfileViewModel @Inject constructor(
 
     internal fun setGender(gender: Gender) {
         _gender.value = gender
+    }
+
+    internal fun setRoadNameAddress(address: String) {
+        _roadNameAddress.value = address
+    }
+
+    internal fun setLotNumberAddress(address: String) {
+        _lotNumberAddress.value = address
     }
 }

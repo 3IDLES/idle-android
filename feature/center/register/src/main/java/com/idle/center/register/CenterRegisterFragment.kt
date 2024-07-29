@@ -86,7 +86,6 @@ internal class CenterRegisterFragment : BaseComposeFragment() {
     }
 }
 
-
 @Composable
 internal fun CenterRegisterScreen(
     registerProcess: RegisterProcess,
@@ -114,7 +113,7 @@ internal fun CenterRegisterScreen(
                 title = "센터 회원가입",
                 onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
                 modifier = Modifier.fillMaxWidth()
-                    .padding(start = 12.dp, top = 48.dp, bottom = 8.dp)
+                    .padding(start = 12.dp, top = 48.dp)
             )
         },
         modifier = Modifier.addFocusCleaner(focusManager),
@@ -125,7 +124,7 @@ internal fun CenterRegisterScreen(
             modifier = Modifier.fillMaxSize()
                 .background(Color.White)
                 .padding(paddingValue)
-                .padding(start = 20.dp, end = 20.dp, bottom = 30.dp),
+                .padding(start = 20.dp, end = 20.dp, top = 8.dp),
         ) {
             CareProgressBar(
                 currentStep = registerProcess.step,

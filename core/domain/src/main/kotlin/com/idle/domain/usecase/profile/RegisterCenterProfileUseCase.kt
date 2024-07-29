@@ -10,8 +10,6 @@ class RegisterCenterProfileUseCase @Inject constructor(
         centerName: String,
         detailedAddress: String,
         introduce: String,
-        latitude: String,
-        longitude: String,
         lotNumberAddress: String,
         officeNumber: String,
         roadNameAddress: String
@@ -19,8 +17,6 @@ class RegisterCenterProfileUseCase @Inject constructor(
         centerName = centerName,
         detailedAddress = detailedAddress,
         introduce = introduce,
-        latitude = latitude,
-        longitude = longitude,
         lotNumberAddress = lotNumberAddress,
         officeNumber = officeNumber,
         roadNameAddress = roadNameAddress
