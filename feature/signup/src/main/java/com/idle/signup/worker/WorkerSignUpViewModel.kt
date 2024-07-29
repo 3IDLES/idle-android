@@ -14,6 +14,7 @@ import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
 import com.idle.domain.usecase.auth.SignInWorkerUseCase
 import com.idle.domain.usecase.auth.SignUpWorkerUseCase
 import com.idle.signin.worker.WorkerSignUpProcess.NAME
+import com.idle.signup.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -128,8 +129,9 @@ class WorkerSignUpViewModel @Inject constructor(
             phoneNumber = _workerPhoneNumber.value,
             authCode = _workerAuthCode.value,
         )
-            .onSuccess { baseEvent(CareBaseEvent.NavigateTo(WorkerHome, true)) }
-            .onFailure {
+            .onSuccess {
+                baseEvent(CareBaseEvent.NavigateTo(WorkerHome, R.id.workerSignUpFragment))
+            }.onFailure {
                 confirmAuthCodeUseCase(_workerPhoneNumber.value, _workerAuthCode.value)
                     .onSuccess {
                         cancelTimer()
@@ -150,7 +152,14 @@ class WorkerSignUpViewModel @Inject constructor(
             longitude = "127.0276",
             latitude = "37.4979",
         )
-            .onSuccess { baseEvent(CareBaseEvent.NavigateTo(WorkerHome, true)) }
+            .onSuccess {
+                baseEvent(
+                    CareBaseEvent.NavigateTo(
+                        WorkerHome,
+                        R.id.workerSignUpFragment
+                    )
+                )
+            }
             .onFailure { Log.d("test", "실패! ${it}") }
     }
 

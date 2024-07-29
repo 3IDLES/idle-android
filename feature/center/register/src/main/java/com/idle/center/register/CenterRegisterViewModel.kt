@@ -50,7 +50,7 @@ class CenterVerificationViewModel @Inject constructor(
             officeNumber = _centerNumber.value,
             roadNameAddress = _roadNameAddress.value
         ).onSuccess {
-            baseEvent(CareBaseEvent.NavigateTo(CenterRegisterComplete, true))
+            baseEvent(CareBaseEvent.NavigateTo(CenterRegisterComplete, R.id.centerRegisterFragment))
         }.onFailure {
             Log.d("test", "센터 정보 등록 실패! $it")
         }

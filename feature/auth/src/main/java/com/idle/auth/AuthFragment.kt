@@ -39,13 +39,13 @@ internal class AuthFragment : BaseComposeFragment() {
             navigateToWorkerAuth = {
                 fragmentViewModel.handleTokenNavigation(
                     defaultDestination = NavigateTo(WorkerAuth),
-                    authenticatedDestination = NavigateTo(WorkerHome, true),
+                    authenticatedDestination = NavigateTo(WorkerHome, R.id.authFragment),
                 )
             },
             navigateToCenterAuth = {
                 fragmentViewModel.handleTokenNavigation(
                     defaultDestination = NavigateTo(CenterAuth),
-                    authenticatedDestination = NavigateTo(CenterHome, true),
+                    authenticatedDestination = NavigateTo(CenterHome, R.id.authFragment),
                 )
             },
         )

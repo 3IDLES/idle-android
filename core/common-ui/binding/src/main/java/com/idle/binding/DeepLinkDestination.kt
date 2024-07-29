@@ -1,6 +1,7 @@
 package com.idle.binding
 
 import android.content.Context
+import androidx.annotation.IdRes
 import androidx.core.net.toUri
 import androidx.navigation.NavController
 import androidx.navigation.NavDeepLinkRequest
@@ -19,11 +20,14 @@ sealed class DeepLinkDestination(val addressRes: Int) {
     data object CenterProfile : DeepLinkDestination(R.string.center_profile_deeplink_url)
     data object CenterSetting : DeepLinkDestination(R.string.center_setting_deeplink_url)
     data object CenterRegister : DeepLinkDestination(R.string.center_register_deeplink_url)
-    data object CenterRegisterComplete : DeepLinkDestination(R.string.center_register_complete_deeplink_url)
+    data object CenterRegisterComplete :
+        DeepLinkDestination(R.string.center_register_complete_deeplink_url)
 
     data object WorkerHome : DeepLinkDestination(R.string.worker_home_deeplink_url)
     data object WorkerProfile : DeepLinkDestination(R.string.worker_profile_deeplink_url)
-    data object WorkerJobDetail : DeepLinkDestination(R.string.worker_recruitment_detail_deeplink_url)
+    data object WorkerJobDetail :
+        DeepLinkDestination(R.string.worker_recruitment_detail_deeplink_url)
+
     data object WorkerAuth : DeepLinkDestination(R.string.worker_auth_deeplink_url)
     data object WorkerSignUp : DeepLinkDestination(R.string.worker_signup_deeplink_url)
 }
@@ -33,12 +37,12 @@ fun DeepLinkDestination.getDeepLink(context: Context) = context.getString(this.a
 fun NavController.deepLinkNavigateTo(
     context: Context,
     deepLinkDestination: DeepLinkDestination,
-    popUpTo: Boolean = false,
+    @IdRes popUpTo: Int? = null,
 ) {
     val builder = NavOptions.Builder()
 
-    if (popUpTo) {
-        builder.setPopUpTo(graph.startDestinationId, true)
+    popUpTo?.let {
+        builder.setPopUpTo(it, true)
     }
 
     navigate(
