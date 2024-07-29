@@ -19,10 +19,11 @@ sealed class DeepLinkDestination(val addressRes: Int) {
     data object CenterProfile : DeepLinkDestination(R.string.center_profile_deeplink_url)
     data object CenterSetting : DeepLinkDestination(R.string.center_setting_deeplink_url)
     data object CenterRegister : DeepLinkDestination(R.string.center_register_deeplink_url)
+    data object CenterRegisterComplete : DeepLinkDestination(R.string.center_register_complete_deeplink_url)
 
     data object WorkerHome : DeepLinkDestination(R.string.worker_home_deeplink_url)
     data object WorkerProfile : DeepLinkDestination(R.string.worker_profile_deeplink_url)
-    data object WorkerJobDetail : DeepLinkDestination(R.string.worker_job_detail_deeplink_url)
+    data object WorkerJobDetail : DeepLinkDestination(R.string.worker_recruitment_detail_deeplink_url)
     data object WorkerAuth : DeepLinkDestination(R.string.worker_auth_deeplink_url)
     data object WorkerSignUp : DeepLinkDestination(R.string.worker_signup_deeplink_url)
 }

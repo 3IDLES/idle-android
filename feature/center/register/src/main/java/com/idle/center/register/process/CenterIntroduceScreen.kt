@@ -122,7 +122,8 @@ internal fun CenterIntroduceScreen(
         CareButtonLarge(
             text = "다음",
             onClick = { if (centerIntroduce.isNotBlank()) registerCenterProfile() },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
+                .padding(bottom = 30.dp),
         )
     }
 }
