@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.idle.designsystem.compose.foundation.CareTheme
 
@@ -45,8 +46,8 @@ fun CareButtonSmall(
 fun CareButtonMedium(
     text: String,
     onClick: () -> Unit,
-    enable: Boolean,
     modifier: Modifier = Modifier,
+    enable: Boolean = true,
 ) {
     Button(
         onClick = onClick,
