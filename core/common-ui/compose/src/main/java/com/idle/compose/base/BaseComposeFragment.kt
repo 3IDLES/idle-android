@@ -35,7 +35,8 @@ abstract class BaseComposeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewLifecycleOwner.repeatOnStarted {
-            fragmentViewModel.baseEventFlow.collect { handleEvent(it) }
+            fragmentViewModel.baseEventFlow.collect { handleEvent(it)
+            }
         }
 
         composeView.setContent {

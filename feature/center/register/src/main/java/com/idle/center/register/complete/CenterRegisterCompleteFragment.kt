@@ -11,10 +11,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.idle.binding.DeepLinkDestination.CenterHome
 import com.idle.binding.DeepLinkDestination.CenterProfile
 import com.idle.binding.base.CareBaseEvent.NavigateTo
@@ -32,24 +34,16 @@ internal class CenterRegisterCompleteFragment : BaseComposeFragment() {
     @Composable
     override fun ComposeLayout() {
         fragmentViewModel.apply {
+            val centerProfile by centerProfile.collectAsStateWithLifecycle()
+
             CenterRegisterCompleteScreen(
+                centerProfile = centerProfile,
                 navigateToCenterProfile = {
-                    baseEvent(
-                        NavigateTo(
-                            CenterProfile,
-                            R.id.centerRegisterCompleteFragment,
-                        )
-                    )
+                    baseEvent(NavigateTo(CenterProfile, R.id.centerRegisterCompleteFragment))
                 },
                 navigateToCenterHome = {
-                    baseEvent(
-                        NavigateTo(
-                            CenterHome,
-                            R.id.centerRegisterCompleteFragment,
-                        )
-                    )
+                    baseEvent(NavigateTo(CenterHome, R.id.centerRegisterCompleteFragment))
                 }
-
             )
         }
     }
@@ -57,6 +51,7 @@ internal class CenterRegisterCompleteFragment : BaseComposeFragment() {
 
 @Composable
 internal fun CenterRegisterCompleteScreen(
+    centerProfile: com.idle.domain.model.profile.CenterProfile,
     navigateToCenterProfile: () -> Unit,
     navigateToCenterHome: () -> Unit,
 ) {
@@ -88,8 +83,8 @@ internal fun CenterRegisterCompleteScreen(
         )
 
         CareCard(
-            name = "네얼간이 요양보호소",
-            address = "용인시 어쩌고 저쩌고",
+            name = centerProfile.centerName,
+            address = centerProfile.roadNameAddress,
             onClick = { navigateToCenterProfile() },
             modifier = Modifier.fillMaxWidth(),
         )
