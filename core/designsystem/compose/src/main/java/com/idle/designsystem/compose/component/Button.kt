@@ -72,8 +72,8 @@ fun CareButtonMedium(
 fun CareButtonLarge(
     text: String,
     onClick: () -> Unit,
-    enable: Boolean = true,
     modifier: Modifier = Modifier,
+    enable: Boolean = true,
 ) {
     Button(
         onClick = onClick,
@@ -96,11 +96,65 @@ fun CareButtonLarge(
 }
 
 @Composable
+fun CareButtonCardLarge(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enable: Boolean = true,
+) {
+    Button(
+        onClick = onClick,
+        enabled = enable,
+        shape = RoundedCornerShape(6.dp),
+        colors = ButtonColors(
+            containerColor = CareTheme.colors.orange500,
+            contentColor = CareTheme.colors.orange500,
+            disabledContentColor = CareTheme.colors.gray200,
+            disabledContainerColor = CareTheme.colors.gray200,
+        ),
+        modifier = modifier.height(38.dp),
+    ) {
+        Text(
+            text = text,
+            style = CareTheme.typography.subtitle4,
+            color = CareTheme.colors.white000,
+        )
+    }
+}
+
+@Composable
+fun CareButtonCardMedium(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enable: Boolean = true,
+) {
+    Button(
+        onClick = onClick,
+        enabled = enable,
+        shape = RoundedCornerShape(6.dp),
+        colors = ButtonColors(
+            containerColor = CareTheme.colors.orange500,
+            contentColor = CareTheme.colors.orange500,
+            disabledContentColor = CareTheme.colors.gray200,
+            disabledContainerColor = CareTheme.colors.gray200,
+        ),
+        modifier = modifier.height(38.dp),
+    ) {
+        Text(
+            text = text,
+            style = CareTheme.typography.heading4,
+            color = CareTheme.colors.white000,
+        )
+    }
+}
+
+@Composable
 fun CareButtonStrokeSmall(
     text: String,
     onClick: () -> Unit,
-    enable: Boolean = true,
     modifier: Modifier = Modifier,
+    enable: Boolean = true,
 ) {
     Button(
         onClick = onClick,
@@ -128,11 +182,11 @@ fun CareButtonStrokeSmall(
 fun CareButtonLine(
     text: String,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
     enable: Boolean = true,
     borderColor: Color = CareTheme.colors.orange400,
     containerColor: Color = CareTheme.colors.white000,
     textColor: Color = CareTheme.colors.orange500,
-    modifier: Modifier = Modifier,
 ) {
     Button(
         onClick = onClick,
@@ -161,9 +215,9 @@ internal fun CareDialogButton(
     onClick: () -> Unit,
     containerColor: Color,
     textColor: Color,
+    modifier: Modifier = Modifier,
     border: BorderStroke? = null,
     enable: Boolean = true,
-    modifier: Modifier = Modifier,
 ) {
     Button(
         onClick = onClick,

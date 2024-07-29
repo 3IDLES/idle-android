@@ -16,8 +16,8 @@ import com.idle.designsystem.compose.foundation.CareTheme
 fun CareChip(
     text: String,
     enable: Boolean,
-    onClick: () -> Unit = {},
     modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
 ) {
     Box(
         contentAlignment = Alignment.Center,

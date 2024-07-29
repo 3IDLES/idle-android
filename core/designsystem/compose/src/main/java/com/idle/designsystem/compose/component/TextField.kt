@@ -33,6 +33,8 @@ import com.idle.designsystem.compose.foundation.CareTheme
 @Composable
 fun CareTextField(
     value: String,
+    onValueChanged: (String) -> Unit,
+    modifier: Modifier = Modifier,
     hint: String = "",
     readOnly: Boolean = false,
     enabled: Boolean = true,
@@ -40,10 +42,8 @@ fun CareTextField(
     keyboardType: KeyboardType = KeyboardType.Text,
     supportingText: String = "",
     visualTransformation: VisualTransformation = VisualTransformation.None,
-    onValueChanged: (String) -> Unit,
     onDone: () -> Unit = {},
     leftComponent: @Composable () -> Unit = {},
-    modifier: Modifier = Modifier,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val interactionSource = remember { MutableInteractionSource() }
