@@ -12,8 +12,8 @@ import androidx.compose.runtime.Composable
 @Composable
 fun <S : Enum<S>> CareStateAnimator(
     targetState: S,
+    content: @Composable() AnimatedContentScope.(targetState: S) -> Unit,
     label : String = "AnimatedContent",
-    content: @Composable() AnimatedContentScope.(targetState: S) -> Unit
 ) {
     AnimatedContent(
         targetState = targetState,
