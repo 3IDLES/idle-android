@@ -15,6 +15,7 @@ import com.idle.domain.usecase.auth.SignUpCenterUseCase
 import com.idle.domain.usecase.auth.ValidateBusinessRegistrationNumberUseCase
 import com.idle.domain.usecase.auth.ValidateIdentifierUseCase
 import com.idle.signin.center.CenterSignUpProcess.NAME
+import com.idle.signup.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -158,7 +159,14 @@ class CenterSignUpViewModel @Inject constructor(
             managerName = _centerName.value,
             businessRegistrationNumber = _businessRegistrationNumber.value,
         )
-            .onSuccess { baseEvent(CareBaseEvent.NavigateTo(DeepLinkDestination.CenterSignIn, true)) }
+            .onSuccess {
+                baseEvent(
+                    CareBaseEvent.NavigateTo(
+                        DeepLinkDestination.CenterSignIn,
+                        R.id.centerSignUpFragment
+                    )
+                )
+            }
             .onFailure { Log.d("test", "실패! ${it}") }
     }
 

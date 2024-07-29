@@ -27,6 +27,6 @@ open class BaseViewModel : ViewModel() {
 sealed class CareBaseEvent {
     data class NavigateTo(
         val destination: DeepLinkDestination,
-        val popUpTo: Boolean = false,
+        val popUpTo: Int? = null,
     ) : CareBaseEvent()
 }

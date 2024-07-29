@@ -18,6 +18,7 @@ import androidx.fragment.app.viewModels
 import com.idle.binding.DeepLinkDestination.CenterHome
 import com.idle.binding.DeepLinkDestination.CenterProfile
 import com.idle.binding.base.CareBaseEvent.NavigateTo
+import com.idle.center.register.R
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareCard
@@ -32,8 +33,22 @@ internal class CenterRegisterCompleteFragment : BaseComposeFragment() {
     override fun ComposeLayout() {
         fragmentViewModel.apply {
             CenterRegisterCompleteScreen(
-                navigateToCenterProfile = { baseEvent(NavigateTo(CenterProfile, popUpTo = true)) },
-                navigateToCenterHome = { baseEvent(NavigateTo(CenterHome, popUpTo = true)) }
+                navigateToCenterProfile = {
+                    baseEvent(
+                        NavigateTo(
+                            CenterProfile,
+                            R.id.centerRegisterCompleteFragment,
+                        )
+                    )
+                },
+                navigateToCenterHome = {
+                    baseEvent(
+                        NavigateTo(
+                            CenterHome,
+                            R.id.centerRegisterCompleteFragment,
+                        )
+                    )
+                }
 
             )
         }
