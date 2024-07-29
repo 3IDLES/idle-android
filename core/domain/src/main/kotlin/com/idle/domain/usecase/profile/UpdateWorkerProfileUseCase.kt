@@ -14,8 +14,6 @@ class UpdateWorkerProfileUseCase @Inject constructor(
         experienceYear: Int?,
         roadNameAddress: String,
         lotNumberAddress: String,
-        longitude: String,
-        latitude: String,
         introduce: String?,
         speciality: String,
         jobSearchStatus: JobSearchStatus,
@@ -27,8 +25,6 @@ class UpdateWorkerProfileUseCase @Inject constructor(
                     experienceYear = experienceYear,
                     roadNameAddress = roadNameAddress,
                     lotNumberAddress = lotNumberAddress,
-                    longitude = longitude,
-                    latitude = latitude,
                     jobSearchStatus = jobSearchStatus,
                     introduce = introduce,
                     speciality = speciality

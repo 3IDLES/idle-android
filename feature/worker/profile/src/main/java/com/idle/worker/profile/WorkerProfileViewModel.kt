@@ -67,8 +67,6 @@ class WorkerProfileViewModel @Inject constructor(
             experienceYear = _experienceYear.value,
             roadNameAddress = "",
             lotNumberAddress = "",
-            longitude = "",
-            latitude = "",
             speciality = _specialty.value,
             introduce = _workerIntroduce.value.ifBlank { null },
             imageFileUri = _profileImageUri.value?.toString(),

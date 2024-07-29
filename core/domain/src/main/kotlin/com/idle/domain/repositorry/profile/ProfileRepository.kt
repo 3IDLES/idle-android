@@ -16,8 +16,6 @@ interface ProfileRepository {
         roadNameAddress: String,
         lotNumberAddress: String,
         jobSearchStatus: JobSearchStatus,
-        longitude: String,
-        latitude: String,
         introduce: String?,
         speciality: String,
     ): Result<Unit>
@@ -26,8 +24,6 @@ interface ProfileRepository {
         centerName: String,
         detailedAddress: String,
         introduce: String,
-        latitude: String,
-        longitude: String,
         lotNumberAddress: String,
         officeNumber: String,
         roadNameAddress: String,

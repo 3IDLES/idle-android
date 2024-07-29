@@ -8,8 +8,6 @@ data class RegisterCenterProfileRequest(
     val centerName: String,
     val detailedAddress: String,
     val introduce: String,
-    val latitude: String,
-    val longitude: String,
     val lotNumberAddress: String,
     val officeNumber: String,
     val roadNameAddress: String

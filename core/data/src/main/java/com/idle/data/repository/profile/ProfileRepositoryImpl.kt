@@ -43,8 +43,6 @@ class ProfileRepositoryImpl @Inject constructor(
         roadNameAddress: String,
         lotNumberAddress: String,
         jobSearchStatus: JobSearchStatus,
-        longitude: String,
-        latitude: String,
         introduce: String?,
         speciality: String
     ): Result<Unit> = profileDataSource.updateWorkerProfile(
@@ -52,9 +50,7 @@ class ProfileRepositoryImpl @Inject constructor(
             experienceYear = experienceYear,
             roadNameAddress = roadNameAddress,
             lotNumberAddress = lotNumberAddress,
-            longitude = longitude,
             jobSearchStatus = jobSearchStatus.name,
-            latitude = latitude,
             introduce = introduce,
             speciality = speciality
         )
@@ -64,8 +60,6 @@ class ProfileRepositoryImpl @Inject constructor(
         centerName: String,
         detailedAddress: String,
         introduce: String,
-        latitude: String,
-        longitude: String,
         lotNumberAddress: String,
         officeNumber: String,
         roadNameAddress: String
@@ -74,8 +68,6 @@ class ProfileRepositoryImpl @Inject constructor(
             centerName = centerName,
             detailedAddress = detailedAddress,
             introduce = introduce,
-            latitude = latitude,
-            longitude = longitude,
             lotNumberAddress = lotNumberAddress,
             officeNumber = officeNumber,
             roadNameAddress = roadNameAddress,
