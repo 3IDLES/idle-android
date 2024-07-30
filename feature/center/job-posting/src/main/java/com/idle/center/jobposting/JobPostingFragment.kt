@@ -34,8 +34,10 @@ import com.idle.domain.model.job.DayOfWeek
 import com.idle.domain.model.job.MentalStatus
 import com.idle.domain.model.job.PayType
 import com.idle.post.code.PostCodeFragment
+import com.idle.signup.center.step.AdditionalInfoScreen
 import com.idle.signup.center.step.AddressScreen
 import com.idle.signup.center.step.CustomerInformationScreen
+import com.idle.signup.center.step.CustomerRequirementScreen
 import com.idle.signup.center.step.TimePaymentScreen
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -216,8 +218,12 @@ internal fun JobPostingScreen(
                         setJobPostingStep = setJobPostingStep,
                     )
 
-                    JobPostingStep.CUSTOMER_REQUIREMENT -> {}
-                    JobPostingStep.ADDITIONAL_INFO -> {}
+                    JobPostingStep.CUSTOMER_REQUIREMENT -> CustomerRequirementScreen(
+                        setJobPostingStep
+                    )
+
+                    JobPostingStep.ADDITIONAL_INFO -> AdditionalInfoScreen(setJobPostingStep)
+
                     JobPostingStep.SUMMARY -> {}
                 }
             }

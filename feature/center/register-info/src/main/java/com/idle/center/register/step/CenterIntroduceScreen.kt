@@ -24,11 +24,11 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.idle.center.register.RegistrationStep
-import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareTextFieldLong
+import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 
 @Composable
@@ -76,7 +76,8 @@ internal fun CenterIntroduceScreen(
 
         LabeledContent(
             subtitle = "센터 소개",
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
+                .padding(bottom = 20.dp),
         ) {
             CareTextFieldLong(
                 value = centerIntroduce,
@@ -90,7 +91,8 @@ internal fun CenterIntroduceScreen(
 
         LabeledContent(
             subtitle = "센터 사진",
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
+                .padding(bottom = 24.dp),
         ) {
             AsyncImage(
                 model = centerProfileImageUri ?: R.drawable.ic_profile_empty_edit,
