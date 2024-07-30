@@ -30,6 +30,7 @@ import com.idle.designsystem.compose.component.CareProgressBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
 import com.idle.post.code.PostCodeFragment
+import com.idle.signup.center.step.TimePaymentScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -122,7 +123,7 @@ internal fun JobPostingScreen(
                 label = "센터 정보 입력을 관리하는 애니메이션",
             ) { jobPostingStep ->
                 when (jobPostingStep) {
-                    JobPostingStep.TIMEPAYMENT -> {}
+                    JobPostingStep.TIMEPAYMENT -> TimePaymentScreen(setJobPostingStep)
                     JobPostingStep.ADDRESS -> {}
                     JobPostingStep.CUSTOMERINFORMATION -> {}
                     JobPostingStep.CUSTOMERREQUIREMENT -> {}

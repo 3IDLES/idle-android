@@ -39,7 +39,7 @@ import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designsystem.compose.component.CareButtonStrokeSmall
-import com.idle.designsystem.compose.component.CareChip
+import com.idle.designsystem.compose.component.CareChipBasic
 import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.component.CareTextField
@@ -343,13 +343,13 @@ internal fun WorkerProfileScreen(
                             horizontalArrangement = Arrangement.spacedBy(4.dp),
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            CareChip(
+                            CareChipBasic(
                                 text = Gender.WOMAN.displayName,
                                 enable = gender == Gender.WOMAN,
                                 modifier = Modifier.size(width = 104.dp, height = 44.dp),
                             )
 
-                            CareChip(
+                            CareChipBasic(
                                 text = Gender.MAN.displayName,
                                 enable = gender == Gender.MAN,
                                 modifier = Modifier.size(width = 104.dp, height = 44.dp),

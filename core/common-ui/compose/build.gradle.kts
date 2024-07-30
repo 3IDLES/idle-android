@@ -9,6 +9,7 @@ android {
 
 dependencies {
     implementation(projects.core.designresource)
+    implementation(projects.core.designsystem.compose)
     implementation(projects.core.commonUi.binding)
     implementation(libs.androidx.navigation.fragment)
 }

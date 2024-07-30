@@ -15,7 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.idle.designsystem.compose.component.CareButtonLarge
-import com.idle.designsystem.compose.component.CareChip
+import com.idle.designsystem.compose.component.CareChipBasic
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.Gender
 import com.idle.signin.worker.WorkerSignUpStep
@@ -53,7 +53,7 @@ internal fun GenderScreen(
             horizontalArrangement = Arrangement.spacedBy(4.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
-            CareChip(
+            CareChipBasic(
                 text = Gender.WOMAN.displayName,
                 onClick = { onGenderChanged(Gender.WOMAN) },
                 enable = gender == Gender.WOMAN,
@@ -61,7 +61,7 @@ internal fun GenderScreen(
                     .height(56.dp),
             )
 
-            CareChip(
+            CareChipBasic(
                 text = Gender.MAN.displayName,
                 onClick = { onGenderChanged(Gender.MAN) },
                 enable = gender == Gender.MAN,

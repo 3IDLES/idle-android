@@ -32,5 +32,11 @@ class JobPostingViewModel @Inject constructor() : BaseViewModel() {
 
 enum class JobPostingStep(val step: Int) {
     TIMEPAYMENT(1), ADDRESS(2), CUSTOMERINFORMATION(3),
-    CUSTOMERREQUIREMENT(4), ADDITIONALINFO(5), SUMMARY(6)
+    CUSTOMERREQUIREMENT(4), ADDITIONALINFO(5), SUMMARY(6);
+
+    companion object {
+        fun findStep(step: Int): JobPostingStep {
+            return JobPostingStep.entries.first { it.step == step }
+        }
+    }
 }
