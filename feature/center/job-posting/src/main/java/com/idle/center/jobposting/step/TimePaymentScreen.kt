@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.idle.center.jobposting.JobPostingStep
 import com.idle.designsystem.compose.component.CareButtonLarge
@@ -29,8 +30,10 @@ import com.idle.domain.model.job.PayType
 internal fun TimePaymentScreen(
     weekDays: Set<DayOfWeek>,
     payType: PayType,
+    payAmount: String,
     setWeekDays: (DayOfWeek) -> Unit,
     setPayType: (PayType) -> Unit,
+    setPayAmount: (String) -> Unit,
     setJobPostingStep: (JobPostingStep) -> Unit,
 ) {
     Column(
@@ -129,10 +132,11 @@ internal fun TimePaymentScreen(
                 }
 
                 CareTextField(
-                    value = "500,000",
-                    hint = "",
+                    value = payAmount,
+                    hint = "급여를 입력하세요",
                     textStyle = CareTheme.typography.body2,
-                    onValueChanged = {},
+                    onValueChanged = setPayAmount,
+                    keyboardType = KeyboardType.Number,
                     leftComponent = {
                         Text(
                             text = "원",
@@ -148,6 +152,7 @@ internal fun TimePaymentScreen(
 
         CareButtonLarge(
             text = "다음",
+            enable = weekDays.isNotEmpty() && payAmount.isNotBlank(),
             onClick = { setJobPostingStep(JobPostingStep.findStep(JobPostingStep.TIMEPAYMENT.step + 1)) },
             modifier = Modifier.fillMaxWidth(),
         )

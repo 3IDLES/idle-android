@@ -60,13 +60,16 @@ internal class JobPostingFragment : BaseComposeFragment() {
             val jobPostingStep by registerProcess.collectAsStateWithLifecycle()
             val weekDays by weekDays.collectAsStateWithLifecycle()
             val payType by payType.collectAsStateWithLifecycle()
+            val payAmount by payAmount.collectAsStateWithLifecycle()
 
             JobPostingScreen(
                 weekDays = weekDays,
                 payType = payType,
+                payAmount = payAmount,
                 jobPostingStep = jobPostingStep,
                 setWeekDays = ::setWeekDays,
                 setPayType = ::setPayType,
+                setPayAmount = ::setPayAmount,
                 showPostCodeDialog = {
                     if (!(postCodeDialog?.isAdded == true || postCodeDialog?.isVisible == true)) {
                         postCodeDialog?.show(parentFragmentManager, "PostCodeFragment")
@@ -82,9 +85,11 @@ internal class JobPostingFragment : BaseComposeFragment() {
 internal fun JobPostingScreen(
     weekDays: Set<DayOfWeek>,
     payType: PayType,
+    payAmount: String,
     jobPostingStep: JobPostingStep,
     setWeekDays: (DayOfWeek) -> Unit,
     setPayType: (PayType) -> Unit,
+    setPayAmount: (String) -> Unit,
     showPostCodeDialog: () -> Unit,
     setJobPostingStep: (JobPostingStep) -> Unit,
 ) {
@@ -138,8 +143,10 @@ internal fun JobPostingScreen(
                     JobPostingStep.TIMEPAYMENT -> TimePaymentScreen(
                         weekDays = weekDays,
                         payType = payType,
+                        payAmount = payAmount,
                         setWeekDays = setWeekDays,
                         setPayType = setPayType,
+                        setPayAmount = setPayAmount,
                         setJobPostingStep = setJobPostingStep,
                     )
 

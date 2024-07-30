@@ -18,6 +18,9 @@ class JobPostingViewModel @Inject constructor() : BaseViewModel() {
     private val _payType = MutableStateFlow<PayType>(HOURLY)
     val payType = _payType.asStateFlow()
 
+    private val _payAmount = MutableStateFlow("")
+    val payAmount = _payAmount.asStateFlow()
+
     private val _jobPostingStep = MutableStateFlow(JobPostingStep.TIMEPAYMENT)
     val registerProcess = _jobPostingStep.asStateFlow()
 
@@ -35,6 +38,10 @@ class JobPostingViewModel @Inject constructor() : BaseViewModel() {
 
     internal fun setPayType(payType: PayType) {
         _payType.value = payType
+    }
+
+    internal fun setPayAmount(payAmount: String) {
+        _payAmount.value = payAmount
     }
 
     internal fun setJobPostingStep(step: JobPostingStep) {
