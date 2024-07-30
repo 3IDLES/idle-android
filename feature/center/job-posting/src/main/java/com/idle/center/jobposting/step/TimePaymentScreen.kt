@@ -143,7 +143,11 @@ internal fun TimePaymentScreen(
                             style = CareTheme.typography.body3,
                             color = CareTheme.colors.gray500,
                         )
-                    }
+                    },
+                    onDone = {
+                        if (weekDays.isNotEmpty() && payAmount.isNotBlank())
+                            setJobPostingStep(JobPostingStep.findStep(JobPostingStep.TIME_PAYMENT.step + 1))
+                    },
                 )
             }
         }
@@ -153,7 +157,7 @@ internal fun TimePaymentScreen(
         CareButtonLarge(
             text = "다음",
             enable = weekDays.isNotEmpty() && payAmount.isNotBlank(),
-            onClick = { setJobPostingStep(JobPostingStep.findStep(JobPostingStep.TIMEPAYMENT.step + 1)) },
+            onClick = { setJobPostingStep(JobPostingStep.findStep(JobPostingStep.TIME_PAYMENT.step + 1)) },
             modifier = Modifier.fillMaxWidth(),
         )
     }

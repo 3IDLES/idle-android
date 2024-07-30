@@ -29,9 +29,13 @@ import com.idle.designsystem.compose.component.CareButtonStrokeSmall
 import com.idle.designsystem.compose.component.CareProgressBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
+import com.idle.domain.model.auth.Gender
 import com.idle.domain.model.job.DayOfWeek
+import com.idle.domain.model.job.MentalStatus
 import com.idle.domain.model.job.PayType
 import com.idle.post.code.PostCodeFragment
+import com.idle.signup.center.step.AddressScreen
+import com.idle.signup.center.step.CustomerInformationScreen
 import com.idle.signup.center.step.TimePaymentScreen
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -61,20 +65,43 @@ internal class JobPostingFragment : BaseComposeFragment() {
             val weekDays by weekDays.collectAsStateWithLifecycle()
             val payType by payType.collectAsStateWithLifecycle()
             val payAmount by payAmount.collectAsStateWithLifecycle()
+            val roadNameAddress by roadNameAddress.collectAsStateWithLifecycle()
+            val detailAddress by detailAddress.collectAsStateWithLifecycle()
+            val gender by gender.collectAsStateWithLifecycle()
+            val birthYear by birthYear.collectAsStateWithLifecycle()
+            val weight by weight.collectAsStateWithLifecycle()
+            val careLevel by careLevel.collectAsStateWithLifecycle()
+            val mentalStatus by mentalStatus.collectAsStateWithLifecycle()
+            val disease by disease.collectAsStateWithLifecycle()
 
             JobPostingScreen(
                 weekDays = weekDays,
                 payType = payType,
                 payAmount = payAmount,
+                roadNameAddress = roadNameAddress,
+                detailAddress = detailAddress,
+                gender = gender,
+                birthYear = birthYear,
+                weight = weight,
+                careLevel = careLevel,
+                mentalStatus = mentalStatus,
+                disease = disease,
                 jobPostingStep = jobPostingStep,
                 setWeekDays = ::setWeekDays,
-                setPayType = ::setPayType,
-                setPayAmount = ::setPayAmount,
+                onPayTypeChanged = ::setPayType,
+                onPayAmountChanged = ::setPayAmount,
+                onDetailAddressChanged = ::setDetailAddress,
                 showPostCodeDialog = {
                     if (!(postCodeDialog?.isAdded == true || postCodeDialog?.isVisible == true)) {
                         postCodeDialog?.show(parentFragmentManager, "PostCodeFragment")
                     }
                 },
+                onGenderChanged = ::setGender,
+                onWeightChanged = ::setWeight,
+                onMentalStatusChanged = ::setMentalStatus,
+                onBirthYearChanged = ::setBirthYear,
+                onCareLevelChanged = ::setCareLevel,
+                onDiseaseChanged = ::setDisease,
                 setJobPostingStep = ::setJobPostingStep,
             )
         }
@@ -86,11 +113,26 @@ internal fun JobPostingScreen(
     weekDays: Set<DayOfWeek>,
     payType: PayType,
     payAmount: String,
+    roadNameAddress: String,
+    detailAddress: String,
+    gender: Gender,
+    birthYear: String,
+    weight: String,
+    careLevel: String,
+    mentalStatus: MentalStatus,
+    disease: String,
     jobPostingStep: JobPostingStep,
     setWeekDays: (DayOfWeek) -> Unit,
-    setPayType: (PayType) -> Unit,
-    setPayAmount: (String) -> Unit,
+    onPayTypeChanged: (PayType) -> Unit,
+    onPayAmountChanged: (String) -> Unit,
+    onDetailAddressChanged: (String) -> Unit,
     showPostCodeDialog: () -> Unit,
+    onGenderChanged: (Gender) -> Unit,
+    onBirthYearChanged: (String) -> Unit,
+    onWeightChanged: (String) -> Unit,
+    onCareLevelChanged: (String) -> Unit,
+    onMentalStatusChanged: (MentalStatus) -> Unit,
+    onDiseaseChanged: (String) -> Unit,
     setJobPostingStep: (JobPostingStep) -> Unit,
 ) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
@@ -140,20 +182,42 @@ internal fun JobPostingScreen(
                 label = "센터 정보 입력을 관리하는 애니메이션",
             ) { jobPostingStep ->
                 when (jobPostingStep) {
-                    JobPostingStep.TIMEPAYMENT -> TimePaymentScreen(
+                    JobPostingStep.TIME_PAYMENT -> TimePaymentScreen(
                         weekDays = weekDays,
                         payType = payType,
                         payAmount = payAmount,
                         setWeekDays = setWeekDays,
-                        setPayType = setPayType,
-                        setPayAmount = setPayAmount,
+                        setPayType = onPayTypeChanged,
+                        setPayAmount = onPayAmountChanged,
                         setJobPostingStep = setJobPostingStep,
                     )
 
-                    JobPostingStep.ADDRESS -> {}
-                    JobPostingStep.CUSTOMERINFORMATION -> {}
-                    JobPostingStep.CUSTOMERREQUIREMENT -> {}
-                    JobPostingStep.ADDITIONALINFO -> {}
+                    JobPostingStep.ADDRESS -> AddressScreen(
+                        roadNameAddress = roadNameAddress,
+                        detailAddress = detailAddress,
+                        onDetailAddressChanged = onDetailAddressChanged,
+                        showPostCodeDialog = showPostCodeDialog,
+                        setJobPostingStep = setJobPostingStep,
+                    )
+
+                    JobPostingStep.CUSTOMER_INFORMATION -> CustomerInformationScreen(
+                        gender = gender,
+                        birthYear = birthYear,
+                        weight = weight,
+                        careLevel = careLevel,
+                        mentalStatus = mentalStatus,
+                        disease = disease,
+                        onGenderChanged = onGenderChanged,
+                        onBirthYearChanged = onBirthYearChanged,
+                        onWeightChanged = onWeightChanged,
+                        onCareLevelChanged = onCareLevelChanged,
+                        onMentalStatusChanged = onMentalStatusChanged,
+                        onDiseaseChanged = onDiseaseChanged,
+                        setJobPostingStep = setJobPostingStep,
+                    )
+
+                    JobPostingStep.CUSTOMER_REQUIREMENT -> {}
+                    JobPostingStep.ADDITIONAL_INFO -> {}
                     JobPostingStep.SUMMARY -> {}
                 }
             }

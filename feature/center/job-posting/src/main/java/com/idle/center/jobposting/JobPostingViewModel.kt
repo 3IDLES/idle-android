@@ -1,7 +1,9 @@
 package com.idle.center.jobposting
 
 import com.idle.binding.base.BaseViewModel
+import com.idle.domain.model.auth.Gender
 import com.idle.domain.model.job.DayOfWeek
+import com.idle.domain.model.job.MentalStatus
 import com.idle.domain.model.job.PayType
 import com.idle.domain.model.job.PayType.HOURLY
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,13 +23,34 @@ class JobPostingViewModel @Inject constructor() : BaseViewModel() {
     private val _payAmount = MutableStateFlow("")
     val payAmount = _payAmount.asStateFlow()
 
-    private val _jobPostingStep = MutableStateFlow(JobPostingStep.TIMEPAYMENT)
+    private val _jobPostingStep = MutableStateFlow(JobPostingStep.TIME_PAYMENT)
     val registerProcess = _jobPostingStep.asStateFlow()
 
     private val _roadNameAddress = MutableStateFlow("")
     val roadNameAddress = _roadNameAddress.asStateFlow()
 
     private val _lotNumberAddress = MutableStateFlow("")
+
+    private val _detailAddress = MutableStateFlow("")
+    val detailAddress = _detailAddress.asStateFlow()
+
+    private val _gender = MutableStateFlow(Gender.NONE)
+    internal val gender = _gender.asStateFlow()
+
+    private val _birthYear = MutableStateFlow("")
+    val birthYear = _birthYear.asStateFlow()
+
+    private val _weight = MutableStateFlow("")
+    val weight = _weight.asStateFlow()
+
+    private val _careLevel = MutableStateFlow("")
+    val careLevel = _careLevel.asStateFlow()
+
+    private val _mentalStatus = MutableStateFlow(MentalStatus.UNKNOWN)
+    val mentalStatus = _mentalStatus.asStateFlow()
+
+    private val _disease = MutableStateFlow("")
+    val disease = _disease.asStateFlow()
 
     internal fun setWeekDays(dayOfWeek: DayOfWeek) {
         _weekDays.value = _weekDays.value.toMutableSet().apply {
@@ -55,11 +78,39 @@ class JobPostingViewModel @Inject constructor() : BaseViewModel() {
     internal fun setLotNumberAddress(address: String) {
         _lotNumberAddress.value = address
     }
+
+    internal fun setDetailAddress(address: String) {
+        _detailAddress.value = address
+    }
+
+    internal fun setGender(gender: Gender) {
+        _gender.value = gender
+    }
+
+    internal fun setBirthYear(birthYear: String) {
+        _birthYear.value = birthYear
+    }
+
+    internal fun setWeight(weight: String) {
+        _weight.value = weight
+    }
+
+    internal fun setCareLevel(careLevel: String) {
+        _careLevel.value = careLevel
+    }
+
+    internal fun setMentalStatus(mentalStatus: MentalStatus) {
+        _mentalStatus.value = mentalStatus
+    }
+
+    internal fun setDisease(disease: String) {
+        _disease.value = disease
+    }
 }
 
 enum class JobPostingStep(val step: Int) {
-    TIMEPAYMENT(1), ADDRESS(2), CUSTOMERINFORMATION(3),
-    CUSTOMERREQUIREMENT(4), ADDITIONALINFO(5), SUMMARY(6);
+    TIME_PAYMENT(1), ADDRESS(2), CUSTOMER_INFORMATION(3),
+    CUSTOMER_REQUIREMENT(4), ADDITIONAL_INFO(5), SUMMARY(6);
 
     companion object {
         fun findStep(step: Int): JobPostingStep {

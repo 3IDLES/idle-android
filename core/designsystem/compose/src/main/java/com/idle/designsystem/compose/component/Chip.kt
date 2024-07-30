@@ -47,7 +47,7 @@ fun CareChipBasic(
 @Composable
 fun CareChipShort(
     text: String,
-    enable: Boolean,
+    enable: Boolean = true,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
 ) {
