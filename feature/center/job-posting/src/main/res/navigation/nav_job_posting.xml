@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/jobPostingFragment"
-        android:name="com.idle.register.recruitment.JobPostingFragment"
+        android:name="com.idle.center.jobposting.JobPostingFragment"
         android:label="JobPostingFragment">
         <deepLink app:uri="@string/center_job_posting_deeplink_url" />
     </fragment>

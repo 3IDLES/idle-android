@@ -1,6 +1,11 @@
-package com.idle.register.recruitment
+package com.idle.center.jobposting
 
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,6 +25,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
+import com.idle.designsystem.compose.component.CareButtonStrokeSmall
 import com.idle.designsystem.compose.component.CareProgressBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
@@ -57,6 +63,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
                         postCodeDialog?.show(parentFragmentManager, "PostCodeFragment")
                     }
                 },
+                setJobPostingStep = ::setJobPostingStep,
             )
         }
     }
@@ -66,6 +73,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
 internal fun JobPostingScreen(
     jobPostingStep: JobPostingStep,
     showPostCodeDialog: () -> Unit,
+    setJobPostingStep: (JobPostingStep) -> Unit,
 ) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val focusManager = LocalFocusManager.current
@@ -73,8 +81,16 @@ internal fun JobPostingScreen(
     Scaffold(
         topBar = {
             CareSubtitleTopAppBar(
-                title = "센터 회원가입",
+                title = if (jobPostingStep != JobPostingStep.SUMMARY) "공고 등록" else "",
                 onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
+                leftComponent = {
+                    if (jobPostingStep == JobPostingStep.SUMMARY) {
+                        CareButtonStrokeSmall(
+                            text = "공고 수정하기",
+                            onClick = { },
+                        )
+                    }
+                },
                 modifier = Modifier.fillMaxWidth()
                     .padding(start = 12.dp, top = 48.dp)
             )
@@ -89,18 +105,29 @@ internal fun JobPostingScreen(
                 .padding(paddingValue)
                 .padding(start = 20.dp, end = 20.dp, top = 8.dp),
         ) {
-            CareProgressBar(
-                currentStep = jobPostingStep.step,
-                totalSteps = JobPostingStep.entries.size,
-                modifier = Modifier.fillMaxWidth(),
-            )
+            AnimatedVisibility(
+                visible = jobPostingStep != JobPostingStep.SUMMARY,
+                enter = slideInHorizontally(initialOffsetX = { it }) + fadeIn(),
+                exit = slideOutHorizontally(targetOffsetX = { -it }) + fadeOut()
+            ) {
+                CareProgressBar(
+                    currentStep = jobPostingStep.step,
+                    totalSteps = JobPostingStep.entries.size - 1,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
 
             CareStateAnimator(
                 targetState = jobPostingStep,
                 label = "센터 정보 입력을 관리하는 애니메이션",
-            ) { verificationProcess ->
-                when (verificationProcess) {
-                    else -> Unit
+            ) { jobPostingStep ->
+                when (jobPostingStep) {
+                    JobPostingStep.TIMEPAYMENT -> {}
+                    JobPostingStep.ADDRESS -> {}
+                    JobPostingStep.CUSTOMERINFORMATION -> {}
+                    JobPostingStep.CUSTOMERREQUIREMENT -> {}
+                    JobPostingStep.ADDITIONALINFO -> {}
+                    JobPostingStep.SUMMARY -> {}
                 }
             }
         }

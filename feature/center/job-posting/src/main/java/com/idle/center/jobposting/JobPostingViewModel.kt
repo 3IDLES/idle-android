@@ -1,4 +1,4 @@
-package com.idle.register.recruitment
+package com.idle.center.jobposting
 
 import com.idle.binding.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel

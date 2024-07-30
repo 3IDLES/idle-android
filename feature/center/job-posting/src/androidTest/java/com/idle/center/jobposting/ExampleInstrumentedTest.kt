@@ -1,4 +1,4 @@
-package com.idle.register.recruitment
+package com.idle.center.jobposting
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
