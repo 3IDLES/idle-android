@@ -1,12 +1,6 @@
 package com.idle.signin.center
 
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,10 +25,10 @@ import com.idle.designsystem.compose.component.CareProgressBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
 import com.idle.domain.model.auth.BusinessRegistrationInfo
-import com.idle.signup.center.process.BusinessRegistrationScreen
-import com.idle.signup.center.process.CenterNameScreen
-import com.idle.signup.center.process.CenterPhoneNumberScreen
-import com.idle.signup.center.process.IdPasswordScreen
+import com.idle.signup.center.step.BusinessRegistrationScreen
+import com.idle.signup.center.step.CenterNameScreen
+import com.idle.signup.center.step.CenterPhoneNumberScreen
+import com.idle.signup.center.step.IdPasswordScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -45,7 +39,7 @@ internal class CenterSignUpFragment : BaseComposeFragment() {
     override fun ComposeLayout() {
         fragmentViewModel.apply {
 
-            val signUpProcess by signUpProcess.collectAsStateWithLifecycle()
+            val signUpStep by signUpStep.collectAsStateWithLifecycle()
             val centerName by centerName.collectAsStateWithLifecycle()
             val centerPhoneNumber by centerPhoneNumber.collectAsStateWithLifecycle()
             val centerAuthCodeTimerMinute by centerAuthCodeTimerMinute.collectAsStateWithLifecycle()
@@ -61,7 +55,7 @@ internal class CenterSignUpFragment : BaseComposeFragment() {
             val centerPasswordForConfirm by centerPasswordForConfirm.collectAsStateWithLifecycle()
 
             CenterSignUpScreen(
-                signUpProcess = signUpProcess,
+                signUpStep = signUpStep,
                 centerName = centerName,
                 centerPhoneNumber = centerPhoneNumber,
                 centerAuthCodeTimerMinute = centerAuthCodeTimerMinute,
@@ -74,7 +68,7 @@ internal class CenterSignUpFragment : BaseComposeFragment() {
                 centerIdResult = centerIdResult,
                 centerPassword = centerPassword,
                 centerPasswordForConfirm = centerPasswordForConfirm,
-                setSignUpProcess = ::setCenterSignUpProcess,
+                setSignUpStep = ::setCenterSignUpStep,
                 onCenterNameChanged = ::setCenterName,
                 onCenterPhoneNumberChanged = ::setCenterPhoneNumber,
                 onCenterAuthCodeChanged = ::setCenterAuthCode,
@@ -95,7 +89,7 @@ internal class CenterSignUpFragment : BaseComposeFragment() {
 
 @Composable
 internal fun CenterSignUpScreen(
-    signUpProcess: CenterSignUpProcess,
+    signUpStep: CenterSignUpStep,
     centerName: String,
     centerPhoneNumber: String,
     centerAuthCodeTimerMinute: String,
@@ -108,7 +102,7 @@ internal fun CenterSignUpScreen(
     centerIdResult: Boolean,
     centerPassword: String,
     centerPasswordForConfirm: String,
-    setSignUpProcess: (CenterSignUpProcess) -> Unit,
+    setSignUpStep: (CenterSignUpStep) -> Unit,
     onCenterNameChanged: (String) -> Unit,
     onCenterPhoneNumberChanged: (String) -> Unit,
     onCenterAuthCodeChanged: (String) -> Unit,
@@ -147,24 +141,24 @@ internal fun CenterSignUpScreen(
                 .padding(start = 20.dp, end = 20.dp, bottom = 30.dp),
         ) {
             CareProgressBar(
-                currentStep = signUpProcess.step,
-                totalSteps = CenterSignUpProcess.entries.size,
+                currentStep = signUpStep.step,
+                totalSteps = CenterSignUpStep.entries.size,
                 modifier = Modifier.fillMaxWidth(),
             )
 
             CareStateAnimator(
-                targetState = signUpProcess,
+                targetState = signUpStep,
                 label = "센터의 회원가입을 관리하는 애니메이션",
-            ) { signUpProcess ->
-                when (signUpProcess) {
-                    CenterSignUpProcess.NAME ->
+            ) { signUpStep ->
+                when (signUpStep) {
+                    CenterSignUpStep.NAME ->
                         CenterNameScreen(
                             centerName = centerName,
                             onCenterNameChanged = onCenterNameChanged,
-                            setSignUpProcess = setSignUpProcess,
+                            setSignUpStep = setSignUpStep,
                         )
 
-                    CenterSignUpProcess.PHONE_NUMBER ->
+                    CenterSignUpStep.PHONE_NUMBER ->
                         CenterPhoneNumberScreen(
                             centerPhoneNumber = centerPhoneNumber,
                             centerAuthCodeTimerMinute = centerAuthCodeTimerMinute,
@@ -174,22 +168,22 @@ internal fun CenterSignUpScreen(
                             businessRegistrationProcessed = businessRegistrationProcessed,
                             onCenterPhoneNumberChanged = onCenterPhoneNumberChanged,
                             onCenterAuthCodeChanged = onCenterAuthCodeChanged,
-                            setSignUpProcess = setSignUpProcess,
+                            setSignUpStep = setSignUpStep,
                             sendPhoneNumber = sendPhoneNumber,
                             confirmAuthCode = confirmAuthCode,
                             setBusinessRegistrationProcessed = setBusinessRegistrationProcessed,
                         )
 
-                    CenterSignUpProcess.BUSINESS_REGISTRATION_NUMBER ->
+                    CenterSignUpStep.BUSINESS_REGISTRATION_NUMBER ->
                         BusinessRegistrationScreen(
                             businessRegistrationNumber = businessRegistrationNumber,
                             businessRegistrationInfo = businessRegistrationInfo,
                             onBusinessRegistrationNumberChanged = onBusinessRegistrationNumberChanged,
                             validateBusinessRegistrationNumber = validateBusinessRegistrationNumber,
-                            setSignUpProcess = setSignUpProcess,
+                            setSignUpStep = setSignUpStep,
                         )
 
-                    CenterSignUpProcess.ID_PASSWORD ->
+                    CenterSignUpStep.ID_PASSWORD ->
                         IdPasswordScreen(
                             centerId = centerId,
                             centerIdResult = centerIdResult,
@@ -198,7 +192,7 @@ internal fun CenterSignUpScreen(
                             onCenterIdChanged = onCenterIdChanged,
                             onCenterPasswordChanged = onCenterPasswordChanged,
                             onCenterPasswordForConfirmChanged = onCenterPasswordForConfirmChanged,
-                            setSignUpProcess = setSignUpProcess,
+                            setSignUpStep = setSignUpStep,
                             validateIdentifier = validateIdentifier,
                             signUpCenter = signUpCenter,
                         )

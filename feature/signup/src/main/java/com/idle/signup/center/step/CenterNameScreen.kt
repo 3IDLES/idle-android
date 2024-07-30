@@ -1,4 +1,4 @@
-package com.idle.signup.center.process
+package com.idle.signup.center.step
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,13 +17,13 @@ import androidx.compose.ui.unit.dp
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.foundation.CareTheme
-import com.idle.signin.center.CenterSignUpProcess
+import com.idle.signin.center.CenterSignUpStep
 
 @Composable
 internal fun CenterNameScreen(
     centerName: String,
     onCenterNameChanged: (String) -> Unit,
-    setSignUpProcess: (CenterSignUpProcess) -> Unit,
+    setSignUpStep: (CenterSignUpStep) -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
 
@@ -48,7 +48,7 @@ internal fun CenterNameScreen(
             onValueChanged = onCenterNameChanged,
             onDone = {
                 if (centerName.isNotBlank()) {
-                    setSignUpProcess(CenterSignUpProcess.PHONE_NUMBER)
+                    setSignUpStep(CenterSignUpStep.PHONE_NUMBER)
                 }
             },
             modifier = Modifier.fillMaxWidth()
@@ -60,7 +60,7 @@ internal fun CenterNameScreen(
         CareButtonLarge(
             text = "다음",
             enable = centerName.isNotBlank(),
-            onClick = { setSignUpProcess(CenterSignUpProcess.PHONE_NUMBER) },
+            onClick = { setSignUpStep(CenterSignUpStep.PHONE_NUMBER) },
             modifier = Modifier.fillMaxWidth(),
         )
     }

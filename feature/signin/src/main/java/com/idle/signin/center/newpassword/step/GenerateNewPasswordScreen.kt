@@ -1,53 +1,53 @@
-package com.idle.signup.center.process
+package com.idle.signin.center.newpassword.step
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import com.idle.center.register.RegisterProcess
+import androidx.compose.ui.unit.sp
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.foundation.CareTheme
+import com.idle.signin.center.newpassword.NewPasswordStep
+import com.idle.signin.center.newpassword.NewPasswordStep.PHONE_NUMBER
 
 @Composable
-internal fun CenterInfoScreen(
-    centerName: String,
-    centerNumber: String,
-    onCenterNameChanged: (String) -> Unit,
-    onCenterNumberChanged: (String) -> Unit,
-    setRegisterProcess: (RegisterProcess) -> Unit,
+internal fun GenerateNewPasswordScreen(
+    newPassword: String,
+    newPasswordForConfirm: String,
+    onNewPasswordChanged: (String) -> Unit,
+    onNewPasswordForConfirmChanged: (String) -> Unit,
+    setNewPasswordProcess: (NewPasswordStep) -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
-    val keyboardController = LocalSoftwareKeyboardController.current
-    val focusManager = LocalFocusManager.current
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
 
+    BackHandler { setNewPasswordProcess(PHONE_NUMBER) }
+
     Column(
         horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(28.dp),
+        verticalArrangement = Arrangement.spacedBy(32.dp, Alignment.CenterVertically),
         modifier = Modifier.fillMaxSize()
-            .padding(bottom = 30.dp),
     ) {
         Text(
-            text = "센터 정보를 입력해주세요",
+            text = "새로운 비밀번호를 입력해주세요",
             style = CareTheme.typography.heading2,
             color = CareTheme.colors.gray900,
         )
@@ -57,19 +57,29 @@ internal fun CenterInfoScreen(
             verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
         ) {
             Text(
-                text = "이름",
+                text = buildAnnotatedString {
+                    withStyle(
+                        style = SpanStyle(color = CareTheme.colors.gray500)
+                    ) {
+                        append("비밀번호 설정 ")
+                    }
+                    withStyle(
+                        style = SpanStyle(
+                            color = CareTheme.colors.gray300,
+                            fontSize = 12.sp,
+                        )
+                    ) {
+                        append("(영문+숫자 조합 10자리 이상 등 조건)")
+                    }
+                },
                 style = CareTheme.typography.subtitle4,
-                color = CareTheme.colors.gray500,
             )
 
             CareTextField(
-                value = centerName,
-                hint = "센터 이름을 입력해주세요.",
-                onValueChanged = onCenterNameChanged,
-                onDone = { if (centerName.isNotBlank()){
-                    focusManager.moveFocus(FocusDirection.Down)
-                    keyboardController?.show()
-                } },
+                value = newPassword,
+                hint = "비밀번호를 입력해주세요.",
+                onValueChanged = onNewPasswordChanged,
+                onDone = { },
                 modifier = Modifier.fillMaxWidth()
                     .focusRequester(focusRequester),
             )
@@ -80,30 +90,27 @@ internal fun CenterInfoScreen(
             verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
         ) {
             Text(
-                text = "센터 연락처",
+                text = "비밀번호 확인",
                 style = CareTheme.typography.subtitle4,
                 color = CareTheme.colors.gray500,
             )
 
+
             CareTextField(
-                value = centerNumber,
-                hint = "지원자들의 연락을 받을 번호를 입력해주세요.",
-                onValueChanged = onCenterNumberChanged,
-                keyboardType = KeyboardType.Number,
-                onDone = {
-                    if (centerName.isNotBlank() && centerNumber.isNotBlank()) setRegisterProcess(
-                        RegisterProcess.ADDRESS
-                    )
-                },
+                value = newPasswordForConfirm,
+                hint = "비밀번호를 한번 더 입력해주세요.",
+                onValueChanged = onNewPasswordForConfirmChanged,
+                onDone = { },
                 modifier = Modifier.fillMaxWidth(),
             )
         }
+
         Spacer(modifier = Modifier.weight(1f))
 
         CareButtonLarge(
-            text = "다음",
-            enable = centerName.isNotBlank() && centerNumber.isNotBlank(),
-            onClick = { setRegisterProcess(RegisterProcess.ADDRESS) },
+            text = "비밀번호 변경",
+            enable = newPasswordForConfirm.isNotBlank(),
+            onClick = { },
             modifier = Modifier.fillMaxWidth(),
         )
     }

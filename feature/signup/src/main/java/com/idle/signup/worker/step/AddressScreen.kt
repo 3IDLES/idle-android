@@ -1,4 +1,4 @@
-package com.idle.signup.worker.process
+package com.idle.signup.worker.step
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.foundation.CareTheme
-import com.idle.signin.worker.WorkerSignUpProcess
+import com.idle.signin.worker.WorkerSignUpStep
 
 @Composable
 internal fun AddressScreen(
@@ -22,10 +22,10 @@ internal fun AddressScreen(
     addressDetail: String,
     onAddressChanged: (String) -> Unit,
     onAddressDetailChanged: (String) -> Unit,
-    setSignUpProcess: (WorkerSignUpProcess) -> Unit,
+    setSignUpStep: (WorkerSignUpStep) -> Unit,
     signUpWorker: () -> Unit,
 ) {
-    BackHandler { setSignUpProcess(WorkerSignUpProcess.PHONE_NUMBER) }
+    BackHandler { setSignUpStep(WorkerSignUpStep.PHONE_NUMBER) }
 
     Column(
         horizontalAlignment = Alignment.Start,

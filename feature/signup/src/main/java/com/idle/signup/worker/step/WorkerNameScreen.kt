@@ -1,4 +1,4 @@
-package com.idle.signup.worker.process
+package com.idle.signup.worker.step
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,13 +17,13 @@ import androidx.compose.ui.unit.dp
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.foundation.CareTheme
-import com.idle.signin.worker.WorkerSignUpProcess
+import com.idle.signin.worker.WorkerSignUpStep
 
 @Composable
 internal fun WorkerNameScreen(
     workerName: String,
     onWorkerNameChanged: (String) -> Unit,
-    setSignUpProcess: (WorkerSignUpProcess) -> Unit,
+    setSignUpProcess: (WorkerSignUpStep) -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
 
@@ -46,7 +46,7 @@ internal fun WorkerNameScreen(
             value = workerName,
             hint = "성함을 입력해주세요.",
             onValueChanged = onWorkerNameChanged,
-            onDone = { if (workerName.isNotBlank()) setSignUpProcess(WorkerSignUpProcess.GENDER) },
+            onDone = { if (workerName.isNotBlank()) setSignUpProcess(WorkerSignUpStep.GENDER) },
             modifier = Modifier.fillMaxWidth()
                 .focusRequester(focusRequester)
         )
@@ -56,7 +56,7 @@ internal fun WorkerNameScreen(
         CareButtonLarge(
             text = "다음",
             enable = workerName.isNotBlank(),
-            onClick = { if (workerName.isNotBlank()) setSignUpProcess(WorkerSignUpProcess.GENDER) },
+            onClick = { if (workerName.isNotBlank()) setSignUpProcess(WorkerSignUpStep.GENDER) },
             modifier = Modifier.fillMaxWidth(),
         )
     }

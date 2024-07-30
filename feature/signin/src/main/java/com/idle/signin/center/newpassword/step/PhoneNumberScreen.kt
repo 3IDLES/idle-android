@@ -1,4 +1,4 @@
-package com.idle.signin.center.newpassword.process
+package com.idle.signin.center.newpassword.step
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,8 +19,8 @@ import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareButtonSmall
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.foundation.CareTheme
-import com.idle.signin.center.newpassword.GenerateNewPasswordProcess
-import com.idle.signin.center.newpassword.GenerateNewPasswordProcess.GENERATE_NEW_PASSWORD
+import com.idle.signin.center.newpassword.NewPasswordStep
+import com.idle.signin.center.newpassword.NewPasswordStep.GENERATE_NEW_PASSWORD
 
 @Composable
 internal fun PhoneNumberScreen(
@@ -30,7 +30,7 @@ internal fun PhoneNumberScreen(
     onAuthCodeChanged: (String) -> Unit,
     sendPhoneNumber: () -> Unit,
     confirmAuthCode: () -> Unit,
-    setGenerateNewPasswordProcess: (GenerateNewPasswordProcess) -> Unit,
+    setNewPasswordProcess: (NewPasswordStep) -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
 
@@ -117,7 +117,7 @@ internal fun PhoneNumberScreen(
         CareButtonLarge(
             text = "다음",
             enable = certificationNumber.isNotBlank(),
-            onClick = { setGenerateNewPasswordProcess(GENERATE_NEW_PASSWORD) },
+            onClick = { setNewPasswordProcess(GENERATE_NEW_PASSWORD) },
             modifier = Modifier.fillMaxWidth(),
         )
     }

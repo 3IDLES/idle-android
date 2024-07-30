@@ -27,9 +27,9 @@ import com.idle.post.code.PostCodeFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-internal class RegisterRecruitmentFragment : BaseComposeFragment() {
+internal class JobPostingFragment : BaseComposeFragment() {
 
-    override val fragmentViewModel: RegisterRecruitmentViewModel by viewModels()
+    override val fragmentViewModel: JobPostingViewModel by viewModels()
 
     private val postCodeDialog: PostCodeFragment? by lazy {
         PostCodeFragment().apply {
@@ -50,8 +50,8 @@ internal class RegisterRecruitmentFragment : BaseComposeFragment() {
         fragmentViewModel.apply {
             val registerProcess by registerProcess.collectAsStateWithLifecycle()
 
-            CenterRegisterScreen(
-                registerProcess = registerProcess,
+            JobPostingScreen(
+                jobPostingStep = registerProcess,
                 showPostCodeDialog = {
                     if (!(postCodeDialog?.isAdded == true || postCodeDialog?.isVisible == true)) {
                         postCodeDialog?.show(parentFragmentManager, "PostCodeFragment")
@@ -63,8 +63,8 @@ internal class RegisterRecruitmentFragment : BaseComposeFragment() {
 }
 
 @Composable
-internal fun CenterRegisterScreen(
-    registerProcess: RegisterProcess,
+internal fun JobPostingScreen(
+    jobPostingStep: JobPostingStep,
     showPostCodeDialog: () -> Unit,
 ) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
@@ -90,13 +90,13 @@ internal fun CenterRegisterScreen(
                 .padding(start = 20.dp, end = 20.dp, top = 8.dp),
         ) {
             CareProgressBar(
-                currentStep = registerProcess.step,
-                totalSteps = RegisterProcess.entries.size,
+                currentStep = jobPostingStep.step,
+                totalSteps = JobPostingStep.entries.size,
                 modifier = Modifier.fillMaxWidth(),
             )
 
             CareStateAnimator(
-                targetState = registerProcess,
+                targetState = jobPostingStep,
                 label = "센터 정보 입력을 관리하는 애니메이션",
             ) { verificationProcess ->
                 when (verificationProcess) {

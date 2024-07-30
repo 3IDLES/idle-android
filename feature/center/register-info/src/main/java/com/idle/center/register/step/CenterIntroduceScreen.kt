@@ -1,4 +1,4 @@
-package com.idle.signup.center.process
+package com.idle.signup.center.step
 
 import android.net.Uri
 import androidx.activity.compose.BackHandler
@@ -24,7 +24,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.idle.center.register.RegisterProcess
+import com.idle.center.register.RegistrationStep
 import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
@@ -37,7 +37,7 @@ internal fun CenterIntroduceScreen(
     centerProfileImageUri: Uri?,
     onCenterIntroduceChanged: (String) -> Unit,
     onProfileImageUriChanged: (Uri?) -> Unit,
-    setRegisterProcess: (RegisterProcess) -> Unit,
+    setRegistrationStep: (RegistrationStep) -> Unit,
     registerCenterProfile: () -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
@@ -52,7 +52,7 @@ internal fun CenterIntroduceScreen(
         focusRequester.requestFocus()
     }
 
-    BackHandler { setRegisterProcess(RegisterProcess.ADDRESS) }
+    BackHandler { setRegistrationStep(RegistrationStep.ADDRESS) }
 
     Column(
         horizontalAlignment = Alignment.Start,

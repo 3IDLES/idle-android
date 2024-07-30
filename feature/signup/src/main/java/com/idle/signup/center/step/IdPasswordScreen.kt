@@ -1,4 +1,4 @@
-package com.idle.signup.center.process
+package com.idle.signup.center.step
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.sp
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.foundation.CareTheme
-import com.idle.signin.center.CenterSignUpProcess
+import com.idle.signin.center.CenterSignUpStep
 
 @Composable
 internal fun IdPasswordScreen(
@@ -42,7 +42,7 @@ internal fun IdPasswordScreen(
     onCenterIdChanged: (String) -> Unit,
     onCenterPasswordChanged: (String) -> Unit,
     onCenterPasswordForConfirmChanged: (String) -> Unit,
-    setSignUpProcess: (CenterSignUpProcess) -> Unit,
+    setSignUpStep: (CenterSignUpStep) -> Unit,
     signUpCenter: () -> Unit,
     validateIdentifier: () -> Unit,
 ) {
@@ -55,7 +55,7 @@ internal fun IdPasswordScreen(
         focusRequester.requestFocus()
     }
 
-    BackHandler { setSignUpProcess(CenterSignUpProcess.BUSINESS_REGISTRATION_NUMBER) }
+    BackHandler { setSignUpStep(CenterSignUpStep.BUSINESS_REGISTRATION_NUMBER) }
 
     Column(
         horizontalAlignment = Alignment.Start,

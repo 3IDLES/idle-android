@@ -1,4 +1,4 @@
-package com.idle.signup.worker.process
+package com.idle.signup.center.step
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
@@ -20,23 +20,22 @@ import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareButtonSmall
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.foundation.CareTheme
-import com.idle.signin.center.CenterSignUpProcess
-import com.idle.signin.worker.WorkerSignUpProcess
+import com.idle.signin.center.CenterSignUpStep
 
 @Composable
-internal fun WorkerPhoneNumberScreen(
-    workerPhoneNumber: String,
-    workerAuthCodeTimerMinute: String,
-    workerAuthCodeTimerSeconds: String,
-    workerAuthCode: String,
+internal fun CenterPhoneNumberScreen(
+    centerPhoneNumber: String,
+    centerAuthCodeTimerMinute: String,
+    centerAuthCodeTimerSeconds: String,
+    centerAuthCode: String,
     isConfirmAuthCode: Boolean,
-    addressProcessed: Boolean,
-    onWorkerPhoneNumberChanged: (String) -> Unit,
-    onWorkerAuthCodeChanged: (String) -> Unit,
-    setSignUpProcess: (WorkerSignUpProcess) -> Unit,
+    businessRegistrationProcessed: Boolean,
+    onCenterPhoneNumberChanged: (String) -> Unit,
+    onCenterAuthCodeChanged: (String) -> Unit,
+    setSignUpStep: (CenterSignUpStep) -> Unit,
     sendPhoneNumber: () -> Unit,
     confirmAuthCode: () -> Unit,
-    setAddressProcessed: (Boolean) -> Unit,
+    setBusinessRegistrationProcessed: (Boolean) -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
 
@@ -45,13 +44,13 @@ internal fun WorkerPhoneNumberScreen(
     }
 
     LaunchedEffect(isConfirmAuthCode) {
-        if (isConfirmAuthCode && !addressProcessed) {
-            setSignUpProcess(WorkerSignUpProcess.ADDRESS)
-            setAddressProcessed(true)
+        if (isConfirmAuthCode && !businessRegistrationProcessed) {
+            setSignUpStep(CenterSignUpStep.BUSINESS_REGISTRATION_NUMBER)
+            setBusinessRegistrationProcessed(true)
         }
     }
 
-    BackHandler { setSignUpProcess(WorkerSignUpProcess.GENDER) }
+    BackHandler { setSignUpStep(CenterSignUpStep.NAME) }
 
     Column(
         horizontalAlignment = Alignment.Start,
@@ -77,21 +76,21 @@ internal fun WorkerPhoneNumberScreen(
             Row(
                 verticalAlignment = Alignment.Top,
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 CareTextField(
-                    value = workerPhoneNumber,
+                    value = centerPhoneNumber,
                     hint = "전화번호를 입력해주세요.",
-                    onValueChanged = onWorkerPhoneNumberChanged,
-                    readOnly = (workerAuthCodeTimerMinute != "" && workerAuthCodeTimerSeconds != ""),
-                    onDone = { if (workerPhoneNumber.length == 11) sendPhoneNumber() },
+                    onValueChanged = onCenterPhoneNumberChanged,
+                    readOnly = (centerAuthCodeTimerMinute != "" && centerAuthCodeTimerSeconds != ""),
+                    onDone = { if (centerPhoneNumber.length == 11) sendPhoneNumber() },
                     modifier = Modifier.weight(1f)
                         .focusRequester(focusRequester),
                 )
 
                 CareButtonSmall(
-                    enable = workerPhoneNumber.length == 11 &&
-                            !(workerAuthCodeTimerMinute != "" && workerAuthCodeTimerSeconds != ""),
+                    enable = centerPhoneNumber.length == 11 &&
+                            !(centerAuthCodeTimerMinute != "" && centerAuthCodeTimerSeconds != ""),
                     text = "인증",
                     onClick = sendPhoneNumber,
                 )
@@ -100,7 +99,7 @@ internal fun WorkerPhoneNumberScreen(
 
         Column(
             horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
+            verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.Top),
         ) {
             Text(
                 text = "인증번호",
@@ -111,19 +110,19 @@ internal fun WorkerPhoneNumberScreen(
             Row(
                 verticalAlignment = Alignment.Top,
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 CareTextField(
-                    value = workerAuthCode,
+                    value = centerAuthCode,
                     hint = "",
-                    onValueChanged = onWorkerAuthCodeChanged,
-                    onDone = { confirmAuthCode() },
+                    onValueChanged = onCenterAuthCodeChanged,
                     supportingText = if (isConfirmAuthCode) "인증이 완료되었습니다." else "",
-                    readOnly = !(workerAuthCodeTimerMinute != "" && workerAuthCodeTimerSeconds != "") || isConfirmAuthCode,
+                    readOnly = !(centerAuthCodeTimerMinute != "" && centerAuthCodeTimerSeconds != "") || isConfirmAuthCode,
+                    onDone = { if (centerAuthCode.isNotBlank()) confirmAuthCode() },
                     leftComponent = {
-                        if (workerAuthCodeTimerMinute != "" && workerAuthCodeTimerSeconds != "") {
+                        if (centerAuthCodeTimerMinute != "" && centerAuthCodeTimerSeconds != "") {
                             Text(
-                                text = "$workerAuthCodeTimerMinute:$workerAuthCodeTimerSeconds",
+                                text = "$centerAuthCodeTimerMinute:$centerAuthCodeTimerSeconds",
                                 style = CareTheme.typography.body3,
                                 color = if (!isConfirmAuthCode) CareTheme.colors.gray500 else CareTheme.colors.gray200,
                             )
@@ -133,7 +132,7 @@ internal fun WorkerPhoneNumberScreen(
                 )
 
                 CareButtonSmall(
-                    enable = workerAuthCode.isNotBlank(),
+                    enable = centerAuthCode.isNotBlank() && !isConfirmAuthCode,
                     text = "확인",
                     onClick = confirmAuthCode,
                 )
@@ -145,7 +144,7 @@ internal fun WorkerPhoneNumberScreen(
         CareButtonLarge(
             text = "다음",
             enable = isConfirmAuthCode,
-            onClick = { setSignUpProcess(WorkerSignUpProcess.ADDRESS) },
+            onClick = { setSignUpStep(CenterSignUpStep.BUSINESS_REGISTRATION_NUMBER) },
             modifier = Modifier.fillMaxWidth(),
         )
     }

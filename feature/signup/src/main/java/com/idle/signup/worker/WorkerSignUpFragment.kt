@@ -25,11 +25,11 @@ import com.idle.designsystem.compose.component.CareProgressBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
 import com.idle.domain.model.auth.Gender
-import com.idle.signin.center.CenterSignUpProcess
-import com.idle.signup.worker.process.AddressScreen
-import com.idle.signup.worker.process.GenderScreen
-import com.idle.signup.worker.process.WorkerNameScreen
-import com.idle.signup.worker.process.WorkerPhoneNumberScreen
+import com.idle.signin.center.CenterSignUpStep
+import com.idle.signup.worker.step.AddressScreen
+import com.idle.signup.worker.step.GenderScreen
+import com.idle.signup.worker.step.WorkerNameScreen
+import com.idle.signup.worker.step.WorkerPhoneNumberScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -39,7 +39,7 @@ internal class WorkerSignUpFragment : BaseComposeFragment() {
     @Composable
     override fun ComposeLayout() {
         fragmentViewModel.apply {
-            val signUpProcess by signUpProcess.collectAsStateWithLifecycle()
+            val signUpStep by signUpStep.collectAsStateWithLifecycle()
             val workerName by workerName.collectAsStateWithLifecycle()
             val workerPhoneNumber by workerPhoneNumber.collectAsStateWithLifecycle()
             val workerAuthCodeTimerMinute by workerAuthCodeTimerMinute.collectAsStateWithLifecycle()
@@ -51,7 +51,7 @@ internal class WorkerSignUpFragment : BaseComposeFragment() {
             val addressDetail by addressDetail.collectAsStateWithLifecycle()
 
             WorkerSignUpScreen(
-                signUpProcess = signUpProcess,
+                signUpStep = signUpStep,
                 workerName = workerName,
                 workerPhoneNumber = workerPhoneNumber,
                 workerAuthCodeTimerMinute = workerAuthCodeTimerMinute,
@@ -67,7 +67,7 @@ internal class WorkerSignUpFragment : BaseComposeFragment() {
                 onGenderChanged = ::setGender,
                 onAddressChanged = ::setAddress,
                 onAddressDetailChanged = ::setAddressDetail,
-                setSignUpProcess = ::setWorkerSignUpProcess,
+                setSignUpStep = ::setWorkerSignUpStep,
                 sendPhoneNumber = ::sendPhoneNumber,
                 confirmAuthCode = ::confirmAuthCode,
                 signUpWorker = ::signUpWorker,
@@ -79,7 +79,7 @@ internal class WorkerSignUpFragment : BaseComposeFragment() {
 
 @Composable
 internal fun WorkerSignUpScreen(
-    signUpProcess: WorkerSignUpProcess,
+    signUpStep: WorkerSignUpStep,
     workerName: String,
     workerPhoneNumber: String,
     workerAuthCodeTimerMinute: String,
@@ -95,7 +95,7 @@ internal fun WorkerSignUpScreen(
     onGenderChanged: (Gender) -> Unit,
     onAddressChanged: (String) -> Unit,
     onAddressDetailChanged: (String) -> Unit,
-    setSignUpProcess: (WorkerSignUpProcess) -> Unit,
+    setSignUpStep: (WorkerSignUpStep) -> Unit,
     sendPhoneNumber: () -> Unit,
     confirmAuthCode: () -> Unit,
     signUpWorker: () -> Unit,
@@ -125,31 +125,31 @@ internal fun WorkerSignUpScreen(
                 .padding(start = 20.dp, end = 20.dp, bottom = 30.dp),
         ) {
             CareProgressBar(
-                currentStep = signUpProcess.step,
-                totalSteps = CenterSignUpProcess.entries.size,
+                currentStep = signUpStep.step,
+                totalSteps = CenterSignUpStep.entries.size,
                 modifier = Modifier.fillMaxWidth(),
             )
 
             CareStateAnimator(
-                targetState = signUpProcess,
+                targetState = signUpStep,
                 label = "요양 보호사의 회원가입을 관리하는 애니메이션",
-            ) { signUpProcess ->
-                when (signUpProcess) {
-                    WorkerSignUpProcess.NAME -> WorkerNameScreen(
+            ) { signUpStep ->
+                when (signUpStep) {
+                    WorkerSignUpStep.NAME -> WorkerNameScreen(
                         workerName = workerName,
                         onWorkerNameChanged = onWorkerNameChanged,
-                        setSignUpProcess = setSignUpProcess
+                        setSignUpProcess = setSignUpStep
                     )
 
-                    WorkerSignUpProcess.GENDER -> GenderScreen(
+                    WorkerSignUpStep.GENDER -> GenderScreen(
                         gender = gender,
                         phoneNumberProcessed = phoneNumberProcessed,
                         onGenderChanged = onGenderChanged,
-                        setSignUpProcess = setSignUpProcess,
+                        setSignUpStep = setSignUpStep,
                         setPhoneNumberProcessed = setPhoneNumberProcessed,
                     )
 
-                    WorkerSignUpProcess.PHONE_NUMBER -> WorkerPhoneNumberScreen(
+                    WorkerSignUpStep.PHONE_NUMBER -> WorkerPhoneNumberScreen(
                         workerPhoneNumber = workerPhoneNumber,
                         workerAuthCodeTimerMinute = workerAuthCodeTimerMinute,
                         workerAuthCodeTimerSeconds = workerAuthCodeTimerSeconds,
@@ -158,18 +158,18 @@ internal fun WorkerSignUpScreen(
                         addressProcessed = addressProcessed,
                         onWorkerPhoneNumberChanged = onWorkerPhoneNumberChanged,
                         onWorkerAuthCodeChanged = onWorkerAuthCodeChanged,
-                        setSignUpProcess = setSignUpProcess,
+                        setSignUpStep = setSignUpStep,
                         sendPhoneNumber = sendPhoneNumber,
                         confirmAuthCode = confirmAuthCode,
                         setAddressProcessed = setAddressProcessed,
                     )
 
-                    WorkerSignUpProcess.ADDRESS -> AddressScreen(
+                    WorkerSignUpStep.ADDRESS -> AddressScreen(
                         address = address,
                         addressDetail = addressDetail,
                         onAddressChanged = onAddressChanged,
                         onAddressDetailChanged = onAddressDetailChanged,
-                        setSignUpProcess = setSignUpProcess,
+                        setSignUpStep = setSignUpStep,
                         signUpWorker = signUpWorker,
                     )
                 }

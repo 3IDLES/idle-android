@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
 import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
 import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
-import com.idle.signin.center.newpassword.GenerateNewPasswordProcess.PHONE_NUMBER
+import com.idle.signin.center.newpassword.NewPasswordStep.PHONE_NUMBER
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,8 +23,8 @@ class NewPasswordViewModel @Inject constructor(
     private val _centerAuthCode = MutableStateFlow("")
     internal val centerAuthCode = _centerAuthCode.asStateFlow()
 
-    private val _generateNewPasswordProcess = MutableStateFlow(PHONE_NUMBER)
-    internal val generateNewPasswordProcess = _generateNewPasswordProcess.asStateFlow()
+    private val _newPasswordProcess = MutableStateFlow(PHONE_NUMBER)
+    internal val newPasswordProcess = _newPasswordProcess.asStateFlow()
 
     private val _newPassword = MutableStateFlow("")
     internal val newPassword = _newPassword.asStateFlow()
@@ -40,8 +40,8 @@ class NewPasswordViewModel @Inject constructor(
         _centerAuthCode.value = certificateNumber
     }
 
-    internal fun setGenerateNewPasswordProcess(process: GenerateNewPasswordProcess) {
-        _generateNewPasswordProcess.value = process
+    internal fun setNewPasswordProcess(process: NewPasswordStep) {
+        _newPasswordProcess.value = process
     }
 
     internal fun setNewPassword(password: String) {
@@ -65,6 +65,6 @@ class NewPasswordViewModel @Inject constructor(
     }
 }
 
-enum class GenerateNewPasswordProcess {
+enum class NewPasswordStep {
     PHONE_NUMBER, GENERATE_NEW_PASSWORD
 }

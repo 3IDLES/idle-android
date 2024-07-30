@@ -20,8 +20,8 @@ import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
 import com.idle.designsystem.compose.foundation.CareTheme
-import com.idle.signin.center.newpassword.process.GenerateNewPasswordScreen
-import com.idle.signin.center.newpassword.process.PhoneNumberScreen
+import com.idle.signin.center.newpassword.step.GenerateNewPasswordScreen
+import com.idle.signin.center.newpassword.step.PhoneNumberScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -33,17 +33,17 @@ class NewPasswordFragment : BaseComposeFragment() {
         fragmentViewModel.apply {
             val phoneNumber by phoneNumber.collectAsStateWithLifecycle()
             val authCode by centerAuthCode.collectAsStateWithLifecycle()
-            val generateNewPasswordProcess by generateNewPasswordProcess.collectAsStateWithLifecycle()
+            val newPasswordProcess by newPasswordProcess.collectAsStateWithLifecycle()
             val newPassword by newPassword.collectAsStateWithLifecycle()
             val newPasswordForConfirm by newPasswordForConfirm.collectAsStateWithLifecycle()
 
             NewPasswordScreen(
-                generateNewPasswordProcess = generateNewPasswordProcess,
+                newPasswordStep = newPasswordProcess,
                 phoneNumber = phoneNumber,
                 certificationNumber = authCode,
                 newPassword = newPassword,
                 newPasswordForConfirm = newPasswordForConfirm,
-                setGenerateNewPasswordProcess = ::setGenerateNewPasswordProcess,
+                setNewPasswordProcess = ::setNewPasswordProcess,
                 onPhoneNumberChanged = ::setPhoneNumber,
                 onAuthCodeChanged = ::setAuthCode,
                 sendPhoneNumber = ::sendPhoneNumber,
@@ -61,14 +61,14 @@ internal fun NewPasswordScreen(
     certificationNumber: String,
     newPassword: String,
     newPasswordForConfirm: String,
-    generateNewPasswordProcess: GenerateNewPasswordProcess,
+    newPasswordStep: NewPasswordStep,
     onPhoneNumberChanged: (String) -> Unit,
     onAuthCodeChanged: (String) -> Unit,
     sendPhoneNumber: () -> Unit,
     confirmAuthCode: () -> Unit,
     onNewPasswordChanged: (String) -> Unit,
     onNewPasswordForConfirmChanged: (String) -> Unit,
-    setGenerateNewPasswordProcess: (GenerateNewPasswordProcess) -> Unit,
+    setNewPasswordProcess: (NewPasswordStep) -> Unit,
 ) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val focusManager = LocalFocusManager.current
@@ -92,23 +92,23 @@ internal fun NewPasswordScreen(
                 .padding(paddingValue)
                 .padding(start = 20.dp, end = 20.dp, bottom = 30.dp),
         ) {
-            when (generateNewPasswordProcess) {
-                GenerateNewPasswordProcess.PHONE_NUMBER -> PhoneNumberScreen(
+            when (newPasswordStep) {
+                NewPasswordStep.PHONE_NUMBER -> PhoneNumberScreen(
                     phoneNumber = phoneNumber,
                     certificationNumber = certificationNumber,
                     onPhoneNumberChanged = onPhoneNumberChanged,
                     onAuthCodeChanged = onAuthCodeChanged,
                     sendPhoneNumber = sendPhoneNumber,
                     confirmAuthCode = confirmAuthCode,
-                    setGenerateNewPasswordProcess = setGenerateNewPasswordProcess,
+                    setNewPasswordProcess = setNewPasswordProcess,
                 )
 
-                GenerateNewPasswordProcess.GENERATE_NEW_PASSWORD -> GenerateNewPasswordScreen(
+                NewPasswordStep.GENERATE_NEW_PASSWORD -> GenerateNewPasswordScreen(
                     newPassword = newPassword,
                     newPasswordForConfirm = newPasswordForConfirm,
                     onNewPasswordChanged = onNewPasswordChanged,
                     onNewPasswordForConfirmChanged = onNewPasswordForConfirmChanged,
-                    setGenerateNewPasswordProcess = setGenerateNewPasswordProcess,
+                    setNewPasswordProcess = setNewPasswordProcess,
                 )
             }
         }

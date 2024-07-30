@@ -20,7 +20,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.idle.binding.DeepLinkDestination.CenterHome
 import com.idle.binding.DeepLinkDestination.CenterProfile
 import com.idle.binding.base.CareBaseEvent.NavigateTo
-import com.idle.center.register.R
+import com.idle.center.register.info.R
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareCard
@@ -39,10 +39,10 @@ internal class CenterRegisterCompleteFragment : BaseComposeFragment() {
             CenterRegisterCompleteScreen(
                 centerProfile = centerProfile,
                 navigateToCenterProfile = {
-                    baseEvent(NavigateTo(CenterProfile, R.id.centerRegisterCompleteFragment))
+                    baseEvent(NavigateTo(CenterProfile, R.id.registerCenterInfoCompleteFragment))
                 },
                 navigateToCenterHome = {
-                    baseEvent(NavigateTo(CenterHome, R.id.centerRegisterCompleteFragment))
+                    baseEvent(NavigateTo(CenterHome, R.id.registerCenterInfoCompleteFragment))
                 }
             )
         }

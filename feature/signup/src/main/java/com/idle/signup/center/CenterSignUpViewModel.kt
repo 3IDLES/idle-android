@@ -14,7 +14,7 @@ import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
 import com.idle.domain.usecase.auth.SignUpCenterUseCase
 import com.idle.domain.usecase.auth.ValidateBusinessRegistrationNumberUseCase
 import com.idle.domain.usecase.auth.ValidateIdentifierUseCase
-import com.idle.signin.center.CenterSignUpProcess.NAME
+import com.idle.signin.center.CenterSignUpStep.NAME
 import com.idle.signup.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -33,8 +33,8 @@ class CenterSignUpViewModel @Inject constructor(
     private val countDownTimer: CountDownTimer,
 ) : BaseViewModel() {
 
-    private val _signUpProcess = MutableStateFlow<CenterSignUpProcess>(NAME)
-    val signUpProcess = _signUpProcess.asStateFlow()
+    private val _signUpStep = MutableStateFlow<CenterSignUpStep>(NAME)
+    val signUpStep = _signUpStep.asStateFlow()
 
     private val _centerName = MutableStateFlow("")
     val centerName = _centerName.asStateFlow()
@@ -75,8 +75,8 @@ class CenterSignUpViewModel @Inject constructor(
     private val _centerPasswordForConfirm = MutableStateFlow("")
     val centerPasswordForConfirm = _centerPasswordForConfirm.asStateFlow()
 
-    internal fun setCenterSignUpProcess(process: CenterSignUpProcess) {
-        _signUpProcess.value = process
+    internal fun setCenterSignUpStep(step: CenterSignUpStep) {
+        _signUpStep.value = step
     }
 
     internal fun setCenterName(name: String) {
@@ -183,6 +183,6 @@ class CenterSignUpViewModel @Inject constructor(
     }
 }
 
-enum class CenterSignUpProcess(val step: Int) {
+enum class CenterSignUpStep(val step: Int) {
     NAME(1), PHONE_NUMBER(2), BUSINESS_REGISTRATION_NUMBER(3), ID_PASSWORD(4)
 }

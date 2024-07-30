@@ -1,4 +1,4 @@
-package com.idle.signup.center.process
+package com.idle.signup.center.step
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
@@ -28,7 +28,7 @@ import com.idle.designsystem.compose.component.CareButtonSmall
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.BusinessRegistrationInfo
-import com.idle.signin.center.CenterSignUpProcess
+import com.idle.signin.center.CenterSignUpStep
 
 @Composable
 internal fun BusinessRegistrationScreen(
@@ -36,7 +36,7 @@ internal fun BusinessRegistrationScreen(
     businessRegistrationInfo: BusinessRegistrationInfo?,
     onBusinessRegistrationNumberChanged: (String) -> Unit,
     validateBusinessRegistrationNumber: () -> Unit,
-    setSignUpProcess: (CenterSignUpProcess) -> Unit,
+    setSignUpStep: (CenterSignUpStep) -> Unit,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
@@ -45,7 +45,7 @@ internal fun BusinessRegistrationScreen(
         focusRequester.requestFocus()
     }
 
-    BackHandler { setSignUpProcess(CenterSignUpProcess.PHONE_NUMBER) }
+    BackHandler { setSignUpStep(CenterSignUpStep.PHONE_NUMBER) }
 
     Column(
         horizontalAlignment = Alignment.Start,
@@ -149,7 +149,7 @@ internal fun BusinessRegistrationScreen(
         CareButtonLarge(
             text = "다음",
             enable = businessRegistrationInfo != null,
-            onClick = { setSignUpProcess(CenterSignUpProcess.ID_PASSWORD) },
+            onClick = { setSignUpStep(CenterSignUpStep.ID_PASSWORD) },
             modifier = Modifier.fillMaxWidth(),
         )
     }

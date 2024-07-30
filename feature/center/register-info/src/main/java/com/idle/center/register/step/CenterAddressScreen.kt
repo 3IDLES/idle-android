@@ -1,4 +1,4 @@
-package com.idle.signup.center.process
+package com.idle.signup.center.step
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.idle.center.register.RegisterProcess
+import com.idle.center.register.RegistrationStep
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareClickableTextField
 import com.idle.designsystem.compose.component.CareTextField
@@ -24,9 +24,9 @@ internal fun CenterAddressScreen(
     centerDetailAddress: String,
     navigateToPostCode: () -> Unit,
     onCenterDetailAddressChanged: (String) -> Unit,
-    setRegisterProcess: (RegisterProcess) -> Unit,
+    setRegistrationStep: (RegistrationStep) -> Unit,
 ) {
-    BackHandler { setRegisterProcess(RegisterProcess.INFO) }
+    BackHandler { setRegistrationStep(RegistrationStep.INFO) }
 
     Column(
         horizontalAlignment = Alignment.Start,
@@ -74,7 +74,7 @@ internal fun CenterAddressScreen(
                 onValueChanged = onCenterDetailAddressChanged,
                 onDone = {
                     if (roadNameAddress.isNotBlank() && centerDetailAddress.isNotBlank())
-                        setRegisterProcess(RegisterProcess.INTRODUCE)
+                        setRegistrationStep(RegistrationStep.INTRODUCE)
                 },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -85,7 +85,7 @@ internal fun CenterAddressScreen(
         CareButtonLarge(
             text = "다음",
             enable = centerDetailAddress.isNotBlank(),
-            onClick = { setRegisterProcess(RegisterProcess.INTRODUCE) },
+            onClick = { setRegistrationStep(RegistrationStep.INTRODUCE) },
             modifier = Modifier.fillMaxWidth(),
         )
     }

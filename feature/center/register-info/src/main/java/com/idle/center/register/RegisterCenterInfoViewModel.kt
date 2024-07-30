@@ -19,8 +19,8 @@ class RegisterCenterInfoViewModel @Inject constructor(
     private val registerCenterProfileUseCase: RegisterCenterProfileUseCase,
 ) : BaseViewModel() {
 
-    private val _registerProcess = MutableStateFlow(RegisterProcess.INFO)
-    val registerProcess = _registerProcess.asStateFlow()
+    private val _registrationStep = MutableStateFlow(RegistrationStep.INFO)
+    val registrationStep = _registrationStep.asStateFlow()
 
     private val _centerName = MutableStateFlow("")
     val centerName = _centerName.asStateFlow()
@@ -59,8 +59,8 @@ class RegisterCenterInfoViewModel @Inject constructor(
         }
     }
 
-    internal fun setRegisterProcess(process: RegisterProcess) {
-        _registerProcess.value = process
+    internal fun setRegistrationStep(step: RegistrationStep) {
+        _registrationStep.value = step
     }
 
     internal fun setCenterName(name: String) {
@@ -92,6 +92,6 @@ class RegisterCenterInfoViewModel @Inject constructor(
     }
 }
 
-enum class RegisterProcess(val step: Int) {
+enum class RegistrationStep(val step: Int) {
     INFO(1), ADDRESS(2), INTRODUCE(3)
 }

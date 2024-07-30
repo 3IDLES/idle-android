@@ -25,9 +25,9 @@ import com.idle.designsystem.compose.component.CareProgressBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
 import com.idle.post.code.PostCodeFragment
-import com.idle.signup.center.process.CenterAddressScreen
-import com.idle.signup.center.process.CenterInfoScreen
-import com.idle.signup.center.process.CenterIntroduceScreen
+import com.idle.signup.center.step.CenterAddressScreen
+import com.idle.signup.center.step.CenterInfoScreen
+import com.idle.signup.center.step.CenterIntroduceScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -52,7 +52,7 @@ internal class RegisterCenterInfoFragment : BaseComposeFragment() {
     @Composable
     override fun ComposeLayout() {
         fragmentViewModel.apply {
-            val registerProcess by registerProcess.collectAsStateWithLifecycle()
+            val registrationStep by registrationStep.collectAsStateWithLifecycle()
             val centerName by centerName.collectAsStateWithLifecycle()
             val centerNumber by centerNumber.collectAsStateWithLifecycle()
             val centerIntroduce by centerIntroduce.collectAsStateWithLifecycle()
@@ -61,14 +61,14 @@ internal class RegisterCenterInfoFragment : BaseComposeFragment() {
             val centerDetailAddress by centerDetailAddress.collectAsStateWithLifecycle()
 
             CenterRegisterScreen(
-                registerProcess = registerProcess,
+                registrationStep = registrationStep,
                 centerName = centerName,
                 centerNumber = centerNumber,
                 centerIntroduce = centerIntroduce,
                 centerProfileImageUri = centerProfileImageUri,
                 roadNameAddress = roadNameAddress,
                 centerDetailAddress = centerDetailAddress,
-                setRegisterProcess = ::setRegisterProcess,
+                setRegistrationStep = ::setRegistrationStep,
                 onCenterNameChanged = ::setCenterName,
                 onCenterNumberChanged = ::setCenterNumber,
                 onCenterIntroduceChanged = ::setCenterIntroduce,
@@ -87,7 +87,7 @@ internal class RegisterCenterInfoFragment : BaseComposeFragment() {
 
 @Composable
 internal fun CenterRegisterScreen(
-    registerProcess: RegisterProcess,
+    registrationStep: RegistrationStep,
     centerName: String,
     centerNumber: String,
     centerIntroduce: String,
@@ -100,7 +100,7 @@ internal fun CenterRegisterScreen(
     showPostCodeDialog: () -> Unit,
     onCenterDetailAddressChanged: (String) -> Unit,
     onProfileImageUriChanged: (Uri?) -> Unit,
-    setRegisterProcess: (RegisterProcess) -> Unit,
+    setRegistrationStep: (RegistrationStep) -> Unit,
     registerCenterProfile: () -> Unit,
 ) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
@@ -126,38 +126,38 @@ internal fun CenterRegisterScreen(
                 .padding(start = 20.dp, end = 20.dp, top = 8.dp),
         ) {
             CareProgressBar(
-                currentStep = registerProcess.step,
-                totalSteps = RegisterProcess.entries.size,
+                currentStep = registrationStep.step,
+                totalSteps = RegistrationStep.entries.size,
                 modifier = Modifier.fillMaxWidth(),
             )
 
             CareStateAnimator(
-                targetState = registerProcess,
+                targetState = registrationStep,
                 label = "센터 정보 입력을 관리하는 애니메이션",
-            ) { verificationProcess ->
-                when (verificationProcess) {
-                    RegisterProcess.INFO -> CenterInfoScreen(
+            ) { registrationStep ->
+                when (registrationStep) {
+                    RegistrationStep.INFO -> CenterInfoScreen(
                         centerName = centerName,
                         centerNumber = centerNumber,
                         onCenterNameChanged = onCenterNameChanged,
                         onCenterNumberChanged = onCenterNumberChanged,
-                        setRegisterProcess = setRegisterProcess
+                        setRegistrationStep = setRegistrationStep
                     )
 
-                    RegisterProcess.ADDRESS -> CenterAddressScreen(
+                    RegistrationStep.ADDRESS -> CenterAddressScreen(
                         roadNameAddress = roadNameAddress,
                         centerDetailAddress = centerDetailAddress,
                         navigateToPostCode = showPostCodeDialog,
                         onCenterDetailAddressChanged = onCenterDetailAddressChanged,
-                        setRegisterProcess = setRegisterProcess,
+                        setRegistrationStep = setRegistrationStep,
                     )
 
-                    RegisterProcess.INTRODUCE -> CenterIntroduceScreen(
+                    RegistrationStep.INTRODUCE -> CenterIntroduceScreen(
                         centerIntroduce = centerIntroduce,
                         centerProfileImageUri = centerProfileImageUri,
                         onCenterIntroduceChanged = onCenterIntroduceChanged,
                         onProfileImageUriChanged = onProfileImageUriChanged,
-                        setRegisterProcess = setRegisterProcess,
+                        setRegistrationStep = setRegistrationStep,
                         registerCenterProfile = registerCenterProfile,
                     )
                 }

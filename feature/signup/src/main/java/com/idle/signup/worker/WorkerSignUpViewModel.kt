@@ -13,7 +13,7 @@ import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
 import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
 import com.idle.domain.usecase.auth.SignInWorkerUseCase
 import com.idle.domain.usecase.auth.SignUpWorkerUseCase
-import com.idle.signin.worker.WorkerSignUpProcess.NAME
+import com.idle.signin.worker.WorkerSignUpStep.NAME
 import com.idle.signup.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -31,8 +31,8 @@ class WorkerSignUpViewModel @Inject constructor(
     private val countDownTimer: CountDownTimer,
 ) : BaseViewModel() {
 
-    private val _signUpProcess = MutableStateFlow<WorkerSignUpProcess>(NAME)
-    internal val signUpProcess = _signUpProcess.asStateFlow()
+    private val _signUpStep = MutableStateFlow<WorkerSignUpStep>(NAME)
+    internal val signUpStep = _signUpStep.asStateFlow()
 
     private val _workerName = MutableStateFlow("")
     internal val workerName = _workerName.asStateFlow()
@@ -63,8 +63,8 @@ class WorkerSignUpViewModel @Inject constructor(
     private val _addressDetail = MutableStateFlow("")
     internal val addressDetail = _addressDetail.asStateFlow()
 
-    internal fun setWorkerSignUpProcess(process: WorkerSignUpProcess) {
-        _signUpProcess.value = process
+    internal fun setWorkerSignUpStep(step: WorkerSignUpStep) {
+        _signUpStep.value = step
     }
 
     internal fun setWorkerName(name: String) {
@@ -167,6 +167,6 @@ class WorkerSignUpViewModel @Inject constructor(
     }
 }
 
-enum class WorkerSignUpProcess(val step: Int) {
+enum class WorkerSignUpStep(val step: Int) {
     NAME(1), GENDER(2), PHONE_NUMBER(3), ADDRESS(4)
 }

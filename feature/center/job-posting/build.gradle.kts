@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.idle.center.register.recruitment"
+    namespace = "com.idle.center.job.posting"
 }
 
 dependencies {

@@ -1,4 +1,4 @@
-package com.idle.signup.worker.process
+package com.idle.signup.worker.step
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
@@ -18,21 +18,21 @@ import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareChip
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.Gender
-import com.idle.signin.worker.WorkerSignUpProcess
+import com.idle.signin.worker.WorkerSignUpStep
 
 @Composable
 internal fun GenderScreen(
     gender: Gender,
     phoneNumberProcessed: Boolean,
     onGenderChanged: (Gender) -> Unit,
-    setSignUpProcess: (WorkerSignUpProcess) -> Unit,
+    setSignUpStep: (WorkerSignUpStep) -> Unit,
     setPhoneNumberProcessed: (Boolean) -> Unit,
 ) {
-    BackHandler { setSignUpProcess(WorkerSignUpProcess.NAME) }
+    BackHandler { setSignUpStep(WorkerSignUpStep.NAME) }
 
     LaunchedEffect(gender) {
         if (gender != Gender.NONE && !phoneNumberProcessed) {
-            setSignUpProcess(WorkerSignUpProcess.PHONE_NUMBER)
+            setSignUpStep(WorkerSignUpStep.PHONE_NUMBER)
             setPhoneNumberProcessed(true)
         }
     }
@@ -75,7 +75,7 @@ internal fun GenderScreen(
         CareButtonLarge(
             text = "다음",
             enable = gender != Gender.NONE,
-            onClick = { setSignUpProcess(WorkerSignUpProcess.PHONE_NUMBER) },
+            onClick = { setSignUpStep(WorkerSignUpStep.PHONE_NUMBER) },
             modifier = Modifier.fillMaxWidth(),
         )
     }
