@@ -9,6 +9,9 @@ import javax.inject.Inject
 @HiltViewModel
 class JobPostingViewModel @Inject constructor() : BaseViewModel() {
 
+    private val _weekDays = MutableStateFlow<Set<DayOfWeeks>>(setOf())
+    val weekDays = _weekDays.asStateFlow()
+
     private val _jobPostingStep = MutableStateFlow(JobPostingStep.TIMEPAYMENT)
     val registerProcess = _jobPostingStep.asStateFlow()
 
@@ -16,6 +19,13 @@ class JobPostingViewModel @Inject constructor() : BaseViewModel() {
     val roadNameAddress = _roadNameAddress.asStateFlow()
 
     private val _lotNumberAddress = MutableStateFlow("")
+
+    internal fun setWeekDays(dayOfWeek: DayOfWeeks) {
+        _weekDays.value = _weekDays.value.toMutableSet().apply {
+            if(dayOfWeek in this) remove(dayOfWeek)
+            else add(dayOfWeek)
+        }.toSet()
+    }
 
     internal fun setJobPostingStep(step: JobPostingStep) {
         _jobPostingStep.value = step
@@ -39,4 +49,14 @@ enum class JobPostingStep(val step: Int) {
             return JobPostingStep.entries.first { it.step == step }
         }
     }
+}
+
+enum class DayOfWeeks(val displayName: String) {
+    MONDAY("월"),
+    TUESDAY("화"),
+    WEDNESDAY("수"),
+    THURSDAY("목"),
+    FRIDAY("금"),
+    SATURDAY("토"),
+    SUNDAY("일"),
 }

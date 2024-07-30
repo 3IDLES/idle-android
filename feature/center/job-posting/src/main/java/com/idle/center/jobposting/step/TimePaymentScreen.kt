@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.idle.center.jobposting.DayOfWeeks
 import com.idle.center.jobposting.JobPostingStep
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareChipBasic
@@ -22,10 +23,11 @@ import com.idle.designsystem.compose.component.CareClickableTextField
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
-import java.time.DayOfWeek
 
 @Composable
 internal fun TimePaymentScreen(
+    weekDays: Set<DayOfWeeks>,
+    setWeekDays: (DayOfWeeks) -> Unit,
     setJobPostingStep: (JobPostingStep) -> Unit,
 ) {
     Column(
@@ -45,21 +47,11 @@ internal fun TimePaymentScreen(
             modifier = Modifier.fillMaxWidth(),
         ) {
             Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                DayOfWeek.entries.forEach { day ->
-                    val koreanDay = when (day) {
-                        DayOfWeek.MONDAY -> "월"
-                        DayOfWeek.TUESDAY -> "화"
-                        DayOfWeek.WEDNESDAY -> "수"
-                        DayOfWeek.THURSDAY -> "목"
-                        DayOfWeek.FRIDAY -> "금"
-                        DayOfWeek.SATURDAY -> "토"
-                        DayOfWeek.SUNDAY -> "일"
-                    }
-
+                DayOfWeeks.entries.forEach { day ->
                     CareChipShort(
-                        text = koreanDay,
-                        onClick = {},
-                        enable = false,
+                        text = day.displayName,
+                        enable = day in weekDays,
+                        onClick = { setWeekDays(day) },
                     )
                 }
             }

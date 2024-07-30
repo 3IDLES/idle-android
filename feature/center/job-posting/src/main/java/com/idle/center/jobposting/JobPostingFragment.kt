@@ -56,9 +56,12 @@ internal class JobPostingFragment : BaseComposeFragment() {
     override fun ComposeLayout() {
         fragmentViewModel.apply {
             val registerProcess by registerProcess.collectAsStateWithLifecycle()
+            val weekDays by weekDays.collectAsStateWithLifecycle()
 
             JobPostingScreen(
+                weekDays = weekDays,
                 jobPostingStep = registerProcess,
+                setWeekDays = ::setWeekDays,
                 showPostCodeDialog = {
                     if (!(postCodeDialog?.isAdded == true || postCodeDialog?.isVisible == true)) {
                         postCodeDialog?.show(parentFragmentManager, "PostCodeFragment")
@@ -72,7 +75,9 @@ internal class JobPostingFragment : BaseComposeFragment() {
 
 @Composable
 internal fun JobPostingScreen(
+    weekDays: Set<DayOfWeeks>,
     jobPostingStep: JobPostingStep,
+    setWeekDays: (DayOfWeeks) -> Unit,
     showPostCodeDialog: () -> Unit,
     setJobPostingStep: (JobPostingStep) -> Unit,
 ) {
@@ -123,7 +128,12 @@ internal fun JobPostingScreen(
                 label = "센터 정보 입력을 관리하는 애니메이션",
             ) { jobPostingStep ->
                 when (jobPostingStep) {
-                    JobPostingStep.TIMEPAYMENT -> TimePaymentScreen(setJobPostingStep)
+                    JobPostingStep.TIMEPAYMENT -> TimePaymentScreen(
+                        weekDays = weekDays,
+                        setWeekDays = setWeekDays,
+                        setJobPostingStep = setJobPostingStep,
+                    )
+
                     JobPostingStep.ADDRESS -> {}
                     JobPostingStep.CUSTOMERINFORMATION -> {}
                     JobPostingStep.CUSTOMERREQUIREMENT -> {}
