@@ -3,6 +3,7 @@ package com.idle.designsystem.compose.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -23,6 +24,7 @@ fun CareChipBasic(
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
+            .height(44.dp)
             .background(
                 color = if (enable) CareTheme.colors.orange100 else CareTheme.colors.white000,
                 shape = RoundedCornerShape(6.dp),
