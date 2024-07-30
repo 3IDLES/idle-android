@@ -43,6 +43,7 @@ import com.idle.designsystem.compose.component.CareButtonStrokeSmall
 import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.CareTextFieldLong
+import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.profile.CenterProfile
 import dagger.hilt.android.AndroidEntryPoint
@@ -179,13 +180,10 @@ internal fun CenterProfileScreen(
                     }
                 }
 
-                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Text(
-                        text = "전화번호",
-                        style = CareTheme.typography.subtitle4,
-                        color = CareTheme.colors.gray500,
-                    )
-
+                LabeledContent(
+                    subtitle = "전화번호",
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
                     if (!isEditState) {
                         Text(
                             text = centerOfficeNumber,
@@ -202,13 +200,10 @@ internal fun CenterProfileScreen(
                     }
                 }
 
-                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Text(
-                        text = "센터 소개",
-                        style = CareTheme.typography.subtitle4,
-                        color = CareTheme.colors.gray500,
-                    )
-
+                LabeledContent(
+                    subtitle = "센터 소개",
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
                     if (!isEditState) {
                         Text(
                             text = centerIntroduce,

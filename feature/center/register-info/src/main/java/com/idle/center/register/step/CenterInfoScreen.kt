@@ -20,6 +20,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.idle.center.register.RegistrationStep
+import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.foundation.CareTheme
@@ -52,16 +53,10 @@ internal fun CenterInfoScreen(
             color = CareTheme.colors.gray900,
         )
 
-        Column(
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
+        LabeledContent(
+            subtitle = "이름",
+            modifier = Modifier.fillMaxWidth(),
         ) {
-            Text(
-                text = "이름",
-                style = CareTheme.typography.subtitle4,
-                color = CareTheme.colors.gray500,
-            )
-
             CareTextField(
                 value = centerName,
                 hint = "센터 이름을 입력해주세요.",
@@ -75,16 +70,10 @@ internal fun CenterInfoScreen(
             )
         }
 
-        Column(
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
+        LabeledContent(
+            subtitle = "센터 연락처",
+            modifier = Modifier.fillMaxWidth(),
         ) {
-            Text(
-                text = "센터 연락처",
-                style = CareTheme.typography.subtitle4,
-                color = CareTheme.colors.gray500,
-            )
-
             CareTextField(
                 value = centerNumber,
                 hint = "지원자들의 연락을 받을 번호를 입력해주세요.",

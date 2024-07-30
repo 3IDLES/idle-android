@@ -26,8 +26,9 @@ import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designsystem.compose.component.CareButtonLarge
-import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
+import com.idle.designsystem.compose.component.CareTextField
+import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -85,18 +86,11 @@ internal fun CenterSignInScreen(
                 .padding(paddingValue)
                 .padding(start = 20.dp, end = 20.dp, top = 125.dp, bottom = 30.dp),
         ) {
-            Column(
-                horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
-                modifier = Modifier.padding(bottom = 16.dp),
+            LabeledContent(
+                subtitle = "아이디",
+                modifier = Modifier.fillMaxWidth()
+                    .padding(bottom = 16.dp),
             ) {
-                Text(
-                    text = "아이디",
-                    style = CareTheme.typography.subtitle4,
-                    color = CareTheme.colors.gray500,
-                )
-
-
                 CareTextField(
                     value = centerId,
                     hint = "아이디를 입력해주세요.",
@@ -106,17 +100,11 @@ internal fun CenterSignInScreen(
                 )
             }
 
-            Column(
-                horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
+            LabeledContent(
+                subtitle = "아이디",
+                modifier = Modifier.fillMaxWidth()
+                    .padding(bottom = 16.dp),
             ) {
-                Text(
-                    text = "비밀번호",
-                    style = CareTheme.typography.subtitle4,
-                    color = CareTheme.colors.gray500,
-                )
-
-
                 CareTextField(
                     value = centerPassword,
                     hint = "비밀번호를 입력해주세요.",

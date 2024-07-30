@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareButtonSmall
 import com.idle.designsystem.compose.component.CareTextField
+import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.signin.center.newpassword.NewPasswordStep
 import com.idle.signin.center.newpassword.NewPasswordStep.GENERATE_NEW_PASSWORD
@@ -49,16 +50,10 @@ internal fun PhoneNumberScreen(
             color = CareTheme.colors.gray900,
         )
 
-        Column(
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
+        LabeledContent(
+            subtitle = "전화번호",
+            modifier = Modifier.fillMaxWidth(),
         ) {
-            Text(
-                text = "전화번호",
-                style = CareTheme.typography.subtitle4,
-                color = CareTheme.colors.gray500,
-            )
-
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -81,16 +76,10 @@ internal fun PhoneNumberScreen(
             }
         }
 
-        Column(
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
+        LabeledContent(
+            subtitle = "인증번호",
+            modifier = Modifier.fillMaxWidth(),
         ) {
-            Text(
-                text = "인증번호",
-                style = CareTheme.typography.subtitle4,
-                color = CareTheme.colors.gray500,
-            )
-
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(4.dp),

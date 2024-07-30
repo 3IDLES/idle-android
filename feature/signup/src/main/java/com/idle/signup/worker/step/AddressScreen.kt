@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareTextField
+import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.signin.worker.WorkerSignUpStep
 
@@ -38,16 +39,10 @@ internal fun AddressScreen(
             color = CareTheme.colors.gray900,
         )
 
-        Column(
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
+        LabeledContent(
+            subtitle = "우편번호",
+            modifier = Modifier.fillMaxWidth(),
         ) {
-            Text(
-                text = "우편번호",
-                style = CareTheme.typography.subtitle4,
-                color = CareTheme.colors.gray500,
-            )
-
             CareTextField(
                 value = address,
                 hint = "우편번호를 입력해주세요. (예: 14354)",
@@ -57,16 +52,10 @@ internal fun AddressScreen(
             )
         }
 
-        Column(
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
+        LabeledContent(
+            subtitle = "상세 주소",
+            modifier = Modifier.fillMaxWidth(),
         ) {
-            Text(
-                text = "상세 주소",
-                style = CareTheme.typography.subtitle4,
-                color = CareTheme.colors.gray500,
-            )
-
             CareTextField(
                 value = addressDetail,
                 hint = "상세 주소를 입력해주세요. (예: 101동 101호)",

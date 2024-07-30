@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareButtonSmall
 import com.idle.designsystem.compose.component.CareTextField
+import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.BusinessRegistrationInfo
 import com.idle.signin.center.CenterSignUpStep
@@ -92,16 +93,10 @@ internal fun BusinessRegistrationScreen(
         }
 
         if (businessRegistrationInfo != null) {
-            Column(
-                horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
+            LabeledContent(
+                subtitle = "아래의 시설이 맞나요?",
+                modifier = Modifier.fillMaxWidth(),
             ) {
-                Text(
-                    text = "아래의 시설이 맞나요?",
-                    style = CareTheme.typography.subtitle3,
-                    color = CareTheme.colors.gray500,
-                )
-
                 Box(
                     modifier = Modifier.border(
                         width = 1.dp,

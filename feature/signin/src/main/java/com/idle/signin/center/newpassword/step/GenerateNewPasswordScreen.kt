@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareTextField
+import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.signin.center.newpassword.NewPasswordStep
 import com.idle.signin.center.newpassword.NewPasswordStep.PHONE_NUMBER
@@ -52,29 +53,24 @@ internal fun GenerateNewPasswordScreen(
             color = CareTheme.colors.gray900,
         )
 
-        Column(
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
+        LabeledContent(
+            subtitle = buildAnnotatedString {
+                withStyle(
+                    style = SpanStyle(color = CareTheme.colors.gray500)
+                ) {
+                    append("비밀번호 설정 ")
+                }
+                withStyle(
+                    style = SpanStyle(
+                        color = CareTheme.colors.gray300,
+                        fontSize = 12.sp,
+                    )
+                ) {
+                    append("(영문+숫자 조합 10자리 이상 등 조건)")
+                }
+            },
+            modifier = Modifier.fillMaxWidth(),
         ) {
-            Text(
-                text = buildAnnotatedString {
-                    withStyle(
-                        style = SpanStyle(color = CareTheme.colors.gray500)
-                    ) {
-                        append("비밀번호 설정 ")
-                    }
-                    withStyle(
-                        style = SpanStyle(
-                            color = CareTheme.colors.gray300,
-                            fontSize = 12.sp,
-                        )
-                    ) {
-                        append("(영문+숫자 조합 10자리 이상 등 조건)")
-                    }
-                },
-                style = CareTheme.typography.subtitle4,
-            )
-
             CareTextField(
                 value = newPassword,
                 hint = "비밀번호를 입력해주세요.",
@@ -85,17 +81,10 @@ internal fun GenerateNewPasswordScreen(
             )
         }
 
-        Column(
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
+        LabeledContent(
+            subtitle = "비밀번호 확인",
+            modifier = Modifier.fillMaxWidth(),
         ) {
-            Text(
-                text = "비밀번호 확인",
-                style = CareTheme.typography.subtitle4,
-                color = CareTheme.colors.gray500,
-            )
-
-
             CareTextField(
                 value = newPasswordForConfirm,
                 hint = "비밀번호를 한번 더 입력해주세요.",

@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.idle.center.register.RegistrationStep
+import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareClickableTextField
 import com.idle.designsystem.compose.component.CareTextField
@@ -40,16 +41,10 @@ internal fun CenterAddressScreen(
             color = CareTheme.colors.gray900,
         )
 
-        Column(
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
+        LabeledContent(
+            subtitle = "도로명 주소",
+            modifier = Modifier.fillMaxWidth(),
         ) {
-            Text(
-                text = "도로명 주소",
-                style = CareTheme.typography.subtitle4,
-                color = CareTheme.colors.gray500,
-            )
-
             CareClickableTextField(
                 value = roadNameAddress,
                 hint = "도로명 주소를 입력해주세요.",
@@ -58,16 +53,10 @@ internal fun CenterAddressScreen(
             )
         }
 
-        Column(
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
+        LabeledContent(
+            subtitle = "상세 주소",
+            modifier = Modifier.fillMaxWidth(),
         ) {
-            Text(
-                text = "상세 주소",
-                style = CareTheme.typography.subtitle4,
-                color = CareTheme.colors.gray500,
-            )
-
             CareTextField(
                 value = centerDetailAddress,
                 hint = "상세 주소를 입력해주세요. (예: 2층 204호)",

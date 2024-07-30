@@ -5,7 +5,6 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,6 +24,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.idle.center.register.RegistrationStep
+import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
@@ -74,17 +74,10 @@ internal fun CenterIntroduceScreen(
             modifier = Modifier.padding(bottom = 32.dp),
         )
 
-        Column(
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
-            modifier = Modifier.padding(bottom = 20.dp),
+        LabeledContent(
+            subtitle = "센터 소개",
+            modifier = Modifier.fillMaxWidth(),
         ) {
-            Text(
-                text = "센터 소개",
-                style = CareTheme.typography.subtitle4,
-                color = CareTheme.colors.gray500,
-            )
-
             CareTextFieldLong(
                 value = centerIntroduce,
                 hint = "추가적으로 요구사항이 있다면 작성해주세요.(예: 어쩌고저쩌고)",
@@ -95,17 +88,10 @@ internal fun CenterIntroduceScreen(
             )
         }
 
-        Column(
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
-            modifier = Modifier.padding(bottom = 24.dp),
+        LabeledContent(
+            subtitle = "센터 사진",
+            modifier = Modifier.fillMaxWidth(),
         ) {
-            Text(
-                text = "센터 사진",
-                style = CareTheme.typography.subtitle4,
-                color = CareTheme.colors.gray500,
-            )
-
             AsyncImage(
                 model = centerProfileImageUri ?: R.drawable.ic_profile_empty_edit,
                 contentDescription = null,

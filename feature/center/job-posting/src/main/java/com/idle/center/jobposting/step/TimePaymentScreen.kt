@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.idle.center.jobposting.JobPostingStep
+import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareChipShort
 import com.idle.designsystem.compose.foundation.CareTheme
@@ -34,20 +35,11 @@ internal fun TimePaymentScreen(
             color = CareTheme.colors.gray900,
         )
 
-        Column(
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterVertically),
+        LabeledContent(
+            subtitle = "근무 요일",
+            modifier = Modifier.fillMaxWidth(),
         ) {
-            Text(
-                text = "근무 요일",
-                style = CareTheme.typography.subtitle4,
-                color = CareTheme.colors.gray500,
-            )
-
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                modifier = Modifier.fillMaxWidth(),
-            ) {
+            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                 DayOfWeek.entries.forEach { day ->
                     val koreanDay = when (day) {
                         DayOfWeek.MONDAY -> "월"
