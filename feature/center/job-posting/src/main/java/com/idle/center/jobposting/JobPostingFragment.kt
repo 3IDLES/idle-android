@@ -29,6 +29,8 @@ import com.idle.designsystem.compose.component.CareButtonStrokeSmall
 import com.idle.designsystem.compose.component.CareProgressBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
+import com.idle.domain.model.job.DayOfWeek
+import com.idle.domain.model.job.PayType
 import com.idle.post.code.PostCodeFragment
 import com.idle.signup.center.step.TimePaymentScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -55,13 +57,16 @@ internal class JobPostingFragment : BaseComposeFragment() {
     @Composable
     override fun ComposeLayout() {
         fragmentViewModel.apply {
-            val registerProcess by registerProcess.collectAsStateWithLifecycle()
+            val jobPostingStep by registerProcess.collectAsStateWithLifecycle()
             val weekDays by weekDays.collectAsStateWithLifecycle()
+            val payType by payType.collectAsStateWithLifecycle()
 
             JobPostingScreen(
                 weekDays = weekDays,
-                jobPostingStep = registerProcess,
+                payType = payType,
+                jobPostingStep = jobPostingStep,
                 setWeekDays = ::setWeekDays,
+                setPayType = ::setPayType,
                 showPostCodeDialog = {
                     if (!(postCodeDialog?.isAdded == true || postCodeDialog?.isVisible == true)) {
                         postCodeDialog?.show(parentFragmentManager, "PostCodeFragment")
@@ -75,9 +80,11 @@ internal class JobPostingFragment : BaseComposeFragment() {
 
 @Composable
 internal fun JobPostingScreen(
-    weekDays: Set<DayOfWeeks>,
+    weekDays: Set<DayOfWeek>,
+    payType: PayType,
     jobPostingStep: JobPostingStep,
-    setWeekDays: (DayOfWeeks) -> Unit,
+    setWeekDays: (DayOfWeek) -> Unit,
+    setPayType: (PayType) -> Unit,
     showPostCodeDialog: () -> Unit,
     setJobPostingStep: (JobPostingStep) -> Unit,
 ) {
@@ -130,7 +137,9 @@ internal fun JobPostingScreen(
                 when (jobPostingStep) {
                     JobPostingStep.TIMEPAYMENT -> TimePaymentScreen(
                         weekDays = weekDays,
+                        payType = payType,
                         setWeekDays = setWeekDays,
+                        setPayType = setPayType,
                         setJobPostingStep = setJobPostingStep,
                     )
 

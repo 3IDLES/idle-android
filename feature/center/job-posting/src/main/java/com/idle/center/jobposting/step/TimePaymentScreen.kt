@@ -23,11 +23,14 @@ import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.job.DayOfWeek
+import com.idle.domain.model.job.PayType
 
 @Composable
 internal fun TimePaymentScreen(
     weekDays: Set<DayOfWeek>,
+    payType: PayType,
     setWeekDays: (DayOfWeek) -> Unit,
+    setPayType: (PayType) -> Unit,
     setJobPostingStep: (JobPostingStep) -> Unit,
 ) {
     Column(
@@ -105,22 +108,22 @@ internal fun TimePaymentScreen(
                 Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                     CareChipBasic(
                         text = "시급",
-                        onClick = {},
-                        enable = false,
+                        onClick = { setPayType(PayType.HOURLY) },
+                        enable = payType == PayType.HOURLY,
                         modifier = Modifier.weight(1f),
                     )
 
                     CareChipBasic(
                         text = "주급",
-                        onClick = {},
-                        enable = true,
+                        onClick = { setPayType(PayType.WEEKLY) },
+                        enable = payType == PayType.WEEKLY,
                         modifier = Modifier.weight(1f),
                     )
 
                     CareChipBasic(
                         text = "월급",
-                        onClick = {},
-                        enable = false,
+                        onClick = { setPayType(PayType.MONTHLY) },
+                        enable = payType == PayType.MONTHLY,
                         modifier = Modifier.weight(1f),
                     )
                 }
