@@ -11,7 +11,8 @@
     <include app:graph="@navigation/nav_center_home" />
     <include app:graph="@navigation/nav_center_profile" />
     <include app:graph="@navigation/nav_center_setting" />
-    <include app:graph="@navigation/nav_center_register" />
+    <include app:graph="@navigation/nav_register_center_info" />
+    <include app:graph="@navigation/nav_register_recruitment" />
     <include app:graph="@navigation/nav_worker_home" />
     <include app:graph="@navigation/nav_worker_profile" />
     <include app:graph="@navigation/nav_worker_recruitment_detail" />

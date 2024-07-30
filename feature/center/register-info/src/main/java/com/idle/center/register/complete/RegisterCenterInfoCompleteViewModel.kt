@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CenterRegisterCompleteViewModel @Inject constructor(
+class RegisterCenterInfoCompleteViewModel @Inject constructor(
     private val getMyCenterProfileUseCase: GetMyCenterProfileUseCase,
 ) : BaseViewModel() {
     private val _centerProfile = MutableStateFlow(CenterProfile())

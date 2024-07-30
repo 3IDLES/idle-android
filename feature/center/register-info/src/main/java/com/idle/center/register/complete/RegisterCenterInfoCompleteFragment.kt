@@ -29,7 +29,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 internal class CenterRegisterCompleteFragment : BaseComposeFragment() {
-    override val fragmentViewModel: CenterRegisterCompleteViewModel by viewModels()
+    override val fragmentViewModel: RegisterCenterInfoCompleteViewModel by viewModels()
 
     @Composable
     override fun ComposeLayout() {

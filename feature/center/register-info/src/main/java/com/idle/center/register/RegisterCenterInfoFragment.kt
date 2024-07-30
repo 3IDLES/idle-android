@@ -31,22 +31,21 @@ import com.idle.signup.center.process.CenterIntroduceScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-internal class CenterRegisterFragment : BaseComposeFragment() {
+internal class RegisterCenterInfoFragment : BaseComposeFragment() {
 
-    override val fragmentViewModel: CenterVerificationViewModel by viewModels()
+    override val fragmentViewModel: RegisterCenterInfoViewModel by viewModels()
 
     private val postCodeDialog: PostCodeFragment? by lazy {
         PostCodeFragment().apply {
-            onDismissCallback =
-                {
-                    findNavController().currentBackStackEntry?.savedStateHandle?.let {
-                        val roadNameAddress = it.get<String>("roadNameAddress")
-                        val lotNumberAddress = it.get<String>("lotNumberAddress")
+            onDismissCallback = {
+                findNavController().currentBackStackEntry?.savedStateHandle?.let {
+                    val roadNameAddress = it.get<String>("roadNameAddress")
+                    val lotNumberAddress = it.get<String>("lotNumberAddress")
 
-                        fragmentViewModel.setRoadNameAddress(roadNameAddress ?: "")
-                        fragmentViewModel.setLotNumberAddress(lotNumberAddress ?: "")
-                    }
+                    fragmentViewModel.setRoadNameAddress(roadNameAddress ?: "")
+                    fragmentViewModel.setLotNumberAddress(lotNumberAddress ?: "")
                 }
+            }
         }
     }
 

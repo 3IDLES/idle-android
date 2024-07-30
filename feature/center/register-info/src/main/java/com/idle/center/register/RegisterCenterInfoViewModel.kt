@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.idle.binding.DeepLinkDestination.CenterRegisterComplete
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
+import com.idle.center.register.info.R
 import com.idle.domain.usecase.profile.RegisterCenterProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +15,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CenterVerificationViewModel @Inject constructor(
+class RegisterCenterInfoViewModel @Inject constructor(
     private val registerCenterProfileUseCase: RegisterCenterProfileUseCase,
 ) : BaseViewModel() {
 
@@ -50,7 +51,9 @@ class CenterVerificationViewModel @Inject constructor(
             officeNumber = _centerNumber.value,
             roadNameAddress = _roadNameAddress.value
         ).onSuccess {
-            baseEvent(CareBaseEvent.NavigateTo(CenterRegisterComplete, R.id.centerRegisterFragment))
+            baseEvent(
+                CareBaseEvent.NavigateTo(CenterRegisterComplete, R.id.registerCenterInfoFragment)
+            )
         }.onFailure {
             Log.d("test", "센터 정보 등록 실패! $it")
         }

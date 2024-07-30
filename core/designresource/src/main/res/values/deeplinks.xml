@@ -14,8 +14,9 @@
     <string name="center_home_deeplink_url">care://center/home</string>
     <string name="center_profile_deeplink_url">care://center/profile</string>
     <string name="center_setting_deeplink_url">care://center/setting</string>
-    <string name="center_register_deeplink_url">care://center/register</string>
-    <string name="center_register_complete_deeplink_url">care://center/register/complete</string>
+    <string name="center_register_info_deeplink_url">care://center/register/info</string>
+    <string name="center_register_info_complete_deeplink_url">care://center/register/info/complete</string>
+    <string name="center_register_recruitment_deeplink_url">care://center/register/recruitment</string>
 
     <string name="worker_home_deeplink_url">care://worker/home</string>
     <string name="worker_profile_deeplink_url">care://worker/profile</string>
