@@ -14,7 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.idle.center.jobposting.DayOfWeeks
 import com.idle.center.jobposting.JobPostingStep
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareChipBasic
@@ -23,11 +22,12 @@ import com.idle.designsystem.compose.component.CareClickableTextField
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
+import com.idle.domain.model.job.DayOfWeek
 
 @Composable
 internal fun TimePaymentScreen(
-    weekDays: Set<DayOfWeeks>,
-    setWeekDays: (DayOfWeeks) -> Unit,
+    weekDays: Set<DayOfWeek>,
+    setWeekDays: (DayOfWeek) -> Unit,
     setJobPostingStep: (JobPostingStep) -> Unit,
 ) {
     Column(
@@ -47,7 +47,7 @@ internal fun TimePaymentScreen(
             modifier = Modifier.fillMaxWidth(),
         ) {
             Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                DayOfWeeks.entries.forEach { day ->
+                DayOfWeek.entries.forEach { day ->
                     CareChipShort(
                         text = day.displayName,
                         enable = day in weekDays,

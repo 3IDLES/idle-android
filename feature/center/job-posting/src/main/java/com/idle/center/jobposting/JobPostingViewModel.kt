@@ -1,6 +1,7 @@
 package com.idle.center.jobposting
 
 import com.idle.binding.base.BaseViewModel
+import com.idle.domain.model.job.DayOfWeek
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -9,7 +10,7 @@ import javax.inject.Inject
 @HiltViewModel
 class JobPostingViewModel @Inject constructor() : BaseViewModel() {
 
-    private val _weekDays = MutableStateFlow<Set<DayOfWeeks>>(setOf())
+    private val _weekDays = MutableStateFlow<Set<DayOfWeek>>(setOf())
     val weekDays = _weekDays.asStateFlow()
 
     private val _jobPostingStep = MutableStateFlow(JobPostingStep.TIMEPAYMENT)
@@ -20,9 +21,9 @@ class JobPostingViewModel @Inject constructor() : BaseViewModel() {
 
     private val _lotNumberAddress = MutableStateFlow("")
 
-    internal fun setWeekDays(dayOfWeek: DayOfWeeks) {
+    internal fun setWeekDays(dayOfWeek: DayOfWeek) {
         _weekDays.value = _weekDays.value.toMutableSet().apply {
-            if(dayOfWeek in this) remove(dayOfWeek)
+            if (dayOfWeek in this) remove(dayOfWeek)
             else add(dayOfWeek)
         }.toSet()
     }
@@ -49,14 +50,4 @@ enum class JobPostingStep(val step: Int) {
             return JobPostingStep.entries.first { it.step == step }
         }
     }
-}
-
-enum class DayOfWeeks(val displayName: String) {
-    MONDAY("월"),
-    TUESDAY("화"),
-    WEDNESDAY("수"),
-    THURSDAY("목"),
-    FRIDAY("금"),
-    SATURDAY("토"),
-    SUNDAY("일"),
 }
