@@ -1,13 +1,9 @@
 package com.idle.center.jobposting
 
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,6 +36,7 @@ import com.idle.signup.center.step.AdditionalInfoScreen
 import com.idle.signup.center.step.AddressScreen
 import com.idle.signup.center.step.CustomerInformationScreen
 import com.idle.signup.center.step.CustomerRequirementScreen
+import com.idle.signup.center.step.SummaryScreen
 import com.idle.signup.center.step.TimePaymentScreen
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -206,92 +203,94 @@ internal fun JobPostingScreen(
         },
         modifier = Modifier.addFocusCleaner(focusManager),
     ) { paddingValue ->
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(32.dp, Alignment.CenterVertically),
+        CareStateAnimator(
+            targetState = jobPostingStep,
             modifier = Modifier.fillMaxSize()
                 .background(Color.White)
                 .padding(paddingValue)
-                .padding(start = 20.dp, end = 20.dp, top = 8.dp),
-        ) {
-            AnimatedVisibility(
-                visible = jobPostingStep != JobPostingStep.SUMMARY,
-                enter = slideInHorizontally(initialOffsetX = { it }) + fadeIn(),
-                exit = slideOutHorizontally(targetOffsetX = { -it }) + fadeOut()
-            ) {
-                CareProgressBar(
-                    currentStep = jobPostingStep.step,
-                    totalSteps = JobPostingStep.entries.size - 1,
-                    modifier = Modifier.fillMaxWidth(),
-                )
-            }
-
-            CareStateAnimator(
-                targetState = jobPostingStep,
-                label = "센터 정보 입력을 관리하는 애니메이션",
-            ) { jobPostingStep ->
-                when (jobPostingStep) {
-                    JobPostingStep.TIME_PAYMENT -> TimePaymentScreen(
-                        weekDays = weekDays,
-                        payType = payType,
-                        payAmount = payAmount,
-                        setWeekDays = setWeekDays,
-                        setPayType = onPayTypeChanged,
-                        setPayAmount = onPayAmountChanged,
-                        setJobPostingStep = setJobPostingStep,
+        ) { step ->
+            if (step == JobPostingStep.SUMMARY) {
+                SummaryScreen(setJobPostingStep)
+            } else {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(32.dp, Alignment.CenterVertically),
+                    modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 8.dp),
+                ) {
+                    CareProgressBar(
+                        currentStep = jobPostingStep.step,
+                        totalSteps = JobPostingStep.entries.size - 1,
+                        modifier = Modifier.fillMaxWidth(),
                     )
 
-                    JobPostingStep.ADDRESS -> AddressScreen(
-                        roadNameAddress = roadNameAddress,
-                        detailAddress = detailAddress,
-                        onDetailAddressChanged = onDetailAddressChanged,
-                        showPostCodeDialog = showPostCodeDialog,
-                        setJobPostingStep = setJobPostingStep,
-                    )
+                    CareStateAnimator(
+                        targetState = jobPostingStep,
+                        label = "센터 정보 입력을 관리하는 애니메이션",
+                    ) { jobPostingStep ->
+                        when (jobPostingStep) {
+                            JobPostingStep.TIME_PAYMENT -> TimePaymentScreen(
+                                weekDays = weekDays,
+                                payType = payType,
+                                payAmount = payAmount,
+                                setWeekDays = setWeekDays,
+                                setPayType = onPayTypeChanged,
+                                setPayAmount = onPayAmountChanged,
+                                setJobPostingStep = setJobPostingStep,
+                            )
 
-                    JobPostingStep.CUSTOMER_INFORMATION -> CustomerInformationScreen(
-                        gender = gender,
-                        birthYear = birthYear,
-                        weight = weight,
-                        careLevel = careLevel,
-                        mentalStatus = mentalStatus,
-                        disease = disease,
-                        onGenderChanged = onGenderChanged,
-                        onBirthYearChanged = onBirthYearChanged,
-                        onWeightChanged = onWeightChanged,
-                        onCareLevelChanged = onCareLevelChanged,
-                        onMentalStatusChanged = onMentalStatusChanged,
-                        onDiseaseChanged = onDiseaseChanged,
-                        setJobPostingStep = setJobPostingStep,
-                    )
+                            JobPostingStep.ADDRESS -> AddressScreen(
+                                roadNameAddress = roadNameAddress,
+                                detailAddress = detailAddress,
+                                onDetailAddressChanged = onDetailAddressChanged,
+                                showPostCodeDialog = showPostCodeDialog,
+                                setJobPostingStep = setJobPostingStep,
+                            )
 
-                    JobPostingStep.CUSTOMER_REQUIREMENT -> CustomerRequirementScreen(
-                        isMealAssistance = isMealAssistance,
-                        isBowelAssistance = isBowelAssistance,
-                        isWalkingAssistance = isWalkingAssistance,
-                        lifeAssistance = lifeAssistance,
-                        speciality = speciality,
-                        setMealAssistance = onMealAssistanceChanged,
-                        setBowelAssistance = onBowelAssistanceChanged,
-                        setWalkingAssistance = onWalkingAssistanceChanged,
-                        setLifeAssistance = onLifeAssistanceChanged,
-                        setSpeciality = onSpecialityChanged,
-                        setJobPostingStep = setJobPostingStep,
-                    )
+                            JobPostingStep.CUSTOMER_INFORMATION -> CustomerInformationScreen(
+                                gender = gender,
+                                birthYear = birthYear,
+                                weight = weight,
+                                careLevel = careLevel,
+                                mentalStatus = mentalStatus,
+                                disease = disease,
+                                onGenderChanged = onGenderChanged,
+                                onBirthYearChanged = onBirthYearChanged,
+                                onWeightChanged = onWeightChanged,
+                                onCareLevelChanged = onCareLevelChanged,
+                                onMentalStatusChanged = onMentalStatusChanged,
+                                onDiseaseChanged = onDiseaseChanged,
+                                setJobPostingStep = setJobPostingStep,
+                            )
 
-                    JobPostingStep.ADDITIONAL_INFO -> AdditionalInfoScreen(
-                        isExperiencePreferred = isExperiencePreferred,
-                        applyMethod = applyMethod,
-                        applyDeadlineChipState = applyDeadlineChipState,
-                        applyDeadline = applyDeadline,
-                        onExperiencePreferredChanged = onExperiencePreferredChanged,
-                        onApplyMethodChanged = onApplyMethodChanged,
-                        onApplyDeadlineChipStateChanged = onApplyDeadlineChipStateChanged,
-                        onApplyDeadlineChanged = onApplyDeadlineChanged,
-                        setJobPostingStep = setJobPostingStep,
-                    )
+                            JobPostingStep.CUSTOMER_REQUIREMENT -> CustomerRequirementScreen(
+                                isMealAssistance = isMealAssistance,
+                                isBowelAssistance = isBowelAssistance,
+                                isWalkingAssistance = isWalkingAssistance,
+                                lifeAssistance = lifeAssistance,
+                                speciality = speciality,
+                                setMealAssistance = onMealAssistanceChanged,
+                                setBowelAssistance = onBowelAssistanceChanged,
+                                setWalkingAssistance = onWalkingAssistanceChanged,
+                                setLifeAssistance = onLifeAssistanceChanged,
+                                setSpeciality = onSpecialityChanged,
+                                setJobPostingStep = setJobPostingStep,
+                            )
 
-                    JobPostingStep.SUMMARY -> {}
+                            JobPostingStep.ADDITIONAL_INFO -> AdditionalInfoScreen(
+                                isExperiencePreferred = isExperiencePreferred,
+                                applyMethod = applyMethod,
+                                applyDeadlineChipState = applyDeadlineChipState,
+                                applyDeadline = applyDeadline,
+                                onExperiencePreferredChanged = onExperiencePreferredChanged,
+                                onApplyMethodChanged = onApplyMethodChanged,
+                                onApplyDeadlineChipStateChanged = onApplyDeadlineChipStateChanged,
+                                onApplyDeadlineChanged = onApplyDeadlineChanged,
+                                setJobPostingStep = setJobPostingStep,
+                            )
+
+                            JobPostingStep.SUMMARY -> Box(modifier = Modifier.fillMaxSize())
+                        }
+                    }
                 }
             }
         }

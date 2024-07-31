@@ -107,14 +107,14 @@ fun CareButtonStrokeSmall(
         enabled = enable,
         shape = RoundedCornerShape(19.dp),
         border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
-        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 5.5.dp),
+        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 0.dp),
         colors = ButtonColors(
             containerColor = CareTheme.colors.white000,
             contentColor = CareTheme.colors.white000,
             disabledContentColor = CareTheme.colors.white000,
             disabledContainerColor = CareTheme.colors.white000,
         ),
-        modifier = modifier,
+        modifier = modifier.height(32.dp),
     ) {
         Text(
             text = text,

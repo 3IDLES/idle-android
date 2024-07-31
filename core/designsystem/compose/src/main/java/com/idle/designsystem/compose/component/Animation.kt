@@ -8,10 +8,12 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 
 @Composable
 fun <S : Enum<S>> CareStateAnimator(
     targetState: S,
+    modifier: Modifier = Modifier,
     label : String = "AnimatedContent",
     content: @Composable() AnimatedContentScope.(targetState: S) -> Unit
 ) {
@@ -28,5 +30,6 @@ fun <S : Enum<S>> CareStateAnimator(
         },
         label = label,
         content = content,
+        modifier = modifier,
     )
 }
