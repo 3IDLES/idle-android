@@ -2,6 +2,7 @@ package com.idle.center.jobposting
 
 import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.auth.Gender
+import com.idle.domain.model.job.ApplyMethod
 import com.idle.domain.model.job.DayOfWeek
 import com.idle.domain.model.job.LifeAssistance
 import com.idle.domain.model.job.MentalStatus
@@ -68,6 +69,17 @@ class JobPostingViewModel @Inject constructor() : BaseViewModel() {
     private val _speciality = MutableStateFlow("")
     val speciality = _speciality.asStateFlow()
 
+    private val _isExperiencePreferred = MutableStateFlow<Boolean?>(null)
+    val isExperiencePreferred = _isExperiencePreferred.asStateFlow()
+
+    private val _applyMethod = MutableStateFlow<Set<ApplyMethod>>(setOf())
+    val applyMethod = _applyMethod.asStateFlow()
+
+    private val _applyDeadlineChipState = MutableStateFlow<ApplyDeadlineChipState?>(null)
+    val applyDeadlineChipState = _applyDeadlineChipState.asStateFlow()
+
+    private val _applyDeadline = MutableStateFlow<String>("")
+    val applyDeadline = _applyDeadline.asStateFlow()
 
     internal fun setWeekDays(dayOfWeek: DayOfWeek) {
         _weekDays.value = _weekDays.value.toMutableSet().apply {
@@ -146,6 +158,25 @@ class JobPostingViewModel @Inject constructor() : BaseViewModel() {
     internal fun setSpeciality(speciality: String) {
         _speciality.value = speciality
     }
+
+    internal fun setExperiencePreferred(preferred: Boolean) {
+        _isExperiencePreferred.value = preferred
+    }
+
+    internal fun setApplyMethod(applyMethod: ApplyMethod) {
+        _applyMethod.value = _applyMethod.value.toMutableSet().apply {
+            if (applyMethod in this) remove(applyMethod)
+            else add(applyMethod)
+        }.toSet()
+    }
+
+    internal fun setApplyDeadlineChipState(chipState: ApplyDeadlineChipState) {
+        _applyDeadlineChipState.value = chipState
+    }
+
+    internal fun setApplyDeadline(applyDeadline: String) {
+        _applyDeadline.value = applyDeadline
+    }
 }
 
 enum class JobPostingStep(val step: Int) {
@@ -157,4 +188,9 @@ enum class JobPostingStep(val step: Int) {
             return JobPostingStep.entries.first { it.step == step }
         }
     }
+}
+
+enum class ApplyDeadlineChipState(val displayName: String) {
+    UNTIL_HIRED("채용시까지"),
+    SET_DEADLINE("마감일 설정")
 }

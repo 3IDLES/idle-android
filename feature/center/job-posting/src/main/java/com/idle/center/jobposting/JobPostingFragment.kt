@@ -30,6 +30,7 @@ import com.idle.designsystem.compose.component.CareProgressBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
 import com.idle.domain.model.auth.Gender
+import com.idle.domain.model.job.ApplyMethod
 import com.idle.domain.model.job.DayOfWeek
 import com.idle.domain.model.job.LifeAssistance
 import com.idle.domain.model.job.MentalStatus
@@ -81,6 +82,10 @@ internal class JobPostingFragment : BaseComposeFragment() {
             val isWalkingAssistance by isWalkingAssistance.collectAsStateWithLifecycle()
             val lifeAssistance by lifeAssistance.collectAsStateWithLifecycle()
             val speciality by speciality.collectAsStateWithLifecycle()
+            val isExperiencePreferred by isExperiencePreferred.collectAsStateWithLifecycle()
+            val applyMethod by applyMethod.collectAsStateWithLifecycle()
+            val applyDeadlineChipState by applyDeadlineChipState.collectAsStateWithLifecycle()
+            val applyDeadline by applyDeadline.collectAsStateWithLifecycle()
 
             JobPostingScreen(
                 weekDays = weekDays,
@@ -99,6 +104,10 @@ internal class JobPostingFragment : BaseComposeFragment() {
                 isWalkingAssistance = isWalkingAssistance,
                 lifeAssistance = lifeAssistance,
                 speciality = speciality,
+                isExperiencePreferred = isExperiencePreferred,
+                applyMethod = applyMethod,
+                applyDeadlineChipState = applyDeadlineChipState,
+                applyDeadline = applyDeadline,
                 jobPostingStep = jobPostingStep,
                 setWeekDays = ::setWeekDays,
                 onPayTypeChanged = ::setPayType,
@@ -115,11 +124,15 @@ internal class JobPostingFragment : BaseComposeFragment() {
                 onBirthYearChanged = ::setBirthYear,
                 onCareLevelChanged = ::setCareLevel,
                 onDiseaseChanged = ::setDisease,
-                setMealAssistance = ::setMealAssistance,
-                setBowelAssistance = ::setBowelAssistance,
-                setWalkingAssistance = ::setWalkingAssistance,
-                setLifeAssistance = ::setLifeAssistance,
-                setSpeciality = ::setSpeciality,
+                onMealAssistanceChanged = ::setMealAssistance,
+                onBowelAssistanceChanged = ::setBowelAssistance,
+                onWalkingAssistanceChanged = ::setWalkingAssistance,
+                onLifeAssistanceChanged = ::setLifeAssistance,
+                onSpecialityChanged = ::setSpeciality,
+                onExperiencePreferredChanged = ::setExperiencePreferred,
+                onApplyMethodChanged = ::setApplyMethod,
+                onApplyDeadlineChipStateChanged = ::setApplyDeadlineChipState,
+                onApplyDeadlineChanged = ::setApplyDeadline,
                 setJobPostingStep = ::setJobPostingStep,
             )
         }
@@ -144,6 +157,10 @@ internal fun JobPostingScreen(
     isWalkingAssistance: Boolean?,
     lifeAssistance: Set<LifeAssistance>,
     speciality: String,
+    isExperiencePreferred: Boolean?,
+    applyMethod: Set<ApplyMethod>,
+    applyDeadlineChipState: ApplyDeadlineChipState?,
+    applyDeadline: String,
     jobPostingStep: JobPostingStep,
     setWeekDays: (DayOfWeek) -> Unit,
     onPayTypeChanged: (PayType) -> Unit,
@@ -156,11 +173,15 @@ internal fun JobPostingScreen(
     onCareLevelChanged: (String) -> Unit,
     onMentalStatusChanged: (MentalStatus) -> Unit,
     onDiseaseChanged: (String) -> Unit,
-    setMealAssistance: (Boolean) -> Unit,
-    setBowelAssistance: (Boolean) -> Unit,
-    setWalkingAssistance: (Boolean) -> Unit,
-    setLifeAssistance: (LifeAssistance) -> Unit,
-    setSpeciality: (String) -> Unit,
+    onMealAssistanceChanged: (Boolean) -> Unit,
+    onBowelAssistanceChanged: (Boolean) -> Unit,
+    onWalkingAssistanceChanged: (Boolean) -> Unit,
+    onLifeAssistanceChanged: (LifeAssistance) -> Unit,
+    onSpecialityChanged: (String) -> Unit,
+    onExperiencePreferredChanged: (Boolean) -> Unit,
+    onApplyMethodChanged: (ApplyMethod) -> Unit,
+    onApplyDeadlineChanged: (String) -> Unit,
+    onApplyDeadlineChipStateChanged: (ApplyDeadlineChipState) -> Unit,
     setJobPostingStep: (JobPostingStep) -> Unit,
 ) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
@@ -180,7 +201,7 @@ internal fun JobPostingScreen(
                     }
                 },
                 modifier = Modifier.fillMaxWidth()
-                    .padding(start = 12.dp, top = 48.dp)
+                    .padding(start = 12.dp, top = 48.dp, end = 20.dp),
             )
         },
         modifier = Modifier.addFocusCleaner(focusManager),
@@ -250,15 +271,25 @@ internal fun JobPostingScreen(
                         isWalkingAssistance = isWalkingAssistance,
                         lifeAssistance = lifeAssistance,
                         speciality = speciality,
-                        setMealAssistance = setMealAssistance,
-                        setBowelAssistance = setBowelAssistance,
-                        setWalkingAssistance = setWalkingAssistance,
-                        setLifeAssistance = setLifeAssistance,
-                        setSpeciality = setSpeciality,
-                        setJobPostingStep = setJobPostingStep
+                        setMealAssistance = onMealAssistanceChanged,
+                        setBowelAssistance = onBowelAssistanceChanged,
+                        setWalkingAssistance = onWalkingAssistanceChanged,
+                        setLifeAssistance = onLifeAssistanceChanged,
+                        setSpeciality = onSpecialityChanged,
+                        setJobPostingStep = setJobPostingStep,
                     )
 
-                    JobPostingStep.ADDITIONAL_INFO -> AdditionalInfoScreen(setJobPostingStep)
+                    JobPostingStep.ADDITIONAL_INFO -> AdditionalInfoScreen(
+                        isExperiencePreferred = isExperiencePreferred,
+                        applyMethod = applyMethod,
+                        applyDeadlineChipState = applyDeadlineChipState,
+                        applyDeadline = applyDeadline,
+                        onExperiencePreferredChanged = onExperiencePreferredChanged,
+                        onApplyMethodChanged = onApplyMethodChanged,
+                        onApplyDeadlineChipStateChanged = onApplyDeadlineChipStateChanged,
+                        onApplyDeadlineChanged = onApplyDeadlineChanged,
+                        setJobPostingStep = setJobPostingStep,
+                    )
 
                     JobPostingStep.SUMMARY -> {}
                 }
