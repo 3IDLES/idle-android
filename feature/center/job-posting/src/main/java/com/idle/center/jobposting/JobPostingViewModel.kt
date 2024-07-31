@@ -3,6 +3,7 @@ package com.idle.center.jobposting
 import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.auth.Gender
 import com.idle.domain.model.job.DayOfWeek
+import com.idle.domain.model.job.LifeAssistance
 import com.idle.domain.model.job.MentalStatus
 import com.idle.domain.model.job.PayType
 import com.idle.domain.model.job.PayType.HOURLY
@@ -51,6 +52,22 @@ class JobPostingViewModel @Inject constructor() : BaseViewModel() {
 
     private val _disease = MutableStateFlow("")
     val disease = _disease.asStateFlow()
+
+    private val _isMealAssistance = MutableStateFlow<Boolean?>(null)
+    val isMealAssistance = _isMealAssistance.asStateFlow()
+
+    private val _isBowelAssistance = MutableStateFlow<Boolean?>(null)
+    val isBowelAssistance = _isBowelAssistance.asStateFlow()
+
+    private val _isWalkingAssistance = MutableStateFlow<Boolean?>(null)
+    val isWalkingAssistance = _isWalkingAssistance.asStateFlow()
+
+    private val _lifeAssistance = MutableStateFlow<Set<LifeAssistance>>(setOf())
+    val lifeAssistance = _lifeAssistance.asStateFlow()
+
+    private val _speciality = MutableStateFlow("")
+    val speciality = _speciality.asStateFlow()
+
 
     internal fun setWeekDays(dayOfWeek: DayOfWeek) {
         _weekDays.value = _weekDays.value.toMutableSet().apply {
@@ -105,6 +122,29 @@ class JobPostingViewModel @Inject constructor() : BaseViewModel() {
 
     internal fun setDisease(disease: String) {
         _disease.value = disease
+    }
+
+    internal fun setMealAssistance(necessary: Boolean) {
+        _isMealAssistance.value = necessary
+    }
+
+    internal fun setBowelAssistance(necessary: Boolean) {
+        _isBowelAssistance.value = necessary
+    }
+
+    internal fun setWalkingAssistance(necessary: Boolean) {
+        _isWalkingAssistance.value = necessary
+    }
+
+    internal fun setLifeAssistance(lifeAssistance: LifeAssistance) {
+        _lifeAssistance.value = _lifeAssistance.value.toMutableSet().apply {
+            if (lifeAssistance in this) remove(lifeAssistance)
+            else add(lifeAssistance)
+        }.toSet()
+    }
+
+    internal fun setSpeciality(speciality: String) {
+        _speciality.value = speciality
     }
 }
 

@@ -31,6 +31,7 @@ import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
 import com.idle.domain.model.auth.Gender
 import com.idle.domain.model.job.DayOfWeek
+import com.idle.domain.model.job.LifeAssistance
 import com.idle.domain.model.job.MentalStatus
 import com.idle.domain.model.job.PayType
 import com.idle.post.code.PostCodeFragment
@@ -75,6 +76,11 @@ internal class JobPostingFragment : BaseComposeFragment() {
             val careLevel by careLevel.collectAsStateWithLifecycle()
             val mentalStatus by mentalStatus.collectAsStateWithLifecycle()
             val disease by disease.collectAsStateWithLifecycle()
+            val isMealAssistance by isMealAssistance.collectAsStateWithLifecycle()
+            val isBowelAssistance by isBowelAssistance.collectAsStateWithLifecycle()
+            val isWalkingAssistance by isWalkingAssistance.collectAsStateWithLifecycle()
+            val lifeAssistance by lifeAssistance.collectAsStateWithLifecycle()
+            val speciality by speciality.collectAsStateWithLifecycle()
 
             JobPostingScreen(
                 weekDays = weekDays,
@@ -88,6 +94,11 @@ internal class JobPostingFragment : BaseComposeFragment() {
                 careLevel = careLevel,
                 mentalStatus = mentalStatus,
                 disease = disease,
+                isMealAssistance = isMealAssistance,
+                isBowelAssistance = isBowelAssistance,
+                isWalkingAssistance = isWalkingAssistance,
+                lifeAssistance = lifeAssistance,
+                speciality = speciality,
                 jobPostingStep = jobPostingStep,
                 setWeekDays = ::setWeekDays,
                 onPayTypeChanged = ::setPayType,
@@ -104,6 +115,11 @@ internal class JobPostingFragment : BaseComposeFragment() {
                 onBirthYearChanged = ::setBirthYear,
                 onCareLevelChanged = ::setCareLevel,
                 onDiseaseChanged = ::setDisease,
+                setMealAssistance = ::setMealAssistance,
+                setBowelAssistance = ::setBowelAssistance,
+                setWalkingAssistance = ::setWalkingAssistance,
+                setLifeAssistance = ::setLifeAssistance,
+                setSpeciality = ::setSpeciality,
                 setJobPostingStep = ::setJobPostingStep,
             )
         }
@@ -123,6 +139,11 @@ internal fun JobPostingScreen(
     careLevel: String,
     mentalStatus: MentalStatus,
     disease: String,
+    isMealAssistance: Boolean?,
+    isBowelAssistance: Boolean?,
+    isWalkingAssistance: Boolean?,
+    lifeAssistance: Set<LifeAssistance>,
+    speciality: String,
     jobPostingStep: JobPostingStep,
     setWeekDays: (DayOfWeek) -> Unit,
     onPayTypeChanged: (PayType) -> Unit,
@@ -135,6 +156,11 @@ internal fun JobPostingScreen(
     onCareLevelChanged: (String) -> Unit,
     onMentalStatusChanged: (MentalStatus) -> Unit,
     onDiseaseChanged: (String) -> Unit,
+    setMealAssistance: (Boolean) -> Unit,
+    setBowelAssistance: (Boolean) -> Unit,
+    setWalkingAssistance: (Boolean) -> Unit,
+    setLifeAssistance: (LifeAssistance) -> Unit,
+    setSpeciality: (String) -> Unit,
     setJobPostingStep: (JobPostingStep) -> Unit,
 ) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
@@ -219,7 +245,17 @@ internal fun JobPostingScreen(
                     )
 
                     JobPostingStep.CUSTOMER_REQUIREMENT -> CustomerRequirementScreen(
-                        setJobPostingStep
+                        isMealAssistance = isMealAssistance,
+                        isBowelAssistance = isBowelAssistance,
+                        isWalkingAssistance = isWalkingAssistance,
+                        lifeAssistance = lifeAssistance,
+                        speciality = speciality,
+                        setMealAssistance = setMealAssistance,
+                        setBowelAssistance = setBowelAssistance,
+                        setWalkingAssistance = setWalkingAssistance,
+                        setLifeAssistance = setLifeAssistance,
+                        setSpeciality = setSpeciality,
+                        setJobPostingStep = setJobPostingStep
                     )
 
                     JobPostingStep.ADDITIONAL_INFO -> AdditionalInfoScreen(setJobPostingStep)

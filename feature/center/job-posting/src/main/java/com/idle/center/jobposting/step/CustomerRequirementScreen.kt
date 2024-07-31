@@ -17,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.idle.center.job.posting.R
@@ -28,10 +27,21 @@ import com.idle.designsystem.compose.component.CareChipBasic
 import com.idle.designsystem.compose.component.CareTextFieldLong
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
+import com.idle.domain.model.job.LifeAssistance
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 internal fun CustomerRequirementScreen(
+    isMealAssistance: Boolean?,
+    isBowelAssistance: Boolean?,
+    isWalkingAssistance: Boolean?,
+    lifeAssistance: Set<LifeAssistance>,
+    speciality: String,
+    setMealAssistance: (Boolean) -> Unit,
+    setBowelAssistance: (Boolean) -> Unit,
+    setWalkingAssistance: (Boolean) -> Unit,
+    setLifeAssistance: (LifeAssistance) -> Unit,
+    setSpeciality: (String) -> Unit,
     setJobPostingStep: (JobPostingStep) -> Unit,
 ) {
     val scrollState = rememberScrollState()
@@ -61,15 +71,15 @@ internal fun CustomerRequirementScreen(
             ) {
                 CareChipBasic(
                     text = stringResource(R.string.necessary),
-                    onClick = {},
-                    enable = false,
+                    onClick = { setMealAssistance(true) },
+                    enable = isMealAssistance == true,
                     modifier = Modifier.width(104.dp),
                 )
 
                 CareChipBasic(
                     text = stringResource(R.string.unnecessary),
-                    onClick = {},
-                    enable = false,
+                    onClick = { setMealAssistance(false) },
+                    enable = isMealAssistance == false,
                     modifier = Modifier.width(104.dp),
                 )
             }
@@ -85,15 +95,15 @@ internal fun CustomerRequirementScreen(
             ) {
                 CareChipBasic(
                     text = stringResource(R.string.necessary),
-                    onClick = {},
-                    enable = false,
+                    onClick = { setBowelAssistance(true) },
+                    enable = isBowelAssistance == true,
                     modifier = Modifier.width(104.dp),
                 )
 
                 CareChipBasic(
                     text = stringResource(R.string.unnecessary),
-                    onClick = {},
-                    enable = false,
+                    onClick = { setBowelAssistance(false) },
+                    enable = isBowelAssistance == false,
                     modifier = Modifier.width(104.dp),
                 )
             }
@@ -109,15 +119,15 @@ internal fun CustomerRequirementScreen(
             ) {
                 CareChipBasic(
                     text = stringResource(R.string.necessary),
-                    onClick = {},
-                    enable = false,
+                    onClick = { setWalkingAssistance(true) },
+                    enable = isWalkingAssistance == true,
                     modifier = Modifier.width(104.dp),
                 )
 
                 CareChipBasic(
                     text = stringResource(R.string.unnecessary),
-                    onClick = {},
-                    enable = false,
+                    onClick = { setWalkingAssistance(false) },
+                    enable = isWalkingAssistance == false,
                     modifier = Modifier.width(104.dp),
                 )
             }
@@ -132,40 +142,14 @@ internal fun CustomerRequirementScreen(
                 maxItemsInEachRow = 3,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                CareChipBasic(
-                    text = "청소",
-                    onClick = {},
-                    enable = false,
-                    modifier = Modifier.width(104.dp),
-                )
-
-                CareChipBasic(
-                    text = "빨래",
-                    onClick = {},
-                    enable = false,
-                    modifier = Modifier.width(104.dp),
-                )
-
-                CareChipBasic(
-                    text = "산책",
-                    onClick = {},
-                    enable = false,
-                    modifier = Modifier.width(104.dp),
-                )
-
-                CareChipBasic(
-                    text = "운동보조",
-                    onClick = {},
-                    enable = false,
-                    modifier = Modifier.width(104.dp),
-                )
-
-                CareChipBasic(
-                    text = "말벗",
-                    onClick = {},
-                    enable = false,
-                    modifier = Modifier.width(104.dp),
-                )
+                LifeAssistance.entries.forEach { assistance ->
+                    CareChipBasic(
+                        text = assistance.displayName,
+                        onClick = { setLifeAssistance(assistance) },
+                        enable = assistance in lifeAssistance,
+                        modifier = Modifier.width(104.dp),
+                    )
+                }
             }
         }
 
@@ -173,9 +157,9 @@ internal fun CustomerRequirementScreen(
             subtitle = "이외에 요구사항이 있다면 적어주세요."
         ) {
             CareTextFieldLong(
-                value = "",
+                value = speciality,
                 hint = "추가적으로 요구사항이 있다면 작성해주세요.(예: 어쩌고저쩌고)",
-                onValueChanged = {},
+                onValueChanged = setSpeciality,
                 modifier = Modifier.fillMaxWidth(),
             )
         }
@@ -184,7 +168,7 @@ internal fun CustomerRequirementScreen(
 
         CareButtonLarge(
             text = "다음",
-            enable = true,
+            enable = isMealAssistance != null && isBowelAssistance != null && isWalkingAssistance != null,
             onClick = { setJobPostingStep(JobPostingStep.findStep(CUSTOMER_REQUIREMENT.step + 1)) },
             modifier = Modifier.fillMaxWidth(),
         )
