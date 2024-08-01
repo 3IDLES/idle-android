@@ -23,13 +23,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.idle.center.jobposting.ApplyDeadlineChipState
 import com.idle.center.jobposting.JobPostingStep
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.component.CareTextFieldLong
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.Gender
+import com.idle.domain.model.job.ApplyDeadlineChipState
 import com.idle.domain.model.job.ApplyMethod
 import com.idle.domain.model.job.DayOfWeek
 import com.idle.domain.model.job.LifeAssistance

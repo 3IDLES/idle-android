@@ -4,10 +4,9 @@ plugins {
 }
 
 android {
-    namespace = "com.idle.center.job.posting"
+    namespace = "com.idle.center.job.edit"
 }
 
 dependencies {
     implementation(projects.feature.postcode)
-    implementation(projects.feature.center.jobEdit)
 }

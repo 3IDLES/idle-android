@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -19,13 +20,17 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
+import com.idle.center.job.edit.JobEditScreen
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
+import com.idle.compose.clickable
 import com.idle.designsystem.compose.component.CareButtonStrokeSmall
 import com.idle.designsystem.compose.component.CareProgressBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
+import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.Gender
+import com.idle.domain.model.job.ApplyDeadlineChipState
 import com.idle.domain.model.job.ApplyMethod
 import com.idle.domain.model.job.DayOfWeek
 import com.idle.domain.model.job.LifeAssistance
@@ -83,6 +88,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
             val applyMethod by applyMethod.collectAsStateWithLifecycle()
             val applyDeadlineChipState by applyDeadlineChipState.collectAsStateWithLifecycle()
             val applyDeadline by applyDeadline.collectAsStateWithLifecycle()
+            val isEditState by isEditState.collectAsStateWithLifecycle()
 
             JobPostingScreen(
                 weekDays = weekDays,
@@ -106,6 +112,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
                 applyDeadlineChipState = applyDeadlineChipState,
                 applyDeadline = applyDeadline,
                 jobPostingStep = jobPostingStep,
+                isEditState = isEditState,
                 setWeekDays = ::setWeekDays,
                 onPayTypeChanged = ::setPayType,
                 onPayAmountChanged = ::setPayAmount,
@@ -132,6 +139,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
                 onApplyDeadlineChanged = ::setApplyDeadline,
                 postJobPosting = ::postJobPosting,
                 setJobPostingStep = ::setJobPostingStep,
+                setEditState = ::setEditState,
             )
         }
     }
@@ -160,6 +168,7 @@ internal fun JobPostingScreen(
     applyDeadlineChipState: ApplyDeadlineChipState?,
     applyDeadline: String,
     jobPostingStep: JobPostingStep,
+    isEditState: Boolean,
     setWeekDays: (DayOfWeek) -> Unit,
     onPayTypeChanged: (PayType) -> Unit,
     onPayAmountChanged: (String) -> Unit,
@@ -182,6 +191,7 @@ internal fun JobPostingScreen(
     onApplyDeadlineChipStateChanged: (ApplyDeadlineChipState) -> Unit,
     postJobPosting: () -> Unit,
     setJobPostingStep: (JobPostingStep) -> Unit,
+    setEditState: (Boolean) -> Unit,
 ) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val focusManager = LocalFocusManager.current
@@ -189,14 +199,27 @@ internal fun JobPostingScreen(
     Scaffold(
         topBar = {
             CareSubtitleTopAppBar(
-                title = if (jobPostingStep != JobPostingStep.SUMMARY) "공고 등록" else "",
+                title = if (jobPostingStep != JobPostingStep.SUMMARY) {
+                    "공고 등록"
+                } else if (isEditState) {
+                    "공고 수정"
+                } else "",
                 onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
                 leftComponent = {
                     if (jobPostingStep == JobPostingStep.SUMMARY) {
-                        CareButtonStrokeSmall(
-                            text = "공고 수정하기",
-                            onClick = { },
-                        )
+                        if (!isEditState) {
+                            CareButtonStrokeSmall(
+                                text = "공고 수정하기",
+                                onClick = { setEditState(true) },
+                            )
+                        } else {
+                            Text(
+                                text = "저장",
+                                style = CareTheme.typography.subtitle2,
+                                color = CareTheme.colors.orange500,
+                                modifier = Modifier.clickable { setEditState(false) },
+                            )
+                        }
                     }
                 },
                 modifier = Modifier.fillMaxWidth()
@@ -205,134 +228,185 @@ internal fun JobPostingScreen(
         },
         modifier = Modifier.addFocusCleaner(focusManager),
     ) { paddingValue ->
-        CareStateAnimator(
-            targetState = jobPostingStep,
-            modifier = Modifier.fillMaxSize()
-                .background(Color.White)
-                .padding(paddingValue)
-        ) { step ->
-            if (step == JobPostingStep.SUMMARY) {
-                SummaryScreen(
-                    weekDays = weekDays,
-                    payType = payType,
-                    payAmount = payAmount,
-                    roadNameAddress = roadNameAddress,
-                    gender = gender,
-                    birthYear = birthYear,
-                    weight = weight,
-                    careLevel = careLevel,
-                    mentalStatus = mentalStatus,
-                    disease = disease,
-                    isMealAssistance = isMealAssistance,
-                    isBowelAssistance = isBowelAssistance,
-                    isWalkingAssistance = isWalkingAssistance,
-                    lifeAssistance = lifeAssistance,
-                    speciality = speciality,
-                    isExperiencePreferred = isExperiencePreferred,
-                    applyMethod = applyMethod,
-                    applyDeadlineChipState = applyDeadlineChipState,
-                    applyDeadline = applyDeadline,
-                    setWeekDays = setWeekDays,
-                    onPayTypeChanged = onPayTypeChanged,
-                    onPayAmountChanged = onPayAmountChanged,
-                    onDetailAddressChanged = onDetailAddressChanged,
-                    showPostCodeDialog = showPostCodeDialog,
-                    onGenderChanged = onGenderChanged,
-                    onBirthYearChanged = onBirthYearChanged,
-                    onWeightChanged = onWeightChanged,
-                    onCareLevelChanged = onCareLevelChanged,
-                    onMentalStatusChanged = onMentalStatusChanged,
-                    onDiseaseChanged = onDiseaseChanged,
-                    onMealAssistanceChanged = onMealAssistanceChanged,
-                    onBowelAssistanceChanged = onBowelAssistanceChanged,
-                    onWalkingAssistanceChanged = onWalkingAssistanceChanged,
-                    onLifeAssistanceChanged = onLifeAssistanceChanged,
-                    onSpecialityChanged = onSpecialityChanged,
-                    onExperiencePreferredChanged = onExperiencePreferredChanged,
-                    onApplyMethodChanged = onApplyMethodChanged,
-                    onApplyDeadlineChanged = onApplyDeadlineChanged,
-                    onApplyDeadlineChipStateChanged = onApplyDeadlineChipStateChanged,
-                    postJobPosting = postJobPosting,
-                    setJobPostingStep = setJobPostingStep,
-                )
-            } else {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(32.dp, Alignment.CenterVertically),
-                    modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 8.dp),
-                ) {
-                    CareProgressBar(
-                        currentStep = jobPostingStep.step,
-                        totalSteps = JobPostingStep.entries.size - 1,
-                        modifier = Modifier.fillMaxWidth(),
+        if (isEditState) {
+            JobEditScreen(
+                weekDays = weekDays,
+                payType = payType,
+                payAmount = payAmount,
+                roadNameAddress = roadNameAddress,
+                detailAddress = detailAddress,
+                gender = gender,
+                birthYear = birthYear,
+                weight = weight,
+                careLevel = careLevel,
+                mentalStatus = mentalStatus,
+                disease = disease,
+                isMealAssistance = isMealAssistance,
+                isBowelAssistance = isBowelAssistance,
+                isWalkingAssistance = isWalkingAssistance,
+                lifeAssistance = lifeAssistance,
+                speciality = speciality,
+                isExperiencePreferred = isExperiencePreferred,
+                applyMethod = applyMethod,
+                applyDeadlineChipState = applyDeadlineChipState,
+                applyDeadline = applyDeadline,
+                setWeekDays = setWeekDays,
+                onPayTypeChanged = onPayTypeChanged,
+                onPayAmountChanged = onPayAmountChanged,
+                onDetailAddressChanged = onDetailAddressChanged,
+                showPostCodeDialog = showPostCodeDialog,
+                onGenderChanged = onGenderChanged,
+                onBirthYearChanged = onBirthYearChanged,
+                onWeightChanged = onWeightChanged,
+                onCareLevelChanged = onCareLevelChanged,
+                onMentalStatusChanged = onMentalStatusChanged,
+                onDiseaseChanged = onDiseaseChanged,
+                onMealAssistanceChanged = onMealAssistanceChanged,
+                onBowelAssistanceChanged = onBowelAssistanceChanged,
+                onWalkingAssistanceChanged = onWalkingAssistanceChanged,
+                onLifeAssistanceChanged = onLifeAssistanceChanged,
+                onSpecialityChanged = onSpecialityChanged,
+                onExperiencePreferredChanged = onExperiencePreferredChanged,
+                onApplyMethodChanged = onApplyMethodChanged,
+                onApplyDeadlineChanged = onApplyDeadlineChanged,
+                onApplyDeadlineChipStateChanged = onApplyDeadlineChipStateChanged,
+                modifier = Modifier.fillMaxSize()
+                    .background(CareTheme.colors.white000)
+                    .padding(paddingValue),
+            )
+        } else {
+            CareStateAnimator(
+                targetState = jobPostingStep,
+                modifier = Modifier.fillMaxSize()
+                    .background(CareTheme.colors.white000)
+                    .padding(paddingValue)
+            ) { step ->
+                if (step == JobPostingStep.SUMMARY) {
+                    SummaryScreen(
+                        weekDays = weekDays,
+                        payType = payType,
+                        payAmount = payAmount,
+                        roadNameAddress = roadNameAddress,
+                        gender = gender,
+                        birthYear = birthYear,
+                        weight = weight,
+                        careLevel = careLevel,
+                        mentalStatus = mentalStatus,
+                        disease = disease,
+                        isMealAssistance = isMealAssistance,
+                        isBowelAssistance = isBowelAssistance,
+                        isWalkingAssistance = isWalkingAssistance,
+                        lifeAssistance = lifeAssistance,
+                        speciality = speciality,
+                        isExperiencePreferred = isExperiencePreferred,
+                        applyMethod = applyMethod,
+                        applyDeadlineChipState = applyDeadlineChipState,
+                        applyDeadline = applyDeadline,
+                        setWeekDays = setWeekDays,
+                        onPayTypeChanged = onPayTypeChanged,
+                        onPayAmountChanged = onPayAmountChanged,
+                        onDetailAddressChanged = onDetailAddressChanged,
+                        showPostCodeDialog = showPostCodeDialog,
+                        onGenderChanged = onGenderChanged,
+                        onBirthYearChanged = onBirthYearChanged,
+                        onWeightChanged = onWeightChanged,
+                        onCareLevelChanged = onCareLevelChanged,
+                        onMentalStatusChanged = onMentalStatusChanged,
+                        onDiseaseChanged = onDiseaseChanged,
+                        onMealAssistanceChanged = onMealAssistanceChanged,
+                        onBowelAssistanceChanged = onBowelAssistanceChanged,
+                        onWalkingAssistanceChanged = onWalkingAssistanceChanged,
+                        onLifeAssistanceChanged = onLifeAssistanceChanged,
+                        onSpecialityChanged = onSpecialityChanged,
+                        onExperiencePreferredChanged = onExperiencePreferredChanged,
+                        onApplyMethodChanged = onApplyMethodChanged,
+                        onApplyDeadlineChanged = onApplyDeadlineChanged,
+                        onApplyDeadlineChipStateChanged = onApplyDeadlineChipStateChanged,
+                        postJobPosting = postJobPosting,
+                        setJobPostingStep = setJobPostingStep,
                     )
+                } else {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(
+                            32.dp,
+                            Alignment.CenterVertically
+                        ),
+                        modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 8.dp),
+                    ) {
+                        CareProgressBar(
+                            currentStep = jobPostingStep.step,
+                            totalSteps = JobPostingStep.entries.size - 1,
+                            modifier = Modifier.fillMaxWidth(),
+                        )
 
-                    CareStateAnimator(
-                        targetState = jobPostingStep,
-                        label = "센터 정보 입력을 관리하는 애니메이션",
-                    ) { jobPostingStep ->
-                        when (jobPostingStep) {
-                            JobPostingStep.TIME_PAYMENT -> TimePaymentScreen(
-                                weekDays = weekDays,
-                                payType = payType,
-                                payAmount = payAmount,
-                                setWeekDays = setWeekDays,
-                                setPayType = onPayTypeChanged,
-                                setPayAmount = onPayAmountChanged,
-                                setJobPostingStep = setJobPostingStep,
-                            )
+                        CareStateAnimator(
+                            targetState = jobPostingStep,
+                            label = "센터 정보 입력을 관리하는 애니메이션",
+                        ) { jobPostingStep ->
+                            when (jobPostingStep) {
+                                JobPostingStep.TIME_PAYMENT -> TimePaymentScreen(
+                                    weekDays = weekDays,
+                                    payType = payType,
+                                    payAmount = payAmount,
+                                    setWeekDays = setWeekDays,
+                                    setPayType = onPayTypeChanged,
+                                    setPayAmount = onPayAmountChanged,
+                                    setJobPostingStep = setJobPostingStep,
+                                )
 
-                            JobPostingStep.ADDRESS -> AddressScreen(
-                                roadNameAddress = roadNameAddress,
-                                detailAddress = detailAddress,
-                                onDetailAddressChanged = onDetailAddressChanged,
-                                showPostCodeDialog = showPostCodeDialog,
-                                setJobPostingStep = setJobPostingStep,
-                            )
+                                JobPostingStep.ADDRESS -> AddressScreen(
+                                    roadNameAddress = roadNameAddress,
+                                    detailAddress = detailAddress,
+                                    onDetailAddressChanged = onDetailAddressChanged,
+                                    showPostCodeDialog = showPostCodeDialog,
+                                    setJobPostingStep = setJobPostingStep,
+                                )
 
-                            JobPostingStep.CUSTOMER_INFORMATION -> CustomerInformationScreen(
-                                gender = gender,
-                                birthYear = birthYear,
-                                weight = weight,
-                                careLevel = careLevel,
-                                mentalStatus = mentalStatus,
-                                disease = disease,
-                                onGenderChanged = onGenderChanged,
-                                onBirthYearChanged = onBirthYearChanged,
-                                onWeightChanged = onWeightChanged,
-                                onCareLevelChanged = onCareLevelChanged,
-                                onMentalStatusChanged = onMentalStatusChanged,
-                                onDiseaseChanged = onDiseaseChanged,
-                                setJobPostingStep = setJobPostingStep,
-                            )
+                                JobPostingStep.CUSTOMER_INFORMATION -> CustomerInformationScreen(
+                                    gender = gender,
+                                    birthYear = birthYear,
+                                    weight = weight,
+                                    careLevel = careLevel,
+                                    mentalStatus = mentalStatus,
+                                    disease = disease,
+                                    onGenderChanged = onGenderChanged,
+                                    onBirthYearChanged = onBirthYearChanged,
+                                    onWeightChanged = onWeightChanged,
+                                    onCareLevelChanged = onCareLevelChanged,
+                                    onMentalStatusChanged = onMentalStatusChanged,
+                                    onDiseaseChanged = onDiseaseChanged,
+                                    setJobPostingStep = setJobPostingStep,
+                                )
 
-                            JobPostingStep.CUSTOMER_REQUIREMENT -> CustomerRequirementScreen(
-                                isMealAssistance = isMealAssistance,
-                                isBowelAssistance = isBowelAssistance,
-                                isWalkingAssistance = isWalkingAssistance,
-                                lifeAssistance = lifeAssistance,
-                                speciality = speciality,
-                                setMealAssistance = onMealAssistanceChanged,
-                                setBowelAssistance = onBowelAssistanceChanged,
-                                setWalkingAssistance = onWalkingAssistanceChanged,
-                                setLifeAssistance = onLifeAssistanceChanged,
-                                setSpeciality = onSpecialityChanged,
-                                setJobPostingStep = setJobPostingStep,
-                            )
+                                JobPostingStep.CUSTOMER_REQUIREMENT -> CustomerRequirementScreen(
+                                    isMealAssistance = isMealAssistance,
+                                    isBowelAssistance = isBowelAssistance,
+                                    isWalkingAssistance = isWalkingAssistance,
+                                    lifeAssistance = lifeAssistance,
+                                    speciality = speciality,
+                                    setMealAssistance = onMealAssistanceChanged,
+                                    setBowelAssistance = onBowelAssistanceChanged,
+                                    setWalkingAssistance = onWalkingAssistanceChanged,
+                                    setLifeAssistance = onLifeAssistanceChanged,
+                                    setSpeciality = onSpecialityChanged,
+                                    setJobPostingStep = setJobPostingStep,
+                                )
 
-                            JobPostingStep.ADDITIONAL_INFO -> AdditionalInfoScreen(
-                                isExperiencePreferred = isExperiencePreferred,
-                                applyMethod = applyMethod,
-                                applyDeadlineChipState = applyDeadlineChipState,
-                                applyDeadline = applyDeadline,
-                                onExperiencePreferredChanged = onExperiencePreferredChanged,
-                                onApplyMethodChanged = onApplyMethodChanged,
-                                onApplyDeadlineChipStateChanged = onApplyDeadlineChipStateChanged,
-                                onApplyDeadlineChanged = onApplyDeadlineChanged,
-                                setJobPostingStep = setJobPostingStep,
-                            )
+                                JobPostingStep.ADDITIONAL_INFO -> AdditionalInfoScreen(
+                                    isExperiencePreferred = isExperiencePreferred,
+                                    applyMethod = applyMethod,
+                                    applyDeadlineChipState = applyDeadlineChipState,
+                                    applyDeadline = applyDeadline,
+                                    onExperiencePreferredChanged = onExperiencePreferredChanged,
+                                    onApplyMethodChanged = onApplyMethodChanged,
+                                    onApplyDeadlineChipStateChanged = onApplyDeadlineChipStateChanged,
+                                    onApplyDeadlineChanged = onApplyDeadlineChanged,
+                                    setJobPostingStep = setJobPostingStep,
+                                )
 
-                            JobPostingStep.SUMMARY -> Box(modifier = Modifier.fillMaxSize())
+                                JobPostingStep.SUMMARY -> Box(modifier = Modifier.fillMaxSize())
+                            }
                         }
                     }
                 }

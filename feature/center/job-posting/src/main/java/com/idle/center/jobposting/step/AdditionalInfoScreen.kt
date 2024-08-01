@@ -22,7 +22,6 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import com.idle.center.jobposting.ApplyDeadlineChipState
 import com.idle.center.jobposting.JobPostingStep
 import com.idle.center.jobposting.JobPostingStep.ADDITIONAL_INFO
 import com.idle.designsystem.compose.component.CareButtonLarge
@@ -31,6 +30,7 @@ import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.designsystem.compose.foundation.PretendardMedium
+import com.idle.domain.model.job.ApplyDeadlineChipState
 import com.idle.domain.model.job.ApplyMethod
 
 @Composable

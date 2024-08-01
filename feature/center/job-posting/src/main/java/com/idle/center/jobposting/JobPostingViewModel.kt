@@ -6,6 +6,7 @@ import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
 import com.idle.center.job.posting.R
 import com.idle.domain.model.auth.Gender
+import com.idle.domain.model.job.ApplyDeadlineChipState
 import com.idle.domain.model.job.ApplyMethod
 import com.idle.domain.model.job.DayOfWeek
 import com.idle.domain.model.job.LifeAssistance
@@ -84,6 +85,9 @@ class JobPostingViewModel @Inject constructor() : BaseViewModel() {
 
     private val _applyDeadline = MutableStateFlow<String>("")
     val applyDeadline = _applyDeadline.asStateFlow()
+
+    private val _isEditState = MutableStateFlow(false)
+    val isEditState = _isEditState.asStateFlow()
 
     internal fun setWeekDays(dayOfWeek: DayOfWeek) {
         _weekDays.value = _weekDays.value.toMutableSet().apply {
@@ -190,6 +194,10 @@ class JobPostingViewModel @Inject constructor() : BaseViewModel() {
             )
         )
     }
+
+    internal fun setEditState(editState: Boolean) {
+        _isEditState.value = editState
+    }
 }
 
 enum class JobPostingStep(val step: Int) {
@@ -201,9 +209,4 @@ enum class JobPostingStep(val step: Int) {
             return JobPostingStep.entries.first { it.step == step }
         }
     }
-}
-
-enum class ApplyDeadlineChipState(val displayName: String) {
-    UNTIL_HIRED("채용시까지"),
-    SET_DEADLINE("마감일 설정")
 }
