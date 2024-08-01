@@ -428,13 +428,11 @@ internal fun SummaryScreen(
                         color = CareTheme.colors.gray300,
                     )
 
-                    if (lifeAssistance.isNotEmpty()) {
-                        Text(
-                            text = "일상보조",
-                            style = CareTheme.typography.body2,
-                            color = CareTheme.colors.gray300,
-                        )
-                    }
+                    Text(
+                        text = "일상보조",
+                        style = CareTheme.typography.body2,
+                        color = CareTheme.colors.gray300,
+                    )
                 }
 
                 Column(

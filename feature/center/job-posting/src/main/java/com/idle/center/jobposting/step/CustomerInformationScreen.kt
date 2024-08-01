@@ -17,7 +17,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.idle.center.jobposting.JobPostingStep
 import com.idle.center.jobposting.JobPostingStep.ADDRESS
@@ -28,6 +31,7 @@ import com.idle.designsystem.compose.component.CareChipShort
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
+import com.idle.designsystem.compose.foundation.PretendardMedium
 import com.idle.domain.model.auth.Gender
 import com.idle.domain.model.job.MentalStatus
 
@@ -168,7 +172,18 @@ internal fun CustomerInformationScreen(
         }
 
         LabeledContent(
-            subtitle = "질병",
+            subtitle = buildAnnotatedString {
+                append("질병 ")
+                withStyle(
+                    style = SpanStyle(
+                        color = CareTheme.colors.gray300,
+                        fontSize = CareTheme.typography.caption.fontSize,
+                        fontFamily = PretendardMedium,
+                    )
+                ) {
+                    append("(선택)")
+                }
+            },
             modifier = Modifier.fillMaxWidth(),
         ) {
             CareTextField(
