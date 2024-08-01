@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import com.idle.compose.base.BaseComposeFragment
@@ -51,6 +52,7 @@ internal fun JobPostingCompleteScreen() {
             text = "요양보호사 구인 공고를\n" + "등록했어요!",
             style = CareTheme.typography.heading1,
             color = CareTheme.colors.gray900,
+            textAlign = TextAlign.Center,
         )
 
         Spacer(modifier = Modifier.weight(1f))

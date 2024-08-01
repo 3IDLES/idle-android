@@ -138,7 +138,7 @@ internal fun AdditionalInfoScreen(
 
         CareButtonLarge(
             text = "다음",
-            enable = true,
+            enable = isExperiencePreferred != null && applyMethod.isNotEmpty() && applyDeadlineChipState != null && (applyDeadlineChipState == ApplyDeadlineChipState.SET_DEADLINE && applyDeadline.isNotEmpty()),
             onClick = { setJobPostingStep(JobPostingStep.findStep(ADDITIONAL_INFO.step + 1)) },
             modifier = Modifier.fillMaxWidth(),
         )
