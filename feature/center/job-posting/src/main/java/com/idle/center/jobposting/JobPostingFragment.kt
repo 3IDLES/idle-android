@@ -210,7 +210,48 @@ internal fun JobPostingScreen(
                 .padding(paddingValue)
         ) { step ->
             if (step == JobPostingStep.SUMMARY) {
-                SummaryScreen(setJobPostingStep)
+                SummaryScreen(
+                    weekDays = weekDays,
+                    payType = payType,
+                    payAmount = payAmount,
+                    roadNameAddress = roadNameAddress,
+                    gender = gender,
+                    birthYear = birthYear,
+                    weight = weight,
+                    careLevel = careLevel,
+                    mentalStatus = mentalStatus,
+                    disease = disease,
+                    isMealAssistance = isMealAssistance,
+                    isBowelAssistance = isBowelAssistance,
+                    isWalkingAssistance = isWalkingAssistance,
+                    lifeAssistance = lifeAssistance,
+                    speciality = speciality,
+                    isExperiencePreferred = isExperiencePreferred,
+                    applyMethod = applyMethod,
+                    applyDeadlineChipState = applyDeadlineChipState,
+                    applyDeadline = applyDeadline,
+                    setWeekDays = setWeekDays,
+                    onPayTypeChanged = onPayTypeChanged,
+                    onPayAmountChanged = onPayAmountChanged,
+                    onDetailAddressChanged = onDetailAddressChanged,
+                    showPostCodeDialog = showPostCodeDialog,
+                    onGenderChanged = onGenderChanged,
+                    onBirthYearChanged = onBirthYearChanged,
+                    onWeightChanged = onWeightChanged,
+                    onCareLevelChanged = onCareLevelChanged,
+                    onMentalStatusChanged = onMentalStatusChanged,
+                    onDiseaseChanged = onDiseaseChanged,
+                    onMealAssistanceChanged = onMealAssistanceChanged,
+                    onBowelAssistanceChanged = onBowelAssistanceChanged,
+                    onWalkingAssistanceChanged = onWalkingAssistanceChanged,
+                    onLifeAssistanceChanged = onLifeAssistanceChanged,
+                    onSpecialityChanged = onSpecialityChanged,
+                    onExperiencePreferredChanged = onExperiencePreferredChanged,
+                    onApplyMethodChanged = onApplyMethodChanged,
+                    onApplyDeadlineChanged = onApplyDeadlineChanged,
+                    onApplyDeadlineChipStateChanged = onApplyDeadlineChipStateChanged,
+                    setJobPostingStep = setJobPostingStep
+                )
             } else {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,

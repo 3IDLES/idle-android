@@ -23,17 +23,70 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.idle.center.jobposting.ApplyDeadlineChipState
 import com.idle.center.jobposting.JobPostingStep
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.component.CareTextFieldLong
 import com.idle.designsystem.compose.foundation.CareTheme
+import com.idle.domain.model.auth.Gender
+import com.idle.domain.model.job.ApplyMethod
+import com.idle.domain.model.job.DayOfWeek
+import com.idle.domain.model.job.LifeAssistance
+import com.idle.domain.model.job.MentalStatus
+import com.idle.domain.model.job.PayType
 
 @Composable
 internal fun SummaryScreen(
+    weekDays: Set<DayOfWeek>,
+    payType: PayType,
+    payAmount: String,
+    roadNameAddress: String,
+    gender: Gender,
+    birthYear: String,
+    weight: String,
+    careLevel: String,
+    mentalStatus: MentalStatus,
+    disease: String,
+    isMealAssistance: Boolean?,
+    isBowelAssistance: Boolean?,
+    isWalkingAssistance: Boolean?,
+    lifeAssistance: Set<LifeAssistance>,
+    speciality: String,
+    isExperiencePreferred: Boolean?,
+    applyMethod: Set<ApplyMethod>,
+    applyDeadlineChipState: ApplyDeadlineChipState?,
+    applyDeadline: String,
+    setWeekDays: (DayOfWeek) -> Unit,
+    onPayTypeChanged: (PayType) -> Unit,
+    onPayAmountChanged: (String) -> Unit,
+    onDetailAddressChanged: (String) -> Unit,
+    showPostCodeDialog: () -> Unit,
+    onGenderChanged: (Gender) -> Unit,
+    onBirthYearChanged: (String) -> Unit,
+    onWeightChanged: (String) -> Unit,
+    onCareLevelChanged: (String) -> Unit,
+    onMentalStatusChanged: (MentalStatus) -> Unit,
+    onDiseaseChanged: (String) -> Unit,
+    onMealAssistanceChanged: (Boolean) -> Unit,
+    onBowelAssistanceChanged: (Boolean) -> Unit,
+    onWalkingAssistanceChanged: (Boolean) -> Unit,
+    onLifeAssistanceChanged: (LifeAssistance) -> Unit,
+    onSpecialityChanged: (String) -> Unit,
+    onExperiencePreferredChanged: (Boolean) -> Unit,
+    onApplyMethodChanged: (ApplyMethod) -> Unit,
+    onApplyDeadlineChanged: (String) -> Unit,
+    onApplyDeadlineChipStateChanged: (ApplyDeadlineChipState) -> Unit,
     setJobPostingStep: (JobPostingStep) -> Unit,
 ) {
     val scrollState = rememberScrollState()
+
+    val payText = when (payType) {
+        PayType.HOURLY -> "시급 $payAmount 원"
+        PayType.WEEKLY -> "주급 $payAmount 원"
+        PayType.MONTHLY -> "월급 $payAmount 원"
+        PayType.UNKNOWN -> ""
+    }
 
     BackHandler { setJobPostingStep(JobPostingStep.findStep(JobPostingStep.SUMMARY.step - 1)) }
 
@@ -74,41 +127,30 @@ internal fun SummaryScreen(
                         modifier = Modifier.fillMaxWidth()
                             .padding(bottom = 8.dp)
                     ) {
-                        CareTag(
-                            text = "초보가능",
-                            textColor = CareTheme.colors.orange500,
-                            backgroundColor = CareTheme.colors.orange100,
-                        )
+                        if (isExperiencePreferred == false) {
+                            CareTag(
+                                text = "초보 가능",
+                                textColor = CareTheme.colors.orange500,
+                                backgroundColor = CareTheme.colors.orange100,
+                            )
+                        }
 
                         CareTag(
-                            text = "D-10",
+                            text = applyDeadline,
                             textColor = CareTheme.colors.gray300,
                             backgroundColor = CareTheme.colors.gray050,
                         )
                     }
 
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        modifier = Modifier.fillMaxWidth()
+                    Text(
+                        text = roadNameAddress,
+                        style = CareTheme.typography.subtitle2,
+                        color = CareTheme.colors.gray900,
+                        overflow = TextOverflow.Clip,
+                        maxLines = 1,
+                        modifier = Modifier.weight(1f)
                             .padding(bottom = 2.dp),
-                    ) {
-                        Text(
-                            text = "서울특별시 강남구 신사동",
-                            style = CareTheme.typography.subtitle2,
-                            color = CareTheme.colors.gray900,
-                            overflow = TextOverflow.Clip,
-                            maxLines = 1,
-                            modifier = Modifier.weight(1f),
-                        )
-
-                        Text(
-                            text = "도보 15분~20분",
-                            style = CareTheme.typography.body3,
-                            color = CareTheme.colors.gray500,
-                            modifier = Modifier.padding(end = 8.dp),
-                        )
-                    }
+                    )
 
                     Text(
                         text = "1등급 78세 여성",
@@ -128,7 +170,10 @@ internal fun SummaryScreen(
                         )
 
                         Text(
-                            text = "월, 화, 수, 목, 금 | 09:00 - 15:00",
+                            text = weekDays
+                                .sortedBy { it.ordinal }
+                                .map { it.displayName }
+                                .joinToString(", ") + "|" + "09:00 - 15:00",
                             style = CareTheme.typography.body3,
                             color = CareTheme.colors.gray500,
                         )
@@ -144,7 +189,7 @@ internal fun SummaryScreen(
                         )
 
                         Text(
-                            text = "시급 12,500 원",
+                            text = payText,
                             style = CareTheme.typography.body3,
                             color = CareTheme.colors.gray500,
                         )
@@ -213,25 +258,27 @@ internal fun SummaryScreen(
 
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(
-                        text = "근무 요일",
+                        text = weekDays
+                            .sortedBy { it.ordinal }
+                            .joinToString(", ") { it.displayName },
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray900,
                     )
 
                     Text(
-                        text = "근무 시간",
+                        text = "09:00 - 15:00",
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray900,
                     )
 
                     Text(
-                        text = "급여",
+                        text = payText,
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray900,
                     )
 
                     Text(
-                        text = "근무 주소",
+                        text = roadNameAddress,
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray900,
                     )
@@ -282,19 +329,19 @@ internal fun SummaryScreen(
 
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(
-                        text = "남성",
+                        text = gender.displayName,
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray900,
                     )
 
                     Text(
-                        text = "74세",
+                        text = "${birthYear}년생",
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray900,
                     )
 
                     Text(
-                        text = "71kg",
+                        text = "${weight}kg",
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray900,
                     )
@@ -332,19 +379,19 @@ internal fun SummaryScreen(
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     Text(
-                        text = "2등급",
+                        text = "${careLevel}등급",
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray900,
                     )
 
                     Text(
-                        text = "치매 초기",
+                        text = mentalStatus.displayName,
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray900,
                     )
 
                     Text(
-                        text = "어쩌고저쩌고",
+                        text = disease.ifBlank { "-" },
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray900,
                     )
@@ -380,36 +427,41 @@ internal fun SummaryScreen(
                         color = CareTheme.colors.gray300,
                     )
 
-                    Text(
-                        text = "일상보조",
-                        style = CareTheme.typography.body2,
-                        color = CareTheme.colors.gray300,
-                    )
+                    if (lifeAssistance.isNotEmpty()) {
+                        Text(
+                            text = "일상보조",
+                            style = CareTheme.typography.body2,
+                            color = CareTheme.colors.gray300,
+                        )
+                    }
                 }
 
                 Column(
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     Text(
-                        text = "불필요",
+                        text = if (isMealAssistance!!) "필요" else "불필요",
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray900,
                     )
 
                     Text(
-                        text = "필요",
+                        text = if (isBowelAssistance!!) "필요" else "불필요",
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray900,
                     )
 
                     Text(
-                        text = "필요",
+                        text = if (isWalkingAssistance!!) "필요" else "불필요",
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray900,
                     )
 
                     Text(
-                        text = "청소, 말벗",
+                        text = lifeAssistance
+                            .sortedBy { it.ordinal }
+                            .joinToString(", ") { it.displayName }
+                            .ifEmpty { "-" },
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray900,
                     )
@@ -426,7 +478,7 @@ internal fun SummaryScreen(
             )
 
             CareTextFieldLong(
-                value = "5~60대 남성 선생님을 선호합니다.",
+                value = speciality,
                 enabled = false,
                 onValueChanged = {},
             )
@@ -474,19 +526,19 @@ internal fun SummaryScreen(
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     Text(
-                        text = "초보 가능",
+                        text = if (isExperiencePreferred!!) "초보 가능" else "경력자 우대",
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray900,
                     )
 
                     Text(
-                        text = "전화",
+                        text = applyMethod.joinToString(", ") { it.displayName },
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray900,
                     )
 
                     Text(
-                        text = "2024. 11. 12",
+                        text = applyDeadline,
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray900,
                     )
