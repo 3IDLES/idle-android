@@ -130,6 +130,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
                 onApplyMethodChanged = ::setApplyMethod,
                 onApplyDeadlineChipStateChanged = ::setApplyDeadlineChipState,
                 onApplyDeadlineChanged = ::setApplyDeadline,
+                postJobPosting = ::postJobPosting,
                 setJobPostingStep = ::setJobPostingStep,
             )
         }
@@ -179,6 +180,7 @@ internal fun JobPostingScreen(
     onApplyMethodChanged: (ApplyMethod) -> Unit,
     onApplyDeadlineChanged: (String) -> Unit,
     onApplyDeadlineChipStateChanged: (ApplyDeadlineChipState) -> Unit,
+    postJobPosting: () -> Unit,
     setJobPostingStep: (JobPostingStep) -> Unit,
 ) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
@@ -250,7 +252,8 @@ internal fun JobPostingScreen(
                     onApplyMethodChanged = onApplyMethodChanged,
                     onApplyDeadlineChanged = onApplyDeadlineChanged,
                     onApplyDeadlineChipStateChanged = onApplyDeadlineChipStateChanged,
-                    setJobPostingStep = setJobPostingStep
+                    postJobPosting = postJobPosting,
+                    setJobPostingStep = setJobPostingStep,
                 )
             } else {
                 Column(

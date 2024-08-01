@@ -2,4 +2,6 @@
 <resources>
     <string name="necessary">필요</string>
     <string name="unnecessary">불필요</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -77,6 +77,7 @@ internal fun SummaryScreen(
     onApplyMethodChanged: (ApplyMethod) -> Unit,
     onApplyDeadlineChanged: (String) -> Unit,
     onApplyDeadlineChipStateChanged: (ApplyDeadlineChipState) -> Unit,
+    postJobPosting: () -> Unit,
     setJobPostingStep: (JobPostingStep) -> Unit,
 ) {
     val scrollState = rememberScrollState()
@@ -558,7 +559,7 @@ internal fun SummaryScreen(
 
             CareButtonLarge(
                 text = "확인했어요",
-                onClick = { },
+                onClick = postJobPosting,
                 modifier = Modifier.fillMaxWidth(),
             )
         }

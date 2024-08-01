@@ -1,6 +1,10 @@
 package com.idle.center.jobposting
 
+import androidx.lifecycle.viewModelScope
+import com.idle.binding.DeepLinkDestination.CenterJobPostingComplete
 import com.idle.binding.base.BaseViewModel
+import com.idle.binding.base.CareBaseEvent
+import com.idle.center.job.posting.R
 import com.idle.domain.model.auth.Gender
 import com.idle.domain.model.job.ApplyMethod
 import com.idle.domain.model.job.DayOfWeek
@@ -10,6 +14,7 @@ import com.idle.domain.model.job.PayType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -175,6 +180,15 @@ class JobPostingViewModel @Inject constructor() : BaseViewModel() {
 
     internal fun setApplyDeadline(applyDeadline: String) {
         _applyDeadline.value = applyDeadline
+    }
+
+    internal fun postJobPosting() = viewModelScope.launch {
+        baseEvent(
+            CareBaseEvent.NavigateTo(
+                destination = CenterJobPostingComplete,
+                popUpTo = R.id.jobPostingFragment
+            )
+        )
     }
 }
 
