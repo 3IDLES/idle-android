@@ -29,7 +29,7 @@ import com.idle.domain.model.job.PayType
 @Composable
 internal fun TimePaymentScreen(
     weekDays: Set<DayOfWeek>,
-    payType: PayType,
+    payType: PayType?,
     payAmount: String,
     setWeekDays: (DayOfWeek) -> Unit,
     setPayType: (PayType) -> Unit,
@@ -145,7 +145,7 @@ internal fun TimePaymentScreen(
                         )
                     },
                     onDone = {
-                        if (weekDays.isNotEmpty() && payAmount.isNotBlank())
+                        if (weekDays.isNotEmpty() && payType != null && payAmount.isNotBlank())
                             setJobPostingStep(JobPostingStep.findStep(JobPostingStep.TIME_PAYMENT.step + 1))
                     },
                 )
@@ -156,7 +156,7 @@ internal fun TimePaymentScreen(
 
         CareButtonLarge(
             text = "다음",
-            enable = weekDays.isNotEmpty() && payAmount.isNotBlank(),
+            enable = weekDays.isNotEmpty() && payType != null && payAmount.isNotBlank(),
             onClick = { setJobPostingStep(JobPostingStep.findStep(JobPostingStep.TIME_PAYMENT.step + 1)) },
             modifier = Modifier.fillMaxWidth(),
         )

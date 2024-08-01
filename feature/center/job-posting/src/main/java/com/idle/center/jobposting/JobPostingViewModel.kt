@@ -7,7 +7,6 @@ import com.idle.domain.model.job.DayOfWeek
 import com.idle.domain.model.job.LifeAssistance
 import com.idle.domain.model.job.MentalStatus
 import com.idle.domain.model.job.PayType
-import com.idle.domain.model.job.PayType.HOURLY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,7 +18,7 @@ class JobPostingViewModel @Inject constructor() : BaseViewModel() {
     private val _weekDays = MutableStateFlow<Set<DayOfWeek>>(setOf())
     val weekDays = _weekDays.asStateFlow()
 
-    private val _payType = MutableStateFlow<PayType>(HOURLY)
+    private val _payType = MutableStateFlow<PayType?>(null)
     val payType = _payType.asStateFlow()
 
     private val _payAmount = MutableStateFlow("")

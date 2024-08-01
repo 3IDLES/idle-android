@@ -139,7 +139,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
 @Composable
 internal fun JobPostingScreen(
     weekDays: Set<DayOfWeek>,
-    payType: PayType,
+    payType: PayType?,
     payAmount: String,
     roadNameAddress: String,
     detailAddress: String,

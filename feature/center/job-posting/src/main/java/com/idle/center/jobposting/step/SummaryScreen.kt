@@ -39,7 +39,7 @@ import com.idle.domain.model.job.PayType
 @Composable
 internal fun SummaryScreen(
     weekDays: Set<DayOfWeek>,
-    payType: PayType,
+    payType: PayType?,
     payAmount: String,
     roadNameAddress: String,
     gender: Gender,
@@ -81,7 +81,7 @@ internal fun SummaryScreen(
 ) {
     val scrollState = rememberScrollState()
 
-    val payText = when (payType) {
+    val payText = when (payType!!) {
         PayType.HOURLY -> "시급 $payAmount 원"
         PayType.WEEKLY -> "주급 $payAmount 원"
         PayType.MONTHLY -> "월급 $payAmount 원"
@@ -172,8 +172,8 @@ internal fun SummaryScreen(
                         Text(
                             text = weekDays
                                 .sortedBy { it.ordinal }
-                                .map { it.displayName }
-                                .joinToString(", ") + "|" + "09:00 - 15:00",
+                                .joinToString(", ") { it.displayName }
+                                    + " | " + "09:00 - 15:00",
                             style = CareTheme.typography.body3,
                             color = CareTheme.colors.gray500,
                         )
