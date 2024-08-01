@@ -25,19 +25,19 @@ import com.idle.designsystem.compose.foundation.White000
 @Composable
 fun CareDialog(
     title: String,
-    titleColor: Color = CareTheme.colors.gray900,
-    description: String? = null,
-    descriptionColor: Color = CareTheme.colors.gray500,
     leftButtonText: String,
-    leftButtonTextColor: Color = CareTheme.colors.white000,
-    leftButtonColor: Color = CareTheme.colors.white000,
     rightButtonText: String,
-    rightButtonTextColor: Color = CareTheme.colors.orange500,
-    rightButtonColor: Color = CareTheme.colors.white000,
-    onDismissRequest: () -> Unit = {},
     onLeftButtonClick: () -> Unit,
     onRightButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
+    titleColor: Color = CareTheme.colors.gray900,
+    description: String? = null,
+    descriptionColor: Color = CareTheme.colors.gray500,
+    leftButtonTextColor: Color = CareTheme.colors.white000,
+    leftButtonColor: Color = CareTheme.colors.white000,
+    rightButtonTextColor: Color = CareTheme.colors.orange500,
+    rightButtonColor: Color = CareTheme.colors.white000,
+    onDismissRequest: () -> Unit = {},
 ) {
     Dialog(onDismissRequest = onDismissRequest) {
         Card(

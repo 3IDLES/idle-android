@@ -13,6 +13,14 @@ internal fun Project.configureAndroidCompose() {
     val libs = extensions.libs
 
     androidExtension.apply {
+        composeOptions {
+            kotlinCompilerExtensionVersion = "1.3.0"
+        }
+
+        buildFeatures.apply {
+            compose = true
+        }
+
         dependencies {
             val bom = libs.findLibrary("androidx-compose-bom").get()
             add("implementation", platform(bom))

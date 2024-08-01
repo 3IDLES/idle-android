@@ -16,9 +16,9 @@ import com.idle.designsystem.compose.foundation.CareTheme
 @Composable
 fun CareSubtitleTopAppBar(
     title: String,
+    modifier: Modifier = Modifier,
     onNavigationClick: () -> Unit = {},
     leftComponent: @Composable () -> Unit = {},
-    modifier: Modifier = Modifier,
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -45,9 +45,9 @@ fun CareSubtitleTopAppBar(
 @Composable
 fun CareHeadingTopAppBar(
     title: String,
+    modifier: Modifier = Modifier,
     rightComponent: @Composable () -> Unit = {},
     leftComponent: @Composable () -> Unit = {},
-    modifier: Modifier = Modifier,
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(4.dp),
