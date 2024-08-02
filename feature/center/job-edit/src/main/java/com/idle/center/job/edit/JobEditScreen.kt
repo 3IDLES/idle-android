@@ -95,7 +95,7 @@ fun JobEditScreen(
     onApplyMethodChanged: (ApplyMethod) -> Unit,
     clearApplyMethod: () -> Unit,
     onApplyDeadlineChanged: (String) -> Unit,
-    onApplyDeadlineChipStateChanged: (ApplyDeadlineType) -> Unit,
+    onApplyDeadlineTypeChanged: (ApplyDeadlineType) -> Unit,
     setEditState: (Boolean) -> Unit,
 ) {
     var localWeekDays by remember { mutableStateOf(weekDays) }
@@ -164,8 +164,7 @@ fun JobEditScreen(
                             clearApplyMethod()
                             localApplyMethod.forEach { onApplyMethodChanged(it) }
                             onApplyDeadlineChanged(localApplyDeadline)
-                            onApplyDeadlineChipStateChanged(localApplyDeadlineChipState!!)
-
+                            onApplyDeadlineTypeChanged(localApplyDeadlineType!!)
                             setEditState(false)
                         },
                     )
@@ -681,7 +680,7 @@ fun JobEditScreen(
                         ) {
                             ApplyDeadlineType.entries.forEach { type ->
                                 CareChipBasic(
-                                    text = state.displayName,
+                                    text = type.displayName,
                                     onClick = { localApplyDeadlineType = type },
                                     enable = localApplyDeadlineType == type,
                                     modifier = Modifier.width(104.dp),

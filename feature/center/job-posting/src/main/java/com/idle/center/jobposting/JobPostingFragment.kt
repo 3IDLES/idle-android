@@ -220,7 +220,6 @@ internal fun JobPostingScreen(
     applyDeadlineType: ApplyDeadlineType?,
     applyDeadline: String,
     jobPostingStep: JobPostingStep,
-    isEditState: Boolean,
     setWeekDays: (DayOfWeek) -> Unit,
     onPayTypeChanged: (PayType) -> Unit,
     onPayAmountChanged: (String) -> Unit,

@@ -120,11 +120,11 @@ internal fun AdditionalInfoScreen(
                     horizontalArrangement = Arrangement.spacedBy(4.dp),
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    ApplyDeadlineType.entries.forEach { state ->
+                    ApplyDeadlineType.entries.forEach { type ->
                         CareChipBasic(
-                            text = state.displayName,
-                            onClick = { onApplyDeadlineChipStateChanged(state) },
-                            enable = applyDeadlineType == state,
+                            text = type.displayName,
+                            onClick = { onApplyDeadlineTypeChanged(type) },
+                            enable = applyDeadlineType == type,
                             modifier = Modifier.width(104.dp),
                         )
                     }

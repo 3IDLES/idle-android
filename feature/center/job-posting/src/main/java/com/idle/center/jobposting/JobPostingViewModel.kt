@@ -252,10 +252,6 @@ class JobPostingViewModel @Inject constructor(
         }
             .onFailure { Log.d("test", "공고 등록 실패! $it") }
     }
-
-    internal fun setEditState(editState: Boolean) {
-        _isEditState.value = editState
-    }
 }
 
 enum class JobPostingStep(val step: Int) {
