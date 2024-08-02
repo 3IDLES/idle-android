@@ -13,9 +13,13 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -37,12 +41,14 @@ import com.idle.domain.model.job.MentalStatus
 
 @Composable
 internal fun CustomerInformationScreen(
+    clientName: String,
     gender: Gender,
     birthYear: String,
     weight: String,
     careLevel: String,
     mentalStatus: MentalStatus,
     disease: String,
+    onClientNameChanged: (String) -> Unit,
     onGenderChanged: (Gender) -> Unit,
     onBirthYearChanged: (String) -> Unit,
     onWeightChanged: (String) -> Unit,
@@ -51,10 +57,15 @@ internal fun CustomerInformationScreen(
     onDiseaseChanged: (String) -> Unit,
     setJobPostingStep: (JobPostingStep) -> Unit,
 ) {
+    val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
     val scrollState = rememberScrollState()
 
     BackHandler { setJobPostingStep(JobPostingStep.findStep(ADDRESS.step - 1)) }
+
+    LaunchedEffect(true) {
+        focusRequester.requestFocus()
+    }
 
     Column(
         horizontalAlignment = Alignment.Start,
@@ -70,6 +81,19 @@ internal fun CustomerInformationScreen(
         )
 
         LabeledContent(
+            subtitle = "이름",
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            CareTextField(
+                value = clientName,
+                onValueChanged = onClientNameChanged,
+                hint = "고객의 이름을 입력해주세요.",
+                modifier = Modifier.fillMaxWidth()
+                    .focusRequester(focusRequester),
+            )
+        }
+
+        LabeledContent(
             subtitle = "성별",
             modifier = Modifier.fillMaxWidth(),
         ) {
@@ -80,20 +104,14 @@ internal fun CustomerInformationScreen(
             ) {
                 CareChipBasic(
                     text = Gender.WOMAN.displayName,
-                    onClick = {
-                        onGenderChanged(Gender.WOMAN)
-                        focusManager.moveFocus(FocusDirection.Down)
-                    },
+                    onClick = { onGenderChanged(Gender.WOMAN) },
                     enable = gender == Gender.WOMAN,
                     modifier = Modifier.width(104.dp),
                 )
 
                 CareChipBasic(
                     text = Gender.MAN.displayName,
-                    onClick = {
-                        onGenderChanged(Gender.MAN)
-                        focusManager.moveFocus(FocusDirection.Down)
-                    },
+                    onClick = { onGenderChanged(Gender.MAN) },
                     enable = gender == Gender.MAN,
                     modifier = Modifier.width(104.dp),
                 )

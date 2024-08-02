@@ -16,7 +16,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -30,22 +29,21 @@ import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.designsystem.compose.foundation.PretendardMedium
-import com.idle.domain.model.job.ApplyDeadlineChipState
+import com.idle.domain.model.job.ApplyDeadlineType
 import com.idle.domain.model.job.ApplyMethod
 
 @Composable
 internal fun AdditionalInfoScreen(
     isExperiencePreferred: Boolean?,
     applyMethod: Set<ApplyMethod>,
-    applyDeadlineChipState: ApplyDeadlineChipState?,
+    applyDeadlineType: ApplyDeadlineType?,
     applyDeadline: String,
     onExperiencePreferredChanged: (Boolean) -> Unit,
     onApplyMethodChanged: (ApplyMethod) -> Unit,
-    onApplyDeadlineChipStateChanged: (ApplyDeadlineChipState) -> Unit,
+    onApplyDeadlineChipStateChanged: (ApplyDeadlineType) -> Unit,
     onApplyDeadlineChanged: (String) -> Unit,
     setJobPostingStep: (JobPostingStep) -> Unit,
 ) {
-    val focusManager = LocalFocusManager.current
     val scrollState = rememberScrollState()
 
     BackHandler { setJobPostingStep(JobPostingStep.findStep(ADDITIONAL_INFO.step - 1)) }
@@ -122,17 +120,17 @@ internal fun AdditionalInfoScreen(
                     horizontalArrangement = Arrangement.spacedBy(4.dp),
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    ApplyDeadlineChipState.entries.forEach { state ->
+                    ApplyDeadlineType.entries.forEach { state ->
                         CareChipBasic(
                             text = state.displayName,
                             onClick = { onApplyDeadlineChipStateChanged(state) },
-                            enable = applyDeadlineChipState == state,
+                            enable = applyDeadlineType == state,
                             modifier = Modifier.width(104.dp),
                         )
                     }
                 }
 
-                if (applyDeadlineChipState == ApplyDeadlineChipState.SET_DEADLINE) {
+                if (applyDeadlineType == ApplyDeadlineType.DEFINITE) {
                     CareTextField(
                         value = applyDeadline,
                         onValueChanged = onApplyDeadlineChanged,
@@ -153,7 +151,7 @@ internal fun AdditionalInfoScreen(
 
         CareButtonLarge(
             text = "다음",
-            enable = isExperiencePreferred != null && applyMethod.isNotEmpty() && applyDeadlineChipState != null && !(applyDeadlineChipState == ApplyDeadlineChipState.SET_DEADLINE && applyDeadline.isNotEmpty()),
+            enable = isExperiencePreferred != null && applyMethod.isNotEmpty() && applyDeadlineType != null && !(applyDeadlineType == ApplyDeadlineType.DEFINITE && applyDeadline.isNotEmpty()),
             onClick = { setJobPostingStep(JobPostingStep.findStep(ADDITIONAL_INFO.step + 1)) },
             modifier = Modifier.fillMaxWidth(),
         )
