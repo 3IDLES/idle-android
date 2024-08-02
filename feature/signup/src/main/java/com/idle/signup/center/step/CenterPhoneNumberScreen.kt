@@ -101,24 +101,34 @@ internal fun CenterPhoneNumberScreen(
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                CareTextField(
-                    value = centerAuthCode,
-                    hint = "",
-                    onValueChanged = onCenterAuthCodeChanged,
-                    supportingText = if (isConfirmAuthCode) "인증이 완료되었습니다." else "",
-                    readOnly = !(centerAuthCodeTimerMinute != "" && centerAuthCodeTimerSeconds != "") || isConfirmAuthCode,
-                    onDone = { if (centerAuthCode.isNotBlank()) confirmAuthCode() },
-                    leftComponent = {
-                        if (centerAuthCodeTimerMinute != "" && centerAuthCodeTimerSeconds != "") {
-                            Text(
-                                text = "$centerAuthCodeTimerMinute:$centerAuthCodeTimerSeconds",
-                                style = CareTheme.typography.body3,
-                                color = if (!isConfirmAuthCode) CareTheme.colors.gray500 else CareTheme.colors.gray200,
-                            )
-                        }
-                    },
-                    modifier = Modifier.weight(1f),
-                )
+                Column(
+                    horizontalAlignment = Alignment.Start,
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    CareTextField(
+                        value = centerAuthCode,
+                        hint = "",
+                        onValueChanged = onCenterAuthCodeChanged,
+                        readOnly = !(centerAuthCodeTimerMinute != "" && centerAuthCodeTimerSeconds != "") || isConfirmAuthCode,
+                        onDone = { if (centerAuthCode.isNotBlank()) confirmAuthCode() },
+                        leftComponent = {
+                            if (centerAuthCodeTimerMinute != "" && centerAuthCodeTimerSeconds != "") {
+                                Text(
+                                    text = "$centerAuthCodeTimerMinute:$centerAuthCodeTimerSeconds",
+                                    style = CareTheme.typography.body3,
+                                    color = if (!isConfirmAuthCode) CareTheme.colors.gray500 else CareTheme.colors.gray200,
+                                )
+                            }
+                        },
+                        modifier = Modifier.weight(1f),
+                    )
+
+                    Text(
+                        text = if (isConfirmAuthCode) "인증이 완료되었습니다." else "",
+                        style = CareTheme.typography.caption,
+                        color = CareTheme.colors.gray300,
+                    )
+                }
 
                 CareButtonSmall(
                     enable = centerAuthCode.isNotBlank() && !isConfirmAuthCode,

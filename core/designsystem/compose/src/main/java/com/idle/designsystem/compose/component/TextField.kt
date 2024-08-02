@@ -38,7 +38,7 @@ fun CareTextField(
     onValueChanged: (String) -> Unit,
     modifier: Modifier = Modifier,
     hint: String = "",
-    supportingText: String = "",
+    supportingText: String,
     keyboardType: KeyboardType = KeyboardType.Text,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     readOnly: Boolean = false,
@@ -132,6 +132,98 @@ fun CareTextField(
                 CareTheme.colors.gray300
             },
         )
+    }
+}
+
+@Composable
+fun CareTextField(
+    value: String,
+    onValueChanged: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    hint: String = "",
+    keyboardType: KeyboardType = KeyboardType.Text,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    readOnly: Boolean = false,
+    enabled: Boolean = true,
+    isError: Boolean = false,
+    onDone: () -> Unit = {},
+    textStyle: TextStyle = CareTheme.typography.body3.copy(
+        color = if (readOnly) {
+            CareTheme.colors.gray300
+        } else {
+            CareTheme.colors.gray900
+        },
+    ),
+    leftComponent: @Composable () -> Unit = {},
+) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val interactionSource = remember { MutableInteractionSource() }
+    val isFocused = interactionSource.collectIsFocusedAsState().value
+    val boarderStroke = BorderStroke(
+        width = 1.dp,
+        color = if (isError) {
+            CareTheme.colors.red
+        } else if (isFocused) {
+            CareTheme.colors.gray700
+        } else {
+            CareTheme.colors.gray100
+        },
+    )
+
+    Column(
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+        modifier = modifier
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .height(44.dp)
+                .background(
+                    color = if (readOnly) {
+                        CareTheme.colors.gray050
+                    } else {
+                        CareTheme.colors.white000
+                    }, shape = RoundedCornerShape(6.dp)
+                )
+                .border(
+                    border = boarderStroke,
+                    shape = RoundedCornerShape(6.dp)
+                )
+                .padding(horizontal = 16.dp),
+        ) {
+            BasicTextField(
+                value = value,
+                onValueChange = onValueChanged,
+                textStyle = textStyle,
+                singleLine = true,
+                readOnly = readOnly,
+                enabled = enabled,
+                interactionSource = interactionSource,
+                visualTransformation = visualTransformation,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = keyboardType,
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(onDone = {
+                    keyboardController?.hide()
+                    onDone()
+                }),
+                modifier = Modifier.weight(1f)
+                    .padding(top = 10.dp, bottom = 10.dp, end = 8.dp),
+                decorationBox = { innerTextField ->
+                    if (value.isEmpty()) {
+                        Text(
+                            text = hint,
+                            style = CareTheme.typography.body3,
+                            color = CareTheme.colors.gray200,
+                        )
+                    }
+                    innerTextField()
+                }
+            )
+
+            leftComponent()
+        }
     }
 }
 
