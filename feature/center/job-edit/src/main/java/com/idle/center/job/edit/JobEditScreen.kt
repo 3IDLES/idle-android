@@ -135,6 +135,14 @@ fun JobEditScreen(
                         style = CareTheme.typography.subtitle2,
                         color = CareTheme.colors.orange500,
                         modifier = Modifier.clickable {
+                            if(localWeekDays.isEmpty()){
+                                return@clickable
+                            }
+
+                            if(applyMethod.isEmpty()){
+                                return@clickable
+                            }
+
                             clearWeekDays()
                             localWeekDays.forEach { setWeekDays(it) }
                             onPayTypeChanged(localPayType!!)
