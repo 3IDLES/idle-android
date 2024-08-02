@@ -116,7 +116,7 @@ fun JobEditScreen(
     var localSpeciality by remember { mutableStateOf(speciality) }
     var localIsExperiencePreferred by remember { mutableStateOf(isExperiencePreferred) }
     var localApplyMethod by remember { mutableStateOf(applyMethod) }
-    var localApplyDeadlineChipState by remember { mutableStateOf(applyDeadlineType) }
+    var localApplyDeadlineType by remember { mutableStateOf(applyDeadlineType) }
     var localApplyDeadline by remember { mutableStateOf(applyDeadline) }
 
     val scrollState = rememberScrollState()
@@ -679,17 +679,17 @@ fun JobEditScreen(
                             horizontalArrangement = Arrangement.spacedBy(4.dp),
                             modifier = Modifier.fillMaxWidth(),
                         ) {
-                            ApplyDeadlineType.entries.forEach { state ->
+                            ApplyDeadlineType.entries.forEach { type ->
                                 CareChipBasic(
                                     text = state.displayName,
-                                    onClick = { localApplyDeadlineChipState = state },
-                                    enable = localApplyDeadlineChipState == state,
+                                    onClick = { localApplyDeadlineType = type },
+                                    enable = localApplyDeadlineType == type,
                                     modifier = Modifier.width(104.dp),
                                 )
                             }
                         }
 
-                        if (localApplyDeadlineChipState == ApplyDeadlineType.DEFINITE) {
+                        if (localApplyDeadlineType == ApplyDeadlineType.DEFINITE) {
                             CareTextField(
                                 value = localApplyDeadline,
                                 onValueChanged = { localApplyDeadline = it },

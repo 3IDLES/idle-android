@@ -40,7 +40,7 @@ internal fun AdditionalInfoScreen(
     applyDeadline: String,
     onExperiencePreferredChanged: (Boolean) -> Unit,
     onApplyMethodChanged: (ApplyMethod) -> Unit,
-    onApplyDeadlineChipStateChanged: (ApplyDeadlineType) -> Unit,
+    onApplyDeadlineTypeChanged: (ApplyDeadlineType) -> Unit,
     onApplyDeadlineChanged: (String) -> Unit,
     setJobPostingStep: (JobPostingStep) -> Unit,
 ) {

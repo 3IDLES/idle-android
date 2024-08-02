@@ -201,7 +201,7 @@ class JobPostingViewModel @Inject constructor(
         _applyMethod.value = setOf()
     }
 
-    internal fun setApplyDeadlineChipState(chipState: ApplyDeadlineType) {
+    internal fun setApplyDeadlineType(chipState: ApplyDeadlineType) {
         _applyDeadlineType.value = chipState
     }
 
@@ -251,6 +251,10 @@ class JobPostingViewModel @Inject constructor(
             )
         }
             .onFailure { Log.d("test", "공고 등록 실패! $it") }
+    }
+
+    internal fun setEditState(editState: Boolean) {
+        _isEditState.value = editState
     }
 }
 

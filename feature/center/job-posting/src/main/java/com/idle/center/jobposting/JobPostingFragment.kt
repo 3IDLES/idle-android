@@ -83,7 +83,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
             val speciality by speciality.collectAsStateWithLifecycle()
             val isExperiencePreferred by isExperiencePreferred.collectAsStateWithLifecycle()
             val applyMethod by applyMethod.collectAsStateWithLifecycle()
-            val applyDeadlineChipState by applyDeadlineType.collectAsStateWithLifecycle()
+            val applyDeadlineType by applyDeadlineType.collectAsStateWithLifecycle()
             val applyDeadline by applyDeadline.collectAsStateWithLifecycle()
             val isEditState by isEditState.collectAsStateWithLifecycle()
 
@@ -107,7 +107,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
                     speciality = speciality,
                     isExperiencePreferred = isExperiencePreferred,
                     applyMethod = applyMethod,
-                    applyDeadlineType = applyDeadlineChipState,
+                    applyDeadlineType = applyDeadlineType,
                     applyDeadline = applyDeadline,
                     setWeekDays = ::setWeekDays,
                     clearWeekDays = ::clearWeekDays,
@@ -134,7 +134,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
                     onExperiencePreferredChanged = ::setExperiencePreferred,
                     onApplyMethodChanged = ::setApplyMethod,
                     clearApplyMethod = ::clearApplyMethod,
-                    onApplyDeadlineChipStateChanged = ::setApplyDeadlineChipState,
+                    onApplyDeadlineTypeChanged = ::setApplyDeadlineType,
                     onApplyDeadlineChanged = ::setApplyDeadline,
                     setEditState = ::setEditState,
                 )
@@ -159,7 +159,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
                     speciality = speciality,
                     isExperiencePreferred = isExperiencePreferred,
                     applyMethod = applyMethod,
-                    applyDeadlineType = applyDeadlineChipState,
+                    applyDeadlineType = applyDeadlineType,
                     applyDeadline = applyDeadline,
                     jobPostingStep = jobPostingStep,
                     setWeekDays = ::setWeekDays,
@@ -185,7 +185,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
                     onSpecialityChanged = ::setSpeciality,
                     onExperiencePreferredChanged = ::setExperiencePreferred,
                     onApplyMethodChanged = ::setApplyMethod,
-                    onApplyDeadlineChipStateChanged = ::setApplyDeadlineChipState,
+                    onApplyDeadlineTypeChanged = ::setApplyDeadlineType,
                     onApplyDeadlineChanged = ::setApplyDeadline,
                     postJobPosting = ::postJobPosting,
                     setJobPostingStep = ::setJobPostingStep,
@@ -220,6 +220,7 @@ internal fun JobPostingScreen(
     applyDeadlineType: ApplyDeadlineType?,
     applyDeadline: String,
     jobPostingStep: JobPostingStep,
+    isEditState: Boolean,
     setWeekDays: (DayOfWeek) -> Unit,
     onPayTypeChanged: (PayType) -> Unit,
     onPayAmountChanged: (String) -> Unit,
@@ -240,7 +241,7 @@ internal fun JobPostingScreen(
     onExperiencePreferredChanged: (Boolean) -> Unit,
     onApplyMethodChanged: (ApplyMethod) -> Unit,
     onApplyDeadlineChanged: (String) -> Unit,
-    onApplyDeadlineChipStateChanged: (ApplyDeadlineType) -> Unit,
+    onApplyDeadlineTypeChanged: (ApplyDeadlineType) -> Unit,
     postJobPosting: () -> Unit,
     setJobPostingStep: (JobPostingStep) -> Unit,
     setEditState: (Boolean) -> Unit,
@@ -294,28 +295,7 @@ internal fun JobPostingScreen(
                     speciality = speciality,
                     isExperiencePreferred = isExperiencePreferred,
                     applyMethod = applyMethod,
-                    applyDeadlineType = applyDeadlineType,
                     applyDeadline = applyDeadline,
-                    setWeekDays = setWeekDays,
-                    onPayTypeChanged = onPayTypeChanged,
-                    onPayAmountChanged = onPayAmountChanged,
-                    onDetailAddressChanged = onDetailAddressChanged,
-                    showPostCodeDialog = showPostCodeDialog,
-                    onGenderChanged = onGenderChanged,
-                    onBirthYearChanged = onBirthYearChanged,
-                    onWeightChanged = onWeightChanged,
-                    onCareLevelChanged = onCareLevelChanged,
-                    onMentalStatusChanged = onMentalStatusChanged,
-                    onDiseaseChanged = onDiseaseChanged,
-                    onMealAssistanceChanged = onMealAssistanceChanged,
-                    onBowelAssistanceChanged = onBowelAssistanceChanged,
-                    onWalkingAssistanceChanged = onWalkingAssistanceChanged,
-                    onLifeAssistanceChanged = onLifeAssistanceChanged,
-                    onSpecialityChanged = onSpecialityChanged,
-                    onExperiencePreferredChanged = onExperiencePreferredChanged,
-                    onApplyMethodChanged = onApplyMethodChanged,
-                    onApplyDeadlineChanged = onApplyDeadlineChanged,
-                    onApplyDeadlineChipStateChanged = onApplyDeadlineChipStateChanged,
                     postJobPosting = postJobPosting,
                     setJobPostingStep = setJobPostingStep,
                 )
@@ -396,7 +376,7 @@ internal fun JobPostingScreen(
                                 applyDeadline = applyDeadline,
                                 onExperiencePreferredChanged = onExperiencePreferredChanged,
                                 onApplyMethodChanged = onApplyMethodChanged,
-                                onApplyDeadlineChipStateChanged = onApplyDeadlineChipStateChanged,
+                                onApplyDeadlineTypeChanged = onApplyDeadlineTypeChanged,
                                 onApplyDeadlineChanged = onApplyDeadlineChanged,
                                 setJobPostingStep = setJobPostingStep,
                             )
