@@ -1,17 +1,19 @@
 package com.idle.center.jobposting
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.DeepLinkDestination.CenterJobPostingComplete
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
 import com.idle.center.job.posting.R
 import com.idle.domain.model.auth.Gender
-import com.idle.domain.model.job.ApplyDeadlineChipState
+import com.idle.domain.model.job.ApplyDeadlineType
 import com.idle.domain.model.job.ApplyMethod
 import com.idle.domain.model.job.DayOfWeek
 import com.idle.domain.model.job.LifeAssistance
 import com.idle.domain.model.job.MentalStatus
 import com.idle.domain.model.job.PayType
+import com.idle.domain.usecase.jobposting.PostJobPostingUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,7 +21,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class JobPostingViewModel @Inject constructor() : BaseViewModel() {
+class JobPostingViewModel @Inject constructor(
+    private val postJobPostingUseCase: PostJobPostingUseCase,
+) : BaseViewModel() {
 
     private val _weekDays = MutableStateFlow<Set<DayOfWeek>>(setOf())
     val weekDays = _weekDays.asStateFlow()
@@ -40,6 +44,9 @@ class JobPostingViewModel @Inject constructor() : BaseViewModel() {
 
     private val _detailAddress = MutableStateFlow("")
     val detailAddress = _detailAddress.asStateFlow()
+
+    private val _clientName = MutableStateFlow("")
+    val clientName = _clientName.asStateFlow()
 
     private val _gender = MutableStateFlow(Gender.NONE)
     internal val gender = _gender.asStateFlow()
@@ -80,8 +87,8 @@ class JobPostingViewModel @Inject constructor() : BaseViewModel() {
     private val _applyMethod = MutableStateFlow<Set<ApplyMethod>>(setOf())
     val applyMethod = _applyMethod.asStateFlow()
 
-    private val _applyDeadlineChipState = MutableStateFlow<ApplyDeadlineChipState?>(null)
-    val applyDeadlineChipState = _applyDeadlineChipState.asStateFlow()
+    private val _applyDeadlineType = MutableStateFlow<ApplyDeadlineType?>(null)
+    val applyDeadlineType = _applyDeadlineType.asStateFlow()
 
     private val _applyDeadline = MutableStateFlow<String>("")
     val applyDeadline = _applyDeadline.asStateFlow()
@@ -122,6 +129,10 @@ class JobPostingViewModel @Inject constructor() : BaseViewModel() {
 
     internal fun setDetailAddress(address: String) {
         _detailAddress.value = address
+    }
+
+    internal fun setClientName(name: String) {
+        _clientName.value = name
     }
 
     internal fun setGender(gender: Gender) {
@@ -190,25 +201,56 @@ class JobPostingViewModel @Inject constructor() : BaseViewModel() {
         _applyMethod.value = setOf()
     }
 
-    internal fun setApplyDeadlineChipState(chipState: ApplyDeadlineChipState) {
-        _applyDeadlineChipState.value = chipState
+    internal fun setApplyDeadlineChipState(chipState: ApplyDeadlineType) {
+        _applyDeadlineType.value = chipState
     }
 
     internal fun setApplyDeadline(applyDeadline: String) {
         _applyDeadline.value = applyDeadline
     }
 
-    internal fun postJobPosting() = viewModelScope.launch {
-        baseEvent(
-            CareBaseEvent.NavigateTo(
-                destination = CenterJobPostingComplete,
-                popUpTo = R.id.jobPostingFragment
-            )
-        )
-    }
-
     internal fun setEditState(editState: Boolean) {
         _isEditState.value = editState
+    }
+
+    internal fun postJobPosting() = viewModelScope.launch {
+        postJobPostingUseCase(
+            weekdays = _weekDays.value.toList()
+                .sortedBy { it.ordinal },
+            startTime = "09:00",
+            endTime = "15:00",
+            payType = _payType.value ?: PayType.UNKNOWN,
+            payAmount = _payAmount.value.toIntOrNull() ?: return@launch,
+            roadNameAddress = _roadNameAddress.value,
+            lotNumberAddress = _lotNumberAddress.value,
+            clientName = _clientName.value,
+            gender = _gender.value,
+            birthYear = _birthYear.value.toIntOrNull() ?: return@launch,
+            weight = _weight.value.toIntOrNull() ?: return@launch,
+            careLevel = _careLevel.value.toIntOrNull() ?: return@launch,
+            mentalStatus = _mentalStatus.value,
+            disease = _disease.value.ifBlank { null },
+            isMealAssistance = _isMealAssistance.value ?: return@launch,
+            isBowelAssistance = _isBowelAssistance.value ?: return@launch,
+            isWalkingAssistance = _isWalkingAssistance.value ?: return@launch,
+            lifeAssistance = _lifeAssistance.value.toList()
+                .sortedBy { it.ordinal }
+                .ifEmpty { null },
+            speciality = _speciality.value.ifBlank { null },
+            isExperiencePreferred = _isExperiencePreferred.value ?: return@launch,
+            applyMethod = _applyMethod.value.toList()
+                .sortedBy { it.ordinal },
+            applyDeadLineType = _applyDeadlineType.value ?: ApplyDeadlineType.INDEFINITE,
+            applyDeadline = "2024-08-30",
+        ).onSuccess {
+            baseEvent(
+                CareBaseEvent.NavigateTo(
+                    destination = CenterJobPostingComplete,
+                    popUpTo = R.id.jobPostingFragment
+                )
+            )
+        }
+            .onFailure { Log.d("test", "공고 등록 실패! $it") }
     }
 }
 

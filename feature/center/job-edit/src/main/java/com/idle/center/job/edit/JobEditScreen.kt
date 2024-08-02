@@ -43,7 +43,7 @@ import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.designsystem.compose.foundation.PretendardMedium
 import com.idle.domain.model.auth.Gender
-import com.idle.domain.model.job.ApplyDeadlineChipState
+import com.idle.domain.model.job.ApplyDeadlineType
 import com.idle.domain.model.job.ApplyMethod
 import com.idle.domain.model.job.DayOfWeek
 import com.idle.domain.model.job.LifeAssistance
@@ -71,7 +71,7 @@ fun JobEditScreen(
     speciality: String,
     isExperiencePreferred: Boolean?,
     applyMethod: Set<ApplyMethod>,
-    applyDeadlineChipState: ApplyDeadlineChipState?,
+    applyDeadlineType: ApplyDeadlineType?,
     applyDeadline: String,
     setWeekDays: (DayOfWeek) -> Unit,
     clearWeekDays: () -> Unit,
@@ -95,7 +95,7 @@ fun JobEditScreen(
     onApplyMethodChanged: (ApplyMethod) -> Unit,
     clearApplyMethod: () -> Unit,
     onApplyDeadlineChanged: (String) -> Unit,
-    onApplyDeadlineChipStateChanged: (ApplyDeadlineChipState) -> Unit,
+    onApplyDeadlineChipStateChanged: (ApplyDeadlineType) -> Unit,
     setEditState: (Boolean) -> Unit,
 ) {
     var localWeekDays by remember { mutableStateOf(weekDays) }
@@ -116,7 +116,7 @@ fun JobEditScreen(
     var localSpeciality by remember { mutableStateOf(speciality) }
     var localIsExperiencePreferred by remember { mutableStateOf(isExperiencePreferred) }
     var localApplyMethod by remember { mutableStateOf(applyMethod) }
-    var localApplyDeadlineChipState by remember { mutableStateOf(applyDeadlineChipState) }
+    var localApplyDeadlineChipState by remember { mutableStateOf(applyDeadlineType) }
     var localApplyDeadline by remember { mutableStateOf(applyDeadline) }
 
     val scrollState = rememberScrollState()
@@ -679,7 +679,7 @@ fun JobEditScreen(
                             horizontalArrangement = Arrangement.spacedBy(4.dp),
                             modifier = Modifier.fillMaxWidth(),
                         ) {
-                            ApplyDeadlineChipState.entries.forEach { state ->
+                            ApplyDeadlineType.entries.forEach { state ->
                                 CareChipBasic(
                                     text = state.displayName,
                                     onClick = { localApplyDeadlineChipState = state },
@@ -689,7 +689,7 @@ fun JobEditScreen(
                             }
                         }
 
-                        if (localApplyDeadlineChipState == ApplyDeadlineChipState.SET_DEADLINE) {
+                        if (localApplyDeadlineChipState == ApplyDeadlineType.DEFINITE) {
                             CareTextField(
                                 value = localApplyDeadline,
                                 onValueChanged = { localApplyDeadline = it },

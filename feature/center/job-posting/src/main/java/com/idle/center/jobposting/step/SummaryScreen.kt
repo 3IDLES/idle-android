@@ -29,7 +29,7 @@ import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.component.CareTextFieldLong
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.Gender
-import com.idle.domain.model.job.ApplyDeadlineChipState
+import com.idle.domain.model.job.ApplyDeadlineType
 import com.idle.domain.model.job.ApplyMethod
 import com.idle.domain.model.job.DayOfWeek
 import com.idle.domain.model.job.LifeAssistance
@@ -55,7 +55,7 @@ internal fun SummaryScreen(
     speciality: String,
     isExperiencePreferred: Boolean?,
     applyMethod: Set<ApplyMethod>,
-    applyDeadlineChipState: ApplyDeadlineChipState?,
+    applyDeadlineType: ApplyDeadlineType?,
     applyDeadline: String,
     setWeekDays: (DayOfWeek) -> Unit,
     onPayTypeChanged: (PayType) -> Unit,
@@ -76,7 +76,7 @@ internal fun SummaryScreen(
     onExperiencePreferredChanged: (Boolean) -> Unit,
     onApplyMethodChanged: (ApplyMethod) -> Unit,
     onApplyDeadlineChanged: (String) -> Unit,
-    onApplyDeadlineChipStateChanged: (ApplyDeadlineChipState) -> Unit,
+    onApplyDeadlineChipStateChanged: (ApplyDeadlineType) -> Unit,
     postJobPosting: () -> Unit,
     setJobPostingStep: (JobPostingStep) -> Unit,
 ) {

@@ -21,7 +21,7 @@ data class JobPostingRequest(
     val isMealAssistance: Boolean,
     val isBowelAssistance: Boolean,
     val isWalkingAssistance: Boolean,
-    val lifeAssistance: List<String>,
+    val lifeAssistance: List<String>?,
     val speciality: String?,
     val isExperiencePreferred: Boolean,
     val applyMethod: List<String>,

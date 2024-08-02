@@ -1,7 +1,6 @@
 package com.idle.center.jobposting
 
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,7 +26,7 @@ import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.Gender
-import com.idle.domain.model.job.ApplyDeadlineChipState
+import com.idle.domain.model.job.ApplyDeadlineType
 import com.idle.domain.model.job.ApplyMethod
 import com.idle.domain.model.job.DayOfWeek
 import com.idle.domain.model.job.LifeAssistance
@@ -70,6 +69,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
             val payAmount by payAmount.collectAsStateWithLifecycle()
             val roadNameAddress by roadNameAddress.collectAsStateWithLifecycle()
             val detailAddress by detailAddress.collectAsStateWithLifecycle()
+            val clientName by clientName.collectAsStateWithLifecycle()
             val gender by gender.collectAsStateWithLifecycle()
             val birthYear by birthYear.collectAsStateWithLifecycle()
             val weight by weight.collectAsStateWithLifecycle()
@@ -83,7 +83,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
             val speciality by speciality.collectAsStateWithLifecycle()
             val isExperiencePreferred by isExperiencePreferred.collectAsStateWithLifecycle()
             val applyMethod by applyMethod.collectAsStateWithLifecycle()
-            val applyDeadlineChipState by applyDeadlineChipState.collectAsStateWithLifecycle()
+            val applyDeadlineChipState by applyDeadlineType.collectAsStateWithLifecycle()
             val applyDeadline by applyDeadline.collectAsStateWithLifecycle()
             val isEditState by isEditState.collectAsStateWithLifecycle()
 
@@ -107,7 +107,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
                     speciality = speciality,
                     isExperiencePreferred = isExperiencePreferred,
                     applyMethod = applyMethod,
-                    applyDeadlineChipState = applyDeadlineChipState,
+                    applyDeadlineType = applyDeadlineChipState,
                     applyDeadline = applyDeadline,
                     setWeekDays = ::setWeekDays,
                     clearWeekDays = ::clearWeekDays,
@@ -145,6 +145,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
                     payAmount = payAmount,
                     roadNameAddress = roadNameAddress,
                     detailAddress = detailAddress,
+                    clientName = clientName,
                     gender = gender,
                     birthYear = birthYear,
                     weight = weight,
@@ -158,10 +159,9 @@ internal class JobPostingFragment : BaseComposeFragment() {
                     speciality = speciality,
                     isExperiencePreferred = isExperiencePreferred,
                     applyMethod = applyMethod,
-                    applyDeadlineChipState = applyDeadlineChipState,
+                    applyDeadlineType = applyDeadlineChipState,
                     applyDeadline = applyDeadline,
                     jobPostingStep = jobPostingStep,
-                    isEditState = isEditState,
                     setWeekDays = ::setWeekDays,
                     onPayTypeChanged = ::setPayType,
                     onPayAmountChanged = ::setPayAmount,
@@ -171,6 +171,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
                             postCodeDialog?.show(parentFragmentManager, "PostCodeFragment")
                         }
                     },
+                    onClientNameChanged = ::setClientName,
                     onGenderChanged = ::setGender,
                     onWeightChanged = ::setWeight,
                     onMentalStatusChanged = ::setMentalStatus,
@@ -202,6 +203,7 @@ internal fun JobPostingScreen(
     payAmount: String,
     roadNameAddress: String,
     detailAddress: String,
+    clientName: String,
     gender: Gender,
     birthYear: String,
     weight: String,
@@ -215,15 +217,15 @@ internal fun JobPostingScreen(
     speciality: String,
     isExperiencePreferred: Boolean?,
     applyMethod: Set<ApplyMethod>,
-    applyDeadlineChipState: ApplyDeadlineChipState?,
+    applyDeadlineType: ApplyDeadlineType?,
     applyDeadline: String,
     jobPostingStep: JobPostingStep,
-    isEditState: Boolean,
     setWeekDays: (DayOfWeek) -> Unit,
     onPayTypeChanged: (PayType) -> Unit,
     onPayAmountChanged: (String) -> Unit,
     onDetailAddressChanged: (String) -> Unit,
     showPostCodeDialog: () -> Unit,
+    onClientNameChanged: (String) -> Unit,
     onGenderChanged: (Gender) -> Unit,
     onBirthYearChanged: (String) -> Unit,
     onWeightChanged: (String) -> Unit,
@@ -238,7 +240,7 @@ internal fun JobPostingScreen(
     onExperiencePreferredChanged: (Boolean) -> Unit,
     onApplyMethodChanged: (ApplyMethod) -> Unit,
     onApplyDeadlineChanged: (String) -> Unit,
-    onApplyDeadlineChipStateChanged: (ApplyDeadlineChipState) -> Unit,
+    onApplyDeadlineChipStateChanged: (ApplyDeadlineType) -> Unit,
     postJobPosting: () -> Unit,
     setJobPostingStep: (JobPostingStep) -> Unit,
     setEditState: (Boolean) -> Unit,
@@ -292,7 +294,7 @@ internal fun JobPostingScreen(
                     speciality = speciality,
                     isExperiencePreferred = isExperiencePreferred,
                     applyMethod = applyMethod,
-                    applyDeadlineChipState = applyDeadlineChipState,
+                    applyDeadlineType = applyDeadlineType,
                     applyDeadline = applyDeadline,
                     setWeekDays = setWeekDays,
                     onPayTypeChanged = onPayTypeChanged,
@@ -356,12 +358,14 @@ internal fun JobPostingScreen(
                             )
 
                             JobPostingStep.CUSTOMER_INFORMATION -> CustomerInformationScreen(
+                                clientName = clientName,
                                 gender = gender,
                                 birthYear = birthYear,
                                 weight = weight,
                                 careLevel = careLevel,
                                 mentalStatus = mentalStatus,
                                 disease = disease,
+                                onClientNameChanged = onClientNameChanged,
                                 onGenderChanged = onGenderChanged,
                                 onBirthYearChanged = onBirthYearChanged,
                                 onWeightChanged = onWeightChanged,
@@ -388,7 +392,7 @@ internal fun JobPostingScreen(
                             JobPostingStep.ADDITIONAL_INFO -> AdditionalInfoScreen(
                                 isExperiencePreferred = isExperiencePreferred,
                                 applyMethod = applyMethod,
-                                applyDeadlineChipState = applyDeadlineChipState,
+                                applyDeadlineType = applyDeadlineType,
                                 applyDeadline = applyDeadline,
                                 onExperiencePreferredChanged = onExperiencePreferredChanged,
                                 onApplyMethodChanged = onApplyMethodChanged,
