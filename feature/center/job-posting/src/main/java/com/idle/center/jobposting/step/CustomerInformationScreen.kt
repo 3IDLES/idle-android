@@ -189,7 +189,7 @@ internal fun CustomerInformationScreen(
             CareTextField(
                 value = disease,
                 onValueChanged = onDiseaseChanged,
-                hint = "고객의 고객이 현재 앓고 있는 질병 또는 병력을 입력해주세요.",
+                hint = "고객이 현재 앓고 있는 질병 또는 병력을 입력해주세요.",
                 onDone = { setJobPostingStep(JobPostingStep.findStep(CUSTOMER_INFORMATION.step + 1)) },
                 modifier = Modifier.fillMaxWidth(),
             )

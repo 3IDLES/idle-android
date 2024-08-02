@@ -96,6 +96,10 @@ class JobPostingViewModel @Inject constructor() : BaseViewModel() {
         }.toSet()
     }
 
+    internal fun clearWeekDays() {
+        _weekDays.value = setOf()
+    }
+
     internal fun setPayType(payType: PayType) {
         _payType.value = payType
     }
@@ -163,6 +167,10 @@ class JobPostingViewModel @Inject constructor() : BaseViewModel() {
         }.toSet()
     }
 
+    internal fun clearLifeAssistance() {
+        _lifeAssistance.value = setOf()
+    }
+
     internal fun setSpeciality(speciality: String) {
         _speciality.value = speciality
     }
@@ -176,6 +184,10 @@ class JobPostingViewModel @Inject constructor() : BaseViewModel() {
             if (applyMethod in this) remove(applyMethod)
             else add(applyMethod)
         }.toSet()
+    }
+
+    internal fun clearApplyMethod() {
+        _applyMethod.value = setOf()
     }
 
     internal fun setApplyDeadlineChipState(chipState: ApplyDeadlineChipState) {

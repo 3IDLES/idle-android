@@ -14,13 +14,38 @@ import androidx.compose.ui.Modifier
 fun <S : Enum<S>> CareStateAnimator(
     targetState: S,
     modifier: Modifier = Modifier,
-    label : String = "AnimatedContent",
-    content: @Composable() AnimatedContentScope.(targetState: S) -> Unit
+    label: String = "AnimatedContent",
+    content: @Composable AnimatedContentScope.(targetState: S) -> Unit
 ) {
     AnimatedContent(
         targetState = targetState,
         transitionSpec = {
             if (targetState.ordinal > initialState.ordinal) {
+                slideInHorizontally(initialOffsetX = { it }) + fadeIn() togetherWith
+                        slideOutHorizontally(targetOffsetX = { -it }) + fadeOut()
+            } else {
+                slideInHorizontally(initialOffsetX = { -it }) + fadeIn() togetherWith
+                        slideOutHorizontally(targetOffsetX = { it }) + fadeOut()
+            }
+        },
+        label = label,
+        content = content,
+        modifier = modifier,
+    )
+}
+
+@Composable
+fun <S> CareStateAnimator(
+    targetState: S,
+    transitionCondition: Boolean,
+    modifier: Modifier = Modifier,
+    label: String = "AnimatedContent",
+    content: @Composable AnimatedContentScope.(targetState: S) -> Unit
+) {
+    AnimatedContent(
+        targetState = targetState,
+        transitionSpec = {
+            if (transitionCondition) {
                 slideInHorizontally(initialOffsetX = { it }) + fadeIn() togetherWith
                         slideOutHorizontally(targetOffsetX = { -it }) + fadeOut()
             } else {
