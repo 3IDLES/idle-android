@@ -7,6 +7,7 @@ import com.idle.network.model.auth.SignInCenterRequest
 import com.idle.network.model.auth.SignInWorkerRequest
 import com.idle.network.model.auth.SignUpCenterRequest
 import com.idle.network.model.auth.SignUpWorkerRequest
+import com.idle.network.model.jobposting.JobPostingRequest
 import com.idle.network.model.profile.CallbackImageUploadRequest
 import com.idle.network.model.profile.GetCenterProfileResponse
 import com.idle.network.model.profile.GetWorkerProfileResponse
@@ -90,5 +91,14 @@ interface CareNetworkApi {
     @POST("/api/v1/users/center/my/profile")
     suspend fun registerCenterProfile(
         @Body registerCenterProfileRequest: RegisterCenterProfileRequest
+    ): Response<Unit>
+
+    @POST("/api/v1/job-postings")
+    suspend fun postJobPosting(@Body jobPostingRequest: JobPostingRequest): Response<Unit>
+
+    @PATCH("/api/v1/job-postings/{job-posting-id}")
+    suspend fun updateJobPosting(
+        @Path("job-posting-id") jobPostingId: String,
+        @Body jobPostingRequest: JobPostingRequest,
     ): Response<Unit>
 }
