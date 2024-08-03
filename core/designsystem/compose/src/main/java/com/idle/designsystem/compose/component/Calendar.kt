@@ -302,6 +302,7 @@ fun PreviewCareCalendarFoldable() {
         year = 2024,
         month = 7,
         startMonth = 7,
+        selectedDay = 4,
         onMonthChanged = {},
         onDayClick = {},
         modifier = Modifier

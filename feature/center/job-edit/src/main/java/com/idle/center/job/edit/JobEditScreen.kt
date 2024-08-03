@@ -73,7 +73,7 @@ fun JobEditScreen(
     isExperiencePreferred: Boolean?,
     applyMethod: Set<ApplyMethod>,
     applyDeadlineType: ApplyDeadlineType?,
-    applyDeadline: String,
+    applyDeadline: Int?,
     setWeekDays: (DayOfWeek) -> Unit,
     clearWeekDays: () -> Unit,
     onPayTypeChanged: (PayType) -> Unit,
@@ -96,7 +96,7 @@ fun JobEditScreen(
     onExperiencePreferredChanged: (Boolean) -> Unit,
     onApplyMethodChanged: (ApplyMethod) -> Unit,
     clearApplyMethod: () -> Unit,
-    onApplyDeadlineChanged: (String) -> Unit,
+    onApplyDeadlineChanged: (Int) -> Unit,
     onApplyDeadlineTypeChanged: (ApplyDeadlineType) -> Unit,
     setEditState: (Boolean) -> Unit,
 ) {
@@ -138,15 +138,15 @@ fun JobEditScreen(
                         style = CareTheme.typography.subtitle2,
                         color = CareTheme.colors.orange500,
                         modifier = Modifier.clickable {
-                            if(localWeekDays.isEmpty()){
+                            if (localWeekDays.isEmpty()) {
                                 return@clickable
                             }
 
-                            if(applyMethod.isEmpty()){
+                            if (applyMethod.isEmpty()) {
                                 return@clickable
                             }
 
-                            if(clientName.isBlank()){
+                            if (clientName.isBlank()) {
                                 return@clickable
                             }
 
@@ -171,13 +171,14 @@ fun JobEditScreen(
                             onExperiencePreferredChanged(localIsExperiencePreferred!!)
                             clearApplyMethod()
                             localApplyMethod.forEach { onApplyMethodChanged(it) }
-                            onApplyDeadlineChanged(localApplyDeadline)
+                            onApplyDeadlineChanged(localApplyDeadline!!)
                             onApplyDeadlineTypeChanged(localApplyDeadlineType!!)
                             setEditState(false)
                         },
                     )
                 },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(start = 12.dp, top = 48.dp, end = 20.dp),
             )
         },
@@ -186,7 +187,8 @@ fun JobEditScreen(
     ) { paddingValue ->
         Column(
             verticalArrangement = Arrangement.spacedBy(24.dp),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(paddingValue)
                 .verticalScroll(scrollState)
         ) {
@@ -199,7 +201,8 @@ fun JobEditScreen(
             Column(
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.spacedBy(20.dp),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(horizontal = 20.dp),
             ) {
                 Text(
@@ -348,7 +351,8 @@ fun JobEditScreen(
 
             Column(
                 verticalArrangement = Arrangement.spacedBy(20.dp),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(horizontal = 20.dp)
             ) {
                 Text(
@@ -623,7 +627,8 @@ fun JobEditScreen(
 
             Column(
                 verticalArrangement = Arrangement.spacedBy(20.dp),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(start = 20.dp, end = 20.dp, bottom = 28.dp)
             ) {
                 Text(
@@ -709,9 +714,9 @@ fun JobEditScreen(
                         }
 
                         if (localApplyDeadlineType == ApplyDeadlineType.DEFINITE) {
-                            CareTextField(
-                                value = localApplyDeadline,
-                                onValueChanged = { localApplyDeadline = it },
+                            CareClickableTextField(
+                                value = localApplyDeadline?.toString() ?: "",
+                                onClick = {},
                                 hint = "날짜를 선택해주세요.",
                                 leftComponent = {
                                     Image(

@@ -55,7 +55,7 @@ internal fun SummaryScreen(
     speciality: String,
     isExperiencePreferred: Boolean?,
     applyMethod: Set<ApplyMethod>,
-    applyDeadline: String,
+    applyDeadline: Int?,
     postJobPosting: () -> Unit,
     setJobPostingStep: (JobPostingStep) -> Unit,
 ) {
@@ -119,7 +119,7 @@ internal fun SummaryScreen(
                         }
 
                         CareTag(
-                            text = applyDeadline,
+                            text = applyDeadline?.toString() ?: "",
                             textColor = CareTheme.colors.gray300,
                             backgroundColor = CareTheme.colors.gray050,
                         )
@@ -562,7 +562,7 @@ internal fun SummaryScreen(
                         )
 
                         Text(
-                            text = applyDeadline,
+                            text = applyDeadline?.toString() ?: "",
                             style = CareTheme.typography.body2,
                             color = CareTheme.colors.gray900,
                         )

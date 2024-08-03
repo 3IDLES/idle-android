@@ -25,7 +25,7 @@ import com.idle.center.jobposting.JobPostingStep
 import com.idle.center.jobposting.JobPostingStep.ADDITIONAL_INFO
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareChipBasic
-import com.idle.designsystem.compose.component.CareTextField
+import com.idle.designsystem.compose.component.CareClickableTextField
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.designsystem.compose.foundation.PretendardMedium
@@ -37,11 +37,11 @@ internal fun AdditionalInfoScreen(
     isExperiencePreferred: Boolean?,
     applyMethod: Set<ApplyMethod>,
     applyDeadlineType: ApplyDeadlineType?,
-    applyDeadline: String,
+    applyDeadline: Int?,
     onExperiencePreferredChanged: (Boolean) -> Unit,
     onApplyMethodChanged: (ApplyMethod) -> Unit,
     onApplyDeadlineTypeChanged: (ApplyDeadlineType) -> Unit,
-    onApplyDeadlineChanged: (String) -> Unit,
+    onApplyDeadlineChanged: (Int) -> Unit,
     setJobPostingStep: (JobPostingStep) -> Unit,
 ) {
     val scrollState = rememberScrollState()
@@ -51,7 +51,8 @@ internal fun AdditionalInfoScreen(
     Column(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(28.dp),
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .verticalScroll(scrollState)
             .padding(bottom = 30.dp),
     ) {
@@ -131,9 +132,8 @@ internal fun AdditionalInfoScreen(
                 }
 
                 if (applyDeadlineType == ApplyDeadlineType.DEFINITE) {
-                    CareTextField(
-                        value = applyDeadline,
-                        onValueChanged = onApplyDeadlineChanged,
+                    CareClickableTextField(
+                        value = applyDeadline?.toString() ?: "",
                         hint = "날짜를 선택해주세요.",
                         leftComponent = {
                             Image(
@@ -141,6 +141,7 @@ internal fun AdditionalInfoScreen(
                                 contentDescription = null,
                             )
                         },
+                        onClick = {},
                         modifier = Modifier.fillMaxWidth(),
                     )
                 }
@@ -151,7 +152,7 @@ internal fun AdditionalInfoScreen(
 
         CareButtonLarge(
             text = "다음",
-            enable = isExperiencePreferred != null && applyMethod.isNotEmpty() && applyDeadlineType != null && !(applyDeadlineType == ApplyDeadlineType.DEFINITE && applyDeadline.isNotEmpty()),
+            enable = isExperiencePreferred != null && applyMethod.isNotEmpty() && applyDeadlineType != null && !(applyDeadlineType == ApplyDeadlineType.DEFINITE && applyDeadline != null),
             onClick = { setJobPostingStep(JobPostingStep.findStep(ADDITIONAL_INFO.step + 1)) },
             modifier = Modifier.fillMaxWidth(),
         )
