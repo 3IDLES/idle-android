@@ -94,6 +94,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
                     payAmount = payAmount,
                     roadNameAddress = roadNameAddress,
                     detailAddress = detailAddress,
+                    clientName = clientName,
                     gender = gender,
                     birthYear = birthYear,
                     weight = weight,
@@ -119,6 +120,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
                             postCodeDialog?.show(parentFragmentManager, "PostCodeFragment")
                         }
                     },
+                    onClientNameChanged = ::setClientName,
                     onGenderChanged = ::setGender,
                     onWeightChanged = ::setWeight,
                     onMentalStatusChanged = ::setMentalStatus,
@@ -262,7 +264,8 @@ internal fun JobPostingScreen(
                         )
                     }
                 },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(start = 12.dp, top = 48.dp, end = 20.dp),
             )
         },
@@ -272,7 +275,8 @@ internal fun JobPostingScreen(
         CareStateAnimator(
             targetState = jobPostingStep == JobPostingStep.SUMMARY,
             transitionCondition = jobPostingStep == JobPostingStep.SUMMARY,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .padding(paddingValue),
         ) { isSummary ->
             if (isSummary) {
@@ -281,6 +285,7 @@ internal fun JobPostingScreen(
                     payType = payType,
                     payAmount = payAmount,
                     roadNameAddress = roadNameAddress,
+                    clientName = clientName,
                     gender = gender,
                     birthYear = birthYear,
                     weight = weight,
