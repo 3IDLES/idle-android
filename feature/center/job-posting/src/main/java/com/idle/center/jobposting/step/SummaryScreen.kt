@@ -34,6 +34,7 @@ import com.idle.domain.model.job.DayOfWeek
 import com.idle.domain.model.job.LifeAssistance
 import com.idle.domain.model.job.MentalStatus
 import com.idle.domain.model.job.PayType
+import java.time.LocalDate
 
 @Composable
 internal fun SummaryScreen(
@@ -55,7 +56,7 @@ internal fun SummaryScreen(
     speciality: String,
     isExperiencePreferred: Boolean?,
     applyMethod: Set<ApplyMethod>,
-    applyDeadline: Int?,
+    applyDeadline: LocalDate?,
     postJobPosting: () -> Unit,
     setJobPostingStep: (JobPostingStep) -> Unit,
 ) {
@@ -505,87 +506,87 @@ internal fun SummaryScreen(
                     onValueChanged = {},
                 )
             }
+        }
 
-            HorizontalDivider(thickness = 8.dp, color = CareTheme.colors.gray050)
+        HorizontalDivider(thickness = 8.dp, color = CareTheme.colors.gray050)
 
-            Column(
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 20.dp, end = 20.dp, bottom = 28.dp)
+        ) {
+            Text(
+                text = "추가 지원 정보",
+                style = CareTheme.typography.subtitle1,
+                color = CareTheme.colors.gray900,
+                modifier = Modifier.padding(bottom = 20.dp),
+            )
+
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(32.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 20.dp, end = 20.dp, bottom = 28.dp)
+                    .padding(top = 20.dp),
             ) {
-                Text(
-                    text = "추가 지원 정보",
-                    style = CareTheme.typography.subtitle1,
-                    color = CareTheme.colors.gray900,
-                    modifier = Modifier.padding(bottom = 20.dp),
-                )
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(
+                        text = "경력 우대여부",
+                        style = CareTheme.typography.body2,
+                        color = CareTheme.colors.gray300,
+                    )
 
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(32.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 20.dp),
+                    Text(
+                        text = "지원 방법",
+                        style = CareTheme.typography.body2,
+                        color = CareTheme.colors.gray300,
+                    )
+
+                    Text(
+                        text = "접수 마감일",
+                        style = CareTheme.typography.body2,
+                        color = CareTheme.colors.gray300,
+                    )
+                }
+
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
-                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text(
-                            text = "경력 우대여부",
-                            style = CareTheme.typography.body2,
-                            color = CareTheme.colors.gray300,
-                        )
+                    Text(
+                        text = if (isExperiencePreferred!!) "초보 가능" else "경력자 우대",
+                        style = CareTheme.typography.body2,
+                        color = CareTheme.colors.gray900,
+                    )
 
-                        Text(
-                            text = "지원 방법",
-                            style = CareTheme.typography.body2,
-                            color = CareTheme.colors.gray300,
-                        )
+                    Text(
+                        text = applyMethod.joinToString(", ") { it.displayName },
+                        style = CareTheme.typography.body2,
+                        color = CareTheme.colors.gray900,
+                    )
 
-                        Text(
-                            text = "접수 마감일",
-                            style = CareTheme.typography.body2,
-                            color = CareTheme.colors.gray300,
-                        )
-                    }
-
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
-                    ) {
-                        Text(
-                            text = if (isExperiencePreferred!!) "초보 가능" else "경력자 우대",
-                            style = CareTheme.typography.body2,
-                            color = CareTheme.colors.gray900,
-                        )
-
-                        Text(
-                            text = applyMethod.joinToString(", ") { it.displayName },
-                            style = CareTheme.typography.body2,
-                            color = CareTheme.colors.gray900,
-                        )
-
-                        Text(
-                            text = applyDeadline?.toString() ?: "",
-                            style = CareTheme.typography.body2,
-                            color = CareTheme.colors.gray900,
-                        )
-                    }
+                    Text(
+                        text = applyDeadline?.toString() ?: "",
+                        style = CareTheme.typography.body2,
+                        color = CareTheme.colors.gray900,
+                    )
                 }
             }
+        }
 
-            Column(
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.padding(horizontal = 20.dp)
-            ) {
-                Text(
-                    text = "공고 등록 후에도 공고 내용을 수정할 수 있어요.",
-                    style = CareTheme.typography.body3,
-                    color = CareTheme.colors.gray300,
-                )
+        Column(
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier.padding(horizontal = 20.dp)
+        ) {
+            Text(
+                text = "공고 등록 후에도 공고 내용을 수정할 수 있어요.",
+                style = CareTheme.typography.body3,
+                color = CareTheme.colors.gray300,
+            )
 
-                CareButtonLarge(
-                    text = "확인했어요",
-                    onClick = postJobPosting,
-                    modifier = Modifier.fillMaxWidth(),
-                )
-            }
+            CareButtonLarge(
+                text = "확인했어요",
+                onClick = postJobPosting,
+                modifier = Modifier.fillMaxWidth(),
+            )
         }
     }
 }

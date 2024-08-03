@@ -16,6 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.idle.center.jobposting.JobPostingStep
+import com.idle.compose.JobPostingBottomSheetType
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareChipBasic
 import com.idle.designsystem.compose.component.CareChipShort
@@ -35,6 +36,7 @@ internal fun TimePaymentScreen(
     setPayType: (PayType) -> Unit,
     setPayAmount: (String) -> Unit,
     setJobPostingStep: (JobPostingStep) -> Unit,
+    showBottomSheet: (JobPostingBottomSheetType) -> Unit,
 ) {
     Column(
         horizontalAlignment = Alignment.Start,
@@ -75,7 +77,7 @@ internal fun TimePaymentScreen(
                 CareClickableTextField(
                     value = "",
                     hint = "시작 시간",
-                    onClick = {},
+                    onClick = { showBottomSheet(JobPostingBottomSheetType.WORK_START_TIME) },
                     leftComponent = {
                         Image(
                             painter = painterResource(com.idle.designresource.R.drawable.ic_arrow_down),
@@ -88,7 +90,7 @@ internal fun TimePaymentScreen(
                 CareClickableTextField(
                     value = "",
                     hint = "종료 시간",
-                    onClick = {},
+                    onClick = { showBottomSheet(JobPostingBottomSheetType.WORK_END_TIME) },
                     leftComponent = {
                         Image(
                             painter = painterResource(com.idle.designresource.R.drawable.ic_arrow_down),

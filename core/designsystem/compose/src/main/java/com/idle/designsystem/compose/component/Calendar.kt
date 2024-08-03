@@ -16,7 +16,6 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -42,36 +41,48 @@ fun CareCalendar(
     month: Int,
     startMonth: Int,
     onMonthChanged: (Int) -> Unit,
-    onDayClick: (Int) -> Unit,
+    onDayClick: (LocalDate) -> Unit,
     modifier: Modifier = Modifier,
-    selectedDay: Int? = null,
+    selectedDate: LocalDate? = null,
 ) {
-    var previousMonth by rememberSaveable { mutableIntStateOf(month) }
-
-    LaunchedEffect(month) {
-        previousMonth = month
-    }
+    var currentMonth by rememberSaveable { mutableIntStateOf(month) }
+    var currentYear by rememberSaveable { mutableIntStateOf(year) }
 
     CareStateAnimator(
-        targetState = month,
-        transitionCondition = previousMonth < month,
-        modifier = modifier,
+        targetState = currentMonth,
+        transitionCondition = currentMonth != startMonth,
     ) {
-        Column(verticalArrangement = Arrangement.spacedBy(26.dp)) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(26.dp),
+            modifier = modifier,
+        ) {
             CalendarHeader(
-                year = year,
-                month = month,
+                year = currentYear,
+                month = currentMonth,
                 startMonth = startMonth,
-                onMonthChanged = onMonthChanged,
+                onMonthChanged = { newMonth ->
+                    if (newMonth < 1) {
+                        currentMonth = 12
+                        currentYear--
+                    } else if (newMonth > 12) {
+                        currentMonth = 1
+                        currentYear++
+                    } else {
+                        currentMonth = newMonth
+                    }
+                },
             )
 
             DayOfWeekLabel()
 
             CalendarBody(
-                year = year,
-                month = month,
-                selectedDay = selectedDay,
-                onDayClick = onDayClick,
+                year = currentYear,
+                month = currentMonth,
+                selectedDate = selectedDate,
+                onDayClick = {
+                    onDayClick(it)
+                    onMonthChanged(currentMonth)
+                },
             )
         }
     }
@@ -133,7 +144,7 @@ private fun DayOfWeekLabel() {
                 text = dayOfWeek.displayName,
                 textAlign = TextAlign.Center,
                 style = CareTheme.typography.body2,
-                color = CareTheme.colors.gray700,
+                color = CareTheme.colors.gray300,
                 modifier = Modifier.weight(1f),
             )
         }
@@ -144,8 +155,8 @@ private fun DayOfWeekLabel() {
 private fun CalendarBody(
     year: Int,
     month: Int,
-    selectedDay: Int?,
-    onDayClick: (Int) -> Unit,
+    selectedDate: LocalDate?,
+    onDayClick: (LocalDate) -> Unit,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(7),
@@ -169,6 +180,8 @@ private fun CalendarBody(
             CalendarDayText(
                 day = day,
                 color = CareTheme.colors.gray300,
+                isSelected = (selectedDate?.monthValue == calendarDate.monthValue.minus(1)) &&
+                        (selectedDate.dayOfMonth == day)
             )
         }
 
@@ -178,7 +191,9 @@ private fun CalendarBody(
             CalendarDayText(
                 day = day,
                 color = CareTheme.colors.gray700,
-                isSelected = selectedDay == day,
+                isSelected = (selectedDate?.monthValue == calendarDate.monthValue) &&
+                        (selectedDate.dayOfMonth == day),
+                onClick = { onDayClick(calendarDate.withDayOfMonth(day)) },
             )
         }
 
@@ -188,6 +203,8 @@ private fun CalendarBody(
             CalendarDayText(
                 day = day,
                 color = CareTheme.colors.gray300,
+                isSelected = (selectedDate?.monthValue == calendarDate.monthValue.plus(1)) &&
+                        (selectedDate.dayOfMonth == day)
             )
         }
     }
@@ -282,7 +299,7 @@ fun PreviewCareCalendarWithSelect() {
         year = 2024,
         month = 8,
         startMonth = 7,
-        selectedDay = 6,
+        selectedDate = LocalDate.of(2024, 8, 6),
         onMonthChanged = {},
         onDayClick = {},
         modifier = Modifier
@@ -302,7 +319,7 @@ fun PreviewCareCalendarFoldable() {
         year = 2024,
         month = 7,
         startMonth = 7,
-        selectedDay = 4,
+        selectedDate = LocalDate.of(2024, 7, 4),
         onMonthChanged = {},
         onDayClick = {},
         modifier = Modifier
@@ -322,7 +339,7 @@ fun PreviewCareCalendarFlip() {
         year = 2024,
         month = 8,
         startMonth = 7,
-        selectedDay = 6,
+        selectedDate = LocalDate.of(2024, 8, 6),
         onMonthChanged = {},
         onDayClick = {},
         modifier = Modifier
