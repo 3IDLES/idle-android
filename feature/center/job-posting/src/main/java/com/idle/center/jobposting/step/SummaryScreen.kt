@@ -138,7 +138,7 @@ internal fun SummaryScreen(
                     )
 
                     Text(
-                        text = "1등급 78세 여성",
+                        text = "${careLevel}등급 ${LocalDate.now().year - birthYear.toInt() + 1}세 ${gender.displayName}",
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray900,
                         modifier = Modifier.padding(end = 8.dp, bottom = 4.dp),
@@ -158,8 +158,7 @@ internal fun SummaryScreen(
                         Text(
                             text = weekDays
                                 .sortedBy { it.ordinal }
-                                .joinToString(", ") { it.displayName }
-                                    + " | " + "09:00 - 15:00",
+                                .joinToString(", ") { it.displayName } + " | " + "09:00 - 15:00",
                             style = CareTheme.typography.body3,
                             color = CareTheme.colors.gray500,
                         )
