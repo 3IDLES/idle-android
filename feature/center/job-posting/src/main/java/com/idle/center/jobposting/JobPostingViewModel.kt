@@ -18,6 +18,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -90,8 +92,14 @@ class JobPostingViewModel @Inject constructor(
     private val _applyDeadlineType = MutableStateFlow<ApplyDeadlineType?>(null)
     val applyDeadlineType = _applyDeadlineType.asStateFlow()
 
-    private val _applyDeadline = MutableStateFlow<String>("")
+    private val _applyDeadline = MutableStateFlow<Int?>(null)
     val applyDeadline = _applyDeadline.asStateFlow()
+
+    private val seoulZoneId = ZoneId.of("Asia/Seoul")
+    private val currentDateTime = ZonedDateTime.now(seoulZoneId).toLocalDateTime()
+
+    private val _calendarDateTime = MutableStateFlow(currentDateTime)
+    val calendarDateTime = _calendarDateTime.asStateFlow()
 
     private val _isEditState = MutableStateFlow(false)
     val isEditState = _isEditState.asStateFlow()
@@ -205,8 +213,12 @@ class JobPostingViewModel @Inject constructor(
         _applyDeadlineType.value = chipState
     }
 
-    internal fun setApplyDeadline(applyDeadline: String) {
+    internal fun setApplyDeadline(applyDeadline: Int) {
         _applyDeadline.value = applyDeadline
+    }
+
+    internal fun setCalendarMonth(month: Int) {
+        _calendarDateTime.value = _calendarDateTime.value.withMonth(month)
     }
 
     internal fun setEditState(editState: Boolean) {
