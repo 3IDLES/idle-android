@@ -58,6 +58,7 @@ fun JobEditScreen(
     payAmount: String,
     roadNameAddress: String,
     detailAddress: String,
+    clientName: String,
     gender: Gender,
     birthYear: String,
     weight: String,
@@ -79,6 +80,7 @@ fun JobEditScreen(
     onPayAmountChanged: (String) -> Unit,
     onDetailAddressChanged: (String) -> Unit,
     showPostCodeDialog: () -> Unit,
+    onClientNameChanged: (String) -> Unit,
     onGenderChanged: (Gender) -> Unit,
     onBirthYearChanged: (String) -> Unit,
     onWeightChanged: (String) -> Unit,
@@ -103,6 +105,7 @@ fun JobEditScreen(
     var localPayAmount by remember { mutableStateOf(payAmount) }
     var localRoadNameAddress by remember { mutableStateOf(roadNameAddress) }
     var localDetailAddress by remember { mutableStateOf(detailAddress) }
+    var localClientName by remember { mutableStateOf(clientName) }
     var localGender by remember { mutableStateOf(gender) }
     var localBirthYear by remember { mutableStateOf(birthYear) }
     var localWeight by remember { mutableStateOf(weight) }
@@ -143,11 +146,16 @@ fun JobEditScreen(
                                 return@clickable
                             }
 
+                            if(clientName.isBlank()){
+                                return@clickable
+                            }
+
                             clearWeekDays()
                             localWeekDays.forEach { setWeekDays(it) }
                             onPayTypeChanged(localPayType!!)
                             onPayAmountChanged(localPayAmount)
                             onDetailAddressChanged(localDetailAddress)
+                            onClientNameChanged(localClientName)
                             onGenderChanged(localGender)
                             onBirthYearChanged(localBirthYear)
                             onWeightChanged(localWeight)
@@ -348,6 +356,18 @@ fun JobEditScreen(
                     style = CareTheme.typography.subtitle1,
                     color = CareTheme.colors.gray900,
                 )
+
+                LabeledContent(
+                    subtitle = "고객 이름",
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    CareTextField(
+                        value = localClientName,
+                        onValueChanged = { localClientName = it },
+                        hint = "고객 이름을 입력해주세요.",
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
 
                 LabeledContent(
                     subtitle = "성별",

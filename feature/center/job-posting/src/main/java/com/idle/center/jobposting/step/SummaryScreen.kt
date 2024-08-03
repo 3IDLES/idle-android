@@ -41,6 +41,7 @@ internal fun SummaryScreen(
     payType: PayType?,
     payAmount: String,
     roadNameAddress: String,
+    clientName: String,
     gender: Gender,
     birthYear: String,
     weight: String,
@@ -295,6 +296,22 @@ internal fun SummaryScreen(
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                     modifier = Modifier.width(60.dp),
                 ) {
+                    Column(
+                        horizontalAlignment = Alignment.Start,
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        Text(
+                            text = "이름",
+                            style = CareTheme.typography.body2,
+                            color = CareTheme.colors.gray300,
+                        )
+
+                        Text(
+                            text = "",
+                            style = CareTheme.typography.caption,
+                        )
+                    }
+
                     Text(
                         text = "성별",
                         style = CareTheme.typography.body2,
@@ -315,6 +332,23 @@ internal fun SummaryScreen(
                 }
 
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Column(
+                        horizontalAlignment = Alignment.Start,
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        Text(
+                            text = clientName,
+                            style = CareTheme.typography.body2,
+                            color = CareTheme.colors.gray900,
+                        )
+
+                        Text(
+                            text = "고객 이름 센터 측에서만 볼 수 있어요.",
+                            style = CareTheme.typography.caption,
+                            color = CareTheme.colors.gray300,
+                        )
+                    }
+
                     Text(
                         text = gender.displayName,
                         style = CareTheme.typography.body2,
