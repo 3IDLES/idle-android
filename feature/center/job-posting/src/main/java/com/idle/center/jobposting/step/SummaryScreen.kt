@@ -29,7 +29,6 @@ import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.component.CareTextFieldLong
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.Gender
-import com.idle.domain.model.job.ApplyDeadlineType
 import com.idle.domain.model.job.ApplyMethod
 import com.idle.domain.model.job.DayOfWeek
 import com.idle.domain.model.job.LifeAssistance
@@ -73,7 +72,8 @@ internal fun SummaryScreen(
     Column(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(24.dp),
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .verticalScroll(scrollState)
             .padding(top = 20.dp, bottom = 30.dp),
     ) {
@@ -87,7 +87,8 @@ internal fun SummaryScreen(
         Column(
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.spacedBy(12.dp),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(horizontal = 20.dp),
         ) {
             Card(
@@ -104,7 +105,8 @@ internal fun SummaryScreen(
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(4.dp),
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
                             .padding(bottom = 8.dp)
                     ) {
                         if (isExperiencePreferred == false) {
@@ -128,7 +130,8 @@ internal fun SummaryScreen(
                         color = CareTheme.colors.gray900,
                         overflow = TextOverflow.Clip,
                         maxLines = 1,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier
+                            .weight(1f)
                             .padding(bottom = 2.dp),
                     )
 
@@ -141,7 +144,8 @@ internal fun SummaryScreen(
 
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
                             .padding(bottom = 2.dp)
                     ) {
                         Image(
@@ -196,7 +200,8 @@ internal fun SummaryScreen(
         Column(
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(horizontal = 20.dp),
         ) {
             Text(
@@ -269,7 +274,8 @@ internal fun SummaryScreen(
         HorizontalDivider(thickness = 8.dp, color = CareTheme.colors.gray050)
 
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(horizontal = 20.dp)
         ) {
             Text(
@@ -281,7 +287,8 @@ internal fun SummaryScreen(
 
             Row(
                 horizontalArrangement = Arrangement.spacedBy(32.dp),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(bottom = 16.dp),
             ) {
                 Column(
@@ -332,7 +339,8 @@ internal fun SummaryScreen(
 
             Row(
                 horizontalArrangement = Arrangement.spacedBy(32.dp),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(vertical = 16.dp),
             ) {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -382,7 +390,8 @@ internal fun SummaryScreen(
 
             Row(
                 horizontalArrangement = Arrangement.spacedBy(32.dp),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(vertical = 16.dp),
             ) {
                 Column(
@@ -446,99 +455,103 @@ internal fun SummaryScreen(
                 }
             }
 
-            HorizontalDivider(thickness = 1.dp, color = CareTheme.colors.gray100)
+            if (speciality.isNotBlank()) {
+                HorizontalDivider(thickness = 1.dp, color = CareTheme.colors.gray100)
 
-            Text(
-                text = "특이사항",
-                style = CareTheme.typography.body2,
-                color = CareTheme.colors.gray300,
-                modifier = Modifier.padding(top = 16.dp, bottom = 6.dp),
-            )
+                Text(
+                    text = "특이사항",
+                    style = CareTheme.typography.body2,
+                    color = CareTheme.colors.gray300,
+                    modifier = Modifier.padding(top = 16.dp, bottom = 6.dp),
+                )
 
-            CareTextFieldLong(
-                value = speciality,
-                enabled = false,
-                onValueChanged = {},
-            )
-        }
+                CareTextFieldLong(
+                    value = speciality,
+                    enabled = false,
+                    onValueChanged = {},
+                )
+            }
 
-        HorizontalDivider(thickness = 8.dp, color = CareTheme.colors.gray050)
+            HorizontalDivider(thickness = 8.dp, color = CareTheme.colors.gray050)
 
-        Column(
-            modifier = Modifier.fillMaxWidth()
-                .padding(start = 20.dp, end = 20.dp, bottom = 28.dp)
-        ) {
-            Text(
-                text = "추가 지원 정보",
-                style = CareTheme.typography.subtitle1,
-                color = CareTheme.colors.gray900,
-                modifier = Modifier.padding(bottom = 20.dp),
-            )
-
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(32.dp),
-                modifier = Modifier.fillMaxWidth()
-                    .padding(top = 20.dp),
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 20.dp, end = 20.dp, bottom = 28.dp)
             ) {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text(
-                        text = "경력 우대여부",
-                        style = CareTheme.typography.body2,
-                        color = CareTheme.colors.gray300,
-                    )
+                Text(
+                    text = "추가 지원 정보",
+                    style = CareTheme.typography.subtitle1,
+                    color = CareTheme.colors.gray900,
+                    modifier = Modifier.padding(bottom = 20.dp),
+                )
 
-                    Text(
-                        text = "지원 방법",
-                        style = CareTheme.typography.body2,
-                        color = CareTheme.colors.gray300,
-                    )
-
-                    Text(
-                        text = "접수 마감일",
-                        style = CareTheme.typography.body2,
-                        color = CareTheme.colors.gray300,
-                    )
-                }
-
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(32.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 20.dp),
                 ) {
-                    Text(
-                        text = if (isExperiencePreferred!!) "초보 가능" else "경력자 우대",
-                        style = CareTheme.typography.body2,
-                        color = CareTheme.colors.gray900,
-                    )
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(
+                            text = "경력 우대여부",
+                            style = CareTheme.typography.body2,
+                            color = CareTheme.colors.gray300,
+                        )
 
-                    Text(
-                        text = applyMethod.joinToString(", ") { it.displayName },
-                        style = CareTheme.typography.body2,
-                        color = CareTheme.colors.gray900,
-                    )
+                        Text(
+                            text = "지원 방법",
+                            style = CareTheme.typography.body2,
+                            color = CareTheme.colors.gray300,
+                        )
 
-                    Text(
-                        text = applyDeadline,
-                        style = CareTheme.typography.body2,
-                        color = CareTheme.colors.gray900,
-                    )
+                        Text(
+                            text = "접수 마감일",
+                            style = CareTheme.typography.body2,
+                            color = CareTheme.colors.gray300,
+                        )
+                    }
+
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        Text(
+                            text = if (isExperiencePreferred!!) "초보 가능" else "경력자 우대",
+                            style = CareTheme.typography.body2,
+                            color = CareTheme.colors.gray900,
+                        )
+
+                        Text(
+                            text = applyMethod.joinToString(", ") { it.displayName },
+                            style = CareTheme.typography.body2,
+                            color = CareTheme.colors.gray900,
+                        )
+
+                        Text(
+                            text = applyDeadline,
+                            style = CareTheme.typography.body2,
+                            color = CareTheme.colors.gray900,
+                        )
+                    }
                 }
             }
-        }
 
-        Column(
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            modifier = Modifier.padding(horizontal = 20.dp)
-        ) {
-            Text(
-                text = "공고 등록 후에도 공고 내용을 수정할 수 있어요.",
-                style = CareTheme.typography.body3,
-                color = CareTheme.colors.gray300,
-            )
+            Column(
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier.padding(horizontal = 20.dp)
+            ) {
+                Text(
+                    text = "공고 등록 후에도 공고 내용을 수정할 수 있어요.",
+                    style = CareTheme.typography.body3,
+                    color = CareTheme.colors.gray300,
+                )
 
-            CareButtonLarge(
-                text = "확인했어요",
-                onClick = postJobPosting,
-                modifier = Modifier.fillMaxWidth(),
-            )
+                CareButtonLarge(
+                    text = "확인했어요",
+                    onClick = postJobPosting,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
         }
     }
 }
