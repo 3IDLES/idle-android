@@ -6,6 +6,7 @@ import com.idle.binding.DeepLinkDestination.CenterJobPostingComplete
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
 import com.idle.center.job.posting.R
+import com.idle.compose.JobPostingBottomSheetType
 import com.idle.domain.model.auth.Gender
 import com.idle.domain.model.job.ApplyDeadlineType
 import com.idle.domain.model.job.ApplyMethod
@@ -18,6 +19,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import javax.inject.Inject
@@ -43,6 +45,12 @@ class JobPostingViewModel @Inject constructor(
     val roadNameAddress = _roadNameAddress.asStateFlow()
 
     private val _lotNumberAddress = MutableStateFlow("")
+
+    private val _tempRoadNameAddress = MutableStateFlow("")
+    val tempRoadNameAddress = _tempRoadNameAddress.asStateFlow()
+
+    private val _tempLotNumberAddress = MutableStateFlow("")
+    val tempLotNumberAddress = _tempLotNumberAddress.asStateFlow()
 
     private val _detailAddress = MutableStateFlow("")
     val detailAddress = _detailAddress.asStateFlow()
@@ -92,17 +100,20 @@ class JobPostingViewModel @Inject constructor(
     private val _applyDeadlineType = MutableStateFlow<ApplyDeadlineType?>(null)
     val applyDeadlineType = _applyDeadlineType.asStateFlow()
 
-    private val _applyDeadline = MutableStateFlow<Int?>(null)
+    private val _applyDeadline = MutableStateFlow<LocalDate?>(null)
     val applyDeadline = _applyDeadline.asStateFlow()
 
     private val seoulZoneId = ZoneId.of("Asia/Seoul")
-    private val currentDateTime = ZonedDateTime.now(seoulZoneId).toLocalDateTime()
+    private val currentDate = ZonedDateTime.now(seoulZoneId).toLocalDate()
 
-    private val _calendarDateTime = MutableStateFlow(currentDateTime)
-    val calendarDateTime = _calendarDateTime.asStateFlow()
+    private val _calendarDate = MutableStateFlow(currentDate)
+    val calendarDate = _calendarDate.asStateFlow()
 
     private val _isEditState = MutableStateFlow(false)
     val isEditState = _isEditState.asStateFlow()
+
+    private val _bottomSheetType = MutableStateFlow<JobPostingBottomSheetType?>(null)
+    val bottomSheetType = _bottomSheetType.asStateFlow()
 
     internal fun setWeekDays(dayOfWeek: DayOfWeek) {
         _weekDays.value = _weekDays.value.toMutableSet().apply {
@@ -133,6 +144,14 @@ class JobPostingViewModel @Inject constructor(
 
     internal fun setLotNumberAddress(address: String) {
         _lotNumberAddress.value = address
+    }
+
+    internal fun setTempRoadNameAddress(address: String) {
+        _tempRoadNameAddress.value = address
+    }
+
+    internal fun setTempLotNumberAddress(address: String) {
+        _tempLotNumberAddress.value = address
     }
 
     internal fun setDetailAddress(address: String) {
@@ -213,16 +232,25 @@ class JobPostingViewModel @Inject constructor(
         _applyDeadlineType.value = chipState
     }
 
-    internal fun setApplyDeadline(applyDeadline: Int) {
+    internal fun setApplyDeadline(applyDeadline: LocalDate) {
         _applyDeadline.value = applyDeadline
     }
 
     internal fun setCalendarMonth(month: Int) {
-        _calendarDateTime.value = _calendarDateTime.value.withMonth(month)
+        _calendarDate.value = _calendarDate.value.withMonth(month)
     }
 
     internal fun setEditState(editState: Boolean) {
+        if (editState) {
+            _tempRoadNameAddress.value = _roadNameAddress.value
+            _tempLotNumberAddress.value = _lotNumberAddress.value
+        }
+
         _isEditState.value = editState
+    }
+
+    internal fun setBottomSheetType(sheetType: JobPostingBottomSheetType) {
+        _bottomSheetType.value = sheetType
     }
 
     internal fun postJobPosting() = viewModelScope.launch {

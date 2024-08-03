@@ -23,6 +23,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.idle.center.jobposting.JobPostingStep
 import com.idle.center.jobposting.JobPostingStep.ADDITIONAL_INFO
+import com.idle.compose.JobPostingBottomSheetType
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareChipBasic
 import com.idle.designsystem.compose.component.CareClickableTextField
@@ -31,18 +32,19 @@ import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.designsystem.compose.foundation.PretendardMedium
 import com.idle.domain.model.job.ApplyDeadlineType
 import com.idle.domain.model.job.ApplyMethod
+import java.time.LocalDate
 
 @Composable
 internal fun AdditionalInfoScreen(
     isExperiencePreferred: Boolean?,
     applyMethod: Set<ApplyMethod>,
     applyDeadlineType: ApplyDeadlineType?,
-    applyDeadline: Int?,
+    applyDeadline: LocalDate?,
     onExperiencePreferredChanged: (Boolean) -> Unit,
     onApplyMethodChanged: (ApplyMethod) -> Unit,
     onApplyDeadlineTypeChanged: (ApplyDeadlineType) -> Unit,
-    onApplyDeadlineChanged: (Int) -> Unit,
     setJobPostingStep: (JobPostingStep) -> Unit,
+    showBottomSheet: (JobPostingBottomSheetType) -> Unit,
 ) {
     val scrollState = rememberScrollState()
 
@@ -141,7 +143,7 @@ internal fun AdditionalInfoScreen(
                                 contentDescription = null,
                             )
                         },
-                        onClick = {},
+                        onClick = { showBottomSheet(JobPostingBottomSheetType.POST_DEAD_LINE) },
                         modifier = Modifier.fillMaxWidth(),
                     )
                 }
@@ -152,7 +154,7 @@ internal fun AdditionalInfoScreen(
 
         CareButtonLarge(
             text = "다음",
-            enable = isExperiencePreferred != null && applyMethod.isNotEmpty() && applyDeadlineType != null && !(applyDeadlineType == ApplyDeadlineType.DEFINITE && applyDeadline != null),
+            enable = isExperiencePreferred != null && applyMethod.isNotEmpty() && applyDeadlineType != null && (applyDeadlineType == ApplyDeadlineType.DEFINITE && applyDeadline != null),
             onClick = { setJobPostingStep(JobPostingStep.findStep(ADDITIONAL_INFO.step + 1)) },
             modifier = Modifier.fillMaxWidth(),
         )
