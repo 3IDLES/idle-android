@@ -121,7 +121,6 @@ internal class JobPostingFragment : BaseComposeFragment() {
                     weekDays = weekDays,
                     payType = payType,
                     payAmount = payAmount,
-                    roadNameAddress = roadNameAddress,
                     tempRoadNameAddress = tempRoadNameAddress,
                     tempLotNumberAddress = tempLotNumberAddress,
                     detailAddress = detailAddress,
@@ -392,7 +391,7 @@ internal fun JobPostingScreen(
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(top = 30.dp, bottom = 50.dp),
+                                .padding(top = 30.dp),
                         )
                     }
 

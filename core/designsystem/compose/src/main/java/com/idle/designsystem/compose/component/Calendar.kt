@@ -201,7 +201,7 @@ private fun CalendarBody(
             )
         }
 
-        val remainingDays = 7 - ((visibleDaysCount + thisMonthDaysToShow.size) % 7)
+        val remainingDays = 42 - (visibleDaysCount + thisMonthDaysToShow.size)
         val nextMonthDaysToShow = IntRange(1, remainingDays).toList()
         items(nextMonthDaysToShow) { day ->
             CalendarDayText(

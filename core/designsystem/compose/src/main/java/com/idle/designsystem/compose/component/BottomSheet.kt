@@ -5,19 +5,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.idle.designsystem.compose.foundation.CareTheme
@@ -38,19 +35,10 @@ fun CareBottomSheetLayout(
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
         sheetState = sheetState,
         sheetContent = {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(start = 18.dp, end = 18.dp, bottom = 32.dp)
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.padding(horizontal = 18.dp, vertical = 36.dp)
             ) {
-                HorizontalDivider(
-                    thickness = 4.dp,
-                    color = CareTheme.colors.gray200,
-                    modifier = Modifier
-                        .width(55.dp)
-                        .clip(RoundedCornerShape(2.dp))
-                        .padding(top = 13.dp, bottom = 19.dp),
-                )
-
                 sheetContent()
             }
         },
