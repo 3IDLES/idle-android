@@ -76,7 +76,6 @@ fun JobEditScreen(
     weekDays: Set<DayOfWeek>,
     payType: PayType?,
     payAmount: String,
-    roadNameAddress: String,
     tempRoadNameAddress: String,
     tempLotNumberAddress: String,
     detailAddress: String,
@@ -251,7 +250,7 @@ fun JobEditScreen(
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(top = 30.dp, bottom = 50.dp),
+                                .padding(top = 30.dp),
                         )
                     }
 
