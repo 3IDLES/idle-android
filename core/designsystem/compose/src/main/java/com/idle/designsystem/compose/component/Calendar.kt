@@ -48,42 +48,46 @@ fun CareCalendar(
     var currentMonth by rememberSaveable { mutableIntStateOf(month) }
     var currentYear by rememberSaveable { mutableIntStateOf(year) }
 
-    CareStateAnimator(
-        targetState = currentMonth,
-        transitionCondition = currentMonth != startMonth,
+    Column(
+        verticalArrangement = Arrangement.spacedBy(26.dp),
+        modifier = modifier,
     ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(26.dp),
-            modifier = modifier,
+        CalendarHeader(
+            year = currentYear,
+            month = currentMonth,
+            startMonth = startMonth,
+            onMonthChanged = { newMonth ->
+                if (newMonth < 1) {
+                    currentMonth = 12
+                    currentYear--
+                } else if (newMonth > 12) {
+                    currentMonth = 1
+                    currentYear++
+                } else {
+                    currentMonth = newMonth
+                }
+            },
+        )
+
+        CareStateAnimator(
+            targetState = currentMonth,
+            transitionCondition = currentMonth != startMonth,
         ) {
-            CalendarHeader(
-                year = currentYear,
-                month = currentMonth,
-                startMonth = startMonth,
-                onMonthChanged = { newMonth ->
-                    if (newMonth < 1) {
-                        currentMonth = 12
-                        currentYear--
-                    } else if (newMonth > 12) {
-                        currentMonth = 1
-                        currentYear++
-                    } else {
-                        currentMonth = newMonth
-                    }
-                },
-            )
+            Column(
+                verticalArrangement = Arrangement.spacedBy(26.dp),
+            ) {
+                DayOfWeekLabel()
 
-            DayOfWeekLabel()
-
-            CalendarBody(
-                year = currentYear,
-                month = currentMonth,
-                selectedDate = selectedDate,
-                onDayClick = {
-                    onDayClick(it)
-                    onMonthChanged(currentMonth)
-                },
-            )
+                CalendarBody(
+                    year = currentYear,
+                    month = currentMonth,
+                    selectedDate = selectedDate,
+                    onDayClick = {
+                        onDayClick(it)
+                        onMonthChanged(currentMonth)
+                    },
+                )
+            }
         }
     }
 }
