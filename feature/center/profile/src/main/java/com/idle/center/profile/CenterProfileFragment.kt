@@ -39,7 +39,7 @@ import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designresource.R
-import com.idle.designsystem.compose.component.CareButtonStrokeSmall
+import com.idle.designsystem.compose.component.CareButtonRound
 import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.CareTextFieldLong
@@ -173,7 +173,7 @@ internal fun CenterProfileScreen(
                     )
 
                     if (!isEditState) {
-                        CareButtonStrokeSmall(
+                        CareButtonRound(
                             text = "수정하기",
                             onClick = { setEditState(true) }
                         )
