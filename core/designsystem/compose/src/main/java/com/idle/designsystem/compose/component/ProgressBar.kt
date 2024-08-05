@@ -3,6 +3,7 @@ package com.idle.designsystem.compose.component
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.LinearProgressIndicator
@@ -16,8 +17,11 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Devices
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.idle.designsystem.compose.Flip
 import com.idle.designsystem.compose.foundation.CareTheme
 
 @Composable
@@ -60,7 +64,7 @@ private fun formatProgressText(
     totalSteps: Int,
 ) = buildAnnotatedString {
     withStyle(
-        style = SpanStyle(color = CareTheme.colors.orange500,)
+        style = SpanStyle(color = CareTheme.colors.orange500)
     ) {
         append("$currentStep ")
     }
@@ -72,4 +76,36 @@ private fun formatProgressText(
     ) {
         append("/ $totalSteps")
     }
+}
+
+@Composable
+private fun CareProgressBarContent() {
+    CareProgressBar(
+        currentStep = 3,
+        totalSteps = 5,
+        modifier = Modifier.fillMaxWidth()
+    )
+}
+
+@Preview(name = "Progress_Default", showBackground = true, group = "Default")
+@Composable
+private fun PreviewCareProgressBarDefault() {
+    CareProgressBarContent()
+}
+
+@Preview(name = "Progress_Flip", showBackground = true, device = Flip, group = "Flip")
+@Composable
+private fun PreviewCareProgressBarFlip() {
+    CareProgressBarContent()
+}
+
+@Preview(
+    name = "Progress_Foldable",
+    showBackground = true,
+    device = Devices.FOLDABLE,
+    group = "Fold"
+)
+@Composable
+private fun PreviewCareProgressBarFoldable() {
+    CareProgressBarContent()
 }

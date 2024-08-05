@@ -1,6 +1,7 @@
 package com.idle.designsystem.compose.component
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -24,12 +25,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Devices
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.idle.compose.clickable
+import com.idle.designresource.R
+import com.idle.designsystem.compose.Flip
 import com.idle.designsystem.compose.foundation.CareTheme
 
 @Composable
@@ -344,4 +350,95 @@ fun CareClickableTextField(
 
         leftComponent()
     }
+}
+
+@Composable
+private fun CareTextFieldDefaultContent() {
+    CareTextField(
+        value = "Sample Text",
+        onValueChanged = {},
+        supportingText = "Supporting text",
+        hint = "Hint",
+        modifier = Modifier.fillMaxWidth()
+    )
+}
+
+@Composable
+private fun CareTextFieldLongDefaultContent() {
+    CareTextFieldLong(
+        value = "Sample Long Text",
+        hint = "Long Hint",
+        onValueChanged = {},
+        modifier = Modifier.fillMaxWidth()
+    )
+}
+
+@Composable
+private fun CareClickableTextFieldDefaultContent() {
+    CareClickableTextField(
+        value = "Clickable Text",
+        onClick = {},
+        leftComponent = {
+            Image(
+                painter = painterResource(R.drawable.ic_arrow_down),
+                contentDescription = null,
+            )
+        },
+        hint = "Hint",
+        modifier = Modifier.fillMaxWidth()
+    )
+}
+
+@Preview(name = "TextField_Default", showBackground = true, group = "Default")
+@Composable
+private fun PreviewCareTextFieldDefault() {
+    CareTextFieldDefaultContent()
+}
+
+@Preview(name = "TextField_Flip", showBackground = true, device = Flip, group = "Flip")
+@Composable
+private fun PreviewCareTextFieldFlip() {
+    CareTextFieldDefaultContent()
+}
+
+@Preview(name = "TextField_Foldable", showBackground = true, device = Devices.FOLDABLE, group = "Fold")
+@Composable
+private fun PreviewCareTextFieldFoldable() {
+    CareTextFieldDefaultContent()
+}
+
+@Preview(name = "TextFieldLong_Default", showBackground = true, group = "Default")
+@Composable
+private fun PreviewCareTextFieldLongDefault() {
+    CareTextFieldLongDefaultContent()
+}
+
+@Preview(name = "TextFieldLong_Flip", showBackground = true, device = Flip, group = "Flip")
+@Composable
+private fun PreviewCareTextFieldLongFlip() {
+    CareTextFieldLongDefaultContent()
+}
+
+@Preview(name = "TextFieldLong_Foldable", showBackground = true, device = Devices.FOLDABLE, group = "Fold")
+@Composable
+private fun PreviewCareTextFieldLongFoldable() {
+    CareTextFieldLongDefaultContent()
+}
+
+@Preview(name = "ClickableTextField_Default", showBackground = true, group = "Default")
+@Composable
+private fun PreviewCareClickableTextFieldDefault() {
+    CareClickableTextFieldDefaultContent()
+}
+
+@Preview(name = "ClickableTextField_Flip", showBackground = true, device = Flip, group = "Flip")
+@Composable
+private fun PreviewCareClickableTextFieldFlip() {
+    CareClickableTextFieldDefaultContent()
+}
+
+@Preview(name = "ClickableTextField_Foldable", showBackground = true, device = Devices.FOLDABLE, group = "Fold")
+@Composable
+private fun PreviewCareClickableTextFieldFoldable() {
+    CareClickableTextFieldDefaultContent()
 }
