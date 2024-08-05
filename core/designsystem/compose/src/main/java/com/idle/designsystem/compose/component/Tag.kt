@@ -11,7 +11,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Devices
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.idle.designsystem.compose.Flip
 import com.idle.designsystem.compose.foundation.CareTheme
 
 @Composable
@@ -36,4 +39,20 @@ fun CareTag(
             modifier = Modifier.padding(horizontal = 4.dp, vertical = 0.5.dp),
         )
     }
+}
+
+@Composable
+private fun CareTagContent() {
+    CareTag(
+        text = "Sample Tag",
+        textColor = CareTheme.colors.white000,
+        backgroundColor = CareTheme.colors.orange500,
+        modifier = Modifier.wrapContentSize()
+    )
+}
+
+@Preview(name = "Tag_Default", showBackground = true, group = "Default")
+@Composable
+private fun PreviewCareTagDefault() {
+    CareTagContent()
 }
