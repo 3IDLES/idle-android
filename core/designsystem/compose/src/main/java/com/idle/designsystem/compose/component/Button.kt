@@ -11,7 +11,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.idle.designsystem.compose.foundation.CareTheme
 
@@ -59,7 +58,7 @@ fun CareButtonMedium(
             disabledContentColor = CareTheme.colors.gray200,
             disabledContainerColor = CareTheme.colors.gray200,
         ),
-        modifier = modifier.size(width = 165.dp, height = 56.dp),
+        modifier = modifier.height(56.dp),
     ) {
         Text(
             text = text,

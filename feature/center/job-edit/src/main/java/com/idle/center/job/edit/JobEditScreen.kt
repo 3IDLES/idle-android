@@ -74,6 +74,8 @@ import java.time.LocalDate
 @Composable
 fun JobEditScreen(
     weekDays: Set<DayOfWeek>,
+    workStartTime: String?,
+    workEndTime: String?,
     payType: PayType?,
     payAmount: String,
     tempRoadNameAddress: String,
@@ -98,6 +100,8 @@ fun JobEditScreen(
     calendarDate: LocalDate,
     setWeekDays: (DayOfWeek) -> Unit,
     clearWeekDays: () -> Unit,
+    onWorkStartTimeChanged: (String) -> Unit,
+    onWorkEndTimeChanged: (String) -> Unit,
     onPayTypeChanged: (PayType) -> Unit,
     onPayAmountChanged: (String) -> Unit,
     onRoadNameAddressChanged: (String) -> Unit,
