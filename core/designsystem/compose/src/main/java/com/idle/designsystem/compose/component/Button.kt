@@ -250,9 +250,8 @@ internal fun CareDialogButton(
     }
 }
 
-@Preview(name = "Button_Primary_Default_Large", showBackground = true, group = "Default")
 @Composable
-fun PreviewButtonPrimaryDefaultLarge() {
+private fun PreviewButtonLarge() {
     Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
         CareButtonLarge(text = "다음", onClick = {}, modifier = Modifier.fillMaxWidth())
         CareButtonLarge(
@@ -262,314 +261,196 @@ fun PreviewButtonPrimaryDefaultLarge() {
             enable = false
         )
     }
+}
+
+@Composable
+private fun PreviewButtonMedium() {
+    Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
+        CareButtonMedium(text = "확인", onClick = {})
+        CareButtonMedium(text = "확인", onClick = {}, enable = false)
+    }
+}
+
+@Composable
+private fun PreviewButtonCardLarge() {
+    Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
+        CareButtonCardLarge(text = "저장하기", onClick = {}, modifier = Modifier.fillMaxWidth())
+        CareButtonCardLarge(
+            text = "저장하기",
+            onClick = {},
+            modifier = Modifier.fillMaxWidth(),
+            enable = false
+        )
+    }
+}
+
+@Composable
+private fun PreviewButtonCardMedium() {
+    Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
+        CareButtonCardMedium(text = "저장하기", onClick = {})
+        CareButtonCardMedium(text = "저장하기", onClick = {}, enable = false)
+    }
+}
+
+@Composable
+private fun PreviewButtonRound() {
+    Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
+        CareButtonRound(text = "삭제하기", onClick = {})
+        CareButtonRound(text = "삭제하기", onClick = {}, enable = false)
+    }
+}
+
+@Composable
+private fun PreviewButtonLine() {
+    Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
+        CareButtonLine(text = "삭제하기", onClick = {})
+        CareButtonLine(text = "삭제하기", onClick = {}, enable = false)
+    }
+}
+
+@Composable
+private fun PreviewButtonDialog() {
+    Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
+        CareDialogButton(
+            text = "Dialog",
+            onClick = {},
+            containerColor = CareTheme.colors.orange500,
+            textColor = CareTheme.colors.white000
+        )
+        CareDialogButton(
+            text = "Dialog",
+            onClick = {},
+            containerColor = CareTheme.colors.orange500,
+            textColor = CareTheme.colors.white000
+        )
+    }
+}
+
+// Default Group Previews
+@Preview(name = "Button_Primary_Default_Large", showBackground = true, group = "Default")
+@Composable
+private fun PreviewButtonPrimaryDefaultLarge() {
+    PreviewButtonLarge()
 }
 
 @Preview(name = "Button_Primary_Default_Medium", showBackground = true, group = "Default")
 @Composable
-fun PreviewButtonPrimaryDefaultMedium() {
-    Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
-        CareButtonMedium(text = "확인", onClick = {})
-        CareButtonMedium(text = "확인", onClick = {}, enable = false)
-    }
+private fun PreviewButtonPrimaryDefaultMedium() {
+    PreviewButtonMedium()
 }
 
 @Preview(name = "Button_Primary_Default_CardLarge", showBackground = true, group = "Default")
 @Composable
-fun PreviewButtonPrimaryDefaultCardLarge() {
-    Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
-        CareButtonCardLarge(text = "저장하기", onClick = {}, modifier = Modifier.fillMaxWidth())
-        CareButtonCardLarge(
-            text = "저장하기",
-            onClick = {},
-            modifier = Modifier.fillMaxWidth(),
-            enable = false
-        )
-    }
+private fun PreviewButtonPrimaryDefaultCardLarge() {
+    PreviewButtonCardLarge()
 }
 
-@Preview(
-    name = "Button_Primary_Default_CardMedium",
-    showBackground = true,
-    group = "Default"
-)
+@Preview(name = "Button_Primary_Default_CardMedium", showBackground = true, group = "Default")
 @Composable
-fun PreviewButtonPrimaryDefaultCardMedium() {
-    Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
-        CareButtonCardMedium(text = "저장하기", onClick = {})
-        CareButtonCardMedium(text = "저장하기", onClick = {}, enable = false)
-    }
+private fun PreviewButtonPrimaryDefaultCardMedium() {
+    PreviewButtonCardMedium()
 }
 
 @Preview(name = "Button_Primary_Default_Round", showBackground = true, group = "Default")
 @Composable
-fun PreviewButtonPrimaryDefaultRound() {
-    Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
-        CareButtonRound(text = "삭제하기", onClick = {})
-        CareButtonRound(text = "삭제하기", onClick = {}, enable = false)
-    }
+private fun PreviewButtonPrimaryDefaultRound() {
+    PreviewButtonRound()
 }
 
 @Preview(name = "Button_Primary_Default_Line", showBackground = true, group = "Default")
 @Composable
-fun PreviewButtonPrimaryDefaultLine() {
-    Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
-        CareButtonLine(text = "삭제하기", onClick = {})
-        CareButtonLine(text = "삭제하기", onClick = {}, enable = false)
-    }
+private fun PreviewButtonPrimaryDefaultLine() {
+    PreviewButtonLine()
 }
 
 @Preview(name = "Button_Primary_Default_Dialog", showBackground = true, group = "Default")
 @Composable
-fun PreviewButtonPrimaryDefaultDialog() {
-    Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
-        CareDialogButton(
-            text = "Dialog",
-            onClick = {},
-            containerColor = CareTheme.colors.orange500,
-            textColor = CareTheme.colors.white000
-        )
-        CareDialogButton(
-            text = "Dialog",
-            onClick = {},
-            containerColor = CareTheme.colors.orange500,
-            textColor = CareTheme.colors.white000
-        )
-    }
+private fun PreviewButtonPrimaryDefaultDialog() {
+    PreviewButtonDialog()
 }
 
-@Preview(
-    name = "Button_Primary_Flip_Large",
-    showBackground = true,
-    device = Flip,
-    group = "Flip"
-)
+// Flip Group Previews
+@Preview(name = "Button_Primary_Flip_Large", showBackground = true, device = Flip, group = "Flip")
 @Composable
-fun PreviewButtonPrimaryFlipLarge() {
-    Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
-        CareButtonLarge(text = "다음", onClick = {}, modifier = Modifier.fillMaxWidth())
-        CareButtonLarge(
-            text = "다음",
-            onClick = {},
-            modifier = Modifier.fillMaxWidth(),
-            enable = false
-        )
-    }
+private fun PreviewButtonPrimaryFlipLarge() {
+    PreviewButtonLarge()
 }
 
-@Preview(
-    name = "Button_Primary_Flip_Medium",
-    showBackground = true,
-    device = Flip,
-    group = "Flip"
-
-)
+@Preview(name = "Button_Primary_Flip_Medium", showBackground = true, device = Flip, group = "Flip")
 @Composable
-fun PreviewButtonPrimaryFlipMedium() {
-    Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
-        CareButtonMedium(text = "확인", onClick = {})
-        CareButtonMedium(text = "확인", onClick = {}, enable = false)
-    }
+private fun PreviewButtonPrimaryFlipMedium() {
+    PreviewButtonMedium()
 }
 
-@Preview(
-    name = "Button_Primary_Flip_CardLarge",
-    showBackground = true,
-    device = Flip,
-    group = "Flip"
-)
+@Preview(name = "Button_Primary_Flip_CardLarge", showBackground = true, device = Flip, group = "Flip")
 @Composable
-fun PreviewButtonPrimaryFlipCardLarge() {
-    Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
-        CareButtonCardLarge(text = "저장하기", onClick = {}, modifier = Modifier.fillMaxWidth())
-        CareButtonCardLarge(
-            text = "저장하기",
-            onClick = {},
-            modifier = Modifier.fillMaxWidth(),
-            enable = false
-        )
-    }
+private fun PreviewButtonPrimaryFlipCardLarge() {
+    PreviewButtonCardLarge()
 }
 
-@Preview(
-    name = "Button_Primary_Flip_CardMedium",
-    showBackground = true,
-    device = Flip,
-    group = "Flip"
-)
+@Preview(name = "Button_Primary_Flip_CardMedium", showBackground = true, device = Flip, group = "Flip")
 @Composable
-fun PreviewButtonPrimaryFlipCardMedium() {
-    Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
-        CareButtonCardMedium(text = "저장하기", onClick = {})
-        CareButtonCardMedium(text = "저장하기", onClick = {}, enable = false)
-    }
+private fun PreviewButtonPrimaryFlipCardMedium() {
+    PreviewButtonCardMedium()
 }
 
-@Preview(
-    name = "Button_Primary_Flip_Round",
-    showBackground = true,
-    device = Flip,
-    group = "Flip"
-)
+@Preview(name = "Button_Primary_Flip_Round", showBackground = true, device = Flip, group = "Flip")
 @Composable
-fun PreviewButtonPrimaryFlipRound() {
-    Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
-        CareButtonRound(text = "삭제하기", onClick = {})
-        CareButtonRound(text = "삭제하기", onClick = {}, enable = false)
-    }
+private fun PreviewButtonPrimaryFlipRound() {
+    PreviewButtonRound()
 }
 
-@Preview(
-    name = "Button_Primary_Flip_Line",
-    showBackground = true,
-    device = Flip,
-    group = "Flip"
-)
+@Preview(name = "Button_Primary_Flip_Line", showBackground = true, device = Flip, group = "Flip")
 @Composable
-fun PreviewButtonPrimaryFlipLine() {
-    Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
-        CareButtonLine(text = "삭제하기", onClick = {})
-        CareButtonLine(text = "삭제하기", onClick = {}, enable = false)
-    }
+private fun PreviewButtonPrimaryFlipLine() {
+    PreviewButtonLine()
 }
 
-@Preview(
-    name = "Button_Primary_Flip_Dialog",
-    showBackground = true,
-    device = Flip,
-    group = "Flip"
-)
+@Preview(name = "Button_Primary_Flip_Dialog", showBackground = true, device = Flip, group = "Flip")
 @Composable
-fun PreviewButtonPrimaryFlipDialog() {
-    Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
-        CareDialogButton(
-            text = "Dialog",
-            onClick = {},
-            containerColor = CareTheme.colors.orange500,
-            textColor = CareTheme.colors.white000
-        )
-        CareDialogButton(
-            text = "Dialog",
-            onClick = {},
-            containerColor = CareTheme.colors.orange500,
-            textColor = CareTheme.colors.white000
-        )
-    }
+private fun PreviewButtonPrimaryFlipDialog() {
+    PreviewButtonDialog()
 }
 
-@Preview(
-    name = "Button_Primary_Foldable_Large",
-    showBackground = true,
-    device = Devices.FOLDABLE,
-    group = "Fold"
-)
+// Fold Group Previews
+@Preview(name = "Button_Primary_Foldable_Large", showBackground = true, device = Devices.FOLDABLE, group = "Fold")
 @Composable
-fun PreviewButtonPrimaryFoldableLarge() {
-    Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
-        CareButtonLarge(text = "다음", onClick = {}, modifier = Modifier.fillMaxWidth())
-        CareButtonLarge(
-            text = "다음",
-            onClick = {},
-            modifier = Modifier.fillMaxWidth(),
-            enable = false
-        )
-    }
+private fun PreviewButtonPrimaryFoldableLarge() {
+    PreviewButtonLarge()
 }
 
-@Preview(
-    name = "Button_Primary_Foldable_Medium",
-    showBackground = true,
-    device = Devices.FOLDABLE,
-    group = "Fold"
-)
+@Preview(name = "Button_Primary_Foldable_Medium", showBackground = true, device = Devices.FOLDABLE, group = "Fold")
 @Composable
-fun PreviewButtonPrimaryFoldableMedium() {
-    Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
-        CareButtonMedium(text = "확인", onClick = {})
-        CareButtonMedium(text = "확인", onClick = {}, enable = false)
-    }
+private fun PreviewButtonPrimaryFoldableMedium() {
+    PreviewButtonMedium()
 }
 
-@Preview(
-    name = "Button_Primary_Foldable_CardLarge",
-    showBackground = true,
-    device = Devices.FOLDABLE,
-    group = "Fold"
-)
+@Preview(name = "Button_Primary_Foldable_CardLarge", showBackground = true, device = Devices.FOLDABLE, group = "Fold")
 @Composable
-fun PreviewButtonPrimaryFoldableCardLarge() {
-    Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
-        CareButtonCardLarge(text = "저장하기", onClick = {}, modifier = Modifier.fillMaxWidth())
-        CareButtonCardLarge(
-            text = "저장하기",
-            onClick = {},
-            modifier = Modifier.fillMaxWidth(),
-            enable = false
-        )
-    }
+private fun PreviewButtonPrimaryFoldableCardLarge() {
+    PreviewButtonCardLarge()
 }
 
-@Preview(
-    name = "Button_Primary_Foldable_CardMedium",
-    showBackground = true,
-    device = Devices.FOLDABLE,
-    group = "Fold"
-)
+@Preview(name = "Button_Primary_Foldable_CardMedium", showBackground = true, device = Devices.FOLDABLE, group = "Fold")
 @Composable
-fun PreviewButtonPrimaryFoldableCardMedium() {
-    Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
-        CareButtonCardMedium(text = "저장하기", onClick = {})
-        CareButtonCardMedium(text = "저장하기", onClick = {}, enable = false)
-    }
+private fun PreviewButtonPrimaryFoldableCardMedium() {
+    PreviewButtonCardMedium()
 }
 
-@Preview(
-    name = "Button_Primary_Foldable_Round",
-    showBackground = true,
-    device = Devices.FOLDABLE,
-    group = "Fold"
-)
+@Preview(name = "Button_Primary_Foldable_Round", showBackground = true, device = Devices.FOLDABLE, group = "Fold")
 @Composable
-fun PreviewButtonPrimaryFoldableRound() {
-    Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
-        CareButtonRound(text = "삭제하기", onClick = {})
-        CareButtonRound(text = "삭제하기", onClick = {}, enable = false)
-    }
+private fun PreviewButtonPrimaryFoldableRound() {
+    PreviewButtonRound()
 }
 
-@Preview(
-    name = "Button_Primary_Foldable_Line",
-    showBackground = true,
-    device = Devices.FOLDABLE,
-    group = "Fold"
-)
+@Preview(name = "Button_Primary_Foldable_Line", showBackground = true, device = Devices.FOLDABLE, group = "Fold")
 @Composable
-fun PreviewButtonPrimaryFoldableLine() {
-    Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
-        CareButtonLine(text = "삭제하기", onClick = {})
-        CareButtonLine(text = "삭제하기", onClick = {}, enable = false)
-    }
+private fun PreviewButtonPrimaryFoldableLine() {
+    PreviewButtonLine()
 }
 
-@Preview(
-    name = "Button_Primary_Foldable_Dialog",
-    showBackground = true,
-    device = Devices.FOLDABLE,
-    group = "Fold"
-)
+@Preview(name = "Button_Primary_Foldable_Dialog", showBackground = true, device = Devices.FOLDABLE, group = "Fold")
 @Composable
-fun PreviewButtonPrimaryFoldableDialog() {
-    Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
-        CareDialogButton(
-            text = "Dialog",
-            onClick = {},
-            containerColor = CareTheme.colors.orange500,
-            textColor = CareTheme.colors.white000
-        )
-        CareDialogButton(
-            text = "Dialog",
-            onClick = {},
-            containerColor = CareTheme.colors.orange500,
-            textColor = CareTheme.colors.white000
-        )
-    }
+private fun PreviewButtonPrimaryFoldableDialog() {
+    PreviewButtonDialog()
 }
