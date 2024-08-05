@@ -16,8 +16,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Devices
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.idle.compose.clickable
+import com.idle.designsystem.compose.Flip
 import com.idle.designsystem.compose.foundation.CareTheme
 
 @Composable
@@ -40,7 +43,8 @@ fun CareCard(
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(horizontal = 20.dp, vertical = 16.dp)
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -72,4 +76,40 @@ fun CareCard(
             )
         }
     }
+}
+
+@Preview(name = "CareCard_Default", showBackground = true, group = "Default")
+@Composable
+private fun PreviewCareCardDefault() {
+    CareCard(
+        name = "John Doe",
+        address = "1234 Elm Street",
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    )
+}
+
+@Preview(name = "CareCard_Flip", showBackground = true, device = Flip, group = "Flip")
+@Composable
+private fun PreviewCareCardFlip() {
+    CareCard(
+        name = "John Doe",
+        address = "1234 Elm Street",
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    )
+}
+
+@Preview(name = "CareCard_Fold", showBackground = true, device = Devices.FOLDABLE, group = "Fold")
+@Composable
+private fun PreviewCareCardFoldable() {
+    CareCard(
+        name = "John Doe",
+        address = "1234 Elm Street",
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    )
 }

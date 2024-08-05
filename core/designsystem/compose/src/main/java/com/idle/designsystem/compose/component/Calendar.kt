@@ -30,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.idle.compose.clickable
+import com.idle.designsystem.compose.Flip
 import com.idle.designsystem.compose.foundation.CareTheme
 import java.time.LocalDate
 import java.time.format.TextStyle
@@ -276,11 +277,12 @@ enum class DayOfWeek(val displayName: String) {
 }
 
 @Preview(
-    name = "withOutSelect",
+    name = "Calendar_Default_WithOutSelect",
     showBackground = true,
+    group = "Default"
 )
 @Composable
-fun PreviewCareCalendarWithoutSelect() {
+private fun PreviewCareCalendarDefaultWithoutSelect() {
     CareCalendar(
         year = 2024,
         month = 7,
@@ -294,11 +296,12 @@ fun PreviewCareCalendarWithoutSelect() {
 }
 
 @Preview(
-    name = "withSelect",
+    name = "Calendar_Default_WithSelect",
     showBackground = true,
+    group = "Default"
 )
 @Composable
-fun PreviewCareCalendarWithSelect() {
+private fun PreviewCareCalendarDefaultWithSelect() {
     CareCalendar(
         year = 2024,
         month = 8,
@@ -313,12 +316,33 @@ fun PreviewCareCalendarWithSelect() {
 }
 
 @Preview(
-    name = "Foldable",
+    name = "Calendar_Foldable_WithOutSelect",
     showBackground = true,
-    device = Devices.FOLDABLE
+    device = Devices.FOLDABLE,
+    group = "Fold"
 )
 @Composable
-fun PreviewCareCalendarFoldable() {
+private fun PreviewCareCalendarFoldableWithoutSelect() {
+    CareCalendar(
+        year = 2024,
+        month = 7,
+        startMonth = 7,
+        onMonthChanged = {},
+        onDayClick = {},
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp)
+    )
+}
+
+@Preview(
+    name = "Calendar_Foldable_WithSelect",
+    showBackground = true,
+    device = Devices.FOLDABLE,
+    group = "Fold"
+)
+@Composable
+private fun PreviewCareCalendarFoldableWithSelect() {
     CareCalendar(
         year = 2024,
         month = 7,
@@ -333,12 +357,33 @@ fun PreviewCareCalendarFoldable() {
 }
 
 @Preview(
-    name = "Flip",
+    name = "Calendar_Flip_WithOutSelect",
     showBackground = true,
-    device = "spec:width=480dp,height=320dp,dpi=480,isRound=false,chinSize=0dp"
+    device = Flip,
+    group = "Flip"
 )
 @Composable
-fun PreviewCareCalendarFlip() {
+private fun PreviewCareCalendarFlipWithoutSelect() {
+    CareCalendar(
+        year = 2024,
+        month = 8,
+        startMonth = 7,
+        onMonthChanged = {},
+        onDayClick = {},
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp)
+    )
+}
+
+@Preview(
+    name = "Calendar_Flip_WithSelect",
+    showBackground = true,
+    device = Flip,
+    group = "Flip"
+)
+@Composable
+private fun PreviewCareCalendarFlipWithSelect() {
     CareCalendar(
         year = 2024,
         month = 8,
