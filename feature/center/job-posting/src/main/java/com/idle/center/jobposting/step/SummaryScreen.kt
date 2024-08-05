@@ -39,6 +39,8 @@ import java.time.LocalDate
 @Composable
 internal fun SummaryScreen(
     weekDays: Set<DayOfWeek>,
+    workStartTime: String,
+    workEndTime: String,
     payType: PayType?,
     payAmount: String,
     roadNameAddress: String,
@@ -252,7 +254,7 @@ internal fun SummaryScreen(
                     )
 
                     Text(
-                        text = "09:00 - 15:00",
+                        text = "${workStartTime} - ${workEndTime}",
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray900,
                     )

@@ -4,7 +4,6 @@ package com.idle.center.job.edit
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -39,8 +38,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.fragment.app.FragmentManager
+import androidx.navigation.fragment.findNavController
 import com.idle.compose.JobPostingBottomSheetType
 import com.idle.compose.JobPostingBottomSheetType.POST_DEAD_LINE
 import com.idle.compose.JobPostingBottomSheetType.WORK_END_TIME
@@ -57,6 +59,7 @@ import com.idle.designsystem.compose.component.CareClickableTextField
 import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.CareTextFieldLong
+import com.idle.designsystem.compose.component.CareWheelPicker
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.designsystem.compose.foundation.PretendardMedium
@@ -67,6 +70,7 @@ import com.idle.domain.model.job.DayOfWeek
 import com.idle.domain.model.job.LifeAssistance
 import com.idle.domain.model.job.MentalStatus
 import com.idle.domain.model.job.PayType
+import com.idle.post.code.PostCodeFragment
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
@@ -74,12 +78,12 @@ import java.time.LocalDate
 @Composable
 fun JobEditScreen(
     weekDays: Set<DayOfWeek>,
-    workStartTime: String?,
-    workEndTime: String?,
+    workStartTime: String,
+    workEndTime: String,
+    fragmentManager: FragmentManager,
     payType: PayType?,
     payAmount: String,
-    tempRoadNameAddress: String,
-    tempLotNumberAddress: String,
+    roadNameAddress: String,
     detailAddress: String,
     clientName: String,
     gender: Gender,
@@ -107,7 +111,6 @@ fun JobEditScreen(
     onRoadNameAddressChanged: (String) -> Unit,
     onLotNumberAddressChanged: (String) -> Unit,
     onDetailAddressChanged: (String) -> Unit,
-    showPostCodeDialog: () -> Unit,
     onClientNameChanged: (String) -> Unit,
     onGenderChanged: (Gender) -> Unit,
     onBirthYearChanged: (String) -> Unit,
@@ -130,8 +133,12 @@ fun JobEditScreen(
     setEditState: (Boolean) -> Unit,
 ) {
     var localWeekDays by remember { mutableStateOf(weekDays) }
+    var localWorkStartTime by remember { mutableStateOf(workStartTime) }
+    var localWorkEndTime by remember { mutableStateOf(workEndTime) }
     var localPayType by remember { mutableStateOf(payType) }
     var localPayAmount by remember { mutableStateOf(payAmount) }
+    var localRoadNameAddress by remember { mutableStateOf(roadNameAddress) }
+    var localLotNumberAddress by remember { mutableStateOf("") }
     var localDetailAddress by remember { mutableStateOf(detailAddress) }
     var localClientName by remember { mutableStateOf(clientName) }
     var localGender by remember { mutableStateOf(gender) }
@@ -160,6 +167,20 @@ fun JobEditScreen(
         skipHalfExpanded = true,
     )
 
+    val postCodeDialog: PostCodeFragment? by lazy {
+        PostCodeFragment().apply {
+            onDismissCallback = {
+                findNavController().currentBackStackEntry?.savedStateHandle?.let {
+                    val roadNameAddress = it.get<String>("roadNameAddress")
+                    val lotNumberAddress = it.get<String>("lotNumberAddress")
+
+                    localRoadNameAddress = roadNameAddress ?: ""
+                    localLotNumberAddress = lotNumberAddress ?: ""
+                }
+            }
+        }
+    }
+
 
     BackHandler { setEditState(false) }
 
@@ -172,19 +193,56 @@ fun JobEditScreen(
             ) {
                 when (bottomSheetType) {
                     WORK_START_TIME -> {
+                        var tempWorkStartAmPm by remember { mutableStateOf("오전") }
+                        var tempWorkStartHour by remember { mutableStateOf("01") }
+                        var tempWorkStartMinute by remember { mutableStateOf("00") }
+
                         Text(
                             text = "근무 시작 시간",
                             style = CareTheme.typography.heading3,
                             color = CareTheme.colors.gray900,
                         )
 
-                        Spacer(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(150.dp)
-                                .background(CareTheme.colors.gray200)
-                                .padding(vertical = 80.dp),
-                        )
+                        Spacer(modifier = Modifier.height(80.dp))
+
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            CareWheelPicker(
+                                list = listOf("오전", "오후"),
+                                onItemSelected = { tempWorkStartAmPm = it },
+                                initIndex = if (
+                                    localWorkStartTime.isBlank() ||
+                                    localWorkStartTime.substring(0, 2).toInt() <= 12
+                                ) 0 else 1,
+                                modifier = Modifier.padding(end = 40.dp),
+                            )
+
+                            CareWheelPicker(
+                                list = (1..12).toList(),
+                                onItemSelected = { tempWorkStartHour = it },
+                                initIndex = if (localWorkStartTime.isBlank()) 0
+                                else if (localWorkStartTime.substring(0, 2) == "00") 11
+                                else localWorkStartTime.substring(0, 2).toInt() - 1,
+                                modifier = Modifier.padding(end = 10.dp),
+                            )
+
+                            Text(
+                                text = ":",
+                                style = CareTheme.typography.subtitle2,
+                                color = CareTheme.colors.gray900,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.width(20.dp),
+                            )
+
+                            CareWheelPicker(
+                                list = (0..50 step 10).toList(),
+                                onItemSelected = { tempWorkStartMinute = it },
+                                initIndex = if (localWorkStartTime.isBlank()) 0
+                                else (localWorkStartTime.substring(3, 5).toInt() / 10),
+                                modifier = Modifier.padding(start = 10.dp),
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(80.dp))
 
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -192,30 +250,85 @@ fun JobEditScreen(
                         ) {
                             CareButtonMedium(
                                 text = "취소",
-                                onClick = { /*TODO*/ },
+                                onClick = {
+                                    coroutineScope.launch {
+                                        sheetState.hide()
+                                    }
+                                },
+                                modifier = Modifier.weight(1f),
                             )
 
                             CareButtonMedium(
-                                text = "종료",
-                                onClick = { /*TODO*/ },
+                                text = "저장",
+                                onClick = {
+                                    coroutineScope.launch {
+                                        val startTime =
+                                            "${
+                                                if (tempWorkStartAmPm == "오전" && tempWorkStartHour == "12") "00"
+                                                else if (tempWorkStartAmPm == "오전") tempWorkStartHour
+                                                else if (tempWorkStartAmPm == "오후" && tempWorkStartHour == "12") "12"
+                                                else tempWorkStartHour.toInt() + 12
+                                            }" + ":${tempWorkStartMinute}"
+                                        localWorkStartTime = startTime
+                                        sheetState.hide()
+                                    }
+                                },
+                                modifier = Modifier.weight(1f),
                             )
                         }
                     }
 
-                    JobPostingBottomSheetType.WORK_END_TIME -> {
+                    WORK_END_TIME -> {
+                        var tempWorkEndAmPm by remember { mutableStateOf("오전") }
+                        var tempWorkEndHour by remember { mutableStateOf("01") }
+                        var tempWorkEndMinute by remember { mutableStateOf("00") }
+
                         Text(
                             text = "근무 종료 시간",
                             style = CareTheme.typography.heading3,
                             color = CareTheme.colors.gray900,
                         )
 
-                        Spacer(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(150.dp)
-                                .background(CareTheme.colors.gray200)
-                                .padding(vertical = 80.dp),
-                        )
+                        Spacer(modifier = Modifier.height(80.dp))
+
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            CareWheelPicker(
+                                list = listOf("오전", "오후"),
+                                onItemSelected = { tempWorkEndAmPm = it },
+                                initIndex = if (
+                                    localWorkEndTime.isBlank() ||
+                                    localWorkEndTime.substring(0, 2).toInt() <= 12
+                                ) 0 else 1,
+                                modifier = Modifier.padding(end = 40.dp),
+                            )
+
+                            CareWheelPicker(
+                                list = (1..12).toList(),
+                                onItemSelected = { tempWorkEndHour = it },
+                                initIndex = if (localWorkEndTime.isBlank()) 0
+                                else if (localWorkEndTime.substring(0, 2) == "00") 11
+                                else localWorkEndTime.substring(0, 2).toInt() - 1,
+                                modifier = Modifier.padding(end = 10.dp),
+                            )
+
+                            Text(
+                                text = ":",
+                                style = CareTheme.typography.subtitle2,
+                                color = CareTheme.colors.gray900,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.width(20.dp),
+                            )
+
+                            CareWheelPicker(
+                                list = (0..50 step 10).toList(),
+                                onItemSelected = { tempWorkEndMinute = it },
+                                initIndex = if (localWorkEndTime.isBlank()) 0
+                                else localWorkEndTime.substring(3, 5).toInt() / 10,
+                                modifier = Modifier.padding(start = 10.dp),
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(80.dp))
 
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -223,12 +336,29 @@ fun JobEditScreen(
                         ) {
                             CareButtonMedium(
                                 text = "취소",
-                                onClick = { /*TODO*/ },
+                                onClick = {
+                                    coroutineScope.launch {
+                                        sheetState.hide()
+                                    }
+                                },
+                                modifier = Modifier.weight(1f),
                             )
 
                             CareButtonMedium(
-                                text = "종료",
-                                onClick = { /*TODO*/ },
+                                text = "저장",
+                                onClick = {
+                                    coroutineScope.launch {
+                                        val endTime = "${
+                                            if (tempWorkEndAmPm == "오전" && tempWorkEndHour == "12") "00"
+                                            else if (tempWorkEndAmPm == "오전") tempWorkEndHour
+                                            else if (tempWorkEndAmPm == "오후" && tempWorkEndHour == "12") "12"
+                                            else tempWorkEndHour.toInt() + 12
+                                        }" + ":${tempWorkEndMinute}"
+                                        localWorkEndTime = endTime
+                                        sheetState.hide()
+                                    }
+                                },
+                                modifier = Modifier.weight(1f),
                             )
                         }
                     }
@@ -248,7 +378,7 @@ fun JobEditScreen(
                             onMonthChanged = onCalendarMonthChanged,
                             onDayClick = {
                                 coroutineScope.launch {
-                                    onApplyDeadlineChanged(it)
+                                    localApplyDeadline = it
                                     sheetState.hide()
                                 }
                             },
@@ -262,8 +392,7 @@ fun JobEditScreen(
                 }
             }
         },
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
         Scaffold(
             topBar = {
@@ -290,6 +419,8 @@ fun JobEditScreen(
 
                                 clearWeekDays()
                                 localWeekDays.forEach { setWeekDays(it) }
+                                onWorkStartTimeChanged(localWorkStartTime)
+                                onWorkEndTimeChanged(localWorkEndTime)
                                 onPayTypeChanged(localPayType!!)
                                 onPayAmountChanged(localPayAmount)
                                 onDetailAddressChanged(localDetailAddress)
@@ -311,8 +442,8 @@ fun JobEditScreen(
                                 localApplyMethod.forEach { onApplyMethodChanged(it) }
                                 onApplyDeadlineChanged(localApplyDeadline!!)
                                 onApplyDeadlineTypeChanged(localApplyDeadlineType!!)
-                                onRoadNameAddressChanged(tempRoadNameAddress)
-                                onLotNumberAddressChanged(tempLotNumberAddress)
+                                onRoadNameAddressChanged(localRoadNameAddress)
+                                onLotNumberAddressChanged(localLotNumberAddress)
                                 setEditState(false)
                             },
                         )
@@ -382,7 +513,7 @@ fun JobEditScreen(
                             modifier = Modifier.fillMaxWidth(),
                         ) {
                             CareClickableTextField(
-                                value = "",
+                                value = localWorkStartTime,
                                 hint = "시작 시간",
                                 onClick = {
                                     coroutineScope.launch {
@@ -400,7 +531,7 @@ fun JobEditScreen(
                             )
 
                             CareClickableTextField(
-                                value = "",
+                                value = localWorkEndTime,
                                 hint = "종료 시간",
                                 onClick = {
                                     coroutineScope.launch {
@@ -476,9 +607,13 @@ fun JobEditScreen(
                             modifier = Modifier.fillMaxWidth(),
                         ) {
                             CareClickableTextField(
-                                value = tempRoadNameAddress,
+                                value = localRoadNameAddress,
                                 hint = "도로명 주소를 입력해주세요.",
-                                onClick = showPostCodeDialog,
+                                onClick = {
+                                    if (!(postCodeDialog?.isAdded == true || postCodeDialog?.isVisible == true)) {
+                                        postCodeDialog?.show(fragmentManager, "PostCodeFragment")
+                                    }
+                                },
                                 modifier = Modifier.fillMaxWidth(),
                             )
                         }

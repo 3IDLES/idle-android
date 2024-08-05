@@ -43,8 +43,9 @@ fun <T> CareWheelPicker(
         }
     } + listOf("")
 
-    LaunchedEffect(!listState.isScrollInProgress) {
-        onItemSelected(innerList[listState.firstVisibleItemIndex + 1])
+    LaunchedEffect(listState.isScrollInProgress) {
+        val currentIndex = listState.firstVisibleItemIndex + 1
+        onItemSelected(innerList[currentIndex])
     }
 
     Box(modifier = modifier.width(52.dp)) {
