@@ -15,6 +15,7 @@ import com.idle.network.model.profile.RegisterCenterProfileRequest
 import com.idle.network.model.profile.UpdateCenterProfileRequest
 import com.idle.network.model.profile.UpdateWorkerProfileRequest
 import com.idle.network.model.profile.UploadProfileImageUrlResponse
+import com.idle.network.model.token.RefreshTokenRequest
 import com.idle.network.model.token.TokenResponse
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -28,6 +29,9 @@ import retrofit2.http.Query
 import retrofit2.http.Url
 
 interface CareNetworkApi {
+    @POST("/api/v1/auth/center/refresh")
+    suspend fun refreshToken(@Body refreshTokenRequest: RefreshTokenRequest): Response<TokenResponse>
+
     @POST("/api/v1/auth/common/send")
     suspend fun sendPhoneNumber(@Body sendPhoneRequest: SendPhoneRequest): Response<Unit>
 

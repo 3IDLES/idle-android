@@ -1,6 +1,6 @@
 package com.idle.network.token
 
-import com.idle.network.api.TokenNetworkApi
+import com.idle.network.api.CareNetworkApi
 import com.idle.network.model.token.RefreshTokenRequest
 import com.idle.network.util.onResponse
 import kotlinx.coroutines.launch
@@ -10,10 +10,11 @@ import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
 import javax.inject.Inject
+import javax.inject.Provider
 
 class TokenAuthenticator @Inject constructor(
     private val tokenManager: TokenManager,
-    private val tokenNetworkApi: TokenNetworkApi,
+    private val careNetworkApi: Provider<CareNetworkApi>,
 ) : Authenticator {
     override fun authenticate(route: Route?, response: Response): Request? {
         val originRequest = response.request
@@ -32,7 +33,7 @@ class TokenAuthenticator @Inject constructor(
         }
 
         val token = runBlocking {
-            tokenNetworkApi.refreshToken(RefreshTokenRequest(tokenManager.getRefreshToken()))
+            careNetworkApi.get().refreshToken(RefreshTokenRequest(tokenManager.getRefreshToken()))
                 .onResponse()
         }.getOrNull()
 
