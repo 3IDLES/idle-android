@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.idle.designsystem.compose.Flip
 import com.idle.designsystem.compose.foundation.CareTheme
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -91,58 +92,81 @@ fun <T> CareWheelPicker(
     }
 }
 
-@Preview
 @Composable
-fun PreviewCareWheelPickerHour() {
+private fun CareWheelPickerContent(list: List<Any>, initIndex: Int = 0) {
     CareWheelPicker(
-        list = (1..12).toList(),
-        onItemSelected = { },
-    )
-}
-
-@Preview
-@Composable
-fun PreviewCareWheelPickerMinute() {
-    CareWheelPicker(
-        list = (0..50 step 10).toList(),
+        list = list,
         onItemSelected = {},
-    )
-}
-
-@Preview
-@Composable
-fun PreviewCareWheelPickerString() {
-    CareWheelPicker(
-        list = listOf("오전", "오후"),
-        initIndex = 1,
-        onItemSelected = {},
-    )
-}
-
-@Preview(
-    name = "Foldable",
-    showBackground = true,
-    device = Devices.FOLDABLE
-)
-@Composable
-fun PreviewCareWheelPickerFoldable() {
-    CareWheelPicker(
-        list = (1..24).toList(),
-        onItemSelected = { },
+        initIndex = initIndex,
         modifier = Modifier.padding(horizontal = 20.dp)
     )
 }
 
+@Preview(name = "WheelPicker_Default_Hour", showBackground = true, group = "Default")
+@Composable
+private fun PreviewCareWheelPickerHourDefault() {
+    CareWheelPickerContent(list = (1..12).toList())
+}
+
+@Preview(name = "WheelPicker_Default_Minute", showBackground = true, group = "Default")
+@Composable
+private fun PreviewCareWheelPickerMinuteDefault() {
+    CareWheelPickerContent(list = (0..50 step 10).toList())
+}
+
+@Preview(name = "WheelPicker_Default_String", showBackground = true, group = "Default")
+@Composable
+private fun PreviewCareWheelPickerStringDefault() {
+    CareWheelPickerContent(list = listOf("오전", "오후"), initIndex = 1)
+}
+
+@Preview(name = "WheelPicker_Flip_Hour", showBackground = true, device = Flip, group = "Flip")
+@Composable
+private fun PreviewCareWheelPickerHourFlip() {
+    CareWheelPickerContent(list = (1..12).toList())
+}
+
+@Preview(name = "WheelPicker_Flip_Minute", showBackground = true, device = Flip, group = "Flip")
+@Composable
+private fun PreviewCareWheelPickerMinuteFlip() {
+    CareWheelPickerContent(list = (0..50 step 10).toList())
+}
+
+@Preview(name = "WheelPicker_Flip_String", showBackground = true, device = Flip, group = "Flip")
+@Composable
+private fun PreviewCareWheelPickerStringFlip() {
+    CareWheelPickerContent(list = listOf("오전", "오후"), initIndex = 1)
+}
+
 @Preview(
-    name = "Flip",
+    name = "WheelPicker_Foldable_Hour",
     showBackground = true,
-    device = "spec:width=480dp,height=320dp,dpi=480,isRound=false,chinSize=0dp"
+    device = Devices.FOLDABLE,
+    group = "Fold"
 )
 @Composable
-fun PreviewCareWheelPickerFlip() {
-    CareWheelPicker(
-        list = listOf("오전", "오후"),
-        onItemSelected = {},
-        modifier = Modifier.padding(horizontal = 20.dp)
-    )
+private fun PreviewCareWheelPickerHourFoldable() {
+    CareWheelPickerContent(list = (1..12).toList())
+}
+
+@Preview(
+    name = "WheelPicker_Foldable_Minute",
+    showBackground = true,
+    device = Devices.FOLDABLE,
+    group = "Fold"
+)
+@Composable
+private fun PreviewCareWheelPickerMinuteFoldable() {
+    CareWheelPickerContent(list = (0..50 step 10).toList())
+}
+
+@Preview(
+    name = "WheelPicker_Foldable_String",
+    showBackground = true,
+    device = Devices.FOLDABLE,
+    group = "Fold"
+)
+@Composable
+private fun PreviewCareWheelPickerStringFoldable() {
+    CareWheelPickerContent(list = listOf("오전", "오후"), initIndex = 1)
 }
