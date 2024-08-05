@@ -4,13 +4,18 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Devices
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.idle.compose.clickable
+import com.idle.designsystem.compose.Flip
 import com.idle.designsystem.compose.foundation.CareTheme
 
 @Composable
@@ -65,4 +70,66 @@ fun CareHeadingTopAppBar(
 
         leftComponent()
     }
+}
+
+@Composable
+private fun CareSubtitleTopAppBarContent() {
+    CareSubtitleTopAppBar(
+        title = "Subtitle AppBar",
+        onNavigationClick = {},
+        leftComponent = {
+            Text(text = "Left Action", style = CareTheme.typography.body3)
+        },
+        modifier = Modifier.fillMaxWidth().padding(16.dp)
+    )
+}
+
+@Composable
+private fun CareHeadingTopAppBarContent() {
+    CareHeadingTopAppBar(
+        title = "Heading AppBar",
+        rightComponent = {
+            Text(text = "Right Action", style = CareTheme.typography.body3)
+        },
+        leftComponent = {
+            Text(text = "Left Action", style = CareTheme.typography.body3)
+        },
+        modifier = Modifier.fillMaxWidth().padding(16.dp)
+    )
+}
+
+@Preview(name = "SubtitleTopAppBar_Default", showBackground = true, group = "Default")
+@Composable
+private fun PreviewCareSubtitleTopAppBarDefault() {
+    CareSubtitleTopAppBarContent()
+}
+
+@Preview(name = "SubtitleTopAppBar_Flip", showBackground = true, device = Flip, group = "Flip")
+@Composable
+private fun PreviewCareSubtitleTopAppBarFlip() {
+    CareSubtitleTopAppBarContent()
+}
+
+@Preview(name = "SubtitleTopAppBar_Foldable", showBackground = true, device = Devices.FOLDABLE, group = "Fold")
+@Composable
+private fun PreviewCareSubtitleTopAppBarFoldable() {
+    CareSubtitleTopAppBarContent()
+}
+
+@Preview(name = "HeadingTopAppBar_Default", showBackground = true, group = "Default")
+@Composable
+private fun PreviewCareHeadingTopAppBarDefault() {
+    CareHeadingTopAppBarContent()
+}
+
+@Preview(name = "HeadingTopAppBar_Flip", showBackground = true, device = Flip, group = "Flip")
+@Composable
+private fun PreviewCareHeadingTopAppBarFlip() {
+    CareHeadingTopAppBarContent()
+}
+
+@Preview(name = "HeadingTopAppBar_Foldable", showBackground = true, device = Devices.FOLDABLE, group = "Fold")
+@Composable
+private fun PreviewCareHeadingTopAppBarFoldable() {
+    CareHeadingTopAppBarContent()
 }
