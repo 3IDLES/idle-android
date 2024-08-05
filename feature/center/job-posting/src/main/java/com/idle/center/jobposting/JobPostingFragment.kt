@@ -40,7 +40,7 @@ import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.component.CareBottomSheetLayout
 import com.idle.designsystem.compose.component.CareButtonMedium
-import com.idle.designsystem.compose.component.CareButtonStrokeSmall
+import com.idle.designsystem.compose.component.CareButtonRound
 import com.idle.designsystem.compose.component.CareCalendar
 import com.idle.designsystem.compose.component.CareProgressBar
 import com.idle.designsystem.compose.component.CareStateAnimator
@@ -522,7 +522,7 @@ internal fun JobPostingScreen(
                     onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
                     leftComponent = {
                         if (jobPostingStep == JobPostingStep.SUMMARY) {
-                            CareButtonStrokeSmall(
+                            CareButtonRound(
                                 text = "공고 수정하기",
                                 onClick = { setEditState(true) },
                             )
