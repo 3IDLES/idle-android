@@ -52,12 +52,6 @@ class JobPostingViewModel @Inject constructor(
 
     private val _lotNumberAddress = MutableStateFlow("")
 
-    private val _tempRoadNameAddress = MutableStateFlow("")
-    val tempRoadNameAddress = _tempRoadNameAddress.asStateFlow()
-
-    private val _tempLotNumberAddress = MutableStateFlow("")
-    val tempLotNumberAddress = _tempLotNumberAddress.asStateFlow()
-
     private val _detailAddress = MutableStateFlow("")
     val detailAddress = _detailAddress.asStateFlow()
 
@@ -160,14 +154,6 @@ class JobPostingViewModel @Inject constructor(
         _lotNumberAddress.value = address
     }
 
-    internal fun setTempRoadNameAddress(address: String) {
-        _tempRoadNameAddress.value = address
-    }
-
-    internal fun setTempLotNumberAddress(address: String) {
-        _tempLotNumberAddress.value = address
-    }
-
     internal fun setDetailAddress(address: String) {
         _detailAddress.value = address
     }
@@ -255,11 +241,6 @@ class JobPostingViewModel @Inject constructor(
     }
 
     internal fun setEditState(editState: Boolean) {
-        if (editState) {
-            _tempRoadNameAddress.value = _roadNameAddress.value
-            _tempLotNumberAddress.value = _lotNumberAddress.value
-        }
-
         _isEditState.value = editState
     }
 

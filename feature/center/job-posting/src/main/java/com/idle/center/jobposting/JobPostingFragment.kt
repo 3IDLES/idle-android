@@ -2,7 +2,6 @@
 
 package com.idle.center.jobposting
 
-import android.util.Log
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -81,8 +80,6 @@ internal class JobPostingFragment : BaseComposeFragment() {
             val payType by payType.collectAsStateWithLifecycle()
             val payAmount by payAmount.collectAsStateWithLifecycle()
             val roadNameAddress by roadNameAddress.collectAsStateWithLifecycle()
-            val tempRoadNameAddress by tempRoadNameAddress.collectAsStateWithLifecycle()
-            val tempLotNumberAddress by tempLotNumberAddress.collectAsStateWithLifecycle()
             val detailAddress by detailAddress.collectAsStateWithLifecycle()
             val clientName by clientName.collectAsStateWithLifecycle()
             val gender by gender.collectAsStateWithLifecycle()
@@ -108,16 +105,11 @@ internal class JobPostingFragment : BaseComposeFragment() {
                 PostCodeFragment().apply {
                     onDismissCallback = {
                         findNavController().currentBackStackEntry?.savedStateHandle?.let {
-                            val roadNameAddress = it.get<String>("roadNameAddress")
-                            val lotNumberAddress = it.get<String>("lotNumberAddress")
+                            val roadName = it.get<String>("roadNameAddress")
+                            val lotNumber = it.get<String>("lotNumberAddress")
 
-                            if (!isEditState) {
-                                fragmentViewModel.setRoadNameAddress(roadNameAddress ?: "")
-                                fragmentViewModel.setLotNumberAddress(lotNumberAddress ?: "")
-                            } else {
-                                fragmentViewModel.setTempRoadNameAddress(roadNameAddress ?: "")
-                                fragmentViewModel.setTempLotNumberAddress(lotNumberAddress ?: "")
-                            }
+                            fragmentViewModel.setRoadNameAddress(roadName ?: "")
+                            fragmentViewModel.setLotNumberAddress(lotNumber ?: "")
                         }
                     }
                 }
@@ -128,10 +120,10 @@ internal class JobPostingFragment : BaseComposeFragment() {
                     weekDays = weekDays,
                     workStartTime = workStartTime,
                     workEndTime = workEndTime,
+                    fragmentManager = parentFragmentManager,
                     payType = payType,
                     payAmount = payAmount,
-                    tempRoadNameAddress = tempRoadNameAddress,
-                    tempLotNumberAddress = tempLotNumberAddress,
+                    roadNameAddress = roadNameAddress,
                     detailAddress = detailAddress,
                     clientName = clientName,
                     gender = gender,
@@ -157,11 +149,6 @@ internal class JobPostingFragment : BaseComposeFragment() {
                     onPayTypeChanged = ::setPayType,
                     onPayAmountChanged = ::setPayAmount,
                     onDetailAddressChanged = ::setDetailAddress,
-                    showPostCodeDialog = {
-                        if (!(postCodeDialog?.isAdded == true || postCodeDialog?.isVisible == true)) {
-                            postCodeDialog?.show(parentFragmentManager, "PostCodeFragment")
-                        }
-                    },
                     onClientNameChanged = ::setClientName,
                     onGenderChanged = ::setGender,
                     onWeightChanged = ::setWeight,
@@ -326,13 +313,12 @@ internal fun JobPostingScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                var localWorkStartAmPm by remember { mutableStateOf("오전") }
-                var localWorkStartHour by remember { mutableStateOf("01") }
-                var localWorkStartMinute by remember { mutableStateOf("00") }
-
-
                 when (bottomSheetType) {
                     JobPostingBottomSheetType.WORK_START_TIME -> {
+                        var localWorkStartAmPm by remember { mutableStateOf("오전") }
+                        var localWorkStartHour by remember { mutableStateOf("01") }
+                        var localWorkStartMinute by remember { mutableStateOf("00") }
+
                         Text(
                             text = "근무 시작 시간",
                             style = CareTheme.typography.heading3,
@@ -355,6 +341,7 @@ internal fun JobPostingScreen(
                                 list = (1..12).toList(),
                                 onItemSelected = { localWorkStartHour = it },
                                 initIndex = if (workStartTime.isBlank()) 0
+                                else if (workStartTime.substring(0, 2) == "00") 11
                                 else workStartTime.substring(0, 2).toInt() - 1,
                                 modifier = Modifier.padding(end = 10.dp),
                             )
@@ -371,7 +358,7 @@ internal fun JobPostingScreen(
                                 list = (0..50 step 10).toList(),
                                 onItemSelected = { localWorkStartMinute = it },
                                 initIndex = if (workStartTime.isBlank()) 0
-                                else workStartTime.substring(3, 5).toInt() - 1,
+                                else (workStartTime.substring(3, 5).toInt() / 10),
                                 modifier = Modifier.padding(start = 10.dp),
                             )
                         }
@@ -396,7 +383,6 @@ internal fun JobPostingScreen(
                                 text = "저장",
                                 onClick = {
                                     coroutineScope.launch {
-                                        Log.d("test", localWorkStartAmPm + localWorkStartHour + localWorkStartMinute)
                                         val startTime =
                                             "${
                                                 if (localWorkStartAmPm == "오전" && localWorkStartHour == "12") "00"
@@ -440,6 +426,7 @@ internal fun JobPostingScreen(
                                 list = (1..12).toList(),
                                 onItemSelected = { localWorkEndHour = it },
                                 initIndex = if (workEndTime.isBlank()) 0
+                                else if (workEndTime.substring(0, 2) == "00") 11
                                 else workEndTime.substring(0, 2).toInt() - 1,
                                 modifier = Modifier.padding(end = 10.dp),
                             )
@@ -456,7 +443,7 @@ internal fun JobPostingScreen(
                                 list = (0..50 step 10).toList(),
                                 onItemSelected = { localWorkEndMinute = it },
                                 initIndex = if (workEndTime.isBlank()) 0
-                                else workEndTime.substring(3, 5).toInt() - 1,
+                                else (workEndTime.substring(3, 5).toInt() / 10),
                                 modifier = Modifier.padding(start = 10.dp),
                             )
                         }
@@ -559,6 +546,8 @@ internal fun JobPostingScreen(
                 if (isSummary) {
                     SummaryScreen(
                         weekDays = weekDays,
+                        workStartTime = workStartTime,
+                        workEndTime = workEndTime,
                         payType = payType,
                         payAmount = payAmount,
                         roadNameAddress = roadNameAddress,
@@ -672,7 +661,7 @@ internal fun JobPostingScreen(
                                             setBottomSheetType(sheetType)
                                             sheetState.show()
                                         }
-                                    },
+                                    }
                                 )
 
                                 JobPostingStep.SUMMARY -> Box(modifier = Modifier.fillMaxSize())
