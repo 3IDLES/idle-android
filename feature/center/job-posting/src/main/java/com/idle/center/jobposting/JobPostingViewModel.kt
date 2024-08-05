@@ -32,6 +32,12 @@ class JobPostingViewModel @Inject constructor(
     private val _weekDays = MutableStateFlow<Set<DayOfWeek>>(setOf())
     val weekDays = _weekDays.asStateFlow()
 
+    private val _workStartTime = MutableStateFlow("")
+    val workStartTime = _workStartTime.asStateFlow()
+
+    private val _workEndTime = MutableStateFlow("")
+    val workEndTime = _workEndTime.asStateFlow()
+
     private val _payType = MutableStateFlow<PayType?>(null)
     val payType = _payType.asStateFlow()
 
@@ -132,6 +138,14 @@ class JobPostingViewModel @Inject constructor(
 
     internal fun setPayAmount(payAmount: String) {
         _payAmount.value = payAmount
+    }
+
+    internal fun setWorkStartTime(time: String) {
+        _workStartTime.value = time
+    }
+
+    internal fun setWorkEndTime(time: String) {
+        _workEndTime.value = time
     }
 
     internal fun setJobPostingStep(step: JobPostingStep) {

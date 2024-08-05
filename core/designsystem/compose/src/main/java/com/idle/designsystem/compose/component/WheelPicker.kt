@@ -1,6 +1,5 @@
 package com.idle.designsystem.compose.component
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
@@ -30,9 +29,10 @@ fun <T> CareWheelPicker(
     list: List<T>,
     onItemSelected: (String) -> Unit,
     modifier: Modifier = Modifier,
+    initIndex: Int = 0,
     pickerMaxHeight: Dp = 150.dp,
 ) {
-    val listState = rememberLazyListState()
+    val listState = rememberLazyListState(initialFirstVisibleItemIndex = initIndex)
     val snapFlingBehavior = rememberSnapFlingBehavior(lazyListState = listState)
 
     // Int 타입이면 padStart 적용, 아니면 기본 toString 사용
@@ -94,8 +94,8 @@ fun <T> CareWheelPicker(
 @Composable
 fun PreviewCareWheelPickerHour() {
     CareWheelPicker(
-        list = (1..24).toList(),
-        onItemSelected = { Log.d("test", it) },
+        list = (1..12).toList(),
+        onItemSelected = { },
     )
 }
 
@@ -113,6 +113,7 @@ fun PreviewCareWheelPickerMinute() {
 fun PreviewCareWheelPickerString() {
     CareWheelPicker(
         list = listOf("오전", "오후"),
+        initIndex = 1,
         onItemSelected = {},
     )
 }

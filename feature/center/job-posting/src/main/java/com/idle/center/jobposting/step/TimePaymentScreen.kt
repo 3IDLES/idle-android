@@ -30,6 +30,8 @@ import com.idle.domain.model.job.PayType
 @Composable
 internal fun TimePaymentScreen(
     weekDays: Set<DayOfWeek>,
+    workStartTime: String,
+    workEndTime: String,
     payType: PayType?,
     payAmount: String,
     setWeekDays: (DayOfWeek) -> Unit,
@@ -41,7 +43,8 @@ internal fun TimePaymentScreen(
     Column(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(28.dp),
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .padding(bottom = 30.dp),
     ) {
         Text(
@@ -75,7 +78,7 @@ internal fun TimePaymentScreen(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 CareClickableTextField(
-                    value = "",
+                    value = workStartTime,
                     hint = "시작 시간",
                     onClick = { showBottomSheet(JobPostingBottomSheetType.WORK_START_TIME) },
                     leftComponent = {
@@ -88,7 +91,7 @@ internal fun TimePaymentScreen(
                 )
 
                 CareClickableTextField(
-                    value = "",
+                    value = workEndTime,
                     hint = "종료 시간",
                     onClick = { showBottomSheet(JobPostingBottomSheetType.WORK_END_TIME) },
                     leftComponent = {
@@ -158,7 +161,7 @@ internal fun TimePaymentScreen(
 
         CareButtonLarge(
             text = "다음",
-            enable = weekDays.isNotEmpty() && payType != null && payAmount.isNotBlank(),
+            enable = weekDays.isNotEmpty() && workStartTime.isNotBlank() && workEndTime.isNotBlank() && payType != null && payAmount.isNotBlank(),
             onClick = { setJobPostingStep(JobPostingStep.findStep(JobPostingStep.TIME_PAYMENT.step + 1)) },
             modifier = Modifier.fillMaxWidth(),
         )
