@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
@@ -101,12 +102,12 @@ internal fun CenterProfileScreen(
     Scaffold(
         topBar = {
             CareSubtitleTopAppBar(
-                title = "내 센터 정보",
+                title = stringResource(id = R.string.my_center_info),
                 onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
                 leftComponent = {
                     if (isEditState) {
                         Text(
-                            text = "저장",
+                            text = stringResource(id = R.string.save),
                             style = CareTheme.typography.subtitle2,
                             color = CareTheme.colors.orange500,
                             modifier = Modifier.clickable {
@@ -115,7 +116,8 @@ internal fun CenterProfileScreen(
                         )
                     }
                 },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(start = 12.dp, top = 48.dp, bottom = 25.dp, end = 28.dp),
             )
         },
@@ -124,7 +126,8 @@ internal fun CenterProfileScreen(
     ) { paddingValues ->
         Column(
             verticalArrangement = Arrangement.spacedBy(20.dp),
-            modifier = Modifier.padding(paddingValues)
+            modifier = Modifier
+                .padding(paddingValues)
                 .fillMaxWidth()
                 .verticalScroll(scrollState),
         ) {
@@ -162,26 +165,28 @@ internal fun CenterProfileScreen(
                 modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 4.dp),
             ) {
                 Row(
-                    modifier = Modifier.fillMaxWidth().height(32.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(32.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = "센터 상세 정보",
+                        text = stringResource(id = R.string.center_detail_info),
                         style = CareTheme.typography.subtitle1,
                         color = CareTheme.colors.gray900,
                     )
 
                     if (!isEditState) {
                         CareButtonRound(
-                            text = "수정하기",
+                            text = stringResource(id = R.string.edit_job_posting),
                             onClick = { setEditState(true) }
                         )
                     }
                 }
 
                 LabeledContent(
-                    subtitle = "전화번호",
+                    subtitle = stringResource(id = R.string.phone_number),
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     if (!isEditState) {
@@ -201,7 +206,7 @@ internal fun CenterProfileScreen(
                 }
 
                 LabeledContent(
-                    subtitle = "센터 소개",
+                    subtitle = stringResource(id = R.string.center_introduce),
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     if (!isEditState) {
@@ -221,12 +226,13 @@ internal fun CenterProfileScreen(
 
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(
-                        text = "센터 사진",
+                        text = stringResource(id = R.string.center_image),
                         style = CareTheme.typography.subtitle4,
                         color = CareTheme.colors.gray500,
                     )
 
-                    Box(modifier = Modifier.padding(bottom = 60.dp)
+                    Box(modifier = Modifier
+                        .padding(bottom = 60.dp)
                         .clickable {
                             if (isEditState) singlePhotoPickerLauncher.launch(
                                 PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
@@ -238,7 +244,8 @@ internal fun CenterProfileScreen(
                                     painter = painterResource(R.drawable.ic_profile_empty),
                                     contentDescription = null,
                                     contentScale = ContentScale.FillWidth,
-                                    modifier = Modifier.fillMaxWidth()
+                                    modifier = Modifier
+                                        .fillMaxWidth()
                                         .clip(RoundedCornerShape(6.dp))
                                 )
                             } else {
@@ -246,7 +253,8 @@ internal fun CenterProfileScreen(
                                     painter = painterResource(R.drawable.ic_profile_empty_edit),
                                     contentDescription = null,
                                     contentScale = ContentScale.FillWidth,
-                                    modifier = Modifier.fillMaxWidth()
+                                    modifier = Modifier
+                                        .fillMaxWidth()
                                         .clip(RoundedCornerShape(6.dp))
                                 )
                             }
@@ -256,13 +264,15 @@ internal fun CenterProfileScreen(
                                 contentDescription = "",
                                 placeholder = painterResource(R.drawable.ic_profile_empty),
                                 contentScale = ContentScale.FillWidth,
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier
+                                    .fillMaxWidth()
                                     .clip(RoundedCornerShape(6.dp))
                             )
 
                             if (isEditState) {
                                 Spacer(
-                                    modifier = Modifier.matchParentSize()
+                                    modifier = Modifier
+                                        .matchParentSize()
                                         .clip(RoundedCornerShape(6.dp))
                                         .background(Color.Black.copy(alpha = 0.4f))
                                 )
@@ -270,7 +280,8 @@ internal fun CenterProfileScreen(
                                 Image(
                                     painter = painterResource(R.drawable.ic_edit_pencil),
                                     contentDescription = "",
-                                    modifier = Modifier.align(Alignment.BottomEnd)
+                                    modifier = Modifier
+                                        .align(Alignment.BottomEnd)
                                         .padding(16.dp)
                                 )
                             }
