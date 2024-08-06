@@ -32,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
@@ -39,6 +40,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
+import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonRound
 import com.idle.designsystem.compose.component.CareChipBasic
 import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
@@ -124,7 +126,7 @@ internal fun WorkerProfileScreen(
                     leftComponent = {
                         if (isEditState) {
                             Text(
-                                text = "저장",
+                                text = stringResource(id = R.string.save),
                                 style = CareTheme.typography.subtitle2,
                                 color = CareTheme.colors.orange500,
                                 modifier = Modifier.clickable {
@@ -133,12 +135,13 @@ internal fun WorkerProfileScreen(
                             )
                         } else {
                             CareButtonRound(
-                                text = "수정하기",
+                                text = stringResource(id = R.string.edit),
                                 onClick = { setEditState(true) },
                             )
                         }
                     },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .padding(start = 12.dp, top = 48.dp, end = 28.dp)
                         .height(32.dp),
                 )
@@ -148,13 +151,15 @@ internal fun WorkerProfileScreen(
         modifier = Modifier.addFocusCleaner(focusManager),
     ) { paddingValues ->
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .padding(paddingValues)
                 .verticalScroll(scrollState),
         ) {
             if (!isEditState) {
                 Box(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .background(CareTheme.colors.gray050)
                         .height(92.dp)
                 )
@@ -162,14 +167,16 @@ internal fun WorkerProfileScreen(
 
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(top = 44.dp)
                     .align(Alignment.TopCenter)
             ) {
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.Bottom,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .padding(horizontal = 20.dp)
                 ) {
                     Spacer(modifier = Modifier.size(24.dp))
@@ -182,7 +189,8 @@ internal fun WorkerProfileScreen(
                         Image(
                             painter = painterResource(com.idle.designresource.R.drawable.ic_worker_empty),
                             contentDescription = null,
-                            modifier = Modifier.align(Alignment.Center)
+                            modifier = Modifier
+                                .align(Alignment.Center)
                                 .padding(horizontal = 7.dp),
                         )
 
@@ -205,21 +213,21 @@ internal fun WorkerProfileScreen(
                 if (!isEditState) {
                     when (workerProfile.jobSearchStatus) {
                         YES -> CareTag(
-                            text = "구인중",
+                            text = workerProfile.jobSearchStatus.displayName,
                             textColor = CareTheme.colors.orange500,
                             backgroundColor = CareTheme.colors.orange100,
                             modifier = Modifier.padding(top = 16.dp),
                         )
 
                         NO -> CareTag(
-                            text = "구인중",
+                            text = workerProfile.jobSearchStatus.displayName,
                             textColor = CareTheme.colors.gray300,
                             backgroundColor = CareTheme.colors.gray050,
                             modifier = Modifier.padding(top = 16.dp),
                         )
 
                         UNKNOWN -> CareTag(
-                            text = "로드중",
+                            text = workerProfile.jobSearchStatus.displayName,
                             textColor = CareTheme.colors.gray300,
                             backgroundColor = CareTheme.colors.gray100,
                             modifier = Modifier.padding(top = 16.dp),
@@ -240,7 +248,7 @@ internal fun WorkerProfileScreen(
                         )
 
                         Text(
-                            text = "요양보호사",
+                            text = stringResource(id = R.string.worker),
                             style = CareTheme.typography.subtitle3,
                             color = CareTheme.colors.gray900,
                         )
@@ -249,11 +257,12 @@ internal fun WorkerProfileScreen(
                     Column(
                         horizontalAlignment = Alignment.Start,
                         verticalArrangement = Arrangement.spacedBy(6.dp),
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
                             .padding(start = 20.dp, end = 20.dp, bottom = 24.dp),
                     ) {
                         Text(
-                            text = "이름",
+                            text = stringResource(id = R.string.name),
                             style = CareTheme.typography.subtitle4,
                             color = CareTheme.colors.gray500,
                         )
@@ -269,11 +278,12 @@ internal fun WorkerProfileScreen(
                 if (!isEditState) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(bottom = 28.dp)
+                        modifier = Modifier
+                            .padding(bottom = 28.dp)
                             .height(IntrinsicSize.Min)
                     ) {
                         Text(
-                            text = "나이",
+                            text = stringResource(id = R.string.age),
                             style = CareTheme.typography.body3,
                             color = CareTheme.colors.gray500,
                             modifier = Modifier.padding(end = 4.dp),
@@ -292,7 +302,7 @@ internal fun WorkerProfileScreen(
                         )
 
                         Text(
-                            text = "성별",
+                            text = stringResource(id = R.string.gender),
                             style = CareTheme.typography.body3,
                             color = CareTheme.colors.gray500,
                             modifier = Modifier.padding(end = 4.dp),
@@ -312,7 +322,7 @@ internal fun WorkerProfileScreen(
                             )
 
                             Text(
-                                text = "경력",
+                                text = stringResource(id = R.string.experience),
                                 style = CareTheme.typography.body3,
                                 color = CareTheme.colors.gray500,
                                 modifier = Modifier.padding(end = 4.dp),
@@ -330,11 +340,12 @@ internal fun WorkerProfileScreen(
                     Column(
                         horizontalAlignment = Alignment.Start,
                         verticalArrangement = Arrangement.spacedBy(6.dp),
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
                             .padding(start = 20.dp, end = 20.dp, bottom = 28.dp),
                     ) {
                         Text(
-                            text = "성별",
+                            text = stringResource(id = R.string.gender),
                             style = CareTheme.typography.subtitle4,
                             color = CareTheme.colors.gray500,
                         )
@@ -361,7 +372,8 @@ internal fun WorkerProfileScreen(
                     Column(
                         horizontalAlignment = Alignment.Start,
                         verticalArrangement = Arrangement.spacedBy(6.dp),
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
                             .padding(start = 20.dp, end = 20.dp, bottom = 24.dp),
                     ) {
                         Row(
@@ -369,7 +381,7 @@ internal fun WorkerProfileScreen(
                             modifier = Modifier.padding(bottom = 6.dp),
                         ) {
                             Text(
-                                text = "성별",
+                                text = stringResource(id = R.string.gender),
                                 style = CareTheme.typography.subtitle4,
                                 color = CareTheme.colors.gray500,
                                 textAlign = TextAlign.Start,
@@ -377,7 +389,7 @@ internal fun WorkerProfileScreen(
                             )
 
                             Text(
-                                text = "경력",
+                                text = stringResource(id = R.string.experience),
                                 style = CareTheme.typography.subtitle4,
                                 color = CareTheme.colors.gray500,
                                 textAlign = TextAlign.Start,
@@ -427,11 +439,12 @@ internal fun WorkerProfileScreen(
                 Column(
                     horizontalAlignment = Alignment.Start,
                     verticalArrangement = Arrangement.spacedBy(6.dp),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .padding(start = 20.dp, end = 20.dp, bottom = 28.dp),
                 ) {
                     Text(
-                        text = "주소",
+                        text = stringResource(id = R.string.address),
                         style = CareTheme.typography.subtitle4,
                         color = CareTheme.colors.gray500,
                     )
@@ -454,11 +467,12 @@ internal fun WorkerProfileScreen(
                 Column(
                     horizontalAlignment = Alignment.Start,
                     verticalArrangement = Arrangement.spacedBy(6.dp),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .padding(start = 20.dp, end = 20.dp, bottom = 28.dp),
                 ) {
                     Text(
-                        text = "한줄 소개",
+                        text = stringResource(id = R.string.worker_introduce),
                         style = CareTheme.typography.subtitle4,
                         color = CareTheme.colors.gray500,
                     )
@@ -481,11 +495,12 @@ internal fun WorkerProfileScreen(
                 Column(
                     horizontalAlignment = Alignment.Start,
                     verticalArrangement = Arrangement.spacedBy(6.dp),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .padding(start = 20.dp, end = 20.dp, bottom = 28.dp),
                 ) {
                     Text(
-                        text = "특기",
+                        text = stringResource(id = R.string.specialty),
                         style = CareTheme.typography.subtitle4,
                         color = CareTheme.colors.gray500,
                     )

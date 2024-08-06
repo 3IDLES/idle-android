@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="center_info">기관 정보</string>
     <string name="setting">설정</string>
     <string name="my_center_info">내 센터 정보</string>
     <string name="notification_setting">알림 설정</string>
@@ -69,6 +70,7 @@
     <string name="detail_address">상세 주소</string>
     <string name="detail_address_hint">상세 주소를 입력해주세요. (예: 2층 204호)</string>
     <string name="summary_title">다음의 공고 정보가 맞는지 확인해주세요.</string>
+    <string name="job_posting_detail">공고 정보</string>
     <string name="experience_preferred">경력자 우대</string>
     <string name="beginner_possible">초보 가능</string>
     <string name="view_as_caregiver">보호사 측 화면으로 보기</string>
@@ -76,7 +78,11 @@
     <string name="work_days">근무 요일</string>
     <string name="work_hours">근무 시간</string>
     <string name="pay">급여</string>
-    <string name="address">근무 주소</string>
+    <string name="recruit">지원하기</string>
+    <string name="work_address">근무 주소</string>
+    <string name="specialty">특기</string>
+    <string name="worker_introduce">한줄 소개</string>
+    <string name="address">주소</string>
     <string name="road_name_address">도로명 주소</string>
     <string name="road_name_address_hint">도로명 주소를 입력해주세요.</string>
     <string name="customer_info">고객 정보</string>
@@ -93,6 +99,7 @@
     <string name="customer_info_title">고객 정보를 입력해주세요.</string>
     <string name="customer_requirement_title">고객 요구사항을 입력해주세요.</string>
     <string name="name">이름</string>
+    <string name="worker">요양보호사</string>
     <string name="center_name_hint">센터 이름을 입력해주세요.</string>
     <string name="customer_name">고객 이름</string>
     <string name="customer_name_hint">고객의 이름을 입력해주세요.</string>
@@ -114,6 +121,7 @@
     <string name="life_assistance">일상보조</string>
     <string name="speciality">특이사항</string>
     <string name="additional_info">추가 지원 정보</string>
+    <string name="experience">경력</string>
     <string name="experience_preference">경력 우대 여부</string>
     <string name="apply_method">지원 방법</string>
     <string name="apply_deadline">접수 마감일</string>
