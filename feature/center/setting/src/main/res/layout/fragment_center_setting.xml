@@ -21,14 +21,14 @@
             android:layout_marginStart="12dp"
             android:layout_marginTop="20dp"
             app:showBackIcon="true"
-            app:title="설정" />
+            app:title="@string/setting" />
 
         <com.idle.designsystem.binding.component.CareRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="20dp"
-            app:title="내 센터 정보" />
+            app:title="@string/my_center_info" />
 
         <com.idle.designsystem.binding.component.CareCenterInfoCard
             android:layout_width="match_parent"
@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             app:showSwitch="true"
-            app:title="알림 설정" />
+            app:title="@string/notification_setting" />
 
         <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
@@ -59,13 +59,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            app:title="자주 묻는 질문" />
+            app:title="@string/faq" />
 
         <com.idle.designsystem.binding.component.CareRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            app:title="문의하기" />
+            app:title="@string/inquiry" />
 
         <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
@@ -76,7 +76,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            app:title="약관 및 정책" />
+            app:title="@string/terms_and_policies" />
 
         <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
@@ -87,7 +87,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            app:title="개인정보 처리 방침" />
+            app:title="@string/privacy_policy" />
 
         <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
@@ -98,7 +98,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            app:title="로그아웃" />
+            app:title="@string/logout" />
 
         <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
@@ -109,7 +109,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            app:title="회원 탈퇴" />
+            app:title="@string/withdrawal" />
 
         <View
             android:layout_width="match_parent"
