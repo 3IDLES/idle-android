@@ -22,6 +22,7 @@ sealed class DeepLinkDestination(val addressRes: Int) {
     data object CenterRegister : DeepLinkDestination(R.string.center_register_info_deeplink_url)
     data object CenterRegisterComplete :
         DeepLinkDestination(R.string.center_register_info_complete_deeplink_url)
+
     data object CenterJobPosting : DeepLinkDestination(R.string.center_job_posting_deeplink_url)
     data object CenterJobPostingComplete :
         DeepLinkDestination(R.string.center_job_posting_complete_deeplink_url)
@@ -46,6 +47,11 @@ fun NavController.deepLinkNavigateTo(
 
     popUpTo?.let {
         builder.setPopUpTo(it, true)
+    }
+
+    if (deepLinkDestination == DeepLinkDestination.CenterJobPostingComplete) {
+        builder.setEnterAnim(R.anim.anim_slide_in_horizontally)
+            .setExitAnim(R.anim.anim_slide_out_horizontally)
     }
 
     navigate(
