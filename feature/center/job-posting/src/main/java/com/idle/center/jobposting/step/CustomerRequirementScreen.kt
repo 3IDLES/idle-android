@@ -55,19 +55,18 @@ internal fun CustomerRequirementScreen(
     Column(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(28.dp),
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .verticalScroll(scrollState)
             .padding(bottom = 30.dp),
     ) {
         Text(
-            text = "고객 요구사항을 입력해주세요.",
+            text = stringResource(id = R.string.customer_requirement_title),
             style = CareTheme.typography.heading2,
             color = CareTheme.colors.gray900,
         )
 
-        LabeledContent(
-            subtitle = "식사보조"
-        ) {
+        LabeledContent(subtitle = stringResource(id = R.string.meal_assistance)) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -89,9 +88,7 @@ internal fun CustomerRequirementScreen(
             }
         }
 
-        LabeledContent(
-            subtitle = "배변보조"
-        ) {
+        LabeledContent(subtitle = stringResource(id = R.string.bowel_assistance)) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -113,9 +110,7 @@ internal fun CustomerRequirementScreen(
             }
         }
 
-        LabeledContent(
-            subtitle = "이동보조"
-        ) {
+        LabeledContent(subtitle = stringResource(id = R.string.walking_assistance)) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -184,7 +179,7 @@ internal fun CustomerRequirementScreen(
         ) {
             CareTextFieldLong(
                 value = speciality,
-                hint = "추가적으로 요구사항이 있다면 작성해주세요.(예: 어쩌고저쩌고)",
+                hint = stringResource(id = R.string.speciality_hint),
                 onValueChanged = setSpeciality,
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -193,7 +188,7 @@ internal fun CustomerRequirementScreen(
         Spacer(modifier = Modifier.weight(1f))
 
         CareButtonLarge(
-            text = "다음",
+            text = stringResource(id = R.string.next),
             enable = isMealAssistance != null && isBowelAssistance != null && isWalkingAssistance != null,
             onClick = { setJobPostingStep(JobPostingStep.findStep(CUSTOMER_REQUIREMENT.step + 1)) },
             modifier = Modifier.fillMaxWidth(),
