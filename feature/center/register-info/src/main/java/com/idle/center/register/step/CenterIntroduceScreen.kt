@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.idle.center.register.RegistrationStep
@@ -56,48 +57,53 @@ internal fun CenterIntroduceScreen(
 
     Column(
         horizontalAlignment = Alignment.Start,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .verticalScroll(scrollState),
     ) {
 
         Text(
-            text = "우리 센터를 소개해주세요!",
+            text = stringResource(id = R.string.introduce_my_center),
             style = CareTheme.typography.heading2,
             color = CareTheme.colors.gray900,
             modifier = Modifier.padding(bottom = 6.dp),
         )
 
         Text(
-            text = "센터 소개글을 작성하면 보호사 매칭 성공률이 높아져요.",
+            text = stringResource(id = R.string.center_introduce_title),
             style = CareTheme.typography.body3,
             color = CareTheme.colors.gray300,
             modifier = Modifier.padding(bottom = 32.dp),
         )
 
         LabeledContent(
-            subtitle = "센터 소개",
-            modifier = Modifier.fillMaxWidth()
+            subtitle = stringResource(id = R.string.center_introduce),
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(bottom = 20.dp),
         ) {
             CareTextFieldLong(
                 value = centerIntroduce,
-                hint = "추가적으로 요구사항이 있다면 작성해주세요.(예: 어쩌고저쩌고)",
+                hint = stringResource(id = R.string.center_introduce_hint),
                 onValueChanged = onCenterIntroduceChanged,
                 onDone = {},
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .focusRequester(focusRequester)
             )
         }
 
         LabeledContent(
-            subtitle = "센터 사진",
-            modifier = Modifier.fillMaxWidth()
+            subtitle = stringResource(id = R.string.center_image),
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(bottom = 24.dp),
         ) {
             AsyncImage(
                 model = centerProfileImageUri ?: R.drawable.ic_profile_empty_edit,
                 contentDescription = null,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .clip(RoundedCornerShape(6.dp))
                     .clickable {
                         singlePhotoPickerLauncher.launch(
@@ -108,9 +114,10 @@ internal fun CenterIntroduceScreen(
         }
 
         CareButtonLarge(
-            text = "다음",
+            text = stringResource(id = R.string.next),
             onClick = { if (centerIntroduce.isNotBlank()) registerCenterProfile() },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(bottom = 30.dp),
         )
     }

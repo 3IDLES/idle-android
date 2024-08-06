@@ -15,10 +15,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
+import com.idle.designresource.R
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.component.CareProgressBar
@@ -109,9 +111,10 @@ internal fun CenterRegisterScreen(
     Scaffold(
         topBar = {
             CareSubtitleTopAppBar(
-                title = "센터 회원가입",
+                title = stringResource(id = R.string.center_register_info),
                 onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(start = 12.dp, top = 48.dp)
             )
         },
@@ -120,7 +123,8 @@ internal fun CenterRegisterScreen(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(32.dp, Alignment.CenterVertically),
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .background(Color.White)
                 .padding(paddingValue)
                 .padding(start = 20.dp, end = 20.dp, top = 8.dp),
@@ -133,7 +137,7 @@ internal fun CenterRegisterScreen(
 
             CareStateAnimator(
                 targetState = registrationStep,
-                label = "센터 정보 입력을 관리하는 애니메이션",
+                label = stringResource(id = R.string.center_info_input_animation_label),
             ) { registrationStep ->
                 when (registrationStep) {
                     RegistrationStep.INFO -> CenterInfoScreen(

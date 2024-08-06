@@ -54,11 +54,21 @@
     <string name="road_name_address">도로명 주소</string>
     <string name="road_name_address_hint">도로명 주소를 입력해주세요.</string>
     <string name="customer_info">고객 정보</string>
+    <string name="introduce_my_center">"우리 센터를 소개해주세요!"</string>
+    <string name="center_register_info">센터 회원가입</string>
+    <string name="center_number">센터 연락처</string>
+    <string name="center_number_hint">지원자들의 연락을 받을 번호를 입력해주세요</string>
+    <string name="center_introduce">센터 소개</string>
+    <string name="center_introduce_title">센터 소개글을 작성하면 보호사 매칭 성공률이 높아져요.</string>
+    <string name="center_introduce_hint">추가적으로 요구사항이 있다면 작성해주세요.(예: 어쩌고저쩌고)</string>
+    <string name="center_image">센터 사진</string>
+    <string name="center_info_hint">센터 정보를 입력해주세요</string>
     <string name="customer_info_title">고객 정보를 입력해주세요.</string>
     <string name="customer_requirement_title">고객 요구사항을 입력해주세요.</string>
     <string name="name">이름</string>
+    <string name="center_name_hint">센터 이름을 입력해주세요.</string>
     <string name="customer_name">고객 이름</string>
-    <string name="name_hint">고객의 이름을 입력해주세요.</string>
+    <string name="customer_name_hint">고객의 이름을 입력해주세요.</string>
     <string name="customer_name_note">고객 이름은 센터 측에서만 볼 수 있어요.</string>
     <string name="speciality_hint">추가적으로 요구사항이 있다면 작성해주세요.(예: 어쩌고저쩌고)</string>
     <string name="gender">성별</string>
@@ -89,7 +99,8 @@
     <string name="work_days_hours_format">%1$s | %2$s - %3$s</string>
     <string name="customer_info_format">%1$s등급 %2$s세 %3$s</string>
 
-    <string name="center_info_input">센터 정보 입력을 관리하는 애니메이션</string>
+    <string name="center_info_input_animation_label">센터 정보 입력을 관리하는 애니메이션</string>
+    <string name="center_info_input">센터 정보를 입력해주세요.</string>
 
     <string name="additional_info_title">추가 지원정보를 입력해주세요.</string>
     <string name="experience_preference_label">경력 우대 여부</string>
