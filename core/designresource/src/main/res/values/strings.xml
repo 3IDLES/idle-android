@@ -16,6 +16,8 @@
     <string name="cancel">취소</string>
     <string name="save">저장</string>
     <string name="post_deadline">접수 마감일</string>
+    <string name="edit">수정하기</string>
+    <string name="phone_number">전화번호</string>
 
     <string name="edit_job_posting_button">공고 수정하기</string>
     <string name="edit_job_posting">공고 수정</string>
@@ -57,6 +59,7 @@
     <string name="introduce_my_center">"우리 센터를 소개해주세요!"</string>
     <string name="center_register_info">센터 회원가입</string>
     <string name="center_number">센터 연락처</string>
+    <string name="center_detail_info">센터 상세 정보</string>
     <string name="center_number_hint">지원자들의 연락을 받을 번호를 입력해주세요</string>
     <string name="center_introduce">센터 소개</string>
     <string name="center_introduce_title">센터 소개글을 작성하면 보호사 매칭 성공률이 높아져요.</string>
