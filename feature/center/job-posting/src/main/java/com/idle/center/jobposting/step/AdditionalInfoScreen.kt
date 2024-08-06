@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
@@ -24,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.idle.center.jobposting.JobPostingStep
 import com.idle.center.jobposting.JobPostingStep.ADDITIONAL_INFO
 import com.idle.compose.JobPostingBottomSheetType
+import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareChipBasic
 import com.idle.designsystem.compose.component.CareClickableTextField
@@ -47,7 +49,6 @@ internal fun AdditionalInfoScreen(
     showBottomSheet: (JobPostingBottomSheetType) -> Unit,
 ) {
     val scrollState = rememberScrollState()
-
     BackHandler { setJobPostingStep(JobPostingStep.findStep(ADDITIONAL_INFO.step - 1)) }
 
     Column(
@@ -59,13 +60,13 @@ internal fun AdditionalInfoScreen(
             .padding(bottom = 30.dp),
     ) {
         Text(
-            text = "추가 지원정보를 입력해주세요.",
+            text = stringResource(id = R.string.additional_info_title),
             style = CareTheme.typography.heading2,
             color = CareTheme.colors.gray900,
         )
 
         LabeledContent(
-            subtitle = "경력 우대 여부"
+            subtitle = stringResource(id = R.string.experience_preference_label)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -73,14 +74,14 @@ internal fun AdditionalInfoScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 CareChipBasic(
-                    text = "초보 가능",
+                    text = stringResource(id = R.string.beginner_possible),
                     onClick = { onExperiencePreferredChanged(false) },
                     enable = isExperiencePreferred == false,
                     modifier = Modifier.width(104.dp),
                 )
 
                 CareChipBasic(
-                    text = "경력 우대",
+                    text = stringResource(id = R.string.experience_preferred),
                     onClick = { onExperiencePreferredChanged(true) },
                     enable = isExperiencePreferred == true,
                     modifier = Modifier.width(104.dp),
@@ -90,7 +91,7 @@ internal fun AdditionalInfoScreen(
 
         LabeledContent(
             subtitle = buildAnnotatedString {
-                append("지원 방법 ")
+                append(stringResource(id = R.string.apply_method))
                 withStyle(
                     style = SpanStyle(
                         color = CareTheme.colors.gray300,
@@ -98,7 +99,7 @@ internal fun AdditionalInfoScreen(
                         fontFamily = PretendardMedium,
                     )
                 ) {
-                    append("(다중 선택 가능)")
+                    append(stringResource(id = R.string.apply_method_hint))
                 }
             },
         ) {
@@ -115,7 +116,7 @@ internal fun AdditionalInfoScreen(
         }
 
         LabeledContent(
-            subtitle = "접수 마감일"
+            subtitle = stringResource(id = R.string.apply_deadline)
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Row(
@@ -136,7 +137,7 @@ internal fun AdditionalInfoScreen(
                 if (applyDeadlineType == ApplyDeadlineType.DEFINITE) {
                     CareClickableTextField(
                         value = applyDeadline?.toString() ?: "",
-                        hint = "날짜를 선택해주세요.",
+                        hint = stringResource(id = R.string.apply_deadline_hint),
                         leftComponent = {
                             Image(
                                 painter = painterResource(com.idle.designresource.R.drawable.ic_calendar),
@@ -153,7 +154,7 @@ internal fun AdditionalInfoScreen(
         Spacer(modifier = Modifier.weight(1f))
 
         CareButtonLarge(
-            text = "다음",
+            text = stringResource(id = R.string.next),
             enable = isExperiencePreferred != null && applyMethod.isNotEmpty() && applyDeadlineType != null && (applyDeadlineType == ApplyDeadlineType.DEFINITE && applyDeadline != null),
             onClick = { setJobPostingStep(JobPostingStep.findStep(ADDITIONAL_INFO.step + 1)) },
             modifier = Modifier.fillMaxWidth(),

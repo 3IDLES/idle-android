@@ -1,23 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- TopBar Strings -->
     <string name="post_job_posting">공고 등록</string>
 
-    <!-- Time Picker Strings -->
     <string name="work_start_time">근무 시작 시간</string>
     <string name="work_end_time">근무 종료 시간</string>
     <string name="cancel">취소</string>
     <string name="save">저장</string>
     <string name="post_deadline">접수 마감일</string>
 
-    <!-- Button Text -->
     <string name="edit_job_posting">공고 수정하기</string>
 
-    <!-- Chip Text -->
     <string name="necessary">필요</string>
     <string name="unnecessary">불필요</string>
 
-    <!-- Time Payment Screen Strings -->
     <string name="time_payment_title">근무 시간 및 급여를 입력해주세요.</string>
     <string name="work_days_subtitle">근무 요일</string>
     <string name="work_hours_subtitle">근무 시간</string>
@@ -29,9 +24,11 @@
     <string name="monthly">월급</string>
     <string name="pay_amount_hint">급여를 입력하세요</string>
     <string name="currency_unit">원</string>
-    <string name="next_button">다음</string>
-
-    <!-- Summary Screen Strings -->
+    <string name="next">다음</string>
+    <string name="job_posting_complete_message">요양보호사 구인 공고를\n등록했어요!</string>
+    <string name="address_screen_title">근무 시간 및 급여를 입력해주세요.</string>
+    <string name="detail_address">상세 주소</string>
+    <string name="detail_address_hint">상세 주소를 입력해주세요. (예: 2층 204호)</string>
     <string name="summary_title">다음의 공고 정보가 맞는지 확인해주세요.</string>
     <string name="experience_preferred">경력자 우대</string>
     <string name="beginner_possible">초보 가능</string>
@@ -41,15 +38,25 @@
     <string name="work_hours">근무 시간</string>
     <string name="pay">급여</string>
     <string name="address">근무 주소</string>
+    <string name="road_name_address">도로명 주소</string>
+    <string name="road_name_address_hint">도로명 주소를 입력해주세요.</string>
     <string name="customer_info">고객 정보</string>
+    <string name="customer_info_title">고객 정보를 입력해주세요.</string>
+    <string name="customer_requirement_title">고객 요구사항을 입력해주세요.</string>
     <string name="name">이름</string>
+    <string name="name_hint">고객의 이름을 입력해주세요.</string>
     <string name="customer_name_note">고객 이름은 센터 측에서만 볼 수 있어요.</string>
+    <string name="speciality_hint">추가적으로 요구사항이 있다면 작성해주세요.(예: 어쩌고저쩌고)</string>
     <string name="gender">성별</string>
     <string name="age">나이</string>
     <string name="weight">몸무게</string>
+    <string name="weight_hint">고객의 몸무게를 입력해주세요. (예: 60)</string>
+    <string name="birth_year">출생연도</string>
+    <string name="birth_year_hint">고객의 출생연도를 입력해주세요. (예: 1965)</string>
     <string name="care_level">요양등급</string>
     <string name="mental_status">인지 상태</string>
     <string name="disease">질병</string>
+    <string name="disease_hint">고객이 현재 앓고 있는 질병 또는 병력을 입력해주세요.</string>
     <string name="meal_assistance">식사보조</string>
     <string name="bowel_assistance">배변보조</string>
     <string name="walking_assistance">이동보조</string>
@@ -62,13 +69,16 @@
     <string name="post_job_posting_note">공고 등록 후에도 공고 내용을 수정할 수 있어요.</string>
     <string name="confirm">확인했어요</string>
 
-    <!-- Formatting Strings -->
     <string name="hourly_pay_format">시급 %1$s 원</string>
     <string name="weekly_pay_format">주급 %1$s 원</string>
     <string name="monthly_pay_format">월급 %1$s 원</string>
     <string name="work_days_hours_format">%1$s | %2$s - %3$s</string>
     <string name="customer_info_format">%1$s등급 %2$s세 %3$s</string>
 
-    <!-- Other Strings -->
     <string name="center_info_input">센터 정보 입력을 관리하는 애니메이션</string>
+
+    <string name="additional_info_title">추가 지원정보를 입력해주세요.</string>
+    <string name="experience_preference_label">경력 우대 여부</string>
+    <string name="apply_method_hint">(다중 선택 가능)</string>
+    <string name="apply_deadline_hint">날짜를 선택해주세요.</string>
 </resources>

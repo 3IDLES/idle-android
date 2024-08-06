@@ -11,9 +11,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.idle.center.jobposting.JobPostingStep
 import com.idle.center.jobposting.JobPostingStep.ADDRESS
+import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareClickableTextField
 import com.idle.designsystem.compose.component.CareTextField
@@ -33,34 +35,35 @@ internal fun AddressScreen(
     Column(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(28.dp),
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .padding(bottom = 30.dp),
     ) {
         Text(
-            text = "근무 시간 및 급여를 입력해주세요.",
+            text = stringResource(id = R.string.address_screen_title),
             style = CareTheme.typography.heading2,
             color = CareTheme.colors.gray900,
         )
 
         LabeledContent(
-            subtitle = "도로명 주소",
+            subtitle = stringResource(id = R.string.road_name_address),
             modifier = Modifier.fillMaxWidth(),
         ) {
             CareClickableTextField(
                 value = roadNameAddress,
-                hint = "도로명 주소를 입력해주세요.",
+                hint = stringResource(id = R.string.road_name_address_hint),
                 onClick = showPostCodeDialog,
                 modifier = Modifier.fillMaxWidth(),
             )
         }
 
         LabeledContent(
-            subtitle = "상세 주소",
+            subtitle = stringResource(id = R.string.detail_address),
             modifier = Modifier.fillMaxWidth(),
         ) {
             CareTextField(
                 value = detailAddress,
-                hint = "상세 주소를 입력해주세요. (예: 2층 204호)",
+                hint = stringResource(id = R.string.detail_address_hint),
                 onValueChanged = onDetailAddressChanged,
                 onDone = {
                     if (roadNameAddress.isNotBlank() && detailAddress.isNotBlank())
@@ -73,7 +76,7 @@ internal fun AddressScreen(
         Spacer(modifier = Modifier.weight(1f))
 
         CareButtonLarge(
-            text = "다음",
+            text = stringResource(id = R.string.next),
             enable = (roadNameAddress.isNotBlank() && detailAddress.isNotBlank()),
             onClick = { setJobPostingStep(JobPostingStep.findStep(ADDRESS.step + 1)) },
             modifier = Modifier.fillMaxWidth(),

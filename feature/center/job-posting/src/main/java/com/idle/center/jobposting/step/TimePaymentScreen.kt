@@ -161,7 +161,7 @@ internal fun TimePaymentScreen(
         Spacer(modifier = Modifier.weight(1f))
 
         CareButtonLarge(
-            text = stringResource(id = R.string.next_button),
+            text = stringResource(id = R.string.next),
             enable = weekDays.isNotEmpty() && workStartTime.isNotBlank() && workEndTime.isNotBlank() && payType != null && payAmount.isNotBlank(),
             onClick = { setJobPostingStep(JobPostingStep.findStep(JobPostingStep.TIME_PAYMENT.step + 1)) },
             modifier = Modifier.fillMaxWidth(),

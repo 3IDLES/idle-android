@@ -21,6 +21,7 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
@@ -29,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.idle.center.jobposting.JobPostingStep
 import com.idle.center.jobposting.JobPostingStep.ADDRESS
 import com.idle.center.jobposting.JobPostingStep.CUSTOMER_INFORMATION
+import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareChipBasic
 import com.idle.designsystem.compose.component.CareChipShort
@@ -70,31 +72,33 @@ internal fun CustomerInformationScreen(
     Column(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(28.dp),
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .verticalScroll(scrollState)
             .padding(bottom = 30.dp),
     ) {
         Text(
-            text = "고객 정보를 입력해주세요.",
+            text = stringResource(id = R.string.customer_info_title),
             style = CareTheme.typography.heading2,
             color = CareTheme.colors.gray900,
         )
 
         LabeledContent(
-            subtitle = "이름",
+            subtitle = stringResource(id = R.string.name),
             modifier = Modifier.fillMaxWidth(),
         ) {
             CareTextField(
                 value = clientName,
                 onValueChanged = onClientNameChanged,
-                hint = "고객의 이름을 입력해주세요.",
-                modifier = Modifier.fillMaxWidth()
+                hint = stringResource(id = R.string.name_hint),
+                modifier = Modifier
+                    .fillMaxWidth()
                     .focusRequester(focusRequester),
             )
         }
 
         LabeledContent(
-            subtitle = "성별",
+            subtitle = stringResource(id = R.string.gender),
             modifier = Modifier.fillMaxWidth(),
         ) {
             Row(
@@ -119,14 +123,14 @@ internal fun CustomerInformationScreen(
         }
 
         LabeledContent(
-            subtitle = "출생연도",
+            subtitle = stringResource(id = R.string.birth_year),
             modifier = Modifier.fillMaxWidth(),
         ) {
             CareTextField(
                 value = birthYear,
                 onValueChanged = onBirthYearChanged,
                 keyboardType = KeyboardType.Number,
-                hint = "고객의 출생연도를 입력해주세요. (예: 1965)",
+                hint = stringResource(id = R.string.birth_year_hint),
                 onDone = {
                     if (birthYear.isNotBlank()) focusManager.moveFocus(FocusDirection.Down)
                 },
@@ -135,14 +139,14 @@ internal fun CustomerInformationScreen(
         }
 
         LabeledContent(
-            subtitle = "몸무게",
+            subtitle = stringResource(id = R.string.weight),
             modifier = Modifier.fillMaxWidth(),
         ) {
             CareTextField(
                 value = weight,
                 onValueChanged = onWeightChanged,
                 keyboardType = KeyboardType.Number,
-                hint = "고객의 몸무게를 입력해주세요. (예: 60)",
+                hint = stringResource(id = R.string.weight_hint),
                 leftComponent = {
                     Text(
                         text = "kg",
@@ -155,7 +159,7 @@ internal fun CustomerInformationScreen(
         }
 
         LabeledContent(
-            subtitle = "요양 등급",
+            subtitle = stringResource(id = R.string.care_level),
             modifier = Modifier.fillMaxWidth(),
         ) {
             Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -170,7 +174,7 @@ internal fun CustomerInformationScreen(
         }
 
         LabeledContent(
-            subtitle = "인지 상태",
+            subtitle = stringResource(id = R.string.mental_status),
             modifier = Modifier.fillMaxWidth(),
         ) {
             Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -207,7 +211,7 @@ internal fun CustomerInformationScreen(
             CareTextField(
                 value = disease,
                 onValueChanged = onDiseaseChanged,
-                hint = "고객이 현재 앓고 있는 질병 또는 병력을 입력해주세요.",
+                hint = stringResource(id = R.string.disease_hint),
                 onDone = { setJobPostingStep(JobPostingStep.findStep(CUSTOMER_INFORMATION.step + 1)) },
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -216,7 +220,7 @@ internal fun CustomerInformationScreen(
         Spacer(modifier = Modifier.weight(1f))
 
         CareButtonLarge(
-            text = "다음",
+            text = stringResource(id = R.string.next),
             enable = gender != Gender.NONE && birthYear.isNotBlank() && weight.isNotBlank() && mentalStatus != MentalStatus.UNKNOWN,
             onClick = { setJobPostingStep(JobPostingStep.findStep(CUSTOMER_INFORMATION.step + 1)) },
             modifier = Modifier.fillMaxWidth(),
