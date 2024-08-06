@@ -111,7 +111,7 @@ internal fun CenterRegisterScreen(
     Scaffold(
         topBar = {
             CareSubtitleTopAppBar(
-                title = stringResource(id = R.string.center_register_info),
+                title = stringResource(id = R.string.center_signup),
                 onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
                 modifier = Modifier
                     .fillMaxWidth()

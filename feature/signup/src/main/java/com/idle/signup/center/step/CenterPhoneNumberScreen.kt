@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareButtonSmall
@@ -22,6 +23,7 @@ import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.signin.center.CenterSignUpStep
+import com.idle.designresource.R
 
 @Composable
 internal fun CenterPhoneNumberScreen(
@@ -59,13 +61,13 @@ internal fun CenterPhoneNumberScreen(
         modifier = Modifier.fillMaxSize()
     ) {
         Text(
-            text = "전화번호를 입력해주세요",
+            text = stringResource(id = R.string.phone_number_hint),
             style = CareTheme.typography.heading2,
             color = CareTheme.colors.gray900,
         )
 
         LabeledContent(
-            subtitle = "전화번호",
+            subtitle = stringResource(id = R.string.phone_number),
             modifier = Modifier.fillMaxWidth(),
         ) {
             Row(
@@ -75,25 +77,26 @@ internal fun CenterPhoneNumberScreen(
             ) {
                 CareTextField(
                     value = centerPhoneNumber,
-                    hint = "전화번호를 입력해주세요.",
+                    hint = stringResource(id = R.string.phone_number_hint),
                     onValueChanged = onCenterPhoneNumberChanged,
                     readOnly = (centerAuthCodeTimerMinute != "" && centerAuthCodeTimerSeconds != ""),
                     onDone = { if (centerPhoneNumber.length == 11) sendPhoneNumber() },
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
                         .focusRequester(focusRequester),
                 )
 
                 CareButtonSmall(
                     enable = centerPhoneNumber.length == 11 &&
                             !(centerAuthCodeTimerMinute != "" && centerAuthCodeTimerSeconds != ""),
-                    text = "인증",
+                    text = stringResource(id = R.string.verification),
                     onClick = sendPhoneNumber,
                 )
             }
         }
 
         LabeledContent(
-            subtitle = "인증번호",
+            subtitle = stringResource(id = R.string.confirm_code),
             modifier = Modifier.fillMaxWidth(),
         ) {
             Row(
@@ -132,7 +135,7 @@ internal fun CenterPhoneNumberScreen(
 
                 CareButtonSmall(
                     enable = centerAuthCode.isNotBlank() && !isConfirmAuthCode,
-                    text = "확인",
+                    text = stringResource(id = R.string.confirm),
                     onClick = confirmAuthCode,
                 )
             }
@@ -141,7 +144,7 @@ internal fun CenterPhoneNumberScreen(
         Spacer(modifier = Modifier.weight(1f))
 
         CareButtonLarge(
-            text = "다음",
+            text = stringResource(id = R.string.next),
             enable = isConfirmAuthCode,
             onClick = { setSignUpStep(CenterSignUpStep.BUSINESS_REGISTRATION_NUMBER) },
             modifier = Modifier.fillMaxWidth(),

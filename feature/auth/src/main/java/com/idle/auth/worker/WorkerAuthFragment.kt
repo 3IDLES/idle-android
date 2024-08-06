@@ -13,8 +13,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
+import com.idle.designresource.R
 import com.idle.binding.DeepLinkDestination.WorkerSignUp
 import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.compose.base.BaseComposeFragment
@@ -45,7 +47,8 @@ internal fun WorkerAuthScreen(
             alignment = Alignment.CenterVertically,
         ),
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .background(Color.White)
             .padding(horizontal = 20.dp, vertical = 30.dp),
     ) {
@@ -58,14 +61,15 @@ internal fun WorkerAuthScreen(
         )
 
         Spacer(
-            modifier = Modifier.size(120.dp)
+            modifier = Modifier
+                .size(120.dp)
                 .background(CareTheme.colors.gray900),
         )
 
         Spacer(modifier = Modifier.weight(1f))
 
         CareButtonLarge(
-            text = "휴대폰 번호로 시작하기",
+            text = stringResource(id = R.string.start_with_phone),
             onClick = navigateToWorkerSignUp,
             modifier = Modifier.fillMaxWidth(),
         )

@@ -14,11 +14,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.LabeledContent
@@ -48,7 +50,7 @@ internal fun GenerateNewPasswordScreen(
         modifier = Modifier.fillMaxSize()
     ) {
         Text(
-            text = "새로운 비밀번호를 입력해주세요",
+            text = stringResource(id = R.string.new_password_title),
             style = CareTheme.typography.heading2,
             color = CareTheme.colors.gray900,
         )
@@ -73,21 +75,22 @@ internal fun GenerateNewPasswordScreen(
         ) {
             CareTextField(
                 value = newPassword,
-                hint = "비밀번호를 입력해주세요.",
+                hint = stringResource(id = R.string.password_hint),
                 onValueChanged = onNewPasswordChanged,
                 onDone = { },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .focusRequester(focusRequester),
             )
         }
 
         LabeledContent(
-            subtitle = "비밀번호 확인",
+            subtitle = stringResource(id = R.string.confirm_password),
             modifier = Modifier.fillMaxWidth(),
         ) {
             CareTextField(
                 value = newPasswordForConfirm,
-                hint = "비밀번호를 한번 더 입력해주세요.",
+                hint = stringResource(id = R.string.confirm_password_hint),
                 onValueChanged = onNewPasswordForConfirmChanged,
                 onDone = { },
                 modifier = Modifier.fillMaxWidth(),
@@ -97,7 +100,7 @@ internal fun GenerateNewPasswordScreen(
         Spacer(modifier = Modifier.weight(1f))
 
         CareButtonLarge(
-            text = "비밀번호 변경",
+            text = stringResource(id = R.string.change_password),
             enable = newPasswordForConfirm.isNotBlank(),
             onClick = { },
             modifier = Modifier.fillMaxWidth(),

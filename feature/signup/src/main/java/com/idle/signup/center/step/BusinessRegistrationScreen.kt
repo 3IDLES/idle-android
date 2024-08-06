@@ -22,7 +22,9 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareButtonSmall
 import com.idle.designsystem.compose.component.CareTextField
@@ -54,7 +56,7 @@ internal fun BusinessRegistrationScreen(
         modifier = Modifier.fillMaxSize()
     ) {
         Text(
-            text = "사업자 등록번호를 입력해주세요",
+            text = stringResource(id = R.string.enter_business_registration_number),
             style = CareTheme.typography.heading2,
             color = CareTheme.colors.gray900,
         )
@@ -70,20 +72,21 @@ internal fun BusinessRegistrationScreen(
             ) {
                 CareTextField(
                     value = businessRegistrationNumber,
-                    hint = "사업자 등록번호를 입력해주세요.",
+                    hint = stringResource(id = R.string.business_registration_number_hint),
                     onValueChanged = onBusinessRegistrationNumberChanged,
                     onDone = {
                         if (businessRegistrationNumber.isNotBlank()) {
                             validateBusinessRegistrationNumber()
                         }
                     },
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
                         .focusRequester(focusRequester),
                 )
 
                 CareButtonSmall(
                     enable = businessRegistrationNumber.isNotBlank(),
-                    text = "검색",
+                    text = stringResource(id = R.string.search),
                     onClick = {
                         validateBusinessRegistrationNumber()
                         keyboardController?.hide()
@@ -94,7 +97,7 @@ internal fun BusinessRegistrationScreen(
 
         if (businessRegistrationInfo != null) {
             LabeledContent(
-                subtitle = "아래의 시설이 맞나요?",
+                subtitle = stringResource(id = R.string.is_this_the_right_facility),
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Box(
@@ -110,7 +113,8 @@ internal fun BusinessRegistrationScreen(
                             space = 4.dp,
                             alignment = Alignment.CenterVertically
                         ),
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
                             .padding(horizontal = 20.dp, vertical = 16.dp)
                     ) {
                         Text(
@@ -142,7 +146,7 @@ internal fun BusinessRegistrationScreen(
         Spacer(modifier = Modifier.weight(1f))
 
         CareButtonLarge(
-            text = "다음",
+            text = stringResource(id = R.string.next),
             enable = businessRegistrationInfo != null,
             onClick = { setSignUpStep(CenterSignUpStep.ID_PASSWORD) },
             modifier = Modifier.fillMaxWidth(),

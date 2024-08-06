@@ -8,9 +8,30 @@
     <string name="inquiry">문의하기</string>
     <string name="terms_and_policies">약관 및 정책</string>
     <string name="privacy_policy">개인정보 처리 방침</string>
+    <string name="login">로그인</string>
+    <string name="id">아이디</string>
+    <string name="id_hint">아이디를 입력해주세요.</string>
+    <string name="password">비밀번호</string>
+    <string name="change_password">비밀번호 변경</string>
+    <string name="password_hint">비밀번호를 입력해주세요.</string>
+    <string name="confirm_password">비밀번호 확인</string>
+    <string name="confirm_password_hint">비밀번호를 한번 더 입력해주세요.</string>
+    <string name="forget_password">비밀번호가 기억나지 않나요?</string>
     <string name="logout">로그아웃</string>
     <string name="withdrawal">회원탈퇴</string>
-
+    <string name="start_with_phone">휴대폰 번호로 시작하기</string>
+    <string name="start_with_signup">회원가입하고 시작하기</string>
+    <string name="generate_new_password">신규 비밀번호 발급</string>
+    <string name="new_password_title">새로운 비밀번호를 입력해주세요</string>
+    <string name="set_id_and_password">아이디와 비밀번호를 설정해주세요</string>
+    <string name="set_id_label">아이디 설정</string>
+    <string name="id_conditions">(영문+숫자 조합 10자리 이상 등 조건)</string>
+    <string name="id_available">사용 가능한 아이디 입니다</string>
+    <string name="check_duplicate">중복 확인</string>
+    <string name="set_password_label">비밀번호 설정</string>
+    <string name="password_conditions">(영문+숫자 조합 10자리 이상 등 조건)</string>
+    <string name="password_available">사용 가능한 비밀번호 입니다.</string>
+    <string name="password_mismatch">비밀번호가 일치하지 않습니다.</string>
     <string name="work_start_time">근무 시작 시간</string>
     <string name="work_end_time">근무 종료 시간</string>
     <string name="cancel">취소</string>
@@ -18,6 +39,9 @@
     <string name="post_deadline">접수 마감일</string>
     <string name="edit">수정하기</string>
     <string name="phone_number">전화번호</string>
+    <string name="phone_number_hint">전화번호를 입력해주세요</string>
+    <string name="start_center">센터 관리자로\n시작하기</string>
+    <string name="start_worker">요양 보호사로\n시작하기</string>
 
     <string name="edit_job_posting_button">공고 수정하기</string>
     <string name="edit_job_posting">공고 수정</string>
@@ -57,7 +81,7 @@
     <string name="road_name_address_hint">도로명 주소를 입력해주세요.</string>
     <string name="customer_info">고객 정보</string>
     <string name="introduce_my_center">"우리 센터를 소개해주세요!"</string>
-    <string name="center_register_info">센터 회원가입</string>
+    <string name="center_signup">센터 회원가입</string>
     <string name="center_number">센터 연락처</string>
     <string name="center_detail_info">센터 상세 정보</string>
     <string name="center_number_hint">지원자들의 연락을 받을 번호를 입력해주세요</string>
@@ -94,8 +118,13 @@
     <string name="apply_method">지원 방법</string>
     <string name="apply_deadline">접수 마감일</string>
     <string name="post_job_posting_note">공고 등록 후에도 공고 내용을 수정할 수 있어요.</string>
-    <string name="confirm">확인했어요</string>
-
+    <string name="confirm">확인</string>
+    <string name="confirm2">확인했어요</string>
+    <string name="confirm_code">인증번호</string>
+    <string name="verification">인증</string>
+    <string name="complete">완료</string>
+    <string name="enter_your_name">성함을 입력해주세요</string>
+    <string name="enter_your_name_hint">성함을 입력해주세요.</string>
     <string name="hourly_pay_format">시급 %1$s 원</string>
     <string name="weekly_pay_format">주급 %1$s 원</string>
     <string name="monthly_pay_format">월급 %1$s 원</string>
@@ -109,4 +138,8 @@
     <string name="experience_preference_label">경력 우대 여부</string>
     <string name="apply_method_hint">(다중 선택 가능)</string>
     <string name="apply_deadline_hint">날짜를 선택해주세요.</string>
+    <string name="search">검색</string>
+    <string name="enter_business_registration_number">사업자 등록번호를 입력해주세요</string>
+    <string name="business_registration_number_hint">사업자 등록번호를 입력해주세요.</string>
+    <string name="is_this_the_right_facility">아래의 시설이 맞나요?</string>
 </resources>
