@@ -13,8 +13,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.idle.designresource.R
 import com.idle.center.jobposting.JobPostingStep
 import com.idle.compose.JobPostingBottomSheetType
 import com.idle.designsystem.compose.component.CareButtonLarge
@@ -48,13 +50,13 @@ internal fun TimePaymentScreen(
             .padding(bottom = 30.dp),
     ) {
         Text(
-            text = "근무 시간 및 급여를 입력해주세요.",
+            text = stringResource(id = R.string.time_payment_title),
             style = CareTheme.typography.heading2,
             color = CareTheme.colors.gray900,
         )
 
         LabeledContent(
-            subtitle = "근무 요일",
+            subtitle = stringResource(id = R.string.work_days_subtitle),
             modifier = Modifier.fillMaxWidth(),
         ) {
             Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -68,9 +70,8 @@ internal fun TimePaymentScreen(
             }
         }
 
-
         LabeledContent(
-            subtitle = "근무 시간",
+            subtitle = stringResource(id = R.string.work_hours_subtitle),
             modifier = Modifier.fillMaxWidth(),
         ) {
             Row(
@@ -79,7 +80,7 @@ internal fun TimePaymentScreen(
             ) {
                 CareClickableTextField(
                     value = workStartTime,
-                    hint = "시작 시간",
+                    hint = stringResource(id = R.string.work_start_time_hint),
                     onClick = { showBottomSheet(JobPostingBottomSheetType.WORK_START_TIME) },
                     leftComponent = {
                         Image(
@@ -92,7 +93,7 @@ internal fun TimePaymentScreen(
 
                 CareClickableTextField(
                     value = workEndTime,
-                    hint = "종료 시간",
+                    hint = stringResource(id = R.string.work_end_time_hint),
                     onClick = { showBottomSheet(JobPostingBottomSheetType.WORK_END_TIME) },
                     leftComponent = {
                         Image(
@@ -106,7 +107,7 @@ internal fun TimePaymentScreen(
         }
 
         LabeledContent(
-            subtitle = "급여",
+            subtitle = stringResource(id = R.string.pay_subtitle),
             modifier = Modifier.fillMaxWidth(),
         ) {
             Column(
@@ -115,21 +116,21 @@ internal fun TimePaymentScreen(
             ) {
                 Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                     CareChipBasic(
-                        text = "시급",
+                        text = stringResource(id = R.string.hourly),
                         onClick = { setPayType(PayType.HOURLY) },
                         enable = payType == PayType.HOURLY,
                         modifier = Modifier.weight(1f),
                     )
 
                     CareChipBasic(
-                        text = "주급",
+                        text = stringResource(id = R.string.weekly),
                         onClick = { setPayType(PayType.WEEKLY) },
                         enable = payType == PayType.WEEKLY,
                         modifier = Modifier.weight(1f),
                     )
 
                     CareChipBasic(
-                        text = "월급",
+                        text = stringResource(id = R.string.monthly),
                         onClick = { setPayType(PayType.MONTHLY) },
                         enable = payType == PayType.MONTHLY,
                         modifier = Modifier.weight(1f),
@@ -138,13 +139,13 @@ internal fun TimePaymentScreen(
 
                 CareTextField(
                     value = payAmount,
-                    hint = "급여를 입력하세요",
+                    hint = stringResource(id = R.string.pay_amount_hint),
                     textStyle = CareTheme.typography.body2,
                     onValueChanged = setPayAmount,
                     keyboardType = KeyboardType.Number,
                     leftComponent = {
                         Text(
-                            text = "원",
+                            text = stringResource(id = R.string.currency_unit),
                             style = CareTheme.typography.body3,
                             color = CareTheme.colors.gray500,
                         )
@@ -160,7 +161,7 @@ internal fun TimePaymentScreen(
         Spacer(modifier = Modifier.weight(1f))
 
         CareButtonLarge(
-            text = "다음",
+            text = stringResource(id = R.string.next_button),
             enable = weekDays.isNotEmpty() && workStartTime.isNotBlank() && workEndTime.isNotBlank() && payType != null && payAmount.isNotBlank(),
             onClick = { setJobPostingStep(JobPostingStep.findStep(JobPostingStep.TIME_PAYMENT.step + 1)) },
             modifier = Modifier.fillMaxWidth(),
