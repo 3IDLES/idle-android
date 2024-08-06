@@ -526,7 +526,7 @@ internal fun JobPostingScreen(
                     leftComponent = {
                         if (jobPostingStep == JobPostingStep.SUMMARY) {
                             CareButtonRound(
-                                text = stringResource(id = R.string.edit_job_posting),
+                                text = stringResource(id = R.string.edit_job_posting_button),
                                 onClick = { setEditState(true) },
                             )
                         }

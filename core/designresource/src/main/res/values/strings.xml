@@ -8,7 +8,8 @@
     <string name="save">저장</string>
     <string name="post_deadline">접수 마감일</string>
 
-    <string name="edit_job_posting">공고 수정하기</string>
+    <string name="edit_job_posting_button">공고 수정하기</string>
+    <string name="edit_job_posting">공고 수정</string>
 
     <string name="necessary">필요</string>
     <string name="unnecessary">불필요</string>
@@ -18,7 +19,6 @@
     <string name="work_hours_subtitle">근무 시간</string>
     <string name="work_start_time_hint">시작 시간</string>
     <string name="work_end_time_hint">종료 시간</string>
-    <string name="pay_subtitle">급여</string>
     <string name="hourly">시급</string>
     <string name="weekly">주급</string>
     <string name="monthly">월급</string>
@@ -44,6 +44,7 @@
     <string name="customer_info_title">고객 정보를 입력해주세요.</string>
     <string name="customer_requirement_title">고객 요구사항을 입력해주세요.</string>
     <string name="name">이름</string>
+    <string name="customer_name">고객 이름</string>
     <string name="name_hint">고객의 이름을 입력해주세요.</string>
     <string name="customer_name_note">고객 이름은 센터 측에서만 볼 수 있어요.</string>
     <string name="speciality_hint">추가적으로 요구사항이 있다면 작성해주세요.(예: 어쩌고저쩌고)</string>
@@ -62,8 +63,8 @@
     <string name="walking_assistance">이동보조</string>
     <string name="life_assistance">일상보조</string>
     <string name="speciality">특이사항</string>
-    <string name="additional_support_info">추가 지원 정보</string>
-    <string name="experience_preference">경력 우대여부</string>
+    <string name="additional_info">추가 지원 정보</string>
+    <string name="experience_preference">경력 우대 여부</string>
     <string name="apply_method">지원 방법</string>
     <string name="apply_deadline">접수 마감일</string>
     <string name="post_job_posting_note">공고 등록 후에도 공고 내용을 수정할 수 있어요.</string>
