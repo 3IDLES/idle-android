@@ -653,7 +653,7 @@ fun JobEditScreen(
                         CareTextField(
                             value = localClientName,
                             onValueChanged = { localClientName = it },
-                            hint = stringResource(id = R.string.name_hint),
+                            hint = stringResource(id = R.string.customer_name_hint),
                             modifier = Modifier.fillMaxWidth(),
                         )
                     }
