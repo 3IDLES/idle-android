@@ -10,6 +10,10 @@
 
     <string name="edit_job_posting_button">공고 수정하기</string>
     <string name="edit_job_posting">공고 수정</string>
+    <string name="manage_job_posting">공고 관리</string>
+    <string name="ongoing_job_posting">진행중인 공고</string>
+    <string name="previous_job_posting">이전 공고</string>
+    <string name="end_recruiting">채용 종료</string>
 
     <string name="necessary">필요</string>
     <string name="unnecessary">불필요</string>
