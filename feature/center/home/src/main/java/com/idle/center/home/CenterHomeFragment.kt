@@ -23,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
@@ -59,7 +60,7 @@ internal fun CenterHomeScreen(
     Scaffold(
         topBar = {
             CareHeadingTopAppBar(
-                title = "공고 관리",
+                title = stringResource(id = R.string.manage_job_posting),
                 modifier = Modifier.padding(
                     start = 20.dp,
                     end = 20.dp,
@@ -71,17 +72,19 @@ internal fun CenterHomeScreen(
         containerColor = CareTheme.colors.white000,
     ) { paddingValue ->
         Column(
-            modifier = Modifier.padding(paddingValue)
+            modifier = Modifier
+                .padding(paddingValue)
                 .fillMaxSize()
         ) {
             Row(modifier = Modifier.padding(bottom = 20.dp)) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
                         .clickable { setRecruitmentPostStatus(RecruitmentPostStatus.ONGOING) },
                 ) {
                     Text(
-                        text = "진행 중인 공고",
+                        text = stringResource(id = R.string.ongoing_job_posting),
                         style = CareTheme.typography.subtitle3,
                         color = if (recruitmentPostStatus == RecruitmentPostStatus.ONGOING) CareTheme.colors.gray900
                         else CareTheme.colors.gray300,
@@ -97,11 +100,12 @@ internal fun CenterHomeScreen(
 
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
                         .clickable { setRecruitmentPostStatus(RecruitmentPostStatus.PREVIOUS) },
                 ) {
                     Text(
-                        text = "이전 공고",
+                        text = stringResource(id = R.string.previous_job_posting),
                         style = CareTheme.typography.subtitle3,
                         color = if (recruitmentPostStatus == RecruitmentPostStatus.PREVIOUS) CareTheme.colors.gray900
                         else CareTheme.colors.gray300,
@@ -126,7 +130,8 @@ internal fun CenterHomeScreen(
 
                 item {
                     Spacer(
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
                             .height(20.dp)
                     )
                 }
@@ -177,7 +182,8 @@ private fun CenterRecruitmentCardCard() {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(bottom = 8.dp),
             ) {
                 CareButtonCardMedium(
@@ -204,7 +210,7 @@ private fun CenterRecruitmentCardCard() {
                 )
 
                 Text(
-                    text = "공고 수정",
+                    text = stringResource(id = R.string.edit_job_posting),
                     style = CareTheme.typography.body3,
                     color = CareTheme.colors.gray500,
                     modifier = Modifier.padding(end = 4.dp),
@@ -217,7 +223,7 @@ private fun CenterRecruitmentCardCard() {
                 )
 
                 Text(
-                    text = "채용 종료",
+                    text = stringResource(id = R.string.end_recruiting),
                     style = CareTheme.typography.body3,
                     color = CareTheme.colors.gray500,
                 )
