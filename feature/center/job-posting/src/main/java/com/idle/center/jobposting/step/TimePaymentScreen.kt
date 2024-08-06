@@ -150,7 +150,7 @@ internal fun TimePaymentScreen(
                         )
                     },
                     onDone = {
-                        if (weekDays.isNotEmpty() && payType != null && payAmount.isNotBlank())
+                        if (weekDays.isNotEmpty() && workStartTime.isNotBlank() && workEndTime.isNotBlank() && payType != null && payAmount.isNotBlank())
                             setJobPostingStep(JobPostingStep.findStep(JobPostingStep.TIME_PAYMENT.step + 1))
                     },
                 )
