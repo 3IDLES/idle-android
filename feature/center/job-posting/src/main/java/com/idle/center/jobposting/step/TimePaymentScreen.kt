@@ -107,7 +107,7 @@ internal fun TimePaymentScreen(
         }
 
         LabeledContent(
-            subtitle = stringResource(id = R.string.pay_subtitle),
+            subtitle = stringResource(id = R.string.pay),
             modifier = Modifier.fillMaxWidth(),
         ) {
             Column(

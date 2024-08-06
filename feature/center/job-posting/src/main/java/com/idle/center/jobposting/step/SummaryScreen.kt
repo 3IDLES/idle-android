@@ -539,7 +539,7 @@ internal fun SummaryScreen(
                 .padding(start = 20.dp, end = 20.dp, bottom = 28.dp)
         ) {
             Text(
-                text = stringResource(id = R.string.additional_support_info),
+                text = stringResource(id = R.string.additional_info),
                 style = CareTheme.typography.subtitle1,
                 color = CareTheme.colors.gray900,
                 modifier = Modifier.padding(bottom = 20.dp),

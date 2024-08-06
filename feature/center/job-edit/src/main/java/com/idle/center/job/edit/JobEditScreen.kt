@@ -198,7 +198,7 @@ fun JobEditScreen(
                         var tempWorkStartMinute by remember { mutableStateOf("00") }
 
                         Text(
-                            text = "근무 시작 시간",
+                            text = stringResource(id = R.string.work_start_time),
                             style = CareTheme.typography.heading3,
                             color = CareTheme.colors.gray900,
                         )
@@ -249,7 +249,7 @@ fun JobEditScreen(
                             modifier = Modifier.fillMaxWidth(),
                         ) {
                             CareButtonMedium(
-                                text = "취소",
+                                text = stringResource(id = R.string.cancel),
                                 onClick = {
                                     coroutineScope.launch {
                                         sheetState.hide()
@@ -259,7 +259,7 @@ fun JobEditScreen(
                             )
 
                             CareButtonMedium(
-                                text = "저장",
+                                text = stringResource(id = R.string.save),
                                 onClick = {
                                     coroutineScope.launch {
                                         val startTime =
@@ -284,7 +284,7 @@ fun JobEditScreen(
                         var tempWorkEndMinute by remember { mutableStateOf("00") }
 
                         Text(
-                            text = "근무 종료 시간",
+                            text = stringResource(id = R.string.work_end_time),
                             style = CareTheme.typography.heading3,
                             color = CareTheme.colors.gray900,
                         )
@@ -335,7 +335,7 @@ fun JobEditScreen(
                             modifier = Modifier.fillMaxWidth(),
                         ) {
                             CareButtonMedium(
-                                text = "취소",
+                                text = stringResource(id = R.string.cancel),
                                 onClick = {
                                     coroutineScope.launch {
                                         sheetState.hide()
@@ -345,7 +345,7 @@ fun JobEditScreen(
                             )
 
                             CareButtonMedium(
-                                text = "저장",
+                                text = stringResource(id = R.string.save),
                                 onClick = {
                                     coroutineScope.launch {
                                         val endTime = "${
@@ -365,7 +365,7 @@ fun JobEditScreen(
 
                     POST_DEAD_LINE -> {
                         Text(
-                            text = "접수 마감일",
+                            text = stringResource(id = R.string.post_deadline),
                             style = CareTheme.typography.heading3,
                             color = CareTheme.colors.gray900,
                         )
@@ -397,11 +397,11 @@ fun JobEditScreen(
         Scaffold(
             topBar = {
                 CareSubtitleTopAppBar(
-                    title = "공고 수정",
+                    title = stringResource(id = R.string.edit_job_posting),
                     onNavigationClick = { setEditState(false) },
                     leftComponent = {
                         Text(
-                            text = "저장",
+                            text = stringResource(id = R.string.save),
                             style = CareTheme.typography.subtitle2,
                             color = CareTheme.colors.orange500,
                             modifier = Modifier.clickable {
@@ -477,13 +477,13 @@ fun JobEditScreen(
                         .padding(horizontal = 20.dp),
                 ) {
                     Text(
-                        text = "근무 조건",
+                        text = stringResource(id = R.string.work_conditions),
                         style = CareTheme.typography.subtitle1,
                         color = CareTheme.colors.gray900,
                     )
 
                     LabeledContent(
-                        subtitle = "근무 요일",
+                        subtitle = stringResource(id = R.string.work_days),
                         modifier = Modifier.fillMaxWidth(),
                     ) {
                         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -505,7 +505,7 @@ fun JobEditScreen(
 
 
                     LabeledContent(
-                        subtitle = "근무 시간",
+                        subtitle = stringResource(id = R.string.work_hours),
                         modifier = Modifier.fillMaxWidth(),
                     ) {
                         Row(
@@ -514,7 +514,7 @@ fun JobEditScreen(
                         ) {
                             CareClickableTextField(
                                 value = localWorkStartTime,
-                                hint = "시작 시간",
+                                hint = stringResource(id = R.string.work_start_time_hint),
                                 onClick = {
                                     coroutineScope.launch {
                                         bottomSheetType = WORK_START_TIME
@@ -532,7 +532,7 @@ fun JobEditScreen(
 
                             CareClickableTextField(
                                 value = localWorkEndTime,
-                                hint = "종료 시간",
+                                hint = stringResource(id = R.string.work_end_time_hint),
                                 onClick = {
                                     coroutineScope.launch {
                                         bottomSheetType = WORK_END_TIME
@@ -551,7 +551,7 @@ fun JobEditScreen(
                     }
 
                     LabeledContent(
-                        subtitle = "급여",
+                        subtitle = stringResource(id = R.string.pay),
                         modifier = Modifier.fillMaxWidth(),
                     ) {
                         Column(
@@ -560,21 +560,21 @@ fun JobEditScreen(
                         ) {
                             Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                                 CareChipBasic(
-                                    text = "시급",
+                                    text = stringResource(id = R.string.hourly),
                                     onClick = { localPayType = PayType.HOURLY },
                                     enable = localPayType == PayType.HOURLY,
                                     modifier = Modifier.weight(1f),
                                 )
 
                                 CareChipBasic(
-                                    text = "주급",
+                                    text = stringResource(id = R.string.weekly),
                                     onClick = { localPayType = PayType.WEEKLY },
                                     enable = localPayType == PayType.WEEKLY,
                                     modifier = Modifier.weight(1f),
                                 )
 
                                 CareChipBasic(
-                                    text = "월급",
+                                    text = stringResource(id = R.string.monthly),
                                     onClick = { localPayType = PayType.MONTHLY },
                                     enable = localPayType == PayType.MONTHLY,
                                     modifier = Modifier.weight(1f),
@@ -583,7 +583,7 @@ fun JobEditScreen(
 
                             CareTextField(
                                 value = localPayAmount,
-                                hint = "급여를 입력하세요",
+                                hint = stringResource(id = R.string.pay_amount_hint),
                                 textStyle = CareTheme.typography.body2,
                                 onValueChanged = { localPayAmount = it },
                                 keyboardType = KeyboardType.Number,
@@ -603,12 +603,12 @@ fun JobEditScreen(
                         modifier = Modifier.fillMaxWidth(),
                     ) {
                         LabeledContent(
-                            subtitle = "도로명 주소",
+                            subtitle = stringResource(id = R.string.road_name_address),
                             modifier = Modifier.fillMaxWidth(),
                         ) {
                             CareClickableTextField(
                                 value = localRoadNameAddress,
-                                hint = "도로명 주소를 입력해주세요.",
+                                hint = stringResource(id = R.string.road_name_address_hint),
                                 onClick = {
                                     if (!(postCodeDialog?.isAdded == true || postCodeDialog?.isVisible == true)) {
                                         postCodeDialog?.show(fragmentManager, "PostCodeFragment")
@@ -619,12 +619,12 @@ fun JobEditScreen(
                         }
 
                         LabeledContent(
-                            subtitle = "상세 주소",
+                            subtitle = stringResource(id = R.string.detail_address),
                             modifier = Modifier.fillMaxWidth(),
                         ) {
                             CareTextField(
                                 value = localDetailAddress,
-                                hint = "상세 주소를 입력해주세요. (예: 2층 204호)",
+                                hint = stringResource(id = R.string.detail_address_hint),
                                 onValueChanged = { localDetailAddress = it },
                                 modifier = Modifier.fillMaxWidth()
                             )
@@ -641,25 +641,25 @@ fun JobEditScreen(
                         .padding(horizontal = 20.dp)
                 ) {
                     Text(
-                        text = "고객 정보",
+                        text = stringResource(id = R.string.customer_info),
                         style = CareTheme.typography.subtitle1,
                         color = CareTheme.colors.gray900,
                     )
 
                     LabeledContent(
-                        subtitle = "고객 이름",
+                        subtitle = stringResource(id = R.string.customer_name),
                         modifier = Modifier.fillMaxWidth(),
                     ) {
                         CareTextField(
                             value = localClientName,
                             onValueChanged = { localClientName = it },
-                            hint = "고객 이름을 입력해주세요.",
+                            hint = stringResource(id = R.string.name_hint),
                             modifier = Modifier.fillMaxWidth(),
                         )
                     }
 
                     LabeledContent(
-                        subtitle = "성별",
+                        subtitle = stringResource(id = R.string.gender),
                         modifier = Modifier.fillMaxWidth(),
                     ) {
                         Row(
@@ -684,27 +684,27 @@ fun JobEditScreen(
                     }
 
                     LabeledContent(
-                        subtitle = "출생연도",
+                        subtitle = stringResource(id = R.string.birth_year),
                         modifier = Modifier.fillMaxWidth(),
                     ) {
                         CareTextField(
                             value = localBirthYear,
                             onValueChanged = { localBirthYear = it },
                             keyboardType = KeyboardType.Number,
-                            hint = "고객의 출생연도를 입력해주세요. (예: 1965)",
+                            hint = stringResource(id = R.string.birth_year_hint),
                             modifier = Modifier.fillMaxWidth(),
                         )
                     }
 
                     LabeledContent(
-                        subtitle = "몸무게",
+                        subtitle = stringResource(id = R.string.weight),
                         modifier = Modifier.fillMaxWidth(),
                     ) {
                         CareTextField(
                             value = localWeight,
                             onValueChanged = { localWeight = it },
                             keyboardType = KeyboardType.Number,
-                            hint = "고객의 몸무게를 입력해주세요. (예: 60)",
+                            hint = stringResource(id = R.string.weight_hint),
                             leftComponent = {
                                 Text(
                                     text = "kg",
@@ -717,7 +717,7 @@ fun JobEditScreen(
                     }
 
                     LabeledContent(
-                        subtitle = "요양 등급",
+                        subtitle = stringResource(id = R.string.care_level),
                         modifier = Modifier.fillMaxWidth(),
                     ) {
                         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -732,7 +732,7 @@ fun JobEditScreen(
                     }
 
                     LabeledContent(
-                        subtitle = "인지 상태",
+                        subtitle = stringResource(id = R.string.mental_status),
                         modifier = Modifier.fillMaxWidth(),
                     ) {
                         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -769,16 +769,14 @@ fun JobEditScreen(
                         CareTextField(
                             value = localDisease,
                             onValueChanged = { localDisease = it },
-                            hint = "고객이 현재 앓고 있는 질병 또는 병력을 입력해주세요.",
+                            hint = stringResource(id = R.string.disease_hint),
                             modifier = Modifier.fillMaxWidth(),
                         )
                     }
 
                     HorizontalDivider(thickness = 1.dp, color = CareTheme.colors.gray100)
 
-                    LabeledContent(
-                        subtitle = "식사보조"
-                    ) {
+                    LabeledContent(subtitle = stringResource(id = R.string.meal_assistance)) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -800,9 +798,7 @@ fun JobEditScreen(
                         }
                     }
 
-                    LabeledContent(
-                        subtitle = "배변보조"
-                    ) {
+                    LabeledContent(subtitle = stringResource(id = R.string.bowel_assistance)) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -824,9 +820,7 @@ fun JobEditScreen(
                         }
                     }
 
-                    LabeledContent(
-                        subtitle = "이동보조"
-                    ) {
+                    LabeledContent(subtitle = stringResource(id = R.string.walking_assistance)) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -902,7 +896,7 @@ fun JobEditScreen(
                     ) {
                         CareTextFieldLong(
                             value = localSpeciality,
-                            hint = "추가적으로 요구사항이 있다면 작성해주세요.(예: 어쩌고저쩌고)",
+                            hint = stringResource(id = R.string.speciality_hint),
                             onValueChanged = { localSpeciality = it },
                             modifier = Modifier.fillMaxWidth(),
                         )
@@ -918,28 +912,26 @@ fun JobEditScreen(
                         .padding(start = 20.dp, end = 20.dp, bottom = 28.dp)
                 ) {
                     Text(
-                        text = "추가 지원 정보",
+                        text = stringResource(id = R.string.additional_info),
                         style = CareTheme.typography.subtitle1,
                         color = CareTheme.colors.gray900,
                     )
 
-                    LabeledContent(
-                        subtitle = "경력 우대 여부"
-                    ) {
+                    LabeledContent(subtitle = stringResource(id = R.string.experience_preference)) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(4.dp),
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             CareChipBasic(
-                                text = "초보 가능",
+                                text = stringResource(id = R.string.beginner_possible),
                                 onClick = { localIsExperiencePreferred = false },
                                 enable = localIsExperiencePreferred == false,
                                 modifier = Modifier.width(104.dp),
                             )
 
                             CareChipBasic(
-                                text = "경력 우대",
+                                text = stringResource(id = R.string.experience_preferred),
                                 onClick = { localIsExperiencePreferred = true },
                                 enable = localIsExperiencePreferred == true,
                                 modifier = Modifier.width(104.dp),
@@ -980,7 +972,7 @@ fun JobEditScreen(
                     }
 
                     LabeledContent(
-                        subtitle = "접수 마감일",
+                        subtitle = stringResource(id = R.string.apply_deadline),
                         modifier = Modifier.padding(bottom = 68.dp),
                     ) {
                         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -1008,7 +1000,7 @@ fun JobEditScreen(
                                             sheetState.show()
                                         }
                                     },
-                                    hint = "날짜를 선택해주세요.",
+                                    hint = stringResource(id = R.string.apply_deadline_hint),
                                     leftComponent = {
                                         Image(
                                             painter = painterResource(com.idle.designresource.R.drawable.ic_calendar),
