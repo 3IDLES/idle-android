@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
@@ -23,6 +24,7 @@ import com.idle.binding.DeepLinkDestination.CenterSignUp
 import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
+import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.designsystem.compose.foundation.PretendardMedium
@@ -55,7 +57,8 @@ internal fun CenterAuthScreen(
             alignment = Alignment.CenterVertically,
         ),
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .background(Color.White)
             .padding(horizontal = 20.dp, vertical = 30.dp),
     ) {
@@ -68,7 +71,8 @@ internal fun CenterAuthScreen(
         )
 
         Spacer(
-            modifier = Modifier.size(120.dp)
+            modifier = Modifier
+                .size(120.dp)
                 .background(CareTheme.colors.gray900),
         )
 
@@ -93,7 +97,7 @@ internal fun CenterAuthScreen(
         )
 
         CareButtonLarge(
-            text = "회원가입하고 시작하기",
+            text = stringResource(id = R.string.start_with_signup),
             onClick = navigateToCenterSignUp,
             modifier = Modifier.fillMaxWidth(),
         )

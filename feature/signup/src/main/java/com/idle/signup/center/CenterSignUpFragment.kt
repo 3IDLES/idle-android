@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -25,6 +26,7 @@ import com.idle.designsystem.compose.component.CareProgressBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
 import com.idle.domain.model.auth.BusinessRegistrationInfo
+import com.idle.designresource.R
 import com.idle.signup.center.step.BusinessRegistrationScreen
 import com.idle.signup.center.step.CenterNameScreen
 import com.idle.signup.center.step.CenterPhoneNumberScreen
@@ -124,9 +126,10 @@ internal fun CenterSignUpScreen(
     Scaffold(
         topBar = {
             CareSubtitleTopAppBar(
-                title = "센터 회원가입",
+                title = stringResource(id = R.string.center_signup),
                 onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(start = 12.dp, top = 48.dp, bottom = 8.dp)
             )
         },
@@ -135,7 +138,8 @@ internal fun CenterSignUpScreen(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(32.dp, Alignment.CenterVertically),
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .background(Color.White)
                 .padding(paddingValue)
                 .padding(start = 20.dp, end = 20.dp, bottom = 30.dp),
@@ -148,7 +152,7 @@ internal fun CenterSignUpScreen(
 
             CareStateAnimator(
                 targetState = signUpStep,
-                label = "센터의 회원가입을 관리하는 애니메이션",
+                label = stringResource(id = R.string.center_info_input_animation_label),
             ) { signUpStep ->
                 when (signUpStep) {
                     CenterSignUpStep.NAME ->

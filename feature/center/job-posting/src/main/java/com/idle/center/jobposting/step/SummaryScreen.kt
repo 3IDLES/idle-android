@@ -605,7 +605,7 @@ internal fun SummaryScreen(
             )
 
             CareButtonLarge(
-                text = stringResource(id = R.string.confirm),
+                text = stringResource(id = R.string.confirm2),
                 onClick = postJobPosting,
                 modifier = Modifier.fillMaxWidth(),
             )

@@ -15,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -25,6 +26,7 @@ import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
+import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
 import com.idle.designsystem.compose.component.CareTextField
@@ -70,9 +72,10 @@ internal fun CenterSignInScreen(
     Scaffold(
         topBar = {
             CareSubtitleTopAppBar(
-                title = "로그인",
+                title = stringResource(id = R.string.login),
                 onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(start = 12.dp, top = 48.dp)
             )
         },
@@ -81,19 +84,21 @@ internal fun CenterSignInScreen(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .background(CareTheme.colors.white000)
                 .padding(paddingValue)
                 .padding(start = 20.dp, end = 20.dp, top = 125.dp, bottom = 30.dp),
         ) {
             LabeledContent(
-                subtitle = "아이디",
-                modifier = Modifier.fillMaxWidth()
+                subtitle = stringResource(id = R.string.id),
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(bottom = 16.dp),
             ) {
                 CareTextField(
                     value = centerId,
-                    hint = "아이디를 입력해주세요.",
+                    hint = stringResource(id = R.string.id_hint),
                     onValueChanged = onCenterIdChanged,
                     onDone = { },
                     modifier = Modifier.fillMaxWidth(),
@@ -101,13 +106,14 @@ internal fun CenterSignInScreen(
             }
 
             LabeledContent(
-                subtitle = "아이디",
-                modifier = Modifier.fillMaxWidth()
+                subtitle = stringResource(id = R.string.password),
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(bottom = 16.dp),
             ) {
                 CareTextField(
                     value = centerPassword,
-                    hint = "비밀번호를 입력해주세요.",
+                    hint = stringResource(id = R.string.password_hint),
                     onValueChanged = onCenterPasswordChanged,
                     visualTransformation = PasswordVisualTransformation(),
                     onDone = { if (centerPassword.isNotBlank()) signInCenter() },
@@ -118,7 +124,7 @@ internal fun CenterSignInScreen(
             Spacer(modifier = Modifier.weight(1f))
 
             Text(
-                text = "비밀번호가 기억나지 않나요?",
+                text = stringResource(id = R.string.forget_password),
                 textDecoration = TextDecoration.Underline,
                 style = CareTheme.typography.body3,
                 color = CareTheme.colors.gray500,
@@ -126,7 +132,7 @@ internal fun CenterSignInScreen(
             )
 
             CareButtonLarge(
-                text = "로그인",
+                text = stringResource(id = R.string.login),
                 enable = centerPassword.isNotBlank(),
                 onClick = signInCenter,
                 modifier = Modifier.fillMaxWidth(),

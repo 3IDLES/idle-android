@@ -22,12 +22,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.LabeledContent
@@ -64,7 +66,7 @@ internal fun IdPasswordScreen(
         modifier = Modifier.fillMaxSize()
     ) {
         Text(
-            text = "아이디와 비밀번호를 설정해주세요",
+            text = stringResource(id = R.string.set_id_and_password),
             style = CareTheme.typography.heading2,
             color = CareTheme.colors.gray900,
         )
@@ -74,7 +76,7 @@ internal fun IdPasswordScreen(
                 withStyle(
                     style = SpanStyle(color = CareTheme.colors.gray500)
                 ) {
-                    append("아이디 설정 ")
+                    append(stringResource(id = R.string.set_id_label))
                 }
                 withStyle(
                     style = SpanStyle(
@@ -82,7 +84,7 @@ internal fun IdPasswordScreen(
                         fontSize = 12.sp,
                     )
                 ) {
-                    append("(영문+숫자 조합 10자리 이상 등 조건)")
+                    append(stringResource(id = R.string.id_conditions))
                 }
             },
             modifier = Modifier.fillMaxWidth(),
@@ -94,11 +96,12 @@ internal fun IdPasswordScreen(
             ) {
                 CareTextField(
                     value = centerId,
-                    hint = "아이디를 입력해주세요.",
+                    hint = stringResource(id = R.string.id_hint),
                     onValueChanged = onCenterIdChanged,
-                    supportingText = if (centerIdResult) "사용 가능한 아이디 입니다" else "",
+                    supportingText = if (centerIdResult) stringResource(id = R.string.id_available) else "",
                     onDone = { if (idValidationResult.isValid) validateIdentifier() },
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
                         .focusRequester(focusRequester),
                 )
 
@@ -120,7 +123,7 @@ internal fun IdPasswordScreen(
                     modifier = Modifier.size(width = 76.dp, height = 44.dp),
                 ) {
                     Text(
-                        text = "중복 확인",
+                        text = stringResource(id = R.string.check_duplicate),
                         style = CareTheme.typography.subtitle4,
                         color = CareTheme.colors.gray300,
                     )
@@ -133,7 +136,7 @@ internal fun IdPasswordScreen(
                 withStyle(
                     style = SpanStyle(color = CareTheme.colors.gray500)
                 ) {
-                    append("비밀번호 설정 ")
+                    append(stringResource(id = R.string.set_password_label))
                 }
                 withStyle(
                     style = SpanStyle(
@@ -141,16 +144,16 @@ internal fun IdPasswordScreen(
                         fontSize = 12.sp,
                     )
                 ) {
-                    append("(영문+숫자 조합 10자리 이상 등 조건)")
+                    append(stringResource(id = R.string.password_conditions))
                 }
             },
             modifier = Modifier.fillMaxWidth(),
         ) {
             CareTextField(
                 value = centerPassword,
-                hint = "비밀번호를 입력해주세요.",
+                hint = stringResource(id = R.string.password_hint),
                 visualTransformation = PasswordVisualTransformation(),
-                supportingText = if (passwordValidationResult.isValid) "사용 가능한 비밀번호 입니다." else "",
+                supportingText = if (passwordValidationResult.isValid) stringResource(id = R.string.password_available) else "",
                 onValueChanged = onCenterPasswordChanged,
                 onDone = { },
                 modifier = Modifier.fillMaxWidth(),
@@ -158,25 +161,26 @@ internal fun IdPasswordScreen(
         }
 
         LabeledContent(
-            subtitle = "비밀번호 확인",
+            subtitle = stringResource(id = R.string.confirm_password),
             modifier = Modifier.fillMaxWidth(),
         ) {
             CareTextField(
                 value = centerPasswordForConfirm,
-                hint = "비밀번호를 한번 더 입력해주세요.",
+                hint = stringResource(id = R.string.confirm_password_hint),
                 visualTransformation = PasswordVisualTransformation(),
-                supportingText = if (centerPassword != centerPasswordForConfirm) "비밀번호가 일치하지 않습니다." else "",
+                supportingText = if (centerPassword != centerPasswordForConfirm) stringResource(
+                    id = R.string.password_mismatch
+                ) else "",
                 onValueChanged = onCenterPasswordForConfirmChanged,
                 onDone = { },
                 modifier = Modifier.fillMaxWidth(),
             )
         }
 
-
         Spacer(modifier = Modifier.weight(1f))
 
         CareButtonLarge(
-            text = "완료",
+            text = stringResource(id = R.string.complete),
             enable = idValidationResult.isValid && passwordValidationResult.isValid &&
                     (centerPassword == centerPasswordForConfirm),
             onClick = signUpCenter,

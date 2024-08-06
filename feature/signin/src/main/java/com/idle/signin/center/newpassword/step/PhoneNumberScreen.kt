@@ -14,7 +14,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareButtonSmall
 import com.idle.designsystem.compose.component.CareTextField
@@ -45,13 +47,13 @@ internal fun PhoneNumberScreen(
         modifier = Modifier.fillMaxSize()
     ) {
         Text(
-            text = "전화번호를 입력해주세요",
+            text = stringResource(id = R.string.phone_number_hint),
             style = CareTheme.typography.heading2,
             color = CareTheme.colors.gray900,
         )
 
         LabeledContent(
-            subtitle = "전화번호",
+            subtitle = stringResource(id = R.string.phone_number),
             modifier = Modifier.fillMaxWidth(),
         ) {
             Row(
@@ -61,23 +63,24 @@ internal fun PhoneNumberScreen(
             ) {
                 CareTextField(
                     value = phoneNumber,
-                    hint = "전화번호를 입력해주세요.",
+                    hint = stringResource(id = R.string.phone_number_hint),
                     onValueChanged = onPhoneNumberChanged,
                     onDone = { sendPhoneNumber() },
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
                         .focusRequester(focusRequester),
                 )
 
                 CareButtonSmall(
                     enable = phoneNumber.length == 13,
-                    text = "인증",
+                    text = stringResource(id = R.string.verification),
                     onClick = sendPhoneNumber,
                 )
             }
         }
 
         LabeledContent(
-            subtitle = "인증번호",
+            subtitle = stringResource(id = R.string.confirm_code),
             modifier = Modifier.fillMaxWidth(),
         ) {
             Row(
@@ -95,7 +98,7 @@ internal fun PhoneNumberScreen(
 
                 CareButtonSmall(
                     enable = certificationNumber.isNotBlank(),
-                    text = "확인",
+                    text = stringResource(id = R.string.confirm),
                     onClick = confirmAuthCode,
                 )
             }
@@ -104,7 +107,7 @@ internal fun PhoneNumberScreen(
         Spacer(modifier = Modifier.weight(1f))
 
         CareButtonLarge(
-            text = "다음",
+            text = stringResource(id = R.string.next),
             enable = certificationNumber.isNotBlank(),
             onClick = { setNewPasswordProcess(GENERATE_NEW_PASSWORD) },
             modifier = Modifier.fillMaxWidth(),

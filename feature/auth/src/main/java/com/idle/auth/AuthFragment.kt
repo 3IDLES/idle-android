@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
@@ -25,6 +26,7 @@ import com.idle.binding.DeepLinkDestination.WorkerAuth
 import com.idle.binding.DeepLinkDestination.WorkerHome
 import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.compose.base.BaseComposeFragment
+import com.idle.designresource.R.string
 import com.idle.designsystem.compose.foundation.CareTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -61,7 +63,8 @@ internal fun AuthScreen(
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.Start,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .background(Color.White)
             .padding(horizontal = 20.dp),
     ) {
@@ -73,7 +76,8 @@ internal fun AuthScreen(
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(4.dp),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(top = 142.dp),
         ) {
             Column(
@@ -89,11 +93,12 @@ internal fun AuthScreen(
                         width = 1.dp,
                         color = CareTheme.colors.gray100,
                         shape = RoundedCornerShape(8.dp)
-                    ).clickable { navigateToCenterAuth() }
+                    )
+                    .clickable { navigateToCenterAuth() }
                     .padding(horizontal = 25.5.dp, vertical = 37.dp),
             ) {
                 Text(
-                    text = "센터 관리자로\n시작하기",
+                    text = stringResource(id = string.start_center),
                     style = CareTheme.typography.subtitle2,
                     color = CareTheme.colors.gray900,
                     textAlign = TextAlign.Center,
@@ -113,11 +118,12 @@ internal fun AuthScreen(
                         width = 1.dp,
                         color = CareTheme.colors.gray100,
                         shape = RoundedCornerShape(8.dp)
-                    ).clickable { navigateToWorkerAuth() }
+                    )
+                    .clickable { navigateToWorkerAuth() }
                     .padding(horizontal = 25.5.dp, vertical = 37.dp),
             ) {
                 Text(
-                    text = "요양 보호사로\n시작하기",
+                    text = stringResource(id = string.start_worker),
                     style = CareTheme.typography.subtitle2,
                     color = CareTheme.colors.gray900,
                     textAlign = TextAlign.Center,

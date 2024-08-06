@@ -13,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -20,6 +21,7 @@ import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
 import com.idle.designsystem.compose.foundation.CareTheme
+import com.idle.designresource.R
 import com.idle.signin.center.newpassword.step.GenerateNewPasswordScreen
 import com.idle.signin.center.newpassword.step.PhoneNumberScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -76,9 +78,10 @@ internal fun NewPasswordScreen(
     Scaffold(
         topBar = {
             CareSubtitleTopAppBar(
-                title = "신규 비밀번호 발급",
+                title = stringResource(id = R.string.generate_new_password),
                 onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(start = 12.dp, top = 48.dp, bottom = 64.dp)
             )
         },
@@ -87,7 +90,8 @@ internal fun NewPasswordScreen(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(32.dp, Alignment.CenterVertically),
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .background(CareTheme.colors.white000)
                 .padding(paddingValue)
                 .padding(start = 20.dp, end = 20.dp, bottom = 30.dp),
