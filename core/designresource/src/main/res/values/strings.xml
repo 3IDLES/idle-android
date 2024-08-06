@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- TopBar Strings -->
+    <string name="post_job_posting">공고 등록</string>
+
+    <!-- Time Picker Strings -->
+    <string name="work_start_time">근무 시작 시간</string>
+    <string name="work_end_time">근무 종료 시간</string>
+    <string name="cancel">취소</string>
+    <string name="save">저장</string>
+    <string name="post_deadline">접수 마감일</string>
+
+    <!-- Button Text -->
+    <string name="edit_job_posting">공고 수정하기</string>
+
+    <!-- Chip Text -->
     <string name="necessary">필요</string>
     <string name="unnecessary">불필요</string>
+
+    <!-- Other Strings -->
+    <string name="center_info_input">센터 정보 입력을 관리하는 애니메이션</string>
 </resources>

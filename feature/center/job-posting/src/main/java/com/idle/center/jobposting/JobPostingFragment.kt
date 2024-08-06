@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
@@ -38,6 +39,7 @@ import com.idle.center.job.edit.JobEditScreen
 import com.idle.compose.JobPostingBottomSheetType
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
+import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareBottomSheetLayout
 import com.idle.designsystem.compose.component.CareButtonMedium
 import com.idle.designsystem.compose.component.CareButtonRound
@@ -320,7 +322,7 @@ internal fun JobPostingScreen(
                         var localWorkStartMinute by remember { mutableStateOf("00") }
 
                         Text(
-                            text = "근무 시작 시간",
+                            text = stringResource(id = R.string.work_start_time),
                             style = CareTheme.typography.heading3,
                             color = CareTheme.colors.gray900,
                         )
@@ -370,7 +372,7 @@ internal fun JobPostingScreen(
                             modifier = Modifier.fillMaxWidth(),
                         ) {
                             CareButtonMedium(
-                                text = "취소",
+                                text = stringResource(id = R.string.cancel),
                                 onClick = {
                                     coroutineScope.launch {
                                         sheetState.hide()
@@ -380,7 +382,7 @@ internal fun JobPostingScreen(
                             )
 
                             CareButtonMedium(
-                                text = "저장",
+                                text = stringResource(id = R.string.save),
                                 onClick = {
                                     coroutineScope.launch {
                                         val startTime =
@@ -405,7 +407,7 @@ internal fun JobPostingScreen(
                         var localWorkEndMinute by remember { mutableStateOf("00") }
 
                         Text(
-                            text = "근무 종료 시간",
+                            text = stringResource(id = R.string.work_end_time),
                             style = CareTheme.typography.heading3,
                             color = CareTheme.colors.gray900,
                         )
@@ -455,7 +457,7 @@ internal fun JobPostingScreen(
                             modifier = Modifier.fillMaxWidth(),
                         ) {
                             CareButtonMedium(
-                                text = "취소",
+                                text = stringResource(id = R.string.cancel),
                                 onClick = {
                                     coroutineScope.launch {
                                         sheetState.hide()
@@ -465,7 +467,7 @@ internal fun JobPostingScreen(
                             )
 
                             CareButtonMedium(
-                                text = "저장",
+                                text = stringResource(id = R.string.save),
                                 onClick = {
                                     coroutineScope.launch {
                                         val endTime = "${
@@ -485,7 +487,7 @@ internal fun JobPostingScreen(
 
                     JobPostingBottomSheetType.POST_DEAD_LINE -> {
                         Text(
-                            text = "접수 마감일",
+                            text = stringResource(id = R.string.post_deadline),
                             style = CareTheme.typography.heading3,
                             color = CareTheme.colors.gray900,
                         )
@@ -518,12 +520,13 @@ internal fun JobPostingScreen(
         Scaffold(
             topBar = {
                 CareSubtitleTopAppBar(
-                    title = if (jobPostingStep != JobPostingStep.SUMMARY) "공고 등록" else "",
+                    title = if (jobPostingStep != JobPostingStep.SUMMARY) stringResource(id = R.string.post_job_posting)
+                    else "",
                     onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
                     leftComponent = {
                         if (jobPostingStep == JobPostingStep.SUMMARY) {
                             CareButtonRound(
-                                text = "공고 수정하기",
+                                text = stringResource(id = R.string.edit_job_posting),
                                 onClick = { setEditState(true) },
                             )
                         }
