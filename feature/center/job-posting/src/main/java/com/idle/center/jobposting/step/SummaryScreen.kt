@@ -21,9 +21,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.idle.center.jobposting.JobPostingStep
+import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.component.CareTextFieldLong
@@ -65,9 +67,9 @@ internal fun SummaryScreen(
     val scrollState = rememberScrollState()
 
     val payText = when (payType!!) {
-        PayType.HOURLY -> "시급 $payAmount 원"
-        PayType.WEEKLY -> "주급 $payAmount 원"
-        PayType.MONTHLY -> "월급 $payAmount 원"
+        PayType.HOURLY -> stringResource(id = R.string.hourly_pay_format, payAmount)
+        PayType.WEEKLY -> stringResource(id = R.string.weekly_pay_format, payAmount)
+        PayType.MONTHLY -> stringResource(id = R.string.monthly_pay_format, payAmount)
         PayType.UNKNOWN -> ""
     }
 
@@ -82,7 +84,7 @@ internal fun SummaryScreen(
             .padding(top = 20.dp, bottom = 30.dp),
     ) {
         Text(
-            text = "다음의 공고 정보가 맞는지 확인해주세요.",
+            text = stringResource(id = R.string.summary_title),
             style = CareTheme.typography.heading2,
             color = CareTheme.colors.gray900,
             modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 8.dp),
@@ -115,7 +117,13 @@ internal fun SummaryScreen(
                     ) {
                         if (isExperiencePreferred == false) {
                             CareTag(
-                                text = "초보 가능",
+                                text = stringResource(id = R.string.experience_preferred),
+                                textColor = CareTheme.colors.orange500,
+                                backgroundColor = CareTheme.colors.orange100,
+                            )
+                        } else {
+                            CareTag(
+                                text = stringResource(id = R.string.beginner_possible),
                                 textColor = CareTheme.colors.orange500,
                                 backgroundColor = CareTheme.colors.orange100,
                             )
@@ -140,7 +148,12 @@ internal fun SummaryScreen(
                     )
 
                     Text(
-                        text = "${careLevel}등급 ${LocalDate.now().year - birthYear.toInt() + 1}세 ${gender.displayName}",
+                        text = stringResource(
+                            id = R.string.customer_info_format,
+                            careLevel,
+                            LocalDate.now().year - birthYear.toInt() + 1,
+                            gender.displayName
+                        ),
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray900,
                         modifier = Modifier.padding(end = 8.dp, bottom = 4.dp),
@@ -158,9 +171,13 @@ internal fun SummaryScreen(
                         )
 
                         Text(
-                            text = weekDays
-                                .sortedBy { it.ordinal }
-                                .joinToString(", ") { it.displayName } + " | " + "09:00 - 15:00",
+                            text = stringResource(
+                                id = R.string.work_days_hours_format,
+                                weekDays.sortedBy { it.ordinal }
+                                    .joinToString(", ") { it.displayName },
+                                workStartTime,
+                                workEndTime
+                            ),
                             style = CareTheme.typography.body3,
                             color = CareTheme.colors.gray500,
                         )
@@ -186,7 +203,7 @@ internal fun SummaryScreen(
 
             Row {
                 Text(
-                    text = "보호사 측 화면으로 보기",
+                    text = stringResource(id = R.string.view_as_caregiver),
                     style = CareTheme.typography.body2,
                     color = CareTheme.colors.gray300,
                 )
@@ -208,7 +225,7 @@ internal fun SummaryScreen(
                 .padding(horizontal = 20.dp),
         ) {
             Text(
-                text = "근무 조건",
+                text = stringResource(id = R.string.work_conditions),
                 style = CareTheme.typography.subtitle1,
                 color = CareTheme.colors.gray900,
                 modifier = Modifier.padding(bottom = 12.dp),
@@ -220,25 +237,25 @@ internal fun SummaryScreen(
             ) {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(
-                        text = "근무 요일",
+                        text = stringResource(id = R.string.work_days),
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray300,
                     )
 
                     Text(
-                        text = "근무 시간",
+                        text = stringResource(id = R.string.work_hours),
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray300,
                     )
 
                     Text(
-                        text = "급여",
+                        text = stringResource(id = R.string.pay),
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray300,
                     )
 
                     Text(
-                        text = "근무 주소",
+                        text = stringResource(id = R.string.address),
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray300,
                     )
@@ -282,7 +299,7 @@ internal fun SummaryScreen(
                 .padding(horizontal = 20.dp)
         ) {
             Text(
-                text = "고객 정보",
+                text = stringResource(id = R.string.customer_info),
                 style = CareTheme.typography.subtitle1,
                 color = CareTheme.colors.gray900,
                 modifier = Modifier.padding(bottom = 20.dp),
@@ -303,7 +320,7 @@ internal fun SummaryScreen(
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
                         Text(
-                            text = "이름",
+                            text = stringResource(id = R.string.name),
                             style = CareTheme.typography.body2,
                             color = CareTheme.colors.gray300,
                         )
@@ -315,19 +332,19 @@ internal fun SummaryScreen(
                     }
 
                     Text(
-                        text = "성별",
+                        text = stringResource(id = R.string.gender),
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray300,
                     )
 
                     Text(
-                        text = "나이",
+                        text = stringResource(id = R.string.age),
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray300,
                     )
 
                     Text(
-                        text = "몸무게",
+                        text = stringResource(id = R.string.weight),
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray300,
                     )
@@ -345,7 +362,7 @@ internal fun SummaryScreen(
                         )
 
                         Text(
-                            text = "고객 이름 센터 측에서만 볼 수 있어요.",
+                            text = stringResource(id = R.string.customer_name_note),
                             style = CareTheme.typography.caption,
                             color = CareTheme.colors.gray300,
                         )
@@ -379,29 +396,30 @@ internal fun SummaryScreen(
                     .fillMaxWidth()
                     .padding(vertical = 16.dp),
             ) {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.width(60.dp)
+                ) {
                     Text(
-                        text = "요양등급",
+                        text = stringResource(id = R.string.care_level),
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray300,
                     )
 
                     Text(
-                        text = "인지 상태",
+                        text = stringResource(id = R.string.mental_status),
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray300,
                     )
 
                     Text(
-                        text = "질병",
+                        text = stringResource(id = R.string.disease),
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray300,
                     )
                 }
 
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                ) {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(
                         text = "${careLevel}등급",
                         style = CareTheme.typography.body2,
@@ -432,50 +450,54 @@ internal fun SummaryScreen(
             ) {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(8.dp),
-                    modifier = Modifier.width(60.dp),
+                    modifier = Modifier.width(60.dp)
                 ) {
                     Text(
-                        text = "식사보조",
+                        text = stringResource(id = R.string.meal_assistance),
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray300,
                     )
 
                     Text(
-                        text = "배변보조",
+                        text = stringResource(id = R.string.bowel_assistance),
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray300,
                     )
 
                     Text(
-                        text = "이동보조",
+                        text = stringResource(id = R.string.walking_assistance),
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray300,
                     )
 
                     Text(
-                        text = "일상보조",
+                        text = stringResource(id = R.string.life_assistance),
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray300,
                     )
                 }
 
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                ) {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(
-                        text = if (isMealAssistance!!) "필요" else "불필요",
+                        text = if (isMealAssistance!!) stringResource(id = R.string.necessary) else stringResource(
+                            id = R.string.unnecessary
+                        ),
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray900,
                     )
 
                     Text(
-                        text = if (isBowelAssistance!!) "필요" else "불필요",
+                        text = if (isBowelAssistance!!) stringResource(id = R.string.necessary) else stringResource(
+                            id = R.string.unnecessary
+                        ),
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray900,
                     )
 
                     Text(
-                        text = if (isWalkingAssistance!!) "필요" else "불필요",
+                        text = if (isWalkingAssistance!!) stringResource(id = R.string.necessary) else stringResource(
+                            id = R.string.unnecessary
+                        ),
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray900,
                     )
@@ -495,7 +517,7 @@ internal fun SummaryScreen(
                 HorizontalDivider(thickness = 1.dp, color = CareTheme.colors.gray100)
 
                 Text(
-                    text = "특이사항",
+                    text = stringResource(id = R.string.speciality),
                     style = CareTheme.typography.body2,
                     color = CareTheme.colors.gray300,
                     modifier = Modifier.padding(top = 16.dp, bottom = 6.dp),
@@ -517,7 +539,7 @@ internal fun SummaryScreen(
                 .padding(start = 20.dp, end = 20.dp, bottom = 28.dp)
         ) {
             Text(
-                text = "추가 지원 정보",
+                text = stringResource(id = R.string.additional_support_info),
                 style = CareTheme.typography.subtitle1,
                 color = CareTheme.colors.gray900,
                 modifier = Modifier.padding(bottom = 20.dp),
@@ -531,29 +553,28 @@ internal fun SummaryScreen(
             ) {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(
-                        text = "경력 우대여부",
+                        text = stringResource(id = R.string.experience_preference),
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray300,
                     )
 
                     Text(
-                        text = "지원 방법",
+                        text = stringResource(id = R.string.apply_method),
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray300,
                     )
 
                     Text(
-                        text = "접수 마감일",
+                        text = stringResource(id = R.string.apply_deadline),
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray300,
                     )
                 }
 
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                ) {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(
-                        text = if (isExperiencePreferred!!) "초보 가능" else "경력자 우대",
+                        text = if (isExperiencePreferred!!) stringResource(id = R.string.experience_preferred)
+                        else stringResource(id = R.string.beginner_possible),
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray900,
                     )
@@ -578,13 +599,13 @@ internal fun SummaryScreen(
             modifier = Modifier.padding(horizontal = 20.dp)
         ) {
             Text(
-                text = "공고 등록 후에도 공고 내용을 수정할 수 있어요.",
+                text = stringResource(id = R.string.post_job_posting_note),
                 style = CareTheme.typography.body3,
                 color = CareTheme.colors.gray300,
             )
 
             CareButtonLarge(
-                text = "확인했어요",
+                text = stringResource(id = R.string.confirm),
                 onClick = postJobPosting,
                 modifier = Modifier.fillMaxWidth(),
             )
