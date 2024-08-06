@@ -24,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
@@ -31,6 +32,7 @@ import com.idle.binding.DeepLinkDestination.WorkerJobDetail
 import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
+import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareHeadingTopAppBar
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.foundation.CareTheme
@@ -82,7 +84,8 @@ internal fun WorkerHomeScreen(
     ) { paddingValue ->
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(12.dp),
-            modifier = Modifier.padding(paddingValue)
+            modifier = Modifier
+                .padding(paddingValue)
                 .padding(horizontal = 20.dp, vertical = 16.dp)
                 .fillMaxSize()
         ) {
@@ -112,7 +115,8 @@ private fun WorkerRecruitmentCard(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(bottom = 8.dp)
             ) {
                 CareTag(
@@ -138,7 +142,8 @@ private fun WorkerRecruitmentCard(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(bottom = 2.dp),
             ) {
                 Text(
@@ -167,7 +172,8 @@ private fun WorkerRecruitmentCard(
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(bottom = 2.dp)
             ) {
                 Image(
@@ -184,7 +190,8 @@ private fun WorkerRecruitmentCard(
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(bottom = 8.dp),
             ) {
                 Image(
@@ -212,7 +219,7 @@ private fun WorkerRecruitmentCard(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = "지원하기",
+                    text = stringResource(id = R.string.recruit),
                     style = CareTheme.typography.subtitle4,
                     color = CareTheme.colors.white000,
                 )

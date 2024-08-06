@@ -20,10 +20,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import com.idle.compose.base.BaseComposeFragment
+import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLine
 import com.idle.designsystem.compose.component.CareCard
 import com.idle.designsystem.compose.component.CareMap
@@ -54,7 +56,7 @@ internal fun WorkerRecruitmentDetailScreen(
         containerColor = CareTheme.colors.white000,
         topBar = {
             CareSubtitleTopAppBar(
-                title = "공고 정보",
+                title = stringResource(id = R.string.job_posting_detail),
                 modifier = Modifier.padding(start = 12.dp, top = 48.dp, bottom = 24.dp),
             )
         }
@@ -68,13 +70,15 @@ internal fun WorkerRecruitmentDetailScreen(
                 .verticalScroll(scrollState)
         ) {
             Column(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(horizontal = 20.dp)
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(4.dp),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .padding(bottom = 8.dp)
                 ) {
                     CareTag(
@@ -92,7 +96,7 @@ internal fun WorkerRecruitmentDetailScreen(
                     Spacer(modifier = Modifier.weight(1f))
 
                     Image(
-                        painter = painterResource(com.idle.designresource.R.drawable.ic_star_gray),
+                        painter = painterResource(R.drawable.ic_star_gray),
                         contentDescription = null,
                     )
                 }
@@ -100,7 +104,8 @@ internal fun WorkerRecruitmentDetailScreen(
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .padding(bottom = 2.dp),
                 ) {
                     Text(
@@ -129,11 +134,12 @@ internal fun WorkerRecruitmentDetailScreen(
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .padding(bottom = 2.dp)
                 ) {
                     Image(
-                        painter = painterResource(com.idle.designresource.R.drawable.ic_clock),
+                        painter = painterResource(R.drawable.ic_clock),
                         contentDescription = null,
                     )
 
@@ -146,11 +152,12 @@ internal fun WorkerRecruitmentDetailScreen(
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .padding(bottom = 8.dp),
                 ) {
                     Image(
-                        painter = painterResource(com.idle.designresource.R.drawable.ic_money),
+                        painter = painterResource(R.drawable.ic_money),
                         contentDescription = null,
                     )
 
@@ -165,11 +172,12 @@ internal fun WorkerRecruitmentDetailScreen(
             HorizontalDivider(thickness = 8.dp, color = CareTheme.colors.gray050)
 
             Column(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(horizontal = 20.dp)
             ) {
                 Text(
-                    text = "근무 장소",
+                    text = stringResource(id = R.string.work_address),
                     style = CareTheme.typography.subtitle1,
                     color = CareTheme.colors.gray900,
                     modifier = Modifier.padding(bottom = 12.dp),
@@ -185,11 +193,12 @@ internal fun WorkerRecruitmentDetailScreen(
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(6.dp),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .padding(bottom = 16.dp),
                 ) {
                     Image(
-                        painter = painterResource(com.idle.designresource.R.drawable.ic_walk),
+                        painter = painterResource(R.drawable.ic_walk),
                         contentDescription = null,
                     )
 
@@ -201,7 +210,8 @@ internal fun WorkerRecruitmentDetailScreen(
                 }
 
                 CareMap(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .height(224.dp)
                         .clip(RoundedCornerShape(8.dp)),
                 )
@@ -210,11 +220,12 @@ internal fun WorkerRecruitmentDetailScreen(
             HorizontalDivider(thickness = 8.dp, color = CareTheme.colors.gray050)
 
             Column(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(horizontal = 20.dp)
             ) {
                 Text(
-                    text = "근무 조건",
+                    text = stringResource(id = R.string.work_conditions),
                     style = CareTheme.typography.subtitle1,
                     color = CareTheme.colors.gray900,
                     modifier = Modifier.padding(bottom = 20.dp),
@@ -223,30 +234,31 @@ internal fun WorkerRecruitmentDetailScreen(
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(32.dp),
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .padding(bottom = 8.dp),
                 ) {
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Text(
-                            text = "근무 요일",
+                            text = stringResource(id = R.string.work_days),
                             style = CareTheme.typography.body2,
                             color = CareTheme.colors.gray300,
                         )
 
                         Text(
-                            text = "근무 시간",
+                            text = stringResource(id = R.string.work_hours),
                             style = CareTheme.typography.body2,
                             color = CareTheme.colors.gray300,
                         )
 
                         Text(
-                            text = "급여",
+                            text = stringResource(id = R.string.pay),
                             style = CareTheme.typography.body2,
                             color = CareTheme.colors.gray300,
                         )
 
                         Text(
-                            text = "근무 주소",
+                            text = stringResource(id = R.string.work_address),
                             style = CareTheme.typography.body2,
                             color = CareTheme.colors.gray300,
                         )
@@ -283,11 +295,12 @@ internal fun WorkerRecruitmentDetailScreen(
             HorizontalDivider(thickness = 8.dp, color = CareTheme.colors.gray050)
 
             Column(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(horizontal = 20.dp)
             ) {
                 Text(
-                    text = "고객 정보",
+                    text = stringResource(id = R.string.customer_info),
                     style = CareTheme.typography.subtitle1,
                     color = CareTheme.colors.gray900,
                     modifier = Modifier.padding(bottom = 20.dp),
@@ -295,7 +308,8 @@ internal fun WorkerRecruitmentDetailScreen(
 
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(32.dp),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .padding(bottom = 16.dp),
                 ) {
                     Column(
@@ -303,19 +317,19 @@ internal fun WorkerRecruitmentDetailScreen(
                         modifier = Modifier.width(60.dp),
                     ) {
                         Text(
-                            text = "성별",
+                            text = stringResource(id = R.string.gender),
                             style = CareTheme.typography.body2,
                             color = CareTheme.colors.gray300,
                         )
 
                         Text(
-                            text = "나이",
+                            text = stringResource(id = R.string.age),
                             style = CareTheme.typography.body2,
                             color = CareTheme.colors.gray300,
                         )
 
                         Text(
-                            text = "몸무게",
+                            text = stringResource(id = R.string.weight),
                             style = CareTheme.typography.body2,
                             color = CareTheme.colors.gray300,
                         )
@@ -346,24 +360,25 @@ internal fun WorkerRecruitmentDetailScreen(
 
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(32.dp),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .padding(vertical = 16.dp),
                 ) {
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Text(
-                            text = "요양등급",
+                            text = stringResource(id = R.string.care_level),
                             style = CareTheme.typography.body2,
                             color = CareTheme.colors.gray300,
                         )
 
                         Text(
-                            text = "인지 상태",
+                            text = stringResource(id = R.string.mental_status),
                             style = CareTheme.typography.body2,
                             color = CareTheme.colors.gray300,
                         )
 
                         Text(
-                            text = "질병",
+                            text = stringResource(id = R.string.disease),
                             style = CareTheme.typography.body2,
                             color = CareTheme.colors.gray300,
                         )
@@ -396,7 +411,8 @@ internal fun WorkerRecruitmentDetailScreen(
 
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(32.dp),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .padding(vertical = 16.dp),
                 ) {
                     Column(
@@ -404,25 +420,25 @@ internal fun WorkerRecruitmentDetailScreen(
                         modifier = Modifier.width(60.dp),
                     ) {
                         Text(
-                            text = "식사보조",
+                            text = stringResource(id = R.string.meal_assistance),
                             style = CareTheme.typography.body2,
                             color = CareTheme.colors.gray300,
                         )
 
                         Text(
-                            text = "배변보조",
+                            text = stringResource(id = R.string.bowel_assistance),
                             style = CareTheme.typography.body2,
                             color = CareTheme.colors.gray300,
                         )
 
                         Text(
-                            text = "이동보조",
+                            text = stringResource(id = R.string.walking_assistance),
                             style = CareTheme.typography.body2,
                             color = CareTheme.colors.gray300,
                         )
 
                         Text(
-                            text = "일상보조",
+                            text = stringResource(id = R.string.life_assistance),
                             style = CareTheme.typography.body2,
                             color = CareTheme.colors.gray300,
                         )
@@ -432,7 +448,7 @@ internal fun WorkerRecruitmentDetailScreen(
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
                         Text(
-                            text = "불필요",
+                            text = stringResource(id = R.string.unnecessary),
                             style = CareTheme.typography.body2,
                             color = CareTheme.colors.gray900,
                         )
@@ -460,7 +476,7 @@ internal fun WorkerRecruitmentDetailScreen(
                 HorizontalDivider(thickness = 1.dp, color = CareTheme.colors.gray100)
 
                 Text(
-                    text = "특이사항",
+                    text = stringResource(id = R.string.speciality),
                     style = CareTheme.typography.body2,
                     color = CareTheme.colors.gray300,
                     modifier = Modifier.padding(top = 16.dp, bottom = 6.dp),
@@ -476,11 +492,12 @@ internal fun WorkerRecruitmentDetailScreen(
             HorizontalDivider(thickness = 8.dp, color = CareTheme.colors.gray050)
 
             Column(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(horizontal = 20.dp)
             ) {
                 Text(
-                    text = "추가 지원 정보",
+                    text = stringResource(id = R.string.additional_info),
                     style = CareTheme.typography.subtitle1,
                     color = CareTheme.colors.gray900,
                     modifier = Modifier.padding(bottom = 20.dp),
@@ -488,24 +505,25 @@ internal fun WorkerRecruitmentDetailScreen(
 
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(32.dp),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .padding(top = 20.dp),
                 ) {
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Text(
-                            text = "경력 우대여부",
+                            text = stringResource(id = R.string.experience_preference),
                             style = CareTheme.typography.body2,
                             color = CareTheme.colors.gray300,
                         )
 
                         Text(
-                            text = "지원 방법",
+                            text = stringResource(id = R.string.apply_method),
                             style = CareTheme.typography.body2,
                             color = CareTheme.colors.gray300,
                         )
 
                         Text(
-                            text = "접수 마감일",
+                            text = stringResource(id = R.string.apply_deadline),
                             style = CareTheme.typography.body2,
                             color = CareTheme.colors.gray300,
                         )
@@ -538,11 +556,12 @@ internal fun WorkerRecruitmentDetailScreen(
             HorizontalDivider(thickness = 8.dp, color = CareTheme.colors.gray050)
 
             Column(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(horizontal = 20.dp)
             ) {
                 Text(
-                    text = "기관 정보",
+                    text = stringResource(id = R.string.center_info),
                     style = CareTheme.typography.subtitle1,
                     color = CareTheme.colors.gray900,
                     modifier = Modifier.padding(bottom = 12.dp),
@@ -556,11 +575,12 @@ internal fun WorkerRecruitmentDetailScreen(
 
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(top = 16.dp, bottom = 30.dp, start = 20.dp, end = 20.dp),
             ) {
                 CareButtonLine(
-                    text = "문의하기",
+                    text = stringResource(id = R.string.inquiry),
                     onClick = {},
                     borderColor = CareTheme.colors.orange400,
                     textColor = CareTheme.colors.orange500,
@@ -568,7 +588,7 @@ internal fun WorkerRecruitmentDetailScreen(
                 )
 
                 CareButtonLine(
-                    text = "지원하기",
+                    text = stringResource(id = R.string.recruit),
                     onClick = {},
                     containerColor = CareTheme.colors.orange500,
                     borderColor = CareTheme.colors.orange500,

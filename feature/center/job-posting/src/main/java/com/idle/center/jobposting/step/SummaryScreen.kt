@@ -255,7 +255,7 @@ internal fun SummaryScreen(
                     )
 
                     Text(
-                        text = stringResource(id = R.string.address),
+                        text = stringResource(id = R.string.work_address),
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray300,
                     )
