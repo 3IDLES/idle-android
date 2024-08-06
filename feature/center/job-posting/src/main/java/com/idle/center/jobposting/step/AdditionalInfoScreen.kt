@@ -66,7 +66,7 @@ internal fun AdditionalInfoScreen(
         )
 
         LabeledContent(
-            subtitle = stringResource(id = R.string.experience_preference_label)
+            subtitle = stringResource(id = R.string.experience_preference)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
