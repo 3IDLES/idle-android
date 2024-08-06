@@ -15,8 +15,12 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -34,6 +38,8 @@ fun <T> CareWheelPicker(
     pickerMaxHeight: Dp = 150.dp,
 ) {
     val listState = rememberLazyListState(initialFirstVisibleItemIndex = initIndex)
+    val firstItemScrollOffset by remember { derivedStateOf { listState.firstVisibleItemScrollOffset } }
+    val firstItemIndex by remember { derivedStateOf { listState.firstVisibleItemIndex } }
     val snapFlingBehavior = rememberSnapFlingBehavior(lazyListState = listState)
 
     // Int 타입이면 padStart 적용, 아니면 기본 toString 사용
@@ -44,8 +50,13 @@ fun <T> CareWheelPicker(
         }
     } + listOf("")
 
+    val density = LocalDensity.current
+    val threshold = with(density) { 30.dp.toPx().toInt() }
+
     LaunchedEffect(listState.isScrollInProgress) {
-        val currentIndex = listState.firstVisibleItemIndex + 1
+        val currentIndex = if (firstItemScrollOffset >= threshold) firstItemIndex + 2
+        else firstItemIndex + 1
+
         onItemSelected(innerList[currentIndex])
     }
 
@@ -60,7 +71,10 @@ fun <T> CareWheelPicker(
                 .height(pickerMaxHeight),
         ) {
             itemsIndexed(items = innerList) { idx, item ->
-                if (idx == listState.firstVisibleItemIndex + 1) {
+                val currentIndex = if (firstItemScrollOffset >= threshold) firstItemIndex + 2
+                else firstItemIndex + 1
+
+                if (idx == currentIndex) {
                     Text(
                         text = item,
                         style = CareTheme.typography.heading2,
