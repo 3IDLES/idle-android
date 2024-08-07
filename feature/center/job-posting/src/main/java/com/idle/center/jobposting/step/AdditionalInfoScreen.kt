@@ -134,7 +134,7 @@ internal fun AdditionalInfoScreen(
                     }
                 }
 
-                if (applyDeadlineType == ApplyDeadlineType.DEFINITE) {
+                if (applyDeadlineType == ApplyDeadlineType.LIMITED) {
                     CareClickableTextField(
                         value = applyDeadline?.toString() ?: "",
                         hint = stringResource(id = R.string.apply_deadline_hint),
@@ -155,7 +155,7 @@ internal fun AdditionalInfoScreen(
 
         CareButtonLarge(
             text = stringResource(id = R.string.next),
-            enable = isExperiencePreferred != null && applyMethod.isNotEmpty() && applyDeadlineType != null && (applyDeadlineType == ApplyDeadlineType.DEFINITE && applyDeadline != null),
+            enable = isExperiencePreferred != null && applyMethod.isNotEmpty() && applyDeadlineType != null && (applyDeadlineType == ApplyDeadlineType.LIMITED && applyDeadline != null),
             onClick = { setJobPostingStep(JobPostingStep.findStep(ADDITIONAL_INFO.step + 1)) },
             modifier = Modifier.fillMaxWidth(),
         )

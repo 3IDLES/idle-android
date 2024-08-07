@@ -252,8 +252,8 @@ class JobPostingViewModel @Inject constructor(
         postJobPostingUseCase(
             weekdays = _weekDays.value.toList()
                 .sortedBy { it.ordinal },
-            startTime = "09:00",
-            endTime = "15:00",
+            startTime = _workStartTime.value,
+            endTime = _workEndTime.value,
             payType = _payType.value ?: PayType.UNKNOWN,
             payAmount = _payAmount.value.toIntOrNull() ?: return@launch,
             roadNameAddress = _roadNameAddress.value,
@@ -275,8 +275,8 @@ class JobPostingViewModel @Inject constructor(
             isExperiencePreferred = _isExperiencePreferred.value ?: return@launch,
             applyMethod = _applyMethod.value.toList()
                 .sortedBy { it.ordinal },
-            applyDeadLineType = _applyDeadlineType.value ?: ApplyDeadlineType.INDEFINITE,
-            applyDeadline = "2024-08-30",
+            applyDeadLineType = _applyDeadlineType.value ?: ApplyDeadlineType.UNLIMITED,
+            applyDeadline = _applyDeadline.value?.toString() ?: return@launch,
         ).onSuccess {
             baseEvent(
                 CareBaseEvent.NavigateTo(
