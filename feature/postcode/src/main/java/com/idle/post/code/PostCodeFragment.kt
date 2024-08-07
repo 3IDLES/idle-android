@@ -64,8 +64,15 @@ class PostCodeFragment : DialogFragment() {
     private fun setupWebView() {
         binding.postcodeWV.apply {
             settings.javaScriptEnabled = true
+            clearCache(true)
+            settings.cacheMode = WebSettings.LOAD_NO_CACHE
 
-            webViewClient = WebViewClient()
+            webViewClient = object : WebViewClient() {
+                override fun onPageFinished(view: WebView?, url: String?) {
+                    super.onPageFinished(view, url)
+                    view?.evaluateJavascript("execDaumPostcode();", null)
+                }
+            }
             webChromeClient = WebChromeClient()
 
             addJavascriptInterface(AndroidBridge(), "android")

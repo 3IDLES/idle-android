@@ -62,7 +62,7 @@ class JobPostingRepositoryImpl @Inject constructor(
             speciality = speciality,
             isExperiencePreferred = isExperiencePreferred,
             applyMethod = applyMethod.map { it.name },
-            applyDeadLineType = applyDeadLineType.name,
+            applyDeadlineType = applyDeadLineType.name,
             applyDeadline = applyDeadline,
         )
     )
@@ -116,7 +116,7 @@ class JobPostingRepositoryImpl @Inject constructor(
             speciality = speciality,
             isExperiencePreferred = isExperiencePreferred,
             applyMethod = applyMethod.map { it.name },
-            applyDeadLineType = applyDeadLineType.name,
+            applyDeadlineType = applyDeadLineType.name,
             applyDeadline = applyDeadline,
         )
     )

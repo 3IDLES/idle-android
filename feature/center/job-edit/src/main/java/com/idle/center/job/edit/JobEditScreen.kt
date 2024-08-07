@@ -991,7 +991,7 @@ fun JobEditScreen(
                                 }
                             }
 
-                            if (localApplyDeadlineType == ApplyDeadlineType.DEFINITE) {
+                            if (localApplyDeadlineType == ApplyDeadlineType.LIMITED) {
                                 CareClickableTextField(
                                     value = localApplyDeadline?.toString() ?: "",
                                     onClick = {
