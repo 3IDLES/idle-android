@@ -2,6 +2,7 @@
 
 package com.idle.center.jobposting
 
+import android.util.Log
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -331,8 +332,11 @@ internal fun JobPostingScreen(
 
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             CareWheelPicker(
-                                list = listOf("오전", "오후"),
-                                onItemSelected = { localWorkStartAmPm = it },
+                                items = listOf("오전", "오후"),
+                                onItemSelected = {
+                                    localWorkStartAmPm = it
+                                    Log.d("test", it)
+                                },
                                 initIndex = if (workStartTime.isBlank() ||
                                     workStartTime.substring(0, 2).toInt() <= 12
                                 ) 0 else 1,
@@ -340,7 +344,7 @@ internal fun JobPostingScreen(
                             )
 
                             CareWheelPicker(
-                                list = (1..12).toList(),
+                                items = (1..12).toList(),
                                 onItemSelected = { localWorkStartHour = it },
                                 initIndex = if (workStartTime.isBlank()) 0
                                 else if (workStartTime.substring(0, 2) == "00") 11
@@ -357,7 +361,7 @@ internal fun JobPostingScreen(
                             )
 
                             CareWheelPicker(
-                                list = (0..50 step 10).toList(),
+                                items = (0..50 step 10).toList(),
                                 onItemSelected = { localWorkStartMinute = it },
                                 initIndex = if (workStartTime.isBlank()) 0
                                 else (workStartTime.substring(3, 5).toInt() / 10),
@@ -392,6 +396,7 @@ internal fun JobPostingScreen(
                                                 else if (localWorkStartAmPm == "오후" && localWorkStartHour == "12") "12"
                                                 else localWorkStartHour.toInt() + 12
                                             }" + ":${localWorkStartMinute}"
+                                        Log.d("test", startTime.toString())
                                         onWorkStartTimeChanged(startTime)
                                         sheetState.hide()
                                     }
@@ -416,8 +421,11 @@ internal fun JobPostingScreen(
 
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             CareWheelPicker(
-                                list = listOf("오전", "오후"),
-                                onItemSelected = { localWorkEndAmPm = it },
+                                items = listOf("오전", "오후"),
+                                onItemSelected = {
+                                    localWorkEndAmPm = it
+                                    Log.d("test", it)
+                                },
                                 initIndex = if (workEndTime.isBlank() ||
                                     workEndTime.substring(0, 2).toInt() <= 12
                                 ) 0 else 1,
@@ -425,7 +433,7 @@ internal fun JobPostingScreen(
                             )
 
                             CareWheelPicker(
-                                list = (1..12).toList(),
+                                items = (1..12).toList(),
                                 onItemSelected = { localWorkEndHour = it },
                                 initIndex = if (workEndTime.isBlank()) 0
                                 else if (workEndTime.substring(0, 2) == "00") 11
@@ -442,7 +450,7 @@ internal fun JobPostingScreen(
                             )
 
                             CareWheelPicker(
-                                list = (0..50 step 10).toList(),
+                                items = (0..50 step 10).toList(),
                                 onItemSelected = { localWorkEndMinute = it },
                                 initIndex = if (workEndTime.isBlank()) 0
                                 else (workEndTime.substring(3, 5).toInt() / 10),
@@ -476,6 +484,7 @@ internal fun JobPostingScreen(
                                             else if (localWorkEndAmPm == "오후" && localWorkEndHour == "12") "12"
                                             else localWorkEndHour.toInt() + 12
                                         }" + ":${localWorkEndMinute}"
+                                        Log.d("test", endTime.toString())
                                         onWorkEndTimeChanged(endTime)
                                         sheetState.hide()
                                     }

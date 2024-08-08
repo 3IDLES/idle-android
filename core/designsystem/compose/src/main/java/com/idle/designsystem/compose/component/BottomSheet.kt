@@ -137,13 +137,13 @@ private fun WheelPickerBottomSheetContent() {
 
         Row(verticalAlignment = Alignment.CenterVertically) {
             CareWheelPicker(
-                list = listOf("오전", "오후"),
+                items = listOf("오전", "오후"),
                 onItemSelected = {},
                 modifier = Modifier.padding(end = 40.dp)
             )
 
             CareWheelPicker(
-                list = (1..12).toList(),
+                items = (1..12).toList(),
                 onItemSelected = {},
                 modifier = Modifier.padding(end = 10.dp)
             )
@@ -157,7 +157,7 @@ private fun WheelPickerBottomSheetContent() {
             )
 
             CareWheelPicker(
-                list = (0..50 step 10).toList(),
+                items = (0..50 step 10).toList(),
                 onItemSelected = {},
                 modifier = Modifier.padding(start = 10.dp)
             )
