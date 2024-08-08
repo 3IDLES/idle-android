@@ -417,19 +417,11 @@ fun JobEditScreen(
                             text = stringResource(id = R.string.save),
                             style = CareTheme.typography.subtitle2,
                             color = CareTheme.colors.orange500,
-                            modifier = Modifier.clickable {
-                                if (localWeekDays.isEmpty()) {
-                                    return@clickable
-                                }
-
-                                if (applyMethod.isEmpty()) {
-                                    return@clickable
-                                }
-
-                                if (clientName.isBlank()) {
-                                    return@clickable
-                                }
-
+                            modifier = Modifier.clickable(
+                                enabled = localWeekDays.isNotEmpty() &&
+                                        applyMethod.isNotEmpty() &&
+                                        clientName.isNotBlank()
+                            ) {
                                 clearWeekDays()
                                 localWeekDays.forEach { setWeekDays(it) }
                                 onWorkStartTimeChanged(localWorkStartTime)
