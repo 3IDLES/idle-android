@@ -53,14 +53,18 @@ fun CareButtonMedium(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enable: Boolean = true,
+    containerColor: Color = CareTheme.colors.orange500,
+    textColor: Color = CareTheme.colors.white000,
+    border: BorderStroke? = null,
 ) {
     Button(
         onClick = onClick,
         enabled = enable,
         shape = RoundedCornerShape(8.dp),
+        border = border,
         colors = ButtonColors(
-            containerColor = CareTheme.colors.orange500,
-            contentColor = CareTheme.colors.orange500,
+            containerColor = containerColor,
+            contentColor = containerColor,
             disabledContentColor = CareTheme.colors.gray200,
             disabledContainerColor = CareTheme.colors.gray200,
         ),
@@ -69,7 +73,7 @@ fun CareButtonMedium(
         Text(
             text = text,
             style = CareTheme.typography.heading4,
-            color = CareTheme.colors.white000,
+            color = textColor,
         )
     }
 }
@@ -134,14 +138,18 @@ fun CareButtonCardMedium(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enable: Boolean = true,
+    containerColor: Color = CareTheme.colors.orange500,
+    textColor: Color = CareTheme.colors.white000,
+    border: BorderStroke? = null,
 ) {
     Button(
         onClick = onClick,
         enabled = enable,
+        border = border,
         shape = RoundedCornerShape(6.dp),
         colors = ButtonColors(
-            containerColor = CareTheme.colors.orange500,
-            contentColor = CareTheme.colors.orange500,
+            containerColor = containerColor,
+            contentColor = containerColor,
             disabledContentColor = CareTheme.colors.gray200,
             disabledContainerColor = CareTheme.colors.gray200,
         ),
@@ -150,7 +158,7 @@ fun CareButtonCardMedium(
         Text(
             text = text,
             style = CareTheme.typography.heading4,
-            color = CareTheme.colors.white000,
+            color = textColor,
         )
     }
 }
