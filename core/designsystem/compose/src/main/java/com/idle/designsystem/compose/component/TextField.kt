@@ -329,7 +329,7 @@ fun CareClickableTextField(
                 border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
                 shape = RoundedCornerShape(6.dp)
             )
-            .clickable(onClick)
+            .clickable(onClick = onClick)
             .padding(horizontal = 16.dp),
     ) {
         Text(

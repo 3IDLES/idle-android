@@ -21,10 +21,14 @@ fun Modifier.addFocusCleaner(focusManager: FocusManager, doOnClear: () -> Unit =
 }
 
 @Composable
-fun Modifier.clickable(onClick: () -> Unit): Modifier {
+fun Modifier.clickable(
+    enabled: Boolean = true,
+    onClick: () -> Unit,
+): Modifier {
     return this.clickable(
         interactionSource = remember { MutableInteractionSource() },
         indication = null,
+        enabled = enabled,
         onClick = onClick,
     )
 }

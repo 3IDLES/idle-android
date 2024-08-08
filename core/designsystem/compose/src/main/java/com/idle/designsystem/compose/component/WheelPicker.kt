@@ -92,14 +92,8 @@ fun <T> CareWheelPicker(
                         color = CareTheme.colors.gray100,
                         modifier = Modifier
                             .height(30.dp)
-                            .clickable {
-                                if (!listState.isScrollInProgress &&
-                                    idx !in setOf(0, displayItems.size - 1)
-                                ) {
-                                    coroutineScope.launch {
-                                        listState.animateScrollToItem(idx - 1)
-                                    }
-                                }
+                            .clickable(enabled = idx !in setOf(0, displayItems.size - 1)) {
+                                coroutineScope.launch { listState.animateScrollToItem(idx - 1) }
                             },
                     )
                 }

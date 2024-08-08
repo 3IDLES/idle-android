@@ -39,7 +39,7 @@ fun CareCard(
             disabledContentColor = CareTheme.colors.white000,
             disabledContainerColor = CareTheme.colors.white000,
         ),
-        modifier = modifier.clickable(onClick)
+        modifier = modifier.clickable(onClick = onClick)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
