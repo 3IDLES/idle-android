@@ -1,5 +1,6 @@
 package com.idle.designsystem.compose.component
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +19,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
@@ -25,25 +27,26 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.idle.compose.clickable
 import com.idle.designsystem.compose.FLIP
 import com.idle.designsystem.compose.foundation.CareTheme
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun <T> CareWheelPicker(
-    list: List<T>,
+    items: List<T>,
     onItemSelected: (String) -> Unit,
     modifier: Modifier = Modifier,
     initIndex: Int = 0,
     pickerMaxHeight: Dp = 150.dp,
 ) {
     val listState = rememberLazyListState(initialFirstVisibleItemIndex = initIndex)
-    val firstItemScrollOffset by remember { derivedStateOf { listState.firstVisibleItemScrollOffset } }
-    val firstItemIndex by remember { derivedStateOf { listState.firstVisibleItemIndex } }
     val snapFlingBehavior = rememberSnapFlingBehavior(lazyListState = listState)
+    val coroutineScope = rememberCoroutineScope()
 
     // Int 타입이면 padStart 적용, 아니면 기본 toString 사용
-    val innerList = listOf("") + list.map { item ->
+    val displayItems = listOf("") + items.map { item ->
         when (item) {
             is Int -> item.toString().padStart(2, '0')
             else -> item.toString()
@@ -51,13 +54,15 @@ fun <T> CareWheelPicker(
     } + listOf("")
 
     val density = LocalDensity.current
-    val threshold = with(density) { 30.dp.toPx().toInt() }
+    val scrollThreshold = with(density) { 30.dp.toPx().toInt() }
+    val isScrolledPastThreshold by remember { derivedStateOf { listState.firstVisibleItemScrollOffset >= scrollThreshold } }
+    val currentFirstItemIndex by remember { derivedStateOf { listState.firstVisibleItemIndex } }
 
-    LaunchedEffect(listState.isScrollInProgress) {
-        val currentIndex = if (firstItemScrollOffset >= threshold) firstItemIndex + 2
-        else firstItemIndex + 1
+    LaunchedEffect(isScrolledPastThreshold) {
+        val selectedItemIndex = if (isScrolledPastThreshold) currentFirstItemIndex + 2
+        else currentFirstItemIndex + 1
 
-        onItemSelected(innerList[currentIndex])
+        onItemSelected(displayItems[selectedItemIndex])
     }
 
     Box(modifier = modifier.width(52.dp)) {
@@ -70,11 +75,11 @@ fun <T> CareWheelPicker(
                 .fillMaxWidth()
                 .height(pickerMaxHeight),
         ) {
-            itemsIndexed(items = innerList) { idx, item ->
-                val currentIndex = if (firstItemScrollOffset >= threshold) firstItemIndex + 2
-                else firstItemIndex + 1
+            itemsIndexed(items = displayItems) { idx, item ->
+                val selectedItemIndex = if (isScrolledPastThreshold) currentFirstItemIndex + 2
+                else currentFirstItemIndex + 1
 
-                if (idx == currentIndex) {
+                if (idx == selectedItemIndex) {
                     Text(
                         text = item,
                         style = CareTheme.typography.heading2,
@@ -86,7 +91,16 @@ fun <T> CareWheelPicker(
                         text = item,
                         style = CareTheme.typography.subtitle1,
                         color = CareTheme.colors.gray100,
-                        modifier = Modifier.height(30.dp),
+                        modifier = Modifier
+                            .height(30.dp)
+                            .clickable {
+                                Log.d("test", displayItems.toString() + "\n" + idx.toString())
+
+                                if (idx !in setOf(0, displayItems.size - 1)) {
+                                    Log.d("test", idx.toString())
+                                    coroutineScope.launch { listState.animateScrollToItem(idx-1) }
+                                }
+                            },
                     )
                 }
             }
@@ -109,7 +123,7 @@ fun <T> CareWheelPicker(
 @Composable
 private fun CareWheelPickerContent(list: List<Any>, initIndex: Int = 0) {
     CareWheelPicker(
-        list = list,
+        items = list,
         onItemSelected = {},
         initIndex = initIndex,
         modifier = Modifier.padding(horizontal = 20.dp)

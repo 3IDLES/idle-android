@@ -207,7 +207,7 @@ fun JobEditScreen(
 
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             CareWheelPicker(
-                                list = listOf("오전", "오후"),
+                                items = listOf("오전", "오후"),
                                 onItemSelected = { tempWorkStartAmPm = it },
                                 initIndex = if (
                                     localWorkStartTime.isBlank() ||
@@ -217,7 +217,7 @@ fun JobEditScreen(
                             )
 
                             CareWheelPicker(
-                                list = (1..12).toList(),
+                                items = (1..12).toList(),
                                 onItemSelected = { tempWorkStartHour = it },
                                 initIndex = if (localWorkStartTime.isBlank()) 0
                                 else if (localWorkStartTime.substring(0, 2) == "00") 11
@@ -234,7 +234,7 @@ fun JobEditScreen(
                             )
 
                             CareWheelPicker(
-                                list = (0..50 step 10).toList(),
+                                items = (0..50 step 10).toList(),
                                 onItemSelected = { tempWorkStartMinute = it },
                                 initIndex = if (localWorkStartTime.isBlank()) 0
                                 else (localWorkStartTime.substring(3, 5).toInt() / 10),
@@ -293,7 +293,7 @@ fun JobEditScreen(
 
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             CareWheelPicker(
-                                list = listOf("오전", "오후"),
+                                items = listOf("오전", "오후"),
                                 onItemSelected = { tempWorkEndAmPm = it },
                                 initIndex = if (
                                     localWorkEndTime.isBlank() ||
@@ -303,7 +303,7 @@ fun JobEditScreen(
                             )
 
                             CareWheelPicker(
-                                list = (1..12).toList(),
+                                items = (1..12).toList(),
                                 onItemSelected = { tempWorkEndHour = it },
                                 initIndex = if (localWorkEndTime.isBlank()) 0
                                 else if (localWorkEndTime.substring(0, 2) == "00") 11
@@ -320,7 +320,7 @@ fun JobEditScreen(
                             )
 
                             CareWheelPicker(
-                                list = (0..50 step 10).toList(),
+                                items = (0..50 step 10).toList(),
                                 onItemSelected = { tempWorkEndMinute = it },
                                 initIndex = if (localWorkEndTime.isBlank()) 0
                                 else localWorkEndTime.substring(3, 5).toInt() / 10,
