@@ -12,7 +12,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareChipBasic
 import com.idle.designsystem.compose.foundation.CareTheme
@@ -43,7 +45,7 @@ internal fun GenderScreen(
         modifier = Modifier.fillMaxSize()
     ) {
         Text(
-            text = "본인의 성별을 선택해주세요",
+            text = stringResource(id = R.string.worker_gender_title),
             style = CareTheme.typography.heading2,
             color = CareTheme.colors.gray900,
         )
@@ -71,7 +73,7 @@ internal fun GenderScreen(
         Spacer(modifier = Modifier.weight(1f))
 
         CareButtonLarge(
-            text = "다음",
+            text = stringResource(id = R.string.next),
             enable = gender != Gender.NONE,
             onClick = { setSignUpStep(WorkerSignUpStep.findStep(GENDER.step + 1)) },
             modifier = Modifier.fillMaxWidth(),

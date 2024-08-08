@@ -10,8 +10,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
+import com.idle.designsystem.compose.component.CareClickableTextField
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
@@ -20,9 +23,9 @@ import com.idle.signin.worker.WorkerSignUpStep.ADDRESS
 
 @Composable
 internal fun AddressScreen(
-    address: String,
+    roadNameAddress: String,
     addressDetail: String,
-    onAddressChanged: (String) -> Unit,
+    showPostCode: () -> Unit,
     onAddressDetailChanged: (String) -> Unit,
     setSignUpStep: (WorkerSignUpStep) -> Unit,
     signUpWorker: () -> Unit,
@@ -35,41 +38,40 @@ internal fun AddressScreen(
         modifier = Modifier.fillMaxSize()
     ) {
         Text(
-            text = "현재 거주 중인 곳의 \n주소를 입력해주세요.",
+            text = stringResource(id = R.string.worker_address_title),
             style = CareTheme.typography.heading2,
             color = CareTheme.colors.gray900,
         )
 
         LabeledContent(
-            subtitle = "우편번호",
+            subtitle = stringResource(id = R.string.road_name_address),
             modifier = Modifier.fillMaxWidth(),
         ) {
-            CareTextField(
-                value = address,
-                hint = "우편번호를 입력해주세요. (예: 14354)",
-                onValueChanged = onAddressChanged,
-                onDone = { },
+            CareClickableTextField(
+                value = roadNameAddress,
+                hint = stringResource(id = R.string.road_name_address_hint),
+                onClick = showPostCode,
                 modifier = Modifier.fillMaxWidth(),
             )
         }
 
         LabeledContent(
-            subtitle = "상세 주소",
+            subtitle = stringResource(id = R.string.detail_address),
             modifier = Modifier.fillMaxWidth(),
         ) {
             CareTextField(
                 value = addressDetail,
-                hint = "상세 주소를 입력해주세요. (예: 101동 101호)",
+                hint = stringResource(id = R.string.detail_address_hint),
                 onValueChanged = onAddressDetailChanged,
-                onDone = { },
-                modifier = Modifier.fillMaxWidth(),
+                onDone = {},
+                modifier = Modifier.fillMaxWidth()
             )
         }
 
         Spacer(modifier = Modifier.weight(1f))
 
         CareButtonLarge(
-            text = "완료",
+            text = stringResource(id = R.string.complete),
             enable = addressDetail.isNotBlank(),
             onClick = signUpWorker,
             modifier = Modifier.fillMaxWidth(),
