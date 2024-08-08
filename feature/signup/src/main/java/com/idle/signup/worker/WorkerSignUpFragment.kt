@@ -138,7 +138,7 @@ internal fun WorkerSignUpScreen(
                     WorkerSignUpStep.NAME -> WorkerNameScreen(
                         workerName = workerName,
                         onWorkerNameChanged = onWorkerNameChanged,
-                        setSignUpProcess = setSignUpStep
+                        setSignUpStep = setSignUpStep
                     )
 
                     WorkerSignUpStep.GENDER -> GenderScreen(

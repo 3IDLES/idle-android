@@ -93,5 +93,11 @@ class RegisterCenterInfoViewModel @Inject constructor(
 }
 
 enum class RegistrationStep(val step: Int) {
-    INFO(1), ADDRESS(2), INTRODUCE(3)
+    INFO(1), ADDRESS(2), INTRODUCE(3);
+
+    companion object {
+        fun findStep(step: Int): RegistrationStep {
+            return RegistrationStep.entries.first { it.step == step }
+        }
+    }
 }

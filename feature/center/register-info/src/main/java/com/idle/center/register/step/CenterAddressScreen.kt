@@ -14,6 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.idle.center.register.RegistrationStep
+import com.idle.center.register.RegistrationStep.ADDRESS
+import com.idle.center.register.RegistrationStep.INFO
+import com.idle.center.register.RegistrationStep.INTRODUCE
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareClickableTextField
@@ -29,7 +32,7 @@ internal fun CenterAddressScreen(
     onCenterDetailAddressChanged: (String) -> Unit,
     setRegistrationStep: (RegistrationStep) -> Unit,
 ) {
-    BackHandler { setRegistrationStep(RegistrationStep.INFO) }
+    BackHandler { setRegistrationStep(RegistrationStep.findStep(ADDRESS.step - 1)) }
 
     Column(
         horizontalAlignment = Alignment.Start,
@@ -39,7 +42,7 @@ internal fun CenterAddressScreen(
             .padding(bottom = 30.dp),
     ) {
         Text(
-            text =  stringResource(id = R.string.center_info_input),
+            text = stringResource(id = R.string.center_info_input),
             style = CareTheme.typography.heading2,
             color = CareTheme.colors.gray900,
         )
@@ -77,7 +80,7 @@ internal fun CenterAddressScreen(
         CareButtonLarge(
             text = stringResource(id = R.string.next),
             enable = centerDetailAddress.isNotBlank(),
-            onClick = { setRegistrationStep(RegistrationStep.INTRODUCE) },
+            onClick = { setRegistrationStep(RegistrationStep.findStep(ADDRESS.step + 1)) },
             modifier = Modifier.fillMaxWidth(),
         )
     }

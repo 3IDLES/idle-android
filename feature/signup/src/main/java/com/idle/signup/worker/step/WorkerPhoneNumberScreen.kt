@@ -22,6 +22,7 @@ import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.signin.worker.WorkerSignUpStep
+import com.idle.signin.worker.WorkerSignUpStep.PHONE_NUMBER
 
 @Composable
 internal fun WorkerPhoneNumberScreen(
@@ -51,7 +52,7 @@ internal fun WorkerPhoneNumberScreen(
         }
     }
 
-    BackHandler { setSignUpStep(WorkerSignUpStep.GENDER) }
+    BackHandler { setSignUpStep(WorkerSignUpStep.findStep(PHONE_NUMBER.step - 1)) }
 
     Column(
         horizontalAlignment = Alignment.Start,
@@ -79,7 +80,8 @@ internal fun WorkerPhoneNumberScreen(
                     onValueChanged = onWorkerPhoneNumberChanged,
                     readOnly = (workerAuthCodeTimerMinute != "" && workerAuthCodeTimerSeconds != ""),
                     onDone = { if (workerPhoneNumber.length == 11) sendPhoneNumber() },
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
                         .focusRequester(focusRequester),
                 )
 
@@ -133,7 +135,7 @@ internal fun WorkerPhoneNumberScreen(
         CareButtonLarge(
             text = "다음",
             enable = isConfirmAuthCode,
-            onClick = { setSignUpStep(WorkerSignUpStep.ADDRESS) },
+            onClick = { setSignUpStep(WorkerSignUpStep.findStep(PHONE_NUMBER.step + 1)) },
             modifier = Modifier.fillMaxWidth(),
         )
     }

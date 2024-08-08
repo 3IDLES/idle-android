@@ -1,6 +1,5 @@
 package com.idle.designsystem.compose.component
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
@@ -94,11 +93,12 @@ fun <T> CareWheelPicker(
                         modifier = Modifier
                             .height(30.dp)
                             .clickable {
-                                Log.d("test", displayItems.toString() + "\n" + idx.toString())
-
-                                if (idx !in setOf(0, displayItems.size - 1)) {
-                                    Log.d("test", idx.toString())
-                                    coroutineScope.launch { listState.animateScrollToItem(idx-1) }
+                                if (!listState.isScrollInProgress &&
+                                    idx !in setOf(0, displayItems.size - 1)
+                                ) {
+                                    coroutineScope.launch {
+                                        listState.animateScrollToItem(idx - 1)
+                                    }
                                 }
                             },
                     )

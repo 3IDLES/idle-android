@@ -20,6 +20,8 @@ import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.signin.center.CenterSignUpStep
 import com.idle.designresource.R
+import com.idle.signin.center.CenterSignUpStep.BUSINESS_REGISTRATION
+import com.idle.signin.center.CenterSignUpStep.NAME
 
 @Composable
 internal fun CenterNameScreen(
@@ -63,7 +65,7 @@ internal fun CenterNameScreen(
         CareButtonLarge(
             text = stringResource(id = R.string.next),
             enable = centerName.isNotBlank(),
-            onClick = { setSignUpStep(CenterSignUpStep.PHONE_NUMBER) },
+            onClick = { setSignUpStep(CenterSignUpStep.findStep(NAME.step -1)) },
             modifier = Modifier.fillMaxWidth(),
         )
     }

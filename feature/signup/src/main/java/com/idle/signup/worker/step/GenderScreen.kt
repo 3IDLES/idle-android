@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -19,6 +18,7 @@ import com.idle.designsystem.compose.component.CareChipBasic
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.Gender
 import com.idle.signin.worker.WorkerSignUpStep
+import com.idle.signin.worker.WorkerSignUpStep.GENDER
 
 @Composable
 internal fun GenderScreen(
@@ -28,7 +28,7 @@ internal fun GenderScreen(
     setSignUpStep: (WorkerSignUpStep) -> Unit,
     setPhoneNumberProcessed: (Boolean) -> Unit,
 ) {
-    BackHandler { setSignUpStep(WorkerSignUpStep.NAME) }
+    BackHandler { setSignUpStep(WorkerSignUpStep.findStep(GENDER.step - 1)) }
 
     LaunchedEffect(gender) {
         if (gender != Gender.NONE && !phoneNumberProcessed) {
@@ -73,7 +73,7 @@ internal fun GenderScreen(
         CareButtonLarge(
             text = "다음",
             enable = gender != Gender.NONE,
-            onClick = { setSignUpStep(WorkerSignUpStep.PHONE_NUMBER) },
+            onClick = { setSignUpStep(WorkerSignUpStep.findStep(GENDER.step + 1)) },
             modifier = Modifier.fillMaxWidth(),
         )
     }

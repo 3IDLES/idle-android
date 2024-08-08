@@ -184,5 +184,11 @@ class CenterSignUpViewModel @Inject constructor(
 }
 
 enum class CenterSignUpStep(val step: Int) {
-    NAME(1), PHONE_NUMBER(2), BUSINESS_REGISTRATION_NUMBER(3), ID_PASSWORD(4)
+    NAME(1), PHONE_NUMBER(2), BUSINESS_REGISTRATION(3), ID_PASSWORD(4);
+
+    companion object {
+        fun findStep(step: Int): CenterSignUpStep {
+            return CenterSignUpStep.entries.first { it.step == step }
+        }
+    }
 }

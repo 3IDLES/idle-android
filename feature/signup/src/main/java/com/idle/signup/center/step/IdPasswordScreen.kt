@@ -35,6 +35,8 @@ import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.signin.center.CenterSignUpStep
+import com.idle.signin.center.CenterSignUpStep.ID_PASSWORD
+import com.idle.signin.center.CenterSignUpStep.PHONE_NUMBER
 
 @Composable
 internal fun IdPasswordScreen(
@@ -58,7 +60,7 @@ internal fun IdPasswordScreen(
         focusRequester.requestFocus()
     }
 
-    BackHandler { setSignUpStep(CenterSignUpStep.BUSINESS_REGISTRATION_NUMBER) }
+    BackHandler { setSignUpStep(CenterSignUpStep.findStep(ID_PASSWORD.step -1)) }
 
     Column(
         horizontalAlignment = Alignment.Start,

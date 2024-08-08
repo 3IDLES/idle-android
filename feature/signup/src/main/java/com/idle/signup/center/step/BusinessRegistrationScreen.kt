@@ -32,6 +32,7 @@ import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.BusinessRegistrationInfo
 import com.idle.signin.center.CenterSignUpStep
+import com.idle.signin.center.CenterSignUpStep.BUSINESS_REGISTRATION
 
 @Composable
 internal fun BusinessRegistrationScreen(
@@ -48,7 +49,7 @@ internal fun BusinessRegistrationScreen(
         focusRequester.requestFocus()
     }
 
-    BackHandler { setSignUpStep(CenterSignUpStep.PHONE_NUMBER) }
+    BackHandler { setSignUpStep(CenterSignUpStep.findStep(BUSINESS_REGISTRATION.step - 1)) }
 
     Column(
         horizontalAlignment = Alignment.Start,
@@ -148,7 +149,7 @@ internal fun BusinessRegistrationScreen(
         CareButtonLarge(
             text = stringResource(id = R.string.next),
             enable = businessRegistrationInfo != null,
-            onClick = { setSignUpStep(CenterSignUpStep.ID_PASSWORD) },
+            onClick = { setSignUpStep(CenterSignUpStep.findStep(BUSINESS_REGISTRATION.step + 1)) },
             modifier = Modifier.fillMaxWidth(),
         )
     }

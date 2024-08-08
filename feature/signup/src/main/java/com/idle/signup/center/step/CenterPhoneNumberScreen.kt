@@ -17,13 +17,14 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareButtonSmall
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.signin.center.CenterSignUpStep
-import com.idle.designresource.R
+import com.idle.signin.center.CenterSignUpStep.PHONE_NUMBER
 
 @Composable
 internal fun CenterPhoneNumberScreen(
@@ -48,12 +49,12 @@ internal fun CenterPhoneNumberScreen(
 
     LaunchedEffect(isConfirmAuthCode) {
         if (isConfirmAuthCode && !businessRegistrationProcessed) {
-            setSignUpStep(CenterSignUpStep.BUSINESS_REGISTRATION_NUMBER)
+            setSignUpStep(CenterSignUpStep.BUSINESS_REGISTRATION)
             setBusinessRegistrationProcessed(true)
         }
     }
 
-    BackHandler { setSignUpStep(CenterSignUpStep.NAME) }
+    BackHandler { setSignUpStep(CenterSignUpStep.findStep(PHONE_NUMBER.step - 1)) }
 
     Column(
         horizontalAlignment = Alignment.Start,
@@ -146,7 +147,7 @@ internal fun CenterPhoneNumberScreen(
         CareButtonLarge(
             text = stringResource(id = R.string.next),
             enable = isConfirmAuthCode,
-            onClick = { setSignUpStep(CenterSignUpStep.BUSINESS_REGISTRATION_NUMBER) },
+            onClick = { setSignUpStep(CenterSignUpStep.findStep(PHONE_NUMBER.step + 1)) },
             modifier = Modifier.fillMaxWidth(),
         )
     }

@@ -178,7 +178,7 @@ internal fun CenterSignUpScreen(
                             setBusinessRegistrationProcessed = setBusinessRegistrationProcessed,
                         )
 
-                    CenterSignUpStep.BUSINESS_REGISTRATION_NUMBER ->
+                    CenterSignUpStep.BUSINESS_REGISTRATION ->
                         BusinessRegistrationScreen(
                             businessRegistrationNumber = businessRegistrationNumber,
                             businessRegistrationInfo = businessRegistrationInfo,

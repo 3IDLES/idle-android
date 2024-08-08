@@ -168,5 +168,11 @@ class WorkerSignUpViewModel @Inject constructor(
 }
 
 enum class WorkerSignUpStep(val step: Int) {
-    NAME(1), GENDER(2), PHONE_NUMBER(3), ADDRESS(4)
+    NAME(1), GENDER(2), PHONE_NUMBER(3), ADDRESS(4);
+
+    companion object {
+        fun findStep(step: Int): WorkerSignUpStep {
+            return WorkerSignUpStep.entries.first { it.step == step }
+        }
+    }
 }
