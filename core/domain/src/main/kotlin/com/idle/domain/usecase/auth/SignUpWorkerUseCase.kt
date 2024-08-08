@@ -13,8 +13,6 @@ class SignUpWorkerUseCase @Inject constructor(
         phoneNumber: String,
         roadNameAddress: String,
         lotNumberAddress: String,
-        longitude: String,
-        latitude: String,
     ): Result<Unit> {
         val formattedPhoneNumber = formatPhoneNumber(phoneNumber)
 
@@ -25,8 +23,6 @@ class SignUpWorkerUseCase @Inject constructor(
             phoneNumber = formattedPhoneNumber,
             roadNameAddress = roadNameAddress,
             lotNumberAddress = lotNumberAddress,
-            longitude = longitude,
-            latitude = latitude,
         )
     }
 

@@ -152,10 +152,8 @@ class WorkerSignUpViewModel @Inject constructor(
             birthYear = 2000,
             genderType = _gender.value.name,
             phoneNumber = _workerPhoneNumber.value,
-            roadNameAddress = "서울특별시 강남구 테헤란로 123",
-            lotNumberAddress = "서울특별시 강남구 역삼동 456-78",
-            longitude = "127.0276",
-            latitude = "37.4979",
+            roadNameAddress = _roadNameAddress.value,
+            lotNumberAddress = _lotNumberAddress.value,
         )
             .onSuccess {
                 baseEvent(
