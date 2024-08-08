@@ -1,5 +1,6 @@
 package com.idle.designsystem.compose.component
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -171,6 +172,9 @@ private fun WheelPickerBottomSheetContent() {
             CareButtonMedium(
                 text = "취소",
                 onClick = {},
+                border = BorderStroke(width = 1.dp, color = CareTheme.colors.orange400),
+                containerColor = CareTheme.colors.white000,
+                textColor = CareTheme.colors.orange500,
                 modifier = Modifier.weight(1f)
             )
 
