@@ -28,7 +28,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.idle.center.jobposting.JobPostingStep
-import com.idle.center.jobposting.JobPostingStep.ADDRESS
 import com.idle.center.jobposting.JobPostingStep.CUSTOMER_INFORMATION
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
@@ -63,7 +62,7 @@ internal fun CustomerInformationScreen(
     val focusManager = LocalFocusManager.current
     val scrollState = rememberScrollState()
 
-    BackHandler { setJobPostingStep(JobPostingStep.findStep(ADDRESS.step - 1)) }
+    BackHandler { setJobPostingStep(JobPostingStep.findStep(CUSTOMER_INFORMATION.step - 1)) }
 
     LaunchedEffect(true) {
         focusRequester.requestFocus()

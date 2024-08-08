@@ -25,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.idle.center.register.RegistrationStep
+import com.idle.center.register.RegistrationStep.INTRODUCE
 import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
@@ -53,7 +54,7 @@ internal fun CenterIntroduceScreen(
         focusRequester.requestFocus()
     }
 
-    BackHandler { setRegistrationStep(RegistrationStep.ADDRESS) }
+    BackHandler { setRegistrationStep(RegistrationStep.findStep(INTRODUCE.step - 1)) }
 
     Column(
         horizontalAlignment = Alignment.Start,

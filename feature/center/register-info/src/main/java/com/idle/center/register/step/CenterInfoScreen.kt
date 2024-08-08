@@ -21,10 +21,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.idle.center.register.RegistrationStep
+import com.idle.center.register.RegistrationStep.INFO
 import com.idle.designresource.R
-import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareTextField
+import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 
 @Composable
@@ -64,10 +65,12 @@ internal fun CenterInfoScreen(
                 value = centerName,
                 hint = stringResource(id = R.string.center_name_hint),
                 onValueChanged = onCenterNameChanged,
-                onDone = { if (centerName.isNotBlank()){
-                    focusManager.moveFocus(FocusDirection.Down)
-                    keyboardController?.show()
-                } },
+                onDone = {
+                    if (centerName.isNotBlank()) {
+                        focusManager.moveFocus(FocusDirection.Down)
+                        keyboardController?.show()
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .focusRequester(focusRequester),
@@ -96,7 +99,7 @@ internal fun CenterInfoScreen(
         CareButtonLarge(
             text = stringResource(id = R.string.next),
             enable = centerName.isNotBlank() && centerNumber.isNotBlank(),
-            onClick = { setRegistrationStep(RegistrationStep.ADDRESS) },
+            onClick = { setRegistrationStep(RegistrationStep.findStep(INFO.step + 1)) },
             modifier = Modifier.fillMaxWidth(),
         )
     }

@@ -16,6 +16,7 @@ import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.signin.worker.WorkerSignUpStep
+import com.idle.signin.worker.WorkerSignUpStep.ADDRESS
 
 @Composable
 internal fun AddressScreen(
@@ -26,7 +27,7 @@ internal fun AddressScreen(
     setSignUpStep: (WorkerSignUpStep) -> Unit,
     signUpWorker: () -> Unit,
 ) {
-    BackHandler { setSignUpStep(WorkerSignUpStep.PHONE_NUMBER) }
+    BackHandler { setSignUpStep(WorkerSignUpStep.findStep(ADDRESS.step - 1)) }
 
     Column(
         horizontalAlignment = Alignment.Start,
