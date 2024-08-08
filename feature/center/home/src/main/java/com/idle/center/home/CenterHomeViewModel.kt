@@ -16,7 +16,7 @@ class CenterHomeViewModel @Inject constructor() : BaseViewModel() {
     }
 }
 
-enum class RecruitmentPostStatus {
-    ONGOING,
-    PREVIOUS
+enum class RecruitmentPostStatus(val displayName: String) {
+    ONGOING("진행 중인 공고"),
+    PREVIOUS("이전 공고")
 }
