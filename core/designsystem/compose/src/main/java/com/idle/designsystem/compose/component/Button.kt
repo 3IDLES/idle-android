@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.idle.designsystem.compose.Flip
+import com.idle.designsystem.compose.FLIP
 import com.idle.designsystem.compose.foundation.CareTheme
 
 @Composable
@@ -370,43 +370,43 @@ private fun PreviewButtonPrimaryDefaultDialog() {
 }
 
 // Flip Group Previews
-@Preview(name = "Button_Primary_Flip_Large", showBackground = true, device = Flip, group = "Flip")
+@Preview(name = "Button_Primary_Flip_Large", showBackground = true, device = FLIP, group = "Flip")
 @Composable
 private fun PreviewButtonPrimaryFlipLarge() {
     PreviewButtonLarge()
 }
 
-@Preview(name = "Button_Primary_Flip_Medium", showBackground = true, device = Flip, group = "Flip")
+@Preview(name = "Button_Primary_Flip_Medium", showBackground = true, device = FLIP, group = "Flip")
 @Composable
 private fun PreviewButtonPrimaryFlipMedium() {
     PreviewButtonMedium()
 }
 
-@Preview(name = "Button_Primary_Flip_CardLarge", showBackground = true, device = Flip, group = "Flip")
+@Preview(name = "Button_Primary_Flip_CardLarge", showBackground = true, device = FLIP, group = "Flip")
 @Composable
 private fun PreviewButtonPrimaryFlipCardLarge() {
     PreviewButtonCardLarge()
 }
 
-@Preview(name = "Button_Primary_Flip_CardMedium", showBackground = true, device = Flip, group = "Flip")
+@Preview(name = "Button_Primary_Flip_CardMedium", showBackground = true, device = FLIP, group = "Flip")
 @Composable
 private fun PreviewButtonPrimaryFlipCardMedium() {
     PreviewButtonCardMedium()
 }
 
-@Preview(name = "Button_Primary_Flip_Round", showBackground = true, device = Flip, group = "Flip")
+@Preview(name = "Button_Primary_Flip_Round", showBackground = true, device = FLIP, group = "Flip")
 @Composable
 private fun PreviewButtonPrimaryFlipRound() {
     PreviewButtonRound()
 }
 
-@Preview(name = "Button_Primary_Flip_Line", showBackground = true, device = Flip, group = "Flip")
+@Preview(name = "Button_Primary_Flip_Line", showBackground = true, device = FLIP, group = "Flip")
 @Composable
 private fun PreviewButtonPrimaryFlipLine() {
     PreviewButtonLine()
 }
 
-@Preview(name = "Button_Primary_Flip_Dialog", showBackground = true, device = Flip, group = "Flip")
+@Preview(name = "Button_Primary_Flip_Dialog", showBackground = true, device = FLIP, group = "Flip")
 @Composable
 private fun PreviewButtonPrimaryFlipDialog() {
     PreviewButtonDialog()

@@ -1,3 +1,3 @@
 package com.idle.designsystem.compose
 
-const val Flip = "spec:width=480dp,height=320dp,dpi=480,isRound=false,chinSize=0dp"
+const val FLIP = "spec:id=reference_flip,shape=Normal,width=460,height=1048,unit=dp,dpi=480"

@@ -19,7 +19,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.idle.designsystem.compose.Flip
+import com.idle.designsystem.compose.FLIP
 import com.idle.designsystem.compose.foundation.CareTheme
 
 @Composable
@@ -200,25 +200,25 @@ private fun PreviewCareDialogSmallDefault2() {
     PreviewCareDialogSmallContent2()
 }
 
-@Preview(name = "Modal_big_Flip", showBackground = true, device = Flip, group = "Flip")
+@Preview(name = "Modal_big_Flip", showBackground = true, device = FLIP, group = "Flip")
 @Composable
 private fun PreviewCareDialogBigFlip() {
     PreviewCareDialogBigContent()
 }
 
-@Preview(name = "Modal_big_Flip2", showBackground = true, device = Flip, group = "Flip")
+@Preview(name = "Modal_big_Flip2", showBackground = true, device = FLIP, group = "Flip")
 @Composable
 private fun PreviewCareDialogBigFlip2() {
     PreviewCareDialogBigContent2()
 }
 
-@Preview(name = "Modal_small_Flip", showBackground = true, device = Flip, group = "Flip")
+@Preview(name = "Modal_small_Flip", showBackground = true, device = FLIP, group = "Flip")
 @Composable
 private fun PreviewCareDialogSmallFlip() {
     PreviewCareDialogSmallContent()
 }
 
-@Preview(name = "Modal_small_Flip2", showBackground = true, device = Flip, group = "Flip")
+@Preview(name = "Modal_small_Flip2", showBackground = true, device = FLIP, group = "Flip")
 @Composable
 private fun PreviewCareDialogSmallFlip2() {
     PreviewCareDialogSmallContent2()

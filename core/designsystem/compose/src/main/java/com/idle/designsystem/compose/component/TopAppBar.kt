@@ -15,7 +15,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.idle.compose.clickable
-import com.idle.designsystem.compose.Flip
+import com.idle.designsystem.compose.FLIP
 import com.idle.designsystem.compose.foundation.CareTheme
 
 @Composable
@@ -104,7 +104,7 @@ private fun PreviewCareSubtitleTopAppBarDefault() {
     CareSubtitleTopAppBarContent()
 }
 
-@Preview(name = "SubtitleTopAppBar_Flip", showBackground = true, device = Flip, group = "Flip")
+@Preview(name = "SubtitleTopAppBar_Flip", showBackground = true, device = FLIP, group = "Flip")
 @Composable
 private fun PreviewCareSubtitleTopAppBarFlip() {
     CareSubtitleTopAppBarContent()
@@ -122,7 +122,7 @@ private fun PreviewCareHeadingTopAppBarDefault() {
     CareHeadingTopAppBarContent()
 }
 
-@Preview(name = "HeadingTopAppBar_Flip", showBackground = true, device = Flip, group = "Flip")
+@Preview(name = "HeadingTopAppBar_Flip", showBackground = true, device = FLIP, group = "Flip")
 @Composable
 private fun PreviewCareHeadingTopAppBarFlip() {
     CareHeadingTopAppBarContent()
