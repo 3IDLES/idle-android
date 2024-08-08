@@ -3,6 +3,7 @@
 package com.idle.center.job.edit
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -250,6 +251,12 @@ fun JobEditScreen(
                         ) {
                             CareButtonMedium(
                                 text = stringResource(id = R.string.cancel),
+                                border = BorderStroke(
+                                    width = 1.dp,
+                                    color = CareTheme.colors.orange400
+                                ),
+                                containerColor = CareTheme.colors.white000,
+                                textColor = CareTheme.colors.orange500,
                                 onClick = {
                                     coroutineScope.launch {
                                         sheetState.hide()
@@ -336,6 +343,12 @@ fun JobEditScreen(
                         ) {
                             CareButtonMedium(
                                 text = stringResource(id = R.string.cancel),
+                                border = BorderStroke(
+                                    width = 1.dp,
+                                    color = CareTheme.colors.orange400
+                                ),
+                                containerColor = CareTheme.colors.white000,
+                                textColor = CareTheme.colors.orange500,
                                 onClick = {
                                     coroutineScope.launch {
                                         sheetState.hide()

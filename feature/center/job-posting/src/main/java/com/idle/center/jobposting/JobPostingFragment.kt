@@ -4,6 +4,7 @@ package com.idle.center.jobposting
 
 import android.util.Log
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -377,6 +378,12 @@ internal fun JobPostingScreen(
                         ) {
                             CareButtonMedium(
                                 text = stringResource(id = R.string.cancel),
+                                border = BorderStroke(
+                                    width = 1.dp,
+                                    color = CareTheme.colors.orange400
+                                ),
+                                containerColor = CareTheme.colors.white000,
+                                textColor = CareTheme.colors.orange500,
                                 onClick = {
                                     coroutineScope.launch {
                                         sheetState.hide()
@@ -396,7 +403,6 @@ internal fun JobPostingScreen(
                                                 else if (localWorkStartAmPm == "오후" && localWorkStartHour == "12") "12"
                                                 else localWorkStartHour.toInt() + 12
                                             }" + ":${localWorkStartMinute}"
-                                        Log.d("test", startTime.toString())
                                         onWorkStartTimeChanged(startTime)
                                         sheetState.hide()
                                     }
@@ -466,6 +472,12 @@ internal fun JobPostingScreen(
                         ) {
                             CareButtonMedium(
                                 text = stringResource(id = R.string.cancel),
+                                border = BorderStroke(
+                                    width = 1.dp,
+                                    color = CareTheme.colors.orange400
+                                ),
+                                containerColor = CareTheme.colors.white000,
+                                textColor = CareTheme.colors.orange500,
                                 onClick = {
                                     coroutineScope.launch {
                                         sheetState.hide()
