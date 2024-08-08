@@ -11,6 +11,4 @@ data class SignUpWorkerRequest(
     val phoneNumber: String,
     val roadNameAddress: String,
     val lotNumberAddress: String,
-    val longitude: String,
-    val latitude: String,
 )

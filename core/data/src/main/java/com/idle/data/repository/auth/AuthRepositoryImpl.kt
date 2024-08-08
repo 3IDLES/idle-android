@@ -77,8 +77,6 @@ class AuthRepositoryImpl @Inject constructor(
         phoneNumber: String,
         roadNameAddress: String,
         lotNumberAddress: String,
-        longitude: String,
-        latitude: String,
     ): Result<Unit> = authDataSource.signUpWorker(
         SignUpWorkerRequest(
             name = name,
@@ -87,8 +85,6 @@ class AuthRepositoryImpl @Inject constructor(
             phoneNumber = phoneNumber,
             roadNameAddress = roadNameAddress,
             lotNumberAddress = lotNumberAddress,
-            longitude = longitude,
-            latitude = latitude
         )
     ).fold(
         onSuccess = { tokenResponse ->
