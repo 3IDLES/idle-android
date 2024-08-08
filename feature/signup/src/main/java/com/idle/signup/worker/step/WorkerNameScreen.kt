@@ -13,12 +13,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.signin.worker.WorkerSignUpStep
 import com.idle.signin.worker.WorkerSignUpStep.NAME
+import com.idle.designresource.R
 
 @Composable
 internal fun WorkerNameScreen(
@@ -38,14 +40,14 @@ internal fun WorkerNameScreen(
         modifier = Modifier.fillMaxSize()
     ) {
         Text(
-            text = "성함을 입력해주세요",
+            text = stringResource(id = R.string.worker_name_hint),
             style = CareTheme.typography.heading2,
             color = CareTheme.colors.gray900,
         )
 
         CareTextField(
             value = workerName,
-            hint = "성함을 입력해주세요.",
+            hint = stringResource(id = R.string.worker_name_hint),
             onValueChanged = onWorkerNameChanged,
             onDone = {
                 if (workerName.isNotBlank()) {
@@ -60,7 +62,7 @@ internal fun WorkerNameScreen(
         Spacer(modifier = Modifier.weight(1f))
 
         CareButtonLarge(
-            text = "다음",
+            text = stringResource(id = R.string.next),
             enable = workerName.isNotBlank(),
             onClick = {
                 if (workerName.isNotBlank()) {

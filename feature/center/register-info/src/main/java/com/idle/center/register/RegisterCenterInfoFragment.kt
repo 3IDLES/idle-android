@@ -151,7 +151,7 @@ internal fun CenterRegisterScreen(
                     RegistrationStep.ADDRESS -> CenterAddressScreen(
                         roadNameAddress = roadNameAddress,
                         centerDetailAddress = centerDetailAddress,
-                        navigateToPostCode = showPostCodeDialog,
+                        showPostCode = showPostCodeDialog,
                         onCenterDetailAddressChanged = onCenterDetailAddressChanged,
                         setRegistrationStep = setRegistrationStep,
                     )

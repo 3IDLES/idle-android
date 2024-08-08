@@ -15,8 +15,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.idle.center.register.RegistrationStep
 import com.idle.center.register.RegistrationStep.ADDRESS
-import com.idle.center.register.RegistrationStep.INFO
-import com.idle.center.register.RegistrationStep.INTRODUCE
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareClickableTextField
@@ -28,7 +26,7 @@ import com.idle.designsystem.compose.foundation.CareTheme
 internal fun CenterAddressScreen(
     roadNameAddress: String,
     centerDetailAddress: String,
-    navigateToPostCode: () -> Unit,
+    showPostCode: () -> Unit,
     onCenterDetailAddressChanged: (String) -> Unit,
     setRegistrationStep: (RegistrationStep) -> Unit,
 ) {
@@ -54,7 +52,7 @@ internal fun CenterAddressScreen(
             CareClickableTextField(
                 value = roadNameAddress,
                 hint = stringResource(id = R.string.road_name_address_hint),
-                onClick = navigateToPostCode,
+                onClick = showPostCode,
                 modifier = Modifier.fillMaxWidth(),
             )
         }

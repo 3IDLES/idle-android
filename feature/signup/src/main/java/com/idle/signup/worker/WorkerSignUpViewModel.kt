@@ -57,8 +57,10 @@ class WorkerSignUpViewModel @Inject constructor(
     private val _gender = MutableStateFlow(Gender.NONE)
     internal val gender = _gender.asStateFlow()
 
-    private val _address = MutableStateFlow("")
-    internal val address = _address.asStateFlow()
+    private val _roadNameAddress = MutableStateFlow("")
+    val roadNameAddress = _roadNameAddress.asStateFlow()
+
+    private val _lotNumberAddress = MutableStateFlow("")
 
     private val _addressDetail = MutableStateFlow("")
     internal val addressDetail = _addressDetail.asStateFlow()
@@ -83,8 +85,12 @@ class WorkerSignUpViewModel @Inject constructor(
         _gender.value = gender
     }
 
-    internal fun setAddress(address: String) {
-        _address.value = address
+    internal fun setRoadNameAddress(address: String) {
+        _roadNameAddress.value = address
+    }
+
+    internal fun setLotNumberAddress(address: String) {
+        _lotNumberAddress.value = address
     }
 
     internal fun setAddressDetail(addressDetail: String) {
@@ -128,17 +134,16 @@ class WorkerSignUpViewModel @Inject constructor(
         signInWorkerUseCase(
             phoneNumber = _workerPhoneNumber.value,
             authCode = _workerAuthCode.value,
-        )
-            .onSuccess {
-                baseEvent(CareBaseEvent.NavigateTo(WorkerHome, R.id.workerSignUpFragment))
-            }.onFailure {
-                confirmAuthCodeUseCase(_workerPhoneNumber.value, _workerAuthCode.value)
-                    .onSuccess {
-                        cancelTimer()
-                        _isConfirmAuthCode.value = true
-                    }
-                    .onFailure { Log.d("test", "실패! ${it}") }
-            }
+        ).onSuccess {
+            baseEvent(CareBaseEvent.NavigateTo(WorkerHome, R.id.workerSignUpFragment))
+        }.onFailure {
+            confirmAuthCodeUseCase(_workerPhoneNumber.value, _workerAuthCode.value)
+                .onSuccess {
+                    cancelTimer()
+                    _isConfirmAuthCode.value = true
+                }
+                .onFailure { Log.d("test", "실패! ${it}") }
+        }
     }
 
     internal fun signUpWorker() = viewModelScope.launch {
@@ -161,9 +166,6 @@ class WorkerSignUpViewModel @Inject constructor(
                 )
             }
             .onFailure { Log.d("test", "실패! ${it}") }
-    }
-
-    internal fun signInWorker() = viewModelScope.launch {
     }
 }
 

@@ -5,3 +5,7 @@ plugins {
 android {
     namespace = "com.idle.signup"
 }
+
+dependencies {
+    implementation(projects.feature.postcode)
+}

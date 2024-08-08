@@ -19,12 +19,14 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.fragment.findNavController
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.component.CareProgressBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
 import com.idle.domain.model.auth.Gender
+import com.idle.post.code.PostCodeFragment
 import com.idle.signin.center.CenterSignUpStep
 import com.idle.signup.worker.step.AddressScreen
 import com.idle.signup.worker.step.GenderScreen
@@ -35,6 +37,20 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 internal class WorkerSignUpFragment : BaseComposeFragment() {
     override val fragmentViewModel: WorkerSignUpViewModel by viewModels()
+
+    private val postCodeDialog: PostCodeFragment? by lazy {
+        PostCodeFragment().apply {
+            onDismissCallback = {
+                findNavController().currentBackStackEntry?.savedStateHandle?.let {
+                    val roadNameAddress = it.get<String>("roadNameAddress")
+                    val lotNumberAddress = it.get<String>("lotNumberAddress")
+
+                    fragmentViewModel.setRoadNameAddress(roadNameAddress ?: "")
+                    fragmentViewModel.setLotNumberAddress(lotNumberAddress ?: "")
+                }
+            }
+        }
+    }
 
     @Composable
     override fun ComposeLayout() {
@@ -47,7 +63,7 @@ internal class WorkerSignUpFragment : BaseComposeFragment() {
             val workerAuthCode by workerAuthCode.collectAsStateWithLifecycle()
             val isConfirmAuthCode by isConfirmAuthCode.collectAsStateWithLifecycle()
             val gender by gender.collectAsStateWithLifecycle()
-            val address by address.collectAsStateWithLifecycle()
+            val roadNameAddress by roadNameAddress.collectAsStateWithLifecycle()
             val addressDetail by addressDetail.collectAsStateWithLifecycle()
 
             WorkerSignUpScreen(
@@ -59,13 +75,17 @@ internal class WorkerSignUpFragment : BaseComposeFragment() {
                 workerAuthCode = workerAuthCode,
                 isConfirmAuthCode = isConfirmAuthCode,
                 gender = gender,
-                address = address,
+                roadNameAddress = roadNameAddress,
                 addressDetail = addressDetail,
                 onWorkerNameChanged = ::setWorkerName,
                 onWorkerPhoneNumberChanged = ::setWorkerPhoneNumber,
                 onWorkerAuthCodeChanged = ::setWorkerAuthCode,
                 onGenderChanged = ::setGender,
-                onAddressChanged = ::setAddress,
+                showPostCodeDialog = {
+                    if (!(postCodeDialog?.isAdded == true || postCodeDialog?.isVisible == true)) {
+                        postCodeDialog?.show(parentFragmentManager, "PostCodeFragment")
+                    }
+                },
                 onAddressDetailChanged = ::setAddressDetail,
                 setSignUpStep = ::setWorkerSignUpStep,
                 sendPhoneNumber = ::sendPhoneNumber,
@@ -87,13 +107,13 @@ internal fun WorkerSignUpScreen(
     workerAuthCode: String,
     isConfirmAuthCode: Boolean,
     gender: Gender,
-    address: String,
+    roadNameAddress: String,
     addressDetail: String,
     onWorkerNameChanged: (String) -> Unit,
     onWorkerPhoneNumberChanged: (String) -> Unit,
     onWorkerAuthCodeChanged: (String) -> Unit,
     onGenderChanged: (Gender) -> Unit,
-    onAddressChanged: (String) -> Unit,
+    showPostCodeDialog: () -> Unit,
     onAddressDetailChanged: (String) -> Unit,
     setSignUpStep: (WorkerSignUpStep) -> Unit,
     sendPhoneNumber: () -> Unit,
@@ -110,7 +130,8 @@ internal fun WorkerSignUpScreen(
             CareSubtitleTopAppBar(
                 title = "요양보호사 회원가입",
                 onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(start = 12.dp, top = 48.dp, bottom = 8.dp)
             )
         },
@@ -119,7 +140,8 @@ internal fun WorkerSignUpScreen(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(32.dp, Alignment.CenterVertically),
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .background(Color.White)
                 .padding(paddingValue)
                 .padding(start = 20.dp, end = 20.dp, bottom = 30.dp),
@@ -165,9 +187,9 @@ internal fun WorkerSignUpScreen(
                     )
 
                     WorkerSignUpStep.ADDRESS -> AddressScreen(
-                        address = address,
+                        roadNameAddress = roadNameAddress,
                         addressDetail = addressDetail,
-                        onAddressChanged = onAddressChanged,
+                        showPostCode = showPostCodeDialog,
                         onAddressDetailChanged = onAddressDetailChanged,
                         setSignUpStep = setSignUpStep,
                         signUpWorker = signUpWorker,

@@ -24,8 +24,10 @@
     <string name="generate_new_password">신규 비밀번호 발급</string>
     <string name="phone_number">전화번호</string>
     <string name="phone_number_hint">전화번호를 입력해주세요</string>
+    <string name="worker_gender_title">본인의 성별을 선택해주세요</string>
     <string name="verification">인증</string>
     <string name="confirm_code">인증번호</string>
+    <string name="worker_name_hint">성함을 입력해주세요</string>
 
     <!-- User Registration -->
     <string name="start_with_phone">휴대폰 번호로 시작하기</string>
@@ -86,6 +88,7 @@
 
     <!-- Address -->
     <string name="address_screen_title">근무 시간 및 급여를 입력해주세요.</string>
+    <string name="worker_address_title">현재 거주 중인 곳의\n주소를 입력해주세요.</string>
     <string name="address">주소</string>
     <string name="work_address">근무 주소</string>
     <string name="road_name_address">도로명 주소</string>
