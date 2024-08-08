@@ -77,45 +77,26 @@ internal fun CenterHomeScreen(
                 .fillMaxSize()
         ) {
             Row(modifier = Modifier.padding(bottom = 20.dp)) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .weight(1f)
-                        .clickable { setRecruitmentPostStatus(RecruitmentPostStatus.ONGOING) },
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.ongoing_job_posting),
-                        style = CareTheme.typography.subtitle3,
-                        color = if (recruitmentPostStatus == RecruitmentPostStatus.ONGOING) CareTheme.colors.gray900
-                        else CareTheme.colors.gray300,
-                        modifier = Modifier.padding(vertical = 12.dp),
-                    )
+                RecruitmentPostStatus.entries.forEach { status ->
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier
+                            .weight(1f)
+                            .clickable { setRecruitmentPostStatus(status) },
+                    ) {
+                        Text(
+                            text = status.displayName,
+                            style = CareTheme.typography.subtitle3,
+                            color = if (recruitmentPostStatus == status) CareTheme.colors.gray900
+                            else CareTheme.colors.gray300,
+                            modifier = Modifier.padding(vertical = 12.dp),
+                        )
 
-                    if (recruitmentPostStatus == RecruitmentPostStatus.ONGOING) {
-                        HorizontalDivider(thickness = 2.dp, color = CareTheme.colors.gray900)
-                    } else {
-                        HorizontalDivider(thickness = 1.dp, color = CareTheme.colors.gray100)
-                    }
-                }
-
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .weight(1f)
-                        .clickable { setRecruitmentPostStatus(RecruitmentPostStatus.PREVIOUS) },
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.previous_job_posting),
-                        style = CareTheme.typography.subtitle3,
-                        color = if (recruitmentPostStatus == RecruitmentPostStatus.PREVIOUS) CareTheme.colors.gray900
-                        else CareTheme.colors.gray300,
-                        modifier = Modifier.padding(vertical = 12.dp),
-                    )
-
-                    if (recruitmentPostStatus == RecruitmentPostStatus.PREVIOUS) {
-                        HorizontalDivider(thickness = 2.dp, color = CareTheme.colors.gray900)
-                    } else {
-                        HorizontalDivider(thickness = 1.dp, color = CareTheme.colors.gray100)
+                        if (recruitmentPostStatus == status) {
+                            HorizontalDivider(thickness = 2.dp, color = CareTheme.colors.gray900)
+                        } else {
+                            HorizontalDivider(thickness = 1.dp, color = CareTheme.colors.gray100)
+                        }
                     }
                 }
             }

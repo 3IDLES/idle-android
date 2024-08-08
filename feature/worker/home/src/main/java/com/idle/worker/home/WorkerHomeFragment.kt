@@ -21,6 +21,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -28,6 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.idle.binding.DeepLinkDestination.WorkerJobDetail
 import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.compose.base.BaseComposeFragment
@@ -45,52 +47,72 @@ internal class WorkerHomeFragment : BaseComposeFragment() {
     @Composable
     override fun ComposeLayout() {
         fragmentViewModel.apply {
-            WorkerHomeScreen(
+            val recruitmentPostStatus by recruitmentPostStatus.collectAsStateWithLifecycle()
+
+            WorkerHomeScreen(recruitmentPostStatus = recruitmentPostStatus,
+                setRecruitmentPostStatus = ::setRecruitmentPostStatus,
                 navigateToJobDetail = { jobId ->
                     fragmentViewModel.baseEvent(NavigateTo(WorkerJobDetail))
-                }
-            )
+                })
         }
     }
 }
 
 @Composable
 internal fun WorkerHomeScreen(
+    recruitmentPostStatus: RecruitmentPostStatus,
+    setRecruitmentPostStatus: (RecruitmentPostStatus) -> Unit,
     navigateToJobDetail: (String) -> Unit,
 ) {
-    Scaffold(
-        containerColor = CareTheme.colors.white000,
-        topBar = {
-            Column {
-                CareHeadingTopAppBar(
-                    title = "강남구 신사동",
-                    rightComponent = {
-                        Image(
-                            painter = painterResource(com.idle.designresource.R.drawable.ic_address_pin_big),
-                            contentDescription = null,
-                        )
-                    },
-                    modifier = Modifier.padding(
-                        start = 20.dp,
-                        end = 20.dp,
-                        top = 50.dp,
-                        bottom = 20.dp
-                    ),
-                )
-
-                HorizontalDivider(thickness = 1.dp, color = CareTheme.colors.gray100)
-            }
+    Scaffold(containerColor = CareTheme.colors.white000, topBar = {
+        Column {
+            CareHeadingTopAppBar(
+                title = stringResource(id = R.string.manage_job_posting),
+                modifier = Modifier.padding(
+                    start = 20.dp, end = 20.dp, top = 48.dp, bottom = 20.dp
+                ),
+            )
         }
-    ) { paddingValue ->
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+    }) { paddingValue ->
+        Column(
             modifier = Modifier
                 .padding(paddingValue)
-                .padding(horizontal = 20.dp, vertical = 16.dp)
                 .fillMaxSize()
         ) {
-            items(listOf(1, 2, 3, 4, 5)) {
-                WorkerRecruitmentCard(navigateToJobDetail = navigateToJobDetail)
+            Row(modifier = Modifier.padding(bottom = 20.dp)) {
+                RecruitmentPostStatus.entries.forEach { status ->
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier
+                            .weight(1f)
+                            .clickable { setRecruitmentPostStatus(status) },
+                    ) {
+                        Text(
+                            text = status.displayName,
+                            style = CareTheme.typography.subtitle3,
+                            color = if (recruitmentPostStatus == status) CareTheme.colors.gray900
+                            else CareTheme.colors.gray300,
+                            modifier = Modifier.padding(vertical = 12.dp),
+                        )
+
+                        if (recruitmentPostStatus == status) {
+                            HorizontalDivider(thickness = 2.dp, color = CareTheme.colors.gray900)
+                        } else {
+                            HorizontalDivider(thickness = 1.dp, color = CareTheme.colors.gray100)
+                        }
+                    }
+                }
+            }
+
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier
+                    .padding(start = 20.dp, end = 20.dp, top = 16.dp)
+                    .fillMaxSize()
+            ) {
+                items(listOf(1, 2, 3, 4, 5)) {
+                    WorkerRecruitmentCard(navigateToJobDetail = navigateToJobDetail)
+                }
             }
         }
     }
@@ -100,8 +122,7 @@ internal fun WorkerHomeScreen(
 private fun WorkerRecruitmentCard(
     navigateToJobDetail: (String) -> Unit,
 ) {
-    Card(
-        shape = RoundedCornerShape(12.dp),
+    Card(shape = RoundedCornerShape(12.dp),
         colors = CardColors(
             containerColor = CareTheme.colors.white000,
             contentColor = CareTheme.colors.white000,
@@ -109,8 +130,7 @@ private fun WorkerRecruitmentCard(
             disabledContentColor = CareTheme.colors.white000,
         ),
         border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
-        modifier = Modifier.clickable { navigateToJobDetail("") }
-    ) {
+        modifier = Modifier.clickable { navigateToJobDetail("") }) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
