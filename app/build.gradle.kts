@@ -11,6 +11,7 @@ android {
     defaultConfig {
         versionCode = 1
         versionName = "1.0"
+        targetSdk = 34
 
         val properties = Properties()
         properties.load(project.rootProject.file("local.properties").bufferedReader())
