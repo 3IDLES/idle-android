@@ -24,7 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.idle.designsystem.compose.Flip
+import com.idle.designsystem.compose.FLIP
 import com.idle.designsystem.compose.foundation.CareTheme
 import java.time.LocalDate
 
@@ -189,7 +189,7 @@ private fun PreviewCalendarBottomSheetDefault() {
     PreviewCalendarBottomSheet()
 }
 
-@Preview(showBackground = true, device = Flip, group = "Flip")
+@Preview(showBackground = true, device = FLIP, group = "Flip")
 @Composable
 private fun PreviewCalendarBottomSheetFlip() {
     PreviewCalendarBottomSheet()
@@ -207,7 +207,7 @@ private fun PreviewWheelPickerBottomSheetDefault() {
     PreviewWheelPickerBottomSheet()
 }
 
-@Preview(showBackground = true, device = Flip, group = "Flip")
+@Preview(showBackground = true, device = FLIP, group = "Flip")
 @Composable
 private fun PreviewWheelPickerBottomSheetFlip() {
     PreviewWheelPickerBottomSheet()

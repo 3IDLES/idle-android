@@ -21,7 +21,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.idle.designsystem.compose.Flip
+import com.idle.designsystem.compose.FLIP
 import com.idle.designsystem.compose.foundation.CareTheme
 
 @Composable
@@ -93,7 +93,7 @@ private fun PreviewCareProgressBarDefault() {
     CareProgressBarContent()
 }
 
-@Preview(name = "Progress_Flip", showBackground = true, device = Flip, group = "Flip")
+@Preview(name = "Progress_Flip", showBackground = true, device = FLIP, group = "Flip")
 @Composable
 private fun PreviewCareProgressBarFlip() {
     CareProgressBarContent()

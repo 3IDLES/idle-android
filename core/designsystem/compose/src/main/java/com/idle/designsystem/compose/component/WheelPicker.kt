@@ -25,7 +25,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.idle.designsystem.compose.Flip
+import com.idle.designsystem.compose.FLIP
 import com.idle.designsystem.compose.foundation.CareTheme
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -134,19 +134,19 @@ private fun PreviewCareWheelPickerStringDefault() {
     CareWheelPickerContent(list = listOf("오전", "오후"), initIndex = 1)
 }
 
-@Preview(name = "WheelPicker_Flip_Hour", showBackground = true, device = Flip, group = "Flip")
+@Preview(name = "WheelPicker_Flip_Hour", showBackground = true, device = FLIP, group = "Flip")
 @Composable
 private fun PreviewCareWheelPickerHourFlip() {
     CareWheelPickerContent(list = (1..12).toList())
 }
 
-@Preview(name = "WheelPicker_Flip_Minute", showBackground = true, device = Flip, group = "Flip")
+@Preview(name = "WheelPicker_Flip_Minute", showBackground = true, device = FLIP, group = "Flip")
 @Composable
 private fun PreviewCareWheelPickerMinuteFlip() {
     CareWheelPickerContent(list = (0..50 step 10).toList())
 }
 
-@Preview(name = "WheelPicker_Flip_String", showBackground = true, device = Flip, group = "Flip")
+@Preview(name = "WheelPicker_Flip_String", showBackground = true, device = FLIP, group = "Flip")
 @Composable
 private fun PreviewCareWheelPickerStringFlip() {
     CareWheelPickerContent(list = listOf("오전", "오후"), initIndex = 1)
