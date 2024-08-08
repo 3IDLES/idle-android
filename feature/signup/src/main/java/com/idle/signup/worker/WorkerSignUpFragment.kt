@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -28,9 +29,9 @@ import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
 import com.idle.domain.model.auth.Gender
 import com.idle.post.code.PostCodeFragment
 import com.idle.signin.center.CenterSignUpStep
+import com.idle.designresource.R
 import com.idle.signup.worker.step.AddressScreen
-import com.idle.signup.worker.step.GenderScreen
-import com.idle.signup.worker.step.WorkerNameScreen
+import com.idle.signup.worker.step.WorkerInformationScreen
 import com.idle.signup.worker.step.WorkerPhoneNumberScreen
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -56,30 +57,33 @@ internal class WorkerSignUpFragment : BaseComposeFragment() {
     override fun ComposeLayout() {
         fragmentViewModel.apply {
             val signUpStep by signUpStep.collectAsStateWithLifecycle()
-            val workerName by workerName.collectAsStateWithLifecycle()
             val workerPhoneNumber by workerPhoneNumber.collectAsStateWithLifecycle()
             val workerAuthCodeTimerMinute by workerAuthCodeTimerMinute.collectAsStateWithLifecycle()
             val workerAuthCodeTimerSeconds by workerAuthCodeTimerSeconds.collectAsStateWithLifecycle()
             val workerAuthCode by workerAuthCode.collectAsStateWithLifecycle()
             val isConfirmAuthCode by isConfirmAuthCode.collectAsStateWithLifecycle()
+            val workerName by workerName.collectAsStateWithLifecycle()
+            val birthYear by birthYear.collectAsStateWithLifecycle()
             val gender by gender.collectAsStateWithLifecycle()
             val roadNameAddress by roadNameAddress.collectAsStateWithLifecycle()
             val addressDetail by addressDetail.collectAsStateWithLifecycle()
 
             WorkerSignUpScreen(
                 signUpStep = signUpStep,
-                workerName = workerName,
                 workerPhoneNumber = workerPhoneNumber,
                 workerAuthCodeTimerMinute = workerAuthCodeTimerMinute,
                 workerAuthCodeTimerSeconds = workerAuthCodeTimerSeconds,
                 workerAuthCode = workerAuthCode,
                 isConfirmAuthCode = isConfirmAuthCode,
+                workerName = workerName,
+                birthYear = birthYear,
                 gender = gender,
                 roadNameAddress = roadNameAddress,
                 addressDetail = addressDetail,
-                onWorkerNameChanged = ::setWorkerName,
                 onWorkerPhoneNumberChanged = ::setWorkerPhoneNumber,
                 onWorkerAuthCodeChanged = ::setWorkerAuthCode,
+                onWorkerNameChanged = ::setWorkerName,
+                onBirthYearChanged = ::setBirthYear,
                 onGenderChanged = ::setGender,
                 showPostCodeDialog = {
                     if (!(postCodeDialog?.isAdded == true || postCodeDialog?.isVisible == true)) {
@@ -100,18 +104,20 @@ internal class WorkerSignUpFragment : BaseComposeFragment() {
 @Composable
 internal fun WorkerSignUpScreen(
     signUpStep: WorkerSignUpStep,
-    workerName: String,
     workerPhoneNumber: String,
     workerAuthCodeTimerMinute: String,
     workerAuthCodeTimerSeconds: String,
     workerAuthCode: String,
     isConfirmAuthCode: Boolean,
+    workerName: String,
+    birthYear: String,
     gender: Gender,
     roadNameAddress: String,
     addressDetail: String,
-    onWorkerNameChanged: (String) -> Unit,
     onWorkerPhoneNumberChanged: (String) -> Unit,
     onWorkerAuthCodeChanged: (String) -> Unit,
+    onWorkerNameChanged: (String) -> Unit,
+    onBirthYearChanged: (String) -> Unit,
     onGenderChanged: (Gender) -> Unit,
     showPostCodeDialog: () -> Unit,
     onAddressDetailChanged: (String) -> Unit,
@@ -122,13 +128,12 @@ internal fun WorkerSignUpScreen(
 ) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val focusManager = LocalFocusManager.current
-    val (phoneNumberProcessed, setPhoneNumberProcessed) = remember { mutableStateOf(false) }
     val (addressProcessed, setAddressProcessed) = remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
             CareSubtitleTopAppBar(
-                title = "요양보호사 회원가입",
+                title = stringResource(id = R.string.worker_signup),
                 onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -148,7 +153,7 @@ internal fun WorkerSignUpScreen(
         ) {
             CareProgressBar(
                 currentStep = signUpStep.step,
-                totalSteps = CenterSignUpStep.entries.size,
+                totalSteps = WorkerSignUpStep.entries.size,
                 modifier = Modifier.fillMaxWidth(),
             )
 
@@ -157,20 +162,6 @@ internal fun WorkerSignUpScreen(
                 label = "요양 보호사의 회원가입을 관리하는 애니메이션",
             ) { signUpStep ->
                 when (signUpStep) {
-                    WorkerSignUpStep.NAME -> WorkerNameScreen(
-                        workerName = workerName,
-                        onWorkerNameChanged = onWorkerNameChanged,
-                        setSignUpStep = setSignUpStep
-                    )
-
-                    WorkerSignUpStep.GENDER -> GenderScreen(
-                        gender = gender,
-                        phoneNumberProcessed = phoneNumberProcessed,
-                        onGenderChanged = onGenderChanged,
-                        setSignUpStep = setSignUpStep,
-                        setPhoneNumberProcessed = setPhoneNumberProcessed,
-                    )
-
                     WorkerSignUpStep.PHONE_NUMBER -> WorkerPhoneNumberScreen(
                         workerPhoneNumber = workerPhoneNumber,
                         workerAuthCodeTimerMinute = workerAuthCodeTimerMinute,
@@ -184,6 +175,16 @@ internal fun WorkerSignUpScreen(
                         sendPhoneNumber = sendPhoneNumber,
                         confirmAuthCode = confirmAuthCode,
                         setAddressProcessed = setAddressProcessed,
+                    )
+
+                    WorkerSignUpStep.INFO -> WorkerInformationScreen(
+                        workerName = workerName,
+                        birthYear = birthYear,
+                        gender = gender,
+                        onWorkerNameChanged = onWorkerNameChanged,
+                        onBirthYearChanged = onBirthYearChanged,
+                        onGenderChanged = onGenderChanged,
+                        setSignUpStep = setSignUpStep
                     )
 
                     WorkerSignUpStep.ADDRESS -> AddressScreen(

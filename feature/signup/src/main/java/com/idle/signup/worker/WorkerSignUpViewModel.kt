@@ -13,7 +13,7 @@ import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
 import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
 import com.idle.domain.usecase.auth.SignInWorkerUseCase
 import com.idle.domain.usecase.auth.SignUpWorkerUseCase
-import com.idle.signin.worker.WorkerSignUpStep.NAME
+import com.idle.signin.worker.WorkerSignUpStep.PHONE_NUMBER
 import com.idle.signup.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -31,11 +31,8 @@ class WorkerSignUpViewModel @Inject constructor(
     private val countDownTimer: CountDownTimer,
 ) : BaseViewModel() {
 
-    private val _signUpStep = MutableStateFlow<WorkerSignUpStep>(NAME)
+    private val _signUpStep = MutableStateFlow<WorkerSignUpStep>(PHONE_NUMBER)
     internal val signUpStep = _signUpStep.asStateFlow()
-
-    private val _workerName = MutableStateFlow("")
-    internal val workerName = _workerName.asStateFlow()
 
     private val _workerPhoneNumber = MutableStateFlow("")
     internal val workerPhoneNumber = _workerPhoneNumber.asStateFlow()
@@ -54,6 +51,12 @@ class WorkerSignUpViewModel @Inject constructor(
     private val _isConfirmAuthCode = MutableStateFlow(false)
     val isConfirmAuthCode = _isConfirmAuthCode.asStateFlow()
 
+    private val _workerName = MutableStateFlow("")
+    internal val workerName = _workerName.asStateFlow()
+
+    private val _birthYear = MutableStateFlow("")
+    val birthYear = _birthYear.asStateFlow()
+
     private val _gender = MutableStateFlow(Gender.NONE)
     internal val gender = _gender.asStateFlow()
 
@@ -69,16 +72,20 @@ class WorkerSignUpViewModel @Inject constructor(
         _signUpStep.value = step
     }
 
-    internal fun setWorkerName(name: String) {
-        _workerName.value = name
-    }
-
     internal fun setWorkerPhoneNumber(phoneNumber: String) {
         _workerPhoneNumber.value = phoneNumber
     }
 
     internal fun setWorkerAuthCode(certificateNumber: String) {
         _workerAuthCode.value = certificateNumber
+    }
+
+    internal fun setWorkerName(name: String) {
+        _workerName.value = name
+    }
+
+    internal fun setBirthYear(birthYear: String) {
+        _birthYear.value = birthYear
     }
 
     internal fun setGender(gender: Gender) {
@@ -149,7 +156,7 @@ class WorkerSignUpViewModel @Inject constructor(
     internal fun signUpWorker() = viewModelScope.launch {
         signUpWorkerUseCase(
             name = _workerName.value,
-            birthYear = 2000,
+            birthYear = _birthYear.value.toIntOrNull() ?: return@launch,
             genderType = _gender.value.name,
             phoneNumber = _workerPhoneNumber.value,
             roadNameAddress = _roadNameAddress.value,
@@ -168,7 +175,7 @@ class WorkerSignUpViewModel @Inject constructor(
 }
 
 enum class WorkerSignUpStep(val step: Int) {
-    NAME(1), GENDER(2), PHONE_NUMBER(3), ADDRESS(4);
+    PHONE_NUMBER(1), INFO(2), ADDRESS(3);
 
     companion object {
         fun findStep(step: Int): WorkerSignUpStep {

@@ -49,12 +49,10 @@ internal fun WorkerPhoneNumberScreen(
 
     LaunchedEffect(isConfirmAuthCode) {
         if (isConfirmAuthCode && !addressProcessed) {
-            setSignUpStep(WorkerSignUpStep.ADDRESS)
+            setSignUpStep(WorkerSignUpStep.findStep(PHONE_NUMBER.step + 1))
             setAddressProcessed(true)
         }
     }
-
-    BackHandler { setSignUpStep(WorkerSignUpStep.findStep(PHONE_NUMBER.step - 1)) }
 
     Column(
         horizontalAlignment = Alignment.Start,
@@ -125,7 +123,7 @@ internal fun WorkerPhoneNumberScreen(
                 )
 
                 CareButtonSmall(
-                    enable = workerAuthCode.isNotBlank(),
+                    enable = workerAuthCode.isNotBlank() && !isConfirmAuthCode,
                     text = stringResource(id = R.string.confirm),
                     onClick = confirmAuthCode,
                 )

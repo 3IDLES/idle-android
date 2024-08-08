@@ -63,7 +63,7 @@ internal fun AddressScreen(
                 value = addressDetail,
                 hint = stringResource(id = R.string.detail_address_hint),
                 onValueChanged = onAddressDetailChanged,
-                onDone = {},
+                onDone = { if (roadNameAddress.isNotBlank() && addressDetail.isNotBlank()) signUpWorker() },
                 modifier = Modifier.fillMaxWidth()
             )
         }
@@ -72,7 +72,7 @@ internal fun AddressScreen(
 
         CareButtonLarge(
             text = stringResource(id = R.string.complete),
-            enable = addressDetail.isNotBlank(),
+            enable = roadNameAddress.isNotBlank() && addressDetail.isNotBlank(),
             onClick = signUpWorker,
             modifier = Modifier.fillMaxWidth(),
         )

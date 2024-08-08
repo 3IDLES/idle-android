@@ -28,6 +28,8 @@
     <string name="verification">인증</string>
     <string name="confirm_code">인증번호</string>
     <string name="worker_name_hint">성함을 입력해주세요</string>
+    <string name="worker_name_title">본인의 인적사항을 입력해주세요.</string>
+    <string name="worker_signup">요양보호사 회원가입</string>
 
     <!-- User Registration -->
     <string name="start_with_phone">휴대폰 번호로 시작하기</string>
@@ -128,6 +130,7 @@
     <string name="weight">몸무게</string>
     <string name="weight_hint">고객의 몸무게를 입력해주세요. (예: 60)</string>
     <string name="birth_year">출생연도</string>
+    <string name="worker_birth_year_hint">출생연도를 입력해주세요. (예: 1965)</string>
     <string name="birth_year_hint">고객의 출생연도를 입력해주세요. (예: 1965)</string>
     <string name="care_level">요양등급</string>
     <string name="mental_status">인지 상태</string>
