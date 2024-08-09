@@ -20,9 +20,9 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
-import com.idle.designresource.R
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
+import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareProgressBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
@@ -110,13 +110,21 @@ internal fun CenterRegisterScreen(
 
     Scaffold(
         topBar = {
-            CareSubtitleTopBar(
-                title = stringResource(id = R.string.center_signup),
-                onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 12.dp, top = 48.dp)
-            )
+            Column(modifier = Modifier.padding(start = 12.dp, top = 48.dp, end = 20.dp)) {
+                CareSubtitleTopBar(
+                    title = stringResource(id = R.string.center_signup),
+                    onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
+                    modifier = Modifier.fillMaxWidth(),
+                )
+
+                CareProgressBar(
+                    currentStep = registrationStep.step,
+                    totalSteps = RegistrationStep.entries.size,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                )
+            }
         },
         modifier = Modifier.addFocusCleaner(focusManager),
     ) { paddingValue ->
@@ -127,13 +135,8 @@ internal fun CenterRegisterScreen(
                 .fillMaxSize()
                 .background(Color.White)
                 .padding(paddingValue)
-                .padding(start = 20.dp, end = 20.dp, top = 8.dp),
+                .padding(start = 20.dp, end = 20.dp, top = 24.dp),
         ) {
-            CareProgressBar(
-                currentStep = registrationStep.step,
-                totalSteps = RegistrationStep.entries.size,
-                modifier = Modifier.fillMaxWidth(),
-            )
 
             CareStateAnimator(
                 targetState = registrationStep,

@@ -57,7 +57,12 @@ internal fun WorkerRecruitmentDetailScreen(
         topBar = {
             CareSubtitleTopBar(
                 title = stringResource(id = R.string.job_posting_detail),
-                modifier = Modifier.padding(start = 12.dp, top = 48.dp, bottom = 24.dp),
+                modifier = Modifier.padding(
+                    start = 12.dp,
+                    top = 48.dp,
+                    end = 20.dp,
+                    bottom = 12.dp
+                ),
             )
         }
     ) { paddingValue ->
@@ -66,6 +71,7 @@ internal fun WorkerRecruitmentDetailScreen(
             verticalArrangement = Arrangement.spacedBy(24.dp),
             modifier = Modifier
                 .padding(paddingValue)
+                .padding(top = 24.dp)
                 .fillMaxWidth()
                 .verticalScroll(scrollState)
         ) {

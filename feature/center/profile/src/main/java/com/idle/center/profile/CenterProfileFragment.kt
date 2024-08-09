@@ -118,7 +118,7 @@ internal fun CenterProfileScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 12.dp, top = 48.dp, bottom = 25.dp, end = 28.dp),
+                    .padding(start = 12.dp, top = 48.dp, end = 20.dp, bottom = 12.dp),
             )
         },
         containerColor = CareTheme.colors.white000,
@@ -128,6 +128,7 @@ internal fun CenterProfileScreen(
             verticalArrangement = Arrangement.spacedBy(20.dp),
             modifier = Modifier
                 .padding(paddingValues)
+                .padding(top = 24.dp)
                 .fillMaxWidth()
                 .verticalScroll(scrollState),
         ) {

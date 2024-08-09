@@ -82,7 +82,7 @@ internal fun NewPasswordScreen(
                 onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 12.dp, top = 48.dp, bottom = 64.dp)
+                    .padding(start = 12.dp, top = 48.dp, end = 20.dp, bottom = 12.dp),
             )
         },
         modifier = Modifier.addFocusCleaner(focusManager),
@@ -94,7 +94,7 @@ internal fun NewPasswordScreen(
                 .fillMaxSize()
                 .background(CareTheme.colors.white000)
                 .padding(paddingValue)
-                .padding(start = 20.dp, end = 20.dp, bottom = 30.dp),
+                .padding(start = 20.dp, end = 20.dp, top = 24.dp, bottom = 30.dp),
         ) {
             when (newPasswordStep) {
                 NewPasswordStep.PHONE_NUMBER -> PhoneNumberScreen(

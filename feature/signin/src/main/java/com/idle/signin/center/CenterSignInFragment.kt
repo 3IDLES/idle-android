@@ -76,7 +76,7 @@ internal fun CenterSignInScreen(
                 onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 12.dp, top = 48.dp)
+                    .padding(start = 12.dp, top = 48.dp, end = 20.dp, bottom = 12.dp),
             )
         },
         modifier = Modifier.addFocusCleaner(focusManager),
@@ -88,7 +88,7 @@ internal fun CenterSignInScreen(
                 .fillMaxSize()
                 .background(CareTheme.colors.white000)
                 .padding(paddingValue)
-                .padding(start = 20.dp, end = 20.dp, bottom = 28.dp),
+                .padding(start = 20.dp, end = 20.dp, bottom = 28.dp, top = 24.dp),
         ) {
             Spacer(modifier = Modifier.weight(4f))
 
