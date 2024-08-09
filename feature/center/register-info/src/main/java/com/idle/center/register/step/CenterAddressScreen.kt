@@ -35,9 +35,7 @@ internal fun CenterAddressScreen(
     Column(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(28.dp),
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(bottom = 30.dp),
+        modifier = Modifier.fillMaxSize(),
     ) {
         Text(
             text = stringResource(id = R.string.center_info_input),
@@ -79,7 +77,9 @@ internal fun CenterAddressScreen(
             text = stringResource(id = R.string.next),
             enable = centerDetailAddress.isNotBlank(),
             onClick = { setRegistrationStep(RegistrationStep.findStep(ADDRESS.step + 1)) },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 28.dp),
         )
     }
 }

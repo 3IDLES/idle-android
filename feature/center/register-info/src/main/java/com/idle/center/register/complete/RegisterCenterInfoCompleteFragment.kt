@@ -58,8 +58,9 @@ internal fun CenterRegisterCompleteScreen(
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize()
-            .padding(20.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 20.dp),
     ) {
         Spacer(modifier = Modifier.weight(3f))
 
@@ -71,7 +72,8 @@ internal fun CenterRegisterCompleteScreen(
         )
 
         Box(
-            modifier = Modifier.size(120.dp)
+            modifier = Modifier
+                .size(120.dp)
                 .background(CareTheme.colors.gray050),
         )
 
@@ -94,7 +96,9 @@ internal fun CenterRegisterCompleteScreen(
         CareButtonLarge(
             text = "시작하기",
             onClick = navigateToCenterHome,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 28.dp),
         )
     }
 }

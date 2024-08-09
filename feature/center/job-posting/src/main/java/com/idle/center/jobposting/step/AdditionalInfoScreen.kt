@@ -56,8 +56,7 @@ internal fun AdditionalInfoScreen(
         verticalArrangement = Arrangement.spacedBy(28.dp),
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(scrollState)
-            .padding(bottom = 30.dp),
+            .verticalScroll(scrollState),
     ) {
         Text(
             text = stringResource(id = R.string.additional_info_title),
@@ -157,7 +156,9 @@ internal fun AdditionalInfoScreen(
             text = stringResource(id = R.string.next),
             enable = isExperiencePreferred != null && applyMethod.isNotEmpty() && applyDeadlineType != null && (applyDeadlineType == ApplyDeadlineType.LIMITED && applyDeadline != null),
             onClick = { setJobPostingStep(JobPostingStep.findStep(ADDITIONAL_INFO.step + 1)) },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 28.dp),
         )
     }
 }

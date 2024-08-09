@@ -73,8 +73,7 @@ internal fun CustomerInformationScreen(
         verticalArrangement = Arrangement.spacedBy(28.dp),
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(scrollState)
-            .padding(bottom = 30.dp),
+            .verticalScroll(scrollState),
     ) {
         Text(
             text = stringResource(id = R.string.customer_info_title),
@@ -222,7 +221,9 @@ internal fun CustomerInformationScreen(
             text = stringResource(id = R.string.next),
             enable = gender != Gender.NONE && birthYear.isNotBlank() && weight.isNotBlank() && mentalStatus != MentalStatus.UNKNOWN,
             onClick = { setJobPostingStep(JobPostingStep.findStep(CUSTOMER_INFORMATION.step + 1)) },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 28.dp),
         )
     }
 }

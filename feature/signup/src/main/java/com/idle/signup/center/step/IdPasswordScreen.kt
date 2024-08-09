@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -36,7 +37,6 @@ import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.signin.center.CenterSignUpStep
 import com.idle.signin.center.CenterSignUpStep.ID_PASSWORD
-import com.idle.signin.center.CenterSignUpStep.PHONE_NUMBER
 
 @Composable
 internal fun IdPasswordScreen(
@@ -60,7 +60,7 @@ internal fun IdPasswordScreen(
         focusRequester.requestFocus()
     }
 
-    BackHandler { setSignUpStep(CenterSignUpStep.findStep(ID_PASSWORD.step -1)) }
+    BackHandler { setSignUpStep(CenterSignUpStep.findStep(ID_PASSWORD.step - 1)) }
 
     Column(
         horizontalAlignment = Alignment.Start,
@@ -186,7 +186,9 @@ internal fun IdPasswordScreen(
             enable = idValidationResult.isValid && passwordValidationResult.isValid &&
                     (centerPassword == centerPasswordForConfirm),
             onClick = signUpCenter,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 28.dp),
         )
     }
 }
