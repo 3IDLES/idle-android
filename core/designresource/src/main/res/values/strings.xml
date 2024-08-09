@@ -46,6 +46,7 @@
 
     <!-- Profile & Settings -->
     <string name="setting">설정</string>
+    <string name="my_profile">내 프로필</string>
     <string name="my_center_info">내 센터 정보</string>
     <string name="notification_setting">알림 설정</string>
     <string name="logout">로그아웃</string>
@@ -147,6 +148,7 @@
 
     <!-- Experience & Application -->
     <string name="experience">경력</string>
+    <string name="year">연차</string>
     <string name="experience_preference">경력 우대 여부</string>
     <string name="apply_method">지원 방법</string>
     <string name="apply_deadline">접수 마감일</string>
