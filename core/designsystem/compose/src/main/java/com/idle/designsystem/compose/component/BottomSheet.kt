@@ -46,7 +46,12 @@ fun CareBottomSheetLayout(
         sheetContent = {
             Box(
                 contentAlignment = Alignment.Center,
-                modifier = Modifier.padding(horizontal = 20.dp, vertical = 36.dp)
+                modifier = Modifier.padding(
+                    start = 20.dp,
+                    end = 20.dp,
+                    top = 36.dp,
+                    bottom = 28.dp
+                ),
             ) {
                 sheetContent()
             }
