@@ -4,7 +4,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,8 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.Scaffold
@@ -34,6 +31,7 @@ import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designresource.R
+import com.idle.designsystem.compose.component.CareButtonCardLarge
 import com.idle.designsystem.compose.component.CareHeadingTopBar
 import com.idle.designsystem.compose.component.CareHomeTopBar
 import com.idle.designsystem.compose.component.CareTag
@@ -80,7 +78,7 @@ internal fun WorkerHomeScreen(
         Column(
             modifier = Modifier
                 .padding(paddingValue)
-                .fillMaxSize()
+                .fillMaxSize(),
         ) {
             CareHomeTopBar(
                 selectedStatus = recruitmentPostStatus,
@@ -219,7 +217,7 @@ private fun WorkerRecruitmentCard(
                     .padding(bottom = 8.dp),
             ) {
                 Image(
-                    painter = painterResource(com.idle.designresource.R.drawable.ic_money),
+                    painter = painterResource(R.drawable.ic_money),
                     contentDescription = null,
                 )
 
@@ -230,24 +228,11 @@ private fun WorkerRecruitmentCard(
                 )
             }
 
-            Button(
-                onClick = {},
-                contentPadding = PaddingValues(vertical = 10.dp),
-                shape = RoundedCornerShape(6.dp),
-                colors = ButtonColors(
-                    containerColor = CareTheme.colors.orange500,
-                    contentColor = CareTheme.colors.orange500,
-                    disabledContentColor = CareTheme.colors.gray200,
-                    disabledContainerColor = CareTheme.colors.gray200,
-                ),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    text = stringResource(id = R.string.recruit),
-                    style = CareTheme.typography.subtitle4,
-                    color = CareTheme.colors.white000,
-                )
-            }
+            CareButtonCardLarge(
+                text = stringResource(id = R.string.recruit),
+                onClick = { /*TODO*/ },
+                modifier = Modifier.fillMaxWidth(),
+            )
         }
     }
 }
