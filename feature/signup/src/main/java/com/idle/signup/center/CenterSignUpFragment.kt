@@ -22,11 +22,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
+import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareProgressBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.domain.model.auth.BusinessRegistrationInfo
-import com.idle.designresource.R
 import com.idle.signup.center.step.BusinessRegistrationScreen
 import com.idle.signup.center.step.CenterNameScreen
 import com.idle.signup.center.step.CenterPhoneNumberScreen
@@ -125,13 +125,23 @@ internal fun CenterSignUpScreen(
 
     Scaffold(
         topBar = {
-            CareSubtitleTopBar(
-                title = stringResource(id = R.string.center_signup),
-                onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 12.dp, top = 48.dp, bottom = 8.dp)
-            )
+            Column(modifier = Modifier.padding(start = 12.dp, top = 48.dp, end = 20.dp)) {
+                CareSubtitleTopBar(
+                    title = stringResource(id = R.string.center_signup),
+                    onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
+                    modifier = Modifier
+                        .fillMaxWidth()
+
+                )
+
+                CareProgressBar(
+                    currentStep = signUpStep.step,
+                    totalSteps = CenterSignUpStep.entries.size,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                )
+            }
         },
         modifier = Modifier.addFocusCleaner(focusManager),
     ) { paddingValue ->
@@ -142,14 +152,8 @@ internal fun CenterSignUpScreen(
                 .fillMaxSize()
                 .background(Color.White)
                 .padding(paddingValue)
-                .padding(start = 20.dp, end = 20.dp, bottom = 30.dp),
+                .padding(start = 20.dp, end = 20.dp, top = 24.dp, bottom = 28.dp),
         ) {
-            CareProgressBar(
-                currentStep = signUpStep.step,
-                totalSteps = CenterSignUpStep.entries.size,
-                modifier = Modifier.fillMaxWidth(),
-            )
-
             CareStateAnimator(
                 targetState = signUpStep,
                 label = stringResource(id = R.string.center_info_input_animation_label),

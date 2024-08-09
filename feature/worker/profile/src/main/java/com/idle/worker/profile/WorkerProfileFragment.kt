@@ -142,8 +142,8 @@ internal fun WorkerProfileScreen(
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 12.dp, top = 48.dp, end = 28.dp)
-                        .height(32.dp),
+                        .height(32.dp)
+                        .padding(start = 12.dp, top = 48.dp, end = 20.dp, bottom = 12.dp),
                 )
             }
         },
@@ -154,6 +154,7 @@ internal fun WorkerProfileScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
+                .padding(top = 24.dp)
                 .verticalScroll(scrollState),
         ) {
             if (!isEditState) {

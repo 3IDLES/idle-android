@@ -540,22 +540,37 @@ internal fun JobPostingScreen(
     ) {
         Scaffold(
             topBar = {
-                CareSubtitleTopBar(
-                    title = if (jobPostingStep != JobPostingStep.SUMMARY) stringResource(id = R.string.post_job_posting)
-                    else "",
-                    onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
-                    leftComponent = {
-                        if (jobPostingStep == JobPostingStep.SUMMARY) {
-                            CareButtonRound(
-                                text = stringResource(id = R.string.edit_job_posting_button),
-                                onClick = { setEditState(true) },
-                            )
-                        }
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 12.dp, top = 48.dp, end = 20.dp),
-                )
+                Column(modifier = Modifier.padding(start = 12.dp, top = 48.dp, end = 20.dp)) {
+                    val bottomPadding = if (jobPostingStep != JobPostingStep.SUMMARY) 12.dp
+                    else 0.dp
+
+                    CareSubtitleTopBar(
+                        title = if (jobPostingStep != JobPostingStep.SUMMARY) stringResource(id = R.string.post_job_posting)
+                        else "",
+                        onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
+                        leftComponent = {
+                            if (jobPostingStep == JobPostingStep.SUMMARY) {
+                                CareButtonRound(
+                                    text = stringResource(id = R.string.edit_job_posting_button),
+                                    onClick = { setEditState(true) },
+                                )
+                            }
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = bottomPadding),
+                    )
+
+                    if (jobPostingStep != JobPostingStep.SUMMARY) {
+                        CareProgressBar(
+                            currentStep = jobPostingStep.step,
+                            totalSteps = JobPostingStep.entries.size - 1,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 8.dp),
+                        )
+                    }
+                }
             },
             containerColor = CareTheme.colors.white000,
             modifier = Modifier.addFocusCleaner(focusManager),
@@ -565,7 +580,8 @@ internal fun JobPostingScreen(
                 transitionCondition = jobPostingStep == JobPostingStep.SUMMARY,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(paddingValue),
+                    .padding(paddingValue)
+                    .padding(top = 24.dp),
             ) { isSummary ->
                 if (isSummary) {
                     SummaryScreen(
@@ -602,12 +618,6 @@ internal fun JobPostingScreen(
                         ),
                         modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 8.dp),
                     ) {
-                        CareProgressBar(
-                            currentStep = jobPostingStep.step,
-                            totalSteps = JobPostingStep.entries.size - 1,
-                            modifier = Modifier.fillMaxWidth(),
-                        )
-
                         CareStateAnimator(
                             targetState = jobPostingStep,
                             label = "센터 정보 입력을 관리하는 애니메이션",

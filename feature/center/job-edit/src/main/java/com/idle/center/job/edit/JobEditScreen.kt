@@ -455,7 +455,7 @@ fun JobEditScreen(
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 12.dp, top = 48.dp, end = 20.dp),
+                        .padding(start = 12.dp, top = 48.dp, end = 20.dp, bottom = 12.dp),
                 )
             },
             containerColor = CareTheme.colors.white000,
@@ -466,14 +466,9 @@ fun JobEditScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(paddingValue)
+                    .padding(top = 24.dp)
                     .verticalScroll(scrollState)
             ) {
-                HorizontalDivider(
-                    thickness = 1.dp,
-                    color = CareTheme.colors.gray100,
-                    modifier = Modifier.padding(top = 24.dp)
-                )
-
                 Column(
                     horizontalAlignment = Alignment.Start,
                     verticalArrangement = Arrangement.spacedBy(20.dp),
