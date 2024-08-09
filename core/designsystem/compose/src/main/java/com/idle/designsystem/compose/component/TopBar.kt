@@ -79,79 +79,12 @@ fun CareHeadingTopBar(
 
         Text(
             text = title,
-            style = CareTheme.typography.heading2,
+            style = CareTheme.typography.heading1,
         )
 
         Spacer(modifier = Modifier.weight(1f))
 
         leftComponent()
-    }
-}
-
-@Composable
-inline fun <reified S : Enum<S>> CareHomeTopBar(
-    selectedStatus: S,
-    crossinline setStatus: (S) -> Unit,
-    displayName: (S) -> String,
-    modifier: Modifier = Modifier,
-) {
-    val density = LocalDensity.current
-    val configuration = LocalConfiguration.current
-    val screenWidthDp = configuration.screenWidthDp.dp
-    val screenWidthPx = with(density) { screenWidthDp.toPx().toInt() }
-
-    val targetOffset = if (selectedStatus.ordinal == 1) {
-        IntOffset(screenWidthPx / 2, 0)
-    } else {
-        IntOffset.Zero
-    }
-
-    val topBarXOffset by animateIntOffsetAsState(
-        targetValue = targetOffset,
-        animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
-        label = "TopBar Animation",
-    )
-
-    Box(modifier = modifier.wrapContentHeight()) {
-        Row(modifier = Modifier.wrapContentHeight()) {
-            enumValues<S>().forEach { status ->
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .wrapContentHeight()
-                        .clickable { setStatus(status) },
-                ) {
-                    Text(
-                        text = displayName(status),
-                        style = CareTheme.typography.subtitle3,
-                        color = if (selectedStatus == status) CareTheme.colors.gray900
-                        else CareTheme.colors.gray300,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 13.dp),
-                    )
-
-                    HorizontalDivider(
-                        thickness = 1.dp,
-                        color = CareTheme.colors.gray100,
-                        modifier = Modifier
-                            .align(Alignment.BottomCenter)
-                            .padding(bottom = 4.dp),
-                    )
-                }
-            }
-        }
-
-        HorizontalDivider(
-            thickness = 2.dp,
-            color = CareTheme.colors.gray900,
-            modifier = Modifier
-                .width(screenWidthDp / 2)
-                .align(Alignment.BottomStart)
-                .padding(bottom = 4.dp)
-                .graphicsLayer { translationX = topBarXOffset.x.toFloat() },
-        )
     }
 }
 
@@ -185,16 +118,6 @@ private fun CareHeadingTopBarContent() {
     )
 }
 
-@Composable
-private fun CareHomeTopBarContent() {
-    var selectedStatus by remember { mutableStateOf(HomeStatus.ACTIVE) }
-
-    CareHomeTopBar(
-        selectedStatus = selectedStatus,
-        setStatus = { status -> selectedStatus = status },
-        displayName = { it.displayName }
-    )
-}
 
 @Preview(name = "SubtitleTopBar_Default", showBackground = true, group = "Default")
 @Composable
@@ -240,33 +163,4 @@ private fun PreviewCareHeadingTopAppBarFlip() {
 @Composable
 private fun PreviewCareHeadingTopBarFoldable() {
     CareHeadingTopBarContent()
-}
-
-
-@Preview(name = "HomeTopBar_Default", showBackground = true, group = "Default")
-@Composable
-private fun PreviewCareHomeTopBarDefault() {
-    CareHomeTopBarContent()
-}
-
-@Preview(name = "HomeTopBar_Flip", showBackground = true, device = FLIP, group = "Flip")
-@Composable
-private fun PreviewCareHomeTopBarFlip() {
-    CareHomeTopBarContent()
-}
-
-@Preview(
-    name = "HomeTopBar_Foldable",
-    showBackground = true,
-    device = Devices.FOLDABLE,
-    group = "Fold"
-)
-@Composable
-private fun PreviewCareHomeTopBarFoldable() {
-    CareHomeTopBarContent()
-}
-
-private enum class HomeStatus(val displayName: String) {
-    ACTIVE("Active"),
-    INACTIVE("Inactive")
 }
