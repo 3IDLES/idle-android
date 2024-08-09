@@ -144,12 +144,10 @@ class WorkerSignUpViewModel @Inject constructor(
         ).onSuccess {
             baseEvent(CareBaseEvent.NavigateTo(WorkerHome, R.id.workerSignUpFragment))
         }.onFailure {
-            confirmAuthCodeUseCase(_workerPhoneNumber.value, _workerAuthCode.value)
-                .onSuccess {
-                    cancelTimer()
-                    _isConfirmAuthCode.value = true
-                }
-                .onFailure { Log.d("test", "실패! ${it}") }
+            confirmAuthCodeUseCase(_workerPhoneNumber.value, _workerAuthCode.value).onSuccess {
+                cancelTimer()
+                _isConfirmAuthCode.value = true
+            }.onFailure { Log.d("test", "실패! ${it}") }
         }
     }
 
@@ -161,16 +159,14 @@ class WorkerSignUpViewModel @Inject constructor(
             phoneNumber = _workerPhoneNumber.value,
             roadNameAddress = _roadNameAddress.value,
             lotNumberAddress = _lotNumberAddress.value,
-        )
-            .onSuccess {
-                baseEvent(
-                    CareBaseEvent.NavigateTo(
-                        WorkerHome,
-                        R.id.workerSignUpFragment
-                    )
+        ).onSuccess {
+            baseEvent(
+                CareBaseEvent.NavigateTo(
+                    WorkerHome,
+                    R.id.workerSignUpFragment
                 )
-            }
-            .onFailure { Log.d("test", "실패! ${it}") }
+            )
+        }.onFailure { Log.d("test", "실패! ${it}") }
     }
 }
 

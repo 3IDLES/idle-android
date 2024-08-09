@@ -2,13 +2,10 @@
 <resources>
     <array name="centerNavDestinationIds">
         <item>@id/centerHomeFragment</item>
-        <item>@id/centerProfileFragment</item>
         <item>@id/centerSettingFragment</item>
     </array>
 
     <array name="workerNavDestinationIds">
         <item>@id/workerHomeFragment</item>
-        <item>@id/workerProfileFragment</item>
-        <item>@id/workerRecruitmentDetailFragment</item>
     </array>
 </resources>
