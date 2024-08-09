@@ -150,7 +150,9 @@ internal fun BusinessRegistrationScreen(
             text = stringResource(id = R.string.next),
             enable = businessRegistrationInfo != null,
             onClick = { setSignUpStep(CenterSignUpStep.findStep(BUSINESS_REGISTRATION.step + 1)) },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 28.dp),
         )
     }
 }

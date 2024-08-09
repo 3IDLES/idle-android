@@ -57,8 +57,7 @@ internal fun CustomerRequirementScreen(
         verticalArrangement = Arrangement.spacedBy(28.dp),
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(scrollState)
-            .padding(bottom = 30.dp),
+            .verticalScroll(scrollState),
     ) {
         Text(
             text = stringResource(id = R.string.customer_requirement_title),
@@ -191,7 +190,9 @@ internal fun CustomerRequirementScreen(
             text = stringResource(id = R.string.next),
             enable = isMealAssistance != null && isBowelAssistance != null && isWalkingAssistance != null,
             onClick = { setJobPostingStep(JobPostingStep.findStep(CUSTOMER_REQUIREMENT.step + 1)) },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 28.dp),
         )
     }
 }

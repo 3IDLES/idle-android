@@ -80,8 +80,7 @@ internal fun SummaryScreen(
         verticalArrangement = Arrangement.spacedBy(24.dp),
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(scrollState)
-            .padding(top = 20.dp, bottom = 30.dp),
+            .verticalScroll(scrollState),
     ) {
         Text(
             text = stringResource(id = R.string.summary_title),
@@ -607,7 +606,8 @@ internal fun SummaryScreen(
             CareButtonLarge(
                 text = stringResource(id = R.string.confirm2),
                 onClick = postJobPosting,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth()
+                    .padding(bottom = 28.dp),
             )
         }
     }

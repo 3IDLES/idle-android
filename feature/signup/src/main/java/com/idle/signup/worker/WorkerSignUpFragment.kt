@@ -156,7 +156,7 @@ internal fun WorkerSignUpScreen(
                 .fillMaxSize()
                 .background(Color.White)
                 .padding(paddingValue)
-                .padding(start = 20.dp, end = 20.dp, top = 24.dp, bottom = 28.dp),
+                .padding(start = 20.dp, end = 20.dp, top = 24.dp),
         ) {
             CareStateAnimator(
                 targetState = signUpStep,

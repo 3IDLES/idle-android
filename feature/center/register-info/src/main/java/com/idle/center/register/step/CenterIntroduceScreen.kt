@@ -119,7 +119,7 @@ internal fun CenterIntroduceScreen(
             onClick = { if (centerIntroduce.isNotBlank()) registerCenterProfile() },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 30.dp),
+                .padding(bottom = 28.dp),
         )
     }
 }

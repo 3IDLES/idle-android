@@ -16,9 +16,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.idle.designresource.R
 import com.idle.center.jobposting.JobPostingStep
 import com.idle.compose.JobPostingBottomSheetType
+import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareChipBasic
 import com.idle.designsystem.compose.component.CareChipShort
@@ -45,9 +45,7 @@ internal fun TimePaymentScreen(
     Column(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(28.dp),
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(bottom = 30.dp),
+        modifier = Modifier.fillMaxSize(),
     ) {
         Text(
             text = stringResource(id = R.string.time_payment_title),
@@ -164,7 +162,9 @@ internal fun TimePaymentScreen(
             text = stringResource(id = R.string.next),
             enable = weekDays.isNotEmpty() && workStartTime.isNotBlank() && workEndTime.isNotBlank() && payType != null && payAmount.isNotBlank(),
             onClick = { setJobPostingStep(JobPostingStep.findStep(JobPostingStep.TIME_PAYMENT.step + 1)) },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 28.dp),
         )
     }
 }

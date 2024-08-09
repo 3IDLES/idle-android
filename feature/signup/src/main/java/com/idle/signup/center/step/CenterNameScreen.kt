@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -66,7 +67,8 @@ internal fun CenterNameScreen(
             text = stringResource(id = R.string.next),
             enable = centerName.isNotBlank(),
             onClick = { setSignUpStep(CenterSignUpStep.findStep(NAME.step -1)) },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
+                .padding(bottom = 28.dp),
         )
     }
 }

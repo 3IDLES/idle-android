@@ -35,9 +35,7 @@ internal fun AddressScreen(
     Column(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(28.dp),
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(bottom = 30.dp),
+        modifier = Modifier.fillMaxSize(),
     ) {
         Text(
             text = stringResource(id = R.string.address_screen_title),
@@ -79,7 +77,8 @@ internal fun AddressScreen(
             text = stringResource(id = R.string.next),
             enable = (roadNameAddress.isNotBlank() && detailAddress.isNotBlank()),
             onClick = { setJobPostingStep(JobPostingStep.findStep(ADDRESS.step + 1)) },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
+                .padding(bottom = 28.dp),
         )
     }
 }

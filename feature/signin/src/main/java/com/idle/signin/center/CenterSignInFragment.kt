@@ -88,7 +88,7 @@ internal fun CenterSignInScreen(
                 .fillMaxSize()
                 .background(CareTheme.colors.white000)
                 .padding(paddingValue)
-                .padding(start = 20.dp, end = 20.dp, bottom = 28.dp, top = 24.dp),
+                .padding(start = 20.dp, end = 20.dp, top = 24.dp),
         ) {
             Spacer(modifier = Modifier.weight(4f))
 
@@ -137,7 +137,9 @@ internal fun CenterSignInScreen(
                 text = stringResource(id = R.string.login),
                 enable = centerPassword.isNotBlank(),
                 onClick = signInCenter,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 28.dp),
             )
         }
     }

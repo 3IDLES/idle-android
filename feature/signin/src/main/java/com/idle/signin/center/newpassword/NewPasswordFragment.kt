@@ -94,7 +94,7 @@ internal fun NewPasswordScreen(
                 .fillMaxSize()
                 .background(CareTheme.colors.white000)
                 .padding(paddingValue)
-                .padding(start = 20.dp, end = 20.dp, top = 24.dp, bottom = 30.dp),
+                .padding(start = 20.dp, end = 20.dp, top = 24.dp),
         ) {
             when (newPasswordStep) {
                 NewPasswordStep.PHONE_NUMBER -> PhoneNumberScreen(

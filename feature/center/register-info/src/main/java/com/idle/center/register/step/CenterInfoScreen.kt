@@ -47,9 +47,7 @@ internal fun CenterInfoScreen(
     Column(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(28.dp),
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(bottom = 30.dp),
+        modifier = Modifier.fillMaxSize(),
     ) {
         Text(
             text = stringResource(id = R.string.center_info_hint),
@@ -100,7 +98,9 @@ internal fun CenterInfoScreen(
             text = stringResource(id = R.string.next),
             enable = centerName.isNotBlank() && centerNumber.isNotBlank(),
             onClick = { setRegistrationStep(RegistrationStep.findStep(INFO.step + 1)) },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 28.dp),
         )
     }
 }

@@ -135,7 +135,8 @@ internal fun WorkerInformationScreen(
             onClick = {
                 setSignUpStep(WorkerSignUpStep.findStep(INFO.step + 1))
             },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
+                .padding(bottom = 28.dp),
         )
     }
 }

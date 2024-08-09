@@ -40,7 +40,7 @@ internal fun JobPostingCompleteScreen() {
         modifier = Modifier
             .fillMaxSize()
             .background(CareTheme.colors.white000)
-            .padding(start = 20.dp, end = 20.dp, bottom = 30.dp),
+            .padding(horizontal = 20.dp),
     ) {
         Spacer(modifier = Modifier.weight(1f))
 
@@ -62,7 +62,9 @@ internal fun JobPostingCompleteScreen() {
         CareButtonLarge(
             text = stringResource(id = R.string.next),
             onClick = {},
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 28.dp),
         )
     }
 }
