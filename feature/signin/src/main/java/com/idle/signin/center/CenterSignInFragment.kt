@@ -88,8 +88,10 @@ internal fun CenterSignInScreen(
                 .fillMaxSize()
                 .background(CareTheme.colors.white000)
                 .padding(paddingValue)
-                .padding(start = 20.dp, end = 20.dp, top = 125.dp, bottom = 30.dp),
+                .padding(start = 20.dp, end = 20.dp, bottom = 28.dp),
         ) {
+            Spacer(modifier = Modifier.weight(4f))
+
             LabeledContent(
                 subtitle = stringResource(id = R.string.id),
                 modifier = Modifier
@@ -121,7 +123,7 @@ internal fun CenterSignInScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.weight(7f))
 
             Text(
                 text = stringResource(id = R.string.forget_password),
