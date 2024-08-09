@@ -19,7 +19,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
-import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
+import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.designresource.R
 import com.idle.signin.center.newpassword.step.GenerateNewPasswordScreen
@@ -77,7 +77,7 @@ internal fun NewPasswordScreen(
 
     Scaffold(
         topBar = {
-            CareSubtitleTopAppBar(
+            CareSubtitleTopBar(
                 title = stringResource(id = R.string.generate_new_password),
                 onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
                 modifier = Modifier

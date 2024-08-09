@@ -43,7 +43,7 @@ import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonRound
 import com.idle.designsystem.compose.component.CareChipBasic
-import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
+import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.CareTextFieldLong
@@ -120,7 +120,7 @@ internal fun WorkerProfileScreen(
                     else CareTheme.colors.white000
                 ),
             ) {
-                CareSubtitleTopAppBar(
+                CareSubtitleTopBar(
                     title = "내 프로필",
                     onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
                     leftComponent = {

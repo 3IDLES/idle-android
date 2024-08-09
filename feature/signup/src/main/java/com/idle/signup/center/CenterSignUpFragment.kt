@@ -24,7 +24,7 @@ import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.component.CareProgressBar
 import com.idle.designsystem.compose.component.CareStateAnimator
-import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
+import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.domain.model.auth.BusinessRegistrationInfo
 import com.idle.designresource.R
 import com.idle.signup.center.step.BusinessRegistrationScreen
@@ -125,7 +125,7 @@ internal fun CenterSignUpScreen(
 
     Scaffold(
         topBar = {
-            CareSubtitleTopAppBar(
+            CareSubtitleTopBar(
                 title = stringResource(id = R.string.center_signup),
                 onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
                 modifier = Modifier

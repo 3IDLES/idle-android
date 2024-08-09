@@ -17,7 +17,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,7 +34,8 @@ import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designresource.R
-import com.idle.designsystem.compose.component.CareHeadingTopAppBar
+import com.idle.designsystem.compose.component.CareHeadingTopBar
+import com.idle.designsystem.compose.component.CareHomeTopBar
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.foundation.CareTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -64,54 +64,58 @@ internal fun WorkerHomeScreen(
     setRecruitmentPostStatus: (RecruitmentPostStatus) -> Unit,
     navigateToJobDetail: (String) -> Unit,
 ) {
-    Scaffold(containerColor = CareTheme.colors.white000, topBar = {
-        Column {
-            CareHeadingTopAppBar(
-                title = stringResource(id = R.string.manage_job_posting),
-                modifier = Modifier.padding(
-                    start = 20.dp, end = 20.dp, top = 48.dp, bottom = 20.dp
-                ),
-            )
-        }
-    }) { paddingValue ->
+    Scaffold(
+        containerColor = CareTheme.colors.white000,
+        topBar = {
+            Column {
+                CareHeadingTopBar(
+                    title = stringResource(id = R.string.manage_job_posting),
+                    modifier = Modifier.padding(
+                        start = 20.dp, end = 20.dp, top = 48.dp, bottom = 20.dp
+                    ),
+                )
+            }
+        },
+    ) { paddingValue ->
         Column(
             modifier = Modifier
                 .padding(paddingValue)
                 .fillMaxSize()
         ) {
-            Row(modifier = Modifier.padding(bottom = 20.dp)) {
-                RecruitmentPostStatus.entries.forEach { status ->
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier
-                            .weight(1f)
-                            .clickable { setRecruitmentPostStatus(status) },
-                    ) {
-                        Text(
-                            text = status.displayName,
-                            style = CareTheme.typography.subtitle3,
-                            color = if (recruitmentPostStatus == status) CareTheme.colors.gray900
-                            else CareTheme.colors.gray300,
-                            modifier = Modifier.padding(vertical = 12.dp),
-                        )
+            CareHomeTopBar(
+                selectedStatus = recruitmentPostStatus,
+                setStatus = setRecruitmentPostStatus,
+                displayName = { it.displayName },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 20.dp),
+            )
 
-                        if (recruitmentPostStatus == status) {
-                            HorizontalDivider(thickness = 2.dp, color = CareTheme.colors.gray900)
-                        } else {
-                            HorizontalDivider(thickness = 1.dp, color = CareTheme.colors.gray100)
+            when (recruitmentPostStatus) {
+                RecruitmentPostStatus.APPLY -> {
+                    LazyColumn(
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        modifier = Modifier
+                            .padding(start = 20.dp, end = 20.dp, top = 16.dp)
+                            .fillMaxSize()
+                    ) {
+                        items(listOf(1, 2, 3, 4, 5)) {
+                            WorkerRecruitmentCard(navigateToJobDetail = navigateToJobDetail)
                         }
                     }
                 }
-            }
 
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier
-                    .padding(start = 20.dp, end = 20.dp, top = 16.dp)
-                    .fillMaxSize()
-            ) {
-                items(listOf(1, 2, 3, 4, 5)) {
-                    WorkerRecruitmentCard(navigateToJobDetail = navigateToJobDetail)
+                RecruitmentPostStatus.MARKED -> {
+                    LazyColumn(
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        modifier = Modifier
+                            .padding(start = 20.dp, end = 20.dp, top = 16.dp)
+                            .fillMaxSize()
+                    ) {
+                        items(listOf(1, 2, 3, 4, 5)) {
+                            WorkerRecruitmentCard(navigateToJobDetail = navigateToJobDetail)
+                        }
+                    }
                 }
             }
         }

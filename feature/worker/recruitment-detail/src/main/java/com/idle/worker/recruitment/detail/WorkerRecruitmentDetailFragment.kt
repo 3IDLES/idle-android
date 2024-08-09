@@ -29,7 +29,7 @@ import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLine
 import com.idle.designsystem.compose.component.CareCard
 import com.idle.designsystem.compose.component.CareMap
-import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
+import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.component.CareTextFieldLong
 import com.idle.designsystem.compose.foundation.CareTheme
@@ -55,7 +55,7 @@ internal fun WorkerRecruitmentDetailScreen(
     Scaffold(
         containerColor = CareTheme.colors.white000,
         topBar = {
-            CareSubtitleTopAppBar(
+            CareSubtitleTopBar(
                 title = stringResource(id = R.string.job_posting_detail),
                 modifier = Modifier.padding(start = 12.dp, top = 48.dp, bottom = 24.dp),
             )
