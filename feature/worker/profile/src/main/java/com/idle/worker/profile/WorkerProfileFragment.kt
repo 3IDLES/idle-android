@@ -13,9 +13,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -177,7 +179,7 @@ internal fun WorkerProfileScreen(
                     verticalAlignment = Alignment.Bottom,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 20.dp)
+                        .padding(bottom = 12.dp),
                 ) {
                     Box(
                         modifier = Modifier
@@ -209,26 +211,21 @@ internal fun WorkerProfileScreen(
                             text = workerProfile.jobSearchStatus.displayName,
                             textColor = CareTheme.colors.orange500,
                             backgroundColor = CareTheme.colors.orange100,
-                            modifier = Modifier.padding(top = 16.dp),
                         )
 
                         NO -> CareTag(
                             text = workerProfile.jobSearchStatus.displayName,
                             textColor = CareTheme.colors.gray300,
                             backgroundColor = CareTheme.colors.gray050,
-                            modifier = Modifier.padding(top = 16.dp),
                         )
 
                         UNKNOWN -> CareTag(
                             text = workerProfile.jobSearchStatus.displayName,
                             textColor = CareTheme.colors.gray300,
                             backgroundColor = CareTheme.colors.gray100,
-                            modifier = Modifier.padding(top = 16.dp),
                         )
                     }
-                }
 
-                if (!isEditState) {
                     Row(
                         verticalAlignment = Alignment.Bottom,
                         horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -246,29 +243,7 @@ internal fun WorkerProfileScreen(
                             color = CareTheme.colors.gray900,
                         )
                     }
-                } else {
-                    Column(
-                        horizontalAlignment = Alignment.Start,
-                        verticalArrangement = Arrangement.spacedBy(6.dp),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 20.dp, end = 20.dp, bottom = 24.dp),
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.name),
-                            style = CareTheme.typography.subtitle4,
-                            color = CareTheme.colors.gray500,
-                        )
 
-                        CareTextField(
-                            value = workerProfile.workerName,
-                            onValueChanged = { },
-                            modifier = Modifier.fillMaxWidth(),
-                        )
-                    }
-                }
-
-                if (!isEditState) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.height(IntrinsicSize.Min),
@@ -325,6 +300,69 @@ internal fun WorkerProfileScreen(
                                 color = CareTheme.colors.gray900,
                             )
                         }
+                    }
+                } else {
+                    Text(
+                        text = workerProfile.workerName.ifBlank { "홍길동" },
+                        style = CareTheme.typography.heading2,
+                        color = CareTheme.colors.gray900,
+                        modifier = Modifier.padding(bottom = 6.dp),
+                    )
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.height(IntrinsicSize.Min),
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.age),
+                            style = CareTheme.typography.body3,
+                            color = CareTheme.colors.gray500,
+                            modifier = Modifier.padding(end = 4.dp),
+                        )
+
+                        Text(
+                            text = "${workerProfile.age}세",
+                            style = CareTheme.typography.body3,
+                            color = CareTheme.colors.gray900,
+                        )
+
+                        VerticalDivider(
+                            thickness = 1.dp,
+                            color = CareTheme.colors.gray100,
+                            modifier = Modifier.padding(horizontal = 8.dp),
+                        )
+
+                        Text(
+                            text = stringResource(id = R.string.gender),
+                            style = CareTheme.typography.body3,
+                            color = CareTheme.colors.gray500,
+                            modifier = Modifier.padding(end = 4.dp),
+                        )
+
+                        Text(
+                            text = workerProfile.gender.displayName,
+                            style = CareTheme.typography.body3,
+                            color = CareTheme.colors.gray900,
+                        )
+
+                        VerticalDivider(
+                            thickness = 1.dp,
+                            color = CareTheme.colors.gray100,
+                            modifier = Modifier.padding(horizontal = 8.dp),
+                        )
+
+                        Text(
+                            text = stringResource(id = R.string.phone_number),
+                            style = CareTheme.typography.body3,
+                            color = CareTheme.colors.gray500,
+                            modifier = Modifier.padding(end = 4.dp),
+                        )
+
+                        Text(
+                            text = workerProfile.phoneNumber,
+                            style = CareTheme.typography.body3,
+                            color = CareTheme.colors.gray900,
+                        )
                     }
                 }
 
@@ -402,7 +440,7 @@ internal fun WorkerProfileScreen(
                     subtitle = stringResource(id = R.string.specialty),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 20.dp, end = 20.dp, bottom = 32.dp),
+                        .padding(start = 20.dp, end = 20.dp, bottom = 52.dp),
                 ) {
                     if (!isEditState) {
                         Text(
