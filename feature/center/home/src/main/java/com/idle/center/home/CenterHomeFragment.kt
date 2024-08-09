@@ -61,12 +61,7 @@ internal fun CenterHomeScreen(
         topBar = {
             CareHeadingTopBar(
                 title = stringResource(id = R.string.manage_job_posting),
-                modifier = Modifier.padding(
-                    start = 20.dp,
-                    end = 20.dp,
-                    top = 50.dp,
-                    bottom = 30.dp
-                ),
+                modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 48.dp, bottom = 8.dp),
             )
         },
         containerColor = CareTheme.colors.white000,
@@ -74,6 +69,7 @@ internal fun CenterHomeScreen(
         Column(
             modifier = Modifier
                 .padding(paddingValue)
+                .padding(top = 20.dp, bottom = 36.dp)
                 .fillMaxSize()
         ) {
             CareTabBar(
