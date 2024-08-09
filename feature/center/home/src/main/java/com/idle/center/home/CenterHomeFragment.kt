@@ -40,6 +40,7 @@ import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonCardMedium
 import com.idle.designsystem.compose.component.CareHeadingTopBar
+import com.idle.designsystem.compose.component.CareHomeTopBar
 import com.idle.designsystem.compose.foundation.CareTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -64,16 +65,6 @@ internal fun CenterHomeScreen(
     recruitmentPostStatus: RecruitmentPostStatus,
     setRecruitmentPostStatus: (RecruitmentPostStatus) -> Unit,
 ) {
-    val density = LocalDensity.current
-    val configuration = LocalConfiguration.current
-    val screenWidthDp = configuration.screenWidthDp.dp
-    val screenWidthPx = with(density) { screenWidthDp.toPx().toInt() }
-    val topBarXOffset by animateIntOffsetAsState(
-        targetValue = if (recruitmentPostStatus.ordinal == 1) IntOffset(x = screenWidthPx, y = 0)
-        else IntOffset.Zero,
-        label = "홈 화면 탑 바의 막대를 움직이는 애니메이션",
-    )
-
     Scaffold(
         topBar = {
             CareHeadingTopBar(
@@ -93,55 +84,14 @@ internal fun CenterHomeScreen(
                 .padding(paddingValue)
                 .fillMaxSize()
         ) {
-            Box(
+            CareHomeTopBar(
+                selectedStatus = recruitmentPostStatus,
+                setStatus = setRecruitmentPostStatus,
+                displayName = { it.displayName },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(52.dp),
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(52.dp)
-                        .padding(bottom = 20.dp)
-                ) {
-                    RecruitmentPostStatus.entries.forEach { status ->
-                        Box(
-                            modifier = Modifier
-                                .weight(1f)
-                                .clickable { setRecruitmentPostStatus(status) },
-                        ) {
-                            Text(
-                                text = status.displayName,
-                                style = CareTheme.typography.subtitle3,
-                                color = if (recruitmentPostStatus == status) CareTheme.colors.gray900
-                                else CareTheme.colors.gray300,
-                                modifier = Modifier.align(Alignment.Center),
-                            )
-
-
-                            HorizontalDivider(
-                                thickness = 1.dp,
-                                color = CareTheme.colors.gray100,
-                                modifier = Modifier
-                                    .align(Alignment.BottomCenter)
-                                    .padding(bottom = 4.dp),
-                            )
-                        }
-                    }
-                }
-
-                HorizontalDivider(
-                    thickness = 2.dp,
-                    color = CareTheme.colors.gray900,
-                    modifier = Modifier
-                        .width(screenWidthDp / 2)
-                        .align(Alignment.BottomCenter)
-                        .padding(bottom = 4.dp)
-                        .graphicsLayer {
-                            translationX = topBarXOffset.x.toFloat()
-                        },
-                )
-            }
+                    .padding(bottom = 20.dp),
+            )
 
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
