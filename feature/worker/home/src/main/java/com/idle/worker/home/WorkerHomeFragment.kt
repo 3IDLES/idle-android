@@ -33,8 +33,8 @@ import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonCardLarge
 import com.idle.designsystem.compose.component.CareHeadingTopBar
-import com.idle.designsystem.compose.component.CareTabBar
 import com.idle.designsystem.compose.component.CareStateAnimator
+import com.idle.designsystem.compose.component.CareTabBar
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.foundation.CareTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -70,7 +70,10 @@ internal fun WorkerHomeScreen(
                 CareHeadingTopBar(
                     title = stringResource(id = R.string.manage_job_posting),
                     modifier = Modifier.padding(
-                        start = 20.dp, end = 20.dp, top = 48.dp, bottom = 20.dp
+                        start = 20.dp,
+                        end = 20.dp,
+                        top = 48.dp,
+                        bottom = 8.dp
                     ),
                 )
             }
@@ -79,6 +82,7 @@ internal fun WorkerHomeScreen(
         Column(
             modifier = Modifier
                 .padding(paddingValue)
+                .padding(top = 20.dp, bottom = 36.dp)
                 .fillMaxSize(),
         ) {
             CareTabBar(
