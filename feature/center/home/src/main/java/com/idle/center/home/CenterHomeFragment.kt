@@ -1,8 +1,10 @@
 package com.idle.center.home
 
+import androidx.compose.animation.core.animateIntOffsetAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,9 +25,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -32,7 +39,7 @@ import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonCardMedium
-import com.idle.designsystem.compose.component.CareHeadingTopAppBar
+import com.idle.designsystem.compose.component.CareHeadingTopBar
 import com.idle.designsystem.compose.foundation.CareTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -57,9 +64,19 @@ internal fun CenterHomeScreen(
     recruitmentPostStatus: RecruitmentPostStatus,
     setRecruitmentPostStatus: (RecruitmentPostStatus) -> Unit,
 ) {
+    val density = LocalDensity.current
+    val configuration = LocalConfiguration.current
+    val screenWidthDp = configuration.screenWidthDp.dp
+    val screenWidthPx = with(density) { screenWidthDp.toPx().toInt() }
+    val topBarXOffset by animateIntOffsetAsState(
+        targetValue = if (recruitmentPostStatus.ordinal == 1) IntOffset(x = screenWidthPx, y = 0)
+        else IntOffset.Zero,
+        label = "홈 화면 탑 바의 막대를 움직이는 애니메이션",
+    )
+
     Scaffold(
         topBar = {
-            CareHeadingTopAppBar(
+            CareHeadingTopBar(
                 title = stringResource(id = R.string.manage_job_posting),
                 modifier = Modifier.padding(
                     start = 20.dp,
@@ -76,29 +93,54 @@ internal fun CenterHomeScreen(
                 .padding(paddingValue)
                 .fillMaxSize()
         ) {
-            Row(modifier = Modifier.padding(bottom = 20.dp)) {
-                RecruitmentPostStatus.entries.forEach { status ->
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier
-                            .weight(1f)
-                            .clickable { setRecruitmentPostStatus(status) },
-                    ) {
-                        Text(
-                            text = status.displayName,
-                            style = CareTheme.typography.subtitle3,
-                            color = if (recruitmentPostStatus == status) CareTheme.colors.gray900
-                            else CareTheme.colors.gray300,
-                            modifier = Modifier.padding(vertical = 12.dp),
-                        )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(52.dp),
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(52.dp)
+                        .padding(bottom = 20.dp)
+                ) {
+                    RecruitmentPostStatus.entries.forEach { status ->
+                        Box(
+                            modifier = Modifier
+                                .weight(1f)
+                                .clickable { setRecruitmentPostStatus(status) },
+                        ) {
+                            Text(
+                                text = status.displayName,
+                                style = CareTheme.typography.subtitle3,
+                                color = if (recruitmentPostStatus == status) CareTheme.colors.gray900
+                                else CareTheme.colors.gray300,
+                                modifier = Modifier.align(Alignment.Center),
+                            )
 
-                        if (recruitmentPostStatus == status) {
-                            HorizontalDivider(thickness = 2.dp, color = CareTheme.colors.gray900)
-                        } else {
-                            HorizontalDivider(thickness = 1.dp, color = CareTheme.colors.gray100)
+
+                            HorizontalDivider(
+                                thickness = 1.dp,
+                                color = CareTheme.colors.gray100,
+                                modifier = Modifier
+                                    .align(Alignment.BottomCenter)
+                                    .padding(bottom = 4.dp),
+                            )
                         }
                     }
                 }
+
+                HorizontalDivider(
+                    thickness = 2.dp,
+                    color = CareTheme.colors.gray900,
+                    modifier = Modifier
+                        .width(screenWidthDp / 2)
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 4.dp)
+                        .graphicsLayer {
+                            translationX = topBarXOffset.x.toFloat()
+                        },
+                )
             }
 
             LazyColumn(

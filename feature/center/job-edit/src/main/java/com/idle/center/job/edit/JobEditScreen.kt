@@ -57,7 +57,7 @@ import com.idle.designsystem.compose.component.CareCalendar
 import com.idle.designsystem.compose.component.CareChipBasic
 import com.idle.designsystem.compose.component.CareChipShort
 import com.idle.designsystem.compose.component.CareClickableTextField
-import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
+import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.CareTextFieldLong
 import com.idle.designsystem.compose.component.CareWheelPicker
@@ -409,7 +409,7 @@ fun JobEditScreen(
     ) {
         Scaffold(
             topBar = {
-                CareSubtitleTopAppBar(
+                CareSubtitleTopBar(
                     title = stringResource(id = R.string.edit_job_posting),
                     onNavigationClick = { setEditState(false) },
                     leftComponent = {

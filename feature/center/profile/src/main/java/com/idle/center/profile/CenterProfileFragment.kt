@@ -41,7 +41,7 @@ import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonRound
-import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
+import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.CareTextFieldLong
 import com.idle.designsystem.compose.component.LabeledContent
@@ -101,7 +101,7 @@ internal fun CenterProfileScreen(
 
     Scaffold(
         topBar = {
-            CareSubtitleTopAppBar(
+            CareSubtitleTopBar(
                 title = stringResource(id = R.string.my_center_info),
                 onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
                 leftComponent = {

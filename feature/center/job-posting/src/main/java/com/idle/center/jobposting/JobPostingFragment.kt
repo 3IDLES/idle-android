@@ -48,7 +48,7 @@ import com.idle.designsystem.compose.component.CareButtonRound
 import com.idle.designsystem.compose.component.CareCalendar
 import com.idle.designsystem.compose.component.CareProgressBar
 import com.idle.designsystem.compose.component.CareStateAnimator
-import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
+import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.component.CareWheelPicker
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.Gender
@@ -540,7 +540,7 @@ internal fun JobPostingScreen(
     ) {
         Scaffold(
             topBar = {
-                CareSubtitleTopAppBar(
+                CareSubtitleTopBar(
                     title = if (jobPostingStep != JobPostingStep.SUMMARY) stringResource(id = R.string.post_job_posting)
                     else "",
                     onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },

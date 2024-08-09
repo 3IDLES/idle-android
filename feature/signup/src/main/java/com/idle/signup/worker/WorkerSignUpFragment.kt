@@ -25,10 +25,9 @@ import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.component.CareProgressBar
 import com.idle.designsystem.compose.component.CareStateAnimator
-import com.idle.designsystem.compose.component.CareSubtitleTopAppBar
+import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.domain.model.auth.Gender
 import com.idle.post.code.PostCodeFragment
-import com.idle.signin.center.CenterSignUpStep
 import com.idle.designresource.R
 import com.idle.signup.worker.step.AddressScreen
 import com.idle.signup.worker.step.WorkerInformationScreen
@@ -132,7 +131,7 @@ internal fun WorkerSignUpScreen(
 
     Scaffold(
         topBar = {
-            CareSubtitleTopAppBar(
+            CareSubtitleTopBar(
                 title = stringResource(id = R.string.worker_signup),
                 onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
                 modifier = Modifier
