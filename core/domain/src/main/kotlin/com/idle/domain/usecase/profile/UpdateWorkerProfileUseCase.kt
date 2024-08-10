@@ -24,8 +24,11 @@ class UpdateWorkerProfileUseCase @Inject constructor(
                 profileRepository.updateWorkerProfile(
                     experienceYear = experienceYear,
                     roadNameAddress = roadNameAddress,
-                    @@ -31, 17 + 31, 17 @@ class UpdateWorkerProfileUseCase @Inject constructor(
-                    ). getOrThrow ()
+                    lotNumberAddress = lotNumberAddress,
+                    jobSearchStatus = jobSearchStatus,
+                    introduce = introduce,
+                    speciality = speciality
+                ).getOrThrow()
             }
 
             val updateProfileImageJob = imageFileUri?.let {
