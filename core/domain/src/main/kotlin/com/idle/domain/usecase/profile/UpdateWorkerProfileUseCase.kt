@@ -3,8 +3,8 @@ package com.idle.domain.usecase.profile
 import com.idle.domain.model.auth.UserRole
 import com.idle.domain.model.profile.JobSearchStatus
 import com.idle.domain.repositorry.profile.ProfileRepository
-import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class UpdateWorkerProfileUseCase @Inject constructor(
@@ -20,19 +20,16 @@ class UpdateWorkerProfileUseCase @Inject constructor(
         imageFileUri: String?,
     ) = runCatching {
         coroutineScope {
-            val updateProfileDeferred = async {
+            val updateProfileJob = launch {
                 profileRepository.updateWorkerProfile(
                     experienceYear = experienceYear,
                     roadNameAddress = roadNameAddress,
-                    lotNumberAddress = lotNumberAddress,
-                    jobSearchStatus = jobSearchStatus,
-                    introduce = introduce,
-                    speciality = speciality
-                ).getOrThrow()
+                    @@ -31, 17 + 31, 17 @@ class UpdateWorkerProfileUseCase @Inject constructor(
+                    ). getOrThrow ()
             }
 
-            val updateProfileImageDeferred = imageFileUri?.let {
-                async {
+            val updateProfileImageJob = imageFileUri?.let {
+                launch {
                     profileRepository.updateProfileImage(
                         userType = UserRole.WORKER.apiValue,
                         imageFileUri = imageFileUri,
@@ -40,8 +37,8 @@ class UpdateWorkerProfileUseCase @Inject constructor(
                 }
             }
 
-            updateProfileDeferred.await()
-            updateProfileImageDeferred?.await()
+            updateProfileJob.join()
+            updateProfileImageJob?.join()
         }
     }
 }
