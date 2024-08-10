@@ -9,6 +9,8 @@ interface ProfileRepository {
 
     suspend fun getMyWorkerProfile(): Result<WorkerProfile>
 
+    suspend fun getWorkerProfile(workerId: String): Result<WorkerProfile>
+
     suspend fun updateCenterProfile(officeNumber: String, introduce: String?): Result<Unit>
 
     suspend fun updateWorkerProfile(
