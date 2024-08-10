@@ -22,6 +22,8 @@ sealed class DeepLinkDestination(val addressRes: Int) {
     data object CenterRegister : DeepLinkDestination(R.string.center_register_info_deeplink_url)
     data object CenterRegisterComplete :
         DeepLinkDestination(R.string.center_register_info_complete_deeplink_url)
+    data object CenterApplicantInquiry :
+        DeepLinkDestination(R.string.center_applicant_inquiry_deeplink_url)
 
     data object CenterJobPosting : DeepLinkDestination(R.string.center_job_posting_deeplink_url)
     data object CenterJobPostingComplete :

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_applicant_inquiry"
+    app:startDestination="@id/applicantInquiryFragment">
+
+    <fragment
+        android:id="@+id/applicantInquiryFragment"
+        android:name="com.tgyuu.applicant.inquiry.ApplicantInquiryFragment"
+        android:label="ApplicantInquiryFragment">
+        <deepLink app:uri="@string/center_applicant_inquiry_deeplink_url" />
+    </fragment>
+</navigation>

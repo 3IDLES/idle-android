@@ -32,6 +32,7 @@ import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonCardMedium
 import com.idle.designsystem.compose.component.CareHeadingTopBar
+import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareTabBar
 import com.idle.designsystem.compose.foundation.CareTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -81,20 +82,40 @@ internal fun CenterHomeScreen(
                     .padding(bottom = 20.dp),
             )
 
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(8.dp),
+            CareStateAnimator(
+                targetState = recruitmentPostStatus,
                 modifier = Modifier.padding(start = 20.dp, end = 20.dp),
-            ) {
-                items(listOf(1, 2, 3, 4, 5)) {
-                    CenterRecruitmentCardCard()
-                }
+            ) { status ->
+                when (status) {
+                    RecruitmentPostStatus.ONGOING ->
+                        LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            items(listOf(1, 2, 3, 4, 5)) {
+                                CenterRecruitmentCardCard()
+                            }
 
-                item {
-                    Spacer(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(20.dp)
-                    )
+                            item {
+                                Spacer(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(20.dp)
+                                )
+                            }
+                        }
+
+                    RecruitmentPostStatus.PREVIOUS ->
+                        LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            items(listOf(1, 2, 3, 4, 5)) {
+                                CenterRecruitmentCardCard()
+                            }
+
+                            item {
+                                Spacer(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(20.dp)
+                                )
+                            }
+                        }
                 }
             }
         }

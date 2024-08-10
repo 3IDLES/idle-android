@@ -40,7 +40,6 @@ internal class CenterSignUpFragment : BaseComposeFragment() {
     @Composable
     override fun ComposeLayout() {
         fragmentViewModel.apply {
-
             val signUpStep by signUpStep.collectAsStateWithLifecycle()
             val centerName by centerName.collectAsStateWithLifecycle()
             val centerPhoneNumber by centerPhoneNumber.collectAsStateWithLifecycle()

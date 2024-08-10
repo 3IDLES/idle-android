@@ -60,6 +60,7 @@
     <string name="ongoing_job_posting">진행중인 공고</string>
     <string name="previous_job_posting">이전 공고</string>
     <string name="end_recruiting">채용 종료</string>
+    <string name="applicant_inquiry">지원자 확인</string>
     <string name="job_posting_complete_message">요양보호사 구인 공고를\n등록했어요!</string>
     <string name="job_posting_detail">공고 정보</string>
     <string name="experience_preferred">경력자 우대</string>
