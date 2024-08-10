@@ -1,4 +1,4 @@
-package com.idle.signup.center.step
+package com.idle.center.jobposting.step
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
@@ -35,7 +35,9 @@ internal fun AddressScreen(
     Column(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(28.dp),
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = 30.dp),
     ) {
         Text(
             text = stringResource(id = R.string.address_screen_title),
@@ -77,8 +79,7 @@ internal fun AddressScreen(
             text = stringResource(id = R.string.next),
             enable = (roadNameAddress.isNotBlank() && detailAddress.isNotBlank()),
             onClick = { setJobPostingStep(JobPostingStep.findStep(ADDRESS.step + 1)) },
-            modifier = Modifier.fillMaxWidth()
-                .padding(bottom = 28.dp),
+            modifier = Modifier.fillMaxWidth(),
         )
     }
 }
