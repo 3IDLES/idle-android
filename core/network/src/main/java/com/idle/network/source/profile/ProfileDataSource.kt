@@ -53,8 +53,11 @@ class ProfileDataSource @Inject constructor(
         callbackImageUploadRequest = callbackImageUploadRequest,
     ).onResponse()
 
-    suspend fun getWorkerProfile(): Result<GetWorkerProfileResponse> =
-        careNetworkApi.getWorkerProfile().onResponse()
+    suspend fun getMyWorkerProfile(): Result<GetWorkerProfileResponse> =
+        careNetworkApi.getMyWorkerProfile().onResponse()
+
+    suspend fun getWorkerProfile(workerId: String): Result<GetWorkerProfileResponse> =
+        careNetworkApi.getWorkerProfile(workerId).onResponse()
 
     suspend fun updateWorkerProfile(
         updateWorkerProfileRequest: UpdateWorkerProfileRequest

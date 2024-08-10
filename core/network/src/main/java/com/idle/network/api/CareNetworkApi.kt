@@ -85,7 +85,12 @@ interface CareNetworkApi {
     ): Response<Unit>
 
     @GET("/api/v1/users/carer/my/profile")
-    suspend fun getWorkerProfile(): Response<GetWorkerProfileResponse>
+    suspend fun getMyWorkerProfile(): Response<GetWorkerProfileResponse>
+
+    @GET("/api/v1/users/carer/profile/{carer-id}")
+    suspend fun getWorkerProfile(
+        @Path("carer-id") workerId: String,
+    ): Response<GetWorkerProfileResponse>
 
     @PATCH("/api/v1/users/carer/my/profile")
     suspend fun updateWorkerProfile(

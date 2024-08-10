@@ -26,7 +26,10 @@ class ProfileRepositoryImpl @Inject constructor(
         profileDataSource.getMyCenterProfile().mapCatching { it.toVO() }
 
     override suspend fun getMyWorkerProfile(): Result<WorkerProfile> =
-        profileDataSource.getWorkerProfile().mapCatching { it.toVo() }
+        profileDataSource.getMyWorkerProfile().mapCatching { it.toVo() }
+
+    override suspend fun getWorkerProfile(workerId: String): Result<WorkerProfile> =
+        profileDataSource.getWorkerProfile(workerId).mapCatching { it.toVo() }
 
     override suspend fun updateCenterProfile(
         officeNumber: String,
