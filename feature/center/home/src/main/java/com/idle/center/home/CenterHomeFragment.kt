@@ -27,6 +27,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.idle.binding.DeepLinkDestination.CenterApplicantInquiry
+import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designresource.R
@@ -47,7 +49,10 @@ internal class CenterHomeFragment : BaseComposeFragment() {
             val recruitmentPostStatus by recruitmentPostStatus.collectAsStateWithLifecycle()
             CenterHomeScreen(
                 recruitmentPostStatus = recruitmentPostStatus,
-                setRecruitmentPostStatus = ::setRecruitmentPostStatus
+                setRecruitmentPostStatus = ::setRecruitmentPostStatus,
+                navigateToApplicantInquiry = { jobPostingId ->
+                    baseEvent(NavigateTo(CenterApplicantInquiry(jobPostingId)))
+                },
             )
         }
     }
@@ -57,6 +62,7 @@ internal class CenterHomeFragment : BaseComposeFragment() {
 internal fun CenterHomeScreen(
     recruitmentPostStatus: RecruitmentPostStatus,
     setRecruitmentPostStatus: (RecruitmentPostStatus) -> Unit,
+    navigateToApplicantInquiry: (String) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -90,7 +96,7 @@ internal fun CenterHomeScreen(
                     RecruitmentPostStatus.ONGOING ->
                         LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             items(listOf(1, 2, 3, 4, 5)) {
-                                CenterRecruitmentCardCard()
+                                CenterRecruitmentCard(navigateToApplicantInquiry)
                             }
 
                             item {
@@ -105,7 +111,7 @@ internal fun CenterHomeScreen(
                     RecruitmentPostStatus.PREVIOUS ->
                         LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             items(listOf(1, 2, 3, 4, 5)) {
-                                CenterRecruitmentCardCard()
+                                CenterRecruitmentCard(navigateToApplicantInquiry)
                             }
 
                             item {
@@ -123,7 +129,9 @@ internal fun CenterHomeScreen(
 }
 
 @Composable
-private fun CenterRecruitmentCardCard() {
+private fun CenterRecruitmentCard(
+    navigateToApplicantInquiry: (String) -> Unit,
+) {
     Card(
         shape = RoundedCornerShape(12.dp),
         colors = CardColors(
@@ -170,7 +178,7 @@ private fun CenterRecruitmentCardCard() {
             ) {
                 CareButtonCardMedium(
                     text = "지원자 2명 조회",
-                    onClick = {},
+                    onClick = { navigateToApplicantInquiry("1") },
                     modifier = Modifier.weight(1f),
                 )
 

@@ -8,6 +8,9 @@
         android:id="@+id/applicantInquiryFragment"
         android:name="com.tgyuu.applicant.inquiry.ApplicantInquiryFragment"
         android:label="ApplicantInquiryFragment">
+        <argument
+            android:name="jobPostingId"
+            app:argType="string" />
         <deepLink app:uri="@string/center_applicant_inquiry_deeplink_url" />
     </fragment>
 </navigation>
