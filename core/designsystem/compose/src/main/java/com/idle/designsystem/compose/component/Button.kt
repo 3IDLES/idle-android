@@ -157,7 +157,7 @@ fun CareButtonCardMedium(
     ) {
         Text(
             text = text,
-            style = CareTheme.typography.heading4,
+            style = CareTheme.typography.subtitle4,
             color = textColor,
         )
     }
