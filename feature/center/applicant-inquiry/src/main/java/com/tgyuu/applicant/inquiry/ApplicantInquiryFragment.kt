@@ -1,15 +1,18 @@
 package com.tgyuu.applicant.inquiry
 
+import android.util.Log
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
@@ -18,11 +21,17 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 internal class ApplicantInquiryFragment : BaseComposeFragment() {
+    private val args: ApplicantInquiryFragmentArgs by navArgs()
     override val fragmentViewModel: ApplicantInquiryViewModel by viewModels()
 
     @Composable
     override fun ComposeLayout() {
         fragmentViewModel.apply {
+
+            LaunchedEffect(Unit) {
+                Log.d("test", args.jobPostingId)
+            }
+
             ApplicantInquiryScreen()
         }
     }

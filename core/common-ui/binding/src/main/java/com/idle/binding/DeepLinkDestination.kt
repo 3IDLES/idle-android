@@ -8,7 +8,10 @@ import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.NavOptions
 import com.idle.designresource.R
 
-sealed class DeepLinkDestination(val addressRes: Int) {
+sealed class DeepLinkDestination(
+    val addressRes: Int,
+    val params: Map<String, String> = emptyMap()
+) {
     data object Auth : DeepLinkDestination(R.string.auth_deeplink_url)
     data object Postcode : DeepLinkDestination(R.string.postcode_deeplink_url)
     data object NewPassword : DeepLinkDestination(R.string.new_password_deeplink_url)
@@ -22,8 +25,12 @@ sealed class DeepLinkDestination(val addressRes: Int) {
     data object CenterRegister : DeepLinkDestination(R.string.center_register_info_deeplink_url)
     data object CenterRegisterComplete :
         DeepLinkDestination(R.string.center_register_info_complete_deeplink_url)
-    data object CenterApplicantInquiry :
-        DeepLinkDestination(R.string.center_applicant_inquiry_deeplink_url)
+
+    data class CenterApplicantInquiry(val jobPostingId: String) :
+        DeepLinkDestination(
+            addressRes = R.string.center_applicant_inquiry_deeplink_url,
+            params = mapOf("jobPostingId" to jobPostingId),
+        )
 
     data object CenterJobPosting : DeepLinkDestination(R.string.center_job_posting_deeplink_url)
     data object CenterJobPostingComplete :
@@ -38,7 +45,17 @@ sealed class DeepLinkDestination(val addressRes: Int) {
     data object WorkerSignUp : DeepLinkDestination(R.string.worker_signup_deeplink_url)
 }
 
-fun DeepLinkDestination.getDeepLink(context: Context) = context.getString(this.addressRes)
+fun DeepLinkDestination.getDeepLink(context: Context): String {
+    val baseUrl = context.getString(this.addressRes)
+
+    return if (params.isNotEmpty()) {
+        params.entries.fold(baseUrl) { acc, param ->
+            acc.replace("{${param.key}}", param.value)
+        }
+    } else {
+        baseUrl
+    }
+}
 
 fun NavController.deepLinkNavigateTo(
     context: Context,
