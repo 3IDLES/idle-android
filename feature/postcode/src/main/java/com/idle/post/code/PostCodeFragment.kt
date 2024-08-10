@@ -1,7 +1,10 @@
 package com.idle.post.code
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.DialogInterface
+import android.graphics.Point
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -44,15 +47,37 @@ class PostCodeFragment : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        dialog?.window?.setLayout(
-            WindowManager.LayoutParams.MATCH_PARENT,
-            WindowManager.LayoutParams.MATCH_PARENT
-        )
+        resizeDialog(1f, 0.6f)
     }
 
     override fun onDismiss(dialog: DialogInterface) {
         onDismissCallback?.invoke()
         super.onDismiss(dialog)
+    }
+
+    private fun resizeDialog(width: Float, height: Float) {
+        val windowManager =
+            requireContext().getSystemService(Context.WINDOW_SERVICE) as WindowManager
+
+        if (Build.VERSION.SDK_INT < 30) {
+            val display = windowManager.defaultDisplay
+            val size = Point()
+            display.getSize(size)
+
+            val window = this.dialog?.window
+
+            val x = (size.x * width).toInt()
+            val y = (size.y * height).toInt()
+            window?.setLayout(x, y)
+        } else {
+            val rect = windowManager.currentWindowMetrics.bounds
+
+            val window = this.dialog?.window
+
+            val x = (rect.width() * width).toInt()
+            val y = (rect.height() * height).toInt()
+            window?.setLayout(x, y)
+        }
     }
 
     override fun onDestroyView() {
