@@ -86,7 +86,7 @@ internal fun AuthScreen(
             Spacer(modifier = Modifier.weight(3f))
 
             Text(
-                text = "어플 소개 한 줄 정도\n그리고 어플 이름",
+                text = stringResource(id = string.auth_title),
                 style = CareTheme.typography.heading1,
                 color = CareTheme.colors.gray900,
             )
