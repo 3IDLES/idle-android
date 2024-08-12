@@ -30,6 +30,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.idle.analytics.AnalyticsHelper
 import com.idle.binding.DeepLinkDestination.CenterSignIn
 import com.idle.binding.DeepLinkDestination.CenterSignUp
 import com.idle.binding.DeepLinkDestination.WorkerSignUp
@@ -42,6 +43,7 @@ import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.designsystem.compose.foundation.PretendardMedium
 import com.idle.domain.model.auth.UserRole
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 internal class AuthFragment : BaseComposeFragment() {
