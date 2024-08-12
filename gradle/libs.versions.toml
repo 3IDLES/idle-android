@@ -30,6 +30,10 @@ androidxComposeMaterial = "1.6.8"
 # https://developer.android.com/jetpack/androidx/releases/compose-material3
 androidxComposeMaterial3 = "1.2.1"
 
+## Amplitude
+# https://amplitude.com/docs/sdks/analytics/android
+amplitudeAnalytics = "1.16.8"
+
 ## Material
 material = "1.12.0"
 
@@ -86,8 +90,6 @@ coil = "2.7.0"
 
 # https://navermaps.github.io/android-map-sdk/guide-ko/1.html
 naverMap = "3.18.0"
-legacySupportV4 = "1.0.0"
-lifecycleLivedataKtx = "2.8.3"
 
 [libraries]
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
@@ -129,6 +131,8 @@ retrofit-core = { group = "com.squareup.retrofit2", name = "retrofit", version.r
 retrofit-kotlin-serialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "retrofit" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 
+amplitude-analytics = { module = "com.amplitude:analytics-android", version.ref = "amplitudeAnalytics" }
+
 androidx-runner = { group = "androidx.test", name = "runner", version.ref = "androidxTestRunner" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidxTestExt" }
 junit4 = { group = "junit", name = "junit", version.ref = "junit4" }
@@ -148,8 +152,6 @@ firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 
 naver-map = { module = "com.naver.maps:map-sdk", version.ref = "naverMap" }
-androidx-legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacySupportV4" }
-androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtx" }
 
 [bundles]
 
