@@ -1,6 +1,7 @@
 package com.idle.signin.center
 
 import androidx.lifecycle.viewModelScope
+import com.idle.analytics.AnalyticsHelper
 import com.idle.binding.DeepLinkDestination.CenterHome
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent.NavigateTo
@@ -15,6 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CenterSignInViewModel @Inject constructor(
     private val signInCenterUseCase: SignInCenterUseCase,
+    private val analyticsHelper: AnalyticsHelper,
 ) : BaseViewModel() {
     private val _centerId = MutableStateFlow("")
     internal val centerId = _centerId.asStateFlow()
