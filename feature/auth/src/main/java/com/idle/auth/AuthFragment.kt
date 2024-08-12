@@ -23,20 +23,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.idle.binding.DeepLinkDestination.CenterAuth
-import com.idle.binding.DeepLinkDestination.CenterHome
-import com.idle.binding.DeepLinkDestination.WorkerAuth
-import com.idle.binding.DeepLinkDestination.WorkerHome
+import com.idle.binding.DeepLinkDestination.CenterSignIn
+import com.idle.binding.DeepLinkDestination.CenterSignUp
+import com.idle.binding.DeepLinkDestination.WorkerSignUp
 import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designresource.R.string
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.foundation.CareTheme
+import com.idle.designsystem.compose.foundation.PretendardMedium
 import com.idle.domain.model.auth.UserRole
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -51,19 +54,10 @@ internal class AuthFragment : BaseComposeFragment() {
 
             AuthScreen(
                 userRole = userRole,
-                onUserRoleClicked = ::setUserRole,
-                navigateToWorkerAuth = {
-                    handleTokenNavigation(
-                        defaultDestination = NavigateTo(WorkerAuth),
-                        authenticatedDestination = NavigateTo(WorkerHome, R.id.authFragment),
-                    )
-                },
-                navigateToCenterAuth = {
-                    handleTokenNavigation(
-                        defaultDestination = NavigateTo(CenterAuth),
-                        authenticatedDestination = NavigateTo(CenterHome, R.id.authFragment),
-                    )
-                },
+                onUserRoleChanged = ::setUserRole,
+                navigateToCenterSignIn = { fragmentViewModel.baseEvent(NavigateTo(CenterSignIn)) },
+                navigateToCenterSignUp = { fragmentViewModel.baseEvent(NavigateTo(CenterSignUp)) },
+                navigateToWorkerSignUp = { fragmentViewModel.baseEvent(NavigateTo(WorkerSignUp)) },
             )
         }
     }
@@ -73,9 +67,10 @@ internal class AuthFragment : BaseComposeFragment() {
 @Composable
 internal fun AuthScreen(
     userRole: UserRole?,
-    onUserRoleClicked: (UserRole) -> Unit,
-    navigateToWorkerAuth: () -> Unit,
-    navigateToCenterAuth: () -> Unit,
+    onUserRoleChanged: (UserRole) -> Unit,
+    navigateToCenterSignIn: () -> Unit,
+    navigateToCenterSignUp: () -> Unit,
+    navigateToWorkerSignUp: () -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -115,7 +110,7 @@ internal fun AuthScreen(
                     ),
                     modifier = Modifier
                         .wrapContentHeight()
-                        .clickable { onUserRoleClicked(UserRole.CENTER) }
+                        .clickable { onUserRoleChanged(UserRole.CENTER) }
                 ) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -149,7 +144,7 @@ internal fun AuthScreen(
                     ),
                     modifier = Modifier
                         .wrapContentHeight()
-                        .clickable { onUserRoleClicked(UserRole.WORKER) }
+                        .clickable { onUserRoleChanged(UserRole.WORKER) }
                 ) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -175,17 +170,50 @@ internal fun AuthScreen(
         }
 
         Column(
+            verticalArrangement = Arrangement.spacedBy(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 28.dp),
         ) {
-            CareButtonLarge(
-                text = stringResource(id = com.idle.designresource.R.string.start_with_phone),
-                onClick = {},
-                modifier = Modifier.fillMaxWidth(),
-            )
+            when (userRole) {
+                UserRole.WORKER -> {
+                    CareButtonLarge(
+                        text = stringResource(id = string.start_with_phone),
+                        onClick = { navigateToWorkerSignUp() },
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
+
+                UserRole.CENTER -> {
+                    Text(
+                        text = buildAnnotatedString {
+                            withStyle(
+                                style = SpanStyle(
+                                    color = CareTheme.colors.gray300,
+                                    fontFamily = PretendardMedium,
+                                )
+                            ) {
+                                append("이미 아이디가 있으신가요? ")
+                            }
+                            withStyle(style = SpanStyle(color = CareTheme.colors.orange500)) {
+                                append("로그인하기")
+                            }
+                        },
+                        style = CareTheme.typography.subtitle4,
+                        modifier = Modifier.clickable { navigateToCenterSignIn() }
+                    )
+
+                    CareButtonLarge(
+                        text = stringResource(id = string.start_with_signup),
+                        onClick = { navigateToCenterSignUp() },
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
+
+                else -> Unit
+            }
         }
     }
 }
