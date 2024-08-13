@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -34,6 +35,7 @@ import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLine
 import com.idle.designsystem.compose.component.CareCard
+import com.idle.designsystem.compose.component.CareMap
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.component.CareTextFieldLong
@@ -47,33 +49,15 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
     @Composable
     override fun ComposeLayout() {
         fragmentViewModel.apply {
-            val staticMap by staticMap.collectAsStateWithLifecycle()
 
-            WorkerJobPostingDetailScreen(
-                staticMap = staticMap,
-                getStaticMap = ::getStaticMap,
-            )
+            WorkerJobPostingDetailScreen()
         }
     }
 }
 
 @Composable
-internal fun WorkerJobPostingDetailScreen(
-    staticMap: ByteArray?,
-    getStaticMap: (Int, Int) -> Unit,
-) {
+internal fun WorkerJobPostingDetailScreen() {
     val scrollState = rememberScrollState()
-    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
-    val density = LocalDensity.current
-
-    LaunchedEffect(Unit) {
-        with(density) {
-            getStaticMap(
-                (screenWidth - 40.dp).toPx().toInt(),
-                ((screenWidth - 40.dp) / 3 * 2).toPx().toInt()
-            )
-        }
-    }
 
     Scaffold(
         containerColor = CareTheme.colors.white000,
@@ -238,14 +222,13 @@ internal fun WorkerJobPostingDetailScreen(
                     )
                 }
 
-                if (staticMap != null) {
-                    AsyncImage(
-                        model = staticMap,
-                        contentDescription = null,
-                        contentScale = ContentScale.FillWidth,
-                        modifier = Modifier.clip(RoundedCornerShape(8.dp)),
-                    )
-                }
+
+                CareMap(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(224.dp)
+                        .clip(RoundedCornerShape(8.dp)),
+                )
             }
 
             HorizontalDivider(thickness = 8.dp, color = CareTheme.colors.gray050)
