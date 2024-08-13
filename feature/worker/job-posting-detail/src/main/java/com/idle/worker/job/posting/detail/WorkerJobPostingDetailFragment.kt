@@ -1,4 +1,4 @@
-package com.idle.worker.recruitment.detail
+package com.idle.worker.job.posting.detail
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -16,6 +16,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,11 +25,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.AsyncImage
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLine
 import com.idle.designsystem.compose.component.CareCard
-import com.idle.designsystem.compose.component.CareDynamicMap
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.component.CareTextFieldLong
@@ -36,19 +38,22 @@ import com.idle.designsystem.compose.foundation.CareTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-internal class WorkerRecruitmentDetailFragment : BaseComposeFragment() {
-    override val fragmentViewModel: WorkerRecruitmentDetailViewModel by viewModels()
+internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
+    override val fragmentViewModel: WorkerJobPostingDetailViewModel by viewModels()
 
     @Composable
     override fun ComposeLayout() {
         fragmentViewModel.apply {
-            WorkerRecruitmentDetailScreen()
+            val staticMap by staticMap.collectAsStateWithLifecycle()
+
+            WorkerJobPostingDetailScreen(staticMap = staticMap)
         }
     }
 }
 
 @Composable
-internal fun WorkerRecruitmentDetailScreen(
+internal fun WorkerJobPostingDetailScreen(
+    staticMap: ByteArray?,
 ) {
     val scrollState = rememberScrollState()
 
@@ -215,12 +220,16 @@ internal fun WorkerRecruitmentDetailScreen(
                     )
                 }
 
-                CareDynamicMap(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(224.dp)
-                        .clip(RoundedCornerShape(8.dp)),
-                )
+                if (staticMap != null) {
+                    AsyncImage(
+                        model = staticMap,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(224.dp)
+                            .clip(RoundedCornerShape(8.dp)),
+                    )
+                }
             }
 
             HorizontalDivider(thickness = 8.dp, color = CareTheme.colors.gray050)
