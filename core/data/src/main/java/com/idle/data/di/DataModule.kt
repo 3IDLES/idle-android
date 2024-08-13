@@ -4,10 +4,12 @@ import com.idle.data.repository.auth.AuthRepositoryImpl
 import com.idle.data.repository.auth.TokenManagerImpl
 import com.idle.data.repository.auth.TokenRepositoryImpl
 import com.idle.data.repository.jobposting.JobPostingRepositoryImpl
+import com.idle.data.repository.map.MapRepositoryImpl
 import com.idle.data.repository.profile.ProfileRepositoryImpl
 import com.idle.domain.repositorry.auth.AuthRepository
 import com.idle.domain.repositorry.auth.TokenRepository
 import com.idle.domain.repositorry.jobposting.JobPostingRepository
+import com.idle.domain.repositorry.map.MapRepository
 import com.idle.domain.repositorry.profile.ProfileRepository
 import com.idle.network.di.TokenManager
 import dagger.Binds
@@ -42,6 +44,12 @@ abstract class DataModule {
     abstract fun bindsJobPostingRepository(
         jobPostingRepositoryImpl: JobPostingRepositoryImpl,
     ): JobPostingRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindsMapRepository(
+        mapRepositoryImpl: MapRepositoryImpl,
+    ): MapRepository
 
     @Binds
     @Singleton

@@ -6,4 +6,6 @@ android {
     namespace = "com.idle.worker.job.posting.detail"
 }
 
-dependencies {}
+dependencies {
+    implementation(libs.coil.compose)
+}

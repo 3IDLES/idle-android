@@ -7,7 +7,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface NaverApi {
-    @GET("map-static/v2/raster")
+    @GET("/map-static/v2/raster")
     suspend fun getStaticMap(
         @Query("center") center: String,
         @Query("level") level: Int,
@@ -16,6 +16,6 @@ interface NaverApi {
         @Query("dataversion") dataVersion: String
     ): Response<ResponseBody>
 
-    @GET("map-static/v2/lastversion")
-    suspend fun getDataVersion(): Response<DataVersionResponse>
+    @GET("/map-static/v2/lastversion")
+    suspend fun getMapDataVersion(): Response<DataVersionResponse>
 }

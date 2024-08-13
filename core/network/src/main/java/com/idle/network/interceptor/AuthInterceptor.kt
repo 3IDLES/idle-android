@@ -15,7 +15,7 @@ class AuthInterceptor @Inject constructor(
         val requestBuilder = originRequest.newBuilder()
 
         // NAVER API 키를 추가해야 하는 경우
-        if (isAccessTokenUsed(originRequest) && originRequest.url.host == BuildConfig.NAVER_BASE_URL) {
+        if ("https://" + originRequest.url.host == BuildConfig.NAVER_BASE_URL) {
             requestBuilder
                 .addHeader("X-NCP-APIGW-API-KEY-ID", BuildConfig.NAVER_CLIENT_ID)
                 .addHeader("X-NCP-APIGW-API-KEY", BuildConfig.NAVER_CLIENT_SECRET)
