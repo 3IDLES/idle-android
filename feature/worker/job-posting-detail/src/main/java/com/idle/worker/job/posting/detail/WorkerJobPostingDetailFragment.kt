@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -16,10 +15,14 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -46,7 +49,10 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
         fragmentViewModel.apply {
             val staticMap by staticMap.collectAsStateWithLifecycle()
 
-            WorkerJobPostingDetailScreen(staticMap = staticMap)
+            WorkerJobPostingDetailScreen(
+                staticMap = staticMap,
+                getStaticMap = ::getStaticMap,
+            )
         }
     }
 }
@@ -54,8 +60,20 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
 @Composable
 internal fun WorkerJobPostingDetailScreen(
     staticMap: ByteArray?,
+    getStaticMap: (Int, Int) -> Unit,
 ) {
     val scrollState = rememberScrollState()
+    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+    val density = LocalDensity.current
+
+    LaunchedEffect(Unit) {
+        with(density) {
+            getStaticMap(
+                (screenWidth - 40.dp).toPx().toInt(),
+                ((screenWidth - 40.dp) / 3 * 2).toPx().toInt()
+            )
+        }
+    }
 
     Scaffold(
         containerColor = CareTheme.colors.white000,
@@ -224,10 +242,8 @@ internal fun WorkerJobPostingDetailScreen(
                     AsyncImage(
                         model = staticMap,
                         contentDescription = null,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(224.dp)
-                            .clip(RoundedCornerShape(8.dp)),
+                        contentScale = ContentScale.FillWidth,
+                        modifier = Modifier.clip(RoundedCornerShape(8.dp)),
                     )
                 }
             }

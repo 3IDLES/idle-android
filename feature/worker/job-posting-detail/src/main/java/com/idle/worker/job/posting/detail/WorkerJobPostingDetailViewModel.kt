@@ -17,15 +17,14 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
     private val _staticMap = MutableStateFlow<ByteArray?>(null)
     val staticMap = _staticMap.asStateFlow()
 
-    init {
-        viewModelScope.launch {
-            getStaticMapUseCase(
-                center = "129.091799, 35.132965",
-                width = 1024,
-                height = 1024,
-                level = 15,
-            ).onSuccess { _staticMap.value = it }
-                .onFailure { Log.d("test", "지도 정보를 부르는데 실패하였습니다.") }
-        }
+    fun getStaticMap(width: Int, height: Int) = viewModelScope.launch {
+        getStaticMapUseCase(
+            center = "129.091799, 35.132965",
+            width = width,
+            height = height,
+            level = 15,
+        ).onSuccess { _staticMap.value = it }
+            .onFailure { Log.d("test", "지도 정보를 부르는데 실패하였습니다.") }
     }
+
 }
