@@ -19,6 +19,6 @@ dependencies {
     implementation(projects.feature.center.jobPosting)
     implementation(projects.feature.worker.home)
     implementation(projects.feature.worker.profile)
-    implementation(projects.feature.worker.recruitmentDetail)
+    implementation(projects.feature.worker.jobPostingDetail)
     implementation(libs.androidx.navigation.ui)
 }
