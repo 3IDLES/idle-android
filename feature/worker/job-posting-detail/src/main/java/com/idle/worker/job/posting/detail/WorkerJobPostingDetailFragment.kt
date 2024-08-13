@@ -224,6 +224,8 @@ internal fun WorkerJobPostingDetailScreen() {
 
 
                 CareMap(
+                    homeLatLng = 37.5670135 to 126.9883740,
+                    workspaceLatLng = 37.5690135 to 126.9783740,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(224.dp)
