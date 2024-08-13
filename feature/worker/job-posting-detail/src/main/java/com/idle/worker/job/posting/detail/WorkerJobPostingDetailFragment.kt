@@ -2,9 +2,11 @@ package com.idle.worker.job.posting.detail
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -16,22 +18,16 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.AsyncImage
 import com.idle.compose.base.BaseComposeFragment
+import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLine
 import com.idle.designsystem.compose.component.CareCard
@@ -222,15 +218,27 @@ internal fun WorkerJobPostingDetailScreen() {
                     )
                 }
 
-
-                CareMap(
-                    homeLatLng = 37.5670135 to 126.9883740,
-                    workspaceLatLng = 37.5690135 to 126.9783740,
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(224.dp)
                         .clip(RoundedCornerShape(8.dp)),
-                )
+                ) {
+                    CareMap(
+                        homeLatLng = 37.5670135 to 126.9883740,
+                        workspaceLatLng = 37.5690135 to 126.9783740,
+                        modifier = Modifier.fillMaxSize(),
+                    )
+
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_map_expand),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .padding(12.dp)
+                            .clickable { },
+                    )
+                }
             }
 
             HorizontalDivider(thickness = 8.dp, color = CareTheme.colors.gray050)
