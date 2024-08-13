@@ -1,6 +1,8 @@
-package com.idle.network.token
+package com.idle.network.authenticator
 
+import com.idle.domain.model.error.HttpResponseStatus
 import com.idle.network.api.CareApi
+import com.idle.network.di.TokenManager
 import com.idle.network.model.token.RefreshTokenRequest
 import com.idle.network.util.onResponse
 import kotlinx.coroutines.launch
@@ -12,7 +14,7 @@ import okhttp3.Route
 import javax.inject.Inject
 import javax.inject.Provider
 
-class TokenAuthenticator @Inject constructor(
+class CareAuthenticator @Inject constructor(
     private val tokenManager: TokenManager,
     private val careApi: Provider<CareApi>,
 ) : Authenticator {
@@ -28,7 +30,7 @@ class TokenAuthenticator @Inject constructor(
             return null
         }
 
-        if (response.code != 401) {
+        if (response.code != HttpResponseStatus.Unauthorized.code) {
             return null
         }
 

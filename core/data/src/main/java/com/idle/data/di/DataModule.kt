@@ -9,7 +9,7 @@ import com.idle.domain.repositorry.auth.AuthRepository
 import com.idle.domain.repositorry.auth.TokenRepository
 import com.idle.domain.repositorry.jobposting.JobPostingRepository
 import com.idle.domain.repositorry.profile.ProfileRepository
-import com.idle.network.token.TokenManager
+import com.idle.network.di.TokenManager
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

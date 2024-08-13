@@ -3,8 +3,8 @@ package com.idle.network.di
 import com.idle.network.BuildConfig
 import com.idle.network.api.CareApi
 import com.idle.network.api.NaverApi
-import com.idle.network.token.TokenAuthenticator
-import com.idle.network.token.TokenInterceptor
+import com.idle.network.authenticator.CareAuthenticator
+import com.idle.network.interceptor.AuthInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,12 +28,12 @@ object RetrofitModule {
     @Singleton
     @Provides
     fun provideOkHttpClient(
-        tokenInterceptor: TokenInterceptor,
-        tokenAuthenticator: TokenAuthenticator,
+        authInterceptor: AuthInterceptor,
+        careAuthenticator: CareAuthenticator,
     ): OkHttpClient {
         val builder = OkHttpClient.Builder()
-            .addInterceptor(tokenInterceptor)
-            .authenticator(tokenAuthenticator)
+            .addInterceptor(authInterceptor)
+            .authenticator(careAuthenticator)
 
         if (BuildConfig.DEBUG) {
             val loggingInterceptor = HttpLoggingInterceptor()
