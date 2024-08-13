@@ -1,4 +1,4 @@
-package com.idle.network.token
+package com.idle.network.di
 
 interface TokenManager {
     fun getAccessToken(): String

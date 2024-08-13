@@ -1,7 +1,7 @@
 package com.idle.data.repository.auth
 
 import com.idle.datastore.datasource.TokenDataSource
-import com.idle.network.token.TokenManager
+import com.idle.network.di.TokenManager
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
