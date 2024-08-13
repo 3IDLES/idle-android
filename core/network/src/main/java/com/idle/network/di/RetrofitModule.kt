@@ -1,7 +1,8 @@
 package com.idle.network.di
 
 import com.idle.network.BuildConfig
-import com.idle.network.api.CareNetworkApi
+import com.idle.network.api.CareApi
+import com.idle.network.api.NaverApi
 import com.idle.network.token.TokenAuthenticator
 import com.idle.network.token.TokenInterceptor
 import dagger.Module
@@ -45,12 +46,23 @@ object RetrofitModule {
 
     @Singleton
     @Provides
-    fun providesCareNetworkApi(
+    fun providesCareApi(
         okHttpClient: OkHttpClient,
-    ): CareNetworkApi = Retrofit.Builder()
+    ): CareApi = Retrofit.Builder()
         .client(okHttpClient)
         .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
         .baseUrl(BuildConfig.CARE_BASE_URL)
         .build()
-        .create(CareNetworkApi::class.java)
+        .create(CareApi::class.java)
+
+    @Singleton
+    @Provides
+    fun providesNaverApi(
+        okHttpClient: OkHttpClient,
+    ): NaverApi = Retrofit.Builder()
+        .client(okHttpClient)
+        .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
+        .baseUrl(BuildConfig.NAVER_BASE_URL)
+        .build()
+        .create(NaverApi::class.java)
 }

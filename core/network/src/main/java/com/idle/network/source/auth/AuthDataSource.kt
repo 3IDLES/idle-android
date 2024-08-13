@@ -1,6 +1,6 @@
 package com.idle.network.source.auth
 
-import com.idle.network.api.CareNetworkApi
+import com.idle.network.api.CareApi
 import com.idle.network.model.auth.BusinessRegistrationResponse
 import com.idle.network.model.auth.ConfirmAuthCodeRequest
 import com.idle.network.model.auth.SendPhoneRequest
@@ -13,31 +13,31 @@ import com.idle.network.util.onResponse
 import javax.inject.Inject
 
 class AuthDataSource @Inject constructor(
-    private val careNetworkApi: CareNetworkApi
+    private val careApi: CareApi
 ) {
     suspend fun sendPhoneNumber(sendPhoneRequest: SendPhoneRequest): Result<Unit> =
-        careNetworkApi.sendPhoneNumber(sendPhoneRequest).onResponse()
+        careApi.sendPhoneNumber(sendPhoneRequest).onResponse()
 
     suspend fun confirmAuthCode(confirmAuthCodeRequest: ConfirmAuthCodeRequest): Result<Unit> =
-        careNetworkApi.confirmAuthCode(confirmAuthCodeRequest).onResponse()
+        careApi.confirmAuthCode(confirmAuthCodeRequest).onResponse()
 
     suspend fun signUpCenter(signUpCenterRequest: SignUpCenterRequest): Result<Unit> =
-        careNetworkApi.signUpCenter(signUpCenterRequest).onResponse()
+        careApi.signUpCenter(signUpCenterRequest).onResponse()
 
     suspend fun signInCenter(signInCenterRequest: SignInCenterRequest): Result<TokenResponse> =
-        careNetworkApi.signInCenter(signInCenterRequest).onResponse()
+        careApi.signInCenter(signInCenterRequest).onResponse()
 
     suspend fun signUpWorker(signUpWorkerRequest: SignUpWorkerRequest): Result<TokenResponse> =
-        careNetworkApi.signUpWorker(signUpWorkerRequest).onResponse()
+        careApi.signUpWorker(signUpWorkerRequest).onResponse()
 
     suspend fun signInWorker(signInWorkerRequest: SignInWorkerRequest): Result<Unit> =
-        careNetworkApi.signInWorker(signInWorkerRequest).onResponse()
+        careApi.signInWorker(signInWorkerRequest).onResponse()
 
     suspend fun validateIdentifier(identifier: String): Result<Unit> =
-        careNetworkApi.validateIdentifier(identifier).onResponse()
+        careApi.validateIdentifier(identifier).onResponse()
 
     suspend fun validateBusinessRegistrationNumber(
         businessRegistrationNumber: String
     ): Result<BusinessRegistrationResponse> =
-        careNetworkApi.validateBusinessRegistrationNumber(businessRegistrationNumber).onResponse()
+        careApi.validateBusinessRegistrationNumber(businessRegistrationNumber).onResponse()
 }
