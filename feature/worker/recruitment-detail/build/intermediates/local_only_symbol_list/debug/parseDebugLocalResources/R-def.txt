@@ -1,0 +1,5 @@
+R_DEF: Internal format may change without notice
+local
+id nav_worker_recruitment_detail
+id workerRecruitmentDetailFragment
+navigation nav_worker_recruitment_detail
