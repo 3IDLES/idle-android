@@ -1,10 +1,11 @@
 package com.idle.domain.repositorry.map
 
+import com.idle.domain.model.map.MapMarker
+
 interface MapRepository {
     suspend fun getStaticMap(
-        center: String,
-        level: Int,
         width: Int,
         height: Int,
+        markers: List<MapMarker>
     ): Result<ByteArray>
 }

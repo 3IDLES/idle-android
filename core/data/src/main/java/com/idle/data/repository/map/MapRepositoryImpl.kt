@@ -2,6 +2,7 @@ package com.idle.data.repository.map
 
 import android.util.Log
 import com.idle.datastore.datasource.MapDataVersionDataSource
+import com.idle.domain.model.map.MapMarker
 import com.idle.domain.repositorry.map.MapRepository
 import com.idle.network.source.map.MapDataSource
 import kotlinx.coroutines.flow.first
@@ -12,15 +13,13 @@ class MapRepositoryImpl @Inject constructor(
     private val mapDataVersionDataSource: MapDataVersionDataSource,
 ) : MapRepository {
     override suspend fun getStaticMap(
-        center: String,
-        level: Int,
         width: Int,
         height: Int,
+        markers: List<MapMarker>,
     ): Result<ByteArray> = mapDataSource.getStaticMap(
-        center = center,
-        level = level,
         width = width,
         height = height,
+        markers = markers,
         dataVersion = getDataVersion(),
     )
 

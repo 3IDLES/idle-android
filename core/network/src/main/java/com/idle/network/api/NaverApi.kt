@@ -9,10 +9,9 @@ import retrofit2.http.Query
 interface NaverApi {
     @GET("/map-static/v2/raster")
     suspend fun getStaticMap(
-        @Query("center") center: String,
-        @Query("level") level: Int,
         @Query("w") width: Int,
         @Query("h") height: Int,
+        @Query("markers") markers: List<String>,
         @Query("dataversion") dataVersion: String
     ): Response<ResponseBody>
 

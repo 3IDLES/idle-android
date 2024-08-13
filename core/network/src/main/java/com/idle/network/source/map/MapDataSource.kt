@@ -1,5 +1,6 @@
 package com.idle.network.source.map
 
+import com.idle.domain.model.map.MapMarker
 import com.idle.network.api.NaverApi
 import com.idle.network.model.map.DataVersionResponse
 import com.idle.network.util.onResponse
@@ -9,16 +10,14 @@ class MapDataSource @Inject constructor(
     private val naverApi: NaverApi,
 ) {
     suspend fun getStaticMap(
-        center: String,
-        level: Int,
         width: Int,
         height: Int,
+        markers: List<MapMarker>,
         dataVersion: String
     ): Result<ByteArray> = naverApi.getStaticMap(
-        center = center,
-        level = level,
         width = width,
         height = height,
+        markers = markers.map { it.toString() },
         dataVersion = dataVersion,
     )
         .onResponse()
