@@ -18,10 +18,20 @@ object DataStoreModule {
     private const val TOKEN_DATASTORE_NAME = "TOKENS_PREFERENCES"
     private val Context.tokenDataStore by preferencesDataStore(name = TOKEN_DATASTORE_NAME)
 
+    private const val MAP_DATA_VERSION_DATASTORE_NAME = "MAP_DATA_VERSION_PREFERENCES"
+    private val Context.mapDataVersionDataStore by preferencesDataStore(name = MAP_DATA_VERSION_DATASTORE_NAME)
+
     @Provides
     @Singleton
     @Named("token")
     fun provideTokenDataStore(
         @ApplicationContext context: Context
     ): DataStore<Preferences> = context.tokenDataStore
+
+    @Provides
+    @Singleton
+    @Named("mapDataVersion")
+    fun provideMapDataVersionDataStore(
+        @ApplicationContext context: Context
+    ): DataStore<Preferences> = context.mapDataVersionDataStore
 }
