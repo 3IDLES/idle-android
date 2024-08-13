@@ -3,6 +3,7 @@ package com.idle.worker.job.posting.detail
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
+import com.idle.domain.model.map.MapMarker
 import com.idle.domain.usecase.map.GetStaticMapUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,10 +20,18 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
 
     fun getStaticMap(width: Int, height: Int) = viewModelScope.launch {
         getStaticMapUseCase(
-            center = "129.091799, 35.132965",
             width = width,
             height = height,
-            level = 15,
+            markers = listOf(
+                MapMarker(
+                    icon = "https://idle-bucket.s3.ap-northeast-2.amazonaws.com/assets/Pin_Home.svg",
+                    pos = "128.091799 35.132965",
+                ),
+                MapMarker(
+                    icon = "https://idle-bucket.s3.ap-northeast-2.amazonaws.com/assets/Pin_Workplace.svg",
+                    pos = "128.092849 35.132968",
+                )
+            )
         ).onSuccess { _staticMap.value = it }
             .onFailure { Log.d("test", "지도 정보를 부르는데 실패하였습니다.") }
     }
