@@ -18,6 +18,8 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,10 +34,12 @@ import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLine
 import com.idle.designsystem.compose.component.CareCard
 import com.idle.designsystem.compose.component.CareMap
+import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.component.CareTextFieldLong
 import com.idle.designsystem.compose.foundation.CareTheme
+import com.idle.worker.job.posting.detail.map.PlaceDetailScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -45,16 +49,34 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
     @Composable
     override fun ComposeLayout() {
         fragmentViewModel.apply {
+            val (showPlaceDetail, setShowPlaceDetail) = rememberSaveable { mutableStateOf(false) }
 
-            WorkerJobPostingDetailScreen()
+            CareStateAnimator(
+                targetState = showPlaceDetail,
+                transitionCondition = showPlaceDetail,
+                modifier = Modifier.fillMaxSize(),
+            ) { state ->
+                if (state) {
+                    PlaceDetailScreen(
+                        callback = { setShowPlaceDetail(false) },
+                        homeLatLng = 37.5670135 to 126.9883740,
+                        workspaceLatLng = 37.5690135 to 126.9783740,
+                    )
+                } else {
+                    WorkerJobPostingDetailScreen(
+                        showPlaceDetail = setShowPlaceDetail
+                    )
+                }
+            }
         }
     }
 }
 
 @Composable
-internal fun WorkerJobPostingDetailScreen() {
+internal fun WorkerJobPostingDetailScreen(
+    showPlaceDetail: (Boolean) -> Unit,
+) {
     val scrollState = rememberScrollState()
-
     Scaffold(
         containerColor = CareTheme.colors.white000,
         topBar = {
@@ -219,7 +241,7 @@ internal fun WorkerJobPostingDetailScreen() {
                         modifier = Modifier
                             .align(Alignment.BottomEnd)
                             .padding(12.dp)
-                            .clickable { },
+                            .clickable { showPlaceDetail(true) },
                     )
                 }
             }
