@@ -122,7 +122,7 @@ internal fun CenterRegisterScreen(
                     totalSteps = RegistrationStep.entries.size,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 8.dp),
+                        .padding(start = 8.dp, top = 8.dp, bottom = 8.dp),
                 )
             }
         },
