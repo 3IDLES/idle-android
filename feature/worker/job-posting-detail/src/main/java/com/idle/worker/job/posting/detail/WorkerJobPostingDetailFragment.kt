@@ -110,29 +110,14 @@ internal fun WorkerJobPostingDetailScreen() {
                     )
                 }
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 2.dp),
-                ) {
-                    Text(
-                        text = "서울특별시 강남구 신사동",
-                        style = CareTheme.typography.subtitle2,
-                        color = CareTheme.colors.gray900,
-                        overflow = TextOverflow.Clip,
-                        maxLines = 1,
-                        modifier = Modifier.weight(1f),
-                    )
-
-                    Text(
-                        text = "도보 15분~20분",
-                        style = CareTheme.typography.body3,
-                        color = CareTheme.colors.gray500,
-                        modifier = Modifier.padding(end = 8.dp),
-                    )
-                }
+                Text(
+                    text = "서울특별시 강남구 신사동",
+                    style = CareTheme.typography.subtitle1,
+                    color = CareTheme.colors.gray900,
+                    overflow = TextOverflow.Clip,
+                    maxLines = 1,
+                    modifier = Modifier.padding(bottom = 2.dp),
+                )
 
                 Text(
                     text = "1등급 78세 여성",
@@ -154,16 +139,14 @@ internal fun WorkerJobPostingDetailScreen() {
 
                     Text(
                         text = "월, 화, 수, 목, 금 | 09:00 - 15:00",
-                        style = CareTheme.typography.body3,
+                        style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray500,
                     )
                 }
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 8.dp),
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
                     Image(
                         painter = painterResource(R.drawable.ic_money),
@@ -172,7 +155,7 @@ internal fun WorkerJobPostingDetailScreen() {
 
                     Text(
                         text = "시급 12,500 원",
-                        style = CareTheme.typography.body3,
+                        style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray500,
                     )
                 }
@@ -189,7 +172,7 @@ internal fun WorkerJobPostingDetailScreen() {
                     text = stringResource(id = R.string.work_address),
                     style = CareTheme.typography.subtitle1,
                     color = CareTheme.colors.gray900,
-                    modifier = Modifier.padding(bottom = 12.dp),
+                    modifier = Modifier.padding(bottom = 20.dp),
                 )
 
                 Text(
@@ -204,7 +187,7 @@ internal fun WorkerJobPostingDetailScreen() {
                     horizontalArrangement = Arrangement.spacedBy(6.dp),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = 16.dp),
+                        .padding(bottom = 20.dp),
                 ) {
                     Image(
                         painter = painterResource(R.drawable.ic_walk),
