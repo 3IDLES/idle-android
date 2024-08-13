@@ -27,6 +27,7 @@ import com.naver.maps.map.overlay.PathOverlay
 
 @Composable
 fun CareMap(
+    modifier: Modifier = Modifier,
     workspaceLatLng: Pair<Double, Double>? = null,
     homeLatLng: Pair<Double, Double>? = null,
     isLocationButtonEnabled: Boolean = false,
@@ -36,7 +37,6 @@ fun CareMap(
     isTiltGesturesEnabled: Boolean = false,
     isRotateGesturesEnabled: Boolean = false,
     pathColor: Color = CareTheme.colors.orange400,
-    modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
