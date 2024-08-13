@@ -1,5 +1,11 @@
 package com.idle.auth
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -30,7 +36,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.idle.analytics.AnalyticsHelper
 import com.idle.binding.DeepLinkDestination.CenterSignIn
 import com.idle.binding.DeepLinkDestination.CenterSignUp
 import com.idle.binding.DeepLinkDestination.WorkerSignUp
@@ -43,7 +48,6 @@ import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.designsystem.compose.foundation.PretendardMedium
 import com.idle.domain.model.auth.UserRole
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 internal class AuthFragment : BaseComposeFragment() {
@@ -102,8 +106,10 @@ internal fun AuthScreen(
                 Card(
                     shape = RoundedCornerShape(8.dp),
                     colors = CardDefaults.cardColors().copy(
-                        containerColor = if (userRole == UserRole.CENTER) CareTheme.colors.orange100
-                        else CareTheme.colors.white000,
+                        containerColor = animateColorAsState(
+                            if (userRole == UserRole.CENTER) CareTheme.colors.orange100
+                            else CareTheme.colors.white000
+                        ).value
                     ),
                     border = BorderStroke(
                         width = 1.dp,
@@ -136,8 +142,10 @@ internal fun AuthScreen(
                 Card(
                     shape = RoundedCornerShape(8.dp),
                     colors = CardDefaults.cardColors().copy(
-                        containerColor = if (userRole == UserRole.WORKER) CareTheme.colors.orange100
-                        else CareTheme.colors.white000,
+                        containerColor = animateColorAsState(
+                            if (userRole == UserRole.WORKER) CareTheme.colors.orange100
+                            else CareTheme.colors.white000
+                        ).value
                     ),
                     border = BorderStroke(
                         width = 1.dp,
@@ -171,24 +179,38 @@ internal fun AuthScreen(
             Spacer(modifier = Modifier.weight(6f))
         }
 
-        Column(
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 28.dp),
         ) {
-            when (userRole) {
-                UserRole.WORKER -> {
-                    CareButtonLarge(
-                        text = stringResource(id = string.start_with_phone),
-                        onClick = { navigateToWorkerSignUp() },
-                        modifier = Modifier.fillMaxWidth(),
-                    )
-                }
+            AnimatedVisibility(
+                visible = userRole == UserRole.WORKER,
+                enter = fadeIn(),
+                exit = fadeOut(),
+                modifier = Modifier.align(Alignment.BottomCenter),
+            ) {
+                CareButtonLarge(
+                    text = stringResource(id = string.start_with_phone),
+                    onClick = { navigateToWorkerSignUp() },
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
 
-                UserRole.CENTER -> {
+            AnimatedVisibility(
+                visible = userRole == UserRole.CENTER,
+                enter = fadeIn(),
+                exit = fadeOut(),
+                modifier = Modifier.align(Alignment.BottomCenter),
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.BottomCenter)
+                ) {
                     Text(
                         text = buildAnnotatedString {
                             withStyle(
@@ -213,8 +235,6 @@ internal fun AuthScreen(
                         modifier = Modifier.fillMaxWidth(),
                     )
                 }
-
-                else -> Unit
             }
         }
     }
