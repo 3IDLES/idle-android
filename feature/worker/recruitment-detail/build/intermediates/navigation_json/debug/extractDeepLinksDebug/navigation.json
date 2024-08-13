@@ -1,0 +1,32 @@
+[
+  {
+    "name": "nav_worker_recruitment_detail",
+    "navigationXmlIds": [],
+    "deepLinks": [
+      {
+        "schemes": [
+          "http",
+          "https"
+        ],
+        "host": "string",
+        "port": -1,
+        "path": "/worker_recruitment_detail_deeplink_url",
+        "sourceFilePosition": {
+          "mSourceFile": {
+            "mDescription": "nav_worker_recruitment_detail.xml"
+          },
+          "mSourcePosition": {
+            "mStartLine": 10,
+            "mStartColumn": 8,
+            "mStartOffset": 510,
+            "mEndLine": 10,
+            "mEndColumn": 76,
+            "mEndOffset": 578
+          }
+        },
+        "isAutoVerify": false,
+        "action": "android.intent.action.VIEW"
+      }
+    ]
+  }
+]

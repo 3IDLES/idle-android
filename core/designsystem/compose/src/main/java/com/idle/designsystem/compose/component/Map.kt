@@ -14,13 +14,28 @@ import com.naver.maps.map.MapView
 
 
 @Composable
-fun CareDynamicMap(modifier: Modifier = Modifier) {
+fun CareMap(
+    isLocationButtonEnabled: Boolean = false,
+    isScaleBarEnabled: Boolean = false,
+    isScrollGesturesEnabled: Boolean = false,
+    isZoomControlEnabled: Boolean = false,
+    isTiltGesturesEnabled: Boolean = false,
+    isRotateGesturesEnabled: Boolean = false,
+    modifier: Modifier = Modifier
+) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
     val mapView = MapView(context).apply {
         getMapAsync { naverMap ->
-
+            naverMap.uiSettings.apply {
+                this.isLocationButtonEnabled = isLocationButtonEnabled
+                this.isScaleBarEnabled = isScaleBarEnabled
+                this.isScrollGesturesEnabled = isScrollGesturesEnabled
+                this.isZoomControlEnabled = isZoomControlEnabled
+                this.isTiltGesturesEnabled = isTiltGesturesEnabled
+                this.isRotateGesturesEnabled = isRotateGesturesEnabled
+            }
         }
     }
 

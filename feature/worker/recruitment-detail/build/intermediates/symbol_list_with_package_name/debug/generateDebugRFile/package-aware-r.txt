@@ -1,0 +1,4 @@
+com.idle.worker.recruitment.detail
+id nav_worker_recruitment_detail
+id workerRecruitmentDetailFragment
+navigation nav_worker_recruitment_detail
