@@ -28,7 +28,7 @@ import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLine
 import com.idle.designsystem.compose.component.CareCard
-import com.idle.designsystem.compose.component.CareMap
+import com.idle.designsystem.compose.component.CareDynamicMap
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.component.CareTextFieldLong
@@ -215,7 +215,7 @@ internal fun WorkerRecruitmentDetailScreen(
                     )
                 }
 
-                CareMap(
+                CareDynamicMap(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(224.dp)

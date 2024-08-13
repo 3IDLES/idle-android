@@ -21,6 +21,21 @@ android {
             "CARE_BASE_URL",
             "\"${properties["CARE_BASE_URL"]}\"",
         )
+        buildConfigField(
+            "String",
+            "NAVER_BASE_URL",
+            "\"${properties["NAVER_BASE_URL"]}\"",
+        )
+        buildConfigField(
+            "String",
+            "NAVER_CLIENT_ID",
+            "\"${properties["NAVER_CLIENT_ID"]}\"",
+        )
+        buildConfigField(
+            "String",
+            "NAVER_CLIENT_SECRET",
+            "\"${properties["NAVER_CLIENT_SECRET"]}\"",
+        )
     }
 }
 

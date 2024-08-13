@@ -28,7 +28,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 import retrofit2.http.Url
 
-interface CareNetworkApi {
+interface CareApi {
     @POST("/api/v1/auth/center/refresh")
     suspend fun refreshToken(@Body refreshTokenRequest: RefreshTokenRequest): Response<TokenResponse>
 
