@@ -1,6 +1,7 @@
 plugins {
     id("care.android.feature-compose")
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.androidx.navigation.safeargs)
 }
 
 android {
