@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/row_CL"
     android:layout_width="match_parent"
-    android:layout_height="49dp">
+    android:layout_height="50dp">
 
     <TextView
         android:id="@+id/row_title_TV"
