@@ -84,7 +84,9 @@ class CenterSignUpViewModel @Inject constructor(
     }
 
     internal fun setCenterPhoneNumber(phoneNumber: String) {
-        _centerPhoneNumber.value = phoneNumber
+        if (phoneNumber.length <= 11) {
+            _centerPhoneNumber.value = phoneNumber
+        }
     }
 
     internal fun setCenterAuthCode(authCode: String) {

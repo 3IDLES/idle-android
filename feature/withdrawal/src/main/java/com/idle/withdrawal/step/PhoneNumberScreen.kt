@@ -59,8 +59,7 @@ internal fun PhoneNumberScreen(
         modifier = Modifier.fillMaxSize(),
     ) {
         Text(
-            text = "마지막으로\n" +
-                    "전화번호를 인증해주세요.",
+            text = stringResource(id = R.string.withdrawal_phone_number_verification_title),
             style = CareTheme.typography.heading2,
             color = CareTheme.colors.gray900,
             modifier = Modifier.padding(bottom = 36.dp),
@@ -81,8 +80,10 @@ internal fun PhoneNumberScreen(
                     value = phoneNumber,
                     hint = stringResource(id = R.string.phone_number_hint),
                     onValueChanged = {
-                        onPhoneNumberChanged(it)
-                        phoneNumber = it
+                        if (it.length <= 11) {
+                            onPhoneNumberChanged(it)
+                            phoneNumber = it
+                        }
                     },
                     readOnly = (timerMinute != "" && timerSeconds != ""),
                     onDone = { if (phoneNumber.length == 11) sendPhoneNumber() },

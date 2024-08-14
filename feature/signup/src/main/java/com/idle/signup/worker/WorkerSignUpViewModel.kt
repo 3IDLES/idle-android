@@ -73,7 +73,9 @@ class WorkerSignUpViewModel @Inject constructor(
     }
 
     internal fun setWorkerPhoneNumber(phoneNumber: String) {
-        _workerPhoneNumber.value = phoneNumber
+        if (phoneNumber.length <= 11) {
+            _workerPhoneNumber.value = phoneNumber
+        }
     }
 
     internal fun setWorkerAuthCode(certificateNumber: String) {
