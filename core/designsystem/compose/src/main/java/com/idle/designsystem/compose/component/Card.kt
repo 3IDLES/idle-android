@@ -51,7 +51,10 @@ fun CareCard(
                 .padding(horizontal = 20.dp, vertical = 16.dp)
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
                     titleLeftComponent()
 
                     Text(
@@ -61,7 +64,10 @@ fun CareCard(
                     )
                 }
 
-                Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(2.dp)
+                ) {
                     descriptionLeftComponent()
 
                     Text(
@@ -113,7 +119,12 @@ private fun PreviewCareCenterInfoCardFlip() {
     CareCenterInfoCardPreviewContent()
 }
 
-@Preview(name = "CareCenterInfoCard_Fold", showBackground = true, device = Devices.FOLDABLE, group = "Fold")
+@Preview(
+    name = "CareCenterInfoCard_Fold",
+    showBackground = true,
+    device = Devices.FOLDABLE,
+    group = "Fold"
+)
 @Composable
 private fun PreviewCareCenterInfoCardFoldable() {
     CareCenterInfoCardPreviewContent()
@@ -149,7 +160,12 @@ private fun PreviewCareContactCardFlip() {
     CareContactCardPreviewContent()
 }
 
-@Preview(name = "CareContactCard_Fold", showBackground = true, device = Devices.FOLDABLE, group = "Fold")
+@Preview(
+    name = "CareContactCard_Fold",
+    showBackground = true,
+    device = Devices.FOLDABLE,
+    group = "Fold"
+)
 @Composable
 private fun PreviewCareContactCardFoldable() {
     CareContactCardPreviewContent()
