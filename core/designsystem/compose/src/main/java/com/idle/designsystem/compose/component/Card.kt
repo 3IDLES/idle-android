@@ -25,9 +25,12 @@ import com.idle.designsystem.compose.foundation.CareTheme
 
 @Composable
 fun CareCard(
-    name: String,
-    address: String,
+    title: String,
+    description: String,
     modifier: Modifier = Modifier,
+    titleLeftComponent: @Composable () -> Unit = {},
+    descriptionLeftComponent: @Composable () -> Unit = {},
+    showRightArrow: Boolean = true,
     onClick: () -> Unit = {},
 ) {
     Card(
@@ -48,20 +51,21 @@ fun CareCard(
                 .padding(horizontal = 20.dp, vertical = 16.dp)
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(
-                    text = name,
-                    style = CareTheme.typography.subtitle3,
-                    color = CareTheme.colors.gray900,
-                )
-
-                Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
-                    Image(
-                        painter = painterResource(com.idle.designresource.R.drawable.ic_address_pin),
-                        contentDescription = null,
-                    )
+                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    titleLeftComponent()
 
                     Text(
-                        text = address,
+                        text = title,
+                        style = CareTheme.typography.subtitle3,
+                        color = CareTheme.colors.gray900,
+                    )
+                }
+
+                Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+                    descriptionLeftComponent()
+
+                    Text(
+                        text = description,
                         style = CareTheme.typography.body3,
                         color = CareTheme.colors.gray500,
                     )
@@ -70,46 +74,83 @@ fun CareCard(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            Image(
-                painter = painterResource(com.idle.designresource.R.drawable.ic_arrow_right),
-                contentDescription = null,
-            )
+            if (showRightArrow) {
+                Image(
+                    painter = painterResource(com.idle.designresource.R.drawable.ic_arrow_right),
+                    contentDescription = null,
+                )
+            }
         }
     }
 }
 
-@Preview(name = "CareCard_Default", showBackground = true, group = "Default")
 @Composable
-private fun PreviewCareCardDefault() {
+private fun CareCenterInfoCardPreviewContent(modifier: Modifier = Modifier) {
     CareCard(
-        name = "John Doe",
-        address = "1234 Elm Street",
-        modifier = Modifier
+        title = "John Doe",
+        description = "1234 Elm Street",
+        descriptionLeftComponent = {
+            Image(
+                painter = painterResource(com.idle.designresource.R.drawable.ic_address_pin),
+                contentDescription = null,
+            )
+        },
+        modifier = modifier
             .fillMaxWidth()
             .padding(16.dp)
     )
 }
 
-@Preview(name = "CareCard_Flip", showBackground = true, device = FLIP, group = "Flip")
+@Preview(name = "CareCenterInfoCard_Default", showBackground = true, group = "Default")
 @Composable
-private fun PreviewCareCardFlip() {
+private fun PreviewCareCenterInfoCardDefault() {
+    CareCenterInfoCardPreviewContent()
+}
+
+@Preview(name = "CareCenterInfoCard_Flip", showBackground = true, device = FLIP, group = "Flip")
+@Composable
+private fun PreviewCareCenterInfoCardFlip() {
+    CareCenterInfoCardPreviewContent()
+}
+
+@Preview(name = "CareCenterInfoCard_Fold", showBackground = true, device = Devices.FOLDABLE, group = "Fold")
+@Composable
+private fun PreviewCareCenterInfoCardFoldable() {
+    CareCenterInfoCardPreviewContent()
+}
+
+@Composable
+private fun CareContactCardPreviewContent(modifier: Modifier = Modifier) {
     CareCard(
-        name = "John Doe",
-        address = "1234 Elm Street",
-        modifier = Modifier
+        title = "전화로 문의하기",
+        description = "네 얼간이 요양보호센터 | 010-1234-5678",
+        titleLeftComponent = {
+            Image(
+                painter = painterResource(com.idle.designresource.R.drawable.ic_call),
+                contentDescription = null,
+            )
+        },
+        modifier = modifier
             .fillMaxWidth()
             .padding(16.dp)
     )
 }
 
-@Preview(name = "CareCard_Fold", showBackground = true, device = Devices.FOLDABLE, group = "Fold")
+
+@Preview(name = "CareContactCard_Default", showBackground = true, group = "Default")
 @Composable
-private fun PreviewCareCardFoldable() {
-    CareCard(
-        name = "John Doe",
-        address = "1234 Elm Street",
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-    )
+private fun PreviewCareContactCardDefault() {
+    CareContactCardPreviewContent()
+}
+
+@Preview(name = "CareContactCard_Flip", showBackground = true, device = FLIP, group = "Flip")
+@Composable
+private fun PreviewCareContactCardFlip() {
+    CareContactCardPreviewContent()
+}
+
+@Preview(name = "CareContactCard_Fold", showBackground = true, device = Devices.FOLDABLE, group = "Fold")
+@Composable
+private fun PreviewCareContactCardFoldable() {
+    CareContactCardPreviewContent()
 }

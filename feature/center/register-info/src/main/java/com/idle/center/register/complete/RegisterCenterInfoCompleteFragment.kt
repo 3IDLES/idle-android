@@ -85,8 +85,8 @@ internal fun CenterRegisterCompleteScreen(
         )
 
         CareCard(
-            name = centerProfile.centerName,
-            address = centerProfile.roadNameAddress,
+            title = centerProfile.centerName,
+            description = centerProfile.roadNameAddress,
             onClick = { navigateToCenterProfile() },
             modifier = Modifier.fillMaxWidth(),
         )
