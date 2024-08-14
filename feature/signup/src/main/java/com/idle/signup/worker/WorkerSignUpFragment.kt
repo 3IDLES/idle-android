@@ -21,6 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
+import com.idle.binding.DeepLinkDestination.Auth
+import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
@@ -94,6 +96,14 @@ internal class WorkerSignUpFragment : BaseComposeFragment() {
                 sendPhoneNumber = ::sendPhoneNumber,
                 confirmAuthCode = ::confirmAuthCode,
                 signUpWorker = ::signUpWorker,
+                navigateToAuth = {
+                    baseEvent(
+                        NavigateTo(
+                            destination = Auth,
+                            popUpTo = com.idle.signup.R.id.workerSignUpFragment,
+                        )
+                    )
+                }
             )
         }
     }
@@ -124,6 +134,7 @@ internal fun WorkerSignUpScreen(
     sendPhoneNumber: () -> Unit,
     confirmAuthCode: () -> Unit,
     signUpWorker: () -> Unit,
+    navigateToAuth: () -> Unit,
 ) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val focusManager = LocalFocusManager.current
@@ -176,6 +187,7 @@ internal fun WorkerSignUpScreen(
                         sendPhoneNumber = sendPhoneNumber,
                         confirmAuthCode = confirmAuthCode,
                         setAddressProcessed = setAddressProcessed,
+                        navigateToAuth = navigateToAuth,
                     )
 
                     WorkerSignUpStep.INFO -> WorkerInformationScreen(

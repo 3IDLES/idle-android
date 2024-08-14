@@ -1,5 +1,6 @@
 package com.idle.signin.center
 
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -25,6 +26,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.idle.binding.DeepLinkDestination.Auth
 import com.idle.binding.DeepLinkDestination.NewPassword
 import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.compose.addFocusCleaner
@@ -47,13 +49,20 @@ internal class CenterSignInFragment : BaseComposeFragment() {
         fragmentViewModel.apply {
             val centerId by centerId.collectAsStateWithLifecycle()
             val centerPassword by centerPassword.collectAsStateWithLifecycle()
-
             CenterSignInScreen(
                 centerId = centerId,
                 centerPassword = centerPassword,
                 onCenterIdChanged = ::setCenterId,
                 onCenterPasswordChanged = ::setCenterPassword,
                 signInCenter = ::signInCenter,
+                navigateToAuth = {
+                    baseEvent(
+                        NavigateTo(
+                            destination = Auth,
+                            popUpTo = com.idle.signin.R.id.centerSignInFragment
+                        )
+                    )
+                },
                 navigateToNewPassword = { baseEvent(NavigateTo(NewPassword)) }
             )
         }
@@ -68,17 +77,19 @@ internal fun CenterSignInScreen(
     onCenterIdChanged: (String) -> Unit,
     onCenterPasswordChanged: (String) -> Unit,
     signInCenter: () -> Unit,
+    navigateToAuth: () -> Unit = {},
     navigateToNewPassword: () -> Unit = {},
 ) {
-    val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
+
+    BackHandler { navigateToAuth() }
 
     Scaffold(
         topBar = {
             CareSubtitleTopBar(
                 title = stringResource(id = R.string.login),
-                onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
+                onNavigationClick = { navigateToAuth() },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 12.dp, top = 48.dp, end = 20.dp, bottom = 12.dp),

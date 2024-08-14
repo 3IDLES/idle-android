@@ -20,6 +20,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.idle.binding.DeepLinkDestination.Auth
+import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
@@ -82,6 +84,14 @@ internal class CenterSignUpFragment : BaseComposeFragment() {
                 signUpCenter = ::signUpCenter,
                 validateIdentifier = ::validateIdentifier,
                 validateBusinessRegistrationNumber = ::validateBusinessRegistrationNumber,
+                navigateToAuth = {
+                    baseEvent(
+                        NavigateTo(
+                            destination = Auth,
+                            popUpTo = com.idle.signup.R.id.centerSignUpFragment,
+                        )
+                    )
+                }
             )
         }
     }
@@ -116,6 +126,7 @@ internal fun CenterSignUpScreen(
     signUpCenter: () -> Unit,
     validateIdentifier: () -> Unit,
     validateBusinessRegistrationNumber: () -> Unit,
+    navigateToAuth: () -> Unit,
 ) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val focusManager = LocalFocusManager.current
@@ -163,6 +174,7 @@ internal fun CenterSignUpScreen(
                             centerName = centerName,
                             onCenterNameChanged = onCenterNameChanged,
                             setSignUpStep = setSignUpStep,
+                            navigateToAuth = navigateToAuth,
                         )
 
                     CenterSignUpStep.PHONE_NUMBER ->

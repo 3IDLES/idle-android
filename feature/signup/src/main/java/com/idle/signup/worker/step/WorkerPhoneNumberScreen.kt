@@ -1,5 +1,6 @@
 package com.idle.signup.worker.step
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,6 +18,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.idle.binding.base.CareBaseEvent
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareButtonSmall
@@ -40,6 +42,7 @@ internal fun WorkerPhoneNumberScreen(
     sendPhoneNumber: () -> Unit,
     confirmAuthCode: () -> Unit,
     setAddressProcessed: (Boolean) -> Unit,
+    navigateToAuth: () -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
 
@@ -53,6 +56,8 @@ internal fun WorkerPhoneNumberScreen(
             setAddressProcessed(true)
         }
     }
+
+    BackHandler { navigateToAuth() }
 
     Column(
         horizontalAlignment = Alignment.Start,

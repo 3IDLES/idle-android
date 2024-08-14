@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setDestinationListener() {
-        navController.addOnDestinationChangedListener { _, destination, _ ->
+        navController.addOnDestinationChangedListener { _, destination, arguments ->
             binding.apply {
                 val navMenuType = if (destination.id in centerBottomNavDestinationIds) {
                     NavigationMenuType.Center

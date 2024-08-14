@@ -1,5 +1,6 @@
 package com.idle.signup.center.step
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -29,12 +30,15 @@ internal fun CenterNameScreen(
     centerName: String,
     onCenterNameChanged: (String) -> Unit,
     setSignUpStep: (CenterSignUpStep) -> Unit,
+    navigateToAuth: () -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
+
+    BackHandler { navigateToAuth() }
 
     Column(
         horizontalAlignment = Alignment.Start,
@@ -67,7 +71,8 @@ internal fun CenterNameScreen(
             text = stringResource(id = R.string.next),
             enable = centerName.isNotBlank(),
             onClick = { setSignUpStep(CenterSignUpStep.findStep(NAME.step -1)) },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(bottom = 28.dp),
         )
     }

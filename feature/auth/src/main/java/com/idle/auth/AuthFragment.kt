@@ -4,8 +4,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -36,6 +34,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.idle.binding.DeepLinkDestination
 import com.idle.binding.DeepLinkDestination.CenterSignIn
 import com.idle.binding.DeepLinkDestination.CenterSignUp
 import com.idle.binding.DeepLinkDestination.WorkerSignUp
@@ -61,9 +60,7 @@ internal class AuthFragment : BaseComposeFragment() {
             AuthScreen(
                 userRole = userRole,
                 onUserRoleChanged = ::setUserRole,
-                navigateToCenterSignIn = { fragmentViewModel.baseEvent(NavigateTo(CenterSignIn)) },
-                navigateToCenterSignUp = { fragmentViewModel.baseEvent(NavigateTo(CenterSignUp)) },
-                navigateToWorkerSignUp = { fragmentViewModel.baseEvent(NavigateTo(WorkerSignUp)) },
+                navigateTo = { baseEvent(NavigateTo(it, popUpTo = R.id.nav_auth)) },
             )
         }
     }
@@ -74,9 +71,7 @@ internal class AuthFragment : BaseComposeFragment() {
 internal fun AuthScreen(
     userRole: UserRole?,
     onUserRoleChanged: (UserRole) -> Unit,
-    navigateToCenterSignIn: () -> Unit,
-    navigateToCenterSignUp: () -> Unit,
-    navigateToWorkerSignUp: () -> Unit,
+    navigateTo: (DeepLinkDestination) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -193,7 +188,7 @@ internal fun AuthScreen(
             ) {
                 CareButtonLarge(
                     text = stringResource(id = string.start_with_phone),
-                    onClick = { navigateToWorkerSignUp() },
+                    onClick = { navigateTo(WorkerSignUp) },
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
@@ -226,12 +221,12 @@ internal fun AuthScreen(
                             }
                         },
                         style = CareTheme.typography.subtitle4,
-                        modifier = Modifier.clickable { navigateToCenterSignIn() }
+                        modifier = Modifier.clickable { navigateTo(CenterSignIn) }
                     )
 
                     CareButtonLarge(
                         text = stringResource(id = string.start_with_signup),
-                        onClick = { navigateToCenterSignUp() },
+                        onClick = { navigateTo(CenterSignUp) },
                         modifier = Modifier.fillMaxWidth(),
                     )
                 }

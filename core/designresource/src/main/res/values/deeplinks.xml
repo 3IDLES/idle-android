@@ -19,5 +19,4 @@
     <string name="center_job_posting_deeplink_url">care://center/job/posting</string>
     <string name="center_job_posting_complete_deeplink_url">care://center/job/posting/complete</string>
     <string name="center_applicant_inquiry_deeplink_url">care://center/applicant/inquiry/{jobPostingId}</string>
-
 </resources>
