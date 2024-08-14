@@ -21,6 +21,9 @@ class WorkerSettingViewModel @Inject constructor() : BaseViewModel() {
     fun clickLogout() = workerSettingEvent(SettingEvent.Logout)
     fun clickWithdrawal() = workerSettingEvent(SettingEvent.Withdrawal)
     fun clickProfile() = workerSettingEvent(SettingEvent.Profile)
+    fun clickFAQ() = workerSettingEvent(SettingEvent.FAQ)
+    fun clickTermsAndPolicies() = workerSettingEvent(SettingEvent.TermsAndPolicies)
+    fun clickPrivacyAndPolicy() = workerSettingEvent(SettingEvent.PrivacyPolicy)
 
     private fun workerSettingEvent(event: SettingEvent) = viewModelScope.launch {
         _workerSettingEvent.emit(event)

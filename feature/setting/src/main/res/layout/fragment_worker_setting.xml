@@ -40,6 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
+            android:onClick="@{() -> viewModel.clickFAQ()}"
             app:title="@string/faq" />
 
         <com.idle.designsystem.binding.component.CareRow
@@ -57,6 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
+            android:onClick="@{() -> viewModel.clickTermsAndPolicies()}"
             app:title="@string/terms_and_policy" />
 
         <com.google.android.material.divider.MaterialDivider
@@ -68,6 +70,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
+            android:onClick="@{() -> viewModel.clickPrivacyAndPolicy()}"
             app:title="@string/privacy_policy" />
 
         <com.google.android.material.divider.MaterialDivider
