@@ -46,17 +46,18 @@ class LogoutDialogFragment() : DialogFragment() {
     override fun onStart() {
         super.onStart()
 
-        val displayMetrics = Resources.getSystem().displayMetrics
-        val screenWidth = displayMetrics.widthPixels
-        val padding = (20 * displayMetrics.density).toInt()
+        dialog?.window?.apply {
+            val displayMetrics = Resources.getSystem().displayMetrics
+            val paddingPx = (20 * displayMetrics.density).toInt()
+            val screenWidth = displayMetrics.widthPixels
 
-        val params = dialog?.window?.attributes?.apply {
-            width = screenWidth - (padding * 2)
-            height = WindowManager.LayoutParams.WRAP_CONTENT
+            attributes = attributes?.apply {
+                width = screenWidth - (paddingPx * 2)
+                height = WindowManager.LayoutParams.WRAP_CONTENT
+            }
+
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         }
-
-        dialog?.window?.attributes = params
-        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 
     override fun onDismiss(dialog: DialogInterface) {
