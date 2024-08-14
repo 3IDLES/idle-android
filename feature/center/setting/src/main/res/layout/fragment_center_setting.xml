@@ -47,18 +47,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            app:showSwitch="true"
-            app:title="@string/notification_setting" />
-
-        <com.google.android.material.divider.MaterialDivider
-            android:layout_width="match_parent"
-            android:layout_height="8dp"
-            app:dividerColor="@color/gray_050" />
-
-        <com.idle.designsystem.binding.component.CareRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
             app:title="@string/faq" />
 
         <com.idle.designsystem.binding.component.CareRow
