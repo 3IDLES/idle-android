@@ -152,6 +152,8 @@ internal fun CustomerRequirementScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 LifeAssistance.entries.forEach { assistance ->
+                    if(assistance == LifeAssistance.NONE) return@forEach
+
                     CareChipBasic(
                         text = assistance.displayName,
                         onClick = { onLifeAssistanceChanged(assistance) },

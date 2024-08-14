@@ -126,7 +126,12 @@ internal fun CustomerInformationScreen(
         ) {
             CareTextField(
                 value = birthYear,
-                onValueChanged = onBirthYearChanged,
+                onValueChanged = {
+                    onBirthYearChanged(it)
+                    if (it.length == 4) {
+                        focusManager.moveFocus(FocusDirection.Down)
+                    }
+                },
                 keyboardType = KeyboardType.Number,
                 hint = stringResource(id = R.string.birth_year_hint),
                 onDone = {
