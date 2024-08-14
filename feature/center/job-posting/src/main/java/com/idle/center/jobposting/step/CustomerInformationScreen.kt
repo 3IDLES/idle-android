@@ -21,6 +21,7 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -60,6 +61,7 @@ internal fun CustomerInformationScreen(
 ) {
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
     val scrollState = rememberScrollState()
 
     BackHandler { setJobPostingStep(JobPostingStep.findStep(CUSTOMER_INFORMATION.step - 1)) }
@@ -147,7 +149,12 @@ internal fun CustomerInformationScreen(
         ) {
             CareTextField(
                 value = weight,
-                onValueChanged = onWeightChanged,
+                onValueChanged = {
+                    onWeightChanged(it)
+                    if (it.length == 3) {
+                        keyboardController?.hide()
+                    }
+                },
                 keyboardType = KeyboardType.Number,
                 hint = stringResource(id = R.string.weight_hint),
                 leftComponent = {
