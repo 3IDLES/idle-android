@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="12dp"
             app:centerAddress="용인시 어쩌고 저쩌고"
             app:centerName="세얼간이 요양보호소" />
 
@@ -82,27 +82,28 @@
             android:layout_height="8dp"
             app:dividerColor="@color/gray_050" />
 
-        <com.idle.designsystem.binding.component.CareRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            app:title="@string/logout" />
-
-        <com.google.android.material.divider.MaterialDivider
-            android:layout_width="match_parent"
-            android:layout_height="8dp"
-            app:dividerColor="@color/gray_050" />
-
-        <com.idle.designsystem.binding.component.CareRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            app:title="@string/withdrawal" />
-
-        <View
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@color/gray_050" />
+            android:background="@color/gray_050"
+            android:orientation="vertical"
+            android:padding="20.dp">
+
+            <TextView
+                style="@style/Body3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:text="@string/logout"
+                android:textColor="@color/gray_300" />
+
+            <TextView
+                style="@style/Body3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/withdrawal"
+                android:textColor="@color/gray_300" />
+        </LinearLayout>
     </LinearLayout>
 </layout>
