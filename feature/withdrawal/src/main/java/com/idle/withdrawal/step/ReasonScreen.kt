@@ -41,9 +41,8 @@ import com.idle.withdrawal.WithdrawalStep
 internal fun ReasonScreen(
     onReasonChanged: (WithdrawalReason) -> Unit,
     setWithdrawalStep: (WithdrawalStep) -> Unit,
+    navigateToSetting: () -> Unit,
 ) {
-    val onBackPressedDispatcher =
-        LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val scrollState = rememberScrollState()
     var withdrawalReason by rememberSaveable { mutableStateOf<Set<WithdrawalReason>>(setOf()) }
 
@@ -54,15 +53,14 @@ internal fun ReasonScreen(
             .verticalScroll(scrollState),
     ) {
         Text(
-            text = "정말 탈퇴하시겠어요?",
+            text = stringResource(id = R.string.withdrawal_reason_title),
             style = CareTheme.typography.heading1,
             color = CareTheme.colors.gray900,
             modifier = Modifier.padding(bottom = 8.dp),
         )
 
         Text(
-            text = "계정을 삭제하시려는 이유를 알려주세요.\n" +
-                    "소중한 피드백을 받아 더 나은 서비스로 보답하겠습니다.",
+            text = stringResource(id = R.string.withdrawal_reason_description),
             style = CareTheme.typography.body3,
             color = CareTheme.colors.gray300,
             modifier = Modifier.padding(bottom = 32.dp),
@@ -91,7 +89,7 @@ internal fun ReasonScreen(
         Spacer(modifier = Modifier.weight(1f))
 
         Text(
-            text = "탈퇴 버튼 선택 시 모든 정보가 삭제되며, 되돌릴 수 없습니다.",
+            text = stringResource(id = R.string.withdrawal_warning),
             style = CareTheme.typography.caption,
             color = CareTheme.colors.red,
             textAlign = TextAlign.Center,
@@ -109,7 +107,7 @@ internal fun ReasonScreen(
                 textColor = CareTheme.colors.gray300,
                 containerColor = CareTheme.colors.white000,
                 border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray200),
-                onClick = { onBackPressedDispatcher?.onBackPressed() },
+                onClick = { navigateToSetting() },
                 modifier = Modifier.weight(1f),
             )
 

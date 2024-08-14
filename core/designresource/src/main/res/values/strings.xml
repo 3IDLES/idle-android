@@ -27,10 +27,14 @@
     <string name="worker_gender_title">본인의 성별을 선택해주세요</string>
     <string name="verification">인증</string>
     <string name="confirm_code">인증번호</string>
+    <string name="confirm_success">인증이 완료되었습니다.</string>
     <string name="worker_name_hint">성함을 입력해주세요</string>
     <string name="worker_name_title">본인의 인적사항을 입력해주세요.</string>
     <string name="worker_signup">요양보호사 회원가입</string>
     <string name="account_withdrawal">계정 삭제</string>
+    <string name="withdrawal_reason_title">정말 탈퇴하시겠어요?</string>
+    <string name="withdrawal_reason_description">계정을 삭제하시려는 이유를 알려주세요.\n소중한 피드백을 받아 더 나은 서비스로 보답하겠습니다.</string>
+    <string name="withdrawal_warning">탈퇴 버튼 선택 시 모든 정보가 삭제되며, 되돌릴 수 없습니다.</string>
 
     <!-- User Registration -->
     <string name="start_with_phone">휴대폰 번호로 시작하기</string>
