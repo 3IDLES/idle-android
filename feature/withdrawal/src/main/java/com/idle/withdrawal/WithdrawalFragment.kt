@@ -2,7 +2,6 @@
 
 package com.idle.withdrawal
 
-import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -18,6 +17,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.idle.binding.DeepLinkDestination
+import com.idle.binding.base.CareBaseEvent
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
@@ -37,11 +38,30 @@ internal class WithdrawalFragment : BaseComposeFragment() {
     override fun ComposeLayout() {
         fragmentViewModel.apply {
             val withdrawalStep by withdrawalStep.collectAsStateWithLifecycle()
+            val authCodeTimerMinute by authCodeTimerMinute.collectAsStateWithLifecycle()
+            val authCodeTimerSeconds by authCodeTimerSeconds.collectAsStateWithLifecycle()
+            val isConfirmAuthCode by isConfirmAuthCode.collectAsStateWithLifecycle()
 
             WithdrawalStep(
                 withdrawalStep = withdrawalStep,
+                timerMinute = authCodeTimerMinute,
+                timerSeconds = authCodeTimerSeconds,
+                isConfirmAuthCode = isConfirmAuthCode,
                 setWithdrawalStep = ::setWithdrawalStep,
                 onReasonChanged = ::setWithdrawalReason,
+                onPhoneNumberChanged = ::setPhoneNumber,
+                onAuthCodeChanged = ::setAuthCode,
+                sendPhoneNumber = ::sendPhoneNumber,
+                confirmAuthCode = ::confirmAuthCode,
+                withdrawal = ::withdrawal,
+                navigateToSetting = {
+                    baseEvent(
+                        CareBaseEvent.NavigateTo(
+                            destination = DeepLinkDestination.CenterSetting,
+                            popUpTo = com.idle.withdrawal.R.id.withdrawalFragment,
+                        )
+                    )
+                },
             )
         }
     }
@@ -51,18 +71,25 @@ internal class WithdrawalFragment : BaseComposeFragment() {
 @Composable
 internal fun WithdrawalStep(
     withdrawalStep: WithdrawalStep,
+    timerMinute: String,
+    timerSeconds: String,
+    isConfirmAuthCode: Boolean,
     setWithdrawalStep: (WithdrawalStep) -> Unit,
     onReasonChanged: (WithdrawalReason) -> Unit,
+    onPhoneNumberChanged: (String) -> Unit,
+    onAuthCodeChanged: (String) -> Unit,
+    sendPhoneNumber: () -> Unit,
+    confirmAuthCode: () -> Unit,
+    withdrawal: () -> Unit,
+    navigateToSetting: () -> Unit,
 ) {
-    val onBackPressedDispatcher =
-        LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val focusManager = LocalFocusManager.current
 
     Scaffold(
         topBar = {
             CareSubtitleTopBar(
                 title = stringResource(id = R.string.account_withdrawal),
-                onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
+                onNavigationClick = navigateToSetting,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
@@ -90,11 +117,21 @@ internal fun WithdrawalStep(
                     WithdrawalStep.REASON -> ReasonScreen(
                         onReasonChanged = onReasonChanged,
                         setWithdrawalStep = setWithdrawalStep,
+                        navigateToSetting = navigateToSetting,
                     )
 
-                    WithdrawalStep.PHONENUMBER
-
-                    -> PhoneNumberScreen(setWithdrawalStep)
+                    WithdrawalStep.PHONENUMBER -> PhoneNumberScreen(
+                        timerMinute = timerMinute,
+                        timerSeconds = timerSeconds,
+                        isConfirmAuthCode = isConfirmAuthCode,
+                        onPhoneNumberChanged = onPhoneNumberChanged,
+                        onAuthCodeChanged = onAuthCodeChanged,
+                        sendPhoneNumber = sendPhoneNumber,
+                        confirmAuthCode = confirmAuthCode,
+                        setWithdrawalStep = setWithdrawalStep,
+                        withdrawal = withdrawal,
+                        navigateToSetting = navigateToSetting,
+                    )
                 }
             }
         }
