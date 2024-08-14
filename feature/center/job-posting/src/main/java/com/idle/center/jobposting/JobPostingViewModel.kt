@@ -88,8 +88,8 @@ class JobPostingViewModel @Inject constructor(
     private val _lifeAssistance = MutableStateFlow<Set<LifeAssistance>>(setOf())
     val lifeAssistance = _lifeAssistance.asStateFlow()
 
-    private val _speciality = MutableStateFlow("")
-    val speciality = _speciality.asStateFlow()
+    private val _extraRequirement = MutableStateFlow("")
+    val extraRequirement = _extraRequirement.asStateFlow()
 
     private val _isExperiencePreferred = MutableStateFlow<Boolean?>(null)
     val isExperiencePreferred = _isExperiencePreferred.asStateFlow()
@@ -209,8 +209,8 @@ class JobPostingViewModel @Inject constructor(
         _lifeAssistance.value = setOf()
     }
 
-    internal fun setSpeciality(speciality: String) {
-        _speciality.value = speciality
+    internal fun setExtraRequirement(extraRequirement: String) {
+        _extraRequirement.value = extraRequirement
     }
 
     internal fun setExperiencePreferred(preferred: Boolean) {
@@ -270,8 +270,8 @@ class JobPostingViewModel @Inject constructor(
             isWalkingAssistance = _isWalkingAssistance.value ?: return@launch,
             lifeAssistance = _lifeAssistance.value.toList()
                 .sortedBy { it.ordinal }
-                .ifEmpty { null },
-            speciality = _speciality.value.ifBlank { null },
+                .takeIf { it.isNotEmpty() } ?: listOf(LifeAssistance.NONE),
+            extraRequirement = _extraRequirement.value.ifBlank { null },
             isExperiencePreferred = _isExperiencePreferred.value ?: return@launch,
             applyMethod = _applyMethod.value.toList()
                 .sortedBy { it.ordinal },

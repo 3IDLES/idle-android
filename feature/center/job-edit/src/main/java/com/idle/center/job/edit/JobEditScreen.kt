@@ -97,7 +97,7 @@ fun JobEditScreen(
     isBowelAssistance: Boolean?,
     isWalkingAssistance: Boolean?,
     lifeAssistance: Set<LifeAssistance>,
-    speciality: String,
+    extraRequirement: String,
     isExperiencePreferred: Boolean?,
     applyMethod: Set<ApplyMethod>,
     applyDeadlineType: ApplyDeadlineType?,
@@ -152,7 +152,7 @@ fun JobEditScreen(
     var localIsBowelAssistance by remember { mutableStateOf(isBowelAssistance) }
     var localIsWalkingAssistance by remember { mutableStateOf(isWalkingAssistance) }
     var localLifeAssistance by remember { mutableStateOf(lifeAssistance) }
-    var localSpeciality by remember { mutableStateOf(speciality) }
+    var localSpeciality by remember { mutableStateOf(extraRequirement) }
     var localIsExperiencePreferred by remember { mutableStateOf(isExperiencePreferred) }
     var localApplyMethod by remember { mutableStateOf(applyMethod) }
     var localApplyDeadlineType by remember { mutableStateOf(applyDeadlineType) }

@@ -40,12 +40,12 @@ internal fun CustomerRequirementScreen(
     isBowelAssistance: Boolean?,
     isWalkingAssistance: Boolean?,
     lifeAssistance: Set<LifeAssistance>,
-    speciality: String,
-    setMealAssistance: (Boolean) -> Unit,
-    setBowelAssistance: (Boolean) -> Unit,
-    setWalkingAssistance: (Boolean) -> Unit,
-    setLifeAssistance: (LifeAssistance) -> Unit,
-    setSpeciality: (String) -> Unit,
+    extraRequirement: String,
+    onMealAssistanceChanged: (Boolean) -> Unit,
+    onBowelAssistanceChanged: (Boolean) -> Unit,
+    onWalkingAssistanceChanged: (Boolean) -> Unit,
+    onLifeAssistanceChanged: (LifeAssistance) -> Unit,
+    onExtraRequirementChanged: (String) -> Unit,
     setJobPostingStep: (JobPostingStep) -> Unit,
 ) {
     val scrollState = rememberScrollState()
@@ -73,14 +73,14 @@ internal fun CustomerRequirementScreen(
             ) {
                 CareChipBasic(
                     text = stringResource(R.string.necessary),
-                    onClick = { setMealAssistance(true) },
+                    onClick = { onMealAssistanceChanged(true) },
                     enable = isMealAssistance == true,
                     modifier = Modifier.width(104.dp),
                 )
 
                 CareChipBasic(
                     text = stringResource(R.string.unnecessary),
-                    onClick = { setMealAssistance(false) },
+                    onClick = { onMealAssistanceChanged(false) },
                     enable = isMealAssistance == false,
                     modifier = Modifier.width(104.dp),
                 )
@@ -95,14 +95,14 @@ internal fun CustomerRequirementScreen(
             ) {
                 CareChipBasic(
                     text = stringResource(R.string.necessary),
-                    onClick = { setBowelAssistance(true) },
+                    onClick = { onBowelAssistanceChanged(true) },
                     enable = isBowelAssistance == true,
                     modifier = Modifier.width(104.dp),
                 )
 
                 CareChipBasic(
                     text = stringResource(R.string.unnecessary),
-                    onClick = { setBowelAssistance(false) },
+                    onClick = { onBowelAssistanceChanged(false) },
                     enable = isBowelAssistance == false,
                     modifier = Modifier.width(104.dp),
                 )
@@ -117,14 +117,14 @@ internal fun CustomerRequirementScreen(
             ) {
                 CareChipBasic(
                     text = stringResource(R.string.necessary),
-                    onClick = { setWalkingAssistance(true) },
+                    onClick = { onWalkingAssistanceChanged(true) },
                     enable = isWalkingAssistance == true,
                     modifier = Modifier.width(104.dp),
                 )
 
                 CareChipBasic(
                     text = stringResource(R.string.unnecessary),
-                    onClick = { setWalkingAssistance(false) },
+                    onClick = { onWalkingAssistanceChanged(false) },
                     enable = isWalkingAssistance == false,
                     modifier = Modifier.width(104.dp),
                 )
@@ -154,7 +154,7 @@ internal fun CustomerRequirementScreen(
                 LifeAssistance.entries.forEach { assistance ->
                     CareChipBasic(
                         text = assistance.displayName,
-                        onClick = { setLifeAssistance(assistance) },
+                        onClick = { onLifeAssistanceChanged(assistance) },
                         enable = assistance in lifeAssistance,
                         modifier = Modifier.width(104.dp),
                     )
@@ -177,9 +177,9 @@ internal fun CustomerRequirementScreen(
             },
         ) {
             CareTextFieldLong(
-                value = speciality,
+                value = extraRequirement,
                 hint = stringResource(id = R.string.speciality_hint),
-                onValueChanged = setSpeciality,
+                onValueChanged = onExtraRequirementChanged,
                 modifier = Modifier.fillMaxWidth(),
             )
         }

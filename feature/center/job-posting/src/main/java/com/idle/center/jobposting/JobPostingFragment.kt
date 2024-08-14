@@ -96,7 +96,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
             val isBowelAssistance by isBowelAssistance.collectAsStateWithLifecycle()
             val isWalkingAssistance by isWalkingAssistance.collectAsStateWithLifecycle()
             val lifeAssistance by lifeAssistance.collectAsStateWithLifecycle()
-            val speciality by speciality.collectAsStateWithLifecycle()
+            val extraRequirement by extraRequirement.collectAsStateWithLifecycle()
             val isExperiencePreferred by isExperiencePreferred.collectAsStateWithLifecycle()
             val applyMethod by applyMethod.collectAsStateWithLifecycle()
             val applyDeadlineType by applyDeadlineType.collectAsStateWithLifecycle()
@@ -140,7 +140,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
                     isBowelAssistance = isBowelAssistance,
                     isWalkingAssistance = isWalkingAssistance,
                     lifeAssistance = lifeAssistance,
-                    speciality = speciality,
+                    extraRequirement = extraRequirement,
                     isExperiencePreferred = isExperiencePreferred,
                     applyMethod = applyMethod,
                     applyDeadlineType = applyDeadlineType,
@@ -165,7 +165,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
                     onWalkingAssistanceChanged = ::setWalkingAssistance,
                     onLifeAssistanceChanged = ::setLifeAssistance,
                     clearLifeAssistance = ::clearLifeAssistance,
-                    onSpecialityChanged = ::setSpeciality,
+                    onSpecialityChanged = ::setExtraRequirement,
                     onExperiencePreferredChanged = ::setExperiencePreferred,
                     onApplyMethodChanged = ::setApplyMethod,
                     clearApplyMethod = ::clearApplyMethod,
@@ -196,7 +196,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
                     isBowelAssistance = isBowelAssistance,
                     isWalkingAssistance = isWalkingAssistance,
                     lifeAssistance = lifeAssistance,
-                    speciality = speciality,
+                    extraRequirement = extraRequirement,
                     isExperiencePreferred = isExperiencePreferred,
                     applyMethod = applyMethod,
                     applyDeadlineType = applyDeadlineType,
@@ -226,7 +226,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
                     onBowelAssistanceChanged = ::setBowelAssistance,
                     onWalkingAssistanceChanged = ::setWalkingAssistance,
                     onLifeAssistanceChanged = ::setLifeAssistance,
-                    onSpecialityChanged = ::setSpeciality,
+                    onExtraRequirementChanged = ::setExtraRequirement,
                     onExperiencePreferredChanged = ::setExperiencePreferred,
                     onApplyMethodChanged = ::setApplyMethod,
                     onApplyDeadlineTypeChanged = ::setApplyDeadlineType,
@@ -263,7 +263,7 @@ internal fun JobPostingScreen(
     isBowelAssistance: Boolean?,
     isWalkingAssistance: Boolean?,
     lifeAssistance: Set<LifeAssistance>,
-    speciality: String,
+    extraRequirement: String,
     isExperiencePreferred: Boolean?,
     applyMethod: Set<ApplyMethod>,
     applyDeadlineType: ApplyDeadlineType?,
@@ -289,7 +289,7 @@ internal fun JobPostingScreen(
     onBowelAssistanceChanged: (Boolean) -> Unit,
     onWalkingAssistanceChanged: (Boolean) -> Unit,
     onLifeAssistanceChanged: (LifeAssistance) -> Unit,
-    onSpecialityChanged: (String) -> Unit,
+    onExtraRequirementChanged: (String) -> Unit,
     onExperiencePreferredChanged: (Boolean) -> Unit,
     onApplyMethodChanged: (ApplyMethod) -> Unit,
     onApplyDeadlineChanged: (LocalDate) -> Unit,
@@ -602,7 +602,7 @@ internal fun JobPostingScreen(
                         isBowelAssistance = isBowelAssistance,
                         isWalkingAssistance = isWalkingAssistance,
                         lifeAssistance = lifeAssistance,
-                        speciality = speciality,
+                        extraRequirement = extraRequirement,
                         isExperiencePreferred = isExperiencePreferred,
                         applyMethod = applyMethod,
                         applyDeadline = applyDeadline,
@@ -630,8 +630,8 @@ internal fun JobPostingScreen(
                                     payType = payType,
                                     payAmount = payAmount,
                                     setWeekDays = setWeekDays,
-                                    setPayType = onPayTypeChanged,
-                                    setPayAmount = onPayAmountChanged,
+                                    onPayTypeChanged = onPayTypeChanged,
+                                    onPayAmountChanged = onPayAmountChanged,
                                     setJobPostingStep = setJobPostingStep,
                                     showBottomSheet = { sheetType ->
                                         coroutineScope.launch {
@@ -672,12 +672,12 @@ internal fun JobPostingScreen(
                                     isBowelAssistance = isBowelAssistance,
                                     isWalkingAssistance = isWalkingAssistance,
                                     lifeAssistance = lifeAssistance,
-                                    speciality = speciality,
-                                    setMealAssistance = onMealAssistanceChanged,
-                                    setBowelAssistance = onBowelAssistanceChanged,
-                                    setWalkingAssistance = onWalkingAssistanceChanged,
-                                    setLifeAssistance = onLifeAssistanceChanged,
-                                    setSpeciality = onSpecialityChanged,
+                                    extraRequirement = extraRequirement,
+                                    onMealAssistanceChanged = onMealAssistanceChanged,
+                                    onBowelAssistanceChanged = onBowelAssistanceChanged,
+                                    onWalkingAssistanceChanged = onWalkingAssistanceChanged,
+                                    onLifeAssistanceChanged = onLifeAssistanceChanged,
+                                    onExtraRequirementChanged = onExtraRequirementChanged,
                                     setJobPostingStep = setJobPostingStep,
                                 )
 

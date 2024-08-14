@@ -37,8 +37,8 @@ internal fun TimePaymentScreen(
     payType: PayType?,
     payAmount: String,
     setWeekDays: (DayOfWeek) -> Unit,
-    setPayType: (PayType) -> Unit,
-    setPayAmount: (String) -> Unit,
+    onPayTypeChanged: (PayType) -> Unit,
+    onPayAmountChanged: (String) -> Unit,
     setJobPostingStep: (JobPostingStep) -> Unit,
     showBottomSheet: (JobPostingBottomSheetType) -> Unit,
 ) {
@@ -115,21 +115,21 @@ internal fun TimePaymentScreen(
                 Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                     CareChipBasic(
                         text = stringResource(id = R.string.hourly),
-                        onClick = { setPayType(PayType.HOURLY) },
+                        onClick = { onPayTypeChanged(PayType.HOURLY) },
                         enable = payType == PayType.HOURLY,
                         modifier = Modifier.weight(1f),
                     )
 
                     CareChipBasic(
                         text = stringResource(id = R.string.weekly),
-                        onClick = { setPayType(PayType.WEEKLY) },
+                        onClick = { onPayTypeChanged(PayType.WEEKLY) },
                         enable = payType == PayType.WEEKLY,
                         modifier = Modifier.weight(1f),
                     )
 
                     CareChipBasic(
                         text = stringResource(id = R.string.monthly),
-                        onClick = { setPayType(PayType.MONTHLY) },
+                        onClick = { onPayTypeChanged(PayType.MONTHLY) },
                         enable = payType == PayType.MONTHLY,
                         modifier = Modifier.weight(1f),
                     )
@@ -139,7 +139,7 @@ internal fun TimePaymentScreen(
                     value = payAmount,
                     hint = stringResource(id = R.string.pay_amount_hint),
                     textStyle = CareTheme.typography.body2,
-                    onValueChanged = setPayAmount,
+                    onValueChanged = onPayAmountChanged,
                     keyboardType = KeyboardType.Number,
                     leftComponent = {
                         Text(
