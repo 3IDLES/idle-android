@@ -6,6 +6,8 @@ import android.view.View
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.idle.binding.DeepLinkDestination
+import com.idle.binding.DeepLinkDestination.Withdrawal
 import com.idle.binding.DeepLinkDestination.WorkerProfile
 import com.idle.binding.base.BaseBindingFragment
 import com.idle.binding.base.CareBaseEvent.NavigateTo
@@ -52,11 +54,7 @@ internal class WorkerSettingFragment :
                     logoutDialog?.show(parentFragmentManager, "LogoutDialogFragment")
                 }
             }
-
-            SettingEvent.Withdrawal -> {
-
-            }
-
+            SettingEvent.Withdrawal -> fragmentViewModel.baseEvent(NavigateTo(Withdrawal))
             SettingEvent.Profile -> fragmentViewModel.baseEvent(NavigateTo(WorkerProfile))
             SettingEvent.FAQ -> navigateToUri("https://grove-maraca-55d.notion.site/8579186ee8ca4dbb8dc55e3b8b744d11?pvs=4")
             SettingEvent.PrivacyPolicy -> navigateToUri("https://grove-maraca-55d.notion.site/ad4f62dff5304d63a162f1269639afca?pvs=4")
