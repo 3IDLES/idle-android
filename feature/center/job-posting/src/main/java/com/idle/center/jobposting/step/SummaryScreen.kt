@@ -57,7 +57,7 @@ internal fun SummaryScreen(
     isBowelAssistance: Boolean?,
     isWalkingAssistance: Boolean?,
     lifeAssistance: Set<LifeAssistance>,
-    speciality: String,
+    extraRequirement: String,
     isExperiencePreferred: Boolean?,
     applyMethod: Set<ApplyMethod>,
     applyDeadline: LocalDate?,
@@ -512,7 +512,7 @@ internal fun SummaryScreen(
                 }
             }
 
-            if (speciality.isNotBlank()) {
+            if (extraRequirement.isNotBlank()) {
                 HorizontalDivider(thickness = 1.dp, color = CareTheme.colors.gray100)
 
                 Text(
@@ -523,7 +523,7 @@ internal fun SummaryScreen(
                 )
 
                 CareTextFieldLong(
-                    value = speciality,
+                    value = extraRequirement,
                     enabled = false,
                     onValueChanged = {},
                 )
