@@ -16,6 +16,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
+import com.idle.binding.DeepLinkDestination
+import com.idle.binding.base.CareBaseEvent
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
@@ -28,13 +30,24 @@ class JobPostingCompleteFragment : BaseComposeFragment() {
     @Composable
     override fun ComposeLayout() {
         fragmentViewModel.apply {
-            JobPostingCompleteScreen()
+            JobPostingCompleteScreen(
+                navigateTo = {
+                    baseEvent(
+                        CareBaseEvent.NavigateTo(
+                            destination = it,
+                            popUpTo = com.idle.center.job.posting.R.id.jobPostingCompleteFragment
+                        )
+                    )
+                },
+            )
         }
     }
 }
 
 @Composable
-internal fun JobPostingCompleteScreen() {
+internal fun JobPostingCompleteScreen(
+    navigateTo: (DeepLinkDestination) -> Unit,
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -54,14 +67,14 @@ internal fun JobPostingCompleteScreen() {
             text = stringResource(id = R.string.job_posting_complete_message),
             style = CareTheme.typography.heading1,
             color = CareTheme.colors.gray900,
-            textAlign = TextAlign.Center,
+            textAlign = TextAlign. Center,
         )
 
         Spacer(modifier = Modifier.weight(1f))
 
         CareButtonLarge(
-            text = stringResource(id = R.string.next),
-            onClick = {},
+            text = stringResource(id = R.string.confirm),
+            onClick = { navigateTo(DeepLinkDestination.CenterHome) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 28.dp),

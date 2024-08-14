@@ -107,6 +107,14 @@ internal fun ApplicantInquiryScreen() {
                 items(listOf(1, 2, 3)) {
                     WorkerProfileCard()
                 }
+
+                item {
+                    Spacer(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(52.dp),
+                    )
+                }
             }
         }
     }
