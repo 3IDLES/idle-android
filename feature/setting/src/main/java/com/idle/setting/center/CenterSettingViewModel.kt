@@ -22,6 +22,9 @@ class CenterSettingViewModel @Inject constructor() : BaseViewModel() {
     fun clickLogout() = centerSettingEvent(SettingEvent.Logout)
     fun clickWithdrawal() = centerSettingEvent(SettingEvent.Withdrawal)
     fun clickCenterProfile() = centerSettingEvent(SettingEvent.Profile)
+    fun clickFAQ() = centerSettingEvent(SettingEvent.FAQ)
+    fun clickTermsAndPolicies() = centerSettingEvent(SettingEvent.TermsAndPolicies)
+    fun clickPrivacyAndPolicy() = centerSettingEvent(SettingEvent.PrivacyPolicy)
 
     private fun centerSettingEvent(event: SettingEvent) = viewModelScope.launch {
         _centerSettingEvent.emit(event)
