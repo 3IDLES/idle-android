@@ -57,7 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            app:title="@string/terms_and_policies" />
+            app:title="@string/terms_and_policy" />
 
         <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"

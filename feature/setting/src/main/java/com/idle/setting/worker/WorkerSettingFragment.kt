@@ -8,6 +8,7 @@ import com.idle.binding.DeepLinkDestination.WorkerProfile
 import com.idle.binding.base.BaseBindingFragment
 import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.binding.repeatOnStarted
+import com.idle.setting.SettingEvent
 import com.idle.setting.databinding.FragmentWorkerSettingBinding
 import com.idle.setting.dialog.LogoutDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,19 +43,27 @@ internal class WorkerSettingFragment :
         }
     }
 
-    private fun handleSettingEvent(event: WorkerSettingEvent) {
+    private fun handleSettingEvent(event: SettingEvent) {
         when (event) {
-            WorkerSettingEvent.Logout -> {
+            SettingEvent.Logout -> {
                 if (!(logoutDialog?.isAdded == true || logoutDialog?.isVisible == true)) {
                     logoutDialog?.show(parentFragmentManager, "LogoutDialogFragment")
                 }
             }
 
-            WorkerSettingEvent.Withdrawal -> {
+            SettingEvent.Withdrawal -> {
 
             }
 
-            WorkerSettingEvent.MyProfile -> fragmentViewModel.baseEvent(NavigateTo(WorkerProfile))
+            SettingEvent.Profile -> fragmentViewModel.baseEvent(NavigateTo(WorkerProfile))
+
+            SettingEvent.FAQ -> {}
+
+            SettingEvent.PrivacyPolicy -> {}
+
+            SettingEvent.Inquiry -> {}
+
+            SettingEvent.TermsAndPolicies -> {}
         }
     }
 }

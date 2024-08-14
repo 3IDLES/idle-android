@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="20dp"
-            android:onClick="@{() -> viewModel.myCenter()}"
+            android:onClick="@{() -> viewModel.clickCenterProfile()}"
             app:title="@string/my_center_info" />
 
         <com.idle.designsystem.binding.component.CareCenterInfoCard
@@ -65,7 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            app:title="@string/terms_and_policies" />
+            app:title="@string/terms_and_policy" />
 
         <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
@@ -96,7 +96,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
-                android:onClick="@{() -> viewModel.logout()}"
+                android:onClick="@{() -> viewModel.clickLogout()}"
                 android:text="@string/logout"
                 android:textColor="@color/gray_300" />
 
@@ -104,7 +104,7 @@
                 style="@style/Body3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="@{() -> viewModel.withdrawal()}"
+                android:onClick="@{() -> viewModel.clickWithdrawal()}"
                 android:text="@string/withdrawal"
                 android:textColor="@color/gray_300" />
         </LinearLayout>
