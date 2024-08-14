@@ -16,5 +16,6 @@
     <include app:graph="@navigation/nav_job_posting" />
     <include app:graph="@navigation/nav_worker_home" />
     <include app:graph="@navigation/nav_worker_profile" />
+    <include app:graph="@navigation/nav_worker_setting" />
     <include app:graph="@navigation/nav_worker_recruitment_detail" />
 </navigation>

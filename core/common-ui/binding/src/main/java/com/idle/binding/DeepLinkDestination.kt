@@ -125,7 +125,7 @@ private fun buildNavOptions(destination: DeepLinkDestination, @IdRes popUpTo: In
             setPopExitAnim(R.anim.anim_pop_slide_out_horizontally)
         }
 
-        if (destination == DeepLinkDestination.Auth){
+        if (destination == DeepLinkDestination.Auth) {
             setEnterAnim(R.anim.anim_pop_slide_in_horizontally)
             setExitAnim(R.anim.anim_slide_out_horizontally)
             setPopEnterAnim(R.anim.anim_pop_slide_in_horizontally)
@@ -134,7 +134,10 @@ private fun buildNavOptions(destination: DeepLinkDestination, @IdRes popUpTo: In
     }.build()
 }
 
-private fun buildDeepLinkRequest(context: Context, destination: DeepLinkDestination): NavDeepLinkRequest {
+private fun buildDeepLinkRequest(
+    context: Context,
+    destination: DeepLinkDestination
+): NavDeepLinkRequest {
     return NavDeepLinkRequest.Builder
         .fromUri(destination.getDeepLink(context).toUri())
         .build()

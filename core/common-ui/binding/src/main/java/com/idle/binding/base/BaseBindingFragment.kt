@@ -7,6 +7,9 @@ import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
+import androidx.navigation.fragment.findNavController
+import com.idle.binding.deepLinkNavigateTo
+import com.idle.binding.repeatOnStarted
 
 typealias Inflate<T> = (LayoutInflater, ViewGroup?, Boolean) -> T
 
@@ -26,8 +29,26 @@ abstract class BaseBindingFragment<T : ViewDataBinding, V : BaseViewModel>
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewLifecycleOwner.repeatOnStarted {
+            fragmentViewModel.baseEventFlow.collect {
+                handleEvent(it)
+            }
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun handleEvent(event: CareBaseEvent) = when (event) {
+        is CareBaseEvent.NavigateTo -> findNavController()
+            .deepLinkNavigateTo(
+                context = requireContext(),
+                deepLinkDestination = event.destination,
+                popUpTo = event.popUpTo,
+            )
     }
 }
