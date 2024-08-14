@@ -12,7 +12,7 @@ import com.idle.domain.model.auth.UserRole
 sealed class DeepLinkDestination(
     val addressRes: Int,
     val params: Map<String, String> = emptyMap(),
-    val setDefaultAnimation: Boolean = true, // 기본값을 true로 변경
+    val setDefaultAnimation: Boolean = true,
 ) {
     object Auth : DeepLinkDestination(
         addressRes = R.string.auth_deeplink_url,
