@@ -2,12 +2,12 @@
 <resources>
     <string name="auth_deeplink_url">care://auth</string>
     <string name="postcode_deeplink_url">care://postcode</string>
-    <string name="withdrawal_deeplink_url">care://withdrawal</string>
+    <string name="withdrawal_deeplink_url">care://withdrawal/{userRole}</string>
 
     <string name="worker_signup_deeplink_url">care://signup/worker</string>
     <string name="worker_home_deeplink_url">care://worker/home</string>
     <string name="worker_profile_deeplink_url">care://worker/profile</string>
-    <string name="worker_recruitment_detail_deeplink_url">care://worker/recruitment/detail</string>
+    <string name="worker_recruitment_detail_deeplink_url">care://worker/recruitment/detail/{jobPostingId}/{userRole}</string>
     <string name="worker_setting_deeplink_url">care://worker/setting</string>
 
     <string name="center_signin_deeplink_url">care://center/signIn</string>

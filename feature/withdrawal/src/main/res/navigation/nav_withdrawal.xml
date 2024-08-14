@@ -8,6 +8,9 @@
         android:id="@+id/withdrawalFragment"
         android:name="com.idle.withdrawal.WithdrawalFragment"
         android:label="WithdrawalFragment">
+        <argument
+            android:name="userRole"
+            app:argType="string" />
         <deepLink app:uri="@string/withdrawal_deeplink_url" />
     </fragment>
 </navigation>

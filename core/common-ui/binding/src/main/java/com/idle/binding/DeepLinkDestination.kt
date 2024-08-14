@@ -24,7 +24,10 @@ sealed class DeepLinkDestination(
         setDefaultAnimation = false,
     )
 
-    data object Withdrawal : DeepLinkDestination(addressRes = R.string.withdrawal_deeplink_url)
+    data class Withdrawal(val userRole: UserRole) : DeepLinkDestination(
+        addressRes = R.string.withdrawal_deeplink_url,
+        params = mapOf("userRole" to userRole.name),
+    )
 
     data object NewPassword : DeepLinkDestination(
         addressRes = R.string.new_password_deeplink_url
@@ -81,7 +84,7 @@ sealed class DeepLinkDestination(
         addressRes = R.string.worker_profile_deeplink_url
     )
 
-    data class WorkerJobDetail(
+    data class JobDetail(
         val jobPostingId: String,
         val userRole: UserRole,
     ) : DeepLinkDestination(
