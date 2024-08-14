@@ -18,7 +18,7 @@
         <com.idle.designsystem.binding.component.CareSubtitleTopAppBar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             app:showBackIcon="false"
             app:title="@string/setting" />
@@ -59,7 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:onClick="@{() -> viewModel.clickTermsAndPolicies()}"
-            app:title="@string/terms_and_policy" />
+            app:title="@string/terms_and_policies" />
 
         <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
@@ -71,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:onClick="@{() -> viewModel.clickPrivacyAndPolicy()}"
-            app:title="@string/privacy_policy" />
+            app:title="@string/privacy_and_policy" />
 
         <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
