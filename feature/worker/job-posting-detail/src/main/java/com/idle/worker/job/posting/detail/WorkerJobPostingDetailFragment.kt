@@ -600,9 +600,7 @@ internal fun WorkerJobPostingDetailScreen(
 
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(32.dp),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 20.dp),
+                        modifier = Modifier.fillMaxWidth(),
                     ) {
                         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             Text(
