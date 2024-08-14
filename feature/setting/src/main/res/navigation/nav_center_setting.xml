@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/centerSettingFragment"
-        android:name="com.idle.center.setting.CenterSettingFragment"
+        android:name="com.idle.setting.CenterSettingFragment"
         android:label="CenterSettingFragment">
         <deepLink app:uri="@string/center_setting_deeplink_url" />
     </fragment>
