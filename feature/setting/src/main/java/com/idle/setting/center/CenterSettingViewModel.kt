@@ -1,4 +1,4 @@
-package com.idle.setting
+package com.idle.setting.center
 
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
@@ -13,16 +13,17 @@ class CenterSettingViewModel @Inject constructor() : BaseViewModel() {
     private val _centerSettingEvent = MutableSharedFlow<CenterSettingEvent>()
     val centerSettingEvent = _centerSettingEvent.asSharedFlow()
 
-    fun logout() = viewModelScope.launch {
-        _centerSettingEvent.emit(CenterSettingEvent.Logout)
-    }
+    fun logout() = centerSettingEvent(CenterSettingEvent.Logout)
+    fun withdrawal() = centerSettingEvent(CenterSettingEvent.Withdrawal)
+    fun myCenter() = centerSettingEvent(CenterSettingEvent.MyCenter)
 
-    fun withdrawal() = viewModelScope.launch {
-        _centerSettingEvent.emit(CenterSettingEvent.Withdrawal)
+    private fun centerSettingEvent(event: CenterSettingEvent) = viewModelScope.launch {
+        _centerSettingEvent.emit(event)
     }
 }
 
-sealed class CenterSettingEvent() {
+sealed class CenterSettingEvent {
+    data object MyCenter : CenterSettingEvent()
     data object Logout : CenterSettingEvent()
     data object Withdrawal : CenterSettingEvent()
 }

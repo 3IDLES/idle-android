@@ -1,12 +1,13 @@
-package com.idle.setting
+package com.idle.setting.center
 
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import com.idle.binding.DeepLinkDestination.CenterProfile
 import com.idle.binding.base.BaseBindingFragment
-import com.idle.binding.base.CareBaseEvent
+import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.binding.repeatOnStarted
-import com.idle.center.setting.databinding.FragmentCenterSettingBinding
+import com.idle.setting.databinding.FragmentCenterSettingBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -21,7 +22,7 @@ internal class CenterSettingFragment :
 
         binding.viewModel = fragmentViewModel
         fragmentViewModel.apply {
-            repeatOnStarted {
+            viewLifecycleOwner.repeatOnStarted {
                 centerSettingEvent.collect {
                     handleSettingEvent(it)
                 }
@@ -38,6 +39,8 @@ internal class CenterSettingFragment :
             CenterSettingEvent.Withdrawal -> {
 
             }
+
+            CenterSettingEvent.MyCenter -> fragmentViewModel.baseEvent(NavigateTo(CenterProfile))
         }
     }
 }
