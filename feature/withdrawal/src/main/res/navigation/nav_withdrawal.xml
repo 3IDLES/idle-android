@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_withdrawal"
+    app:startDestination="@id/withdrawalFragment">
+
+    <fragment
+        android:id="@+id/withdrawalFragment"
+        android:name="com.idle.withdrawal.WithdrawalFragment"
+        android:label="WithdrawalFragment">
+        <deepLink app:uri="@string/withdrawal_deeplink_url" />
+    </fragment>
+</navigation>

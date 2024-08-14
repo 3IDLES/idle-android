@@ -12,6 +12,7 @@ dependencies {
     implementation(projects.feature.signin)
     implementation(projects.feature.signup)
     implementation(projects.feature.setting)
+    implementation(projects.feature.withdrawal)
     implementation(projects.feature.jobPostingDetail)
     implementation(projects.feature.center.home)
     implementation(projects.feature.center.applicantInquiry)
