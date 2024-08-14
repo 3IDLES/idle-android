@@ -34,6 +34,7 @@
     <string name="account_withdrawal">계정 삭제</string>
     <string name="withdrawal_reason_title">정말 탈퇴하시겠어요?</string>
     <string name="withdrawal_reason_description">계정을 삭제하시려는 이유를 알려주세요.\n소중한 피드백을 받아 더 나은 서비스로 보답하겠습니다.</string>
+    <string name="withdrawal_phone_number_verification_title">마지막으로\n전화번호를 인증해주세요.</string>
     <string name="withdrawal_warning">탈퇴 버튼 선택 시 모든 정보가 삭제되며, 되돌릴 수 없습니다.</string>
 
     <!-- User Registration -->

@@ -101,7 +101,7 @@ class WithdrawalViewModel @Inject constructor(
             .onFailure { Log.d("test", "실패! ${it}") }
     }
 
-    internal fun withdrawal() = viewModelScope.launch{
+    internal fun withdrawal() = viewModelScope.launch {
         Log.d("test", "회원탈퇴 시도")
     }
 }
