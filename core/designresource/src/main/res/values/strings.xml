@@ -49,8 +49,8 @@
     <string name="my_profile">내 프로필</string>
     <string name="my_center_info">내 센터 정보</string>
     <string name="notification_setting">알림 설정</string>
-    <string name="logout">로그아웃</string>
-    <string name="withdrawal">회원탈퇴</string>
+    <string name="logout"><u>로그아웃</u></string>
+    <string name="withdrawal"><u>회원탈퇴</u></string>
 
     <!-- Job Posting & Recruitment -->
     <string name="post_job_posting">공고 등록</string>
