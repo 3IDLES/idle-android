@@ -14,46 +14,48 @@ sealed class DeepLinkDestination(
     val params: Map<String, String> = emptyMap(),
     val setDefaultAnimation: Boolean = true,
 ) {
-    object Auth : DeepLinkDestination(
+    data object Auth : DeepLinkDestination(
         addressRes = R.string.auth_deeplink_url,
         setDefaultAnimation = false,
     )
 
-    object Postcode : DeepLinkDestination(
+    data object Postcode : DeepLinkDestination(
         addressRes = R.string.postcode_deeplink_url,
         setDefaultAnimation = false,
     )
 
-    object NewPassword : DeepLinkDestination(
+    data object Withdrawal : DeepLinkDestination(addressRes = R.string.withdrawal_deeplink_url)
+
+    data object NewPassword : DeepLinkDestination(
         addressRes = R.string.new_password_deeplink_url
     )
 
-    object CenterSignIn : DeepLinkDestination(
+    data object CenterSignIn : DeepLinkDestination(
         addressRes = R.string.center_signin_deeplink_url
     )
 
-    object CenterSignUp : DeepLinkDestination(
+    data object CenterSignUp : DeepLinkDestination(
         addressRes = R.string.center_signup_deeplink_url
     )
 
-    object CenterHome : DeepLinkDestination(
+    data object CenterHome : DeepLinkDestination(
         addressRes = R.string.center_home_deeplink_url,
         setDefaultAnimation = false,
     )
 
-    object CenterProfile : DeepLinkDestination(
+    data object CenterProfile : DeepLinkDestination(
         addressRes = R.string.center_profile_deeplink_url
     )
 
-    object CenterSetting : DeepLinkDestination(
+    data object CenterSetting : DeepLinkDestination(
         addressRes = R.string.center_setting_deeplink_url
     )
 
-    object CenterRegister : DeepLinkDestination(
+    data object CenterRegister : DeepLinkDestination(
         addressRes = R.string.center_register_info_deeplink_url
     )
 
-    object CenterRegisterComplete : DeepLinkDestination(
+    data object CenterRegisterComplete : DeepLinkDestination(
         addressRes = R.string.center_register_info_complete_deeplink_url
     )
 
@@ -62,20 +64,20 @@ sealed class DeepLinkDestination(
         params = mapOf("jobPostingId" to jobPostingId)
     )
 
-    object CenterJobPosting : DeepLinkDestination(
+    data object CenterJobPosting : DeepLinkDestination(
         addressRes = R.string.center_job_posting_deeplink_url
     )
 
-    object CenterJobPostingComplete : DeepLinkDestination(
+    data object CenterJobPostingComplete : DeepLinkDestination(
         addressRes = R.string.center_job_posting_complete_deeplink_url
     )
 
-    object WorkerHome : DeepLinkDestination(
+    data object WorkerHome : DeepLinkDestination(
         addressRes = R.string.worker_home_deeplink_url,
         setDefaultAnimation = false
     )
 
-    object WorkerProfile : DeepLinkDestination(
+    data object WorkerProfile : DeepLinkDestination(
         addressRes = R.string.worker_profile_deeplink_url
     )
 
@@ -90,7 +92,7 @@ sealed class DeepLinkDestination(
         )
     )
 
-    object WorkerSignUp : DeepLinkDestination(
+    data object WorkerSignUp : DeepLinkDestination(
         addressRes = R.string.worker_signup_deeplink_url
     )
 }
