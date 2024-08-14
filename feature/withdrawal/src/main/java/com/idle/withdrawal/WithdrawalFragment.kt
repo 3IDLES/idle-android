@@ -41,6 +41,7 @@ internal class WithdrawalFragment : BaseComposeFragment() {
             WithdrawalStep(
                 withdrawalStep = withdrawalStep,
                 setWithdrawalStep = ::setWithdrawalStep,
+                onReasonChanged = ::setWithdrawalReason,
             )
         }
     }
@@ -51,6 +52,7 @@ internal class WithdrawalFragment : BaseComposeFragment() {
 internal fun WithdrawalStep(
     withdrawalStep: WithdrawalStep,
     setWithdrawalStep: (WithdrawalStep) -> Unit,
+    onReasonChanged: (WithdrawalReason) -> Unit,
 ) {
     val onBackPressedDispatcher =
         LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
@@ -85,8 +87,14 @@ internal fun WithdrawalStep(
                 label = "회원 탈퇴를 관리하는 애니메이션",
             ) { withdrawalStep ->
                 when (withdrawalStep) {
-                    WithdrawalStep.REASON -> ReasonScreen(setWithdrawalStep)
-                    WithdrawalStep.PHONENUMBER -> PhoneNumberScreen(setWithdrawalStep)
+                    WithdrawalStep.REASON -> ReasonScreen(
+                        onReasonChanged = onReasonChanged,
+                        setWithdrawalStep = setWithdrawalStep,
+                    )
+
+                    WithdrawalStep.PHONENUMBER
+
+                    -> PhoneNumberScreen(setWithdrawalStep)
                 }
             }
         }
