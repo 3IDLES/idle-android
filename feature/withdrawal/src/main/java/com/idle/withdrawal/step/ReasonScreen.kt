@@ -34,11 +34,15 @@ import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonMedium
 import com.idle.designsystem.compose.foundation.CareTheme
+import com.idle.domain.model.auth.UserRole
 import com.idle.withdrawal.WithdrawalReason
+import com.idle.withdrawal.WithdrawalReason.NO_LONGER_OPERATING_CENTER
+import com.idle.withdrawal.WithdrawalReason.NO_LONGER_WISH_TO_CONTINUE
 import com.idle.withdrawal.WithdrawalStep
 
 @Composable
 internal fun ReasonScreen(
+    userRole: UserRole,
     onReasonChanged: (WithdrawalReason) -> Unit,
     setWithdrawalStep: (WithdrawalStep) -> Unit,
     navigateToSetting: () -> Unit,
@@ -72,6 +76,9 @@ internal fun ReasonScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             WithdrawalReason.entries.forEach { reason ->
+                if (userRole == UserRole.WORKER && reason == NO_LONGER_OPERATING_CENTER) return@forEach
+                if (userRole == UserRole.CENTER && reason == NO_LONGER_WISH_TO_CONTINUE) return@forEach
+
                 WithdrawalReasonItem(
                     text = reason.displayName,
                     checked = (reason in withdrawalReason),

@@ -10,6 +10,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -17,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.fragment.navArgs
 import com.idle.binding.DeepLinkDestination
 import com.idle.binding.base.CareBaseEvent
 import com.idle.compose.addFocusCleaner
@@ -25,13 +28,14 @@ import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.foundation.CareTheme
+import com.idle.domain.model.auth.UserRole
 import com.idle.withdrawal.step.PhoneNumberScreen
 import com.idle.withdrawal.step.ReasonScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 internal class WithdrawalFragment : BaseComposeFragment() {
-
+    private val args: WithdrawalFragmentArgs by navArgs()
     override val fragmentViewModel: WithdrawalViewModel by viewModels()
 
     @Composable
@@ -41,8 +45,10 @@ internal class WithdrawalFragment : BaseComposeFragment() {
             val authCodeTimerMinute by authCodeTimerMinute.collectAsStateWithLifecycle()
             val authCodeTimerSeconds by authCodeTimerSeconds.collectAsStateWithLifecycle()
             val isConfirmAuthCode by isConfirmAuthCode.collectAsStateWithLifecycle()
+            val userRole by rememberSaveable { mutableStateOf(UserRole.create(args.userRole)) }
 
             WithdrawalStep(
+                userRole = userRole,
                 withdrawalStep = withdrawalStep,
                 timerMinute = authCodeTimerMinute,
                 timerSeconds = authCodeTimerSeconds,
@@ -70,6 +76,7 @@ internal class WithdrawalFragment : BaseComposeFragment() {
 @ExperimentalMaterial3Api
 @Composable
 internal fun WithdrawalStep(
+    userRole: UserRole,
     withdrawalStep: WithdrawalStep,
     timerMinute: String,
     timerSeconds: String,
@@ -115,6 +122,7 @@ internal fun WithdrawalStep(
             ) { withdrawalStep ->
                 when (withdrawalStep) {
                     WithdrawalStep.REASON -> ReasonScreen(
+                        userRole = userRole,
                         onReasonChanged = onReasonChanged,
                         setWithdrawalStep = setWithdrawalStep,
                         navigateToSetting = navigateToSetting,

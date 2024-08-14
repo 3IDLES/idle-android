@@ -11,6 +11,7 @@ import com.idle.binding.DeepLinkDestination.WorkerProfile
 import com.idle.binding.base.BaseBindingFragment
 import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.binding.repeatOnStarted
+import com.idle.domain.model.auth.UserRole
 import com.idle.setting.FAQ_URL
 import com.idle.setting.PRIVACY_POLICY_URL
 import com.idle.setting.SettingEvent
@@ -56,7 +57,7 @@ internal class CenterSettingFragment :
             SettingEvent.PrivacyPolicy -> navigateToUri(PRIVACY_POLICY_URL)
             SettingEvent.TermsAndPolicies -> navigateToUri(TERMS_AND_POLICES_URL)
             SettingEvent.Inquiry -> {}
-            SettingEvent.Withdrawal -> fragmentViewModel.baseEvent(NavigateTo(Withdrawal))
+            SettingEvent.Withdrawal -> fragmentViewModel.baseEvent(NavigateTo(Withdrawal(UserRole.CENTER)))
             SettingEvent.Logout -> {
                 if (!(logoutDialog?.isAdded == true || logoutDialog?.isVisible == true)) {
                     logoutDialog?.show(parentFragmentManager, "LogoutDialogFragment")
