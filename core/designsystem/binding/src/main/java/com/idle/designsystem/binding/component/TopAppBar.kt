@@ -20,6 +20,7 @@ class CareSubtitleTopAppBar @JvmOverloads constructor(
     private var backIconImageView: ImageView
     private var titleTextView: TextView
     private var leftComponentPlaceholder: FrameLayout
+    private var onNavigationClick: (() -> Unit)? = null
 
     init {
         LayoutInflater.from(context).inflate(R.layout.view_care_subtitle_top_app_bar, this, true)
@@ -45,8 +46,6 @@ class CareSubtitleTopAppBar @JvmOverloads constructor(
             recycle()
         }
     }
-
-    private var onNavigationClick: (() -> Unit)? = null
 
     fun setTitle(title: String) {
         titleTextView.text = title
