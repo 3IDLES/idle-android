@@ -21,6 +21,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -31,15 +34,18 @@ import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonMedium
 import com.idle.designsystem.compose.foundation.CareTheme
+import com.idle.withdrawal.WithdrawalReason
 import com.idle.withdrawal.WithdrawalStep
 
 @Composable
 internal fun ReasonScreen(
+    onReasonChanged: (WithdrawalReason) -> Unit,
     setWithdrawalStep: (WithdrawalStep) -> Unit,
 ) {
     val onBackPressedDispatcher =
         LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val scrollState = rememberScrollState()
+    var withdrawalReason by rememberSaveable { mutableStateOf<Set<WithdrawalReason>>(setOf()) }
 
     Column(
         horizontalAlignment = Alignment.Start,
@@ -67,10 +73,18 @@ internal fun ReasonScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
-            repeat(5) {
-                WithdrawalReasonItem(checked = true) {
-
-                }
+            WithdrawalReason.entries.forEach { reason ->
+                WithdrawalReasonItem(
+                    text = reason.displayName,
+                    checked = (reason in withdrawalReason),
+                    onClick = {
+                        onReasonChanged(reason)
+                        withdrawalReason = withdrawalReason.toMutableSet().apply {
+                            if (reason in this) remove(reason)
+                            else add(reason)
+                        }.toSet()
+                    },
+                )
             }
         }
 
@@ -91,7 +105,7 @@ internal fun ReasonScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             CareButtonMedium(
-                text = stringResource(id = com.idle.designresource.R.string.cancel),
+                text = stringResource(id = R.string.cancel),
                 textColor = CareTheme.colors.gray300,
                 containerColor = CareTheme.colors.white000,
                 border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray200),
@@ -100,9 +114,10 @@ internal fun ReasonScreen(
             )
 
             CareButtonMedium(
-                text = stringResource(id = com.idle.designresource.R.string.withdrawal),
+                text = stringResource(id = R.string.withdrawal),
                 textColor = CareTheme.colors.white000,
                 containerColor = CareTheme.colors.red,
+                enable = withdrawalReason.isNotEmpty(),
                 onClick = { setWithdrawalStep(WithdrawalStep.findStep(WithdrawalStep.REASON.step + 1)) },
                 modifier = Modifier.weight(1f),
             )
@@ -112,6 +127,7 @@ internal fun ReasonScreen(
 
 @Composable
 private fun WithdrawalReasonItem(
+    text: String,
     checked: Boolean,
     onClick: () -> Unit,
 ) {
@@ -154,7 +170,7 @@ private fun WithdrawalReasonItem(
         }
 
         Text(
-            text = "탈퇴하는 이유 어쩌고저쩌고",
+            text = text,
             style = CareTheme.typography.body2,
             color = CareTheme.colors.gray500,
         )
