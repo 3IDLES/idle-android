@@ -8,12 +8,13 @@
     <include app:graph="@navigation/nav_postcode" />
     <include app:graph="@navigation/nav_signin" />
     <include app:graph="@navigation/nav_signup" />
+    <include app:graph="@navigation/nav_withdrawal" />
+    <include app:graph="@navigation/nav_job_posting" />
     <include app:graph="@navigation/nav_center_home" />
     <include app:graph="@navigation/nav_applicant_inquiry" />
     <include app:graph="@navigation/nav_center_profile" />
     <include app:graph="@navigation/nav_center_setting" />
     <include app:graph="@navigation/nav_register_center_info" />
-    <include app:graph="@navigation/nav_job_posting" />
     <include app:graph="@navigation/nav_worker_home" />
     <include app:graph="@navigation/nav_worker_profile" />
     <include app:graph="@navigation/nav_worker_setting" />
