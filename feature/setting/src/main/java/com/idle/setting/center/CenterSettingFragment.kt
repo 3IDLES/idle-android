@@ -3,11 +3,14 @@ package com.idle.setting.center
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.idle.binding.DeepLinkDestination.CenterProfile
 import com.idle.binding.base.BaseBindingFragment
 import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.binding.repeatOnStarted
+import com.idle.setting.SettingEvent
 import com.idle.setting.databinding.FragmentCenterSettingBinding
+import com.idle.setting.dialog.LogoutDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -16,6 +19,16 @@ internal class CenterSettingFragment :
         FragmentCenterSettingBinding::inflate
     ) {
     override val fragmentViewModel: CenterSettingViewModel by viewModels()
+    private val logoutDialog: LogoutDialogFragment? by lazy {
+        LogoutDialogFragment().apply {
+            onDismissCallback = {
+                findNavController().currentBackStackEntry?.savedStateHandle?.let {
+                    val result = it.get<Boolean>("logout")
+                    if (result == true) fragmentViewModel.logout()
+                }
+            }
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -30,17 +43,27 @@ internal class CenterSettingFragment :
         }
     }
 
-    private fun handleSettingEvent(event: CenterSettingEvent) {
+    private fun handleSettingEvent(event: SettingEvent) {
         when (event) {
-            CenterSettingEvent.Logout -> {
+            SettingEvent.Logout -> {
+                if (!(logoutDialog?.isAdded == true || logoutDialog?.isVisible == true)) {
+                    logoutDialog?.show(parentFragmentManager, "LogoutDialogFragment")
+                }
+            }
+
+            SettingEvent.Withdrawal -> {
 
             }
 
-            CenterSettingEvent.Withdrawal -> {
+            SettingEvent.Profile -> fragmentViewModel.baseEvent(NavigateTo(CenterProfile))
 
-            }
+            SettingEvent.FAQ -> {}
 
-            CenterSettingEvent.MyCenter -> fragmentViewModel.baseEvent(NavigateTo(CenterProfile))
+            SettingEvent.PrivacyPolicy -> {}
+
+            SettingEvent.Inquiry -> {}
+
+            SettingEvent.TermsAndPolicies -> {}
         }
     }
 }
