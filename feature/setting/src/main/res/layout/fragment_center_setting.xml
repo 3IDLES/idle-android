@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.idle.center.setting.CenterSettingViewModel" />
+            type="com.idle.setting.CenterSettingViewModel" />
     </data>
 
     <LinearLayout
@@ -95,6 +95,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
+                android:onClick="@{() -> viewModel.logout()}"
                 android:text="@string/logout"
                 android:textColor="@color/gray_300" />
 
@@ -102,6 +103,7 @@
                 style="@style/Body3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="@{() -> viewModel.withdrawal()}"
                 android:text="@string/withdrawal"
                 android:textColor="@color/gray_300" />
         </LinearLayout>

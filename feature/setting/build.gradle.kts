@@ -3,5 +3,5 @@ plugins {
 }
 
 android {
-    namespace = "com.idle.center.setting"
+    namespace = "com.idle.setting"
 }
