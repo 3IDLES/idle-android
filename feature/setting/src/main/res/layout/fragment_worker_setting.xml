@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="20dp"
-            android:onClick="@{() -> viewModel.myProfile()}"
+            android:onClick="@{() -> viewModel.clickProfile()}"
             app:title="@string/my_profile" />
 
         <com.google.android.material.divider.MaterialDivider
@@ -88,7 +88,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
-                android:onClick="@{() -> viewModel.logout()}"
+                android:onClick="@{() -> viewModel.clickLogout()}"
                 android:text="@string/logout"
                 android:textColor="@color/gray_300" />
 
@@ -96,7 +96,7 @@
                 style="@style/Body3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="@{() -> viewModel.withdrawal()}"
+                android:onClick="@{() -> viewModel.clickWithdrawal()}"
                 android:text="@string/withdrawal"
                 android:textColor="@color/gray_300" />
         </LinearLayout>

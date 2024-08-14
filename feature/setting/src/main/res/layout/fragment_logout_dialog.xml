@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.idle.designsystem.binding.component.CareDialog
+        android:id="@+id/logoutDialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:leftButtonText="취소하기"
+        app:rightButtonText="탈퇴하기"
+        app:title="로그아웃하시겠어요?" />
+</layout>
