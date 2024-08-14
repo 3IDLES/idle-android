@@ -59,7 +59,7 @@ internal fun WithdrawalStep(
     Scaffold(
         topBar = {
             CareSubtitleTopBar(
-                title = stringResource(id = R.string.post_job_posting),
+                title = stringResource(id = R.string.account_withdrawal),
                 onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -78,7 +78,7 @@ internal fun WithdrawalStep(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .padding(paddingValue)
-                .padding(start = 20.dp, end = 20.dp, top = 24.dp),
+                .padding(start = 20.dp, end = 20.dp, top = 24.dp, bottom = 28.dp),
         ) {
             CareStateAnimator(
                 targetState = withdrawalStep,
