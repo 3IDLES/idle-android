@@ -4,7 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.LocalOverscrollConfiguration
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -31,16 +34,20 @@ abstract class BaseComposeFragment : Fragment() {
         }
     }
 
+    @OptIn(ExperimentalFoundationApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         viewLifecycleOwner.repeatOnStarted {
-            fragmentViewModel.baseEventFlow.collect { handleEvent(it)
+            fragmentViewModel.baseEventFlow.collect {
+                handleEvent(it)
             }
         }
 
         composeView.setContent {
-            ComposeLayout()
+            CompositionLocalProvider(LocalOverscrollConfiguration provides null) {
+                ComposeLayout()
+            }
         }
     }
 
