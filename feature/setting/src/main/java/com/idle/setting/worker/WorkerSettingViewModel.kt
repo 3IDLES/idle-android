@@ -1,5 +1,6 @@
 package com.idle.setting.worker
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,10 +13,13 @@ import javax.inject.Inject
 class WorkerSettingViewModel @Inject constructor() : BaseViewModel() {
     private val _workerSettingEvent = MutableSharedFlow<WorkerSettingEvent>()
     val workerSettingEvent = _workerSettingEvent.asSharedFlow()
+    fun logout() {
+        Log.d("test", "로그아웃 호출")
+    }
 
-    fun logout() = workerSettingEvent(WorkerSettingEvent.Logout)
-    fun withdrawal() = workerSettingEvent(WorkerSettingEvent.Withdrawal)
-    fun myProfile() = workerSettingEvent(WorkerSettingEvent.MyProfile)
+    fun clickLogout() = workerSettingEvent(WorkerSettingEvent.Logout)
+    fun clickWithdrawal() = workerSettingEvent(WorkerSettingEvent.Withdrawal)
+    fun clickProfile() = workerSettingEvent(WorkerSettingEvent.MyProfile)
 
     private fun workerSettingEvent(event: WorkerSettingEvent) = viewModelScope.launch {
         _workerSettingEvent.emit(event)
