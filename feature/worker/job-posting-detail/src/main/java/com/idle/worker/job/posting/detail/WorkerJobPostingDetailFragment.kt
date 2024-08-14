@@ -1,5 +1,6 @@
 package com.idle.worker.job.posting.detail
 
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,7 +30,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import com.idle.compose.base.BaseComposeFragment
-import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLine
 import com.idle.designsystem.compose.component.CareCard
@@ -76,7 +76,9 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
 internal fun WorkerJobPostingDetailScreen(
     showPlaceDetail: (Boolean) -> Unit,
 ) {
+    val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val scrollState = rememberScrollState()
+
     Scaffold(
         containerColor = CareTheme.colors.white000,
         topBar = {
@@ -88,6 +90,7 @@ internal fun WorkerJobPostingDetailScreen(
                     end = 20.dp,
                     bottom = 12.dp
                 ),
+                onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
             )
         }
     ) { paddingValue ->
@@ -232,6 +235,7 @@ internal fun WorkerJobPostingDetailScreen(
                     CareMap(
                         homeLatLng = 37.5670135 to 126.9883740,
                         workspaceLatLng = 37.5690135 to 126.9783740,
+                        onMapClick = { showPlaceDetail(true) },
                         modifier = Modifier.fillMaxSize(),
                     )
 
@@ -240,8 +244,7 @@ internal fun WorkerJobPostingDetailScreen(
                         contentDescription = null,
                         modifier = Modifier
                             .align(Alignment.BottomEnd)
-                            .padding(12.dp)
-                            .clickable { showPlaceDetail(true) },
+                            .padding(12.dp),
                     )
                 }
             }

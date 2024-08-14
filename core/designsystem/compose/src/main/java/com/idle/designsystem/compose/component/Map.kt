@@ -37,6 +37,7 @@ fun CareMap(
     isTiltGesturesEnabled: Boolean = false,
     isRotateGesturesEnabled: Boolean = false,
     pathColor: Color = CareTheme.colors.orange400,
+    onMapClick: () -> Unit = {},
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -88,6 +89,10 @@ fun CareMap(
                 this.isZoomControlEnabled = isZoomControlEnabled
                 this.isTiltGesturesEnabled = isTiltGesturesEnabled
                 this.isRotateGesturesEnabled = isRotateGesturesEnabled
+            }
+
+            naverMap.setOnMapClickListener { _, _ ->
+                onMapClick()
             }
         }
     }
