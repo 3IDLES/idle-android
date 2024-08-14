@@ -26,6 +26,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.idle.binding.DeepLinkDestination
 import com.idle.binding.DeepLinkDestination.WorkerJobDetail
 import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.compose.base.BaseComposeFragment
@@ -37,6 +38,7 @@ import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareTabBar
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.foundation.CareTheme
+import com.idle.domain.model.auth.UserRole
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -48,11 +50,11 @@ internal class WorkerHomeFragment : BaseComposeFragment() {
         fragmentViewModel.apply {
             val recruitmentPostStatus by recruitmentPostStatus.collectAsStateWithLifecycle()
 
-            WorkerHomeScreen(recruitmentPostStatus = recruitmentPostStatus,
+            WorkerHomeScreen(
+                recruitmentPostStatus = recruitmentPostStatus,
                 setRecruitmentPostStatus = ::setRecruitmentPostStatus,
-                navigateToJobDetail = { jobId ->
-                    fragmentViewModel.baseEvent(NavigateTo(WorkerJobDetail))
-                })
+                navigateTo = { baseEvent(NavigateTo(it)) },
+            )
         }
     }
 }
@@ -61,7 +63,7 @@ internal class WorkerHomeFragment : BaseComposeFragment() {
 internal fun WorkerHomeScreen(
     recruitmentPostStatus: RecruitmentPostStatus,
     setRecruitmentPostStatus: (RecruitmentPostStatus) -> Unit,
-    navigateToJobDetail: (String) -> Unit,
+    navigateTo: (DeepLinkDestination) -> Unit,
 ) {
     Scaffold(
         containerColor = CareTheme.colors.white000,
@@ -104,7 +106,7 @@ internal fun WorkerHomeScreen(
                                 .fillMaxSize()
                         ) {
                             items(listOf(1, 2, 3, 4, 5)) {
-                                WorkerRecruitmentCard(navigateToJobDetail = navigateToJobDetail)
+                                WorkerRecruitmentCard(navigateTo)
                             }
                         }
                     }
@@ -117,7 +119,7 @@ internal fun WorkerHomeScreen(
                                 .fillMaxSize()
                         ) {
                             items(listOf(1, 2, 3, 4, 5)) {
-                                WorkerRecruitmentCard(navigateToJobDetail = navigateToJobDetail)
+                                WorkerRecruitmentCard(navigateTo)
                             }
                         }
                     }
@@ -129,9 +131,10 @@ internal fun WorkerHomeScreen(
 
 @Composable
 private fun WorkerRecruitmentCard(
-    navigateToJobDetail: (String) -> Unit,
+    navigateTo: (DeepLinkDestination) -> Unit,
 ) {
-    Card(shape = RoundedCornerShape(12.dp),
+    Card(
+        shape = RoundedCornerShape(12.dp),
         colors = CardColors(
             containerColor = CareTheme.colors.white000,
             contentColor = CareTheme.colors.white000,
@@ -139,7 +142,15 @@ private fun WorkerRecruitmentCard(
             disabledContentColor = CareTheme.colors.white000,
         ),
         border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
-        modifier = Modifier.clickable { navigateToJobDetail("") }) {
+        modifier = Modifier.clickable {
+            navigateTo(
+                WorkerJobDetail(
+                    jobPostingId = "01914eaa-5106-74ab-a079-67875c1d0f42",
+                    userRole = UserRole.WORKER,
+                )
+            )
+        },
+    ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,

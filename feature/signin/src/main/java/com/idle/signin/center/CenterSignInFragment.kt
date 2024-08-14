@@ -2,7 +2,6 @@ package com.idle.signin.center
 
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,9 +10,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -68,6 +72,7 @@ internal fun CenterSignInScreen(
 ) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val focusManager = LocalFocusManager.current
+    val focusRequester = remember { FocusRequester() }
 
     Scaffold(
         topBar = {
@@ -81,37 +86,41 @@ internal fun CenterSignInScreen(
         },
         modifier = Modifier.addFocusCleaner(focusManager),
     ) { paddingValue ->
+
+        LaunchedEffect(Unit) {
+            focusRequester.requestFocus()
+        }
+
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
             modifier = Modifier
                 .fillMaxSize()
                 .background(CareTheme.colors.white000)
                 .padding(paddingValue)
                 .padding(start = 20.dp, end = 20.dp, top = 24.dp),
         ) {
-            Spacer(modifier = Modifier.weight(4f))
+            Spacer(modifier = Modifier.weight(2f))
 
             LabeledContent(
                 subtitle = stringResource(id = R.string.id),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp),
+                    .padding(bottom = 12.dp),
             ) {
                 CareTextField(
                     value = centerId,
                     hint = stringResource(id = R.string.id_hint),
                     onValueChanged = onCenterIdChanged,
-                    onDone = { },
-                    modifier = Modifier.fillMaxWidth(),
+                    onDone = { if (centerId.isNotBlank()) focusManager.moveFocus(FocusDirection.Down) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusRequester(focusRequester),
                 )
             }
 
             LabeledContent(
                 subtitle = stringResource(id = R.string.password),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp),
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 CareTextField(
                     value = centerPassword,
@@ -123,14 +132,16 @@ internal fun CenterSignInScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.weight(7f))
+            Spacer(modifier = Modifier.weight(5f))
 
             Text(
                 text = stringResource(id = R.string.forget_password),
                 textDecoration = TextDecoration.Underline,
                 style = CareTheme.typography.body3,
                 color = CareTheme.colors.gray500,
-                modifier = Modifier.clickable { navigateToNewPassword() }
+                modifier = Modifier
+                    .padding(bottom = 12.dp)
+                    .clickable { navigateToNewPassword() },
             )
 
             CareButtonLarge(

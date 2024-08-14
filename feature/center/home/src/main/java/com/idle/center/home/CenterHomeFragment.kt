@@ -182,7 +182,7 @@ private fun CenterRecruitmentCard(
                 onClick = { navigateTo(CenterApplicantInquiry("01914eaa-5106-74ab-a079-67875c1d0f42")) },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 8.dp),
+                    .padding(bottom = 4  .dp),
             )
 
             Row(
