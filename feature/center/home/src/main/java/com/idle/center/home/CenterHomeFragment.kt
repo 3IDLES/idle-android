@@ -27,6 +27,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.idle.binding.DeepLinkDestination
 import com.idle.binding.DeepLinkDestination.CenterApplicantInquiry
 import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.compose.base.BaseComposeFragment
@@ -37,6 +38,7 @@ import com.idle.designsystem.compose.component.CareHeadingTopBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareTabBar
 import com.idle.designsystem.compose.foundation.CareTheme
+import com.idle.domain.model.auth.UserRole
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -47,12 +49,11 @@ internal class CenterHomeFragment : BaseComposeFragment() {
     override fun ComposeLayout() {
         fragmentViewModel.apply {
             val recruitmentPostStatus by recruitmentPostStatus.collectAsStateWithLifecycle()
+
             CenterHomeScreen(
                 recruitmentPostStatus = recruitmentPostStatus,
                 setRecruitmentPostStatus = ::setRecruitmentPostStatus,
-                navigateToApplicantInquiry = { jobPostingId ->
-                    baseEvent(NavigateTo(CenterApplicantInquiry(jobPostingId)))
-                },
+                navigateTo = { baseEvent(NavigateTo(it)) }
             )
         }
     }
@@ -62,7 +63,7 @@ internal class CenterHomeFragment : BaseComposeFragment() {
 internal fun CenterHomeScreen(
     recruitmentPostStatus: RecruitmentPostStatus,
     setRecruitmentPostStatus: (RecruitmentPostStatus) -> Unit,
-    navigateToApplicantInquiry: (String) -> Unit,
+    navigateTo: (DeepLinkDestination) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -96,7 +97,7 @@ internal fun CenterHomeScreen(
                     RecruitmentPostStatus.ONGOING ->
                         LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             items(listOf(1, 2, 3, 4, 5)) {
-                                CenterRecruitmentCard(navigateToApplicantInquiry)
+                                CenterRecruitmentCard(navigateTo)
                             }
 
                             item {
@@ -111,7 +112,7 @@ internal fun CenterHomeScreen(
                     RecruitmentPostStatus.PREVIOUS ->
                         LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             items(listOf(1, 2, 3, 4, 5)) {
-                                CenterRecruitmentCard(navigateToApplicantInquiry)
+                                CenterRecruitmentCard(navigateTo)
                             }
 
                             item {
@@ -130,7 +131,7 @@ internal fun CenterHomeScreen(
 
 @Composable
 private fun CenterRecruitmentCard(
-    navigateToApplicantInquiry: (String) -> Unit,
+    navigateTo: (DeepLinkDestination) -> Unit,
 ) {
     Card(
         shape = RoundedCornerShape(12.dp),
@@ -141,7 +142,14 @@ private fun CenterRecruitmentCard(
             disabledContentColor = CareTheme.colors.white000,
         ),
         border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
-        modifier = Modifier.clickable { }
+        modifier = Modifier.clickable {
+            navigateTo(
+                DeepLinkDestination.WorkerJobDetail(
+                    jobPostingId = "01914eaa-5106-74ab-a079-67875c1d0f42",
+                    userRole = UserRole.CENTER,
+                )
+            )
+        }
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
@@ -169,25 +177,13 @@ private fun CenterRecruitmentCard(
                 modifier = Modifier.padding(bottom = 12.dp)
             )
 
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment = Alignment.CenterVertically,
+            CareButtonCardMedium(
+                text = "지원자 2명 조회",
+                onClick = { navigateTo(CenterApplicantInquiry("01914eaa-5106-74ab-a079-67875c1d0f42")) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 8.dp),
-            ) {
-                CareButtonCardMedium(
-                    text = "지원자 2명 조회",
-                    onClick = { navigateToApplicantInquiry("1") },
-                    modifier = Modifier.weight(1f),
-                )
-
-                CareButtonCardMedium(
-                    text = "요양 보호사 찾기",
-                    onClick = {},
-                    modifier = Modifier.weight(1f),
-                )
-            }
+            )
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,

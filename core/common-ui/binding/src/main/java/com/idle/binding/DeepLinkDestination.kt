@@ -7,6 +7,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.NavOptions
 import com.idle.designresource.R
+import com.idle.domain.model.auth.UserRole
 
 sealed class DeepLinkDestination(
     val addressRes: Int,
@@ -79,9 +80,16 @@ sealed class DeepLinkDestination(
         setAnimation = true,
     )
 
-    data object WorkerJobDetail :
+    data class WorkerJobDetail(
+        val jobPostingId: String,
+        val userRole: UserRole,
+    ) :
         DeepLinkDestination(
             addressRes = R.string.worker_recruitment_detail_deeplink_url,
+            params = mapOf(
+                "jobPostingId" to jobPostingId,
+                "userRole" to userRole.name
+            ),
             setAnimation = true,
         )
 
