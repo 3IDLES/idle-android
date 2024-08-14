@@ -2,6 +2,8 @@
 
 package com.idle.worker.job.posting.detail
 
+import android.content.Intent
+import android.util.Log
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -34,9 +36,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
+import com.idle.binding.repeatOnStarted
 import com.idle.compose.base.BaseComposeFragment
-import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareBottomSheetLayout
 import com.idle.designsystem.compose.component.CareButtonLine
@@ -60,6 +63,10 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
         fragmentViewModel.apply {
             val (showPlaceDetail, setShowPlaceDetail) = rememberSaveable { mutableStateOf(false) }
 
+            repeatOnStarted {
+                eventFlow.collect { handleJobPostingEvent(it) }
+            }
+
             CareStateAnimator(
                 targetState = showPlaceDetail,
                 transitionCondition = showPlaceDetail,
@@ -73,9 +80,19 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
                     )
                 } else {
                     WorkerJobPostingDetailScreen(
-                        showPlaceDetail = setShowPlaceDetail
+                        showPlaceDetail = setShowPlaceDetail,
+                        requestEvent = ::workerJobPostingDetailEvent,
                     )
                 }
+            }
+        }
+    }
+
+    private fun handleJobPostingEvent(event: WorkerJobPostingDetailEvent) {
+        when (event) {
+            is WorkerJobPostingDetailEvent.CallInquiry -> {
+                val number = "tel:" + event.number
+                startActivity(Intent(Intent.ACTION_DIAL, number.toUri()))
             }
         }
     }
@@ -84,6 +101,7 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
 @Composable
 internal fun WorkerJobPostingDetailScreen(
     showPlaceDetail: (Boolean) -> Unit,
+    requestEvent: (WorkerJobPostingDetailEvent) -> Unit,
 ) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val scrollState = rememberScrollState()
@@ -118,9 +136,8 @@ internal fun WorkerJobPostingDetailScreen(
                             contentDescription = null,
                         )
                     },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { },
+                    onClick = { requestEvent(WorkerJobPostingDetailEvent.CallInquiry("01012345678")) },
+                    modifier = Modifier.fillMaxWidth(),
                 )
             }
         },
