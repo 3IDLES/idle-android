@@ -8,6 +8,6 @@
         android:id="@+id/workerSettingFragment"
         android:name="com.idle.setting.worker.WorkerSettingFragment"
         android:label="WorkerSettingFragment">
-        <deepLink app:uri="@string/center_setting_deeplink_url" />
+        <deepLink app:uri="@string/worker_setting_deeplink_url" />
     </fragment>
 </navigation>

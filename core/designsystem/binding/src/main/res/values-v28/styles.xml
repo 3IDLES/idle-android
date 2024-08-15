@@ -3,28 +3,28 @@
     <!-- Heading styles -->
     <style name="Heading1" parent="TextAppearance.AppCompat">
         <item name="android:textSize">24sp</item>
-        <item name="android:lineHeight">34sp</item>
+        <item name="android:lineHeight">36sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:fontFamily">@font/pretendard_bold</item>
     </style>
 
     <style name="Heading2" parent="TextAppearance.AppCompat">
         <item name="android:textSize">20sp</item>
-        <item name="android:lineHeight">28sp</item>
+        <item name="android:lineHeight">32sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:fontFamily">@font/pretendard_bold</item>
     </style>
 
     <style name="Heading3" parent="TextAppearance.AppCompat">
         <item name="android:textSize">18sp</item>
-        <item name="android:lineHeight">24sp</item>
+        <item name="android:lineHeight">30sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:fontFamily">@font/pretendard_bold</item>
     </style>
 
     <style name="Heading4" parent="TextAppearance.AppCompat">
         <item name="android:textSize">16sp</item>
-        <item name="android:lineHeight">23sp</item>
+        <item name="android:lineHeight">26sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:fontFamily">@font/pretendard_bold</item>
     </style>
@@ -32,59 +32,66 @@
     <!-- Subtitle styles -->
     <style name="Subtitle1" parent="TextAppearance.AppCompat">
         <item name="android:textSize">20sp</item>
-        <item name="android:lineHeight">28sp</item>
+        <item name="android:lineHeight">32sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:fontFamily">@font/pretendard_semi_bold</item>
     </style>
 
     <style name="Subtitle2" parent="TextAppearance.AppCompat">
         <item name="android:textSize">18sp</item>
-        <item name="android:lineHeight">24sp</item>
+        <item name="android:lineHeight">30sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:fontFamily">@font/pretendard_semi_bold</item>
     </style>
 
     <style name="Subtitle3" parent="TextAppearance.AppCompat">
         <item name="android:textSize">16sp</item>
-        <item name="android:lineHeight">22sp</item>
-        <item name="android:letterSpacing">-0.03</item>
+        <item name="android:lineHeight">26sp</item>
+        <item name="android:letterSpacing">-0.02</item>
         <item name="android:fontFamily">@font/pretendard_semi_bold</item>
     </style>
 
     <style name="Subtitle4" parent="TextAppearance.AppCompat">
         <item name="android:textSize">14sp</item>
-        <item name="android:lineHeight">20sp</item>
-        <item name="android:letterSpacing">-0.03</item>
+        <item name="android:lineHeight">22sp</item>
+        <item name="android:letterSpacing">-0.02</item>
         <item name="android:fontFamily">@font/pretendard_semi_bold</item>
     </style>
 
     <!-- Body styles -->
     <style name="Body1" parent="TextAppearance.AppCompat">
         <item name="android:textSize">18sp</item>
-        <item name="android:lineHeight">24sp</item>
+        <item name="android:lineHeight">30sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:fontFamily">@font/pretendard_medium</item>
     </style>
 
     <style name="Body2" parent="TextAppearance.AppCompat">
         <item name="android:textSize">16sp</item>
-        <item name="android:lineHeight">22sp</item>
+        <item name="android:lineHeight">26sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:fontFamily">@font/pretendard_medium</item>
     </style>
 
     <style name="Body3" parent="TextAppearance.AppCompat">
         <item name="android:textSize">14sp</item>
-        <item name="android:lineHeight">20sp</item>
-        <item name="android:letterSpacing">-0.03</item>
+        <item name="android:lineHeight">22sp</item>
+        <item name="android:letterSpacing">-0.02</item>
         <item name="android:fontFamily">@font/pretendard_medium</item>
     </style>
 
     <!-- Caption style -->
-    <style name="Caption" parent="TextAppearance.AppCompat">
+    <style name="Caption1" parent="TextAppearance.AppCompat">
         <item name="android:textSize">12sp</item>
         <item name="android:lineHeight">18sp</item>
-        <item name="android:letterSpacing">-0.04</item>
+        <item name="android:letterSpacing">-0.02</item>
         <item name="android:fontFamily">@font/pretendard_medium</item>
+    </style>
+
+    <style name="Caption2" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">12sp</item>
+        <item name="android:lineHeight">18sp</item>
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:fontFamily">@font/pretendard_semi_bold</item>
     </style>
 </resources>

@@ -6,6 +6,9 @@ import androidx.core.net.toUri
 import androidx.navigation.NavController
 import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.NavOptions
+import com.idle.binding.DeepLinkDestination.Auth
+import com.idle.binding.DeepLinkDestination.CenterSetting
+import com.idle.binding.DeepLinkDestination.WorkerSetting
 import com.idle.designresource.R
 import com.idle.domain.model.auth.UserRole
 
@@ -51,7 +54,8 @@ sealed class DeepLinkDestination(
     )
 
     data object CenterSetting : DeepLinkDestination(
-        addressRes = R.string.center_setting_deeplink_url
+        addressRes = R.string.center_setting_deeplink_url,
+        setDefaultAnimation = false,
     )
 
     data object CenterRegister : DeepLinkDestination(
@@ -77,11 +81,16 @@ sealed class DeepLinkDestination(
 
     data object WorkerHome : DeepLinkDestination(
         addressRes = R.string.worker_home_deeplink_url,
-        setDefaultAnimation = false
+        setDefaultAnimation = false,
     )
 
     data object WorkerProfile : DeepLinkDestination(
         addressRes = R.string.worker_profile_deeplink_url
+    )
+
+    data object WorkerSetting : DeepLinkDestination(
+        addressRes = R.string.center_setting_deeplink_url,
+        setDefaultAnimation = false,
     )
 
     data class JobDetail(
@@ -130,7 +139,7 @@ private fun buildNavOptions(destination: DeepLinkDestination, @IdRes popUpTo: In
             setPopExitAnim(R.anim.anim_pop_slide_out_horizontally)
         }
 
-        if (destination == DeepLinkDestination.Auth) {
+        if (destination in setOf(Auth, CenterSetting, WorkerSetting)) {
             setEnterAnim(R.anim.anim_pop_slide_in_horizontally)
             setExitAnim(R.anim.anim_slide_out_horizontally)
             setPopEnterAnim(R.anim.anim_pop_slide_in_horizontally)
