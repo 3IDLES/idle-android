@@ -2,12 +2,17 @@ package com.idle.withdrawal
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
+import com.idle.binding.DeepLinkDestination
 import com.idle.binding.base.BaseViewModel
+import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.CountDownTimer
 import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
+import com.idle.domain.model.auth.UserRole
 import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
 import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
+import com.idle.domain.usecase.auth.WithdrawalCenterUseCase
+import com.idle.domain.usecase.auth.WithdrawalWorkerUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,6 +24,8 @@ import javax.inject.Inject
 class WithdrawalViewModel @Inject constructor(
     private val sendPhoneNumberUseCase: SendPhoneNumberUseCase,
     private val confirmAuthCodeUseCase: ConfirmAuthCodeUseCase,
+    private val withdrawalCenterUseCase: WithdrawalCenterUseCase,
+    private val withdrawalWorkerUseCase: WithdrawalWorkerUseCase,
     private val countDownTimer: CountDownTimer,
 ) : BaseViewModel() {
     private val _withdrawalStep = MutableStateFlow<WithdrawalStep>(WithdrawalStep.REASON)
@@ -101,8 +108,38 @@ class WithdrawalViewModel @Inject constructor(
             .onFailure { Log.d("test", "실패! ${it}") }
     }
 
-    internal fun withdrawal() = viewModelScope.launch {
-        Log.d("test", "회원탈퇴 시도")
+    internal fun withdrawal(userRole: UserRole) = viewModelScope.launch {
+        when (userRole) {
+            UserRole.CENTER -> withdrawalCenter()
+            UserRole.WORKER -> withdrawalWorker()
+        }
+    }
+
+    private suspend fun withdrawalCenter() {
+        withdrawalCenterUseCase(
+            reason = _withdrawalReason.value
+                .sortedBy { it.ordinal }
+                .joinToString("|"),
+            password = ""
+        ).onSuccess {
+            // Todo 회원탈퇴 성공 알림
+            baseEvent(CareBaseEvent.NavigateTo(DeepLinkDestination.Auth, R.id.withdrawalFragment))
+        }.onFailure {
+            Log.d("test", "센터 회원탈퇴 실패! ${it}")
+        }
+    }
+
+    private suspend fun withdrawalWorker() {
+        withdrawalWorkerUseCase(
+            _withdrawalReason.value
+                .sortedBy { it.ordinal }
+                .joinToString("|"),
+        ).onSuccess {
+            // Todo 회원탈퇴 성공 알림
+            baseEvent(CareBaseEvent.NavigateTo(DeepLinkDestination.Auth, R.id.withdrawalFragment))
+        }.onFailure {
+            Log.d("test", "요양보호사 회원탈퇴 실패! ${it}")
+        }
     }
 }
 

@@ -26,6 +26,11 @@ internal suspend fun <T> DataStore<Preferences>.setValue(
     preferences[key] = value
 }
 
+internal suspend fun <T> DataStore<Preferences>.clear(
+    key: Preferences.Key<T>
+) = edit { preferences ->
+    preferences.remove(key)
+}
 
 private fun Flow<Preferences>.handleException(): Flow<Preferences> =
     this.catch { exception ->

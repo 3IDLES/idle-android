@@ -9,7 +9,11 @@ import com.idle.network.model.auth.SignInCenterRequest
 import com.idle.network.model.auth.SignInWorkerRequest
 import com.idle.network.model.auth.SignUpCenterRequest
 import com.idle.network.model.auth.SignUpWorkerRequest
+import com.idle.network.model.auth.WithdrawalCenterRequest
+import com.idle.network.model.auth.WithdrawalWorkerRequest
 import com.idle.network.source.auth.AuthDataSource
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
@@ -53,9 +57,11 @@ class AuthRepositoryImpl @Inject constructor(
             )
         ).fold(
             onSuccess = { tokenResponse ->
-                tokenDataSource.setAccessToken(tokenResponse.accessToken)
-                tokenDataSource.setRefreshToken(tokenResponse.refreshToken)
-                return Result.success(Unit)
+                coroutineScope {
+                    tokenDataSource.setAccessToken(tokenResponse.accessToken)
+                    launch { tokenDataSource.setRefreshToken(tokenResponse.refreshToken) }
+                    Result.success(Unit)
+                }
             },
             onFailure = { Result.failure(it) }
         )
@@ -88,9 +94,11 @@ class AuthRepositoryImpl @Inject constructor(
         )
     ).fold(
         onSuccess = { tokenResponse ->
-            tokenDataSource.setAccessToken(tokenResponse.accessToken)
-            tokenDataSource.setRefreshToken(tokenResponse.refreshToken)
-            return Result.success(Unit)
+            coroutineScope {
+                tokenDataSource.setAccessToken(tokenResponse.accessToken)
+                launch { tokenDataSource.setRefreshToken(tokenResponse.refreshToken) }
+                Result.success(Unit)
+            }
         },
         onFailure = { Result.failure(it) }
     )
@@ -104,4 +112,46 @@ class AuthRepositoryImpl @Inject constructor(
             authCode = authCode,
         )
     )
+
+    override suspend fun logoutWorker(): Result<Unit> = authDataSource.logoutWorker()
+        .fold(
+            onSuccess = {
+                tokenDataSource.clearToken()
+                return Result.success(Unit)
+            },
+            onFailure = { Result.failure(it) }
+        )
+
+    override suspend fun logoutCenter(): Result<Unit> = authDataSource.logoutCenter()
+        .fold(
+            onSuccess = {
+                tokenDataSource.clearToken()
+                return Result.success(Unit)
+            },
+            onFailure = { Result.failure(it) }
+        )
+
+    override suspend fun withdrawalCenter(reason: String, password: String): Result<Unit> =
+        authDataSource.withdrawalCenter(
+            WithdrawalCenterRequest(
+                reason = reason,
+                password = password
+            )
+        ).fold(
+            onSuccess = {
+                tokenDataSource.clearToken()
+                return Result.success(Unit)
+            },
+            onFailure = { Result.failure(it) }
+        )
+
+    override suspend fun withdrawalWorker(reason: String): Result<Unit> =
+        authDataSource.withdrawalWorker(WithdrawalWorkerRequest(reason))
+            .fold(
+                onSuccess = {
+                    tokenDataSource.clearToken()
+                    return Result.success(Unit)
+                },
+                onFailure = { Result.failure(it) }
+            )
 }
