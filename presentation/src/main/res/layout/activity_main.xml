@@ -19,9 +19,12 @@
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/main_BNV_center"
             android:layout_width="match_parent"
-            android:layout_height="64dp"
+            android:layout_height="wrap_content"
             android:background="@color/white"
+            app:itemBackground="@color/white"
             app:itemIconTint="@drawable/selector_menu_color"
+            app:itemPaddingBottom="8dp"
+            app:itemPaddingTop="8dp"
             app:itemTextColor="@drawable/selector_menu_color"
             app:layout_constraintBottom_toBottomOf="parent"
             app:menu="@menu/menu_center" />
@@ -29,9 +32,12 @@
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/main_BNV_worker"
             android:layout_width="match_parent"
-            android:layout_height="64dp"
+            android:layout_height="wrap_content"
             android:background="@color/white"
+            app:itemBackground="@color/white"
             app:itemIconTint="@drawable/selector_menu_color"
+            app:itemPaddingBottom="8dp"
+            app:itemPaddingTop="8dp"
             app:itemTextColor="@drawable/selector_menu_color"
             app:layout_constraintBottom_toBottomOf="parent"
             app:menu="@menu/menu_worker" />
