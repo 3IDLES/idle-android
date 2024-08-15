@@ -71,12 +71,12 @@ sealed class DeepLinkDestination(
         params = mapOf("jobPostingId" to jobPostingId)
     )
 
-    data object CenterJobPosting : DeepLinkDestination(
-        addressRes = R.string.center_job_posting_deeplink_url
+    data object CenterJobPostingPost : DeepLinkDestination(
+        addressRes = R.string.center_job_posting_post_deeplink_url
     )
 
-    data object CenterJobPostingComplete : DeepLinkDestination(
-        addressRes = R.string.center_job_posting_complete_deeplink_url
+    data object CenterJobPostingPostComplete : DeepLinkDestination(
+        addressRes = R.string.center_job_posting_post_complete_deeplink_url
     )
 
     data object WorkerHome : DeepLinkDestination(
@@ -90,6 +90,11 @@ sealed class DeepLinkDestination(
 
     data object WorkerSetting : DeepLinkDestination(
         addressRes = R.string.worker_setting_deeplink_url,
+        setDefaultAnimation = false,
+    )
+
+    data object WorkerJobPosting : DeepLinkDestination(
+        addressRes = R.string.worker_job_posting_deeplink_url,
         setDefaultAnimation = false,
     )
 

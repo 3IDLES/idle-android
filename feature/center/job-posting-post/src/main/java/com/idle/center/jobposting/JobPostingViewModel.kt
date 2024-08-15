@@ -2,10 +2,10 @@ package com.idle.center.jobposting
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
-import com.idle.binding.DeepLinkDestination.CenterJobPostingComplete
+import com.idle.binding.DeepLinkDestination.CenterJobPostingPostComplete
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
-import com.idle.center.job.posting.R
+import com.idle.center.job.posting.post.R
 import com.idle.compose.JobPostingBottomSheetType
 import com.idle.domain.model.auth.Gender
 import com.idle.domain.model.job.ApplyDeadlineType
@@ -280,8 +280,8 @@ class JobPostingViewModel @Inject constructor(
         ).onSuccess {
             baseEvent(
                 CareBaseEvent.NavigateTo(
-                    destination = CenterJobPostingComplete,
-                    popUpTo = R.id.jobPostingFragment
+                    destination = CenterJobPostingPostComplete,
+                    popUpTo = R.id.jobPostingPostFragment
                 )
             )
         }

@@ -104,7 +104,7 @@ internal fun CenterHomeScreen(
                                 Spacer(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .height(20.dp)
+                                        .height(28.dp)
                                 )
                             }
                         }
@@ -119,7 +119,7 @@ internal fun CenterHomeScreen(
                                 Spacer(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .height(20.dp)
+                                        .height(28.dp)
                                 )
                             }
                         }

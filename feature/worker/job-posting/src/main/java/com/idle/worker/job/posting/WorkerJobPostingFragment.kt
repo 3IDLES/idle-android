@@ -1,4 +1,4 @@
-package com.idle.worker.home
+package com.idle.worker.job.posting
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -35,20 +35,25 @@ import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonCardLarge
 import com.idle.designsystem.compose.component.CareHeadingTopBar
+import com.idle.designsystem.compose.component.CareStateAnimator
+import com.idle.designsystem.compose.component.CareTabBar
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.UserRole
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-internal class WorkerHomeFragment : BaseComposeFragment() {
-    override val fragmentViewModel: WorkerHomeViewModel by viewModels()
+internal class WorkerJobPostingFragment : BaseComposeFragment() {
+    override val fragmentViewModel: WorkerJobPostingViewModel by viewModels()
 
     @Composable
     override fun ComposeLayout() {
         fragmentViewModel.apply {
+            val recruitmentPostStatus by recruitmentPostStatus.collectAsStateWithLifecycle()
 
-            WorkerHomeScreen(
+            WorkerJobPostingScreen(
+                recruitmentPostStatus = recruitmentPostStatus,
+                setRecruitmentPostStatus = ::setRecruitmentPostStatus,
                 navigateTo = { baseEvent(NavigateTo(it)) },
             )
         }
@@ -56,28 +61,26 @@ internal class WorkerHomeFragment : BaseComposeFragment() {
 }
 
 @Composable
-internal fun WorkerHomeScreen(
+internal fun WorkerJobPostingScreen(
+    recruitmentPostStatus: RecruitmentPostStatus,
+    setRecruitmentPostStatus: (RecruitmentPostStatus) -> Unit,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
     Scaffold(
         containerColor = CareTheme.colors.white000,
         topBar = {
-            CareHeadingTopBar(
-                title = "강남구 신사동",
-                rightComponent = {
-                    Image(
-                        painter = painterResource(R.drawable.ic_address_pin_big),
-                        contentDescription = null,
-                    )
-                },
-                modifier = Modifier.padding(
-                    start = 20.dp,
-                    end = 20.dp,
-                    top = 48.dp,
-                    bottom = 8.dp
-                ),
-            )
-        }
+            Column {
+                CareHeadingTopBar(
+                    title = stringResource(id = R.string.manage_job_posting),
+                    modifier = Modifier.padding(
+                        start = 20.dp,
+                        end = 20.dp,
+                        top = 48.dp,
+                        bottom = 8.dp
+                    ),
+                )
+            }
+        },
     ) { paddingValue ->
         Column(
             modifier = Modifier
@@ -85,22 +88,56 @@ internal fun WorkerHomeScreen(
                 .padding(top = 20.dp)
                 .fillMaxSize(),
         ) {
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(8.dp),
+            CareTabBar(
+                selectedStatus = recruitmentPostStatus,
+                setStatus = setRecruitmentPostStatus,
+                displayName = { it.displayName },
                 modifier = Modifier
-                    .padding(start = 20.dp, end = 20.dp)
-                    .fillMaxSize()
-            ) {
-                items(listOf(1, 2, 3, 4, 5)) {
-                    WorkerRecruitmentCard(navigateTo)
-                }
+                    .fillMaxWidth()
+                    .padding(bottom = 20.dp),
+            )
 
-                item {
-                    Spacer(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(28.dp)
-                    )
+            CareStateAnimator(targetState = recruitmentPostStatus) { status ->
+                when (status) {
+                    RecruitmentPostStatus.APPLY -> {
+                        LazyColumn(
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                            modifier = Modifier
+                                .padding(start = 20.dp, end = 20.dp, top = 16.dp)
+                                .fillMaxSize()
+                        ) {
+                            items(listOf(1, 2, 3, 4, 5)) {
+                                WorkerRecruitmentCard(navigateTo)
+                            }
+
+                            item {
+                                Spacer(
+                                    modifier = Modifier.fillMaxWidth()
+                                        .height(28.dp)
+                                )
+                            }
+                        }
+                    }
+
+                    RecruitmentPostStatus.MARKED -> {
+                        LazyColumn(
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                            modifier = Modifier
+                                .padding(start = 20.dp, end = 20.dp, top = 16.dp)
+                                .fillMaxSize()
+                        ) {
+                            items(listOf(1, 2, 3, 4, 5)) {
+                                WorkerRecruitmentCard(navigateTo)
+                            }
+
+                            item {
+                                Spacer(
+                                    modifier = Modifier.fillMaxWidth()
+                                        .height(28.dp)
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }
