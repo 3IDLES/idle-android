@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.idle.center.job.posting"
+    namespace = "com.idle.center.job.posting.post"
 }
 
 dependencies {

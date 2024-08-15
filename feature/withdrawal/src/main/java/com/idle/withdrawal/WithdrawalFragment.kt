@@ -2,6 +2,7 @@
 
 package com.idle.withdrawal
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -47,6 +48,9 @@ internal class WithdrawalFragment : BaseComposeFragment() {
             val authCodeTimerSeconds by authCodeTimerSeconds.collectAsStateWithLifecycle()
             val isConfirmAuthCode by isConfirmAuthCode.collectAsStateWithLifecycle()
             val userRole by rememberSaveable { mutableStateOf(UserRole.create(args.userRole)) }
+
+            Log.d("test", "navArgs : ${args.userRole}")
+            Log.d("test", "userRole : $userRole")
 
             WithdrawalStep(
                 userRole = userRole,
