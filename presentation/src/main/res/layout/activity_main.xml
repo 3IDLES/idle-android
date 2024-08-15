@@ -19,9 +19,10 @@
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/main_BNV_center"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:background="@color/gray_050"
-            app:itemTextColor="@color/gray_900"
+            android:layout_height="64dp"
+            android:background="@color/white"
+            app:itemIconTint="@drawable/selector_menu_color"
+            app:itemTextColor="@color/gray_700"
             app:labelVisibilityMode="labeled"
             app:layout_constraintBottom_toBottomOf="parent"
             app:menu="@menu/menu_center" />
@@ -29,10 +30,10 @@
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/main_BNV_worker"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:background="@color/gray_050"
-            app:itemTextColor="@color/gray_900"
-            app:labelVisibilityMode="labeled"
+            android:layout_height="64dp"
+            android:background="@color/white"
+            app:itemIconTint="@drawable/selector_menu_color"
+            app:itemTextColor="@drawable/selector_menu_color"
             app:layout_constraintBottom_toBottomOf="parent"
             app:menu="@menu/menu_worker" />
     </androidx.constraintlayout.widget.ConstraintLayout>
