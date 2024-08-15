@@ -89,7 +89,7 @@ sealed class DeepLinkDestination(
     )
 
     data object WorkerSetting : DeepLinkDestination(
-        addressRes = R.string.center_setting_deeplink_url,
+        addressRes = R.string.worker_setting_deeplink_url,
         setDefaultAnimation = false,
     )
 
