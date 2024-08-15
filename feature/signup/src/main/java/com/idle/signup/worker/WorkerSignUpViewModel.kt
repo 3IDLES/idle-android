@@ -87,7 +87,9 @@ class WorkerSignUpViewModel @Inject constructor(
     }
 
     internal fun setBirthYear(birthYear: String) {
-        _birthYear.value = birthYear
+        if (birthYear.length <= 4) {
+            _birthYear.value = birthYear
+        }
     }
 
     internal fun setGender(gender: Gender) {

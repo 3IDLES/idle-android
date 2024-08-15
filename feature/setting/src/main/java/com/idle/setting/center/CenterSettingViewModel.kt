@@ -1,8 +1,11 @@
 package com.idle.setting.center
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
+import com.idle.binding.DeepLinkDestination
 import com.idle.binding.base.BaseViewModel
+import com.idle.binding.base.CareBaseEvent
+import com.idle.domain.usecase.auth.LogoutCenterUseCase
+import com.idle.setting.R
 import com.idle.setting.SettingEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -11,12 +14,16 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CenterSettingViewModel @Inject constructor() : BaseViewModel() {
+class CenterSettingViewModel @Inject constructor(
+    private val logoutCenterUseCase: LogoutCenterUseCase,
+) : BaseViewModel() {
     private val _centerSettingEvent = MutableSharedFlow<SettingEvent>()
     val centerSettingEvent = _centerSettingEvent.asSharedFlow()
 
-    fun logout() {
-        Log.d("test", "로그아웃")
+    fun logout() = viewModelScope.launch {
+        logoutCenterUseCase().onSuccess {
+            centerSettingEvent(SettingEvent.LogoutSuccess)
+        }.onFailure { }
     }
 
     fun clickLogout() = centerSettingEvent(SettingEvent.Logout)

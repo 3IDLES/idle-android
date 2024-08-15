@@ -1,8 +1,11 @@
 package com.idle.setting.worker
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
+import com.idle.binding.DeepLinkDestination
 import com.idle.binding.base.BaseViewModel
+import com.idle.binding.base.CareBaseEvent
+import com.idle.domain.usecase.auth.LogoutWorkerUseCase
+import com.idle.setting.R
 import com.idle.setting.SettingEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -11,11 +14,16 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class WorkerSettingViewModel @Inject constructor() : BaseViewModel() {
+class WorkerSettingViewModel @Inject constructor(
+    private val logoutWorkerUseCase: LogoutWorkerUseCase,
+) : BaseViewModel() {
     private val _workerSettingEvent = MutableSharedFlow<SettingEvent>()
     val workerSettingEvent = _workerSettingEvent.asSharedFlow()
-    fun logout() {
-        Log.d("test", "로그아웃 호출")
+
+    fun logout() = viewModelScope.launch {
+        logoutWorkerUseCase().onSuccess {
+            workerSettingEvent(SettingEvent.LogoutSuccess)
+        }.onFailure { }
     }
 
     fun clickLogout() = workerSettingEvent(SettingEvent.Logout)

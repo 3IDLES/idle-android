@@ -8,4 +8,5 @@ sealed class SettingEvent {
     data object PrivacyPolicy : SettingEvent()
     data object Logout : SettingEvent()
     data object Withdrawal : SettingEvent()
+    data object LogoutSuccess : SettingEvent()
 }

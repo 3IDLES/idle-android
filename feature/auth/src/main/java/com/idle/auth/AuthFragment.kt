@@ -34,6 +34,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.fragment.findNavController
 import com.idle.binding.DeepLinkDestination
 import com.idle.binding.DeepLinkDestination.CenterSignIn
 import com.idle.binding.DeepLinkDestination.CenterSignUp
