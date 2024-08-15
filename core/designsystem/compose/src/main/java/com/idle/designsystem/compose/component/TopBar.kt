@@ -59,7 +59,7 @@ fun CareHeadingTopBar(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
     ) {
-        rightComponent()
+        leftComponent()
 
         Text(
             text = title,
@@ -68,7 +68,7 @@ fun CareHeadingTopBar(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        leftComponent()
+        rightComponent()
     }
 }
 

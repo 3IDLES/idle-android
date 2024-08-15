@@ -56,6 +56,9 @@ class MainActivity : AppCompatActivity() {
             val navHostFragment =
                 supportFragmentManager.findFragmentById(R.id.main_FCV) as NavHostFragment
             navController = navHostFragment.navController
+
+            mainBNVCenter.itemIconTintList = null
+            mainBNVWorker.itemIconTintList = null
         }
 
         setDestinationListener()

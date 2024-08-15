@@ -69,17 +69,15 @@ internal fun WorkerJobPostingScreen(
     Scaffold(
         containerColor = CareTheme.colors.white000,
         topBar = {
-            Column {
-                CareHeadingTopBar(
-                    title = stringResource(id = R.string.manage_job_posting),
-                    modifier = Modifier.padding(
-                        start = 20.dp,
-                        end = 20.dp,
-                        top = 48.dp,
-                        bottom = 8.dp
-                    ),
-                )
-            }
+            CareHeadingTopBar(
+                title = stringResource(id = R.string.manage_job_posting),
+                modifier = Modifier.padding(
+                    start = 20.dp,
+                    end = 20.dp,
+                    top = 48.dp,
+                    bottom = 8.dp
+                ),
+            )
         },
     ) { paddingValue ->
         Column(
@@ -112,7 +110,8 @@ internal fun WorkerJobPostingScreen(
 
                             item {
                                 Spacer(
-                                    modifier = Modifier.fillMaxWidth()
+                                    modifier = Modifier
+                                        .fillMaxWidth()
                                         .height(28.dp)
                                 )
                             }
@@ -132,7 +131,8 @@ internal fun WorkerJobPostingScreen(
 
                             item {
                                 Spacer(
-                                    modifier = Modifier.fillMaxWidth()
+                                    modifier = Modifier
+                                        .fillMaxWidth()
                                         .height(28.dp)
                                 )
                             }
