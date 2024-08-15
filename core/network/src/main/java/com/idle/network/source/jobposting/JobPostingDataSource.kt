@@ -1,6 +1,7 @@
 package com.idle.network.source.jobposting
 
 import com.idle.network.api.CareApi
+import com.idle.network.model.jobposting.GetCenterJobPostingDetailResponse
 import com.idle.network.model.jobposting.JobPostingRequest
 import com.idle.network.util.onResponse
 import javax.inject.Inject
@@ -18,4 +19,8 @@ class JobPostingDataSource @Inject constructor(
         jobPostingId = jobPostingId,
         jobPostingRequest = jobPostingRequest
     ).onResponse()
+
+    suspend fun getCenterJobPostingDetail(jobPostingId: String):
+            Result<GetCenterJobPostingDetailResponse> =
+        careApi.getJobPostingDetailCenter(jobPostingId).onResponse()
 }

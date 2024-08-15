@@ -2,7 +2,9 @@ package com.idle.withdrawal
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
+import com.idle.binding.DeepLinkDestination
 import com.idle.binding.base.BaseViewModel
+import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.CountDownTimer
 import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
@@ -130,7 +132,12 @@ class WithdrawalViewModel @Inject constructor(
                 .joinToString("|"),
             password = "testpassword1234"
         ).onSuccess {
-            withdrawalEvent(WithdrawalEvent.WithdrawalSuccess)
+            baseEvent(
+                CareBaseEvent.NavigateTo(
+                    destination = DeepLinkDestination.Auth,
+                    popUpTo = com.idle.withdrawal.R.id.withdrawalFragment,
+                )
+            )
         }.onFailure {
             Log.d("test", "센터 회원탈퇴 실패! ${it}")
         }

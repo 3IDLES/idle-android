@@ -1,7 +1,5 @@
 package com.idle.domain.model.job
 
-import com.idle.domain.model.job.MentalStatus.UNKNOWN
-
 enum class LifeAssistance(val displayName: String) {
     CLEANING("청소"),
     LAUNDRY("빨래"),
@@ -11,8 +9,9 @@ enum class LifeAssistance(val displayName: String) {
     NONE("");
 
     companion object {
-        fun create(lifeAssistance: List<String>): List<LifeAssistance> {
+        fun create(lifeAssistance: List<String>): Set<LifeAssistance> {
             return LifeAssistance.entries.filter { it.name in lifeAssistance }
+                .toSet()
         }
     }
 }

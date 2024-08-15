@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.navArgs
+import com.idle.binding.DeepLinkDestination
 import com.idle.binding.DeepLinkDestination.CenterSetting
 import com.idle.binding.DeepLinkDestination.WorkerSetting
 import com.idle.binding.base.CareBaseEvent
@@ -54,14 +55,6 @@ internal class WithdrawalFragment : BaseComposeFragment() {
             val authCodeTimerSeconds by authCodeTimerSeconds.collectAsStateWithLifecycle()
             val isConfirmAuthCode by isConfirmAuthCode.collectAsStateWithLifecycle()
             val userRole by rememberSaveable { mutableStateOf(UserRole.create(args.userRole)) }
-
-            viewLifecycleOwner.repeatOnStarted {
-                withdrawalEvent.collect {
-                    if (it == WithdrawalEvent.WithdrawalSuccess) {
-                        withdrawalNavigation.navigateToAuth()
-                    }
-                }
-            }
 
             WithdrawalStep(
                 userRole = userRole,

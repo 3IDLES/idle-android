@@ -7,5 +7,12 @@ enum class DayOfWeek(val displayName: String) {
     THURSDAY("목"),
     FRIDAY("금"),
     SATURDAY("토"),
-    SUNDAY("일"),
+    SUNDAY("일");
+
+    companion object {
+        fun create(dayOfWeek: List<String>): Set<DayOfWeek> {
+            return DayOfWeek.entries.filter { it.name in dayOfWeek }
+                .toSet()
+        }
+    }
 }

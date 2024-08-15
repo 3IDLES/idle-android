@@ -7,6 +7,7 @@ import com.idle.domain.model.job.DayOfWeek
 import com.idle.domain.model.job.LifeAssistance
 import com.idle.domain.model.job.MentalStatus
 import com.idle.domain.model.job.PayType
+import com.idle.domain.model.jobposting.CenterJobPostingDetail
 import com.idle.domain.repositorry.jobposting.JobPostingRepository
 import com.idle.network.model.jobposting.JobPostingRequest
 import com.idle.network.source.jobposting.JobPostingDataSource
@@ -120,4 +121,8 @@ class JobPostingRepositoryImpl @Inject constructor(
             applyDeadline = applyDeadline,
         )
     )
+
+    override suspend fun getCenterJobPostingDetail(jobPostingId: String): Result<CenterJobPostingDetail> =
+        jobPostingDataSource.getCenterJobPostingDetail(jobPostingId)
+            .mapCatching { it.toVO() }
 }

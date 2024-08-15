@@ -9,6 +9,7 @@ import com.idle.network.model.auth.SignUpCenterRequest
 import com.idle.network.model.auth.SignUpWorkerRequest
 import com.idle.network.model.auth.WithdrawalCenterRequest
 import com.idle.network.model.auth.WithdrawalWorkerRequest
+import com.idle.network.model.jobposting.GetCenterJobPostingDetailResponse
 import com.idle.network.model.jobposting.JobPostingRequest
 import com.idle.network.model.profile.CallbackImageUploadRequest
 import com.idle.network.model.profile.GetCenterProfileResponse
@@ -128,4 +129,9 @@ interface CareApi {
         @Path("job-posting-id") jobPostingId: String,
         @Body jobPostingRequest: JobPostingRequest,
     ): Response<Unit>
+
+    @GET("/api/v1/job-postings/{job-posting-id}/center")
+    suspend fun getJobPostingDetailCenter(
+        @Path("job-posting-id") jobPostingId: String
+    ): Response<GetCenterJobPostingDetailResponse>
 }
