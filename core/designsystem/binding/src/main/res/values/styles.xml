@@ -40,13 +40,13 @@
 
     <style name="Subtitle3" parent="TextAppearance.AppCompat">
         <item name="android:textSize">16sp</item>
-        <item name="android:letterSpacing">-0.03</item>
+        <item name="android:letterSpacing">-0.2</item>
         <item name="android:fontFamily">@font/pretendard_semi_bold</item>
     </style>
 
     <style name="Subtitle4" parent="TextAppearance.AppCompat">
         <item name="android:textSize">14sp</item>
-        <item name="android:letterSpacing">-0.03</item>
+        <item name="android:letterSpacing">-0.2</item>
         <item name="android:fontFamily">@font/pretendard_semi_bold</item>
     </style>
 
@@ -65,14 +65,20 @@
 
     <style name="Body3" parent="TextAppearance.AppCompat">
         <item name="android:textSize">14sp</item>
-        <item name="android:letterSpacing">-0.03</item>
+        <item name="android:letterSpacing">-0.2</item>
         <item name="android:fontFamily">@font/pretendard_medium</item>
     </style>
 
     <!-- Caption style -->
-    <style name="Caption" parent="TextAppearance.AppCompat">
+    <style name="Caption1" parent="TextAppearance.AppCompat">
         <item name="android:textSize">12sp</item>
-        <item name="android:letterSpacing">-0.04</item>
+        <item name="android:letterSpacing">-0.2</item>
         <item name="android:fontFamily">@font/pretendard_medium</item>
+    </style>
+
+    <style name="Caption2" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">12sp</item>
+        <item name="android:letterSpacing">-0.2</item>
+        <item name="android:fontFamily">@font/pretendard_semi_bold</item>
     </style>
 </resources>
