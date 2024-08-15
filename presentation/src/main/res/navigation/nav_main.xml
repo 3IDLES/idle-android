@@ -22,4 +22,12 @@
     <include app:graph="@navigation/nav_worker_setting" />
     <include app:graph="@navigation/nav_worker_recruitment_detail" />
     <include app:graph="@navigation/nav_worker_job_posting" />
+
+    <action
+        android:id="@+id/action_global_nav_auth"
+        app:destination="@id/nav_auth"
+        app:popUpTo="@id/nav_main"
+        app:enterAnim="@anim/anim_pop_slide_in_horizontally"
+        app:exitAnim="@anim/anim_pop_slide_out_horizontally"
+        app:popUpToInclusive="true" />
 </navigation>

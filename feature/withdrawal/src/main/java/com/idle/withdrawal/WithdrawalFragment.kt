@@ -2,7 +2,6 @@
 
 package com.idle.withdrawal
 
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -24,6 +23,7 @@ import androidx.navigation.fragment.navArgs
 import com.idle.binding.DeepLinkDestination.CenterSetting
 import com.idle.binding.DeepLinkDestination.WorkerSetting
 import com.idle.binding.base.CareBaseEvent
+import com.idle.binding.repeatOnStarted
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
@@ -31,14 +31,20 @@ import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.UserRole
+import com.idle.withdrawal.navigation.WithdrawalNavigation
 import com.idle.withdrawal.step.PhoneNumberScreen
 import com.idle.withdrawal.step.ReasonScreen
+import com.idle.withdrawal.step.WithdrawalEvent
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 internal class WithdrawalFragment : BaseComposeFragment() {
     private val args: WithdrawalFragmentArgs by navArgs()
     override val fragmentViewModel: WithdrawalViewModel by viewModels()
+
+    @Inject
+    lateinit var withdrawalNavigation: WithdrawalNavigation
 
     @Composable
     override fun ComposeLayout() {
@@ -49,8 +55,13 @@ internal class WithdrawalFragment : BaseComposeFragment() {
             val isConfirmAuthCode by isConfirmAuthCode.collectAsStateWithLifecycle()
             val userRole by rememberSaveable { mutableStateOf(UserRole.create(args.userRole)) }
 
-            Log.d("test", "navArgs : ${args.userRole}")
-            Log.d("test", "userRole : $userRole")
+            viewLifecycleOwner.repeatOnStarted {
+                withdrawalEvent.collect {
+                    if (it == WithdrawalEvent.WithdrawalSuccess) {
+                        withdrawalNavigation.navigateToAuth()
+                    }
+                }
+            }
 
             WithdrawalStep(
                 userRole = userRole,
@@ -64,7 +75,7 @@ internal class WithdrawalFragment : BaseComposeFragment() {
                 onAuthCodeChanged = ::setAuthCode,
                 sendPhoneNumber = ::sendPhoneNumber,
                 confirmAuthCode = ::confirmAuthCode,
-                withdrawal = ::withdrawal,
+                withdrawal = { withdrawal(userRole) },
                 navigateToSetting = {
                     baseEvent(
                         CareBaseEvent.NavigateTo(

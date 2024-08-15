@@ -58,7 +58,7 @@ interface CareApi {
     @POST("/api/v1/auth/worker/logout")
     suspend fun logoutWorker(): Response<Unit>
 
-    @POST("/api/v1/auth/worker/withdraw")
+    @POST("/api/v1/auth/center/withdraw")
     suspend fun withdrawalCenter(
         @Body withdrawalCenterResponse: WithdrawalCenterRequest
     ): Response<Unit>

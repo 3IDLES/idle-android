@@ -14,11 +14,14 @@ import com.idle.binding.repeatOnStarted
 import com.idle.domain.model.auth.UserRole
 import com.idle.setting.FAQ_URL
 import com.idle.setting.PRIVACY_POLICY_URL
+import com.idle.setting.R
 import com.idle.setting.SettingEvent
+import com.idle.setting.navigation.SettingNavigation
 import com.idle.setting.TERMS_AND_POLICES_URL
 import com.idle.setting.databinding.FragmentWorkerSettingBinding
 import com.idle.setting.dialog.LogoutDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 internal class WorkerSettingFragment :
@@ -26,6 +29,10 @@ internal class WorkerSettingFragment :
         FragmentWorkerSettingBinding::inflate
     ) {
     override val fragmentViewModel: WorkerSettingViewModel by viewModels()
+
+    @Inject
+    lateinit var settingNavigation : SettingNavigation
+
     private val logoutDialog: LogoutDialogFragment? by lazy {
         LogoutDialogFragment().apply {
             onDismissCallback = {
@@ -57,12 +64,20 @@ internal class WorkerSettingFragment :
             SettingEvent.PrivacyPolicy -> navigateToUri(PRIVACY_POLICY_URL)
             SettingEvent.TermsAndPolicies -> navigateToUri(TERMS_AND_POLICES_URL)
             SettingEvent.Inquiry -> {}
-            SettingEvent.Withdrawal -> fragmentViewModel.baseEvent(NavigateTo(Withdrawal(UserRole.WORKER)))
+            SettingEvent.Withdrawal -> fragmentViewModel.baseEvent(
+                NavigateTo(
+                    destination = Withdrawal(UserRole.WORKER),
+                    popUpTo = R.id.workerSettingFragment
+                )
+            )
+
             SettingEvent.Logout -> {
                 if (!(logoutDialog?.isAdded == true || logoutDialog?.isVisible == true)) {
                     logoutDialog?.show(parentFragmentManager, "LogoutDialogFragment")
                 }
             }
+
+            SettingEvent.LogoutSuccess -> settingNavigation.navigateToAuth()
         }
     }
 
