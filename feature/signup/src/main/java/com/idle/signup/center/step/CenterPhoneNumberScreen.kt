@@ -97,49 +97,51 @@ internal fun CenterPhoneNumberScreen(
             }
         }
 
-        LabeledContent(
-            subtitle = stringResource(id = R.string.confirm_code),
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Row(
-                verticalAlignment = Alignment.Top,
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
+        if (centerAuthCodeTimerMinute.isNotBlank()) {
+            LabeledContent(
+                subtitle = stringResource(id = R.string.confirm_code),
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                Column(
-                    horizontalAlignment = Alignment.Start,
-                    verticalArrangement = Arrangement.spacedBy(4.dp),
-                    modifier = Modifier.weight(1f),
+                Row(
+                    verticalAlignment = Alignment.Top,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
-                    CareTextField(
-                        value = centerAuthCode,
-                        hint = "",
-                        onValueChanged = onCenterAuthCodeChanged,
-                        readOnly = !(centerAuthCodeTimerMinute != "" && centerAuthCodeTimerSeconds != "") || isConfirmAuthCode,
-                        onDone = { if (centerAuthCode.isNotBlank()) confirmAuthCode() },
-                        leftComponent = {
-                            if (centerAuthCodeTimerMinute != "" && centerAuthCodeTimerSeconds != "") {
-                                Text(
-                                    text = "$centerAuthCodeTimerMinute:$centerAuthCodeTimerSeconds",
-                                    style = CareTheme.typography.body3,
-                                    color = if (!isConfirmAuthCode) CareTheme.colors.gray500 else CareTheme.colors.gray200,
-                                )
-                            }
-                        },
-                    )
+                    Column(
+                        horizontalAlignment = Alignment.Start,
+                        verticalArrangement = Arrangement.spacedBy(4.dp),
+                        modifier = Modifier.weight(1f),
+                    ) {
+                        CareTextField(
+                            value = centerAuthCode,
+                            hint = "",
+                            onValueChanged = onCenterAuthCodeChanged,
+                            readOnly = !(centerAuthCodeTimerMinute != "" && centerAuthCodeTimerSeconds != "") || isConfirmAuthCode,
+                            onDone = { if (centerAuthCode.isNotBlank()) confirmAuthCode() },
+                            leftComponent = {
+                                if (centerAuthCodeTimerMinute != "" && centerAuthCodeTimerSeconds != "") {
+                                    Text(
+                                        text = "$centerAuthCodeTimerMinute:$centerAuthCodeTimerSeconds",
+                                        style = CareTheme.typography.body3,
+                                        color = if (!isConfirmAuthCode) CareTheme.colors.gray500 else CareTheme.colors.gray200,
+                                    )
+                                }
+                            },
+                        )
 
-                    Text(
-                        text = if (isConfirmAuthCode) "인증이 완료되었습니다." else "",
-                        style = CareTheme.typography.caption,
-                        color = CareTheme.colors.gray300,
+                        Text(
+                            text = if (isConfirmAuthCode) "인증이 완료되었습니다." else "",
+                            style = CareTheme.typography.caption,
+                            color = CareTheme.colors.gray300,
+                        )
+                    }
+
+                    CareButtonSmall(
+                        enable = centerAuthCode.isNotBlank() && !isConfirmAuthCode,
+                        text = stringResource(id = R.string.confirm),
+                        onClick = confirmAuthCode,
                     )
                 }
-
-                CareButtonSmall(
-                    enable = centerAuthCode.isNotBlank() && !isConfirmAuthCode,
-                    text = stringResource(id = R.string.confirm),
-                    onClick = confirmAuthCode,
-                )
             }
         }
 
@@ -149,7 +151,8 @@ internal fun CenterPhoneNumberScreen(
             text = stringResource(id = R.string.next),
             enable = isConfirmAuthCode,
             onClick = { setSignUpStep(CenterSignUpStep.findStep(PHONE_NUMBER.step + 1)) },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(bottom = 28.dp),
         )
     }

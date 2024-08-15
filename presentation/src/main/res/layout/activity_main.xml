@@ -27,6 +27,7 @@
             app:itemPaddingBottom="8dp"
             app:itemPaddingTop="8dp"
             app:itemTextColor="@drawable/selector_menu_color"
+            app:labelVisibilityMode="labeled"
             app:layout_constraintBottom_toBottomOf="parent"
             app:menu="@menu/menu_center" />
 
@@ -41,6 +42,7 @@
             app:itemPaddingBottom="8dp"
             app:itemPaddingTop="8dp"
             app:itemTextColor="@drawable/selector_menu_color"
+            app:labelVisibilityMode="labeled"
             app:layout_constraintBottom_toBottomOf="parent"
             app:menu="@menu/menu_worker" />
     </androidx.constraintlayout.widget.ConstraintLayout>

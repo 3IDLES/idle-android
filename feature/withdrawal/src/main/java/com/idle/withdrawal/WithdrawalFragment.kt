@@ -20,7 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.navArgs
-import com.idle.binding.DeepLinkDestination
+import com.idle.binding.DeepLinkDestination.CenterSetting
+import com.idle.binding.DeepLinkDestination.WorkerSetting
 import com.idle.binding.base.CareBaseEvent
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
@@ -63,7 +64,8 @@ internal class WithdrawalFragment : BaseComposeFragment() {
                 navigateToSetting = {
                     baseEvent(
                         CareBaseEvent.NavigateTo(
-                            destination = DeepLinkDestination.CenterSetting,
+                            destination = if (userRole == UserRole.CENTER) CenterSetting
+                            else WorkerSetting,
                             popUpTo = com.idle.withdrawal.R.id.withdrawalFragment,
                         )
                     )
