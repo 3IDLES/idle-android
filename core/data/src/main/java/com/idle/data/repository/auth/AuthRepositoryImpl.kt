@@ -12,8 +12,10 @@ import com.idle.network.model.auth.SignUpWorkerRequest
 import com.idle.network.model.auth.WithdrawalCenterRequest
 import com.idle.network.model.auth.WithdrawalWorkerRequest
 import com.idle.network.source.auth.AuthDataSource
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
@@ -57,7 +59,7 @@ class AuthRepositoryImpl @Inject constructor(
             )
         ).fold(
             onSuccess = { tokenResponse ->
-                coroutineScope {
+                withContext(Dispatchers.IO) {
                     tokenDataSource.setAccessToken(tokenResponse.accessToken)
                     launch { tokenDataSource.setRefreshToken(tokenResponse.refreshToken) }
                     Result.success(Unit)
@@ -94,7 +96,7 @@ class AuthRepositoryImpl @Inject constructor(
         )
     ).fold(
         onSuccess = { tokenResponse ->
-            coroutineScope {
+            withContext(Dispatchers.IO) {
                 tokenDataSource.setAccessToken(tokenResponse.accessToken)
                 launch { tokenDataSource.setRefreshToken(tokenResponse.refreshToken) }
                 Result.success(Unit)
