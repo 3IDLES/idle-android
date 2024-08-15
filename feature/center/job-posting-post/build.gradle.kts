@@ -10,5 +10,5 @@ android {
 
 dependencies {
     implementation(projects.feature.postcode)
-    implementation(projects.feature.center.jobEdit)
+    implementation(projects.feature.center.jobPostingEdit)
 }

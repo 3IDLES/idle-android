@@ -2,19 +2,19 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_job_posting"
-    app:startDestination="@id/jobPostingFragment">
+    app:startDestination="@id/jobPostingPostFragment">
 
     <fragment
-        android:id="@+id/jobPostingFragment"
+        android:id="@+id/jobPostingPostFragment"
         android:name="com.idle.center.jobposting.JobPostingFragment"
         android:label="JobPostingFragment">
-        <deepLink app:uri="@string/center_job_posting_deeplink_url" />
+        <deepLink app:uri="@string/center_job_posting_post_deeplink_url" />
     </fragment>
 
     <fragment
-        android:id="@+id/jobPostingCompleteFragment"
+        android:id="@+id/jobPostingPostCompleteFragment"
         android:name="com.idle.center.jobposting.complete.JobPostingCompleteFragment"
         android:label="JobPostingCompleteFragment">
-        <deepLink app:uri="@string/center_job_posting_complete_deeplink_url"/>
+        <deepLink app:uri="@string/center_job_posting_post_complete_deeplink_url"/>
     </fragment>
 </navigation>
