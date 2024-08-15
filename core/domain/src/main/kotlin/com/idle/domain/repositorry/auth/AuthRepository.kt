@@ -35,4 +35,12 @@ interface AuthRepository {
     ): Result<Unit>
 
     suspend fun signInWorker(phoneNumber: String, authCode: String): Result<Unit>
+
+    suspend fun logoutWorker(): Result<Unit>
+
+    suspend fun logoutCenter(): Result<Unit>
+
+    suspend fun withdrawalCenter(reason: String, password: String): Result<Unit>
+
+    suspend fun withdrawalWorker(reason: String): Result<Unit>
 }

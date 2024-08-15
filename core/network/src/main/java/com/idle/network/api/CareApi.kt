@@ -7,6 +7,8 @@ import com.idle.network.model.auth.SignInCenterRequest
 import com.idle.network.model.auth.SignInWorkerRequest
 import com.idle.network.model.auth.SignUpCenterRequest
 import com.idle.network.model.auth.SignUpWorkerRequest
+import com.idle.network.model.auth.WithdrawalCenterRequest
+import com.idle.network.model.auth.WithdrawalWorkerRequest
 import com.idle.network.model.jobposting.JobPostingRequest
 import com.idle.network.model.profile.CallbackImageUploadRequest
 import com.idle.network.model.profile.GetCenterProfileResponse
@@ -49,6 +51,22 @@ interface CareApi {
 
     @POST("/api/v1/auth/carer/login")
     suspend fun signInWorker(@Body signInWorkerRequest: SignInWorkerRequest): Response<Unit>
+
+    @POST("/api/v1/auth/center/logout")
+    suspend fun logoutCenter(): Response<Unit>
+
+    @POST("/api/v1/auth/worker/logout")
+    suspend fun logoutWorker(): Response<Unit>
+
+    @POST("/api/v1/auth/worker/withdraw")
+    suspend fun withdrawalCenter(
+        @Body withdrawalCenterResponse: WithdrawalCenterRequest
+    ): Response<Unit>
+
+    @POST("/api/v1/auth/worker/withdraw")
+    suspend fun withdrawalWorker(
+        @Body withdrawalWorkerResponse: WithdrawalWorkerRequest
+    ): Response<Unit>
 
     @GET("/api/v1/auth/center/validation/{identifier}")
     suspend fun validateIdentifier(@Path("identifier") identifier: String): Response<Unit>

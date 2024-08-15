@@ -3,9 +3,12 @@ package com.idle.datastore.datasource
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.idle.datastore.util.clear
 import com.idle.datastore.util.getValue
 import com.idle.datastore.util.setValue
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -21,6 +24,11 @@ class TokenDataSource @Inject constructor(
 
     suspend fun setRefreshToken(refreshToken: String) {
         dataStore.setValue(REFRESH_TOKEN, refreshToken)
+    }
+
+    suspend fun clearToken() = coroutineScope {
+        dataStore.clear(ACCESS_TOKEN)
+        launch { dataStore.clear(REFRESH_TOKEN) }
     }
 
     companion object {
