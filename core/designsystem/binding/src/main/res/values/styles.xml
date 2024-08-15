@@ -59,7 +59,7 @@
 
     <style name="Body2" parent="TextAppearance.AppCompat">
         <item name="android:textSize">16sp</item>
-        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:letterSpacing">-0.02</item>git c
         <item name="android:fontFamily">@font/pretendard_medium</item>
     </style>
 
