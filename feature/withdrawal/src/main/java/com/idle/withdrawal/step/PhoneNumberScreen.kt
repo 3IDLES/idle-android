@@ -101,53 +101,55 @@ internal fun PhoneNumberScreen(
             }
         }
 
-        LabeledContent(
-            subtitle = stringResource(id = R.string.confirm_code),
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Row(
-                verticalAlignment = Alignment.Top,
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
+        if (timerMinute.isNotBlank()) {
+            LabeledContent(
+                subtitle = stringResource(id = R.string.confirm_code),
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                Column(
-                    horizontalAlignment = Alignment.Start,
-                    verticalArrangement = Arrangement.spacedBy(4.dp),
-                    modifier = Modifier.weight(1f),
+                Row(
+                    verticalAlignment = Alignment.Top,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
-                    CareTextField(
-                        value = authCode,
-                        hint = "",
-                        onValueChanged = {
-                            onAuthCodeChanged(it)
-                            authCode = it
-                        },
-                        readOnly = !(timerMinute != "" && timerSeconds != "") || isConfirmAuthCode,
-                        onDone = { if (authCode.isNotBlank()) confirmAuthCode() },
-                        leftComponent = {
-                            if (timerMinute != "" && timerSeconds != "") {
-                                Text(
-                                    text = "$timerMinute:$timerSeconds",
-                                    style = CareTheme.typography.body3,
-                                    color = if (!isConfirmAuthCode) CareTheme.colors.gray500 else CareTheme.colors.gray200,
-                                )
-                            }
-                        },
-                    )
+                    Column(
+                        horizontalAlignment = Alignment.Start,
+                        verticalArrangement = Arrangement.spacedBy(4.dp),
+                        modifier = Modifier.weight(1f),
+                    ) {
+                        CareTextField(
+                            value = authCode,
+                            hint = "",
+                            onValueChanged = {
+                                onAuthCodeChanged(it)
+                                authCode = it
+                            },
+                            readOnly = !(timerMinute != "" && timerSeconds != "") || isConfirmAuthCode,
+                            onDone = { if (authCode.isNotBlank()) confirmAuthCode() },
+                            leftComponent = {
+                                if (timerMinute != "" && timerSeconds != "") {
+                                    Text(
+                                        text = "$timerMinute:$timerSeconds",
+                                        style = CareTheme.typography.body3,
+                                        color = if (!isConfirmAuthCode) CareTheme.colors.gray500 else CareTheme.colors.gray200,
+                                    )
+                                }
+                            },
+                        )
 
-                    Text(
-                        text = if (isConfirmAuthCode) stringResource(id = R.string.confirm_success)
-                        else "",
-                        style = CareTheme.typography.caption,
-                        color = CareTheme.colors.gray300,
+                        Text(
+                            text = if (isConfirmAuthCode) stringResource(id = R.string.confirm_success)
+                            else "",
+                            style = CareTheme.typography.caption,
+                            color = CareTheme.colors.gray300,
+                        )
+                    }
+
+                    CareButtonSmall(
+                        enable = authCode.isNotBlank() && !isConfirmAuthCode,
+                        text = stringResource(id = R.string.confirm),
+                        onClick = confirmAuthCode,
                     )
                 }
-
-                CareButtonSmall(
-                    enable = authCode.isNotBlank() && !isConfirmAuthCode,
-                    text = stringResource(id = R.string.confirm),
-                    onClick = confirmAuthCode,
-                )
             }
         }
 

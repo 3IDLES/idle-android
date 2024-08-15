@@ -18,7 +18,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.idle.binding.base.CareBaseEvent
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareButtonSmall
@@ -99,39 +98,41 @@ internal fun WorkerPhoneNumberScreen(
             }
         }
 
-        LabeledContent(
-            subtitle = stringResource(id = R.string.confirm_code),
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Row(
-                verticalAlignment = Alignment.Top,
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                modifier = Modifier.fillMaxWidth()
+        if (workerAuthCodeTimerMinute.isNotBlank()) {
+            LabeledContent(
+                subtitle = stringResource(id = R.string.confirm_code),
+                modifier = Modifier.fillMaxWidth(),
             ) {
-                CareTextField(
-                    value = workerAuthCode,
-                    hint = "",
-                    onValueChanged = onWorkerAuthCodeChanged,
-                    onDone = { confirmAuthCode() },
-                    supportingText = if (isConfirmAuthCode) "인증이 완료되었습니다." else "",
-                    readOnly = !(workerAuthCodeTimerMinute != "" && workerAuthCodeTimerSeconds != "") || isConfirmAuthCode,
-                    leftComponent = {
-                        if (workerAuthCodeTimerMinute != "" && workerAuthCodeTimerSeconds != "") {
-                            Text(
-                                text = "$workerAuthCodeTimerMinute:$workerAuthCodeTimerSeconds",
-                                style = CareTheme.typography.body3,
-                                color = if (!isConfirmAuthCode) CareTheme.colors.gray500 else CareTheme.colors.gray200,
-                            )
-                        }
-                    },
-                    modifier = Modifier.weight(1f),
-                )
+                Row(
+                    verticalAlignment = Alignment.Top,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    CareTextField(
+                        value = workerAuthCode,
+                        hint = "",
+                        onValueChanged = onWorkerAuthCodeChanged,
+                        onDone = { confirmAuthCode() },
+                        supportingText = if (isConfirmAuthCode) "인증이 완료되었습니다." else "",
+                        readOnly = !(workerAuthCodeTimerMinute != "" && workerAuthCodeTimerSeconds != "") || isConfirmAuthCode,
+                        leftComponent = {
+                            if (workerAuthCodeTimerMinute != "" && workerAuthCodeTimerSeconds != "") {
+                                Text(
+                                    text = "$workerAuthCodeTimerMinute:$workerAuthCodeTimerSeconds",
+                                    style = CareTheme.typography.body3,
+                                    color = if (!isConfirmAuthCode) CareTheme.colors.gray500 else CareTheme.colors.gray200,
+                                )
+                            }
+                        },
+                        modifier = Modifier.weight(1f),
+                    )
 
-                CareButtonSmall(
-                    enable = workerAuthCode.isNotBlank() && !isConfirmAuthCode,
-                    text = stringResource(id = R.string.confirm),
-                    onClick = confirmAuthCode,
-                )
+                    CareButtonSmall(
+                        enable = workerAuthCode.isNotBlank() && !isConfirmAuthCode,
+                        text = stringResource(id = R.string.confirm),
+                        onClick = confirmAuthCode,
+                    )
+                }
             }
         }
 
