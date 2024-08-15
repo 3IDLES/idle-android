@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -84,7 +85,7 @@ internal fun WorkerHomeScreen(
         Column(
             modifier = Modifier
                 .padding(paddingValue)
-                .padding(top = 20.dp, bottom = 36.dp)
+                .padding(top = 20.dp)
                 .fillMaxSize(),
         ) {
             CareTabBar(
@@ -108,6 +109,13 @@ internal fun WorkerHomeScreen(
                             items(listOf(1, 2, 3, 4, 5)) {
                                 WorkerRecruitmentCard(navigateTo)
                             }
+
+                            item {
+                                Spacer(
+                                    modifier = Modifier.fillMaxWidth()
+                                        .height(24.dp)
+                                )
+                            }
                         }
                     }
 
@@ -120,6 +128,13 @@ internal fun WorkerHomeScreen(
                         ) {
                             items(listOf(1, 2, 3, 4, 5)) {
                                 WorkerRecruitmentCard(navigateTo)
+                            }
+
+                            item {
+                                Spacer(
+                                    modifier = Modifier.fillMaxWidth()
+                                        .height(24.dp)
+                                )
                             }
                         }
                     }

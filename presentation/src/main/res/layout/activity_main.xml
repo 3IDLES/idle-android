@@ -22,8 +22,7 @@
             android:layout_height="64dp"
             android:background="@color/white"
             app:itemIconTint="@drawable/selector_menu_color"
-            app:itemTextColor="@color/gray_700"
-            app:labelVisibilityMode="labeled"
+            app:itemTextColor="@drawable/selector_menu_color"
             app:layout_constraintBottom_toBottomOf="parent"
             app:menu="@menu/menu_center" />
 
