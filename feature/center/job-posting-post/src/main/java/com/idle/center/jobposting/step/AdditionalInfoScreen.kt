@@ -124,6 +124,8 @@ internal fun AdditionalInfoScreen(
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     ApplyDeadlineType.entries.forEach { type ->
+                        if(applyDeadlineType == ApplyDeadlineType.UNKNOWN) return@forEach
+
                         CareChipBasic(
                             text = type.displayName,
                             onClick = { onApplyDeadlineTypeChanged(type) },

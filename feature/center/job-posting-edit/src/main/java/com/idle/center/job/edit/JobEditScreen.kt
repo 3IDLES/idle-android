@@ -982,6 +982,8 @@ fun JobEditScreen(
                                 modifier = Modifier.fillMaxWidth(),
                             ) {
                                 ApplyDeadlineType.entries.forEach { type ->
+                                    if (type == ApplyDeadlineType.UNKNOWN) return@forEach
+
                                     CareChipBasic(
                                         text = type.displayName,
                                         onClick = { localApplyDeadlineType = type },

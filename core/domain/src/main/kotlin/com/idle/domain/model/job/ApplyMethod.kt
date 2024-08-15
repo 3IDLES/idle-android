@@ -6,8 +6,9 @@ enum class ApplyMethod(val displayName: String) {
     APP("어플 지원");
 
     companion object {
-        fun create(applyMethod: List<String>): List<ApplyMethod> {
+        fun create(applyMethod: List<String>): Set<ApplyMethod> {
             return ApplyMethod.entries.filter { it.name in applyMethod }
+                .toSet()
         }
     }
 }

@@ -7,6 +7,7 @@ import com.idle.domain.model.job.DayOfWeek
 import com.idle.domain.model.job.LifeAssistance
 import com.idle.domain.model.job.MentalStatus
 import com.idle.domain.model.job.PayType
+import com.idle.domain.model.jobposting.CenterJobPostingDetail
 
 interface JobPostingRepository {
     suspend fun postJobPosting(
@@ -61,4 +62,6 @@ interface JobPostingRepository {
         applyDeadLineType: ApplyDeadlineType,
         applyDeadline: String,
     ): Result<Unit>
+
+    suspend fun getCenterJobPostingDetail(jobPostingId: String): Result<CenterJobPostingDetail>
 }
