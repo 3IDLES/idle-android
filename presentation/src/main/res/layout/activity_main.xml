@@ -16,6 +16,12 @@
             app:layout_constraintTop_toTopOf="parent"
             app:navGraph="@navigation/nav_main" />
 
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            app:layout_constraintBottom_toTopOf="@id/main_BNV_center"
+            app:dividerColor="#E3E3E3" />
+
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/main_BNV_center"
             style="@style/Caption2"
@@ -23,7 +29,8 @@
             android:layout_height="wrap_content"
             android:background="@color/white"
             app:itemBackground="@color/white"
-            app:itemIconTint="@drawable/selector_menu_color"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
             app:itemPaddingBottom="8dp"
             app:itemPaddingTop="8dp"
             app:itemTextColor="@drawable/selector_menu_color"
@@ -38,7 +45,8 @@
             android:layout_height="wrap_content"
             android:background="@color/white"
             app:itemBackground="@color/white"
-            app:itemIconTint="@drawable/selector_menu_color"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
             app:itemPaddingBottom="8dp"
             app:itemPaddingTop="8dp"
             app:itemTextColor="@drawable/selector_menu_color"

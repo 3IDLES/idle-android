@@ -64,7 +64,7 @@ internal fun WorkerHomeScreen(
         topBar = {
             CareHeadingTopBar(
                 title = "강남구 신사동",
-                rightComponent = {
+                leftComponent = {
                     Image(
                         painter = painterResource(R.drawable.ic_address_pin_big),
                         contentDescription = null,
