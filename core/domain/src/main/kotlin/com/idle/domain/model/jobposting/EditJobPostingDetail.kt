@@ -9,20 +9,19 @@ import com.idle.domain.model.job.MentalStatus
 import com.idle.domain.model.job.PayType
 import java.time.LocalDate
 
-data class CenterJobPostingDetail(
+data class EditJobPostingDetail(
     val weekdays: Set<DayOfWeek>,
     val startTime: String,
     val endTime: String,
     val payType: PayType,
-    val payAmount: Int,
-    val id: String,
+    val payAmount: String,
     val roadNameAddress: String,
     val lotNumberAddress: String,
     val clientName: String,
     val gender: Gender,
-    val birthYear: Int,
-    val weight: Int?,
-    val careLevel: Int,
+    val birthYear: String,
+    val weight: String?,
+    val careLevel: String,
     val mentalStatus: MentalStatus,
     val disease: String,
     val isMealAssistance: Boolean,

@@ -126,10 +126,9 @@ internal class JobPostingFragment : BaseComposeFragment() {
                     workStartTime = workStartTime,
                     workEndTime = workEndTime,
                     fragmentManager = parentFragmentManager,
-                    payType = payType,
+                    payType = payType!!,
                     payAmount = payAmount,
                     roadNameAddress = roadNameAddress,
-                    detailAddress = detailAddress,
                     clientName = clientName,
                     gender = gender,
                     birthYear = birthYear,
@@ -137,44 +136,48 @@ internal class JobPostingFragment : BaseComposeFragment() {
                     careLevel = careLevel,
                     mentalStatus = mentalStatus,
                     disease = disease,
-                    isMealAssistance = isMealAssistance,
-                    isBowelAssistance = isBowelAssistance,
-                    isWalkingAssistance = isWalkingAssistance,
+                    isMealAssistance = isMealAssistance!!,
+                    isBowelAssistance = isBowelAssistance!!,
+                    isWalkingAssistance = isWalkingAssistance!!,
                     lifeAssistance = lifeAssistance,
                     extraRequirement = extraRequirement,
-                    isExperiencePreferred = isExperiencePreferred,
+                    isExperiencePreferred = isExperiencePreferred!!,
                     applyMethod = applyMethod,
-                    applyDeadlineType = applyDeadlineType,
-                    applyDeadline = applyDeadline,
+                    applyDeadlineType = applyDeadlineType!!,
+                    applyDeadline = applyDeadline!!,
                     calendarDate = calendarDate,
-                    setWeekDays = ::setWeekDays,
-                    onWorkStartTimeChanged = ::setWorkStartTime,
-                    onWorkEndTimeChanged = ::setWorkEndTime,
-                    clearWeekDays = ::clearWeekDays,
-                    onPayTypeChanged = ::setPayType,
-                    onPayAmountChanged = ::setPayAmount,
-                    onDetailAddressChanged = ::setDetailAddress,
-                    onClientNameChanged = ::setClientName,
-                    onGenderChanged = ::setGender,
-                    onWeightChanged = ::setWeight,
-                    onMentalStatusChanged = ::setMentalStatus,
-                    onBirthYearChanged = ::setBirthYear,
-                    onCareLevelChanged = ::setCareLevel,
-                    onDiseaseChanged = ::setDisease,
-                    onMealAssistanceChanged = ::setMealAssistance,
-                    onBowelAssistanceChanged = ::setBowelAssistance,
-                    onWalkingAssistanceChanged = ::setWalkingAssistance,
-                    onLifeAssistanceChanged = ::setLifeAssistance,
-                    clearLifeAssistance = ::clearLifeAssistance,
-                    onSpecialityChanged = ::setExtraRequirement,
-                    onExperiencePreferredChanged = ::setExperiencePreferred,
-                    onApplyMethodChanged = ::setApplyMethod,
-                    clearApplyMethod = ::clearApplyMethod,
-                    onApplyDeadlineTypeChanged = ::setApplyDeadlineType,
-                    onApplyDeadlineChanged = ::setApplyDeadline,
-                    onCalendarMonthChanged = ::setCalendarMonth,
-                    onRoadNameAddressChanged = ::setRoadNameAddress,
-                    onLotNumberAddressChanged = ::setLotNumberAddress,
+                    updateJobPosting = { editJobPosting ->
+                        clearWeekDays()
+                        clearLifeAssistance()
+                        clearApplyMethod()
+                        editJobPosting.let {
+                            it.weekdays.forEach { setWeekDays(it) }
+                            setWorkStartTime(it.startTime)
+                            setWorkEndTime(it.endTime)
+                            setPayType(it.payType)
+                            setPayAmount(it.payAmount)
+                            setClientName(it.clientName)
+                            setGender(it.gender)
+                            setBirthYear(it.birthYear)
+                            it.weight?.let { weight -> setWeight(weight) }
+                            setCareLevel(it.careLevel)
+                            setMentalStatus(it.mentalStatus)
+                            setDisease(it.disease)
+                            setMealAssistance(it.isMealAssistance)
+                            setBowelAssistance(it.isBowelAssistance)
+                            setWalkingAssistance(it.isWalkingAssistance)
+                            it.lifeAssistance.forEach { setLifeAssistance(it) }
+                            it.extraRequirement?.let { extraRequirement ->
+                                setExtraRequirement(extraRequirement)
+                            }
+                            setExperiencePreferred(it.isExperiencePreferred)
+                            it.applyMethod.forEach { setApplyMethod(it) }
+                            setApplyDeadline(it.applyDeadline)
+                            setApplyDeadlineType(it.applyDeadlineType)
+                            setRoadNameAddress(it.roadNameAddress)
+                            setLotNumberAddress(it.lotNumberAddress)
+                        }
+                    },
                     setEditState = ::setEditState,
                 )
             } else {

@@ -56,7 +56,7 @@ interface JobPostingRepository {
         isBowelAssistance: Boolean,
         isWalkingAssistance: Boolean,
         lifeAssistance: List<LifeAssistance>,
-        speciality: String?,
+        extraRequirement: String?,
         isExperiencePreferred: Boolean,
         applyMethod: List<ApplyMethod>,
         applyDeadLineType: ApplyDeadlineType,
