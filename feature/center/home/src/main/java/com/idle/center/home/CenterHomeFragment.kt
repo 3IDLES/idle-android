@@ -3,6 +3,7 @@ package com.idle.center.home
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -34,6 +35,7 @@ import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonCardMedium
+import com.idle.designsystem.compose.component.CareFloatingButton
 import com.idle.designsystem.compose.component.CareHeadingTopBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareTabBar
@@ -73,57 +75,70 @@ internal fun CenterHomeScreen(
         },
         containerColor = CareTheme.colors.white000,
     ) { paddingValue ->
-        Column(
+        Box(
             modifier = Modifier
+                .fillMaxWidth()
                 .padding(paddingValue)
-                .padding(top = 20.dp)
-                .fillMaxSize(),
         ) {
-            CareTabBar(
-                selectedStatus = recruitmentPostStatus,
-                setStatus = setRecruitmentPostStatus,
-                displayName = { it.displayName },
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 20.dp),
-            )
+                    .padding(top = 20.dp)
+                    .fillMaxSize()
+            ) {
+                CareTabBar(
+                    selectedStatus = recruitmentPostStatus,
+                    setStatus = setRecruitmentPostStatus,
+                    displayName = { it.displayName },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 20.dp),
+                )
 
-            CareStateAnimator(
-                targetState = recruitmentPostStatus,
-                modifier = Modifier.padding(start = 20.dp, end = 20.dp),
-            ) { status ->
-                when (status) {
-                    RecruitmentPostStatus.ONGOING ->
-                        LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            items(listOf(1, 2, 3, 4, 5)) {
-                                CenterRecruitmentCard(navigateTo)
+                CareStateAnimator(
+                    targetState = recruitmentPostStatus,
+                    modifier = Modifier.padding(start = 20.dp, end = 20.dp),
+                ) { status ->
+                    when (status) {
+                        RecruitmentPostStatus.ONGOING ->
+                            LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                items(listOf(1, 2, 3, 4, 5)) {
+                                    CenterRecruitmentCard(navigateTo)
+                                }
+
+                                item {
+                                    Spacer(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(28.dp)
+                                    )
+                                }
                             }
 
-                            item {
-                                Spacer(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(28.dp)
-                                )
-                            }
-                        }
+                        RecruitmentPostStatus.PREVIOUS ->
+                            LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                items(listOf(1, 2, 3, 4, 5)) {
+                                    CenterRecruitmentCard(navigateTo)
+                                }
 
-                    RecruitmentPostStatus.PREVIOUS ->
-                        LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            items(listOf(1, 2, 3, 4, 5)) {
-                                CenterRecruitmentCard(navigateTo)
+                                item {
+                                    Spacer(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(28.dp)
+                                    )
+                                }
                             }
-
-                            item {
-                                Spacer(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(28.dp)
-                                )
-                            }
-                        }
+                    }
                 }
             }
+
+            CareFloatingButton(
+                text = "+ 공고 등록",
+                onClick = { navigateTo(DeepLinkDestination.CenterJobPostingPost) },
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(16.dp),
+            )
         }
     }
 }
