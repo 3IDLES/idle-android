@@ -276,7 +276,7 @@ class JobPostingViewModel @Inject constructor(
             applyMethod = _applyMethod.value.toList()
                 .sortedBy { it.ordinal },
             applyDeadLineType = _applyDeadlineType.value ?: ApplyDeadlineType.UNLIMITED,
-            applyDeadline = _applyDeadline.value?.toString() ?: return@launch,
+            applyDeadline = _applyDeadline.value?.toString(),
         ).onSuccess {
             baseEvent(
                 CareBaseEvent.NavigateTo(

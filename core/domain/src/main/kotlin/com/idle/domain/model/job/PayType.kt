@@ -8,7 +8,7 @@ enum class PayType(val displayName: String) {
 
     companion object {
         fun create(payType: String): PayType {
-            return PayType.entries.firstOrNull { it.displayName == payType } ?: UNKNOWN
+            return PayType.entries.firstOrNull { it.name == payType } ?: UNKNOWN
         }
     }
 }

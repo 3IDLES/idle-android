@@ -26,5 +26,5 @@ data class JobPostingRequest(
     val isExperiencePreferred: Boolean,
     val applyMethod: List<String>,
     val applyDeadlineType: String,
-    val applyDeadline: String,
+    val applyDeadline: String?,
 )

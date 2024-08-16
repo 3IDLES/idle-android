@@ -33,7 +33,7 @@ interface JobPostingRepository {
         isExperiencePreferred: Boolean,
         applyMethod: List<ApplyMethod>,
         applyDeadLineType: ApplyDeadlineType,
-        applyDeadline: String,
+        applyDeadline: String?,
     ): Result<Unit>
 
     suspend fun updateJobPosting(

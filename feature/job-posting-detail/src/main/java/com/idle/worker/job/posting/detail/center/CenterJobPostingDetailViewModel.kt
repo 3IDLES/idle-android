@@ -3,6 +3,7 @@ package com.idle.worker.job.posting.detail.center
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
+import com.idle.domain.model.job.LifeAssistance
 import com.idle.domain.model.jobposting.CenterJobPostingDetail
 import com.idle.domain.model.jobposting.EditJobPostingDetail
 import com.idle.domain.usecase.jobposting.GetCenterJobPostingDetailUseCase
@@ -21,10 +22,17 @@ class CenterJobPostingDetailViewModel @Inject constructor(
     private val _jobPostingDetail = MutableStateFlow<CenterJobPostingDetail?>(null)
     val jobPostingDetail = _jobPostingDetail.asStateFlow()
 
+    private val _isEditState = MutableStateFlow(false)
+    val isEditState = _isEditState.asStateFlow()
+
     fun getCenterJobPostingDetail(jobPostingId: String) = viewModelScope.launch {
         getCenterJobPostingDetailUseCase(jobPostingId)
             .onSuccess { _jobPostingDetail.value = it }
             .onFailure { Log.d("test", "센터 공고 상세 조회 실패! $it") }
+    }
+
+    fun setEditState(state:Boolean){
+        _isEditState.value = state
     }
 
     fun updateJobPosting(editJobPostingDetail: EditJobPostingDetail) = viewModelScope.launch {
@@ -49,7 +57,8 @@ class CenterJobPostingDetailViewModel @Inject constructor(
             isBowelAssistance = editJobPostingDetail.isBowelAssistance,
             isWalkingAssistance = editJobPostingDetail.isWalkingAssistance,
             lifeAssistance = editJobPostingDetail.lifeAssistance.toList()
-                .sortedBy { it.ordinal },
+                .sortedBy { it.ordinal }
+                .ifEmpty { listOf(LifeAssistance.NONE) },
             extraRequirement = editJobPostingDetail.extraRequirement,
             isExperiencePreferred = editJobPostingDetail.isExperiencePreferred,
             applyMethod = editJobPostingDetail.applyMethod.toList()
@@ -68,7 +77,7 @@ class CenterJobPostingDetailViewModel @Inject constructor(
                 lotNumberAddress = editJobPostingDetail.lotNumberAddress,
                 clientName = editJobPostingDetail.clientName,
                 gender = editJobPostingDetail.gender,
-                birthYear = editJobPostingDetail.birthYear.toIntOrNull() ?: return@launch,
+                age = editJobPostingDetail.birthYear.toIntOrNull() ?: return@launch,
                 weight = editJobPostingDetail.weight?.toInt(),
                 careLevel = editJobPostingDetail.careLevel.toIntOrNull() ?: return@launch,
                 mentalStatus = editJobPostingDetail.mentalStatus,
@@ -83,6 +92,8 @@ class CenterJobPostingDetailViewModel @Inject constructor(
                 applyDeadlineType = editJobPostingDetail.applyDeadlineType,
                 applyDeadline = editJobPostingDetail.applyDeadline,
             )
+
+            _isEditState.value = false
         }.onFailure {
 
         }

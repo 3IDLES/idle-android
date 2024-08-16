@@ -26,6 +26,8 @@ import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.jobposting.CenterJobPostingDetail
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalDate
+import java.time.ZoneId
 
 @AndroidEntryPoint
 internal class CenterJobPostingDetailFragment : BaseComposeFragment() {
@@ -39,7 +41,7 @@ internal class CenterJobPostingDetailFragment : BaseComposeFragment() {
             getCenterJobPostingDetail(jobPostingId)
 
             val jobPostingDetail by jobPostingDetail.collectAsStateWithLifecycle()
-            val (isEditState, setEditState) = rememberSaveable { mutableStateOf(false) }
+            val isEditState by isEditState.collectAsStateWithLifecycle()
 
             CareStateAnimator(
                 targetState = isEditState,
@@ -57,7 +59,7 @@ internal class CenterJobPostingDetailFragment : BaseComposeFragment() {
                             roadNameAddress = it.roadNameAddress,
                             clientName = it.clientName,
                             gender = it.gender,
-                            birthYear = it.birthYear.toString(),
+                            birthYear = (LocalDate.now(ZoneId.of("Asia/Seoul")).year - it.age).toString(),
                             weight = it.weight.toString(),
                             careLevel = it.careLevel.toString(),
                             mentalStatus = it.mentalStatus,
@@ -73,7 +75,7 @@ internal class CenterJobPostingDetailFragment : BaseComposeFragment() {
                             applyDeadlineType = it.applyDeadlineType,
                             calendarDate = it.applyDeadline,
                             updateJobPosting = ::updateJobPosting,
-                            setEditState = { setEditState(false) },
+                            setEditState = ::setEditState,
                         )
                     }
                 } else {
@@ -81,7 +83,7 @@ internal class CenterJobPostingDetailFragment : BaseComposeFragment() {
                         jobPostingId = jobPostingId,
                         jobPostingDetail = jobPostingDetail,
                         navigateTo = { baseEvent(CareBaseEvent.NavigateTo(it)) },
-                        setEditState = setEditState,
+                        setEditState = ::setEditState,
                     )
                 }
             }
@@ -132,7 +134,7 @@ internal fun CenterJobPostingDetailScreen(
                 roadNameAddress = it.roadNameAddress,
                 clientName = it.clientName,
                 gender = it.gender,
-                birthYear = it.birthYear.toString(),
+                birthYear = (LocalDate.now(ZoneId.of("Asia/Seoul")).year - it.age).toString(),
                 weight = it.weight.toString(),
                 careLevel = it.careLevel.toString(),
                 mentalStatus = it.mentalStatus,

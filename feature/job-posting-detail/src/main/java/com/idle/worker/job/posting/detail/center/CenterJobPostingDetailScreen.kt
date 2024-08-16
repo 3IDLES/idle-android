@@ -35,6 +35,7 @@ import com.idle.domain.model.job.LifeAssistance
 import com.idle.domain.model.job.MentalStatus
 import com.idle.domain.model.job.PayType
 import java.time.LocalDate
+import java.time.ZoneId
 
 @Composable
 fun SummaryScreen(
@@ -369,7 +370,7 @@ fun SummaryScreen(
                     )
 
                     Text(
-                        text = "${birthYear}년생",
+                        text = "${(LocalDate.now(ZoneId.of("Asia/Seoul")).year - birthYear.toInt())}세",
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray900,
                     )
