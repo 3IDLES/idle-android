@@ -31,7 +31,7 @@ class CenterJobPostingDetailViewModel @Inject constructor(
             .onFailure { Log.d("test", "센터 공고 상세 조회 실패! $it") }
     }
 
-    fun setEditState(state:Boolean){
+    fun setEditState(state: Boolean) {
         _isEditState.value = state
     }
 
@@ -52,7 +52,7 @@ class CenterJobPostingDetailViewModel @Inject constructor(
             weight = editJobPostingDetail.weight?.toIntOrNull(),
             careLevel = editJobPostingDetail.careLevel.toIntOrNull() ?: return@launch,
             mentalStatus = editJobPostingDetail.mentalStatus,
-            disease = editJobPostingDetail.disease,
+            disease = editJobPostingDetail.disease.ifBlank { null },
             isMealAssistance = editJobPostingDetail.isMealAssistance,
             isBowelAssistance = editJobPostingDetail.isBowelAssistance,
             isWalkingAssistance = editJobPostingDetail.isWalkingAssistance,
@@ -64,7 +64,7 @@ class CenterJobPostingDetailViewModel @Inject constructor(
             applyMethod = editJobPostingDetail.applyMethod.toList()
                 .sortedBy { it.ordinal },
             applyDeadlineType = editJobPostingDetail.applyDeadlineType,
-            applyDeadline = editJobPostingDetail.applyDeadline.toString(),
+            applyDeadline = editJobPostingDetail.applyDeadline.toString().ifBlank { null },
         ).onSuccess {
             _jobPostingDetail.value = CenterJobPostingDetail(
                 id = _jobPostingDetail.value?.id ?: return@launch,

@@ -37,7 +37,7 @@ class UpdateJobPostingUseCase @Inject constructor(
         isExperiencePreferred: Boolean,
         applyMethod: List<ApplyMethod>,
         applyDeadlineType: ApplyDeadlineType,
-        applyDeadline: String,
+        applyDeadline: String?,
     ) = jobPostingRepository.updateJobPosting(
         jobPostingId = jobPostingId,
         weekdays = weekdays,

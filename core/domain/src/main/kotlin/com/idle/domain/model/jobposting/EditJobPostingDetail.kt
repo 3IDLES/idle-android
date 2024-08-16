@@ -32,5 +32,5 @@ data class EditJobPostingDetail(
     val isExperiencePreferred: Boolean,
     val applyMethod: Set<ApplyMethod>,
     val applyDeadlineType: ApplyDeadlineType,
-    val applyDeadline: LocalDate,
+    val applyDeadline: LocalDate?,
 )

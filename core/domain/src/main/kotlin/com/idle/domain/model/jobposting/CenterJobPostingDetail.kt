@@ -24,7 +24,7 @@ data class CenterJobPostingDetail(
     val weight: Int?,
     val careLevel: Int,
     val mentalStatus: MentalStatus,
-    val disease: String,
+    val disease: String?,
     val isMealAssistance: Boolean,
     val isBowelAssistance: Boolean,
     val isWalkingAssistance: Boolean,
@@ -33,5 +33,5 @@ data class CenterJobPostingDetail(
     val isExperiencePreferred: Boolean,
     val applyMethod: Set<ApplyMethod>,
     val applyDeadlineType: ApplyDeadlineType,
-    val applyDeadline: LocalDate,
+    val applyDeadline: LocalDate?,
 )

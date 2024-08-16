@@ -129,6 +129,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
                     payType = payType!!,
                     payAmount = payAmount,
                     roadNameAddress = roadNameAddress,
+                    lotNumberAddress = lotNumberAddress,
                     clientName = clientName,
                     gender = gender,
                     birthYear = birthYear,
@@ -144,8 +145,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
                     isExperiencePreferred = isExperiencePreferred!!,
                     applyMethod = applyMethod,
                     applyDeadlineType = applyDeadlineType!!,
-                    applyDeadline = applyDeadline!!,
-                    calendarDate = calendarDate,
+                    applyDeadline = applyDeadline,
                     updateJobPosting = { editJobPosting ->
                         clearWeekDays()
                         clearLifeAssistance()
@@ -177,6 +177,8 @@ internal class JobPostingFragment : BaseComposeFragment() {
                             setRoadNameAddress(it.roadNameAddress)
                             setLotNumberAddress(it.lotNumberAddress)
                         }
+
+                        setEditState(false)
                     },
                     setEditState = ::setEditState,
                 )

@@ -36,6 +36,7 @@ import com.idle.domain.model.job.MentalStatus
 import com.idle.domain.model.job.PayType
 import java.time.LocalDate
 import java.time.ZoneId
+import java.time.temporal.ChronoUnit
 
 @Composable
 fun SummaryScreen(
@@ -126,11 +127,15 @@ fun SummaryScreen(
                         }
 
                         if (applyDeadline != null) {
-                            CareTag(
-                                text = applyDeadline.toString(),
-                                textColor = CareTheme.colors.gray300,
-                                backgroundColor = CareTheme.colors.gray050,
-                            )
+                            val today = LocalDate.now(ZoneId.of("Asia/Seoul"))
+                            val dDay = ChronoUnit.DAYS.between(applyDeadline, today)
+                            if (dDay in 0..14) {
+                                CareTag(
+                                    text = "D-$dDay",
+                                    textColor = CareTheme.colors.gray300,
+                                    backgroundColor = CareTheme.colors.gray050,
+                                )
+                            }
                         }
                     }
 
@@ -147,7 +152,7 @@ fun SummaryScreen(
                         text = stringResource(
                             id = R.string.customer_info_format,
                             careLevel,
-                            LocalDate.now().year - birthYear.toInt() + 1,
+                            (LocalDate.now(ZoneId.of("Asia/Seoul")).year - birthYear.toInt() + 1),
                             gender.displayName
                         ),
                         style = CareTheme.typography.body2,
@@ -582,7 +587,7 @@ fun SummaryScreen(
                     )
 
                     Text(
-                        text = applyDeadline?.toString() ?: "",
+                        text = applyDeadline?.toString() ?: "채용시까지",
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray900,
                     )
