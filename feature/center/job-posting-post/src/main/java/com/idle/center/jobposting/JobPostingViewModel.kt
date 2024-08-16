@@ -227,7 +227,7 @@ class JobPostingViewModel @Inject constructor(
         _applyDeadlineType.value = chipState
     }
 
-    internal fun setApplyDeadline(applyDeadline: LocalDate) {
+    internal fun setApplyDeadline(applyDeadline: LocalDate?) {
         _applyDeadline.value = applyDeadline
     }
 

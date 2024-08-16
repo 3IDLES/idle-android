@@ -75,8 +75,9 @@ import com.idle.domain.model.jobposting.EditJobPostingDetail
 import com.idle.post.code.PostCodeFragment
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.ZoneId
 
-@OptIn(ExperimentalLayoutApi::class)
+@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun JobEditScreen(
     weekDays: Set<DayOfWeek>,
@@ -86,6 +87,7 @@ fun JobEditScreen(
     payType: PayType,
     payAmount: String,
     roadNameAddress: String,
+    lotNumberAddress: String,
     clientName: String,
     gender: Gender,
     birthYear: String,
@@ -101,8 +103,7 @@ fun JobEditScreen(
     isExperiencePreferred: Boolean,
     applyMethod: Set<ApplyMethod>,
     applyDeadlineType: ApplyDeadlineType,
-    applyDeadline: LocalDate,
-    calendarDate: LocalDate,
+    applyDeadline: LocalDate?,
     updateJobPosting: (EditJobPostingDetail) -> Unit,
     setEditState: (Boolean) -> Unit,
 ) {
@@ -112,7 +113,7 @@ fun JobEditScreen(
     var localPayType by remember { mutableStateOf(payType) }
     var localPayAmount by remember { mutableStateOf(payAmount) }
     var localRoadNameAddress by remember { mutableStateOf(roadNameAddress) }
-    var localLotNumberAddress by remember { mutableStateOf("") }
+    var localLotNumberAddress by remember { mutableStateOf(lotNumberAddress) }
     var localClientName by remember { mutableStateOf(clientName) }
     var localGender by remember { mutableStateOf(gender) }
     var localBirthYear by remember { mutableStateOf(birthYear) }
@@ -129,8 +130,7 @@ fun JobEditScreen(
     var localApplyMethod by remember { mutableStateOf(applyMethod) }
     var localApplyDeadlineType by remember { mutableStateOf(applyDeadlineType) }
     var localApplyDeadline by remember { mutableStateOf(applyDeadline) }
-    val startDate by rememberSaveable { mutableStateOf(calendarDate) }
-
+    val startDate by rememberSaveable { mutableStateOf(LocalDate.now(ZoneId.of("Asia/Seoul"))) }
     val scrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
     val coroutineScope = rememberCoroutineScope()
@@ -356,12 +356,13 @@ fun JobEditScreen(
                         )
 
                         CareCalendar(
-                            year = localApplyDeadline.year,
-                            month = localApplyDeadline.monthValue,
+                            year = localApplyDeadline?.year ?: startDate.year,
+                            month = localApplyDeadline?.monthValue ?: startDate.monthValue,
                             selectedDate = localApplyDeadline,
                             startMonth = startDate.monthValue,
                             onMonthChanged = {
-                                localApplyDeadline = localApplyDeadline.withMonth(it)
+                                localApplyDeadline =
+                                    localApplyDeadline?.withMonth(it) ?: startDate.withMonth(it)
                             },
                             onDayClick = {
                                 coroutineScope.launch {
@@ -819,6 +820,10 @@ fun JobEditScreen(
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             LifeAssistance.entries.forEach { assistance ->
+                                if (assistance == LifeAssistance.NONE) {
+                                    return@forEach
+                                }
+
                                 CareChipBasic(
                                     text = assistance.displayName,
                                     onClick = {
@@ -938,7 +943,9 @@ fun JobEditScreen(
                                 modifier = Modifier.fillMaxWidth(),
                             ) {
                                 ApplyDeadlineType.entries.forEach { type ->
-                                    if (type == ApplyDeadlineType.UNKNOWN) return@forEach
+                                    if (type == ApplyDeadlineType.UNKNOWN) {
+                                        return@forEach
+                                    }
 
                                     CareChipBasic(
                                         text = type.displayName,

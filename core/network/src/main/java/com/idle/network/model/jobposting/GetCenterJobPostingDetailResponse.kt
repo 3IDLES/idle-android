@@ -51,10 +51,10 @@ data class GetCenterJobPostingDetailResponse(
         clientName = clientName,
         gender = Gender.create(gender),
         age = age,
-        weight = weight ?: -1,
+        weight = weight,
         careLevel = careLevel,
         mentalStatus = MentalStatus.create(mentalStatus),
-        disease = disease ?: "",
+        disease = disease,
         isMealAssistance = isMealAssistance,
         isBowelAssistance = isBowelAssistance,
         isWalkingAssistance = isWalkingAssistance,
@@ -63,6 +63,8 @@ data class GetCenterJobPostingDetailResponse(
         isExperiencePreferred = isExperiencePreferred,
         applyMethod = ApplyMethod.create(applyMethod),
         applyDeadlineType = ApplyDeadlineType.create(applyDeadlineType),
-        applyDeadline = LocalDate.parse(applyDeadline, DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+        applyDeadline = applyDeadline?.let {
+            LocalDate.parse(it, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+        },
     )
 }

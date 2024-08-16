@@ -38,7 +38,6 @@ import com.idle.designsystem.compose.component.CareHeadingTopBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareTabBar
 import com.idle.designsystem.compose.foundation.CareTheme
-import com.idle.domain.model.auth.UserRole
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -77,8 +76,8 @@ internal fun CenterHomeScreen(
         Column(
             modifier = Modifier
                 .padding(paddingValue)
-                .padding(top = 20.dp, bottom = 36.dp)
-                .fillMaxSize()
+                .padding(top = 20.dp)
+                .fillMaxSize(),
         ) {
             CareTabBar(
                 selectedStatus = recruitmentPostStatus,
@@ -144,7 +143,7 @@ private fun CenterRecruitmentCard(
         border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
         modifier = Modifier.clickable {
             navigateTo(
-                DeepLinkDestination.CenterJobDetail("0191593f-35dc-711c-88e9-d8f60b8b23a5")
+                DeepLinkDestination.CenterJobDetail("01915a82-2910-7ce5-91da-b35d88d30743")
             )
         }
     ) {
@@ -179,7 +178,7 @@ private fun CenterRecruitmentCard(
                 onClick = { navigateTo(CenterApplicantInquiry("01914eaa-5106-74ab-a079-67875c1d0f42")) },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 4  .dp),
+                    .padding(bottom = 4.dp),
             )
 
             Row(
