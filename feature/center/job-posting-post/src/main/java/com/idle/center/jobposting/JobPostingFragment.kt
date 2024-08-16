@@ -86,7 +86,6 @@ internal class JobPostingFragment : BaseComposeFragment() {
             val payAmount by payAmount.collectAsStateWithLifecycle()
             val roadNameAddress by roadNameAddress.collectAsStateWithLifecycle()
             val lotNumberAddress by lotNumberAddress.collectAsStateWithLifecycle()
-            val detailAddress by detailAddress.collectAsStateWithLifecycle()
             val clientName by clientName.collectAsStateWithLifecycle()
             val gender by gender.collectAsStateWithLifecycle()
             val birthYear by birthYear.collectAsStateWithLifecycle()
@@ -214,7 +213,6 @@ internal class JobPostingFragment : BaseComposeFragment() {
                     onWorkEndTimeChanged = ::setWorkEndTime,
                     onPayTypeChanged = ::setPayType,
                     onPayAmountChanged = ::setPayAmount,
-                    onDetailAddressChanged = ::setDetailAddress,
                     showPostCodeDialog = {
                         if (!(postCodeDialog?.isAdded == true || postCodeDialog?.isVisible == true)) {
                             postCodeDialog?.show(parentFragmentManager, "PostCodeFragment")
@@ -281,7 +279,6 @@ internal fun JobPostingScreen(
     onWorkEndTimeChanged: (String) -> Unit,
     onPayTypeChanged: (PayType) -> Unit,
     onPayAmountChanged: (String) -> Unit,
-    onDetailAddressChanged: (String) -> Unit,
     showPostCodeDialog: () -> Unit,
     onClientNameChanged: (String) -> Unit,
     onGenderChanged: (Gender) -> Unit,

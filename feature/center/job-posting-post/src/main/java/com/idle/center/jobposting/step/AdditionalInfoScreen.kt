@@ -156,7 +156,7 @@ internal fun AdditionalInfoScreen(
 
         CareButtonLarge(
             text = stringResource(id = R.string.next),
-            enable = isExperiencePreferred != null && applyMethod.isNotEmpty() && applyDeadlineType != null && (applyDeadlineType == ApplyDeadlineType.LIMITED && applyDeadline != null),
+            enable = isExperiencePreferred != null && applyMethod.isNotEmpty() && applyDeadlineType != null && !(applyDeadlineType == ApplyDeadlineType.LIMITED && applyDeadline == null),
             onClick = { setJobPostingStep(JobPostingStep.findStep(ADDITIONAL_INFO.step + 1)) },
             modifier = Modifier
                 .fillMaxWidth()

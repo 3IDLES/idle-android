@@ -53,9 +53,6 @@ class JobPostingViewModel @Inject constructor(
     private val _lotNumberAddress = MutableStateFlow("")
     val lotNumberAddress = _lotNumberAddress.asStateFlow()
 
-    private val _detailAddress = MutableStateFlow("")
-    val detailAddress = _detailAddress.asStateFlow()
-
     private val _clientName = MutableStateFlow("")
     val clientName = _clientName.asStateFlow()
 
@@ -153,10 +150,7 @@ class JobPostingViewModel @Inject constructor(
 
     internal fun setLotNumberAddress(address: String) {
         _lotNumberAddress.value = address
-    }
-
-    internal fun setDetailAddress(address: String) {
-        _detailAddress.value = address
+        Log.d("test", _lotNumberAddress.value)
     }
 
     internal fun setClientName(name: String) {

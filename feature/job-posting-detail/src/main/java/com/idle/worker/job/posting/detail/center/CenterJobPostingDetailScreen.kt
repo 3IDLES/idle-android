@@ -133,14 +133,12 @@ fun SummaryScreen(
                     }
 
                     Text(
-                        text = lotNumberAddress.split(" ").subList(0, 3).joinToString { " " },
+                        text = lotNumberAddress.split(" ").subList(0, 3).joinToString(" "),
                         style = CareTheme.typography.subtitle2,
                         color = CareTheme.colors.gray900,
                         overflow = TextOverflow.Clip,
                         maxLines = 1,
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(bottom = 2.dp),
+                        modifier = Modifier.padding(bottom = 2.dp),
                     )
 
                     Text(
