@@ -107,17 +107,21 @@ class PostCodeFragment : DialogFragment() {
 
     private inner class AndroidBridge {
         @JavascriptInterface
-        fun onPostCodeReceived(roadNameAddress: String, lotNumberAddress: String) {
+        fun onPostCodeReceived(
+            roadNameAddress: String,
+            autoRoadNameAddress: String,
+            lotNumberAddress: String,
+            autoLotNumberAddress: String,
+        ) {
             lifecycleScope.launch(Dispatchers.Main) {
                 findNavController().currentBackStackEntry?.savedStateHandle?.set(
                     key = "roadNameAddress",
-                    value = roadNameAddress,
+                    value = roadNameAddress.ifBlank { autoRoadNameAddress },
                 )
                 findNavController().currentBackStackEntry?.savedStateHandle?.set(
                     key = "lotNumberAddress",
-                    value = lotNumberAddress,
+                    value = lotNumberAddress.ifBlank { autoLotNumberAddress },
                 )
-
                 dismiss()
             }
         }

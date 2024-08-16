@@ -39,7 +39,7 @@ class JobPostingRepositoryImpl @Inject constructor(
         isExperiencePreferred: Boolean,
         applyMethod: List<ApplyMethod>,
         applyDeadLineType: ApplyDeadlineType,
-        applyDeadline: String
+        applyDeadline: String?,
     ): Result<Unit> = jobPostingDataSource.postJobPosting(
         JobPostingRequest(
             weekdays = weekdays.map { it.name },

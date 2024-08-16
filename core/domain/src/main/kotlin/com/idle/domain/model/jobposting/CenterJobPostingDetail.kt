@@ -20,7 +20,7 @@ data class CenterJobPostingDetail(
     val lotNumberAddress: String,
     val clientName: String,
     val gender: Gender,
-    val birthYear: Int,
+    val age: Int,
     val weight: Int?,
     val careLevel: Int,
     val mentalStatus: MentalStatus,

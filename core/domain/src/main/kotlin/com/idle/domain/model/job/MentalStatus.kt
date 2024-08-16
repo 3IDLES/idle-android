@@ -8,7 +8,7 @@ enum class MentalStatus(val displayName: String) {
 
     companion object {
         fun create(mentalStatus: String): MentalStatus {
-            return MentalStatus.entries.firstOrNull { it.displayName == mentalStatus } ?: UNKNOWN
+            return MentalStatus.entries.firstOrNull { it.name == mentalStatus } ?: UNKNOWN
         }
     }
 }
