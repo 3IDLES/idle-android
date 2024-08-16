@@ -125,11 +125,13 @@ fun SummaryScreen(
                             )
                         }
 
-                        CareTag(
-                            text = applyDeadline?.toString() ?: "",
-                            textColor = CareTheme.colors.gray300,
-                            backgroundColor = CareTheme.colors.gray050,
-                        )
+                        if (applyDeadline != null) {
+                            CareTag(
+                                text = applyDeadline.toString(),
+                                textColor = CareTheme.colors.gray300,
+                                backgroundColor = CareTheme.colors.gray050,
+                            )
+                        }
                     }
 
                     Text(
