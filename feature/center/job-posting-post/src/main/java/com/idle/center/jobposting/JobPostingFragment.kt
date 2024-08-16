@@ -42,13 +42,13 @@ import com.idle.center.jobposting.step.AdditionalInfoScreen
 import com.idle.center.jobposting.step.AddressScreen
 import com.idle.center.jobposting.step.CustomerInformationScreen
 import com.idle.center.jobposting.step.CustomerRequirementScreen
+import com.idle.center.jobposting.step.JobPostingSummaryScreen
 import com.idle.center.jobposting.step.TimePaymentScreen
 import com.idle.compose.JobPostingBottomSheetType
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareBottomSheetLayout
-import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareButtonMedium
 import com.idle.designsystem.compose.component.CareButtonRound
 import com.idle.designsystem.compose.component.CareCalendar
@@ -65,7 +65,6 @@ import com.idle.domain.model.job.LifeAssistance
 import com.idle.domain.model.job.MentalStatus
 import com.idle.domain.model.job.PayType
 import com.idle.post.code.PostCodeFragment
-import com.idle.worker.job.posting.detail.center.SummaryScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -120,128 +119,133 @@ internal class JobPostingFragment : BaseComposeFragment() {
                 }
             }
 
-            if (isEditState) {
-                JobEditScreen(
-                    weekDays = weekDays,
-                    workStartTime = workStartTime,
-                    workEndTime = workEndTime,
-                    fragmentManager = parentFragmentManager,
-                    payType = payType!!,
-                    payAmount = payAmount,
-                    roadNameAddress = roadNameAddress,
-                    lotNumberAddress = lotNumberAddress,
-                    clientName = clientName,
-                    gender = gender,
-                    birthYear = birthYear,
-                    weight = weight,
-                    careLevel = careLevel,
-                    mentalStatus = mentalStatus,
-                    disease = disease,
-                    isMealAssistance = isMealAssistance!!,
-                    isBowelAssistance = isBowelAssistance!!,
-                    isWalkingAssistance = isWalkingAssistance!!,
-                    lifeAssistance = lifeAssistance,
-                    extraRequirement = extraRequirement,
-                    isExperiencePreferred = isExperiencePreferred!!,
-                    applyMethod = applyMethod,
-                    applyDeadlineType = applyDeadlineType!!,
-                    applyDeadline = applyDeadline,
-                    updateJobPosting = { editJobPosting ->
-                        clearWeekDays()
-                        clearLifeAssistance()
-                        clearApplyMethod()
-                        editJobPosting.let {
-                            it.weekdays.forEach { setWeekDays(it) }
-                            setWorkStartTime(it.startTime)
-                            setWorkEndTime(it.endTime)
-                            setPayType(it.payType)
-                            setPayAmount(it.payAmount)
-                            setClientName(it.clientName)
-                            setGender(it.gender)
-                            setBirthYear(it.birthYear)
-                            it.weight?.let { weight -> setWeight(weight) }
-                            setCareLevel(it.careLevel)
-                            setMentalStatus(it.mentalStatus)
-                            setDisease(it.disease)
-                            setMealAssistance(it.isMealAssistance)
-                            setBowelAssistance(it.isBowelAssistance)
-                            setWalkingAssistance(it.isWalkingAssistance)
-                            it.lifeAssistance.forEach { setLifeAssistance(it) }
-                            it.extraRequirement?.let { extraRequirement ->
-                                setExtraRequirement(extraRequirement)
+            CareStateAnimator(
+                targetState = isEditState,
+                transitionCondition = isEditState
+            ) { state ->
+                if (state) {
+                    JobEditScreen(
+                        weekDays = weekDays,
+                        workStartTime = workStartTime,
+                        workEndTime = workEndTime,
+                        fragmentManager = parentFragmentManager,
+                        payType = payType!!,
+                        payAmount = payAmount,
+                        roadNameAddress = roadNameAddress,
+                        lotNumberAddress = lotNumberAddress,
+                        clientName = clientName,
+                        gender = gender,
+                        birthYear = birthYear,
+                        weight = weight,
+                        careLevel = careLevel,
+                        mentalStatus = mentalStatus,
+                        disease = disease,
+                        isMealAssistance = isMealAssistance!!,
+                        isBowelAssistance = isBowelAssistance!!,
+                        isWalkingAssistance = isWalkingAssistance!!,
+                        lifeAssistance = lifeAssistance,
+                        extraRequirement = extraRequirement,
+                        isExperiencePreferred = isExperiencePreferred!!,
+                        applyMethod = applyMethod,
+                        applyDeadlineType = applyDeadlineType!!,
+                        applyDeadline = applyDeadline,
+                        updateJobPosting = { editJobPosting ->
+                            clearWeekDays()
+                            clearLifeAssistance()
+                            clearApplyMethod()
+                            editJobPosting.let {
+                                it.weekdays.forEach { setWeekDays(it) }
+                                setWorkStartTime(it.startTime)
+                                setWorkEndTime(it.endTime)
+                                setPayType(it.payType)
+                                setPayAmount(it.payAmount)
+                                setClientName(it.clientName)
+                                setGender(it.gender)
+                                setBirthYear(it.birthYear)
+                                it.weight?.let { weight -> setWeight(weight) }
+                                setCareLevel(it.careLevel)
+                                setMentalStatus(it.mentalStatus)
+                                setDisease(it.disease)
+                                setMealAssistance(it.isMealAssistance)
+                                setBowelAssistance(it.isBowelAssistance)
+                                setWalkingAssistance(it.isWalkingAssistance)
+                                it.lifeAssistance.forEach { setLifeAssistance(it) }
+                                it.extraRequirement?.let { extraRequirement ->
+                                    setExtraRequirement(extraRequirement)
+                                }
+                                setExperiencePreferred(it.isExperiencePreferred)
+                                it.applyMethod.forEach { setApplyMethod(it) }
+                                setApplyDeadline(it.applyDeadline)
+                                setApplyDeadlineType(it.applyDeadlineType)
+                                setRoadNameAddress(it.roadNameAddress)
+                                setLotNumberAddress(it.lotNumberAddress)
                             }
-                            setExperiencePreferred(it.isExperiencePreferred)
-                            it.applyMethod.forEach { setApplyMethod(it) }
-                            setApplyDeadline(it.applyDeadline)
-                            setApplyDeadlineType(it.applyDeadlineType)
-                            setRoadNameAddress(it.roadNameAddress)
-                            setLotNumberAddress(it.lotNumberAddress)
-                        }
 
-                        setEditState(false)
-                    },
-                    setEditState = ::setEditState,
-                )
-            } else {
-                JobPostingScreen(
-                    weekDays = weekDays,
-                    workStartTime = workStartTime,
-                    workEndTime = workEndTime,
-                    payType = payType,
-                    payAmount = payAmount,
-                    roadNameAddress = roadNameAddress,
-                    lotNumberAddress = lotNumberAddress,
-                    clientName = clientName,
-                    gender = gender,
-                    birthYear = birthYear,
-                    weight = weight,
-                    careLevel = careLevel,
-                    mentalStatus = mentalStatus,
-                    disease = disease,
-                    isMealAssistance = isMealAssistance,
-                    isBowelAssistance = isBowelAssistance,
-                    isWalkingAssistance = isWalkingAssistance,
-                    lifeAssistance = lifeAssistance,
-                    extraRequirement = extraRequirement,
-                    isExperiencePreferred = isExperiencePreferred,
-                    applyMethod = applyMethod,
-                    applyDeadlineType = applyDeadlineType,
-                    applyDeadline = applyDeadline,
-                    calendarDate = calendarDate,
-                    jobPostingStep = jobPostingStep,
-                    bottomSheetType = jobPostingBottomSheetType,
-                    setWeekDays = ::setWeekDays,
-                    onWorkStartTimeChanged = ::setWorkStartTime,
-                    onWorkEndTimeChanged = ::setWorkEndTime,
-                    onPayTypeChanged = ::setPayType,
-                    onPayAmountChanged = ::setPayAmount,
-                    showPostCodeDialog = {
-                        if (!(postCodeDialog?.isAdded == true || postCodeDialog?.isVisible == true)) {
-                            postCodeDialog?.show(parentFragmentManager, "PostCodeFragment")
-                        }
-                    },
-                    onClientNameChanged = ::setClientName,
-                    onGenderChanged = ::setGender,
-                    onWeightChanged = ::setWeight,
-                    onMentalStatusChanged = ::setMentalStatus,
-                    onBirthYearChanged = ::setBirthYear,
-                    onCareLevelChanged = ::setCareLevel,
-                    onDiseaseChanged = ::setDisease,
-                    onMealAssistanceChanged = ::setMealAssistance,
-                    onBowelAssistanceChanged = ::setBowelAssistance,
-                    onWalkingAssistanceChanged = ::setWalkingAssistance,
-                    onLifeAssistanceChanged = ::setLifeAssistance,
-                    onExtraRequirementChanged = ::setExtraRequirement,
-                    onExperiencePreferredChanged = ::setExperiencePreferred,
-                    onApplyMethodChanged = ::setApplyMethod,
-                    onApplyDeadlineTypeChanged = ::setApplyDeadlineType,
-                    onApplyDeadlineChanged = ::setApplyDeadline,
-                    onCalendarMonthChanged = ::setCalendarMonth,
-                    postJobPosting = ::postJobPosting,
-                    setJobPostingStep = ::setJobPostingStep,
-                    setEditState = ::setEditState,
-                    setBottomSheetType = ::setBottomSheetType,
-                )
+                            setEditState(false)
+                        },
+                        setEditState = ::setEditState,
+                    )
+                } else {
+                    JobPostingScreen(
+                        weekDays = weekDays,
+                        workStartTime = workStartTime,
+                        workEndTime = workEndTime,
+                        payType = payType,
+                        payAmount = payAmount,
+                        roadNameAddress = roadNameAddress,
+                        lotNumberAddress = lotNumberAddress,
+                        clientName = clientName,
+                        gender = gender,
+                        birthYear = birthYear,
+                        weight = weight,
+                        careLevel = careLevel,
+                        mentalStatus = mentalStatus,
+                        disease = disease,
+                        isMealAssistance = isMealAssistance,
+                        isBowelAssistance = isBowelAssistance,
+                        isWalkingAssistance = isWalkingAssistance,
+                        lifeAssistance = lifeAssistance,
+                        extraRequirement = extraRequirement,
+                        isExperiencePreferred = isExperiencePreferred,
+                        applyMethod = applyMethod,
+                        applyDeadlineType = applyDeadlineType,
+                        applyDeadline = applyDeadline,
+                        calendarDate = calendarDate,
+                        jobPostingStep = jobPostingStep,
+                        bottomSheetType = jobPostingBottomSheetType,
+                        setWeekDays = ::setWeekDays,
+                        onWorkStartTimeChanged = ::setWorkStartTime,
+                        onWorkEndTimeChanged = ::setWorkEndTime,
+                        onPayTypeChanged = ::setPayType,
+                        onPayAmountChanged = ::setPayAmount,
+                        showPostCodeDialog = {
+                            if (!(postCodeDialog?.isAdded == true || postCodeDialog?.isVisible == true)) {
+                                postCodeDialog?.show(parentFragmentManager, "PostCodeFragment")
+                            }
+                        },
+                        onClientNameChanged = ::setClientName,
+                        onGenderChanged = ::setGender,
+                        onWeightChanged = ::setWeight,
+                        onMentalStatusChanged = ::setMentalStatus,
+                        onBirthYearChanged = ::setBirthYear,
+                        onCareLevelChanged = ::setCareLevel,
+                        onDiseaseChanged = ::setDisease,
+                        onMealAssistanceChanged = ::setMealAssistance,
+                        onBowelAssistanceChanged = ::setBowelAssistance,
+                        onWalkingAssistanceChanged = ::setWalkingAssistance,
+                        onLifeAssistanceChanged = ::setLifeAssistance,
+                        onExtraRequirementChanged = ::setExtraRequirement,
+                        onExperiencePreferredChanged = ::setExperiencePreferred,
+                        onApplyMethodChanged = ::setApplyMethod,
+                        onApplyDeadlineTypeChanged = ::setApplyDeadlineType,
+                        onApplyDeadlineChanged = ::setApplyDeadline,
+                        onCalendarMonthChanged = ::setCalendarMonth,
+                        postJobPosting = ::postJobPosting,
+                        setJobPostingStep = ::setJobPostingStep,
+                        setEditState = ::setEditState,
+                        setBottomSheetType = ::setBottomSheetType,
+                    )
+                }
             }
         }
     }
@@ -314,345 +318,317 @@ internal fun JobPostingScreen(
         skipHalfExpanded = true,
     )
 
-    CareBottomSheetLayout(
-        sheetState = sheetState,
-        sheetContent = {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                when (bottomSheetType) {
-                    JobPostingBottomSheetType.WORK_START_TIME -> {
-                        var localWorkStartAmPm by remember { mutableStateOf("오전") }
-                        var localWorkStartHour by remember { mutableStateOf("01") }
-                        var localWorkStartMinute by remember { mutableStateOf("00") }
+    CareStateAnimator(
+        targetState = jobPostingStep == JobPostingStep.SUMMARY,
+        transitionCondition = jobPostingStep == JobPostingStep.SUMMARY,
+        modifier = Modifier.fillMaxSize(),
+    ) { isSummary ->
+        if (isSummary) {
+            JobPostingSummaryScreen(
+                weekDays = weekDays,
+                workStartTime = workStartTime,
+                workEndTime = workEndTime,
+                payType = payType,
+                payAmount = payAmount,
+                roadNameAddress = roadNameAddress,
+                lotNumberAddress = lotNumberAddress,
+                clientName = clientName,
+                gender = gender,
+                birthYear = birthYear,
+                weight = weight,
+                careLevel = careLevel,
+                mentalStatus = mentalStatus,
+                disease = disease,
+                isMealAssistance = isMealAssistance,
+                isBowelAssistance = isBowelAssistance,
+                isWalkingAssistance = isWalkingAssistance,
+                lifeAssistance = lifeAssistance,
+                extraRequirement = extraRequirement,
+                isExperiencePreferred = isExperiencePreferred,
+                applyMethod = applyMethod,
+                applyDeadline = applyDeadline,
+                setEditState = setEditState,
+                setJobPostingStep = setJobPostingStep,
+                postJobPosting = postJobPosting,
+            )
+        } else {
+            CareBottomSheetLayout(
+                sheetState = sheetState,
+                sheetContent = {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        when (bottomSheetType) {
+                            JobPostingBottomSheetType.WORK_START_TIME -> {
+                                var localWorkStartAmPm by remember { mutableStateOf("오전") }
+                                var localWorkStartHour by remember { mutableStateOf("01") }
+                                var localWorkStartMinute by remember { mutableStateOf("00") }
 
-                        Text(
-                            text = stringResource(id = R.string.work_start_time),
-                            style = CareTheme.typography.heading3,
-                            color = CareTheme.colors.gray900,
-                        )
-
-                        Spacer(modifier = Modifier.height(80.dp))
-
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            CareWheelPicker(
-                                items = listOf("오전", "오후"),
-                                onItemSelected = {
-                                    localWorkStartAmPm = it
-                                    Log.d("test", it)
-                                },
-                                initIndex = if (workStartTime.isBlank() ||
-                                    workStartTime.substring(0, 2).toInt() <= 12
-                                ) 0 else 1,
-                                modifier = Modifier.padding(end = 40.dp),
-                            )
-
-                            CareWheelPicker(
-                                items = (1..12).toList(),
-                                onItemSelected = { localWorkStartHour = it },
-                                initIndex = if (workStartTime.isBlank()) 0
-                                else if (workStartTime.substring(0, 2) == "00") 11
-                                else workStartTime.substring(0, 2).toInt() - 1,
-                                modifier = Modifier.padding(end = 10.dp),
-                            )
-
-                            Text(
-                                text = ":",
-                                style = CareTheme.typography.subtitle2,
-                                color = CareTheme.colors.gray900,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.width(20.dp),
-                            )
-
-                            CareWheelPicker(
-                                items = (0..50 step 10).toList(),
-                                onItemSelected = { localWorkStartMinute = it },
-                                initIndex = if (workStartTime.isBlank()) 0
-                                else (workStartTime.substring(3, 5).toInt() / 10),
-                                modifier = Modifier.padding(start = 10.dp),
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.height(80.dp))
-
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            modifier = Modifier.fillMaxWidth(),
-                        ) {
-                            CareButtonMedium(
-                                text = stringResource(id = R.string.cancel),
-                                border = BorderStroke(
-                                    width = 1.dp,
-                                    color = CareTheme.colors.orange400
-                                ),
-                                containerColor = CareTheme.colors.white000,
-                                textColor = CareTheme.colors.orange500,
-                                onClick = {
-                                    coroutineScope.launch {
-                                        sheetState.hide()
-                                    }
-                                },
-                                modifier = Modifier.weight(1f),
-                            )
-
-                            CareButtonMedium(
-                                text = stringResource(id = R.string.save),
-                                onClick = {
-                                    coroutineScope.launch {
-                                        val startTime =
-                                            "${
-                                                if (localWorkStartAmPm == "오전" && localWorkStartHour == "12") "00"
-                                                else if (localWorkStartAmPm == "오전") localWorkStartHour
-                                                else if (localWorkStartAmPm == "오후" && localWorkStartHour == "12") "12"
-                                                else localWorkStartHour.toInt() + 12
-                                            }" + ":${localWorkStartMinute}"
-                                        onWorkStartTimeChanged(startTime)
-                                        sheetState.hide()
-                                    }
-                                },
-                                modifier = Modifier.weight(1f),
-                            )
-                        }
-                    }
-
-                    JobPostingBottomSheetType.WORK_END_TIME -> {
-                        var localWorkEndAmPm by remember { mutableStateOf("오전") }
-                        var localWorkEndHour by remember { mutableStateOf("01") }
-                        var localWorkEndMinute by remember { mutableStateOf("00") }
-
-                        Text(
-                            text = stringResource(id = R.string.work_end_time),
-                            style = CareTheme.typography.heading3,
-                            color = CareTheme.colors.gray900,
-                        )
-
-                        Spacer(modifier = Modifier.height(80.dp))
-
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            CareWheelPicker(
-                                items = listOf("오전", "오후"),
-                                onItemSelected = {
-                                    localWorkEndAmPm = it
-                                    Log.d("test", it)
-                                },
-                                initIndex = if (workEndTime.isBlank() ||
-                                    workEndTime.substring(0, 2).toInt() <= 12
-                                ) 0 else 1,
-                                modifier = Modifier.padding(end = 40.dp),
-                            )
-
-                            CareWheelPicker(
-                                items = (1..12).toList(),
-                                onItemSelected = { localWorkEndHour = it },
-                                initIndex = if (workEndTime.isBlank()) 0
-                                else if (workEndTime.substring(0, 2) == "00") 11
-                                else workEndTime.substring(0, 2).toInt() - 1,
-                                modifier = Modifier.padding(end = 10.dp),
-                            )
-
-                            Text(
-                                text = ":",
-                                style = CareTheme.typography.subtitle2,
-                                color = CareTheme.colors.gray900,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.width(20.dp),
-                            )
-
-                            CareWheelPicker(
-                                items = (0..50 step 10).toList(),
-                                onItemSelected = { localWorkEndMinute = it },
-                                initIndex = if (workEndTime.isBlank()) 0
-                                else (workEndTime.substring(3, 5).toInt() / 10),
-                                modifier = Modifier.padding(start = 10.dp),
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.height(80.dp))
-
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            modifier = Modifier.fillMaxWidth(),
-                        ) {
-                            CareButtonMedium(
-                                text = stringResource(id = R.string.cancel),
-                                border = BorderStroke(
-                                    width = 1.dp,
-                                    color = CareTheme.colors.orange400
-                                ),
-                                containerColor = CareTheme.colors.white000,
-                                textColor = CareTheme.colors.orange500,
-                                onClick = {
-                                    coroutineScope.launch {
-                                        sheetState.hide()
-                                    }
-                                },
-                                modifier = Modifier.weight(1f),
-                            )
-
-                            CareButtonMedium(
-                                text = stringResource(id = R.string.save),
-                                onClick = {
-                                    coroutineScope.launch {
-                                        val endTime = "${
-                                            if (localWorkEndAmPm == "오전" && localWorkEndHour == "12") "00"
-                                            else if (localWorkEndAmPm == "오전") localWorkEndHour
-                                            else if (localWorkEndAmPm == "오후" && localWorkEndHour == "12") "12"
-                                            else localWorkEndHour.toInt() + 12
-                                        }" + ":${localWorkEndMinute}"
-                                        Log.d("test", endTime.toString())
-                                        onWorkEndTimeChanged(endTime)
-                                        sheetState.hide()
-                                    }
-                                },
-                                modifier = Modifier.weight(1f),
-                            )
-                        }
-                    }
-
-                    JobPostingBottomSheetType.POST_DEAD_LINE -> {
-                        Text(
-                            text = stringResource(id = R.string.post_deadline),
-                            style = CareTheme.typography.heading3,
-                            color = CareTheme.colors.gray900,
-                        )
-
-                        CareCalendar(
-                            year = calendarDate.year,
-                            month = calendarDate.monthValue,
-                            selectedDate = applyDeadline,
-                            startMonth = startDateTime.monthValue,
-                            onMonthChanged = onCalendarMonthChanged,
-                            onDayClick = {
-                                coroutineScope.launch {
-                                    onApplyDeadlineChanged(it)
-                                    sheetState.hide()
-                                }
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 30.dp),
-                        )
-                    }
-
-                    else -> Unit
-                }
-            }
-        },
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        Scaffold(
-            topBar = {
-                Column(modifier = Modifier.padding(start = 12.dp, top = 48.dp, end = 20.dp)) {
-                    val bottomPadding = if (jobPostingStep != JobPostingStep.SUMMARY) 12.dp
-                    else 0.dp
-
-                    CareSubtitleTopBar(
-                        title = if (jobPostingStep != JobPostingStep.SUMMARY) stringResource(id = R.string.post_job_posting)
-                        else "",
-                        onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
-                        leftComponent = {
-                            if (jobPostingStep == JobPostingStep.SUMMARY) {
-                                CareButtonRound(
-                                    text = stringResource(id = R.string.edit_job_posting_button),
-                                    onClick = { setEditState(true) },
-                                )
-                            }
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = bottomPadding),
-                    )
-
-                    if (jobPostingStep != JobPostingStep.SUMMARY) {
-                        CareProgressBar(
-                            currentStep = jobPostingStep.step,
-                            totalSteps = JobPostingStep.entries.size - 1,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 8.dp, top = 8.dp, bottom = 8.dp),
-                        )
-                    }
-                }
-            },
-            containerColor = CareTheme.colors.white000,
-            modifier = Modifier.addFocusCleaner(focusManager),
-        ) { paddingValue ->
-            CareStateAnimator(
-                targetState = jobPostingStep == JobPostingStep.SUMMARY,
-                transitionCondition = jobPostingStep == JobPostingStep.SUMMARY,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValue)
-                    .padding(top = 24.dp),
-            ) { isSummary ->
-                if (isSummary) {
-                    SummaryScreen(
-                        weekDays = weekDays,
-                        workStartTime = workStartTime,
-                        workEndTime = workEndTime,
-                        payType = payType,
-                        payAmount = payAmount,
-                        roadNameAddress = roadNameAddress,
-                        lotNumberAddress = lotNumberAddress,
-                        clientName = clientName,
-                        gender = gender,
-                        birthYear = birthYear,
-                        weight = weight,
-                        careLevel = careLevel,
-                        mentalStatus = mentalStatus,
-                        disease = disease,
-                        isMealAssistance = isMealAssistance,
-                        isBowelAssistance = isBowelAssistance,
-                        isWalkingAssistance = isWalkingAssistance,
-                        lifeAssistance = lifeAssistance,
-                        extraRequirement = extraRequirement,
-                        isExperiencePreferred = isExperiencePreferred,
-                        applyMethod = applyMethod,
-                        applyDeadline = applyDeadline,
-                        onBackPressed = { setJobPostingStep(JobPostingStep.findStep(JobPostingStep.SUMMARY.step - 1)) },
-                        titleComponent = {
-                            Text(
-                                text = stringResource(id = R.string.summary_title),
-                                style = CareTheme.typography.heading2,
-                                color = CareTheme.colors.gray900,
-                                modifier = Modifier.padding(
-                                    start = 20.dp,
-                                    end = 20.dp,
-                                    bottom = 8.dp
-                                ),
-                            )
-                        },
-                        bottomComponent = {
-                            Column(
-                                verticalArrangement = Arrangement.spacedBy(12.dp),
-                                modifier = Modifier.padding(horizontal = 20.dp)
-                            ) {
                                 Text(
-                                    text = stringResource(id = R.string.post_job_posting_note),
-                                    style = CareTheme.typography.body3,
-                                    color = CareTheme.colors.gray300,
+                                    text = stringResource(id = R.string.work_start_time),
+                                    style = CareTheme.typography.heading3,
+                                    color = CareTheme.colors.gray900,
                                 )
 
-                                CareButtonLarge(
-                                    text = stringResource(id = R.string.confirm2),
-                                    onClick = postJobPosting,
+                                Spacer(modifier = Modifier.height(80.dp))
+
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    CareWheelPicker(
+                                        items = listOf("오전", "오후"),
+                                        onItemSelected = {
+                                            localWorkStartAmPm = it
+                                            Log.d("test", it)
+                                        },
+                                        initIndex = if (workStartTime.isBlank() ||
+                                            workStartTime.substring(0, 2).toInt() <= 12
+                                        ) 0 else 1,
+                                        modifier = Modifier.padding(end = 40.dp),
+                                    )
+
+                                    CareWheelPicker(
+                                        items = (1..12).toList(),
+                                        onItemSelected = { localWorkStartHour = it },
+                                        initIndex = if (workStartTime.isBlank()) 0
+                                        else if (workStartTime.substring(0, 2) == "00") 11
+                                        else workStartTime.substring(0, 2).toInt() - 1,
+                                        modifier = Modifier.padding(end = 10.dp),
+                                    )
+
+                                    Text(
+                                        text = ":",
+                                        style = CareTheme.typography.subtitle2,
+                                        color = CareTheme.colors.gray900,
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier.width(20.dp),
+                                    )
+
+                                    CareWheelPicker(
+                                        items = (0..50 step 10).toList(),
+                                        onItemSelected = { localWorkStartMinute = it },
+                                        initIndex = if (workStartTime.isBlank()) 0
+                                        else (workStartTime.substring(3, 5).toInt() / 10),
+                                        modifier = Modifier.padding(start = 10.dp),
+                                    )
+                                }
+
+                                Spacer(modifier = Modifier.height(80.dp))
+
+                                Row(
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                    modifier = Modifier.fillMaxWidth(),
+                                ) {
+                                    CareButtonMedium(
+                                        text = stringResource(id = R.string.cancel),
+                                        border = BorderStroke(
+                                            width = 1.dp,
+                                            color = CareTheme.colors.orange400
+                                        ),
+                                        containerColor = CareTheme.colors.white000,
+                                        textColor = CareTheme.colors.orange500,
+                                        onClick = {
+                                            coroutineScope.launch {
+                                                sheetState.hide()
+                                            }
+                                        },
+                                        modifier = Modifier.weight(1f),
+                                    )
+
+                                    CareButtonMedium(
+                                        text = stringResource(id = R.string.save),
+                                        onClick = {
+                                            coroutineScope.launch {
+                                                val startTime =
+                                                    "${
+                                                        if (localWorkStartAmPm == "오전" && localWorkStartHour == "12") "00"
+                                                        else if (localWorkStartAmPm == "오전") localWorkStartHour
+                                                        else if (localWorkStartAmPm == "오후" && localWorkStartHour == "12") "12"
+                                                        else localWorkStartHour.toInt() + 12
+                                                    }" + ":${localWorkStartMinute}"
+                                                onWorkStartTimeChanged(startTime)
+                                                sheetState.hide()
+                                            }
+                                        },
+                                        modifier = Modifier.weight(1f),
+                                    )
+                                }
+                            }
+
+                            JobPostingBottomSheetType.WORK_END_TIME -> {
+                                var localWorkEndAmPm by remember { mutableStateOf("오전") }
+                                var localWorkEndHour by remember { mutableStateOf("01") }
+                                var localWorkEndMinute by remember { mutableStateOf("00") }
+
+                                Text(
+                                    text = stringResource(id = R.string.work_end_time),
+                                    style = CareTheme.typography.heading3,
+                                    color = CareTheme.colors.gray900,
+                                )
+
+                                Spacer(modifier = Modifier.height(80.dp))
+
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    CareWheelPicker(
+                                        items = listOf("오전", "오후"),
+                                        onItemSelected = {
+                                            localWorkEndAmPm = it
+                                            Log.d("test", it)
+                                        },
+                                        initIndex = if (workEndTime.isBlank() ||
+                                            workEndTime.substring(0, 2).toInt() <= 12
+                                        ) 0 else 1,
+                                        modifier = Modifier.padding(end = 40.dp),
+                                    )
+
+                                    CareWheelPicker(
+                                        items = (1..12).toList(),
+                                        onItemSelected = { localWorkEndHour = it },
+                                        initIndex = if (workEndTime.isBlank()) 0
+                                        else if (workEndTime.substring(0, 2) == "00") 11
+                                        else workEndTime.substring(0, 2).toInt() - 1,
+                                        modifier = Modifier.padding(end = 10.dp),
+                                    )
+
+                                    Text(
+                                        text = ":",
+                                        style = CareTheme.typography.subtitle2,
+                                        color = CareTheme.colors.gray900,
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier.width(20.dp),
+                                    )
+
+                                    CareWheelPicker(
+                                        items = (0..50 step 10).toList(),
+                                        onItemSelected = { localWorkEndMinute = it },
+                                        initIndex = if (workEndTime.isBlank()) 0
+                                        else (workEndTime.substring(3, 5).toInt() / 10),
+                                        modifier = Modifier.padding(start = 10.dp),
+                                    )
+                                }
+
+                                Spacer(modifier = Modifier.height(80.dp))
+
+                                Row(
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                    modifier = Modifier.fillMaxWidth(),
+                                ) {
+                                    CareButtonMedium(
+                                        text = stringResource(id = R.string.cancel),
+                                        border = BorderStroke(
+                                            width = 1.dp,
+                                            color = CareTheme.colors.orange400
+                                        ),
+                                        containerColor = CareTheme.colors.white000,
+                                        textColor = CareTheme.colors.orange500,
+                                        onClick = {
+                                            coroutineScope.launch {
+                                                sheetState.hide()
+                                            }
+                                        },
+                                        modifier = Modifier.weight(1f),
+                                    )
+
+                                    CareButtonMedium(
+                                        text = stringResource(id = R.string.save),
+                                        onClick = {
+                                            coroutineScope.launch {
+                                                val endTime = "${
+                                                    if (localWorkEndAmPm == "오전" && localWorkEndHour == "12") "00"
+                                                    else if (localWorkEndAmPm == "오전") localWorkEndHour
+                                                    else if (localWorkEndAmPm == "오후" && localWorkEndHour == "12") "12"
+                                                    else localWorkEndHour.toInt() + 12
+                                                }" + ":${localWorkEndMinute}"
+                                                Log.d("test", endTime.toString())
+                                                onWorkEndTimeChanged(endTime)
+                                                sheetState.hide()
+                                            }
+                                        },
+                                        modifier = Modifier.weight(1f),
+                                    )
+                                }
+                            }
+
+                            JobPostingBottomSheetType.POST_DEAD_LINE -> {
+                                Text(
+                                    text = stringResource(id = R.string.post_deadline),
+                                    style = CareTheme.typography.heading3,
+                                    color = CareTheme.colors.gray900,
+                                )
+
+                                CareCalendar(
+                                    year = calendarDate.year,
+                                    month = calendarDate.monthValue,
+                                    selectedDate = applyDeadline,
+                                    startMonth = startDateTime.monthValue,
+                                    onMonthChanged = onCalendarMonthChanged,
+                                    onDayClick = {
+                                        coroutineScope.launch {
+                                            onApplyDeadlineChanged(it)
+                                            sheetState.hide()
+                                        }
+                                    },
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(bottom = 32.dp),
+                                        .padding(top = 30.dp),
                                 )
                             }
+
+                            else -> Unit
                         }
-                    )
-                } else {
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                Scaffold(
+                    topBar = {
+                        Column(
+                            modifier = Modifier.padding(
+                                start = 12.dp,
+                                top = 48.dp,
+                                end = 20.dp
+                            )
+                        ) {
+                            val bottomPadding = if (jobPostingStep != JobPostingStep.SUMMARY) 12.dp
+                            else 0.dp
+
+                            CareSubtitleTopBar(
+                                title = stringResource(id = R.string.post_job_posting),
+                                onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
+                                leftComponent = {
+                                    if (jobPostingStep == JobPostingStep.SUMMARY) {
+                                        CareButtonRound(
+                                            text = stringResource(id = R.string.edit_job_posting_button),
+                                            onClick = { setEditState(true) },
+                                        )
+                                    }
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(bottom = bottomPadding),
+                            )
+
+                            CareProgressBar(
+                                currentStep = jobPostingStep.step,
+                                totalSteps = JobPostingStep.entries.size - 1,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(start = 8.dp, top = 8.dp, bottom = 8.dp),
+                            )
+                        }
+                    },
+                    containerColor = CareTheme.colors.white000,
+                    modifier = Modifier.addFocusCleaner(focusManager),
+                ) { paddingValue ->
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(
                             32.dp,
                             Alignment.CenterVertically
                         ),
-                        modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 8.dp),
+                        modifier = Modifier
+                            .padding(start = 20.dp, end = 20.dp, top = 24.dp)
+                            .padding(paddingValue),
                     ) {
                         CareStateAnimator(
                             targetState = jobPostingStep,

@@ -182,7 +182,7 @@
     <string name="center_info_input">센터 정보를 입력해주세요.</string>
     <string name="start_center">센터 관리자로\n시작하기</string>
     <string name="start_worker">요양 보호사로\n시작하기</string>
-    <string name="summary_title">다음의 공고 정보가 맞는지 확인해주세요.</string>
+    <string name="summary_title">다음의 공고 정보가 맞는지\n확인해주세요.</string>
     <string name="terms_and_policies">약관 및 정책</string>
     <string name="privacy_and_policy">개인정보 처리 방침</string>
     <string name="faq">자주 묻는 질문</string>

@@ -65,7 +65,7 @@ fun SummaryScreen(
     modifier: Modifier = Modifier,
     titleComponent: @Composable (() -> Unit)? = null,
     bottomComponent: @Composable (() -> Unit)? = null,
-    onBackPressed: (() -> Unit)?,
+    onBackPressed: (() -> Unit)? = null,
 ) {
     val scrollState = rememberScrollState()
 
@@ -75,8 +75,6 @@ fun SummaryScreen(
         PayType.MONTHLY -> stringResource(id = R.string.monthly_pay_format, payAmount)
         PayType.UNKNOWN -> ""
     }
-
-    BackHandler { onBackPressed?.invoke() }
 
     Column(
         horizontalAlignment = Alignment.Start,
