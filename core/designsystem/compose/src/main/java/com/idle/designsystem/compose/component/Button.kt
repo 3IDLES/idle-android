@@ -227,7 +227,7 @@ fun CareButtonLine(
 }
 
 @Composable
-internal fun CareDialogButton(
+fun CareDialogButton(
     text: String,
     onClick: () -> Unit,
     containerColor: Color,
@@ -253,6 +253,38 @@ internal fun CareDialogButton(
         Text(
             text = text,
             style = CareTheme.typography.heading4,
+            color = textColor,
+        )
+    }
+}
+
+@Composable
+fun CareFloatingButton(
+    text: String,
+    onClick: () -> Unit,
+    containerColor: Color = CareTheme.colors.gray700,
+    textColor: Color = CareTheme.colors.white000,
+    modifier: Modifier = Modifier,
+    border: BorderStroke? = null,
+    enable: Boolean = true,
+) {
+    Button(
+        onClick = onClick,
+        enabled = enable,
+        shape = RoundedCornerShape(50.dp),
+        border = border,
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+        colors = ButtonColors(
+            containerColor = containerColor,
+            contentColor = containerColor,
+            disabledContentColor = containerColor,
+            disabledContainerColor = containerColor,
+        ),
+        modifier = modifier,
+    ) {
+        Text(
+            text = text,
+            style = CareTheme.typography.subtitle3,
             color = textColor,
         )
     }
@@ -334,6 +366,11 @@ private fun PreviewButtonDialog() {
     }
 }
 
+@Composable
+private fun PreviewFloatingButton() {
+    CareFloatingButton(text = "+ 공고 등록", onClick = {})
+}
+
 // Default Group Previews
 @Preview(name = "Button_Primary_Default_Large", showBackground = true, group = "Default")
 @Composable
@@ -377,6 +414,12 @@ private fun PreviewButtonPrimaryDefaultDialog() {
     PreviewButtonDialog()
 }
 
+@Preview(name = "Button_Primary_Default_Floating", showBackground = true, group = "Default")
+@Composable
+private fun PreviewButtonPrimaryDefaultFloating() {
+    PreviewFloatingButton()
+}
+
 // Flip Group Previews
 @Preview(name = "Button_Primary_Flip_Large", showBackground = true, device = FLIP, group = "Flip")
 @Composable
@@ -390,25 +433,45 @@ private fun PreviewButtonPrimaryFlipMedium() {
     PreviewButtonMedium()
 }
 
-@Preview(name = "Button_Primary_Flip_CardLarge", showBackground = true, device = FLIP, group = "Flip")
+@Preview(
+    name = "Button_Primary_Flip_CardLarge",
+    showBackground = true,
+    device = FLIP,
+    group = "Flip"
+)
 @Composable
 private fun PreviewButtonPrimaryFlipCardLarge() {
     PreviewButtonCardLarge()
 }
 
-@Preview(name = "Button_Primary_Flip_CardMedium", showBackground = true, device = FLIP, group = "Flip")
+@Preview(
+    name = "Button_Primary_Flip_CardMedium",
+    showBackground = true,
+    device = FLIP,
+    group = "Flip"
+)
 @Composable
 private fun PreviewButtonPrimaryFlipCardMedium() {
     PreviewButtonCardMedium()
 }
 
-@Preview(name = "Button_Primary_Flip_Round", showBackground = true, device = FLIP, group = "Flip")
+@Preview(
+    name = "Button_Primary_Flip_Round",
+    showBackground = true,
+    device = FLIP,
+    group = "Flip",
+)
 @Composable
 private fun PreviewButtonPrimaryFlipRound() {
     PreviewButtonRound()
 }
 
-@Preview(name = "Button_Primary_Flip_Line", showBackground = true, device = FLIP, group = "Flip")
+@Preview(
+    name = "Button_Primary_Flip_Line",
+    showBackground = true,
+    device = FLIP,
+    group = "Flip"
+)
 @Composable
 private fun PreviewButtonPrimaryFlipLine() {
     PreviewButtonLine()
@@ -420,45 +483,103 @@ private fun PreviewButtonPrimaryFlipDialog() {
     PreviewButtonDialog()
 }
 
+@Preview(
+    name = "Button_Primary_Flip_Floating",
+    showBackground = true,
+    device = FLIP,
+    group = "Flip",
+)
+@Composable
+private fun PreviewButtonPrimaryFlipFloating() {
+    PreviewFloatingButton()
+}
+
 // Fold Group Previews
-@Preview(name = "Button_Primary_Foldable_Large", showBackground = true, device = Devices.FOLDABLE, group = "Fold")
+@Preview(
+    name = "Button_Primary_Foldable_Large",
+    showBackground = true,
+    device = Devices.FOLDABLE,
+    group = "Fold"
+)
 @Composable
 private fun PreviewButtonPrimaryFoldableLarge() {
     PreviewButtonLarge()
 }
 
-@Preview(name = "Button_Primary_Foldable_Medium", showBackground = true, device = Devices.FOLDABLE, group = "Fold")
+@Preview(
+    name = "Button_Primary_Foldable_Medium",
+    showBackground = true,
+    device = Devices.FOLDABLE,
+    group = "Fold"
+)
 @Composable
 private fun PreviewButtonPrimaryFoldableMedium() {
     PreviewButtonMedium()
 }
 
-@Preview(name = "Button_Primary_Foldable_CardLarge", showBackground = true, device = Devices.FOLDABLE, group = "Fold")
+@Preview(
+    name = "Button_Primary_Foldable_CardLarge",
+    showBackground = true,
+    device = Devices.FOLDABLE,
+    group = "Fold"
+)
 @Composable
 private fun PreviewButtonPrimaryFoldableCardLarge() {
     PreviewButtonCardLarge()
 }
 
-@Preview(name = "Button_Primary_Foldable_CardMedium", showBackground = true, device = Devices.FOLDABLE, group = "Fold")
+@Preview(
+    name = "Button_Primary_Foldable_CardMedium",
+    showBackground = true,
+    device = Devices.FOLDABLE,
+    group = "Fold"
+)
 @Composable
 private fun PreviewButtonPrimaryFoldableCardMedium() {
     PreviewButtonCardMedium()
 }
 
-@Preview(name = "Button_Primary_Foldable_Round", showBackground = true, device = Devices.FOLDABLE, group = "Fold")
+@Preview(
+    name = "Button_Primary_Foldable_Round",
+    showBackground = true,
+    device = Devices.FOLDABLE,
+    group = "Fold"
+)
 @Composable
 private fun PreviewButtonPrimaryFoldableRound() {
     PreviewButtonRound()
 }
 
-@Preview(name = "Button_Primary_Foldable_Line", showBackground = true, device = Devices.FOLDABLE, group = "Fold")
+@Preview(
+    name = "Button_Primary_Foldable_Line",
+    showBackground = true,
+    device = Devices.FOLDABLE,
+    group = "Fold"
+)
 @Composable
 private fun PreviewButtonPrimaryFoldableLine() {
     PreviewButtonLine()
 }
 
-@Preview(name = "Button_Primary_Foldable_Dialog", showBackground = true, device = Devices.FOLDABLE, group = "Fold")
+@Preview(
+    name = "Button_Primary_Foldable_Dialog",
+    showBackground = true,
+    device = Devices.FOLDABLE,
+    group = "Fold"
+)
+
 @Composable
 private fun PreviewButtonPrimaryFoldableDialog() {
     PreviewButtonDialog()
+}
+
+@Preview(
+    name = "Button_Primary_Flip_Floating",
+    showBackground = true,
+    device = Devices.FOLDABLE,
+    group = "Fold"
+)
+@Composable
+private fun PreviewButtonPrimaryFoldableFloating() {
+    PreviewFloatingButton()
 }
