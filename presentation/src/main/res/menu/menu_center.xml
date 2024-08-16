@@ -5,9 +5,6 @@
         android:icon="@drawable/selector_menu_home"
         android:title="홈" />
     <item
-        android:id="@id/nav_job_posting"
-        android:title="공고 등록" />
-    <item
         android:id="@id/nav_register_center_info"
         android:title="인증" />
     <item
