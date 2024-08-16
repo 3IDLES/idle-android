@@ -1,4 +1,4 @@
-package com.idle.center.jobposting.step
+package com.idle.worker.job.posting.detail.center
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
@@ -24,9 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.idle.center.jobposting.JobPostingStep
 import com.idle.designresource.R
-import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.component.CareTextFieldLong
 import com.idle.designsystem.compose.foundation.CareTheme
@@ -39,7 +37,7 @@ import com.idle.domain.model.job.PayType
 import java.time.LocalDate
 
 @Composable
-internal fun SummaryScreen(
+fun SummaryScreen(
     weekDays: Set<DayOfWeek>,
     workStartTime: String,
     workEndTime: String,
@@ -57,12 +55,14 @@ internal fun SummaryScreen(
     isBowelAssistance: Boolean?,
     isWalkingAssistance: Boolean?,
     lifeAssistance: Set<LifeAssistance>,
-    extraRequirement: String,
+    extraRequirement: String?,
     isExperiencePreferred: Boolean?,
     applyMethod: Set<ApplyMethod>,
     applyDeadline: LocalDate?,
-    postJobPosting: () -> Unit,
-    setJobPostingStep: (JobPostingStep) -> Unit,
+    modifier: Modifier = Modifier,
+    titleComponent: @Composable (() -> Unit)? = null,
+    bottomComponent: @Composable (() -> Unit)? = null,
+    onBackPressed: (() -> Unit)?,
 ) {
     val scrollState = rememberScrollState()
 
@@ -73,21 +73,16 @@ internal fun SummaryScreen(
         PayType.UNKNOWN -> ""
     }
 
-    BackHandler { setJobPostingStep(JobPostingStep.findStep(JobPostingStep.SUMMARY.step - 1)) }
+    BackHandler { onBackPressed?.invoke() }
 
     Column(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(24.dp),
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .verticalScroll(scrollState),
     ) {
-        Text(
-            text = stringResource(id = R.string.summary_title),
-            style = CareTheme.typography.heading2,
-            color = CareTheme.colors.gray900,
-            modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 8.dp),
-        )
+        titleComponent?.invoke()
 
         Column(
             horizontalAlignment = Alignment.Start,
@@ -512,7 +507,7 @@ internal fun SummaryScreen(
                 }
             }
 
-            if (extraRequirement.isNotBlank()) {
+            if (extraRequirement?.isNotBlank() == true) {
                 HorizontalDivider(thickness = 1.dp, color = CareTheme.colors.gray100)
 
                 Text(
@@ -593,22 +588,6 @@ internal fun SummaryScreen(
             }
         }
 
-        Column(
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            modifier = Modifier.padding(horizontal = 20.dp)
-        ) {
-            Text(
-                text = stringResource(id = R.string.post_job_posting_note),
-                style = CareTheme.typography.body3,
-                color = CareTheme.colors.gray300,
-            )
-
-            CareButtonLarge(
-                text = stringResource(id = R.string.confirm2),
-                onClick = postJobPosting,
-                modifier = Modifier.fillMaxWidth()
-                    .padding(bottom = 28.dp),
-            )
-        }
+        bottomComponent?.invoke()
     }
 }

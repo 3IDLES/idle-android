@@ -1,5 +1,6 @@
 package com.idle.signin.center
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.idle.analytics.AnalyticsHelper
 import com.idle.binding.DeepLinkDestination.CenterHome
@@ -35,6 +36,6 @@ class CenterSignInViewModel @Inject constructor(
     internal fun signInCenter() = viewModelScope.launch {
         signInCenterUseCase(identifier = _centerId.value, password = _centerPassword.value)
             .onSuccess { baseEvent(NavigateTo(CenterHome, R.id.centerSignInFragment)) }
-            .onFailure { }
+            .onFailure { Log.d("test", "로그인 실패!") }
     }
 }

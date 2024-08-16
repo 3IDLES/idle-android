@@ -79,6 +79,11 @@ sealed class DeepLinkDestination(
         addressRes = R.string.center_job_posting_post_complete_deeplink_url
     )
 
+    data class CenterJobDetail(val jobPostingId: String) : DeepLinkDestination(
+        addressRes = R.string.center_jobposting_detail_deeplink_url,
+        params = mapOf("jobPostingId" to jobPostingId),
+    )
+
     data object WorkerHome : DeepLinkDestination(
         addressRes = R.string.worker_home_deeplink_url,
         setDefaultAnimation = false,
@@ -98,15 +103,9 @@ sealed class DeepLinkDestination(
         setDefaultAnimation = false,
     )
 
-    data class JobDetail(
-        val jobPostingId: String,
-        val userRole: UserRole,
-    ) : DeepLinkDestination(
-        addressRes = R.string.worker_recruitment_detail_deeplink_url,
-        params = mapOf(
-            "jobPostingId" to jobPostingId,
-            "userRole" to userRole.name
-        )
+    data class WorkerJobDetail(val jobPostingId: String) : DeepLinkDestination(
+        addressRes = R.string.worker_jobposting_detail_deeplink_url,
+        params = mapOf("jobPostingId" to jobPostingId),
     )
 
     data object WorkerSignUp : DeepLinkDestination(

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_worker_recruitment_detail"
+    app:startDestination="@id/workerRecruitmentDetailFragment">
+
+    <fragment
+        android:id="@+id/workerRecruitmentDetailFragment"
+        android:name="com.idle.worker.job.posting.detail.worker.WorkerJobPostingDetailFragment"
+        android:label="WorkerRecruitmentDetailFragment">
+        <argument
+            android:name="jobPostingId"
+            app:argType="string" />
+        <deepLink app:uri="@string/worker_jobposting_detail_deeplink_url" />
+    </fragment>
+    <fragment
+        android:id="@+id/centerJobPostingDetailFragment"
+        android:name="com.idle.worker.job.posting.detail.center.CenterJobPostingDetailFragment"
+        android:label="CenterJobPostingDetailFragment">
+        <argument
+            android:name="jobPostingId"
+            app:argType="string" />
+        <deepLink app:uri="@string/center_jobposting_detail_deeplink_url" />
+    </fragment>
+</navigation>

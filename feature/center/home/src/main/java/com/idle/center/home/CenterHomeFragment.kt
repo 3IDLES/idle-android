@@ -144,10 +144,7 @@ private fun CenterRecruitmentCard(
         border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
         modifier = Modifier.clickable {
             navigateTo(
-                DeepLinkDestination.JobDetail(
-                    jobPostingId = "01914eaa-5106-74ab-a079-67875c1d0f42",
-                    userRole = UserRole.CENTER,
-                )
+                DeepLinkDestination.CenterJobDetail("0191593f-35dc-711c-88e9-d8f60b8b23a5")
             )
         }
     ) {

@@ -57,7 +57,6 @@ fun CareMap(
                         60.dp.toPx().toInt(),
                         40.dp.toPx().toInt(),
                     )
-
                     naverMap.moveCamera(cameraUpdate)
 
                     PathOverlay().apply {

@@ -10,5 +10,7 @@ android {
 
 dependencies {
     implementation(projects.feature.postcode)
+    implementation(projects.feature.jobPostingDetail)
     implementation(projects.feature.center.jobPostingEdit)
+    implementation(project(":feature:job-posting-detail"))
 }

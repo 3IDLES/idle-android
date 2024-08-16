@@ -18,7 +18,6 @@ import androidx.compose.material3.CardColors
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -26,9 +25,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.idle.binding.DeepLinkDestination
-import com.idle.binding.DeepLinkDestination.JobDetail
+import com.idle.binding.DeepLinkDestination.WorkerJobDetail
 import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
@@ -121,12 +119,7 @@ private fun WorkerRecruitmentCard(
         ),
         border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
         modifier = Modifier.clickable {
-            navigateTo(
-                JobDetail(
-                    jobPostingId = "01914eaa-5106-74ab-a079-67875c1d0f42",
-                    userRole = UserRole.WORKER,
-                )
-            )
+            navigateTo(WorkerJobDetail(jobPostingId = "01914eaa-5106-74ab-a079-67875c1d0f42"))
         },
     ) {
         Column(modifier = Modifier.padding(16.dp)) {

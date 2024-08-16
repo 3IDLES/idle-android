@@ -38,11 +38,17 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.idle.center.job.edit.JobEditScreen
+import com.idle.center.jobposting.step.AdditionalInfoScreen
+import com.idle.center.jobposting.step.AddressScreen
+import com.idle.center.jobposting.step.CustomerInformationScreen
+import com.idle.center.jobposting.step.CustomerRequirementScreen
+import com.idle.center.jobposting.step.TimePaymentScreen
 import com.idle.compose.JobPostingBottomSheetType
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareBottomSheetLayout
+import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareButtonMedium
 import com.idle.designsystem.compose.component.CareButtonRound
 import com.idle.designsystem.compose.component.CareCalendar
@@ -59,12 +65,7 @@ import com.idle.domain.model.job.LifeAssistance
 import com.idle.domain.model.job.MentalStatus
 import com.idle.domain.model.job.PayType
 import com.idle.post.code.PostCodeFragment
-import com.idle.center.jobposting.step.AdditionalInfoScreen
-import com.idle.center.jobposting.step.AddressScreen
-import com.idle.center.jobposting.step.CustomerInformationScreen
-import com.idle.center.jobposting.step.CustomerRequirementScreen
-import com.idle.center.jobposting.step.SummaryScreen
-import com.idle.center.jobposting.step.TimePaymentScreen
+import com.idle.worker.job.posting.detail.center.SummaryScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -606,8 +607,39 @@ internal fun JobPostingScreen(
                         isExperiencePreferred = isExperiencePreferred,
                         applyMethod = applyMethod,
                         applyDeadline = applyDeadline,
-                        postJobPosting = postJobPosting,
-                        setJobPostingStep = setJobPostingStep,
+                        onBackPressed = { setJobPostingStep(JobPostingStep.findStep(JobPostingStep.SUMMARY.step - 1)) },
+                        titleComponent = {
+                            Text(
+                                text = stringResource(id = R.string.summary_title),
+                                style = CareTheme.typography.heading2,
+                                color = CareTheme.colors.gray900,
+                                modifier = Modifier.padding(
+                                    start = 20.dp,
+                                    end = 20.dp,
+                                    bottom = 8.dp
+                                ),
+                            )
+                        },
+                        bottomComponent = {
+                            Column(
+                                verticalArrangement = Arrangement.spacedBy(12.dp),
+                                modifier = Modifier.padding(horizontal = 20.dp)
+                            ) {
+                                Text(
+                                    text = stringResource(id = R.string.post_job_posting_note),
+                                    style = CareTheme.typography.body3,
+                                    color = CareTheme.colors.gray300,
+                                )
+
+                                CareButtonLarge(
+                                    text = stringResource(id = R.string.confirm2),
+                                    onClick = postJobPosting,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(bottom = 32.dp),
+                                )
+                            }
+                        }
                     )
                 } else {
                     Column(

@@ -1,4 +1,4 @@
-package com.idle.worker.job.posting.detail.map
+package com.idle.worker.job.posting.detail.worker.map
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
