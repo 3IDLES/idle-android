@@ -65,9 +65,6 @@ class WorkerSignUpViewModel @Inject constructor(
 
     private val _lotNumberAddress = MutableStateFlow("")
 
-    private val _addressDetail = MutableStateFlow("")
-    internal val addressDetail = _addressDetail.asStateFlow()
-
     internal fun setWorkerSignUpStep(step: WorkerSignUpStep) {
         _signUpStep.value = step
     }
@@ -102,10 +99,6 @@ class WorkerSignUpViewModel @Inject constructor(
 
     internal fun setLotNumberAddress(address: String) {
         _lotNumberAddress.value = address
-    }
-
-    internal fun setAddressDetail(addressDetail: String) {
-        _addressDetail.value = addressDetail
     }
 
     internal fun sendPhoneNumber() = viewModelScope.launch {

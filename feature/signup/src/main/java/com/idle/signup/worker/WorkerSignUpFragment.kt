@@ -67,8 +67,6 @@ internal class WorkerSignUpFragment : BaseComposeFragment() {
             val birthYear by birthYear.collectAsStateWithLifecycle()
             val gender by gender.collectAsStateWithLifecycle()
             val roadNameAddress by roadNameAddress.collectAsStateWithLifecycle()
-            val addressDetail by addressDetail.collectAsStateWithLifecycle()
-
             WorkerSignUpScreen(
                 signUpStep = signUpStep,
                 workerPhoneNumber = workerPhoneNumber,
@@ -80,7 +78,6 @@ internal class WorkerSignUpFragment : BaseComposeFragment() {
                 birthYear = birthYear,
                 gender = gender,
                 roadNameAddress = roadNameAddress,
-                addressDetail = addressDetail,
                 onWorkerPhoneNumberChanged = ::setWorkerPhoneNumber,
                 onWorkerAuthCodeChanged = ::setWorkerAuthCode,
                 onWorkerNameChanged = ::setWorkerName,
@@ -91,7 +88,6 @@ internal class WorkerSignUpFragment : BaseComposeFragment() {
                         postCodeDialog?.show(parentFragmentManager, "PostCodeFragment")
                     }
                 },
-                onAddressDetailChanged = ::setAddressDetail,
                 setSignUpStep = ::setWorkerSignUpStep,
                 sendPhoneNumber = ::sendPhoneNumber,
                 confirmAuthCode = ::confirmAuthCode,
@@ -122,14 +118,12 @@ internal fun WorkerSignUpScreen(
     birthYear: String,
     gender: Gender,
     roadNameAddress: String,
-    addressDetail: String,
     onWorkerPhoneNumberChanged: (String) -> Unit,
     onWorkerAuthCodeChanged: (String) -> Unit,
     onWorkerNameChanged: (String) -> Unit,
     onBirthYearChanged: (String) -> Unit,
     onGenderChanged: (Gender) -> Unit,
     showPostCodeDialog: () -> Unit,
-    onAddressDetailChanged: (String) -> Unit,
     setSignUpStep: (WorkerSignUpStep) -> Unit,
     sendPhoneNumber: () -> Unit,
     confirmAuthCode: () -> Unit,
@@ -202,9 +196,7 @@ internal fun WorkerSignUpScreen(
 
                     WorkerSignUpStep.ADDRESS -> AddressScreen(
                         roadNameAddress = roadNameAddress,
-                        addressDetail = addressDetail,
                         showPostCode = showPostCodeDialog,
-                        onAddressDetailChanged = onAddressDetailChanged,
                         setSignUpStep = setSignUpStep,
                         signUpWorker = signUpWorker,
                     )

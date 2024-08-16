@@ -85,6 +85,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
             val payType by payType.collectAsStateWithLifecycle()
             val payAmount by payAmount.collectAsStateWithLifecycle()
             val roadNameAddress by roadNameAddress.collectAsStateWithLifecycle()
+            val lotNumberAddress by lotNumberAddress.collectAsStateWithLifecycle()
             val detailAddress by detailAddress.collectAsStateWithLifecycle()
             val clientName by clientName.collectAsStateWithLifecycle()
             val gender by gender.collectAsStateWithLifecycle()
@@ -188,7 +189,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
                     payType = payType,
                     payAmount = payAmount,
                     roadNameAddress = roadNameAddress,
-                    detailAddress = detailAddress,
+                    lotNumberAddress = lotNumberAddress,
                     clientName = clientName,
                     gender = gender,
                     birthYear = birthYear,
@@ -255,7 +256,7 @@ internal fun JobPostingScreen(
     payType: PayType?,
     payAmount: String,
     roadNameAddress: String,
-    detailAddress: String,
+    lotNumberAddress: String,
     clientName: String,
     gender: Gender,
     birthYear: String,
@@ -595,6 +596,7 @@ internal fun JobPostingScreen(
                         payType = payType,
                         payAmount = payAmount,
                         roadNameAddress = roadNameAddress,
+                        lotNumberAddress = lotNumberAddress,
                         clientName = clientName,
                         gender = gender,
                         birthYear = birthYear,
@@ -678,8 +680,6 @@ internal fun JobPostingScreen(
 
                                 JobPostingStep.ADDRESS -> AddressScreen(
                                     roadNameAddress = roadNameAddress,
-                                    detailAddress = detailAddress,
-                                    onDetailAddressChanged = onDetailAddressChanged,
                                     showPostCodeDialog = showPostCodeDialog,
                                     setJobPostingStep = setJobPostingStep,
                                 )
