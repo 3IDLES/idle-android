@@ -8,7 +8,7 @@
     <string name="worker_home_deeplink_url">care://worker/home</string>
     <string name="worker_job_posting_deeplink_url">care://worker/jobposting</string>
     <string name="worker_profile_deeplink_url">care://worker/profile</string>
-    <string name="worker_recruitment_detail_deeplink_url">care://worker/recruitment/detail/{jobPostingId}/{userRole}</string>
+    <string name="worker_jobposting_detail_deeplink_url">care://worker/jobposting/detail/{jobPostingId}</string>
     <string name="worker_setting_deeplink_url">care://worker/setting</string>
 
     <string name="center_signin_deeplink_url">care://center/signIn</string>
@@ -21,5 +21,6 @@
     <string name="center_register_info_complete_deeplink_url">care://center/register/info/complete</string>
     <string name="center_job_posting_post_deeplink_url">care://center/jobposting/post</string>
     <string name="center_job_posting_post_complete_deeplink_url">care://center/jobposting/post/complete</string>
+    <string name="center_jobposting_detail_deeplink_url">care://center/jobposting/detail/{jobPostingId}</string>
     <string name="center_applicant_inquiry_deeplink_url">care://center/applicant/inquiry/{jobPostingId}</string>
 </resources>

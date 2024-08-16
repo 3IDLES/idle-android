@@ -1,9 +1,8 @@
 @file:OptIn(ExperimentalMaterialApi::class)
 
-package com.idle.worker.job.posting.detail
+package com.idle.worker.job.posting.detail.worker
 
 import android.content.Intent
-import android.util.Log
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -50,7 +49,7 @@ import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.component.CareTextFieldLong
 import com.idle.designsystem.compose.foundation.CareTheme
-import com.idle.worker.job.posting.detail.map.PlaceDetailScreen
+import com.idle.worker.job.posting.detail.worker.map.PlaceDetailScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

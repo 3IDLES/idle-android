@@ -1,4 +1,4 @@
-package com.idle.worker.job.posting.detail
+package com.idle.worker.job.posting.detail.worker
 
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel

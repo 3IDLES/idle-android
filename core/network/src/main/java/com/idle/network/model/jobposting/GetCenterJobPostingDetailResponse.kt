@@ -1,5 +1,6 @@
 package com.idle.network.model.jobposting
 
+import com.idle.domain.model.auth.Gender
 import com.idle.domain.model.job.ApplyDeadlineType
 import com.idle.domain.model.job.ApplyMethod
 import com.idle.domain.model.job.DayOfWeek
@@ -8,6 +9,8 @@ import com.idle.domain.model.job.MentalStatus
 import com.idle.domain.model.job.PayType
 import com.idle.domain.model.jobposting.CenterJobPostingDetail
 import kotlinx.serialization.Serializable
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @Serializable
 data class GetCenterJobPostingDetailResponse(
@@ -29,12 +32,12 @@ data class GetCenterJobPostingDetailResponse(
     val isMealAssistance: Boolean = false,
     val isBowelAssistance: Boolean = false,
     val isWalkingAssistance: Boolean = false,
-    val lifeAssistance: List<String> = listOf(),
+    val lifeAssistance: List<String>? = null,
     val extraRequirement: String? = null,
     val isExperiencePreferred: Boolean = false,
     val applyMethod: List<String> = listOf(),
     val applyDeadlineType: String = "",
-    val applyDeadline: String = "",
+    val applyDeadline: String? = null,
 ) {
     fun toVO() = CenterJobPostingDetail(
         weekdays = DayOfWeek.create(weekdays),
@@ -46,7 +49,7 @@ data class GetCenterJobPostingDetailResponse(
         roadNameAddress = roadNameAddress,
         lotNumberAddress = lotNumberAddress,
         clientName = clientName,
-        gender = gender,
+        gender = Gender.create(gender),
         birthYear = birthYear,
         weight = weight ?: -1,
         careLevel = careLevel,
@@ -55,11 +58,11 @@ data class GetCenterJobPostingDetailResponse(
         isMealAssistance = isMealAssistance,
         isBowelAssistance = isBowelAssistance,
         isWalkingAssistance = isWalkingAssistance,
-        lifeAssistance = LifeAssistance.create(lifeAssistance),
+        lifeAssistance = LifeAssistance.create(lifeAssistance ?: listOf()),
         extraRequirement = extraRequirement,
         isExperiencePreferred = isExperiencePreferred,
         applyMethod = ApplyMethod.create(applyMethod),
         applyDeadlineType = ApplyDeadlineType.create(applyDeadlineType),
-        applyDeadline = applyDeadline,
+        applyDeadline = LocalDate.parse(applyDeadline, DateTimeFormatter.ofPattern("yyyy-MM-dd")),
     )
 }
