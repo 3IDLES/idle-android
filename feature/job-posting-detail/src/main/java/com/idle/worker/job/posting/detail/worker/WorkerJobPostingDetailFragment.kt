@@ -62,7 +62,7 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
         fragmentViewModel.apply {
             val (showPlaceDetail, setShowPlaceDetail) = rememberSaveable { mutableStateOf(false) }
 
-            repeatOnStarted {
+            viewLifecycleOwner.repeatOnStarted {
                 eventFlow.collect { handleJobPostingEvent(it) }
             }
 
