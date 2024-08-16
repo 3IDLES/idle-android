@@ -33,10 +33,10 @@ class UpdateJobPostingUseCase @Inject constructor(
         isBowelAssistance: Boolean,
         isWalkingAssistance: Boolean,
         lifeAssistance: List<LifeAssistance>,
-        speciality: String?,
+        extraRequirement: String?,
         isExperiencePreferred: Boolean,
         applyMethod: List<ApplyMethod>,
-        applyDeadLineType: ApplyDeadlineType,
+        applyDeadlineType: ApplyDeadlineType,
         applyDeadline: String,
     ) = jobPostingRepository.updateJobPosting(
         jobPostingId = jobPostingId,
@@ -58,10 +58,10 @@ class UpdateJobPostingUseCase @Inject constructor(
         isBowelAssistance = isBowelAssistance,
         isWalkingAssistance = isWalkingAssistance,
         lifeAssistance = lifeAssistance,
-        speciality = speciality,
+        extraRequirement = extraRequirement,
         isExperiencePreferred = isExperiencePreferred,
         applyMethod = applyMethod,
-        applyDeadLineType = applyDeadLineType,
+        applyDeadLineType = applyDeadlineType,
         applyDeadline = applyDeadline,
     )
 }

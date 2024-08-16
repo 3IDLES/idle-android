@@ -71,6 +71,7 @@ import com.idle.domain.model.job.DayOfWeek
 import com.idle.domain.model.job.LifeAssistance
 import com.idle.domain.model.job.MentalStatus
 import com.idle.domain.model.job.PayType
+import com.idle.domain.model.jobposting.EditJobPostingDetail
 import com.idle.post.code.PostCodeFragment
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -82,10 +83,9 @@ fun JobEditScreen(
     workStartTime: String,
     workEndTime: String,
     fragmentManager: FragmentManager,
-    payType: PayType?,
+    payType: PayType,
     payAmount: String,
     roadNameAddress: String,
-    detailAddress: String,
     clientName: String,
     gender: Gender,
     birthYear: String,
@@ -93,44 +93,17 @@ fun JobEditScreen(
     careLevel: String,
     mentalStatus: MentalStatus,
     disease: String,
-    isMealAssistance: Boolean?,
-    isBowelAssistance: Boolean?,
-    isWalkingAssistance: Boolean?,
+    isMealAssistance: Boolean,
+    isBowelAssistance: Boolean,
+    isWalkingAssistance: Boolean,
     lifeAssistance: Set<LifeAssistance>,
-    extraRequirement: String,
-    isExperiencePreferred: Boolean?,
+    extraRequirement: String?,
+    isExperiencePreferred: Boolean,
     applyMethod: Set<ApplyMethod>,
-    applyDeadlineType: ApplyDeadlineType?,
-    applyDeadline: LocalDate?,
+    applyDeadlineType: ApplyDeadlineType,
+    applyDeadline: LocalDate,
     calendarDate: LocalDate,
-    setWeekDays: (DayOfWeek) -> Unit,
-    clearWeekDays: () -> Unit,
-    onWorkStartTimeChanged: (String) -> Unit,
-    onWorkEndTimeChanged: (String) -> Unit,
-    onPayTypeChanged: (PayType) -> Unit,
-    onPayAmountChanged: (String) -> Unit,
-    onRoadNameAddressChanged: (String) -> Unit,
-    onLotNumberAddressChanged: (String) -> Unit,
-    onDetailAddressChanged: (String) -> Unit,
-    onClientNameChanged: (String) -> Unit,
-    onGenderChanged: (Gender) -> Unit,
-    onBirthYearChanged: (String) -> Unit,
-    onWeightChanged: (String) -> Unit,
-    onCareLevelChanged: (String) -> Unit,
-    onMentalStatusChanged: (MentalStatus) -> Unit,
-    onDiseaseChanged: (String) -> Unit,
-    onMealAssistanceChanged: (Boolean) -> Unit,
-    onBowelAssistanceChanged: (Boolean) -> Unit,
-    onWalkingAssistanceChanged: (Boolean) -> Unit,
-    onLifeAssistanceChanged: (LifeAssistance) -> Unit,
-    clearLifeAssistance: () -> Unit,
-    onSpecialityChanged: (String) -> Unit,
-    onExperiencePreferredChanged: (Boolean) -> Unit,
-    onApplyMethodChanged: (ApplyMethod) -> Unit,
-    clearApplyMethod: () -> Unit,
-    onApplyDeadlineChanged: (LocalDate) -> Unit,
-    onCalendarMonthChanged: (Int) -> Unit,
-    onApplyDeadlineTypeChanged: (ApplyDeadlineType) -> Unit,
+    updateJobPosting: (EditJobPostingDetail) -> Unit,
     setEditState: (Boolean) -> Unit,
 ) {
     var localWeekDays by remember { mutableStateOf(weekDays) }
@@ -140,7 +113,6 @@ fun JobEditScreen(
     var localPayAmount by remember { mutableStateOf(payAmount) }
     var localRoadNameAddress by remember { mutableStateOf(roadNameAddress) }
     var localLotNumberAddress by remember { mutableStateOf("") }
-    var localDetailAddress by remember { mutableStateOf(detailAddress) }
     var localClientName by remember { mutableStateOf(clientName) }
     var localGender by remember { mutableStateOf(gender) }
     var localBirthYear by remember { mutableStateOf(birthYear) }
@@ -152,7 +124,7 @@ fun JobEditScreen(
     var localIsBowelAssistance by remember { mutableStateOf(isBowelAssistance) }
     var localIsWalkingAssistance by remember { mutableStateOf(isWalkingAssistance) }
     var localLifeAssistance by remember { mutableStateOf(lifeAssistance) }
-    var localSpeciality by remember { mutableStateOf(extraRequirement) }
+    var localExtraRequirement by remember { mutableStateOf(extraRequirement ?: "") }
     var localIsExperiencePreferred by remember { mutableStateOf(isExperiencePreferred) }
     var localApplyMethod by remember { mutableStateOf(applyMethod) }
     var localApplyDeadlineType by remember { mutableStateOf(applyDeadlineType) }
@@ -172,11 +144,11 @@ fun JobEditScreen(
         PostCodeFragment().apply {
             onDismissCallback = {
                 findNavController().currentBackStackEntry?.savedStateHandle?.let {
-                    val roadNameAddress = it.get<String>("roadNameAddress")
-                    val lotNumberAddress = it.get<String>("lotNumberAddress")
+                    val roadName = it.get<String>("roadNameAddress")
+                    val lotNumber = it.get<String>("lotNumberAddress")
 
-                    localRoadNameAddress = roadNameAddress ?: ""
-                    localLotNumberAddress = lotNumberAddress ?: ""
+                    localRoadNameAddress = roadName ?: ""
+                    localLotNumberAddress = lotNumber ?: ""
                 }
             }
         }
@@ -384,11 +356,13 @@ fun JobEditScreen(
                         )
 
                         CareCalendar(
-                            year = calendarDate.year,
-                            month = calendarDate.monthValue,
-                            selectedDate = applyDeadline,
+                            year = localApplyDeadline.year,
+                            month = localApplyDeadline.monthValue,
+                            selectedDate = localApplyDeadline,
                             startMonth = startDate.monthValue,
-                            onMonthChanged = onCalendarMonthChanged,
+                            onMonthChanged = {
+                                localApplyDeadline = localApplyDeadline.withMonth(it)
+                            },
                             onDayClick = {
                                 coroutineScope.launch {
                                     localApplyDeadline = it
@@ -422,34 +396,33 @@ fun JobEditScreen(
                                         applyMethod.isNotEmpty() &&
                                         clientName.isNotBlank()
                             ) {
-                                clearWeekDays()
-                                localWeekDays.forEach { setWeekDays(it) }
-                                onWorkStartTimeChanged(localWorkStartTime)
-                                onWorkEndTimeChanged(localWorkEndTime)
-                                onPayTypeChanged(localPayType!!)
-                                onPayAmountChanged(localPayAmount)
-                                onDetailAddressChanged(localDetailAddress)
-                                onClientNameChanged(localClientName)
-                                onGenderChanged(localGender)
-                                onBirthYearChanged(localBirthYear)
-                                onWeightChanged(localWeight)
-                                onCareLevelChanged(localCareLevel)
-                                onMentalStatusChanged(localMentalStatus)
-                                onDiseaseChanged(localDisease)
-                                onMealAssistanceChanged(localIsMealAssistance!!)
-                                onBowelAssistanceChanged(localIsBowelAssistance!!)
-                                onWalkingAssistanceChanged(localIsWalkingAssistance!!)
-                                clearLifeAssistance()
-                                localLifeAssistance.forEach { onLifeAssistanceChanged(it) }
-                                onSpecialityChanged(localSpeciality)
-                                onExperiencePreferredChanged(localIsExperiencePreferred!!)
-                                clearApplyMethod()
-                                localApplyMethod.forEach { onApplyMethodChanged(it) }
-                                onApplyDeadlineChanged(localApplyDeadline!!)
-                                onApplyDeadlineTypeChanged(localApplyDeadlineType!!)
-                                onRoadNameAddressChanged(localRoadNameAddress)
-                                onLotNumberAddressChanged(localLotNumberAddress)
-                                setEditState(false)
+                                updateJobPosting(
+                                    EditJobPostingDetail(
+                                        weekdays = localWeekDays,
+                                        startTime = localWorkStartTime,
+                                        endTime = localWorkEndTime,
+                                        payType = localPayType,
+                                        payAmount = localPayAmount,
+                                        roadNameAddress = localRoadNameAddress,
+                                        lotNumberAddress = localLotNumberAddress,
+                                        clientName = localClientName,
+                                        gender = localGender,
+                                        birthYear = localBirthYear,
+                                        weight = localWeight,
+                                        careLevel = careLevel,
+                                        mentalStatus = localMentalStatus,
+                                        disease = localDisease,
+                                        isMealAssistance = localIsMealAssistance,
+                                        isBowelAssistance = localIsBowelAssistance,
+                                        isWalkingAssistance = isWalkingAssistance,
+                                        lifeAssistance = localLifeAssistance,
+                                        extraRequirement = localExtraRequirement,
+                                        isExperiencePreferred = localIsExperiencePreferred,
+                                        applyMethod = localApplyMethod,
+                                        applyDeadlineType = localApplyDeadlineType,
+                                        applyDeadline = localApplyDeadline,
+                                    )
+                                )
                             },
                         )
                     },
@@ -598,37 +571,20 @@ fun JobEditScreen(
                         }
                     }
 
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                    LabeledContent(
+                        subtitle = stringResource(id = R.string.road_name_address),
                         modifier = Modifier.fillMaxWidth(),
                     ) {
-                        LabeledContent(
-                            subtitle = stringResource(id = R.string.road_name_address),
+                        CareClickableTextField(
+                            value = localRoadNameAddress,
+                            hint = stringResource(id = R.string.road_name_address_hint),
+                            onClick = {
+                                if (!(postCodeDialog?.isAdded == true || postCodeDialog?.isVisible == true)) {
+                                    postCodeDialog?.show(fragmentManager, "PostCodeFragment")
+                                }
+                            },
                             modifier = Modifier.fillMaxWidth(),
-                        ) {
-                            CareClickableTextField(
-                                value = localRoadNameAddress,
-                                hint = stringResource(id = R.string.road_name_address_hint),
-                                onClick = {
-                                    if (!(postCodeDialog?.isAdded == true || postCodeDialog?.isVisible == true)) {
-                                        postCodeDialog?.show(fragmentManager, "PostCodeFragment")
-                                    }
-                                },
-                                modifier = Modifier.fillMaxWidth(),
-                            )
-                        }
-
-                        LabeledContent(
-                            subtitle = stringResource(id = R.string.detail_address),
-                            modifier = Modifier.fillMaxWidth(),
-                        ) {
-                            CareTextField(
-                                value = localDetailAddress,
-                                hint = stringResource(id = R.string.detail_address_hint),
-                                onValueChanged = { localDetailAddress = it },
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                        }
+                        )
                     }
                 }
 
@@ -895,9 +851,9 @@ fun JobEditScreen(
                         },
                     ) {
                         CareTextFieldLong(
-                            value = localSpeciality,
+                            value = localExtraRequirement,
                             hint = stringResource(id = R.string.speciality_hint),
-                            onValueChanged = { localSpeciality = it },
+                            onValueChanged = { localExtraRequirement = it },
                             modifier = Modifier.fillMaxWidth(),
                         )
                     }

@@ -16,10 +16,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.navArgs
 import com.idle.binding.DeepLinkDestination
 import com.idle.binding.base.CareBaseEvent
+import com.idle.center.job.edit.JobEditScreen
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareButtonRound
+import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.jobposting.CenterJobPostingDetail
@@ -37,13 +39,52 @@ internal class CenterJobPostingDetailFragment : BaseComposeFragment() {
             getCenterJobPostingDetail(jobPostingId)
 
             val jobPostingDetail by jobPostingDetail.collectAsStateWithLifecycle()
+            val (isEditState, setEditState) = rememberSaveable { mutableStateOf(false) }
 
-            CenterJobPostingDetailScreen(
-                jobPostingId = jobPostingId,
-                jobPostingDetail = jobPostingDetail,
-                navigateTo = {
-                    baseEvent(CareBaseEvent.NavigateTo(it))
-                })
+            CareStateAnimator(
+                targetState = isEditState,
+                transitionCondition = isEditState
+            ) { state ->
+                if (state) {
+                    jobPostingDetail?.let {
+                        JobEditScreen(
+                            fragmentManager = parentFragmentManager,
+                            weekDays = it.weekdays,
+                            workStartTime = it.startTime,
+                            workEndTime = it.endTime,
+                            payType = it.payType,
+                            payAmount = it.payAmount.toString(),
+                            roadNameAddress = it.roadNameAddress,
+                            clientName = it.clientName,
+                            gender = it.gender,
+                            birthYear = it.birthYear.toString(),
+                            weight = it.weight.toString(),
+                            careLevel = it.careLevel.toString(),
+                            mentalStatus = it.mentalStatus,
+                            disease = it.disease,
+                            isMealAssistance = it.isMealAssistance,
+                            isBowelAssistance = it.isBowelAssistance,
+                            isWalkingAssistance = it.isWalkingAssistance,
+                            lifeAssistance = it.lifeAssistance,
+                            extraRequirement = it.extraRequirement,
+                            isExperiencePreferred = it.isExperiencePreferred,
+                            applyMethod = it.applyMethod,
+                            applyDeadline = it.applyDeadline,
+                            applyDeadlineType = it.applyDeadlineType,
+                            calendarDate = it.applyDeadline,
+                            updateJobPosting = ::updateJobPosting,
+                            setEditState = { setEditState(false) },
+                        )
+                    }
+                } else {
+                    CenterJobPostingDetailScreen(
+                        jobPostingId = jobPostingId,
+                        jobPostingDetail = jobPostingDetail,
+                        navigateTo = { baseEvent(CareBaseEvent.NavigateTo(it)) },
+                        setEditState = setEditState,
+                    )
+                }
+            }
         }
     }
 }
@@ -53,19 +94,21 @@ internal fun CenterJobPostingDetailScreen(
     jobPostingId: String,
     jobPostingDetail: CenterJobPostingDetail?,
     navigateTo: (DeepLinkDestination) -> Unit,
+    setEditState: (Boolean) -> Unit,
 ) {
-    val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
+    val onBackPressedDispatcher =
+        LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
 
     jobPostingDetail?.let {
         Scaffold(
             topBar = {
                 CareSubtitleTopBar(
-                    title = stringResource(id = R.string.post_job_posting),
+                    title = stringResource(id = R.string.manage_job_posting),
                     onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
                     leftComponent = {
                         CareButtonRound(
                             text = stringResource(id = R.string.edit_job_posting_button),
-                            onClick = { },
+                            onClick = { setEditState(true) },
                         )
                     },
                     modifier = Modifier
@@ -102,7 +145,7 @@ internal fun CenterJobPostingDetailScreen(
                 isExperiencePreferred = it.isExperiencePreferred,
                 applyMethod = it.applyMethod,
                 applyDeadline = it.applyDeadline,
-                onBackPressed = {},
+                onBackPressed = { onBackPressedDispatcher?.onBackPressed() },
                 bottomComponent = {
                     CareButtonLarge(
                         text = "지원자 2명 조회",
