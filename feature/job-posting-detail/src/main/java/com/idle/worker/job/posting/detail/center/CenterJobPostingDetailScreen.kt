@@ -45,6 +45,7 @@ fun SummaryScreen(
     payType: PayType?,
     payAmount: String,
     roadNameAddress: String,
+    lotNumberAddress: String,
     clientName: String,
     gender: Gender,
     birthYear: String,
@@ -132,7 +133,7 @@ fun SummaryScreen(
                     }
 
                     Text(
-                        text = roadNameAddress,
+                        text = lotNumberAddress.split(" ").subList(0, 3).joinToString { " " },
                         style = CareTheme.typography.subtitle2,
                         color = CareTheme.colors.gray900,
                         overflow = TextOverflow.Clip,

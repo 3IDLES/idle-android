@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareClickableTextField
-import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.signin.worker.WorkerSignUpStep
@@ -25,9 +24,7 @@ import com.idle.signin.worker.WorkerSignUpStep.ADDRESS
 @Composable
 internal fun AddressScreen(
     roadNameAddress: String,
-    addressDetail: String,
     showPostCode: () -> Unit,
-    onAddressDetailChanged: (String) -> Unit,
     setSignUpStep: (WorkerSignUpStep) -> Unit,
     signUpWorker: () -> Unit,
 ) {
@@ -56,24 +53,11 @@ internal fun AddressScreen(
             )
         }
 
-        LabeledContent(
-            subtitle = stringResource(id = R.string.detail_address),
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            CareTextField(
-                value = addressDetail,
-                hint = stringResource(id = R.string.detail_address_hint),
-                onValueChanged = onAddressDetailChanged,
-                onDone = { if (roadNameAddress.isNotBlank() && addressDetail.isNotBlank()) signUpWorker() },
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
-
         Spacer(modifier = Modifier.weight(1f))
 
         CareButtonLarge(
             text = stringResource(id = R.string.complete),
-            enable = roadNameAddress.isNotBlank() && addressDetail.isNotBlank(),
+            enable = roadNameAddress.isNotBlank(),
             onClick = signUpWorker,
             modifier = Modifier
                 .fillMaxWidth()

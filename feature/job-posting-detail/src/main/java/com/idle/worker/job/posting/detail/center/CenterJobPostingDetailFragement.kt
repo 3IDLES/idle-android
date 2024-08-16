@@ -132,6 +132,7 @@ internal fun CenterJobPostingDetailScreen(
                 payType = it.payType,
                 payAmount = it.payAmount.toString(),
                 roadNameAddress = it.roadNameAddress,
+                lotNumberAddress = it.lotNumberAddress,
                 clientName = it.clientName,
                 gender = it.gender,
                 birthYear = (LocalDate.now(ZoneId.of("Asia/Seoul")).year - it.age).toString(),

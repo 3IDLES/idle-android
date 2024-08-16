@@ -51,6 +51,7 @@ class JobPostingViewModel @Inject constructor(
     val roadNameAddress = _roadNameAddress.asStateFlow()
 
     private val _lotNumberAddress = MutableStateFlow("")
+    val lotNumberAddress = _lotNumberAddress.asStateFlow()
 
     private val _detailAddress = MutableStateFlow("")
     val detailAddress = _detailAddress.asStateFlow()

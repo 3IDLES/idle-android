@@ -25,9 +25,7 @@ import com.idle.designsystem.compose.foundation.CareTheme
 @Composable
 internal fun AddressScreen(
     roadNameAddress: String,
-    detailAddress: String,
     showPostCodeDialog: () -> Unit,
-    onDetailAddressChanged: (String) -> Unit,
     setJobPostingStep: (JobPostingStep) -> Unit,
 ) {
     BackHandler { setJobPostingStep(JobPostingStep.findStep(ADDRESS.step - 1)) }
@@ -57,27 +55,11 @@ internal fun AddressScreen(
             )
         }
 
-        LabeledContent(
-            subtitle = stringResource(id = R.string.detail_address),
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            CareTextField(
-                value = detailAddress,
-                hint = stringResource(id = R.string.detail_address_hint),
-                onValueChanged = onDetailAddressChanged,
-                onDone = {
-                    if (roadNameAddress.isNotBlank() && detailAddress.isNotBlank())
-                        setJobPostingStep(JobPostingStep.findStep(ADDRESS.step + 1))
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
-
         Spacer(modifier = Modifier.weight(1f))
 
         CareButtonLarge(
             text = stringResource(id = R.string.next),
-            enable = (roadNameAddress.isNotBlank() && detailAddress.isNotBlank()),
+            enable = (roadNameAddress.isNotBlank()),
             onClick = { setJobPostingStep(JobPostingStep.findStep(ADDRESS.step + 1)) },
             modifier = Modifier.fillMaxWidth(),
         )
