@@ -34,7 +34,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.fragment.findNavController
 import com.idle.binding.DeepLinkDestination
 import com.idle.binding.DeepLinkDestination.CenterSignIn
 import com.idle.binding.DeepLinkDestination.CenterSignUp
@@ -74,6 +73,11 @@ internal fun AuthScreen(
     onUserRoleChanged: (UserRole) -> Unit,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
+    val cardColor by animateColorAsState(
+        if (userRole == UserRole.WORKER) CareTheme.colors.orange100
+        else CareTheme.colors.white000
+    )
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -113,13 +117,16 @@ internal fun AuthScreen(
                         else CareTheme.colors.gray100,
                     ),
                     modifier = Modifier
+                        .weight(1f)
                         .wrapContentHeight()
                         .clickable { onUserRoleChanged(UserRole.CENTER) }
                 ) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(16.dp),
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 28.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 28.dp),
                     ) {
                         Text(
                             text = stringResource(id = string.start_center),
@@ -137,25 +144,23 @@ internal fun AuthScreen(
 
                 Card(
                     shape = RoundedCornerShape(8.dp),
-                    colors = CardDefaults.cardColors().copy(
-                        containerColor = animateColorAsState(
-                            if (userRole == UserRole.WORKER) CareTheme.colors.orange100
-                            else CareTheme.colors.white000
-                        ).value
-                    ),
+                    colors = CardDefaults.cardColors().copy(containerColor = cardColor),
                     border = BorderStroke(
                         width = 1.dp,
                         color = if (userRole == UserRole.WORKER) CareTheme.colors.orange400
                         else CareTheme.colors.gray100,
                     ),
                     modifier = Modifier
+                        .weight(1f)
                         .wrapContentHeight()
                         .clickable { onUserRoleChanged(UserRole.WORKER) }
                 ) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(16.dp),
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 28.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 28.dp),
                     ) {
                         Text(
                             text = stringResource(id = string.start_worker),
