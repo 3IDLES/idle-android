@@ -2,7 +2,6 @@
 
 package com.idle.center.jobposting
 
-import android.util.Log
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -548,7 +547,7 @@ internal fun JobPostingScreen(
                                                     else if (localWorkEndAmPm == "오후" && localWorkEndHour == "12") "12"
                                                     else localWorkEndHour.toInt() + 12
                                                 }" + ":${localWorkEndMinute}"
-                                                Log.d("test", endTime.toString())
+
                                                 onWorkEndTimeChanged(endTime)
                                                 sheetState.hide()
                                             }
@@ -587,8 +586,7 @@ internal fun JobPostingScreen(
                         }
                     }
                 },
-                modifier = Modifier
-                    .fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
             ) {
                 Scaffold(
                     topBar = {
