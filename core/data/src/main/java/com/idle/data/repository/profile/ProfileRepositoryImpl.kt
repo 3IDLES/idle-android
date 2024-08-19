@@ -3,7 +3,7 @@ package com.idle.data.repository.profile
 import android.content.Context
 import android.net.Uri
 import androidx.core.net.toUri
-import com.idle.domain.model.auth.UserRole
+import com.idle.datastore.datasource.UserInfoDataSource
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.model.profile.JobSearchStatus
 import com.idle.domain.model.profile.MIMEType
@@ -16,20 +16,16 @@ import com.idle.network.model.profile.UpdateWorkerProfileRequest
 import com.idle.network.model.profile.UploadProfileImageUrlResponse
 import com.idle.network.source.profile.ProfileDataSource
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.first
 import java.io.InputStream
 import javax.inject.Inject
 
 class ProfileRepositoryImpl @Inject constructor(
     private val profileDataSource: ProfileDataSource,
+    private val userInfoDataSource: UserInfoDataSource,
     @ApplicationContext private val context: Context,
 ) : ProfileRepository {
-    override suspend fun getMyUserRole() {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun setMyUserRole(userRole: UserRole) {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getMyUserRole() = userInfoDataSource.userRole.first()
 
     override suspend fun getMyCenterProfile(): Result<CenterProfile> =
         profileDataSource.getMyCenterProfile().mapCatching { it.toVO() }

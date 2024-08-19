@@ -1,7 +1,9 @@
 package com.idle.data.repository.auth
 
 import com.idle.datastore.datasource.TokenDataSource
+import com.idle.datastore.datasource.UserInfoDataSource
 import com.idle.domain.model.auth.BusinessRegistrationInfo
+import com.idle.domain.model.auth.UserRole
 import com.idle.domain.repositorry.auth.AuthRepository
 import com.idle.network.model.auth.ConfirmAuthCodeRequest
 import com.idle.network.model.auth.SendPhoneRequest
@@ -13,7 +15,6 @@ import com.idle.network.model.auth.WithdrawalCenterRequest
 import com.idle.network.model.auth.WithdrawalWorkerRequest
 import com.idle.network.source.auth.AuthDataSource
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -21,6 +22,7 @@ import javax.inject.Inject
 class AuthRepositoryImpl @Inject constructor(
     private val authDataSource: AuthDataSource,
     private val tokenDataSource: TokenDataSource,
+    private val userInfoDataSource: UserInfoDataSource,
 ) : AuthRepository {
     override suspend fun sendPhoneNumber(phoneNumber: String): Result<Unit> =
         authDataSource.sendPhoneNumber(SendPhoneRequest(phoneNumber))
@@ -62,6 +64,7 @@ class AuthRepositoryImpl @Inject constructor(
                 withContext(Dispatchers.IO) {
                     tokenDataSource.setAccessToken(tokenResponse.accessToken)
                     launch { tokenDataSource.setRefreshToken(tokenResponse.refreshToken) }
+                    launch { userInfoDataSource.setUserRole(UserRole.CENTER.apiValue) }
                     Result.success(Unit)
                 }
             },
@@ -99,6 +102,7 @@ class AuthRepositoryImpl @Inject constructor(
             withContext(Dispatchers.IO) {
                 tokenDataSource.setAccessToken(tokenResponse.accessToken)
                 launch { tokenDataSource.setRefreshToken(tokenResponse.refreshToken) }
+                launch { userInfoDataSource.setUserRole(UserRole.WORKER.apiValue) }
                 Result.success(Unit)
             }
         },
@@ -118,8 +122,12 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun logoutWorker(): Result<Unit> = authDataSource.logoutWorker()
         .fold(
             onSuccess = {
-                tokenDataSource.clearToken()
-                return Result.success(Unit)
+                withContext(Dispatchers.IO) {
+                    tokenDataSource.clearToken()
+                    launch { userInfoDataSource.clearUserRole() }
+                    launch { userInfoDataSource.clearUserInfo() }
+                    Result.success(Unit)
+                }
             },
             onFailure = { Result.failure(it) }
         )
@@ -127,8 +135,12 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun logoutCenter(): Result<Unit> = authDataSource.logoutCenter()
         .fold(
             onSuccess = {
-                tokenDataSource.clearToken()
-                return Result.success(Unit)
+                withContext(Dispatchers.IO) {
+                    tokenDataSource.clearToken()
+                    launch { userInfoDataSource.clearUserRole() }
+                    launch { userInfoDataSource.clearUserInfo() }
+                    Result.success(Unit)
+                }
             },
             onFailure = { Result.failure(it) }
         )
@@ -141,8 +153,12 @@ class AuthRepositoryImpl @Inject constructor(
             )
         ).fold(
             onSuccess = {
-                tokenDataSource.clearToken()
-                return Result.success(Unit)
+                withContext(Dispatchers.IO) {
+                    tokenDataSource.clearToken()
+                    launch { userInfoDataSource.clearUserRole() }
+                    launch { userInfoDataSource.clearUserInfo() }
+                    Result.success(Unit)
+                }
             },
             onFailure = { Result.failure(it) }
         )
@@ -151,8 +167,12 @@ class AuthRepositoryImpl @Inject constructor(
         authDataSource.withdrawalWorker(WithdrawalWorkerRequest(reason))
             .fold(
                 onSuccess = {
-                    tokenDataSource.clearToken()
-                    return Result.success(Unit)
+                    withContext(Dispatchers.IO) {
+                        tokenDataSource.clearToken()
+                        launch { userInfoDataSource.clearUserRole() }
+                        launch { userInfoDataSource.clearUserInfo() }
+                        Result.success(Unit)
+                    }
                 },
                 onFailure = { Result.failure(it) }
             )
