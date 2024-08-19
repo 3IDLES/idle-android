@@ -6,8 +6,8 @@ import android.view.View
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.idle.binding.DeepLinkDestination.CenterProfile
 import com.idle.binding.DeepLinkDestination.Withdrawal
-import com.idle.binding.DeepLinkDestination.WorkerProfile
 import com.idle.binding.base.BaseBindingFragment
 import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.binding.repeatOnStarted
@@ -16,10 +16,10 @@ import com.idle.setting.FAQ_URL
 import com.idle.setting.PRIVACY_POLICY_URL
 import com.idle.setting.R
 import com.idle.setting.SettingEvent
-import com.idle.setting.navigation.SettingNavigation
 import com.idle.setting.TERMS_AND_POLICES_URL
 import com.idle.setting.databinding.FragmentCenterSettingBinding
 import com.idle.setting.dialog.LogoutDialogFragment
+import com.idle.setting.navigation.SettingNavigation
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -31,7 +31,7 @@ internal class CenterSettingFragment :
     override val fragmentViewModel: CenterSettingViewModel by viewModels()
 
     @Inject
-    lateinit var settingNavigation : SettingNavigation
+    lateinit var settingNavigation: SettingNavigation
 
     private val logoutDialog: LogoutDialogFragment? by lazy {
         LogoutDialogFragment().apply {
@@ -59,7 +59,7 @@ internal class CenterSettingFragment :
 
     private fun handleSettingEvent(event: SettingEvent) {
         when (event) {
-            SettingEvent.Profile -> fragmentViewModel.baseEvent(NavigateTo(WorkerProfile))
+            SettingEvent.Profile -> fragmentViewModel.baseEvent(NavigateTo(CenterProfile))
             SettingEvent.FAQ -> navigateToUri(FAQ_URL)
             SettingEvent.PrivacyPolicy -> navigateToUri(PRIVACY_POLICY_URL)
             SettingEvent.TermsAndPolicies -> navigateToUri(TERMS_AND_POLICES_URL)
