@@ -1,10 +1,15 @@
 package com.idle.domain.repositorry.profile
 
+import com.idle.domain.model.auth.UserRole
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.model.profile.JobSearchStatus
 import com.idle.domain.model.profile.WorkerProfile
 
 interface ProfileRepository {
+    suspend fun getMyUserRole()
+
+    suspend fun setMyUserRole(userRole: UserRole)
+
     suspend fun getMyCenterProfile(): Result<CenterProfile>
 
     suspend fun getMyWorkerProfile(): Result<WorkerProfile>

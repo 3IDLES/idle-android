@@ -3,6 +3,7 @@ package com.idle.data.repository.profile
 import android.content.Context
 import android.net.Uri
 import androidx.core.net.toUri
+import com.idle.domain.model.auth.UserRole
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.model.profile.JobSearchStatus
 import com.idle.domain.model.profile.MIMEType
@@ -22,6 +23,14 @@ class ProfileRepositoryImpl @Inject constructor(
     private val profileDataSource: ProfileDataSource,
     @ApplicationContext private val context: Context,
 ) : ProfileRepository {
+    override suspend fun getMyUserRole() {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun setMyUserRole(userRole: UserRole) {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun getMyCenterProfile(): Result<CenterProfile> =
         profileDataSource.getMyCenterProfile().mapCatching { it.toVO() }
 

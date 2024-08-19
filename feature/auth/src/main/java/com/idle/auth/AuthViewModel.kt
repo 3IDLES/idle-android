@@ -15,6 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val getAccessTokenUseCase: GetAccessTokenUseCase,
+    private val getUserRoleUseCase : GetUserRoleUseCase,
 ) : BaseViewModel() {
     private val _userRole = MutableStateFlow<UserRole?>(null)
     val userRole = _userRole.asStateFlow()
