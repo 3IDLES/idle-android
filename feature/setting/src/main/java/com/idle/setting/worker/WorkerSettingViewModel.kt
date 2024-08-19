@@ -1,11 +1,9 @@
 package com.idle.setting.worker
 
 import androidx.lifecycle.viewModelScope
-import com.idle.binding.DeepLinkDestination
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.usecase.auth.LogoutWorkerUseCase
-import com.idle.setting.R
 import com.idle.setting.SettingEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -23,7 +21,7 @@ class WorkerSettingViewModel @Inject constructor(
     fun logout() = viewModelScope.launch {
         logoutWorkerUseCase().onSuccess {
             workerSettingEvent(SettingEvent.LogoutSuccess)
-        }.onFailure { }
+        }.onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
     }
 
     fun clickLogout() = workerSettingEvent(SettingEvent.Logout)

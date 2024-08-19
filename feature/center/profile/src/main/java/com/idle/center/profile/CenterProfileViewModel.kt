@@ -4,6 +4,7 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
+import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.usecase.profile.GetMyCenterProfileUseCase
 import com.idle.domain.usecase.profile.UpdateCenterProfileUseCase
@@ -43,9 +44,7 @@ class CenterProfileViewModel @Inject constructor(
             _centerProfile.value = it
             _centerIntroduce.value = it.introduce
             _centerOfficeNumber.value = it.officeNumber
-        }.onFailure {
-            Log.d("test", "조회 실패!")
-        }
+        }.onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
     }
 
     fun updateCenterProfile() = viewModelScope.launch {
@@ -62,12 +61,8 @@ class CenterProfileViewModel @Inject constructor(
             officeNumber = _centerOfficeNumber.value,
             introduce = _centerIntroduce.value.ifBlank { null },
             imageFileUri = _profileImageUri.value?.toString(),
-        ).onSuccess {
-            setEditState(false)
-            Log.d("test", "업데이트 성공!")
-        }.onFailure {
-            Log.d("test", "업데이트 실패!")
-        }
+        ).onSuccess { setEditState(false)
+        }.onFailure {  baseEvent(CareBaseEvent.Error(it.message.toString())) }
     }
 
     private fun isCenterProfileUnchanged(): Boolean {

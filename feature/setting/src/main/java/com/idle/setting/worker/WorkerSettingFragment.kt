@@ -29,9 +29,6 @@ internal class WorkerSettingFragment :
         FragmentWorkerSettingBinding::inflate
     ) {
     override val fragmentViewModel: WorkerSettingViewModel by viewModels()
-    override fun handleError(message: String) {
-        TODO("Not yet implemented")
-    }
 
     @Inject
     lateinit var settingNavigation : SettingNavigation

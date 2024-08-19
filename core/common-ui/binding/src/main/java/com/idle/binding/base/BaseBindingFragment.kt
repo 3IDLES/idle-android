@@ -1,13 +1,14 @@
 package com.idle.binding.base
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.idle.binding.deepLinkNavigateTo
 import com.idle.binding.repeatOnStarted
 
@@ -21,7 +22,12 @@ abstract class BaseBindingFragment<T : ViewDataBinding, V : BaseViewModel>
 
     protected abstract val fragmentViewModel: V
 
-    abstract fun handleError(message: String)
+    @SuppressLint("ShowToast")
+    protected fun handleError(message: String) {
+        _binding?.root?.rootView?.let {
+            Snackbar.make(it, message, Snackbar.LENGTH_SHORT)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?,

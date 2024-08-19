@@ -14,9 +14,7 @@ class WorkerJobPostingDetailViewModel @Inject constructor() : BaseViewModel() {
     val eventFlow = _eventFlow.asSharedFlow()
 
     internal fun workerJobPostingDetailEvent(event: WorkerJobPostingDetailEvent) =
-        viewModelScope.launch {
-            _eventFlow.emit(event)
-        }
+        viewModelScope.launch { _eventFlow.emit(event) }
 }
 
 sealed class WorkerJobPostingDetailEvent {

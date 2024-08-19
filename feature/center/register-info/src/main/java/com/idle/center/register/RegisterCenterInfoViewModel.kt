@@ -54,9 +54,7 @@ class RegisterCenterInfoViewModel @Inject constructor(
             baseEvent(
                 CareBaseEvent.NavigateTo(CenterRegisterComplete, R.id.registerCenterInfoFragment)
             )
-        }.onFailure {
-            Log.d("test", "센터 정보 등록 실패! $it")
-        }
+        }.onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
     }
 
     internal fun setRegistrationStep(step: RegistrationStep) {

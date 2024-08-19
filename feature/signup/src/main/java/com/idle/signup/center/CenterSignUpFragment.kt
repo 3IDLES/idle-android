@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,6 +28,7 @@ import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareProgressBar
+import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.domain.model.auth.BusinessRegistrationInfo
@@ -58,6 +61,7 @@ internal class CenterSignUpFragment : BaseComposeFragment() {
             val centerPasswordForConfirm by centerPasswordForConfirm.collectAsStateWithLifecycle()
 
             CenterSignUpScreen(
+                snackbarHostState = snackbarHostState,
                 signUpStep = signUpStep,
                 centerName = centerName,
                 centerPhoneNumber = centerPhoneNumber,
@@ -95,15 +99,12 @@ internal class CenterSignUpFragment : BaseComposeFragment() {
             )
         }
     }
-
-    override fun handleError(message: String) {
-        TODO("Not yet implemented")
-    }
 }
 
 
 @Composable
 internal fun CenterSignUpScreen(
+    snackbarHostState: SnackbarHostState,
     signUpStep: CenterSignUpStep,
     centerName: String,
     centerPhoneNumber: String,
@@ -156,6 +157,12 @@ internal fun CenterSignUpScreen(
                         .padding(start = 8.dp, top = 8.dp, bottom = 8.dp),
                 )
             }
+        },
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+                snackbar = { data -> CareSnackBar(data = data) }
+            )
         },
         modifier = Modifier.addFocusCleaner(focusManager),
     ) { paddingValue ->

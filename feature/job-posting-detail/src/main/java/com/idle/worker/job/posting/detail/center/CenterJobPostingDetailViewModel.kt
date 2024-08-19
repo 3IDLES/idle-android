@@ -3,6 +3,7 @@ package com.idle.worker.job.posting.detail.center
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
+import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.job.LifeAssistance
 import com.idle.domain.model.jobposting.CenterJobPostingDetail
 import com.idle.domain.model.jobposting.EditJobPostingDetail
@@ -28,7 +29,7 @@ class CenterJobPostingDetailViewModel @Inject constructor(
     fun getCenterJobPostingDetail(jobPostingId: String) = viewModelScope.launch {
         getCenterJobPostingDetailUseCase(jobPostingId)
             .onSuccess { _jobPostingDetail.value = it }
-            .onFailure { Log.d("test", "센터 공고 상세 조회 실패! $it") }
+            .onFailure {  baseEvent(CareBaseEvent.Error(it.message.toString())) }
     }
 
     fun setEditState(state: Boolean) {
@@ -94,8 +95,6 @@ class CenterJobPostingDetailViewModel @Inject constructor(
             )
 
             _isEditState.value = false
-        }.onFailure {
-
-        }
+        }.onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
     }
 }

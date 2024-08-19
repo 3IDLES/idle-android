@@ -42,12 +42,10 @@ import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 internal class CenterSignInFragment : BaseComposeFragment() {
     override val fragmentViewModel: CenterSignInViewModel by viewModels()
-    private val snackbarHostState = SnackbarHostState()
 
     @Composable
     override fun ComposeLayout() {
@@ -72,12 +70,6 @@ internal class CenterSignInFragment : BaseComposeFragment() {
                 },
                 navigateToNewPassword = { baseEvent(NavigateTo(NewPassword)) }
             )
-        }
-    }
-
-    override fun handleError(message: String) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            snackbarHostState.showSnackbar(message)
         }
     }
 }

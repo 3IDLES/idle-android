@@ -52,10 +52,6 @@ import dagger.hilt.android.AndroidEntryPoint
 internal class AuthFragment : BaseComposeFragment() {
     override val fragmentViewModel: AuthViewModel by viewModels()
 
-    override fun handleError(message: String) {
-        TODO("Not yet implemented")
-    }
-
     @Composable
     override fun ComposeLayout() {
         fragmentViewModel.apply {

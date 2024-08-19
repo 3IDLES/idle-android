@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,6 +29,7 @@ import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareProgressBar
+import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.domain.model.auth.Gender
@@ -67,7 +70,9 @@ internal class WorkerSignUpFragment : BaseComposeFragment() {
             val birthYear by birthYear.collectAsStateWithLifecycle()
             val gender by gender.collectAsStateWithLifecycle()
             val roadNameAddress by roadNameAddress.collectAsStateWithLifecycle()
+
             WorkerSignUpScreen(
+                snackbarHostState = snackbarHostState,
                 signUpStep = signUpStep,
                 workerPhoneNumber = workerPhoneNumber,
                 workerAuthCodeTimerMinute = workerAuthCodeTimerMinute,
@@ -103,15 +108,12 @@ internal class WorkerSignUpFragment : BaseComposeFragment() {
             )
         }
     }
-
-    override fun handleError(message: String) {
-        TODO("Not yet implemented")
-    }
 }
 
 
 @Composable
 internal fun WorkerSignUpScreen(
+    snackbarHostState: SnackbarHostState,
     signUpStep: WorkerSignUpStep,
     workerPhoneNumber: String,
     workerAuthCodeTimerMinute: String,
@@ -155,6 +157,12 @@ internal fun WorkerSignUpScreen(
                         .padding(start = 8.dp, top = 8.dp, bottom = 8.dp),
                 )
             }
+        },
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+                snackbar = { data -> CareSnackBar(data = data) }
+            )
         },
         modifier = Modifier.addFocusCleaner(focusManager),
     ) { paddingValue ->

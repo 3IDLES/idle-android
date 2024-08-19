@@ -81,10 +81,6 @@ internal class WithdrawalFragment : BaseComposeFragment() {
             )
         }
     }
-
-    override fun handleError(message: String) {
-        TODO("Not yet implemented")
-    }
 }
 
 @ExperimentalMaterial3Api

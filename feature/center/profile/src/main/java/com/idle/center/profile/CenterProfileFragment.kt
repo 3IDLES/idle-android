@@ -20,6 +20,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -41,6 +43,7 @@ import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonRound
+import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.CareTextFieldLong
@@ -63,6 +66,7 @@ internal class CenterProfileFragment : BaseComposeFragment() {
             val profileImageUri by profileImageUri.collectAsStateWithLifecycle()
 
             CenterProfileScreen(
+                snackbarHostState = snackbarHostState,
                 centerProfile = centerProfile,
                 centerOfficeNumber = centerOfficeNumber,
                 centerIntroduce = centerIntroduce,
@@ -76,14 +80,11 @@ internal class CenterProfileFragment : BaseComposeFragment() {
             )
         }
     }
-
-    override fun handleError(message: String) {
-        TODO("Not yet implemented")
-    }
 }
 
 @Composable
 internal fun CenterProfileScreen(
+    snackbarHostState: SnackbarHostState,
     centerProfile: CenterProfile,
     centerOfficeNumber: String,
     centerIntroduce: String,
@@ -123,6 +124,12 @@ internal fun CenterProfileScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 12.dp, top = 48.dp, end = 20.dp, bottom = 12.dp),
+            )
+        },
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+                snackbar = { data -> CareSnackBar(data = data) }
             )
         },
         containerColor = CareTheme.colors.white000,

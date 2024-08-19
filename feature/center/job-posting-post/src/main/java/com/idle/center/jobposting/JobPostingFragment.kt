@@ -20,6 +20,8 @@ import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -53,6 +55,7 @@ import com.idle.designsystem.compose.component.CareButtonMedium
 import com.idle.designsystem.compose.component.CareButtonRound
 import com.idle.designsystem.compose.component.CareCalendar
 import com.idle.designsystem.compose.component.CareProgressBar
+import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.component.CareWheelPicker
@@ -187,6 +190,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
                     )
                 } else {
                     JobPostingScreen(
+                        snackbarHostState = snackbarHostState,
                         weekDays = weekDays,
                         workStartTime = workStartTime,
                         workEndTime = workEndTime,
@@ -249,15 +253,12 @@ internal class JobPostingFragment : BaseComposeFragment() {
             }
         }
     }
-
-    override fun handleError(message: String) {
-        TODO("Not yet implemented")
-    }
 }
 
 @ExperimentalMaterial3Api
 @Composable
 internal fun JobPostingScreen(
+    snackbarHostState: SnackbarHostState,
     weekDays: Set<DayOfWeek>,
     workStartTime: String,
     workEndTime: String,
@@ -620,6 +621,12 @@ internal fun JobPostingScreen(
                                     .padding(start = 8.dp, top = 8.dp, bottom = 8.dp),
                             )
                         }
+                    },
+                    snackbarHost = {
+                        SnackbarHost(
+                            hostState = snackbarHostState,
+                            snackbar = { data -> CareSnackBar(data = data) }
+                        )
                     },
                     containerColor = CareTheme.colors.white000,
                     modifier = Modifier.addFocusCleaner(focusManager),
