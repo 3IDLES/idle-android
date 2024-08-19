@@ -251,7 +251,10 @@ internal class JobPostingFragment : BaseComposeFragment() {
                         onApplyDeadlineChanged = ::setApplyDeadline,
                         onCalendarMonthChanged = ::setCalendarMonth,
                         postJobPosting = ::postJobPosting,
-                        setJobPostingStep = ::setJobPostingStep,
+                        setJobPostingStep = { step ->
+                            snackbarHostState.currentSnackbarData?.dismiss()
+                            setJobPostingStep(step)
+                        },
                         setEditState = ::setEditState,
                         setBottomSheetType = ::setBottomSheetType,
                         showSnackBar = { baseEvent(CareBaseEvent.Error(it)) },
@@ -627,7 +630,12 @@ internal fun JobPostingScreen(
                     snackbarHost = {
                         SnackbarHost(
                             hostState = snackbarHostState,
-                            snackbar = { data -> CareSnackBar(data = data) }
+                            snackbar = { data ->
+                                CareSnackBar(
+                                    data = data,
+                                    modifier = Modifier.padding(bottom = 108.dp)
+                                )
+                            }
                         )
                     },
                     containerColor = CareTheme.colors.white000,

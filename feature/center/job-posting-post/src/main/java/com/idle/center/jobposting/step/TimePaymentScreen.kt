@@ -17,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.idle.center.jobposting.JobPostingStep
+import com.idle.center.jobposting.JobPostingStep.TIME_PAYMENT
 import com.idle.compose.JobPostingBottomSheetType
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
@@ -150,13 +151,14 @@ internal fun TimePaymentScreen(
                         )
                     },
                     onDone = {
-                        if (weekDays.isNotEmpty() && workStartTime.isNotBlank() && workEndTime.isNotBlank() && payType != null && payAmount.isNotBlank())
+                        if (weekDays.isNotEmpty() && workStartTime.isNotBlank() && workEndTime.isNotBlank() && payType != null && payAmount.isNotBlank()) {
                             if ((payAmount.toIntOrNull() ?: return@CareTextField) < 9860) {
                                 showSnackBar("급여는 최저 시급인 9860원보다 많아야 합니다.")
                                 return@CareTextField
                             }
 
-                        setJobPostingStep(JobPostingStep.findStep(JobPostingStep.TIME_PAYMENT.step + 1))
+                            setJobPostingStep(JobPostingStep.findStep(TIME_PAYMENT.step + 1))
+                        }
                     },
                 )
             }
@@ -173,7 +175,7 @@ internal fun TimePaymentScreen(
                     return@CareButtonLarge
                 }
 
-                setJobPostingStep(JobPostingStep.findStep(JobPostingStep.TIME_PAYMENT.step + 1))
+                setJobPostingStep(JobPostingStep.findStep(TIME_PAYMENT.step + 1))
             },
             modifier = Modifier
                 .fillMaxWidth()
