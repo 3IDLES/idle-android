@@ -180,7 +180,7 @@ internal fun CenterProfileScreen(
 
                     if (!isEditState) {
                         CareButtonRound(
-                            text = stringResource(id = R.string.edit_job_posting),
+                            text = stringResource(id = R.string.edit),
                             onClick = { setEditState(true) }
                         )
                     }
