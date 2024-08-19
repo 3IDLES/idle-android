@@ -34,6 +34,8 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import coil.compose.AsyncImage
+import com.idle.binding.DeepLinkDestination
+import com.idle.binding.base.CareBaseEvent
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designresource.R
@@ -56,13 +58,15 @@ internal class ApplicantInquiryFragment : BaseComposeFragment() {
                 Log.d("test", args.jobPostingId)
             }
 
-            ApplicantInquiryScreen()
+            ApplicantInquiryScreen(navigateTo = {
+                baseEvent(CareBaseEvent.NavigateTo(it))
+            })
         }
     }
 }
 
 @Composable
-internal fun ApplicantInquiryScreen() {
+internal fun ApplicantInquiryScreen(navigateTo: (DeepLinkDestination) -> Unit) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
 
     Scaffold(
@@ -104,8 +108,8 @@ internal fun ApplicantInquiryScreen() {
                     )
                 }
 
-                items(listOf(1, 2, 3)) {
-                    WorkerProfileCard()
+                items(listOf(1, 2, 3, 4, 5)) {
+                    WorkerProfileCard(navigateTo = navigateTo)
                 }
 
                 item {
@@ -176,7 +180,9 @@ private fun RecruitInfoCard() {
 }
 
 @Composable
-private fun WorkerProfileCard() {
+private fun WorkerProfileCard(
+    navigateTo: (DeepLinkDestination) -> Unit,
+) {
     Card(
         shape = RoundedCornerShape(12.dp),
         colors = CardColors(
@@ -186,6 +192,7 @@ private fun WorkerProfileCard() {
             disabledContentColor = CareTheme.colors.white000,
         ),
         border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
+        onClick = { navigateTo(DeepLinkDestination.WorkerProfile) },
         modifier = Modifier.fillMaxWidth(),
     ) {
         Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
@@ -203,7 +210,10 @@ private fun WorkerProfileCard() {
                 )
 
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(2.dp),
+                    verticalArrangement = Arrangement.spacedBy(
+                        space = 2.dp,
+                        alignment = Alignment.CenterVertically,
+                    ),
                     horizontalAlignment = Alignment.Start
                 ) {
                     CareTag(

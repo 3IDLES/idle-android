@@ -1,8 +1,8 @@
 package com.idle.center.register.complete
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,6 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -71,10 +73,11 @@ internal fun CenterRegisterCompleteScreen(
             modifier = Modifier.padding(bottom = 20.dp),
         )
 
-        Box(
-            modifier = Modifier
-                .size(120.dp)
-                .background(CareTheme.colors.gray050),
+        Image(
+            painter = painterResource(id = com.idle.designresource.R.drawable.ic_check_with_circle),
+            contentDescription = null,
+            contentScale = ContentScale.FillWidth,
+            modifier = Modifier.size(120.dp),
         )
 
         Text(

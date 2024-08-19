@@ -1,4 +1,4 @@
-package com.idle.center.profile
+ package com.idle.center.profile
 
 import android.net.Uri
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
