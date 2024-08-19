@@ -23,6 +23,7 @@ abstract class BaseComposeFragment : Fragment() {
 
     @Composable
     abstract fun ComposeLayout()
+    abstract fun handleError(message: String)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,5 +59,7 @@ abstract class BaseComposeFragment : Fragment() {
                 deepLinkDestination = event.destination,
                 popUpTo = event.popUpTo,
             )
+
+        is CareBaseEvent.Error -> handleError(event.message)
     }
 }

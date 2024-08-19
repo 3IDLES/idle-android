@@ -29,6 +29,9 @@ internal class CenterSettingFragment :
         FragmentCenterSettingBinding::inflate
     ) {
     override val fragmentViewModel: CenterSettingViewModel by viewModels()
+    override fun handleError(message: String) {
+        TODO("Not yet implemented")
+    }
 
     @Inject
     lateinit var settingNavigation: SettingNavigation

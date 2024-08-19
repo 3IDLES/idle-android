@@ -249,6 +249,10 @@ internal class JobPostingFragment : BaseComposeFragment() {
             }
         }
     }
+
+    override fun handleError(message: String) {
+        TODO("Not yet implemented")
+    }
 }
 
 @ExperimentalMaterial3Api
