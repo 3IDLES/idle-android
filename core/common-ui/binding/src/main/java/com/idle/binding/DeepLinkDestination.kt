@@ -46,7 +46,6 @@ sealed class DeepLinkDestination(
 
     data object CenterHome : DeepLinkDestination(
         addressRes = R.string.center_home_deeplink_url,
-        setDefaultAnimation = false,
     )
 
     data object CenterProfile : DeepLinkDestination(
@@ -86,7 +85,6 @@ sealed class DeepLinkDestination(
 
     data object WorkerHome : DeepLinkDestination(
         addressRes = R.string.worker_home_deeplink_url,
-        setDefaultAnimation = false,
     )
 
     data object WorkerProfile : DeepLinkDestination(

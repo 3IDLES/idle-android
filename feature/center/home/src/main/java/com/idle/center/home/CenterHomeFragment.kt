@@ -1,5 +1,8 @@
 package com.idle.center.home
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -13,13 +16,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -66,6 +72,10 @@ internal fun CenterHomeScreen(
     setRecruitmentPostStatus: (RecruitmentPostStatus) -> Unit,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
+    val onGoingListState = rememberLazyListState()
+    val previousListState = rememberLazyListState()
+    val isScroll by remember { derivedStateOf { onGoingListState.isScrollInProgress || previousListState.isScrollInProgress } }
+
     Scaffold(
         topBar = {
             CareHeadingTopBar(
@@ -100,9 +110,51 @@ internal fun CenterHomeScreen(
                 ) { status ->
                     when (status) {
                         RecruitmentPostStatus.ONGOING ->
-                            LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                                items(listOf(1, 2, 3, 4, 5)) {
-                                    CenterRecruitmentCard(navigateTo)
+                            LazyColumn(
+                                state = onGoingListState,
+                                verticalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                items(
+                                    listOf(
+                                        mapOf(
+                                            "duration" to "2024. 08. 10 ~ 2024. 08. 31",
+                                            "lotNumberAddress" to "서울특별시 서초구 반포동",
+                                            "subText" to "김민수 | 2등급 85세 남성",
+                                            "buttonText" to "지원자 3명 조회"
+                                        ),
+                                        mapOf(
+                                            "duration" to "2024. 08. 16 ~ 2024. 08. 24",
+                                            "lotNumberAddress" to "서울특별시 용산구 이태원동",
+                                            "subText" to "박영희 | 3등급 72세 여성",
+                                            "buttonText" to "지원자 1명 조회"
+                                        ),
+                                        mapOf(
+                                            "duration" to "2024. 08. 13 ~ 2024. 08. 21",
+                                            "lotNumberAddress" to "서울특별시 강서구 화곡동",
+                                            "subText" to "최준호 | 4등급 79세 남성",
+                                            "buttonText" to "지원자 4명 조회"
+                                        ),
+                                        mapOf(
+                                            "duration" to "2024. 08. 17 ~ 2024. 08. 28",
+                                            "lotNumberAddress" to "서울특별시 송파구 잠실동",
+                                            "subText" to "이지연 | 1등급 90세 여성",
+                                            "buttonText" to "지원자 2명 조회"
+                                        ),
+                                        mapOf(
+                                            "duration" to "2024. 07. 17 ~ 2024. 08. 28",
+                                            "lotNumberAddress" to "서울특별시 노원구 상계동",
+                                            "subText" to "홍길동 | 2등급 82세 남성",
+                                            "buttonText" to "지원자 5명 조회"
+                                        )
+                                    )
+                                ) {
+                                    CenterRecruitmentCard(
+                                        duration = it.get("duration")!!,
+                                        lotNumberAddress = it.get("lotNumberAddress")!!,
+                                        subText = it.get("subText")!!,
+                                        buttonText = it.get("buttonText")!!,
+                                        navigateTo = navigateTo,
+                                    )
                                 }
 
                                 item {
@@ -115,9 +167,51 @@ internal fun CenterHomeScreen(
                             }
 
                         RecruitmentPostStatus.PREVIOUS ->
-                            LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                                items(listOf(1, 2, 3, 4, 5)) {
-                                    CenterRecruitmentCard(navigateTo)
+                            LazyColumn(
+                                state = previousListState,
+                                verticalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                items(
+                                    listOf(
+                                        mapOf(
+                                            "duration" to "2024. 08. 10 ~ 2024. 08. 31",
+                                            "lotNumberAddress" to "서울특별시 서초구 반포동",
+                                            "subText" to "김민수 | 2등급 85세 남성",
+                                            "buttonText" to "지원자 3명 조회"
+                                        ),
+                                        mapOf(
+                                            "duration" to "2024. 08. 16 ~ 2024. 08. 24",
+                                            "lotNumberAddress" to "서울특별시 용산구 이태원동",
+                                            "subText" to "박영희 | 3등급 72세 여성",
+                                            "buttonText" to "지원자 1명 조회"
+                                        ),
+                                        mapOf(
+                                            "duration" to "2024. 08. 13 ~ 2024. 08. 21",
+                                            "lotNumberAddress" to "서울특별시 강서구 화곡동",
+                                            "subText" to "최준호 | 4등급 79세 남성",
+                                            "buttonText" to "지원자 4명 조회"
+                                        ),
+                                        mapOf(
+                                            "duration" to "2024. 08. 17 ~ 2024. 08. 28",
+                                            "lotNumberAddress" to "서울특별시 송파구 잠실동",
+                                            "subText" to "이지연 | 1등급 90세 여성",
+                                            "buttonText" to "지원자 2명 조회"
+                                        ),
+                                        mapOf(
+                                            "duration" to "2024. 07. 17 ~ 2024. 08. 28",
+                                            "lotNumberAddress" to "서울특별시 노원구 상계동",
+                                            "subText" to "홍길동 | 2등급 82세 남성",
+                                            "buttonText" to "지원자 5명 조회"
+                                        )
+                                    )
+                                ) {
+                                    CenterRecruitmentCard(
+                                        duration = it.get("duration")!!,
+                                        lotNumberAddress = it.get("lotNumberAddress")!!,
+                                        subText = it.get("subText")!!,
+                                        buttonText = it.get("buttonText")!!,
+                                        navigateTo = navigateTo,
+                                    )
                                 }
 
                                 item {
@@ -132,19 +226,29 @@ internal fun CenterHomeScreen(
                 }
             }
 
-            CareFloatingButton(
-                text = "+ 공고 등록",
-                onClick = { navigateTo(DeepLinkDestination.CenterJobPostingPost) },
+            AnimatedVisibility(
+                visible = !isScroll,
+                enter = fadeIn(),
+                exit = fadeOut(),
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(16.dp),
-            )
+            ) {
+                CareFloatingButton(
+                    text = "+ 공고 등록",
+                    onClick = { navigateTo(DeepLinkDestination.CenterJobPostingPost) },
+                )
+            }
         }
     }
 }
 
 @Composable
 private fun CenterRecruitmentCard(
+    duration: String,
+    lotNumberAddress: String,
+    subText: String,
+    buttonText: String,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
     Card(
@@ -164,7 +268,7 @@ private fun CenterRecruitmentCard(
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
-                text = "2024. 07. 10 ~ 2024. 07. 31",
+                text = duration,
                 style = CareTheme.typography.body3,
                 color = CareTheme.colors.gray300,
                 overflow = TextOverflow.Clip,
@@ -173,7 +277,7 @@ private fun CenterRecruitmentCard(
             )
 
             Text(
-                text = "서울특별시 강남구 신사동",
+                text = lotNumberAddress,
                 style = CareTheme.typography.subtitle2,
                 color = CareTheme.colors.gray900,
                 overflow = TextOverflow.Clip,
@@ -182,14 +286,14 @@ private fun CenterRecruitmentCard(
             )
 
             Text(
-                text = "홍길동 | 1등급 78세 여성",
+                text = subText,
                 style = CareTheme.typography.body2,
                 color = CareTheme.colors.gray500,
                 modifier = Modifier.padding(bottom = 12.dp)
             )
 
             CareButtonCardMedium(
-                text = "지원자 2명 조회",
+                text = buttonText,
                 onClick = { navigateTo(CenterApplicantInquiry("01914eaa-5106-74ab-a079-67875c1d0f42")) },
                 modifier = Modifier
                     .fillMaxWidth()

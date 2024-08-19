@@ -112,7 +112,7 @@ internal fun CenterRegisterScreen(
         topBar = {
             Column(modifier = Modifier.padding(start = 12.dp, top = 48.dp, end = 20.dp)) {
                 CareSubtitleTopBar(
-                    title = stringResource(id = R.string.center_signup),
+                    title = "센터 정보 등록",
                     onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
                     modifier = Modifier.fillMaxWidth(),
                 )
