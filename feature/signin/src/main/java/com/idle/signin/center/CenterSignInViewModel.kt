@@ -1,10 +1,10 @@
 package com.idle.signin.center
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.idle.analytics.AnalyticsHelper
 import com.idle.binding.DeepLinkDestination.CenterHome
 import com.idle.binding.base.BaseViewModel
+import com.idle.binding.base.CareBaseEvent
 import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.domain.usecase.th.SignInCenterUseCase
 import com.idle.signin.R
@@ -17,7 +17,6 @@ import javax.inject.Inject
 @HiltViewModel
 class CenterSignInViewModel @Inject constructor(
     private val signInCenterUseCase: SignInCenterUseCase,
-    private val analyticsHelper: AnalyticsHelper,
 ) : BaseViewModel() {
     private val _centerId = MutableStateFlow("")
     internal val centerId = _centerId.asStateFlow()
@@ -36,6 +35,6 @@ class CenterSignInViewModel @Inject constructor(
     internal fun signInCenter() = viewModelScope.launch {
         signInCenterUseCase(identifier = _centerId.value, password = _centerPassword.value)
             .onSuccess { baseEvent(NavigateTo(CenterHome, R.id.centerSignInFragment)) }
-            .onFailure { Log.d("test", "로그인 실패!") }
+            .onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
     }
 }

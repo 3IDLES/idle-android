@@ -29,4 +29,6 @@ sealed class CareBaseEvent {
         val destination: DeepLinkDestination,
         val popUpTo: Int? = null,
     ) : CareBaseEvent()
+
+    data class Error(val message: String) : CareBaseEvent()
 }

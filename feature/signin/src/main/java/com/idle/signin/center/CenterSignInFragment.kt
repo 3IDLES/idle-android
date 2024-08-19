@@ -1,13 +1,14 @@
 package com.idle.signin.center
 
 import androidx.activity.compose.BackHandler
-import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,6 +27,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import com.idle.binding.DeepLinkDestination.Auth
 import com.idle.binding.DeepLinkDestination.NewPassword
 import com.idle.binding.base.CareBaseEvent.NavigateTo
@@ -34,22 +36,27 @@ import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
+import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 internal class CenterSignInFragment : BaseComposeFragment() {
     override val fragmentViewModel: CenterSignInViewModel by viewModels()
+    private val snackbarHostState = SnackbarHostState()
 
     @Composable
     override fun ComposeLayout() {
         fragmentViewModel.apply {
             val centerId by centerId.collectAsStateWithLifecycle()
             val centerPassword by centerPassword.collectAsStateWithLifecycle()
+
             CenterSignInScreen(
+                snackbarHostState = snackbarHostState,
                 centerId = centerId,
                 centerPassword = centerPassword,
                 onCenterIdChanged = ::setCenterId,
@@ -67,11 +74,18 @@ internal class CenterSignInFragment : BaseComposeFragment() {
             )
         }
     }
+
+    override fun handleError(message: String) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            snackbarHostState.showSnackbar(message)
+        }
+    }
 }
 
 
 @Composable
 internal fun CenterSignInScreen(
+    snackbarHostState: SnackbarHostState,
     centerId: String,
     centerPassword: String,
     onCenterIdChanged: (String) -> Unit,
@@ -93,6 +107,12 @@ internal fun CenterSignInScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 12.dp, top = 48.dp, end = 20.dp, bottom = 12.dp),
+            )
+        },
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+                snackbar = { data -> CareSnackBar(data = data) }
             )
         },
         modifier = Modifier.addFocusCleaner(focusManager),

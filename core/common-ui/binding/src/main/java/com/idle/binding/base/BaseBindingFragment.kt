@@ -21,6 +21,8 @@ abstract class BaseBindingFragment<T : ViewDataBinding, V : BaseViewModel>
 
     protected abstract val fragmentViewModel: V
 
+    abstract fun handleError(message: String)
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?,
     ): View? {
@@ -50,5 +52,7 @@ abstract class BaseBindingFragment<T : ViewDataBinding, V : BaseViewModel>
                 deepLinkDestination = event.destination,
                 popUpTo = event.popUpTo,
             )
+
+        is CareBaseEvent.Error -> handleError(event.message)
     }
 }

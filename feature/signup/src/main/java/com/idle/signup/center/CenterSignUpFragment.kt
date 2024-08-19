@@ -95,6 +95,10 @@ internal class CenterSignUpFragment : BaseComposeFragment() {
             )
         }
     }
+
+    override fun handleError(message: String) {
+        TODO("Not yet implemented")
+    }
 }
 
 

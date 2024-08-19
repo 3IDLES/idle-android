@@ -76,6 +76,10 @@ internal class CenterProfileFragment : BaseComposeFragment() {
             )
         }
     }
+
+    override fun handleError(message: String) {
+        TODO("Not yet implemented")
+    }
 }
 
 @Composable

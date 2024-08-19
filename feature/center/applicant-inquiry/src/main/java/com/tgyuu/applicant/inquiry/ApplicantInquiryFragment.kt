@@ -63,6 +63,10 @@ internal class ApplicantInquiryFragment : BaseComposeFragment() {
             })
         }
     }
+
+    override fun handleError(message: String) {
+        TODO("Not yet implemented")
+    }
 }
 
 @Composable
