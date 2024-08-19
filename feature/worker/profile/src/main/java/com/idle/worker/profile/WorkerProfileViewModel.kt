@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
+import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.auth.Gender
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.usecase.profile.GetMyWorkerProfileUseCase
@@ -58,9 +59,7 @@ class WorkerProfileViewModel @Inject constructor(
             _gender.value = it.gender
             _profileImageUri.value = it.profileImageUrl?.toUri()
             _experienceYear.value = it.experienceYear
-        }.onFailure {
-            Log.d("test", "조회 실패!")
-        }
+        }.onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
     }
 
     fun updateWorkerProfile() = viewModelScope.launch {
@@ -78,9 +77,8 @@ class WorkerProfileViewModel @Inject constructor(
             jobSearchStatus = _workerProfile.value.jobSearchStatus,
         ).onSuccess {
             setEditState(false)
-            Log.d("test", "업데이트 성공!")
         }.onFailure {
-            Log.d("test", "업데이트 실패! $it")
+            baseEvent(CareBaseEvent.Error(it.message.toString()))
         }
     }
 

@@ -243,44 +243,66 @@ class JobPostingViewModel @Inject constructor(
         _bottomSheetType.value = sheetType
     }
 
-    internal fun postJobPosting() = viewModelScope.launch {
-        postJobPostingUseCase(
-            weekdays = _weekDays.value.toList()
-                .sortedBy { it.ordinal },
-            startTime = _workStartTime.value,
-            endTime = _workEndTime.value,
-            payType = _payType.value ?: PayType.UNKNOWN,
-            payAmount = _payAmount.value.toIntOrNull() ?: return@launch,
-            roadNameAddress = _roadNameAddress.value,
-            lotNumberAddress = _lotNumberAddress.value,
-            clientName = _clientName.value,
-            gender = _gender.value,
-            birthYear = _birthYear.value.toIntOrNull() ?: return@launch,
-            weight = _weight.value.toIntOrNull() ?: return@launch,
-            careLevel = _careLevel.value.toIntOrNull() ?: return@launch,
-            mentalStatus = _mentalStatus.value,
-            disease = _disease.value.ifBlank { null },
-            isMealAssistance = _isMealAssistance.value ?: return@launch,
-            isBowelAssistance = _isBowelAssistance.value ?: return@launch,
-            isWalkingAssistance = _isWalkingAssistance.value ?: return@launch,
-            lifeAssistance = _lifeAssistance.value.toList()
-                .sortedBy { it.ordinal }
-                .takeIf { it.isNotEmpty() } ?: listOf(LifeAssistance.NONE),
-            extraRequirement = _extraRequirement.value.ifBlank { null },
-            isExperiencePreferred = _isExperiencePreferred.value ?: return@launch,
-            applyMethod = _applyMethod.value.toList()
-                .sortedBy { it.ordinal },
-            applyDeadLineType = _applyDeadlineType.value ?: ApplyDeadlineType.UNLIMITED,
-            applyDeadline = _applyDeadline.value?.toString(),
-        ).onSuccess {
-            baseEvent(
-                CareBaseEvent.NavigateTo(
-                    destination = CenterJobPostingPostComplete,
-                    popUpTo = R.id.jobPostingPostFragment
+    internal fun postJobPosting() {
+        viewModelScope.launch {
+            postJobPostingUseCase(
+                weekdays = _weekDays.value.toList()
+                    .sortedBy { it.ordinal },
+                startTime = _workStartTime.value,
+                endTime = _workEndTime.value,
+                payType = _payType.value ?: PayType.UNKNOWN,
+                payAmount = _payAmount.value.toIntOrNull() ?: let {
+                    baseEvent(CareBaseEvent.Error("급여가 잘못되었습니다."))
+                    return@launch
+                },
+                roadNameAddress = _roadNameAddress.value,
+                lotNumberAddress = _lotNumberAddress.value,
+                clientName = _clientName.value,
+                gender = _gender.value,
+                birthYear = _birthYear.value.toIntOrNull() ?: let {
+                    baseEvent(CareBaseEvent.Error("출생년도가 잘못되었습니다."))
+                    return@launch
+                },
+                weight = _weight.value.toIntOrNull(),
+                careLevel = _careLevel.value.toIntOrNull() ?: let {
+                    baseEvent(CareBaseEvent.Error("요양등급이 잘못되었습니다."))
+                    return@launch
+                },
+                mentalStatus = _mentalStatus.value,
+                disease = _disease.value.ifBlank { null },
+                isMealAssistance = _isMealAssistance.value ?: let {
+                    baseEvent(CareBaseEvent.Error("식사보조가 잘못되었습니다."))
+                    return@launch
+                },
+                isBowelAssistance = _isBowelAssistance.value ?: let {
+                    baseEvent(CareBaseEvent.Error("배변보조가 잘못되었습니다."))
+                    return@launch
+                },
+                isWalkingAssistance = _isWalkingAssistance.value ?: let {
+                    baseEvent(CareBaseEvent.Error("이동보조가 잘못되었습니다."))
+                    return@launch
+                },
+                lifeAssistance = _lifeAssistance.value.toList()
+                    .sortedBy { it.ordinal }
+                    .takeIf { it.isNotEmpty() } ?: listOf(LifeAssistance.NONE),
+                extraRequirement = _extraRequirement.value.ifBlank { null },
+                isExperiencePreferred = _isExperiencePreferred.value ?: let {
+                    baseEvent(CareBaseEvent.Error("경력 우대 여부가 잘못되었습니다."))
+                    return@launch
+                },
+                applyMethod = _applyMethod.value.toList()
+                    .sortedBy { it.ordinal },
+                applyDeadLineType = _applyDeadlineType.value ?: ApplyDeadlineType.UNLIMITED,
+                applyDeadline = _applyDeadline.value?.toString(),
+            ).onSuccess {
+                baseEvent(
+                    CareBaseEvent.NavigateTo(
+                        destination = CenterJobPostingPostComplete,
+                        popUpTo = R.id.jobPostingPostFragment
+                    )
                 )
-            )
+            }.onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
         }
-            .onFailure { Log.d("test", "공고 등록 실패! $it") }
     }
 }
 

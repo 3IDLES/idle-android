@@ -1,6 +1,5 @@
 package com.idle.signin.worker
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.DeepLinkDestination.WorkerHome
 import com.idle.binding.base.BaseViewModel
@@ -104,7 +103,7 @@ class WorkerSignUpViewModel @Inject constructor(
     internal fun sendPhoneNumber() = viewModelScope.launch {
         sendPhoneNumberUseCase(_workerPhoneNumber.value)
             .onSuccess { startTimer() }
-            .onFailure { Log.d("test", "실패! ${it}") }
+            .onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
     }
 
     private fun startTimer() {
@@ -144,7 +143,7 @@ class WorkerSignUpViewModel @Inject constructor(
             confirmAuthCodeUseCase(_workerPhoneNumber.value, _workerAuthCode.value).onSuccess {
                 cancelTimer()
                 _isConfirmAuthCode.value = true
-            }.onFailure { Log.d("test", "실패! ${it}") }
+            }.onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
         }
     }
 
@@ -163,7 +162,7 @@ class WorkerSignUpViewModel @Inject constructor(
                     R.id.workerSignUpFragment
                 )
             )
-        }.onFailure { Log.d("test", "실패! ${it}") }
+        }.onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
     }
 }
 

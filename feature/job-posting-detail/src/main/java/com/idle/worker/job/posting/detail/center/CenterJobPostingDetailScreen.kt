@@ -1,6 +1,5 @@
 package com.idle.worker.job.posting.detail.center
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -138,7 +137,11 @@ fun SummaryScreen(
                     }
 
                     Text(
-                        text = lotNumberAddress.split(" ").subList(0, 3).joinToString(" "),
+                        text = try {
+                            lotNumberAddress.split(" ").subList(0, 3).joinToString(" ")
+                        } catch (e: IndexOutOfBoundsException) {
+                            ""
+                        },
                         style = CareTheme.typography.subtitle2,
                         color = CareTheme.colors.gray900,
                         overflow = TextOverflow.Clip,

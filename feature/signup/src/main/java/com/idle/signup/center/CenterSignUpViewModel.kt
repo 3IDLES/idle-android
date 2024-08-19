@@ -1,6 +1,5 @@
 package com.idle.signin.center
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.DeepLinkDestination
 import com.idle.binding.base.BaseViewModel
@@ -114,7 +113,7 @@ class CenterSignUpViewModel @Inject constructor(
     internal fun sendPhoneNumber() = viewModelScope.launch {
         sendPhoneNumberUseCase(_centerPhoneNumber.value)
             .onSuccess { startTimer() }
-            .onFailure { Log.d("test", "실패! ${it}") }
+            .onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
     }
 
     private fun startTimer() {
@@ -150,7 +149,7 @@ class CenterSignUpViewModel @Inject constructor(
                 cancelTimer()
                 _isConfirmAuthCode.value = true
             }
-            .onFailure { Log.d("test", "실패! ${it}") }
+            .onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
     }
 
     internal fun signUpCenter() = viewModelScope.launch {
@@ -169,19 +168,19 @@ class CenterSignUpViewModel @Inject constructor(
                     )
                 )
             }
-            .onFailure { Log.d("test", "실패! ${it}") }
+            .onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
     }
 
     internal fun validateIdentifier() = viewModelScope.launch {
         validateIdentifierUseCase(_centerId.value)
             .onSuccess { _centerIdResult.value = true }
-            .onFailure { Log.d("test", it.toString()) }
+            .onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
     }
 
     internal fun validateBusinessRegistrationNumber() = viewModelScope.launch {
         validateBusinessRegistrationNumberUseCase(_businessRegistrationNumber.value)
             .onSuccess { _businessRegistrationInfo.value = it }
-            .onFailure { Log.d("test", it.toString()) }
+            .onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
     }
 }
 

@@ -1,6 +1,5 @@
 package com.idle.withdrawal
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.DeepLinkDestination
 import com.idle.binding.base.BaseViewModel
@@ -79,7 +78,7 @@ class WithdrawalViewModel @Inject constructor(
     internal fun sendPhoneNumber() = viewModelScope.launch {
         sendPhoneNumberUseCase(_phoneNumber.value)
             .onSuccess { startTimer() }
-            .onFailure { Log.d("test", "실패! ${it}") }
+            .onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
     }
 
     private fun startTimer() {
@@ -87,9 +86,7 @@ class WithdrawalViewModel @Inject constructor(
 
         timerJob = viewModelScope.launch {
             countDownTimer.start(limitTime = TICK_INTERVAL * SECONDS_PER_MINUTE * 5)
-                .collect { timeMillis ->
-                    updateTimerDisplay(timeMillis)
-                }
+                .collect { timeMillis -> updateTimerDisplay(timeMillis) }
         }
     }
 
@@ -115,7 +112,7 @@ class WithdrawalViewModel @Inject constructor(
                 cancelTimer()
                 _isConfirmAuthCode.value = true
             }
-            .onFailure { Log.d("test", "실패! ${it}") }
+            .onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
     }
 
     internal fun withdrawal(userRole: UserRole) = viewModelScope.launch {
@@ -138,9 +135,7 @@ class WithdrawalViewModel @Inject constructor(
                     popUpTo = com.idle.withdrawal.R.id.withdrawalFragment,
                 )
             )
-        }.onFailure {
-            Log.d("test", "센터 회원탈퇴 실패! ${it}")
-        }
+        }.onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
     }
 
     private suspend fun withdrawalWorker() {
@@ -151,7 +146,7 @@ class WithdrawalViewModel @Inject constructor(
         ).onSuccess {
             withdrawalEvent(WithdrawalEvent.WithdrawalSuccess)
         }.onFailure {
-            Log.d("test", "요양보호사 회원탈퇴 실패! ${it}")
+            baseEvent(CareBaseEvent.Error(it.message.toString()))
         }
     }
 }

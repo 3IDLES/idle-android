@@ -6,24 +6,27 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.LocalOverscrollConfiguration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
 import com.idle.binding.deepLinkNavigateTo
 import com.idle.binding.repeatOnStarted
+import kotlinx.coroutines.launch
 
 abstract class BaseComposeFragment : Fragment() {
 
     protected abstract val fragmentViewModel: BaseViewModel
+    protected var snackbarHostState = SnackbarHostState()
     private lateinit var composeView: ComposeView
 
     @Composable
     abstract fun ComposeLayout()
-    abstract fun handleError(message: String)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,4 +65,11 @@ abstract class BaseComposeFragment : Fragment() {
 
         is CareBaseEvent.Error -> handleError(event.message)
     }
+
+    private fun handleError(message: String) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            snackbarHostState.showSnackbar(message)
+        }
+    }
+
 }

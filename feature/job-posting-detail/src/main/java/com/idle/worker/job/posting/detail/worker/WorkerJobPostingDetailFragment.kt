@@ -87,10 +87,6 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
         }
     }
 
-    override fun handleError(message: String) {
-        TODO("Not yet implemented")
-    }
-
     private fun handleJobPostingEvent(event: WorkerJobPostingDetailEvent) {
         when (event) {
             is WorkerJobPostingDetailEvent.CallInquiry -> {
