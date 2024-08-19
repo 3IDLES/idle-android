@@ -58,6 +58,7 @@ internal fun CustomerInformationScreen(
     onMentalStatusChanged: (MentalStatus) -> Unit,
     onDiseaseChanged: (String) -> Unit,
     setJobPostingStep: (JobPostingStep) -> Unit,
+    showSnackBar: (String) -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
@@ -232,7 +233,13 @@ internal fun CustomerInformationScreen(
         CareButtonLarge(
             text = stringResource(id = R.string.next),
             enable = gender != Gender.NONE && birthYear.isNotBlank() && weight.isNotBlank() && mentalStatus != MentalStatus.UNKNOWN,
-            onClick = { setJobPostingStep(JobPostingStep.findStep(CUSTOMER_INFORMATION.step + 1)) },
+            onClick = {
+                if ((birthYear.toIntOrNull() ?: return@CareButtonLarge) < 1900) {
+                    showSnackBar("출생년도가 잘못되었습니다.")
+                    return@CareButtonLarge
+                }
+
+                setJobPostingStep(JobPostingStep.findStep(CUSTOMER_INFORMATION.step + 1)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 28.dp),

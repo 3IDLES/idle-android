@@ -41,6 +41,7 @@ internal fun TimePaymentScreen(
     onPayAmountChanged: (String) -> Unit,
     setJobPostingStep: (JobPostingStep) -> Unit,
     showBottomSheet: (JobPostingBottomSheetType) -> Unit,
+    showSnackBar: (String) -> Unit,
 ) {
     Column(
         horizontalAlignment = Alignment.Start,
@@ -150,7 +151,12 @@ internal fun TimePaymentScreen(
                     },
                     onDone = {
                         if (weekDays.isNotEmpty() && workStartTime.isNotBlank() && workEndTime.isNotBlank() && payType != null && payAmount.isNotBlank())
-                            setJobPostingStep(JobPostingStep.findStep(JobPostingStep.TIME_PAYMENT.step + 1))
+                            if ((payAmount.toIntOrNull() ?: return@CareTextField) < 9860) {
+                                showSnackBar("급여는 최저 시급인 9860원보다 많아야 합니다.")
+                                return@CareTextField
+                            }
+
+                        setJobPostingStep(JobPostingStep.findStep(JobPostingStep.TIME_PAYMENT.step + 1))
                     },
                 )
             }
@@ -161,7 +167,14 @@ internal fun TimePaymentScreen(
         CareButtonLarge(
             text = stringResource(id = R.string.next),
             enable = weekDays.isNotEmpty() && workStartTime.isNotBlank() && workEndTime.isNotBlank() && payType != null && payAmount.isNotBlank(),
-            onClick = { setJobPostingStep(JobPostingStep.findStep(JobPostingStep.TIME_PAYMENT.step + 1)) },
+            onClick = {
+                if ((payAmount.toIntOrNull() ?: return@CareButtonLarge) < 9860) {
+                    showSnackBar("급여는 최저 시급인 9860원보다 많아야 합니다.")
+                    return@CareButtonLarge
+                }
+
+                setJobPostingStep(JobPostingStep.findStep(JobPostingStep.TIME_PAYMENT.step + 1))
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 28.dp),
