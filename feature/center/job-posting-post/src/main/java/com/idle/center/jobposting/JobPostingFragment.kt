@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
+import com.idle.binding.base.CareBaseEvent
 import com.idle.center.job.edit.JobEditScreen
 import com.idle.center.jobposting.step.AdditionalInfoScreen
 import com.idle.center.jobposting.step.AddressScreen
@@ -248,6 +249,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
                         setJobPostingStep = ::setJobPostingStep,
                         setEditState = ::setEditState,
                         setBottomSheetType = ::setBottomSheetType,
+                        showSnackBar = { baseEvent(CareBaseEvent.Error(it)) },
                     )
                 }
             }
@@ -312,6 +314,7 @@ internal fun JobPostingScreen(
     setJobPostingStep: (JobPostingStep) -> Unit,
     setEditState: (Boolean) -> Unit,
     setBottomSheetType: (JobPostingBottomSheetType) -> Unit,
+    showSnackBar: (String) -> Unit,
 ) {
     val onBackPressedDispatcher =
         LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
@@ -381,10 +384,7 @@ internal fun JobPostingScreen(
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     CareWheelPicker(
                                         items = listOf("오전", "오후"),
-                                        onItemSelected = {
-                                            localWorkStartAmPm = it
-                                            Log.d("test", it)
-                                        },
+                                        onItemSelected = { localWorkStartAmPm = it },
                                         initIndex = if (workStartTime.isBlank() ||
                                             workStartTime.substring(0, 2).toInt() <= 12
                                         ) 0 else 1,
@@ -475,10 +475,7 @@ internal fun JobPostingScreen(
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     CareWheelPicker(
                                         items = listOf("오전", "오후"),
-                                        onItemSelected = {
-                                            localWorkEndAmPm = it
-                                            Log.d("test", it)
-                                        },
+                                        onItemSelected = { localWorkEndAmPm = it },
                                         initIndex = if (workEndTime.isBlank() ||
                                             workEndTime.substring(0, 2).toInt() <= 12
                                         ) 0 else 1,

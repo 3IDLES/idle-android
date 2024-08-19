@@ -20,8 +20,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
+import java.time.format.DateTimeParseException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -133,10 +135,41 @@ class JobPostingViewModel @Inject constructor(
     }
 
     internal fun setWorkStartTime(time: String) {
+        if (_workEndTime.value.isNotEmpty()) {
+            try {
+                val startTime = LocalTime.parse(time)
+                val endTime = LocalTime.parse(_workEndTime.value)
+                if (startTime.isBefore(endTime)) {
+                    _workStartTime.value = time
+                } else {
+                    baseEvent(CareBaseEvent.Error("근무 시작 시간은 근무 종료 시간보다 빨라야 합니다."))
+                }
+            } catch (e: DateTimeParseException) {
+                baseEvent(CareBaseEvent.Error("근무 시작 시간은 근무 종료 시간보다 빨라야 합니다."))
+            }
+
+            return
+        }
+
         _workStartTime.value = time
     }
 
     internal fun setWorkEndTime(time: String) {
+        if (_workStartTime.value.isNotEmpty()) {
+            try {
+                val endTime = LocalTime.parse(time)
+                val startTime = LocalTime.parse(_workStartTime.value)
+                if (endTime.isAfter(startTime)) {
+                    _workEndTime.value = time
+                } else {
+                    baseEvent(CareBaseEvent.Error("근무 종료 시간은 근무 시작 시간보다 빨라야 합니다."))
+                }
+            } catch (e: DateTimeParseException) {
+                baseEvent(CareBaseEvent.Error("근무 종료 시간은 근무 시작 시간보다 빨라야 합니다."))
+            }
+            return
+        }
+
         _workEndTime.value = time
     }
 
@@ -150,7 +183,6 @@ class JobPostingViewModel @Inject constructor(
 
     internal fun setLotNumberAddress(address: String) {
         _lotNumberAddress.value = address
-        Log.d("test", _lotNumberAddress.value)
     }
 
     internal fun setClientName(name: String) {
