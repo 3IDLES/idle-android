@@ -41,6 +41,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.idle.binding.base.CareBaseEvent
 import com.idle.center.job.edit.JobEditScreen
+import com.idle.center.jobposting.JobPostingStep.ADDRESS
 import com.idle.center.jobposting.step.AdditionalInfoScreen
 import com.idle.center.jobposting.step.AddressScreen
 import com.idle.center.jobposting.step.CustomerInformationScreen
@@ -118,6 +119,10 @@ internal class JobPostingFragment : BaseComposeFragment() {
 
                             fragmentViewModel.setRoadNameAddress(roadName ?: "")
                             fragmentViewModel.setLotNumberAddress(lotNumber ?: "")
+
+                            if (jobPostingStep == ADDRESS) {
+                                setJobPostingStep(JobPostingStep.findStep(ADDRESS.step + 1))
+                            }
                         }
                     }
                 }
@@ -659,9 +664,10 @@ internal fun JobPostingScreen(
                                             sheetState.show()
                                         }
                                     },
+                                    showSnackBar = showSnackBar,
                                 )
 
-                                JobPostingStep.ADDRESS -> AddressScreen(
+                                ADDRESS -> AddressScreen(
                                     roadNameAddress = roadNameAddress,
                                     showPostCodeDialog = showPostCodeDialog,
                                     setJobPostingStep = setJobPostingStep,
@@ -683,6 +689,7 @@ internal fun JobPostingScreen(
                                     onMentalStatusChanged = onMentalStatusChanged,
                                     onDiseaseChanged = onDiseaseChanged,
                                     setJobPostingStep = setJobPostingStep,
+                                    showSnackBar = showSnackBar,
                                 )
 
                                 JobPostingStep.CUSTOMER_REQUIREMENT -> CustomerRequirementScreen(
