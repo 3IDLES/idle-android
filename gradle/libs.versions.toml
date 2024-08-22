@@ -19,6 +19,8 @@ androidxNavigation = "2.7.7"
 androidxFragment = "1.8.1"
 # https://developer.android.com/jetpack/androidx/releases/constraintlayout
 androidxConstraintlayout = "2.1.4"
+# https://developer.android.com/jetpack/androidx/releases/core\
+androidxSplashscreen = "1.0.1"
 
 ## Compose
 # https://developer.android.com/develop/ui/compose/bom/bom-mapping
@@ -96,6 +98,7 @@ android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", ver
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
+androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "androidxSplashscreen" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidxAppCompat" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidxConstraintlayout" }
 androidx-fragment = { module = "androidx.fragment:fragment-ktx", version.ref = "androidxFragment" }

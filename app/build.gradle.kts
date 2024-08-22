@@ -33,7 +33,6 @@ android {
 
 dependencies {
     implementation(projects.core.analytics)
-
     implementation(projects.core.data)
     implementation(projects.core.domain)
     implementation(projects.presentation)

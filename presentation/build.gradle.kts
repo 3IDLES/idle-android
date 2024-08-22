@@ -23,5 +23,7 @@ dependencies {
     implementation(projects.feature.worker.home)
     implementation(projects.feature.worker.profile)
     implementation(projects.feature.worker.jobPosting)
+
+    implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.navigation.ui)
 }
