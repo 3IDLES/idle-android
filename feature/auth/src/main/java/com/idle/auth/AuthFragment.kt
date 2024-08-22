@@ -100,7 +100,7 @@ internal fun AuthScreen(
             Spacer(modifier = Modifier.weight(2f))
 
             Row(
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Card(
