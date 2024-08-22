@@ -68,6 +68,7 @@ abstract class BaseComposeFragment : Fragment() {
 
     private fun handleError(message: String) {
         viewLifecycleOwner.lifecycleScope.launch {
+            snackbarHostState.currentSnackbarData?.dismiss()
             snackbarHostState.showSnackbar(message)
         }
     }
