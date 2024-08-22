@@ -18,6 +18,7 @@ import androidx.compose.material3.CardColors
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -25,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.idle.binding.DeepLinkDestination
 import com.idle.binding.DeepLinkDestination.WorkerJobDetail
 import com.idle.binding.base.CareBaseEvent.NavigateTo
@@ -35,7 +37,7 @@ import com.idle.designsystem.compose.component.CareButtonCardLarge
 import com.idle.designsystem.compose.component.CareHeadingTopBar
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.foundation.CareTheme
-import com.idle.domain.model.auth.UserRole
+import com.idle.domain.model.jobposting.JobPosting
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -45,8 +47,10 @@ internal class WorkerHomeFragment : BaseComposeFragment() {
     @Composable
     override fun ComposeLayout() {
         fragmentViewModel.apply {
+            val jobPostings by jobPostings.collectAsStateWithLifecycle()
 
             WorkerHomeScreen(
+                jobPostings = jobPostings,
                 navigateTo = { baseEvent(NavigateTo(it)) },
             )
         }
@@ -55,6 +59,7 @@ internal class WorkerHomeFragment : BaseComposeFragment() {
 
 @Composable
 internal fun WorkerHomeScreen(
+    jobPostings: List<JobPosting>,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
     Scaffold(
@@ -89,8 +94,12 @@ internal fun WorkerHomeScreen(
                     .padding(start = 20.dp, end = 20.dp)
                     .fillMaxSize()
             ) {
-                items(listOf(1, 2, 3, 4, 5)) {
-                    WorkerRecruitmentCard(navigateTo)
+                items(items = jobPostings,
+                    key = { it.id }) { jobPosting ->
+                    WorkerRecruitmentCard(
+                        jobPosting = jobPosting,
+                        navigateTo = navigateTo,
+                    )
                 }
 
                 item {
@@ -107,6 +116,7 @@ internal fun WorkerHomeScreen(
 
 @Composable
 private fun WorkerRecruitmentCard(
+    jobPosting: JobPosting,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
     Card(
@@ -130,11 +140,13 @@ private fun WorkerRecruitmentCard(
                     .fillMaxWidth()
                     .padding(bottom = 8.dp)
             ) {
-                CareTag(
-                    text = "초보가능",
-                    textColor = CareTheme.colors.orange500,
-                    backgroundColor = CareTheme.colors.orange100,
-                )
+                if (!jobPosting.isExperiencePreferred) {
+                    CareTag(
+                        text = "초보가능",
+                        textColor = CareTheme.colors.orange500,
+                        backgroundColor = CareTheme.colors.orange100,
+                    )
+                }
 
                 CareTag(
                     text = "D-10",
@@ -167,7 +179,7 @@ private fun WorkerRecruitmentCard(
                 )
 
                 Text(
-                    text = "도보 15분~20분",
+                    text = jobPosting.distance.toString(),
                     style = CareTheme.typography.body3,
                     color = CareTheme.colors.gray500,
                     modifier = Modifier.padding(end = 8.dp),
@@ -175,7 +187,7 @@ private fun WorkerRecruitmentCard(
             }
 
             Text(
-                text = "1등급 78세 여성",
+                text = "${jobPosting.careLevel}등급 ${jobPosting.age}세 ${jobPosting.gender.displayName}",
                 style = CareTheme.typography.body2,
                 color = CareTheme.colors.gray900,
                 modifier = Modifier.padding(end = 8.dp, bottom = 4.dp),
@@ -193,7 +205,7 @@ private fun WorkerRecruitmentCard(
                 )
 
                 Text(
-                    text = "월, 화, 수, 목, 금 | 09:00 - 15:00",
+                    text = "${jobPosting.weekdays.joinToString { "," }} | ${jobPosting.startTime} - ${jobPosting.endTime}",
                     style = CareTheme.typography.body3,
                     color = CareTheme.colors.gray500,
                 )
@@ -211,7 +223,7 @@ private fun WorkerRecruitmentCard(
                 )
 
                 Text(
-                    text = "시급 12,500 원",
+                    text = "${jobPosting.payType.displayName} ${jobPosting.payAmount} 원",
                     style = CareTheme.typography.body3,
                     color = CareTheme.colors.gray500,
                 )

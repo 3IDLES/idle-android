@@ -10,6 +10,7 @@ import com.idle.network.model.auth.SignUpWorkerRequest
 import com.idle.network.model.auth.WithdrawalCenterRequest
 import com.idle.network.model.auth.WithdrawalWorkerRequest
 import com.idle.network.model.jobposting.GetCenterJobPostingDetailResponse
+import com.idle.network.model.jobposting.GetJobPostingsResponse
 import com.idle.network.model.jobposting.JobPostingRequest
 import com.idle.network.model.profile.CallbackImageUploadRequest
 import com.idle.network.model.profile.GetCenterProfileResponse
@@ -134,4 +135,10 @@ interface CareApi {
     suspend fun getJobPostingDetailCenter(
         @Path("job-posting-id") jobPostingId: String
     ): Response<GetCenterJobPostingDetailResponse>
+
+    @GET("/api/v1/job-postings")
+    suspend fun getJobPostings(
+        @Query("next") next: String?,
+        @Query("limit") limit: Int,
+    ): Response<GetJobPostingsResponse>
 }
