@@ -3,7 +3,7 @@ package com.idle.worker.home
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
-import com.idle.domain.model.jobposting.JobPosting
+import com.idle.domain.model.jobposting.WorkerJobPosting
 import com.idle.domain.usecase.jobposting.GetJobPostingsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,8 +17,8 @@ class WorkerHomeViewModel @Inject constructor(
 ) : BaseViewModel() {
     private val next = MutableStateFlow<String?>(null)
 
-    private val _jobPostings = MutableStateFlow<List<JobPosting>>(emptyList())
-    val jobPostings = _jobPostings.asStateFlow()
+    private val _Worker_jobPostings = MutableStateFlow<List<WorkerJobPosting>>(emptyList())
+    val jobPostings = _Worker_jobPostings.asStateFlow()
 
     private var callType: JobPostingCallType = JobPostingCallType.IN_APP
 
@@ -44,7 +44,7 @@ class WorkerHomeViewModel @Inject constructor(
             if (nextId == null) {
                 callType = JobPostingCallType.CRAWLING
             }
-            _jobPostings.value += postings
+            _Worker_jobPostings.value += postings
         }.onFailure {
 
         }

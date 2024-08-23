@@ -7,8 +7,9 @@ import com.idle.domain.model.job.DayOfWeek
 import com.idle.domain.model.job.LifeAssistance
 import com.idle.domain.model.job.MentalStatus
 import com.idle.domain.model.job.PayType
+import com.idle.domain.model.jobposting.CenterJobPosting
 import com.idle.domain.model.jobposting.CenterJobPostingDetail
-import com.idle.domain.model.jobposting.JobPosting
+import com.idle.domain.model.jobposting.WorkerJobPosting
 
 interface JobPostingRepository {
     suspend fun postJobPosting(
@@ -66,5 +67,10 @@ interface JobPostingRepository {
 
     suspend fun getCenterJobPostingDetail(jobPostingId: String): Result<CenterJobPostingDetail>
 
-    suspend fun getJobPostings(next: String?, limit: Int): Result<Pair<String?, List<JobPosting>>>
+    suspend fun getJobPostings(
+        next: String?,
+        limit: Int
+    ): Result<Pair<String?, List<WorkerJobPosting>>>
+
+    suspend fun getJobPostingsInProgress(): Result<List<CenterJobPosting>>
 }

@@ -7,8 +7,9 @@ import com.idle.domain.model.job.DayOfWeek
 import com.idle.domain.model.job.LifeAssistance
 import com.idle.domain.model.job.MentalStatus
 import com.idle.domain.model.job.PayType
+import com.idle.domain.model.jobposting.CenterJobPosting
 import com.idle.domain.model.jobposting.CenterJobPostingDetail
-import com.idle.domain.model.jobposting.JobPosting
+import com.idle.domain.model.jobposting.WorkerJobPosting
 import com.idle.domain.repositorry.jobposting.JobPostingRepository
 import com.idle.network.model.jobposting.JobPostingRequest
 import com.idle.network.source.jobposting.JobPostingDataSource
@@ -130,8 +131,11 @@ class JobPostingRepositoryImpl @Inject constructor(
     override suspend fun getJobPostings(
         next: String?,
         limit: Int
-    ): Result<Pair<String?, List<JobPosting>>> = jobPostingDataSource.getJobPostings(
+    ): Result<Pair<String?, List<WorkerJobPosting>>> = jobPostingDataSource.getJobPostings(
         next = next,
         limit = limit
     ).mapCatching { it.toVO() }
+
+    override suspend fun getJobPostingsInProgress(): Result<List<CenterJobPosting>> =
+        jobPostingDataSource.getJobPostingsInProgress().mapCatching { it.toVO() }
 }

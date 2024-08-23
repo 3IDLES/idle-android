@@ -5,7 +5,7 @@ import com.idle.domain.model.job.ApplyDeadlineType
 import com.idle.domain.model.job.DayOfWeek
 import com.idle.domain.model.job.PayType
 
-data class JobPosting(
+data class WorkerJobPosting(
     val id: String,
     val age: Int,
     val applyDeadline: String,

@@ -23,6 +23,7 @@ import androidx.compose.material3.CardColors
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -46,6 +47,7 @@ import com.idle.designsystem.compose.component.CareHeadingTopBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareTabBar
 import com.idle.designsystem.compose.foundation.CareTheme
+import com.idle.domain.model.jobposting.CenterJobPosting
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -56,9 +58,15 @@ internal class CenterHomeFragment : BaseComposeFragment() {
     override fun ComposeLayout() {
         fragmentViewModel.apply {
             val recruitmentPostStatus by recruitmentPostStatus.collectAsStateWithLifecycle()
+            val jobPostingsInProgress by jobPostingsInProgress.collectAsStateWithLifecycle()
+
+            LaunchedEffect(true) {
+                getJobPostingsInProgress()
+            }
 
             CenterHomeScreen(
                 recruitmentPostStatus = recruitmentPostStatus,
+                workerJobPostingsInProgresses = jobPostingsInProgress,
                 setRecruitmentPostStatus = ::setRecruitmentPostStatus,
                 navigateTo = { baseEvent(NavigateTo(it)) }
             )
@@ -69,6 +77,7 @@ internal class CenterHomeFragment : BaseComposeFragment() {
 @Composable
 internal fun CenterHomeScreen(
     recruitmentPostStatus: RecruitmentPostStatus,
+    workerJobPostingsInProgresses: List<CenterJobPosting>,
     setRecruitmentPostStatus: (RecruitmentPostStatus) -> Unit,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
@@ -115,44 +124,11 @@ internal fun CenterHomeScreen(
                                 verticalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
                                 items(
-                                    listOf(
-                                        mapOf(
-                                            "duration" to "2024. 08. 10 ~ 2024. 08. 31",
-                                            "lotNumberAddress" to "서울특별시 서초구 반포동",
-                                            "subText" to "김민수 | 2등급 85세 남성",
-                                            "buttonText" to "지원자 3명 조회"
-                                        ),
-                                        mapOf(
-                                            "duration" to "2024. 08. 16 ~ 2024. 08. 24",
-                                            "lotNumberAddress" to "서울특별시 용산구 이태원동",
-                                            "subText" to "박영희 | 3등급 72세 여성",
-                                            "buttonText" to "지원자 1명 조회"
-                                        ),
-                                        mapOf(
-                                            "duration" to "2024. 08. 13 ~ 2024. 08. 21",
-                                            "lotNumberAddress" to "서울특별시 강서구 화곡동",
-                                            "subText" to "최준호 | 4등급 79세 남성",
-                                            "buttonText" to "지원자 4명 조회"
-                                        ),
-                                        mapOf(
-                                            "duration" to "2024. 08. 17 ~ 2024. 08. 28",
-                                            "lotNumberAddress" to "서울특별시 송파구 잠실동",
-                                            "subText" to "이지연 | 1등급 90세 여성",
-                                            "buttonText" to "지원자 2명 조회"
-                                        ),
-                                        mapOf(
-                                            "duration" to "2024. 07. 17 ~ 2024. 08. 28",
-                                            "lotNumberAddress" to "서울특별시 노원구 상계동",
-                                            "subText" to "홍길동 | 2등급 82세 남성",
-                                            "buttonText" to "지원자 5명 조회"
-                                        )
-                                    )
-                                ) {
+                                    items = workerJobPostingsInProgresses,
+                                    key = { it.id },
+                                ) { jobPosting ->
                                     CenterRecruitmentCard(
-                                        duration = it.get("duration")!!,
-                                        lotNumberAddress = it.get("lotNumberAddress")!!,
-                                        subText = it.get("subText")!!,
-                                        buttonText = it.get("buttonText")!!,
+                                        centerJobPosting = jobPosting,
                                         navigateTo = navigateTo,
                                     )
                                 }
@@ -172,44 +148,11 @@ internal fun CenterHomeScreen(
                                 verticalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
                                 items(
-                                    listOf(
-                                        mapOf(
-                                            "duration" to "2024. 08. 10 ~ 2024. 08. 31",
-                                            "lotNumberAddress" to "서울특별시 서초구 반포동",
-                                            "subText" to "김민수 | 2등급 85세 남성",
-                                            "buttonText" to "지원자 3명 조회"
-                                        ),
-                                        mapOf(
-                                            "duration" to "2024. 08. 16 ~ 2024. 08. 24",
-                                            "lotNumberAddress" to "서울특별시 용산구 이태원동",
-                                            "subText" to "박영희 | 3등급 72세 여성",
-                                            "buttonText" to "지원자 1명 조회"
-                                        ),
-                                        mapOf(
-                                            "duration" to "2024. 08. 13 ~ 2024. 08. 21",
-                                            "lotNumberAddress" to "서울특별시 강서구 화곡동",
-                                            "subText" to "최준호 | 4등급 79세 남성",
-                                            "buttonText" to "지원자 4명 조회"
-                                        ),
-                                        mapOf(
-                                            "duration" to "2024. 08. 17 ~ 2024. 08. 28",
-                                            "lotNumberAddress" to "서울특별시 송파구 잠실동",
-                                            "subText" to "이지연 | 1등급 90세 여성",
-                                            "buttonText" to "지원자 2명 조회"
-                                        ),
-                                        mapOf(
-                                            "duration" to "2024. 07. 17 ~ 2024. 08. 28",
-                                            "lotNumberAddress" to "서울특별시 노원구 상계동",
-                                            "subText" to "홍길동 | 2등급 82세 남성",
-                                            "buttonText" to "지원자 5명 조회"
-                                        )
-                                    )
-                                ) {
+                                    items = workerJobPostingsInProgresses,
+                                    key = { it.id },
+                                ) { jobPosting ->
                                     CenterRecruitmentCard(
-                                        duration = it.get("duration")!!,
-                                        lotNumberAddress = it.get("lotNumberAddress")!!,
-                                        subText = it.get("subText")!!,
-                                        buttonText = it.get("buttonText")!!,
+                                        centerJobPosting = jobPosting,
                                         navigateTo = navigateTo,
                                     )
                                 }
@@ -236,7 +179,9 @@ internal fun CenterHomeScreen(
             ) {
                 CareFloatingButton(
                     text = "+ 공고 등록",
-                    onClick = { navigateTo(DeepLinkDestination.CenterJobPostingPost) },
+                    onClick = {
+                        navigateTo(DeepLinkDestination.CenterJobPostingPost)
+                    },
                 )
             }
         }
@@ -245,10 +190,7 @@ internal fun CenterHomeScreen(
 
 @Composable
 private fun CenterRecruitmentCard(
-    duration: String,
-    lotNumberAddress: String,
-    subText: String,
-    buttonText: String,
+    centerJobPosting: CenterJobPosting,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
     Card(
@@ -261,14 +203,12 @@ private fun CenterRecruitmentCard(
         ),
         border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
         modifier = Modifier.clickable {
-            navigateTo(
-                DeepLinkDestination.CenterJobDetail("01915a82-2910-7ce5-91da-b35d88d30743")
-            )
+            navigateTo(DeepLinkDestination.CenterJobDetail(centerJobPosting.id))
         }
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
-                text = duration,
+                text = centerJobPosting.createdAt + " ~ " + centerJobPosting.applyDeadline,
                 style = CareTheme.typography.body3,
                 color = CareTheme.colors.gray300,
                 overflow = TextOverflow.Clip,
@@ -277,7 +217,7 @@ private fun CenterRecruitmentCard(
             )
 
             Text(
-                text = lotNumberAddress,
+                text = centerJobPosting.lotNumberAddress,
                 style = CareTheme.typography.subtitle2,
                 color = CareTheme.colors.gray900,
                 overflow = TextOverflow.Clip,
@@ -286,15 +226,16 @@ private fun CenterRecruitmentCard(
             )
 
             Text(
-                text = subText,
+                text = "${centerJobPosting.clientName} | ${centerJobPosting.careLevel}등급 ${centerJobPosting.age}세 ${centerJobPosting.gender.displayName}",
                 style = CareTheme.typography.body2,
                 color = CareTheme.colors.gray500,
                 modifier = Modifier.padding(bottom = 12.dp)
             )
 
             CareButtonCardMedium(
-                text = buttonText,
-                onClick = { navigateTo(CenterApplicantInquiry("01914eaa-5106-74ab-a079-67875c1d0f42")) },
+                text = "지원자 0명 조회",
+                enable = false,
+                onClick = { navigateTo(CenterApplicantInquiry(centerJobPosting.id)) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 4.dp),

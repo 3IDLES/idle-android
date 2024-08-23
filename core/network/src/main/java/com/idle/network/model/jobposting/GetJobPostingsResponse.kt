@@ -4,22 +4,22 @@ import com.idle.domain.model.auth.Gender
 import com.idle.domain.model.job.ApplyDeadlineType
 import com.idle.domain.model.job.DayOfWeek
 import com.idle.domain.model.job.PayType
-import com.idle.domain.model.jobposting.JobPosting
+import com.idle.domain.model.jobposting.WorkerJobPosting
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class GetJobPostingsResponse(
-    @SerialName("items") val jobPostingResponses: List<JobPostingResponse>,
+    @SerialName("items") val workerJobPostingRespons: List<WorkerJobPostingResponse>,
     val next: String?,
     val total: Int
 ) {
-    fun toVO(): Pair<String?, List<JobPosting>> =
-        next to jobPostingResponses.map { it.toVO() }
+    fun toVO(): Pair<String?, List<WorkerJobPosting>> =
+        next to workerJobPostingRespons.map { it.toVO() }
 }
 
 @Serializable
-data class JobPostingResponse(
+data class WorkerJobPostingResponse(
     val age: Int,
     val applyDeadline: String,
     val applyDeadlineType: String,
@@ -36,7 +36,7 @@ data class JobPostingResponse(
     val startTime: String,
     val weekdays: List<String>
 ) {
-    fun toVO(): JobPosting = JobPosting(
+    fun toVO(): WorkerJobPosting = WorkerJobPosting(
         age = age,
         applyDeadline = applyDeadline,
         applyDeadlineType = ApplyDeadlineType.create(applyDeadlineType),

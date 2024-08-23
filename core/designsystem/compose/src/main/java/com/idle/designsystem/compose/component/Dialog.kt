@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.idle.designsystem.compose.FLIP
 import com.idle.designsystem.compose.foundation.CareTheme
 
@@ -41,7 +42,10 @@ fun CareDialog(
     rightButtonBorder: BorderStroke? = null,
     onDismissRequest: () -> Unit = {},
 ) {
-    Dialog(onDismissRequest = onDismissRequest) {
+    Dialog(
+        onDismissRequest = onDismissRequest,
+        properties = DialogProperties(usePlatformDefaultWidth = false),
+    ) {
         Card(
             colors = CardColors(
                 contentColor = CareTheme.colors.white000,
@@ -74,13 +78,15 @@ fun CareDialog(
                         style = CareTheme.typography.body3,
                         color = descriptionColor,
                         textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(bottom = 16.dp),
+                        modifier = Modifier.padding(bottom = 8.dp),
                     )
                 }
 
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp),
                 ) {
                     CareDialogButton(
                         text = leftButtonText,
