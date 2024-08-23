@@ -10,6 +10,7 @@ import com.idle.domain.model.job.PayType
 import com.idle.domain.model.jobposting.CenterJobPosting
 import com.idle.domain.model.jobposting.CenterJobPostingDetail
 import com.idle.domain.model.jobposting.WorkerJobPosting
+import com.idle.domain.model.jobposting.WorkerJobPostingDetail
 import com.idle.domain.repositorry.jobposting.JobPostingRepository
 import com.idle.network.model.jobposting.JobPostingRequest
 import com.idle.network.source.jobposting.JobPostingDataSource
@@ -126,6 +127,10 @@ class JobPostingRepositoryImpl @Inject constructor(
 
     override suspend fun getCenterJobPostingDetail(jobPostingId: String): Result<CenterJobPostingDetail> =
         jobPostingDataSource.getCenterJobPostingDetail(jobPostingId)
+            .mapCatching { it.toVO() }
+
+    override suspend fun getWorkerJobPostingDetail(jobPostingId: String): Result<WorkerJobPostingDetail> =
+        jobPostingDataSource.getWorkerJobPostingDetail(jobPostingId)
             .mapCatching { it.toVO() }
 
     override suspend fun getJobPostings(

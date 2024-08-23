@@ -25,6 +25,8 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -37,6 +39,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.fragment.navArgs
 import com.idle.binding.repeatOnStarted
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
@@ -49,39 +53,50 @@ import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.component.CareTextFieldLong
 import com.idle.designsystem.compose.foundation.CareTheme
+import com.idle.domain.model.jobposting.WorkerJobPostingDetail
 import com.idle.worker.job.posting.detail.worker.map.PlaceDetailScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
+    private val args: WorkerJobPostingDetailFragmentArgs by navArgs()
     override val fragmentViewModel: WorkerJobPostingDetailViewModel by viewModels()
 
     @Composable
     override fun ComposeLayout() {
         fragmentViewModel.apply {
             val (showPlaceDetail, setShowPlaceDetail) = rememberSaveable { mutableStateOf(false) }
+            val jobPostingDetail by workerJobPostingDetail.collectAsStateWithLifecycle()
 
             viewLifecycleOwner.repeatOnStarted {
                 eventFlow.collect { handleJobPostingEvent(it) }
             }
 
-            CareStateAnimator(
-                targetState = showPlaceDetail,
-                transitionCondition = showPlaceDetail,
-                modifier = Modifier.fillMaxSize(),
-            ) { state ->
-                if (state) {
-                    PlaceDetailScreen(
-                        callback = { setShowPlaceDetail(false) },
-                        homeLatLng = 37.5670135 to 126.9883740,
-                        workspaceLatLng = 37.5690135 to 126.9783740,
-                    )
-                } else {
-                    WorkerJobPostingDetailScreen(
-                        showPlaceDetail = setShowPlaceDetail,
-                        requestEvent = ::workerJobPostingDetailEvent,
-                    )
+            LaunchedEffect(true) {
+                getJobPostingDetail(args.jobPostingId)
+            }
+
+            jobPostingDetail?.let {
+                CareStateAnimator(
+                    targetState = showPlaceDetail,
+                    transitionCondition = showPlaceDetail,
+                    modifier = Modifier.fillMaxSize(),
+                ) { state ->
+                    if (state) {
+                        PlaceDetailScreen(
+                            callback = { setShowPlaceDetail(false) },
+                            homeLatLng = it.latitude.toDouble() to it.longitude.toDouble(),
+                            workspaceLatLng = it.latitude.toDouble() to it.longitude.toDouble(),
+                            lotNumberAddress = it.lotNumberAddress,
+                        )
+                    } else {
+                        WorkerJobPostingDetailScreen(
+                            jobPostingDetail = it,
+                            showPlaceDetail = setShowPlaceDetail,
+                            requestEvent = ::workerJobPostingDetailEvent,
+                        )
+                    }
                 }
             }
         }
@@ -99,6 +114,7 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
 
 @Composable
 internal fun WorkerJobPostingDetailScreen(
+    jobPostingDetail: WorkerJobPostingDetail,
     showPlaceDetail: (Boolean) -> Unit,
     requestEvent: (WorkerJobPostingDetailEvent) -> Unit,
 ) {
@@ -128,7 +144,7 @@ internal fun WorkerJobPostingDetailScreen(
 
                 CareCard(
                     title = stringResource(id = R.string.inquiry_by_call),
-                    description = "네 얼간이 요양보호센터 | 010-1234-5678",
+                    description = "${jobPostingDetail.centerName} | 010-1234-5678",
                     titleLeftComponent = {
                         Image(
                             painter = painterResource(R.drawable.ic_call),
@@ -198,7 +214,12 @@ internal fun WorkerJobPostingDetailScreen(
                     }
 
                     Text(
-                        text = "서울특별시 강남구 신사동",
+                        text = try {
+                            jobPostingDetail.lotNumberAddress.split(" ").subList(0, 3)
+                                .joinToString(" ")
+                        } catch (e: IndexOutOfBoundsException) {
+                            ""
+                        },
                         style = CareTheme.typography.subtitle1,
                         color = CareTheme.colors.gray900,
                         overflow = TextOverflow.Clip,
@@ -207,7 +228,7 @@ internal fun WorkerJobPostingDetailScreen(
                     )
 
                     Text(
-                        text = "1등급 78세 여성",
+                        text = "${jobPostingDetail.careLevel}등급 ${jobPostingDetail.age}세 ${jobPostingDetail.gender.displayName}",
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray900,
                         modifier = Modifier.padding(end = 8.dp, bottom = 4.dp),
@@ -225,7 +246,10 @@ internal fun WorkerJobPostingDetailScreen(
                         )
 
                         Text(
-                            text = "월, 화, 수, 목, 금 | 09:00 - 15:00",
+                            text = "${
+                                jobPostingDetail.weekdays.toList().sortedBy { it.ordinal }
+                                    .joinToString(",") { it.displayName }
+                            } | ${jobPostingDetail.startTime} - ${jobPostingDetail.endTime}",
                             style = CareTheme.typography.body2,
                             color = CareTheme.colors.gray500,
                         )
@@ -241,7 +265,7 @@ internal fun WorkerJobPostingDetailScreen(
                         )
 
                         Text(
-                            text = "시급 12,500 원",
+                            text = "${jobPostingDetail.payType.displayName} ${jobPostingDetail.payAmount}원",
                             style = CareTheme.typography.body2,
                             color = CareTheme.colors.gray500,
                         )
@@ -263,7 +287,7 @@ internal fun WorkerJobPostingDetailScreen(
                     )
 
                     Text(
-                        text = "거주지에서 서울특별시 중 순화동 151까지",
+                        text = "거주지에서 ${jobPostingDetail.lotNumberAddress} 까지",
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray500,
                         modifier = Modifier.padding(bottom = 4.dp),
@@ -282,7 +306,7 @@ internal fun WorkerJobPostingDetailScreen(
                         )
 
                         Text(
-                            text = "걸어서 5분 ~ 10 소요",
+                            text = "걸어서 0분 ~ 5분 소요",
                             style = CareTheme.typography.subtitle2,
                             color = CareTheme.colors.gray500,
                         )
@@ -295,8 +319,8 @@ internal fun WorkerJobPostingDetailScreen(
                             .clip(RoundedCornerShape(8.dp)),
                     ) {
                         CareMap(
-                            homeLatLng = 37.5670135 to 126.9883740,
-                            workspaceLatLng = 37.5690135 to 126.9783740,
+                            homeLatLng = jobPostingDetail.latitude.toDouble() to jobPostingDetail.longitude.toDouble(),
+                            workspaceLatLng = jobPostingDetail.latitude.toDouble() to jobPostingDetail.longitude.toDouble(),
                             onMapClick = { showPlaceDetail(true) },
                             modifier = Modifier.fillMaxSize(),
                         )
@@ -360,25 +384,26 @@ internal fun WorkerJobPostingDetailScreen(
 
                         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             Text(
-                                text = "월, 화, 수, 목, 금",
+                                text = jobPostingDetail.weekdays.toList().sortedBy { it.ordinal }
+                                    .joinToString(",") { it.displayName },
                                 style = CareTheme.typography.body2,
                                 color = CareTheme.colors.gray900,
                             )
 
                             Text(
-                                text = "09:00 - 15:00",
+                                text = "${jobPostingDetail.startTime} - ${jobPostingDetail.endTime}",
                                 style = CareTheme.typography.body2,
                                 color = CareTheme.colors.gray900,
                             )
 
                             Text(
-                                text = "12,500원",
+                                text = "${jobPostingDetail.payType.displayName} ${jobPostingDetail.payAmount} 원",
                                 style = CareTheme.typography.body2,
                                 color = CareTheme.colors.gray900,
                             )
 
                             Text(
-                                text = "서울특별시 중구 순화동 151",
+                                text = jobPostingDetail.lotNumberAddress,
                                 style = CareTheme.typography.body2,
                                 color = CareTheme.colors.gray900,
                             )
@@ -431,19 +456,20 @@ internal fun WorkerJobPostingDetailScreen(
 
                         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             Text(
-                                text = "남성",
+                                text = jobPostingDetail.gender.displayName,
                                 style = CareTheme.typography.body2,
                                 color = CareTheme.colors.gray900,
                             )
 
                             Text(
-                                text = "74세",
+                                text = "${jobPostingDetail.age}세",
                                 style = CareTheme.typography.body2,
                                 color = CareTheme.colors.gray900,
                             )
 
                             Text(
-                                text = "71kg",
+                                text = if (jobPostingDetail.weight != null) "${jobPostingDetail.weight}kg"
+                                else "-",
                                 style = CareTheme.typography.body2,
                                 color = CareTheme.colors.gray900,
                             )
@@ -482,19 +508,19 @@ internal fun WorkerJobPostingDetailScreen(
                             verticalArrangement = Arrangement.spacedBy(8.dp),
                         ) {
                             Text(
-                                text = "2등급",
+                                text = "${jobPostingDetail.careLevel}등급",
                                 style = CareTheme.typography.body2,
                                 color = CareTheme.colors.gray900,
                             )
 
                             Text(
-                                text = "치매 초기",
+                                text = jobPostingDetail.mentalStatus.displayName,
                                 style = CareTheme.typography.body2,
                                 color = CareTheme.colors.gray900,
                             )
 
                             Text(
-                                text = "어쩌고저쩌고",
+                                text = jobPostingDetail.disease ?: "-",
                                 style = CareTheme.typography.body2,
                                 color = CareTheme.colors.gray900,
                             )
@@ -542,25 +568,30 @@ internal fun WorkerJobPostingDetailScreen(
                             verticalArrangement = Arrangement.spacedBy(8.dp),
                         ) {
                             Text(
-                                text = stringResource(id = R.string.unnecessary),
+                                text = if (jobPostingDetail.isMealAssistance) stringResource(id = R.string.necessary)
+                                else stringResource(id = R.string.unnecessary),
                                 style = CareTheme.typography.body2,
                                 color = CareTheme.colors.gray900,
                             )
 
                             Text(
-                                text = "필요",
+                                text = if (jobPostingDetail.isBowelAssistance) stringResource(id = R.string.necessary)
+                                else stringResource(id = R.string.unnecessary),
                                 style = CareTheme.typography.body2,
                                 color = CareTheme.colors.gray900,
                             )
 
                             Text(
-                                text = "필요",
+                                text = if (jobPostingDetail.isWalkingAssistance) stringResource(id = R.string.necessary)
+                                else stringResource(id = R.string.unnecessary),
                                 style = CareTheme.typography.body2,
                                 color = CareTheme.colors.gray900,
                             )
 
                             Text(
-                                text = "청소, 말벗",
+                                text = jobPostingDetail.lifeAssistance.toList()
+                                    .sortedBy { it.ordinal }
+                                    .joinToString(",") { it.displayName },
                                 style = CareTheme.typography.body2,
                                 color = CareTheme.colors.gray900,
                             )
@@ -577,7 +608,7 @@ internal fun WorkerJobPostingDetailScreen(
                     )
 
                     CareTextFieldLong(
-                        value = "5~60대 남성 선생님을 선호합니다.",
+                        value = jobPostingDetail.extraRequirement ?: "-",
                         enabled = false,
                         onValueChanged = {},
                     )
@@ -625,19 +656,22 @@ internal fun WorkerJobPostingDetailScreen(
                             verticalArrangement = Arrangement.spacedBy(8.dp),
                         ) {
                             Text(
-                                text = "초보 가능",
+                                text = if (jobPostingDetail.isExperiencePreferred) stringResource(id = R.string.experience_preferred)
+                                else stringResource(id = R.string.beginner_possible),
                                 style = CareTheme.typography.body2,
                                 color = CareTheme.colors.gray900,
                             )
 
                             Text(
-                                text = "전화",
+                                text = jobPostingDetail.applyMethod.toList()
+                                    .sortedBy { it.ordinal }
+                                    .joinToString(",") { it.displayName },
                                 style = CareTheme.typography.body2,
                                 color = CareTheme.colors.gray900,
                             )
 
                             Text(
-                                text = "2024. 11. 12",
+                                text = jobPostingDetail.applyDeadline.toString(),
                                 style = CareTheme.typography.body2,
                                 color = CareTheme.colors.gray900,
                             )
@@ -660,8 +694,8 @@ internal fun WorkerJobPostingDetailScreen(
                     )
 
                     CareCard(
-                        title = "네얼간이 요양보호소",
-                        description = "용인시 어쩌고 저쩌고",
+                        title = jobPostingDetail.centerName,
+                        description = jobPostingDetail.centerRoadNameAddress,
                     )
                 }
 
