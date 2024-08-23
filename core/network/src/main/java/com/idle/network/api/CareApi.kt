@@ -33,7 +33,7 @@ import retrofit2.http.Query
 import retrofit2.http.Url
 
 interface CareApi {
-    @POST("/api/v1/auth/center/refresh")
+    @POST("/api/v1/auth/common/refresh")
     suspend fun refreshToken(@Body refreshTokenRequest: RefreshTokenRequest): Response<TokenResponse>
 
     @POST("/api/v1/auth/common/send")

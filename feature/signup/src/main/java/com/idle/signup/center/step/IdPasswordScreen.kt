@@ -20,8 +20,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -53,11 +55,18 @@ internal fun IdPasswordScreen(
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
     val idValidationResult = validateId(centerId)
     val passwordValidationResult = validatePassword(centerPassword)
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
+    }
+
+    LaunchedEffect(centerIdResult) {
+        if (centerIdResult) {
+            focusManager.moveFocus(FocusDirection.Down)
+        }
     }
 
     BackHandler { setSignUpStep(CenterSignUpStep.findStep(ID_PASSWORD.step - 1)) }
@@ -157,7 +166,7 @@ internal fun IdPasswordScreen(
                 visualTransformation = PasswordVisualTransformation(),
                 supportingText = if (passwordValidationResult.isValid) stringResource(id = R.string.password_available) else "",
                 onValueChanged = onCenterPasswordChanged,
-                onDone = { },
+                onDone = { if (centerPassword.length >= 8) focusManager.moveFocus(FocusDirection.Down) },
                 modifier = Modifier.fillMaxWidth(),
             )
         }
@@ -174,7 +183,13 @@ internal fun IdPasswordScreen(
                     id = R.string.password_mismatch
                 ) else "",
                 onValueChanged = onCenterPasswordForConfirmChanged,
-                onDone = { },
+                onDone = {
+                    if (idValidationResult.isValid && passwordValidationResult.isValid &&
+                        (centerPassword == centerPasswordForConfirm)
+                    ) {
+                        signUpCenter()
+                    }
+                },
                 modifier = Modifier.fillMaxWidth(),
             )
         }

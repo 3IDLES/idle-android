@@ -161,7 +161,12 @@ internal fun WorkerSignUpScreen(
         snackbarHost = {
             SnackbarHost(
                 hostState = snackbarHostState,
-                snackbar = { data -> CareSnackBar(data = data) }
+                snackbar = { data ->
+                    CareSnackBar(
+                        data = data,
+                        modifier = Modifier.padding(bottom = 104.dp),
+                    )
+                }
             )
         },
         modifier = Modifier.addFocusCleaner(focusManager),
