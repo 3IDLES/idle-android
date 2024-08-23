@@ -46,7 +46,7 @@
     <string name="id_available">사용 가능한 아이디 입니다</string>
     <string name="check_duplicate">중복 확인</string>
     <string name="set_password_label">비밀번호 설정</string>
-    <string name="password_conditions">(영문+숫자 조합 10자리 이상 등 조건)</string>
+    <string name="password_conditions">(영문+숫자 조합 8자리 이상 등 조건)</string>
     <string name="password_available">사용 가능한 비밀번호 입니다.</string>
     <string name="password_mismatch">비밀번호가 일치하지 않습니다.</string>
 
