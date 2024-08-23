@@ -144,7 +144,12 @@ class WithdrawalViewModel @Inject constructor(
                 .sortedBy { it.ordinal }
                 .joinToString("|"),
         ).onSuccess {
-            withdrawalEvent(WithdrawalEvent.WithdrawalSuccess)
+            baseEvent(
+                CareBaseEvent.NavigateTo(
+                    destination = DeepLinkDestination.Auth,
+                    popUpTo = com.idle.withdrawal.R.id.withdrawalFragment,
+                )
+            )
         }.onFailure {
             baseEvent(CareBaseEvent.Error(it.message.toString()))
         }

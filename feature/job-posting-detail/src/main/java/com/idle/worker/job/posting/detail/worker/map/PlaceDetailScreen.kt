@@ -14,6 +14,7 @@ import com.idle.designsystem.compose.foundation.CareTheme
 @Composable
 fun PlaceDetailScreen(
     callback: () -> Unit,
+    lotNumberAddress: String,
     workspaceLatLng: Pair<Double, Double>,
     homeLatLng: Pair<Double, Double>,
 ) {
@@ -23,7 +24,7 @@ fun PlaceDetailScreen(
         containerColor = CareTheme.colors.white000,
         topBar = {
             CareSubtitleTopBar(
-                title = "서울특별시 중구 순화동 151",
+                title = lotNumberAddress,
                 onNavigationClick = callback,
                 modifier = Modifier.padding(
                     start = 12.dp,

@@ -117,6 +117,16 @@ class AuthRepositoryImpl @Inject constructor(
             phoneNumber = phoneNumber,
             authCode = authCode,
         )
+    ).fold(
+        onSuccess = {
+            withContext(Dispatchers.IO) {
+                tokenDataSource.clearToken()
+                launch { userInfoDataSource.clearUserRole() }
+                launch { userInfoDataSource.clearUserInfo() }
+                Result.success(Unit)
+            }
+        },
+        onFailure = { Result.failure(it) }
     )
 
     override suspend fun logoutWorker(): Result<Unit> = authDataSource.logoutWorker()

@@ -32,7 +32,7 @@ class AuthDataSource @Inject constructor(
     suspend fun signUpWorker(signUpWorkerRequest: SignUpWorkerRequest): Result<TokenResponse> =
         careApi.signUpWorker(signUpWorkerRequest).onResponse()
 
-    suspend fun signInWorker(signInWorkerRequest: SignInWorkerRequest): Result<Unit> =
+    suspend fun signInWorker(signInWorkerRequest: SignInWorkerRequest): Result<TokenResponse> =
         careApi.signInWorker(signInWorkerRequest).onResponse()
 
     suspend fun logoutWorker(): Result<Unit> = careApi.logoutWorker().onResponse()

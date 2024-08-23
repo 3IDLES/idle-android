@@ -12,6 +12,7 @@ import com.idle.network.model.auth.WithdrawalWorkerRequest
 import com.idle.network.model.jobposting.GetCenterJobPostingDetailResponse
 import com.idle.network.model.jobposting.GetJobPostingsInProgressResponse
 import com.idle.network.model.jobposting.GetJobPostingsResponse
+import com.idle.network.model.jobposting.GetWorkerJobPostingDetailResponse
 import com.idle.network.model.jobposting.JobPostingRequest
 import com.idle.network.model.profile.CallbackImageUploadRequest
 import com.idle.network.model.profile.GetCenterProfileResponse
@@ -53,12 +54,12 @@ interface CareApi {
     suspend fun signUpWorker(@Body signUpWorkerRequest: SignUpWorkerRequest): Response<TokenResponse>
 
     @POST("/api/v1/auth/carer/login")
-    suspend fun signInWorker(@Body signInWorkerRequest: SignInWorkerRequest): Response<Unit>
+    suspend fun signInWorker(@Body signInWorkerRequest: SignInWorkerRequest): Response<TokenResponse>
 
     @POST("/api/v1/auth/center/logout")
     suspend fun logoutCenter(): Response<Unit>
 
-    @POST("/api/v1/auth/worker/logout")
+    @POST("/api/v1/auth/carer/logout")
     suspend fun logoutWorker(): Response<Unit>
 
     @POST("/api/v1/auth/center/withdraw")
@@ -66,7 +67,7 @@ interface CareApi {
         @Body withdrawalCenterResponse: WithdrawalCenterRequest
     ): Response<Unit>
 
-    @POST("/api/v1/auth/worker/withdraw")
+    @POST("/api/v1/auth/carer/withdraw")
     suspend fun withdrawalWorker(
         @Body withdrawalWorkerResponse: WithdrawalWorkerRequest
     ): Response<Unit>
@@ -145,4 +146,9 @@ interface CareApi {
 
     @GET("/api/v1/job-postings/status/in-progress")
     suspend fun getJobPostingsInProgress(): Response<GetJobPostingsInProgressResponse>
+
+    @GET("/api/v1/job-postings/{job-posting-id}/carer")
+    suspend fun getJobPostingDetailWorker(
+        @Path("job-posting-id") jobPostingId: String
+    ): Response<GetWorkerJobPostingDetailResponse>
 }

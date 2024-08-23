@@ -10,6 +10,7 @@ import com.idle.domain.model.job.PayType
 import com.idle.domain.model.jobposting.CenterJobPosting
 import com.idle.domain.model.jobposting.CenterJobPostingDetail
 import com.idle.domain.model.jobposting.WorkerJobPosting
+import com.idle.domain.model.jobposting.WorkerJobPostingDetail
 
 interface JobPostingRepository {
     suspend fun postJobPosting(
@@ -66,6 +67,8 @@ interface JobPostingRepository {
     ): Result<Unit>
 
     suspend fun getCenterJobPostingDetail(jobPostingId: String): Result<CenterJobPostingDetail>
+
+    suspend fun getWorkerJobPostingDetail(jobPostingId: String): Result<WorkerJobPostingDetail>
 
     suspend fun getJobPostings(
         next: String?,
