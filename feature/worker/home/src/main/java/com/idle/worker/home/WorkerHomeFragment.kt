@@ -41,7 +41,7 @@ import com.idle.designsystem.compose.component.CareButtonCardLarge
 import com.idle.designsystem.compose.component.CareHeadingTopBar
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.foundation.CareTheme
-import com.idle.domain.model.jobposting.JobPosting
+import com.idle.domain.model.jobposting.WorkerJobPosting
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -54,7 +54,7 @@ internal class WorkerHomeFragment : BaseComposeFragment() {
             val jobPostings by jobPostings.collectAsStateWithLifecycle()
 
             WorkerHomeScreen(
-                jobPostings = jobPostings,
+                workerJobPostings = jobPostings,
                 getJobPostings = ::getJobPostings,
                 navigateTo = { baseEvent(NavigateTo(it)) },
             )
@@ -64,7 +64,7 @@ internal class WorkerHomeFragment : BaseComposeFragment() {
 
 @Composable
 internal fun WorkerHomeScreen(
-    jobPostings: List<JobPosting>,
+    workerJobPostings: List<WorkerJobPosting>,
     getJobPostings: () -> Unit,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
@@ -72,8 +72,9 @@ internal fun WorkerHomeScreen(
 
     val isLastElement by remember {
         derivedStateOf {
-            val lastVisibleIndex = listState.firstVisibleItemIndex + listState.layoutInfo.visibleItemsInfo.size
-            jobPostings.isNotEmpty() && lastVisibleIndex >= jobPostings.size
+            val lastVisibleIndex =
+                listState.firstVisibleItemIndex + listState.layoutInfo.visibleItemsInfo.size
+            workerJobPostings.isNotEmpty() && lastVisibleIndex >= workerJobPostings.size
         }
     }
 
@@ -87,7 +88,7 @@ internal fun WorkerHomeScreen(
         containerColor = CareTheme.colors.white000,
         topBar = {
             CareHeadingTopBar(
-                title = "강남구 신사동",
+                title = "경기 가평군 가평읍",
                 leftComponent = {
                     Image(
                         painter = painterResource(R.drawable.ic_address_pin_big),
@@ -117,11 +118,11 @@ internal fun WorkerHomeScreen(
                     .fillMaxSize()
             ) {
                 items(
-                    items = jobPostings,
+                    items = workerJobPostings,
                     key = { it.id },
                 ) { jobPosting ->
                     WorkerRecruitmentCard(
-                        jobPosting = jobPosting,
+                        workerJobPosting = jobPosting,
                         navigateTo = navigateTo,
                     )
                 }
@@ -140,7 +141,7 @@ internal fun WorkerHomeScreen(
 
 @Composable
 private fun WorkerRecruitmentCard(
-    jobPosting: JobPosting,
+    workerJobPosting: WorkerJobPosting,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
     Card(
@@ -153,7 +154,7 @@ private fun WorkerRecruitmentCard(
         ),
         border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
         modifier = Modifier.clickable {
-            navigateTo(WorkerJobDetail(jobPostingId = "01914eaa-5106-74ab-a079-67875c1d0f42"))
+            navigateTo(WorkerJobDetail(jobPostingId = workerJobPosting.id))
         },
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -164,7 +165,7 @@ private fun WorkerRecruitmentCard(
                     .fillMaxWidth()
                     .padding(bottom = 8.dp)
             ) {
-                if (!jobPosting.isExperiencePreferred) {
+                if (!workerJobPosting.isExperiencePreferred) {
                     CareTag(
                         text = "초보가능",
                         textColor = CareTheme.colors.orange500,
@@ -194,7 +195,11 @@ private fun WorkerRecruitmentCard(
                     .padding(bottom = 2.dp),
             ) {
                 Text(
-                    text = "서울특별시 강남구 신사동",
+                    text = try {
+                        workerJobPosting.lotNumberAddress.split(" ").subList(0, 3).joinToString(" ")
+                    } catch (e: IndexOutOfBoundsException) {
+                        ""
+                    },
                     style = CareTheme.typography.subtitle2,
                     color = CareTheme.colors.gray900,
                     overflow = TextOverflow.Clip,
@@ -203,7 +208,7 @@ private fun WorkerRecruitmentCard(
                 )
 
                 Text(
-                    text = jobPosting.distance.toString(),
+                    text = "${workerJobPosting.distance} km",
                     style = CareTheme.typography.body3,
                     color = CareTheme.colors.gray500,
                     modifier = Modifier.padding(end = 8.dp),
@@ -211,7 +216,7 @@ private fun WorkerRecruitmentCard(
             }
 
             Text(
-                text = "${jobPosting.careLevel}등급 ${jobPosting.age}세 ${jobPosting.gender.displayName}",
+                text = "${workerJobPosting.careLevel}등급 ${workerJobPosting.age}세 ${workerJobPosting.gender.displayName}",
                 style = CareTheme.typography.body2,
                 color = CareTheme.colors.gray900,
                 modifier = Modifier.padding(end = 8.dp, bottom = 4.dp),
@@ -229,7 +234,11 @@ private fun WorkerRecruitmentCard(
                 )
 
                 Text(
-                    text = "${jobPosting.weekdays.joinToString { "," }} | ${jobPosting.startTime} - ${jobPosting.endTime}",
+                    text = "${
+                        workerJobPosting.weekdays
+                            .sortedBy { it.ordinal }
+                            .joinToString(", ") { it.displayName }
+                    } | ${workerJobPosting.startTime} - ${workerJobPosting.endTime}",
                     style = CareTheme.typography.body3,
                     color = CareTheme.colors.gray500,
                 )
@@ -247,7 +256,7 @@ private fun WorkerRecruitmentCard(
                 )
 
                 Text(
-                    text = "${jobPosting.payType.displayName} ${jobPosting.payAmount} 원",
+                    text = "${workerJobPosting.payType.displayName} ${workerJobPosting.payAmount} 원",
                     style = CareTheme.typography.body3,
                     color = CareTheme.colors.gray500,
                 )
