@@ -1,6 +1,7 @@
 package com.idle.network.api
 
 import com.idle.network.model.jobposting.ApplyJobPostingRequest
+import com.idle.network.model.jobposting.GetApplicantCountResponse
 import com.idle.network.model.jobposting.GetCenterJobPostingDetailResponse
 import com.idle.network.model.jobposting.GetJobPostingsCenterResponse
 import com.idle.network.model.jobposting.GetJobPostingsResponse
@@ -52,6 +53,11 @@ interface JobPostingApi {
 
     @GET("/api/v1/job-postings/status/completed")
     suspend fun getJobPostingsCompleted(): Response<GetJobPostingsCenterResponse>
+
+    @GET("/api/v1/job-postings/{job-posting-id}/applicant-count")
+    suspend fun getApplicantCount(
+        @Path("job-posting-id") jobPostingId: String
+    ): Response<GetApplicantCountResponse>
 
     @GET("/api/v1/job-postings/{job-posting-id}/carer")
     suspend fun getJobPostingDetailWorker(

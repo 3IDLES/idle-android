@@ -2,6 +2,7 @@ package com.idle.network.source.jobposting
 
 import com.idle.network.api.JobPostingApi
 import com.idle.network.model.jobposting.ApplyJobPostingRequest
+import com.idle.network.model.jobposting.GetApplicantCountResponse
 import com.idle.network.model.jobposting.GetCenterJobPostingDetailResponse
 import com.idle.network.model.jobposting.GetJobPostingsCenterResponse
 import com.idle.network.model.jobposting.GetJobPostingsResponse
@@ -49,6 +50,9 @@ class JobPostingDataSource @Inject constructor(
 
     suspend fun getJobPostingsCompleted(): Result<GetJobPostingsCenterResponse> =
         jobPostingApi.getJobPostingsCompleted().onResponse()
+
+    suspend fun getApplicantCount(jobPostingId: String): Result<GetApplicantCountResponse> =
+        jobPostingApi.getApplicantCount(jobPostingId).onResponse()
 
     suspend fun applyJobPosting(applyJobPostingRequest: ApplyJobPostingRequest): Result<Unit> =
         jobPostingApi.applyJobPosting(applyJobPostingRequest).onResponse()
