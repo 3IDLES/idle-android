@@ -1,6 +1,6 @@
 package com.idle.network.source.profile
 
-import com.idle.network.api.CareApi
+import com.idle.network.api.UserApi
 import com.idle.network.model.profile.CallbackImageUploadRequest
 import com.idle.network.model.profile.GetCenterProfileResponse
 import com.idle.network.model.profile.GetWorkerProfileResponse
@@ -15,18 +15,18 @@ import java.io.InputStream
 import javax.inject.Inject
 
 class ProfileDataSource @Inject constructor(
-    private val careApi: CareApi,
+    private val userApi: UserApi,
 ) {
     suspend fun getMyCenterProfile(): Result<GetCenterProfileResponse> =
-        careApi.getMyCenterProfile().onResponse()
+        userApi.getMyCenterProfile().onResponse()
 
     suspend fun updateMyCenterProfile(updateCenterProfileRequest: UpdateCenterProfileRequest): Result<Unit> =
-        careApi.updateMyCenterProfile(updateCenterProfileRequest).onResponse()
+        userApi.updateMyCenterProfile(updateCenterProfileRequest).onResponse()
 
     suspend fun getProfileImageUploadUrl(
         userType: String,
         imageFileExtension: String
-    ): Result<UploadProfileImageUrlResponse> = careApi.getImageUploadUrl(
+    ): Result<UploadProfileImageUrlResponse> = userApi.getImageUploadUrl(
         userType = userType,
         imageFileExtension = imageFileExtension,
     ).onResponse()
@@ -39,7 +39,7 @@ class ProfileDataSource @Inject constructor(
         val requestImage = imageInputStream.readBytes()
             .toRequestBody(imageFileExtension.toMediaTypeOrNull())
 
-        return careApi.uploadProfileImage(
+        return userApi.uploadProfileImage(
             uploadUrl = uploadUrl,
             requestImage = requestImage,
         ).onResponse()
@@ -48,24 +48,24 @@ class ProfileDataSource @Inject constructor(
     suspend fun callbackImageUpload(
         userType: String,
         callbackImageUploadRequest: CallbackImageUploadRequest,
-    ): Result<Unit> = careApi.callbackImageUpload(
+    ): Result<Unit> = userApi.callbackImageUpload(
         userType = userType,
         callbackImageUploadRequest = callbackImageUploadRequest,
     ).onResponse()
 
     suspend fun getMyWorkerProfile(): Result<GetWorkerProfileResponse> =
-        careApi.getMyWorkerProfile().onResponse()
+        userApi.getMyWorkerProfile().onResponse()
 
     suspend fun getWorkerProfile(workerId: String): Result<GetWorkerProfileResponse> =
-        careApi.getWorkerProfile(workerId).onResponse()
+        userApi.getWorkerProfile(workerId).onResponse()
 
     suspend fun updateWorkerProfile(
         updateWorkerProfileRequest: UpdateWorkerProfileRequest
-    ): Result<Unit> = careApi.updateWorkerProfile(updateWorkerProfileRequest)
+    ): Result<Unit> = userApi.updateWorkerProfile(updateWorkerProfileRequest)
         .onResponse()
 
     suspend fun registerCenterProfile(
         registerCenterProfileRequest: RegisterCenterProfileRequest
     ): Result<Unit> =
-        careApi.registerCenterProfile(registerCenterProfileRequest).onResponse()
+        userApi.registerCenterProfile(registerCenterProfileRequest).onResponse()
 }

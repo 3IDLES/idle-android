@@ -1,7 +1,7 @@
 package com.idle.network.authenticator
 
 import com.idle.domain.model.error.HttpResponseStatus
-import com.idle.network.api.CareApi
+import com.idle.network.api.AuthApi
 import com.idle.network.di.TokenManager
 import com.idle.network.model.token.RefreshTokenRequest
 import com.idle.network.util.onResponse
@@ -16,7 +16,7 @@ import javax.inject.Provider
 
 class CareAuthenticator @Inject constructor(
     private val tokenManager: TokenManager,
-    private val careApi: Provider<CareApi>,
+    private val authApi: Provider<AuthApi>,
 ) : Authenticator {
     override fun authenticate(route: Route?, response: Response): Request? {
         val originRequest = response.request
@@ -35,7 +35,7 @@ class CareAuthenticator @Inject constructor(
         }
 
         val token = runBlocking {
-            careApi.get().refreshToken(RefreshTokenRequest(tokenManager.getRefreshToken()))
+            authApi.get().refreshToken(RefreshTokenRequest(tokenManager.getRefreshToken()))
                 .onResponse()
         }.getOrNull()
 
