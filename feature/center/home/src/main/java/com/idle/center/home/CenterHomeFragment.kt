@@ -49,6 +49,7 @@ import com.idle.designsystem.compose.component.CareTabBar
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.jobposting.CenterJobPosting
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 internal class CenterHomeFragment : BaseComposeFragment() {
@@ -59,14 +60,18 @@ internal class CenterHomeFragment : BaseComposeFragment() {
         fragmentViewModel.apply {
             val recruitmentPostStatus by recruitmentPostStatus.collectAsStateWithLifecycle()
             val jobPostingsInProgress by jobPostingsInProgress.collectAsStateWithLifecycle()
+            val jobPostingsCompleted by jobPostingsCompleted.collectAsStateWithLifecycle()
 
             LaunchedEffect(true) {
+                clearJobPostingStatus()
                 getJobPostingsInProgress()
+                launch { getJobPostingsCompleted() }
             }
 
             CenterHomeScreen(
                 recruitmentPostStatus = recruitmentPostStatus,
-                workerJobPostingsInProgresses = jobPostingsInProgress,
+                jobPostingsInProgresses = jobPostingsInProgress,
+                jobPostingsCompleted = jobPostingsCompleted,
                 setRecruitmentPostStatus = ::setRecruitmentPostStatus,
                 navigateTo = { baseEvent(NavigateTo(it)) }
             )
@@ -77,7 +82,8 @@ internal class CenterHomeFragment : BaseComposeFragment() {
 @Composable
 internal fun CenterHomeScreen(
     recruitmentPostStatus: RecruitmentPostStatus,
-    workerJobPostingsInProgresses: List<CenterJobPosting>,
+    jobPostingsInProgresses: List<CenterJobPosting>,
+    jobPostingsCompleted: List<CenterJobPosting>,
     setRecruitmentPostStatus: (RecruitmentPostStatus) -> Unit,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
@@ -118,13 +124,13 @@ internal fun CenterHomeScreen(
                     modifier = Modifier.padding(start = 20.dp, end = 20.dp),
                 ) { status ->
                     when (status) {
-                        RecruitmentPostStatus.ONGOING ->
+                        RecruitmentPostStatus.IN_PROGRESS ->
                             LazyColumn(
                                 state = onGoingListState,
                                 verticalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
                                 items(
-                                    items = workerJobPostingsInProgresses,
+                                    items = jobPostingsInProgresses,
                                     key = { it.id },
                                 ) { jobPosting ->
                                     CenterRecruitmentCard(
@@ -142,13 +148,13 @@ internal fun CenterHomeScreen(
                                 }
                             }
 
-                        RecruitmentPostStatus.PREVIOUS ->
+                        RecruitmentPostStatus.COMPLETED ->
                             LazyColumn(
                                 state = previousListState,
                                 verticalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
                                 items(
-                                    items = workerJobPostingsInProgresses,
+                                    items = jobPostingsCompleted,
                                     key = { it.id },
                                 ) { jobPosting ->
                                     CenterRecruitmentCard(

@@ -8,7 +8,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class GetJobPostingsInProgressResponse(
+data class GetJobPostingsCenterResponse(
     @SerialName("jobPostings")
     val jobPostings: List<CenterJobPostingResponse>
 ) {

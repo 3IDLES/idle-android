@@ -4,7 +4,6 @@ import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.jobposting.CenterJobPosting
-import com.idle.domain.model.jobposting.WorkerJobPosting
 import com.idle.domain.usecase.jobposting.GetJobPostingsInProgressUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,25 +14,40 @@ import javax.inject.Inject
 @HiltViewModel
 class CenterHomeViewModel @Inject constructor(
     private val getJobPostingsInProgressUseCase: GetJobPostingsInProgressUseCase,
+    private val getJobPostingsCompletedUseCase: GetJobPostingsInProgressUseCase,
 ) : BaseViewModel() {
-    private val _recruitmentPostStatus = MutableStateFlow(RecruitmentPostStatus.ONGOING)
+    private val _recruitmentPostStatus = MutableStateFlow(RecruitmentPostStatus.IN_PROGRESS)
     val recruitmentPostStatus = _recruitmentPostStatus.asStateFlow()
 
-    private val _Worker_jobPostingsInProgress = MutableStateFlow<List<CenterJobPosting>>(emptyList())
-    val jobPostingsInProgress = _Worker_jobPostingsInProgress.asStateFlow()
+    private val _jobPostingsInProgress = MutableStateFlow<List<CenterJobPosting>>(emptyList())
+    val jobPostingsInProgress = _jobPostingsInProgress.asStateFlow()
+
+    private val _jobPostingsCompleted = MutableStateFlow<List<CenterJobPosting>>(emptyList())
+    val jobPostingsCompleted = _jobPostingsCompleted.asStateFlow()
 
     internal fun setRecruitmentPostStatus(recruitmentPostStatus: RecruitmentPostStatus) {
         _recruitmentPostStatus.value = recruitmentPostStatus
     }
 
+    internal fun clearJobPostingStatus() {
+        _jobPostingsInProgress.value = emptyList()
+        _jobPostingsCompleted.value = emptyList()
+    }
+
     internal fun getJobPostingsInProgress() = viewModelScope.launch {
         getJobPostingsInProgressUseCase().onSuccess {
-            _Worker_jobPostingsInProgress.value = it
+            _jobPostingsInProgress.value = it
+        }.onFailure { baseEvent(CareBaseEvent.Error(it.toString())) }
+    }
+
+    internal fun getJobPostingsCompleted() = viewModelScope.launch {
+        getJobPostingsCompletedUseCase().onSuccess {
+            _jobPostingsCompleted.value = it
         }.onFailure { baseEvent(CareBaseEvent.Error(it.toString())) }
     }
 }
 
 enum class RecruitmentPostStatus(val displayName: String) {
-    ONGOING("진행 중인 공고"),
-    PREVIOUS("이전 공고")
+    IN_PROGRESS("진행 중인 공고"),
+    COMPLETED("이전 공고")
 }
