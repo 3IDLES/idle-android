@@ -1,9 +1,11 @@
 package com.idle.worker.home
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
+import com.idle.binding.base.CareBaseEvent
+import com.idle.domain.model.job.ApplyMethod
 import com.idle.domain.model.jobposting.WorkerJobPosting
+import com.idle.domain.usecase.jobposting.ApplyJobPostingUseCase
 import com.idle.domain.usecase.jobposting.GetJobPostingsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WorkerHomeViewModel @Inject constructor(
-    private val getJobPostingsUseCase: GetJobPostingsUseCase
+    private val getJobPostingsUseCase: GetJobPostingsUseCase,
+    private val applyJobPostingUseCase: ApplyJobPostingUseCase,
 ) : BaseViewModel() {
     private val next = MutableStateFlow<String?>(null)
 
@@ -50,6 +53,17 @@ class WorkerHomeViewModel @Inject constructor(
 
     private suspend fun fetchCrawlingJobPostings() {
         // Todo: 크롤링 공고 호출 로직 추가
+    }
+
+    fun applyJobPosting(jobPostingId: String) = viewModelScope.launch {
+        applyJobPostingUseCase(
+            jobPostingId = jobPostingId,
+            applyMethod = ApplyMethod.APP
+        ).onSuccess {
+
+        }.onFailure {
+            baseEvent(CareBaseEvent.Error(it.message.toString()))
+        }
     }
 }
 

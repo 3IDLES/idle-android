@@ -12,6 +12,7 @@ import com.idle.domain.model.jobposting.CenterJobPostingDetail
 import com.idle.domain.model.jobposting.WorkerJobPosting
 import com.idle.domain.model.jobposting.WorkerJobPostingDetail
 import com.idle.domain.repositorry.jobposting.JobPostingRepository
+import com.idle.network.model.jobposting.ApplyJobPostingRequest
 import com.idle.network.model.jobposting.JobPostingRequest
 import com.idle.network.source.jobposting.JobPostingDataSource
 import javax.inject.Inject
@@ -143,4 +144,12 @@ class JobPostingRepositoryImpl @Inject constructor(
 
     override suspend fun getJobPostingsInProgress(): Result<List<CenterJobPosting>> =
         jobPostingDataSource.getJobPostingsInProgress().mapCatching { it.toVO() }
+
+    override suspend fun applyJobPosting(
+        jobPostingId: String,
+        applyMethod: ApplyMethod,
+    ): Result<Unit> =
+        jobPostingDataSource.applyJobPosting(
+            ApplyJobPostingRequest(jobPostingId = jobPostingId, applyMethodType = applyMethod.name)
+        )
 }

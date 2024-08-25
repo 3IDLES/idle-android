@@ -56,6 +56,7 @@ internal class WorkerHomeFragment : BaseComposeFragment() {
             WorkerHomeScreen(
                 workerJobPostings = jobPostings,
                 getJobPostings = ::getJobPostings,
+                applyJobPosting = ::applyJobPosting,
                 navigateTo = { baseEvent(NavigateTo(it)) },
             )
         }
@@ -66,6 +67,7 @@ internal class WorkerHomeFragment : BaseComposeFragment() {
 internal fun WorkerHomeScreen(
     workerJobPostings: List<WorkerJobPosting>,
     getJobPostings: () -> Unit,
+    applyJobPosting: (String) -> Unit,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
     val listState = rememberLazyListState()
@@ -123,6 +125,7 @@ internal fun WorkerHomeScreen(
                 ) { jobPosting ->
                     WorkerRecruitmentCard(
                         workerJobPosting = jobPosting,
+                        applyJobPosting = applyJobPosting,
                         navigateTo = navigateTo,
                     )
                 }
@@ -142,6 +145,7 @@ internal fun WorkerHomeScreen(
 @Composable
 private fun WorkerRecruitmentCard(
     workerJobPosting: WorkerJobPosting,
+    applyJobPosting: (String) -> Unit,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
     Card(
@@ -167,7 +171,7 @@ private fun WorkerRecruitmentCard(
             ) {
                 if (!workerJobPosting.isExperiencePreferred) {
                     CareTag(
-                        text = "초보가능",
+                        text = stringResource(id = R.string.beginner_possible),
                         textColor = CareTheme.colors.orange500,
                         backgroundColor = CareTheme.colors.orange100,
                     )
@@ -266,7 +270,7 @@ private fun WorkerRecruitmentCard(
 
             CareButtonCardLarge(
                 text = stringResource(id = R.string.recruit),
-                onClick = { /*TODO*/ },
+                onClick = { applyJobPosting(workerJobPosting.id) },
                 modifier = Modifier.fillMaxWidth(),
             )
         }
