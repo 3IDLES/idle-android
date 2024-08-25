@@ -1,6 +1,5 @@
 package com.tgyuu.applicant.inquiry
 
-import android.util.Log
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -25,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.navArgs
 import coil.compose.AsyncImage
 import com.idle.binding.DeepLinkDestination
@@ -43,6 +44,8 @@ import com.idle.designsystem.compose.component.CareButtonCardMedium
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.foundation.CareTheme
+import com.idle.domain.model.jobposting.Applicant
+import com.idle.domain.model.jobposting.JobPostingSummary
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -53,20 +56,31 @@ internal class ApplicantInquiryFragment : BaseComposeFragment() {
     @Composable
     override fun ComposeLayout() {
         fragmentViewModel.apply {
+            val jobPostingSummary by jobPostingSummary.collectAsStateWithLifecycle()
+            val applicants by applicants.collectAsStateWithLifecycle()
 
             LaunchedEffect(Unit) {
-                Log.d("test", args.jobPostingId)
+                getApplicantsInfo(args.jobPostingId)
             }
 
-            ApplicantInquiryScreen(navigateTo = {
-                baseEvent(CareBaseEvent.NavigateTo(it))
-            })
+            jobPostingSummary?.let {
+                ApplicantInquiryScreen(
+                    jobPostingSummary = jobPostingSummary!!,
+                    applicants = applicants,
+                    navigateTo = {
+                        baseEvent(CareBaseEvent.NavigateTo(it))
+                    })
+            }
         }
     }
 }
 
 @Composable
-internal fun ApplicantInquiryScreen(navigateTo: (DeepLinkDestination) -> Unit) {
+internal fun ApplicantInquiryScreen(
+    jobPostingSummary: JobPostingSummary,
+    applicants: List<Applicant>,
+    navigateTo: (DeepLinkDestination) -> Unit
+) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
 
     Scaffold(
@@ -86,7 +100,7 @@ internal fun ApplicantInquiryScreen(navigateTo: (DeepLinkDestination) -> Unit) {
                 .padding(paddingValues)
                 .padding(top = 24.dp)
         ) {
-            RecruitInfoCard()
+            RecruitInfoCard(jobPostingSummary)
 
             HorizontalDivider(
                 thickness = 8.dp,
@@ -108,8 +122,14 @@ internal fun ApplicantInquiryScreen(navigateTo: (DeepLinkDestination) -> Unit) {
                     )
                 }
 
-                items(listOf(1, 2, 3, 4, 5)) {
-                    WorkerProfileCard(navigateTo = navigateTo)
+                items(
+                    items = applicants,
+                    key = { it.carerId },
+                ) { applicant ->
+                    WorkerProfileCard(
+                        applicant = applicant,
+                        navigateTo = navigateTo,
+                    )
                 }
 
                 item {
@@ -125,7 +145,7 @@ internal fun ApplicantInquiryScreen(navigateTo: (DeepLinkDestination) -> Unit) {
 }
 
 @Composable
-private fun RecruitInfoCard() {
+private fun RecruitInfoCard(jobPostingSummary: JobPostingSummary) {
     Card(
         shape = RoundedCornerShape(12.dp),
         colors = CardColors(
@@ -141,14 +161,18 @@ private fun RecruitInfoCard() {
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
-                text = "2024. 07. 10 ~ 2024. 07. 31",
+                text = "${jobPostingSummary.createdAt} ~ ${jobPostingSummary.applyDeadline}",
                 style = CareTheme.typography.body3,
                 color = CareTheme.colors.gray300,
                 modifier = Modifier.padding(bottom = 4.dp),
             )
 
             Text(
-                text = "서울특별시 강남구 신사동",
+                text = try {
+                    jobPostingSummary.lotNumberAddress.split(" ").subList(0, 3).joinToString(" ")
+                } catch (e: IndexOutOfBoundsException) {
+                    ""
+                },
                 style = CareTheme.typography.subtitle2,
                 color = CareTheme.colors.gray900,
                 modifier = Modifier.padding(bottom = 2.dp),
@@ -159,7 +183,7 @@ private fun RecruitInfoCard() {
                 modifier = Modifier.height(IntrinsicSize.Min),
             ) {
                 Text(
-                    text = "홍길동",
+                    text = jobPostingSummary.clientName,
                     style = CareTheme.typography.body2,
                     color = CareTheme.colors.gray500,
                 )
@@ -170,7 +194,7 @@ private fun RecruitInfoCard() {
                 )
 
                 Text(
-                    text = "1등급 78세 여성",
+                    text = "${jobPostingSummary.careLevel}등급 ${jobPostingSummary.age}세 ${jobPostingSummary.gender.displayName}",
                     style = CareTheme.typography.body2,
                     color = CareTheme.colors.gray500,
                 )
@@ -181,6 +205,7 @@ private fun RecruitInfoCard() {
 
 @Composable
 private fun WorkerProfileCard(
+    applicant: Applicant,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
     Card(
@@ -217,7 +242,7 @@ private fun WorkerProfileCard(
                     horizontalAlignment = Alignment.Start
                 ) {
                     CareTag(
-                        text = "구직중",
+                        text = applicant.jobSearchStatus.displayName,
                         textColor = CareTheme.colors.orange500,
                         backgroundColor = CareTheme.colors.orange100,
                     )
@@ -227,7 +252,7 @@ private fun WorkerProfileCard(
                         horizontalArrangement = Arrangement.spacedBy(4.dp),
                     ) {
                         Text(
-                            text = "홍길동",
+                            text = applicant.name,
                             style = CareTheme.typography.subtitle2,
                             color = CareTheme.colors.gray900,
                         )
@@ -245,7 +270,7 @@ private fun WorkerProfileCard(
                         modifier = Modifier.height(IntrinsicSize.Min),
                     ) {
                         Text(
-                            text = "58세 여성",
+                            text = "${applicant.age}세 ${applicant.gender.displayName}",
                             style = CareTheme.typography.body3,
                             color = CareTheme.colors.gray500,
                         )
@@ -256,7 +281,7 @@ private fun WorkerProfileCard(
                         )
 
                         Text(
-                            text = "1년차",
+                            text = "${applicant.experienceYear}년차",
                             style = CareTheme.typography.body2,
                             color = CareTheme.colors.gray500,
                         )
@@ -286,7 +311,7 @@ private fun WorkerProfileCard(
                 )
 
                 CareButtonCardMedium(
-                    text = "채용하기",
+                    text = stringResource(id = R.string.recruiting),
                     onClick = { /*TODO*/ },
                     containerColor = CareTheme.colors.white000,
                     textColor = CareTheme.colors.orange500,

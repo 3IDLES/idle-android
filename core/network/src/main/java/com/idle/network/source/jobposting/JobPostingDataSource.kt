@@ -3,6 +3,7 @@ package com.idle.network.source.jobposting
 import com.idle.network.api.JobPostingApi
 import com.idle.network.model.jobposting.ApplyJobPostingRequest
 import com.idle.network.model.jobposting.GetApplicantCountResponse
+import com.idle.network.model.jobposting.GetApplicantsResponse
 import com.idle.network.model.jobposting.GetCenterJobPostingDetailResponse
 import com.idle.network.model.jobposting.GetJobPostingsCenterResponse
 import com.idle.network.model.jobposting.GetJobPostingsResponse
@@ -62,4 +63,7 @@ class JobPostingDataSource @Inject constructor(
 
     suspend fun removeFavoriteJobPosting(jobPostingId: String): Result<Unit> =
         jobPostingApi.removeFavoriteJobPosting(jobPostingId).onResponse()
+
+    suspend fun getApplicants(jobPostingId: String): Result<GetApplicantsResponse> =
+        jobPostingApi.getApplicants(jobPostingId).onResponse()
 }

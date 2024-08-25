@@ -7,8 +7,10 @@ import com.idle.domain.model.job.DayOfWeek
 import com.idle.domain.model.job.LifeAssistance
 import com.idle.domain.model.job.MentalStatus
 import com.idle.domain.model.job.PayType
+import com.idle.domain.model.jobposting.Applicant
 import com.idle.domain.model.jobposting.CenterJobPosting
 import com.idle.domain.model.jobposting.CenterJobPostingDetail
+import com.idle.domain.model.jobposting.JobPostingSummary
 import com.idle.domain.model.jobposting.WorkerJobPosting
 import com.idle.domain.model.jobposting.WorkerJobPostingDetail
 import com.idle.domain.repositorry.jobposting.JobPostingRepository
@@ -181,4 +183,7 @@ class JobPostingRepositoryImpl @Inject constructor(
 
     override suspend fun removeFavoriteJobPosting(jobPostingId: String): Result<Unit> =
         jobPostingDataSource.removeFavoriteJobPosting(jobPostingId)
+
+    override suspend fun getApplicants(jobPostingId: String): Result<Pair<JobPostingSummary, List<Applicant>>> =
+        jobPostingDataSource.getApplicants(jobPostingId).mapCatching { it.toVO() }
 }
