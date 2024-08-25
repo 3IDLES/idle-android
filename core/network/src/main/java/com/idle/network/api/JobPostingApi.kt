@@ -2,7 +2,7 @@ package com.idle.network.api
 
 import com.idle.network.model.jobposting.ApplyJobPostingRequest
 import com.idle.network.model.jobposting.GetCenterJobPostingDetailResponse
-import com.idle.network.model.jobposting.GetJobPostingsInProgressResponse
+import com.idle.network.model.jobposting.GetJobPostingsCenterResponse
 import com.idle.network.model.jobposting.GetJobPostingsResponse
 import com.idle.network.model.jobposting.GetWorkerJobPostingDetailResponse
 import com.idle.network.model.jobposting.JobPostingRequest
@@ -48,7 +48,10 @@ interface JobPostingApi {
     ): Response<GetJobPostingsResponse>
 
     @GET("/api/v1/job-postings/status/in-progress")
-    suspend fun getJobPostingsInProgress(): Response<GetJobPostingsInProgressResponse>
+    suspend fun getJobPostingsInProgress(): Response<GetJobPostingsCenterResponse>
+
+    @GET("/api/v1/job-postings/status/completed")
+    suspend fun getJobPostingsCompleted(): Response<GetJobPostingsCenterResponse>
 
     @GET("/api/v1/job-postings/{job-posting-id}/carer")
     suspend fun getJobPostingDetailWorker(

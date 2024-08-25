@@ -58,8 +58,8 @@ internal class WorkerJobPostingFragment : BaseComposeFragment() {
 
             LaunchedEffect(true) {
                 clearJobPostingStatus()
-                launch { getAppliedJobPostings() }
                 getMyFavoritesJobPostings()
+                launch { getAppliedJobPostings() }
             }
 
             WorkerJobPostingScreen(

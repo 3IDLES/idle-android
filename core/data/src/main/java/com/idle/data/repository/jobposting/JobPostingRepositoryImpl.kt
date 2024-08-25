@@ -162,6 +162,9 @@ class JobPostingRepositoryImpl @Inject constructor(
     override suspend fun getJobPostingsInProgress(): Result<List<CenterJobPosting>> =
         jobPostingDataSource.getJobPostingsInProgress().mapCatching { it.toVO() }
 
+    override suspend fun getJobPostingsCompleted(): Result<List<CenterJobPosting>> =
+        jobPostingDataSource.getJobPostingsCompleted().mapCatching { it.toVO() }
+
     override suspend fun applyJobPosting(
         jobPostingId: String,
         applyMethod: ApplyMethod,
