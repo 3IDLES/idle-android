@@ -142,6 +142,23 @@ class JobPostingRepositoryImpl @Inject constructor(
         limit = limit
     ).mapCatching { it.toVO() }
 
+    override suspend fun getJobPostingsApplied(
+        next: String?,
+        limit: Int
+    ): Result<Pair<String?, List<WorkerJobPosting>>> = jobPostingDataSource.getJobPostingsApplied(
+        next = next,
+        limit = limit
+    ).mapCatching { it.toVO() }
+
+    override suspend fun getMyFavoritesJobPostings(
+        next: String?,
+        limit: Int
+    ): Result<Pair<String?, List<WorkerJobPosting>>> =
+        jobPostingDataSource.getMyFavoritesJobPostings(
+            next = next,
+            limit = limit
+        ).mapCatching { it.toVO() }
+
     override suspend fun getJobPostingsInProgress(): Result<List<CenterJobPosting>> =
         jobPostingDataSource.getJobPostingsInProgress().mapCatching { it.toVO() }
 

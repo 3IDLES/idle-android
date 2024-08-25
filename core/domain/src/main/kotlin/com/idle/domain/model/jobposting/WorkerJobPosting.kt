@@ -5,6 +5,7 @@ import com.idle.domain.model.job.ApplyDeadlineType
 import com.idle.domain.model.job.DayOfWeek
 import com.idle.domain.model.job.PayType
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.ZoneId
 
 data class WorkerJobPosting(
@@ -23,6 +24,8 @@ data class WorkerJobPosting(
     val startTime: String,
     val endTime: String,
     val weekdays: List<DayOfWeek>,
+    val applyTime: LocalDateTime?,
+    val isFavorite: Boolean,
 ) {
     fun calculateDeadline(): Long {
         val seoulZone = ZoneId.of("Asia/Seoul")

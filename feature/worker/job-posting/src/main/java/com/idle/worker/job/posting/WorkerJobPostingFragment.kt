@@ -18,6 +18,7 @@ import androidx.compose.material3.CardColors
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,8 +40,10 @@ import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareTabBar
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.foundation.CareTheme
-import com.idle.domain.model.auth.UserRole
+import com.idle.domain.model.jobposting.WorkerJobPosting
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import java.time.format.DateTimeFormatter
 
 @AndroidEntryPoint
 internal class WorkerJobPostingFragment : BaseComposeFragment() {
@@ -50,10 +53,23 @@ internal class WorkerJobPostingFragment : BaseComposeFragment() {
     override fun ComposeLayout() {
         fragmentViewModel.apply {
             val recruitmentPostStatus by recruitmentPostStatus.collectAsStateWithLifecycle()
+            val appliedJobPostings by appliedJobPostings.collectAsStateWithLifecycle()
+            val favoritesJobPostings by favoritesJobPostings.collectAsStateWithLifecycle()
+
+            LaunchedEffect(true) {
+                clearJobPostingStatus()
+                launch { getAppliedJobPostings() }
+                getMyFavoritesJobPostings()
+            }
 
             WorkerJobPostingScreen(
                 recruitmentPostStatus = recruitmentPostStatus,
+                appliedJobPostings = appliedJobPostings,
+                favoritesJobPostings = favoritesJobPostings,
                 setRecruitmentPostStatus = ::setRecruitmentPostStatus,
+                applyJobPosting = ::applyJobPosting,
+                addFavoriteJobPosting = ::addFavoriteJobPosting,
+                removeFavoriteJobPosting = ::removeFavoriteJobPosting,
                 navigateTo = { baseEvent(NavigateTo(it)) },
             )
         }
@@ -63,7 +79,12 @@ internal class WorkerJobPostingFragment : BaseComposeFragment() {
 @Composable
 internal fun WorkerJobPostingScreen(
     recruitmentPostStatus: RecruitmentPostStatus,
+    appliedJobPostings: List<WorkerJobPosting>,
+    favoritesJobPostings: List<WorkerJobPosting>,
     setRecruitmentPostStatus: (RecruitmentPostStatus) -> Unit,
+    applyJobPosting: (String) -> Unit,
+    addFavoriteJobPosting: (String) -> Unit,
+    removeFavoriteJobPosting: (String) -> Unit,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
     Scaffold(
@@ -104,8 +125,17 @@ internal fun WorkerJobPostingScreen(
                                 .padding(start = 20.dp, end = 20.dp, top = 16.dp)
                                 .fillMaxSize()
                         ) {
-                            items(listOf(1, 2, 3, 4, 5)) {
-                                WorkerRecruitmentCard(navigateTo)
+                            items(
+                                items = appliedJobPostings,
+                                key = { it.id },
+                            ) { jobPosting ->
+                                WorkerRecruitmentCard(
+                                    jobPosting = jobPosting,
+                                    applyJobPosting = applyJobPosting,
+                                    addFavoriteJobPosting = addFavoriteJobPosting,
+                                    removeFavoriteJobPosting = removeFavoriteJobPosting,
+                                    navigateTo = navigateTo,
+                                )
                             }
 
                             item {
@@ -125,8 +155,17 @@ internal fun WorkerJobPostingScreen(
                                 .padding(start = 20.dp, end = 20.dp, top = 16.dp)
                                 .fillMaxSize()
                         ) {
-                            items(listOf(1, 2, 3, 4, 5)) {
-                                WorkerRecruitmentCard(navigateTo)
+                            items(
+                                items = favoritesJobPostings,
+                                key = { it.id },
+                            ) { jobPosting ->
+                                WorkerRecruitmentCard(
+                                    jobPosting = jobPosting,
+                                    applyJobPosting = applyJobPosting,
+                                    addFavoriteJobPosting = addFavoriteJobPosting,
+                                    removeFavoriteJobPosting = removeFavoriteJobPosting,
+                                    navigateTo = navigateTo,
+                                )
                             }
 
                             item {
@@ -146,6 +185,10 @@ internal fun WorkerJobPostingScreen(
 
 @Composable
 private fun WorkerRecruitmentCard(
+    jobPosting: WorkerJobPosting,
+    applyJobPosting: (String) -> Unit = {},
+    addFavoriteJobPosting: (String) -> Unit = {},
+    removeFavoriteJobPosting: (String) -> Unit = {},
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
     Card(
@@ -158,7 +201,7 @@ private fun WorkerRecruitmentCard(
         ),
         border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
         modifier = Modifier.clickable {
-            navigateTo(WorkerJobDetail(jobPostingId = "01914eaa-5106-74ab-a079-67875c1d0f42"))
+            navigateTo(WorkerJobDetail(jobPostingId = jobPosting.id))
         },
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -169,23 +212,28 @@ private fun WorkerRecruitmentCard(
                     .fillMaxWidth()
                     .padding(bottom = 8.dp)
             ) {
-                CareTag(
-                    text = "초보가능",
-                    textColor = CareTheme.colors.orange500,
-                    backgroundColor = CareTheme.colors.orange100,
-                )
+                if (!jobPosting.isExperiencePreferred) {
+                    CareTag(
+                        text = stringResource(id = R.string.beginner_possible),
+                        textColor = CareTheme.colors.orange500,
+                        backgroundColor = CareTheme.colors.orange100,
+                    )
+                }
 
-                CareTag(
-                    text = "D-10",
-                    textColor = CareTheme.colors.gray300,
-                    backgroundColor = CareTheme.colors.gray050,
-                )
+                if (jobPosting.calculateDeadline() <= 14) {
+                    CareTag(
+                        text = "D-${jobPosting.calculateDeadline()}",
+                        textColor = CareTheme.colors.gray300,
+                        backgroundColor = CareTheme.colors.gray050,
+                    )
+                }
 
                 Spacer(modifier = Modifier.weight(1f))
 
                 Image(
                     painter = painterResource(com.idle.designresource.R.drawable.ic_star_gray),
                     contentDescription = null,
+                    modifier = Modifier.clickable { addFavoriteJobPosting(jobPosting.id) }
                 )
             }
 
@@ -197,7 +245,11 @@ private fun WorkerRecruitmentCard(
                     .padding(bottom = 2.dp),
             ) {
                 Text(
-                    text = "서울특별시 강남구 신사동",
+                    text = try {
+                        jobPosting.lotNumberAddress.split(" ").subList(0, 3).joinToString(" ")
+                    } catch (e: IndexOutOfBoundsException) {
+                        ""
+                    },
                     style = CareTheme.typography.subtitle2,
                     color = CareTheme.colors.gray900,
                     overflow = TextOverflow.Clip,
@@ -206,7 +258,7 @@ private fun WorkerRecruitmentCard(
                 )
 
                 Text(
-                    text = "도보 15분~20분",
+                    text = "${jobPosting.distance} km",
                     style = CareTheme.typography.body3,
                     color = CareTheme.colors.gray500,
                     modifier = Modifier.padding(end = 8.dp),
@@ -214,7 +266,7 @@ private fun WorkerRecruitmentCard(
             }
 
             Text(
-                text = "1등급 78세 여성",
+                text = "${jobPosting.careLevel}등급 ${jobPosting.age}세 ${jobPosting.gender.displayName}",
                 style = CareTheme.typography.body2,
                 color = CareTheme.colors.gray900,
                 modifier = Modifier.padding(end = 8.dp, bottom = 4.dp),
@@ -232,7 +284,11 @@ private fun WorkerRecruitmentCard(
                 )
 
                 Text(
-                    text = "월, 화, 수, 목, 금 | 09:00 - 15:00",
+                    text = "${
+                        jobPosting.weekdays
+                            .sortedBy { it.ordinal }
+                            .joinToString(", ") { it.displayName }
+                    } | ${jobPosting.startTime} - ${jobPosting.endTime}",
                     style = CareTheme.typography.body3,
                     color = CareTheme.colors.gray500,
                 )
@@ -250,15 +306,22 @@ private fun WorkerRecruitmentCard(
                 )
 
                 Text(
-                    text = "시급 12,500 원",
+                    text = "${jobPosting.payType.displayName} ${jobPosting.payAmount} 원",
                     style = CareTheme.typography.body3,
                     color = CareTheme.colors.gray500,
                 )
             }
 
             CareButtonCardLarge(
-                text = stringResource(id = R.string.recruit),
-                onClick = { /*TODO*/ },
+                text = if (jobPosting.applyTime != null) {
+                    "지원완료 ${
+                        jobPosting.applyTime!!.format(
+                            DateTimeFormatter.ofPattern("yyyy. MM. dd")
+                        )
+                    }"
+                } else stringResource(id = R.string.recruit),
+                enable = jobPosting.applyTime == null,
+                onClick = { applyJobPosting(jobPosting.id) },
                 modifier = Modifier.fillMaxWidth(),
             )
         }

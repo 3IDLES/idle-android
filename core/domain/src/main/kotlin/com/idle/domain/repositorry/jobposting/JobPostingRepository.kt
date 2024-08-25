@@ -75,6 +75,16 @@ interface JobPostingRepository {
         limit: Int
     ): Result<Pair<String?, List<WorkerJobPosting>>>
 
+    suspend fun getJobPostingsApplied(
+        next: String?,
+        limit: Int
+    ): Result<Pair<String?, List<WorkerJobPosting>>>
+
+    suspend fun getMyFavoritesJobPostings(
+        next: String?,
+        limit: Int
+    ): Result<Pair<String?, List<WorkerJobPosting>>>
+
     suspend fun getJobPostingsInProgress(): Result<List<CenterJobPosting>>
 
     suspend fun applyJobPosting(jobPostingId: String, applyMethod: ApplyMethod): Result<Unit>

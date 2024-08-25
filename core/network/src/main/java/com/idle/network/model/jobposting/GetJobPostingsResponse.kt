@@ -8,6 +8,7 @@ import com.idle.domain.model.jobposting.WorkerJobPosting
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @Serializable
@@ -36,7 +37,9 @@ data class WorkerJobPostingResponse(
     val payType: String,
     val roadNameAddress: String,
     val startTime: String,
-    val weekdays: List<String>
+    val weekdays: List<String>,
+    val applyTime: String = "",
+    val isFavorite: Boolean = false,
 ) {
     fun toVO(): WorkerJobPosting = WorkerJobPosting(
         age = age,
@@ -56,5 +59,8 @@ data class WorkerJobPostingResponse(
         weekdays = DayOfWeek.create(weekdays)
             .toList()
             .sortedBy { it.ordinal },
+        applyTime = applyTime.takeIf { it.isNotBlank() }
+            ?.let { LocalDateTime.parse(it, DateTimeFormatter.ISO_LOCAL_DATE_TIME) },
+        isFavorite = isFavorite,
     )
 }
