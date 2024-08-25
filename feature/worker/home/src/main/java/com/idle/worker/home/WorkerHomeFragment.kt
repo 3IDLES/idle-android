@@ -57,6 +57,8 @@ internal class WorkerHomeFragment : BaseComposeFragment() {
                 workerJobPostings = jobPostings,
                 getJobPostings = ::getJobPostings,
                 applyJobPosting = ::applyJobPosting,
+                addFavoriteJobPosting = ::addFavoriteJobPosting,
+                removeFavoriteJobPosting = ::removeFavoriteJobPosting,
                 navigateTo = { baseEvent(NavigateTo(it)) },
             )
         }
@@ -68,6 +70,8 @@ internal fun WorkerHomeScreen(
     workerJobPostings: List<WorkerJobPosting>,
     getJobPostings: () -> Unit,
     applyJobPosting: (String) -> Unit,
+    addFavoriteJobPosting: (String) -> Unit,
+    removeFavoriteJobPosting: (String) -> Unit,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
     val listState = rememberLazyListState()
@@ -126,6 +130,8 @@ internal fun WorkerHomeScreen(
                     WorkerRecruitmentCard(
                         workerJobPosting = jobPosting,
                         applyJobPosting = applyJobPosting,
+                        addFavoriteJobPosting = addFavoriteJobPosting,
+                        removeFavoriteJobPosting = removeFavoriteJobPosting,
                         navigateTo = navigateTo,
                     )
                 }
@@ -146,6 +152,8 @@ internal fun WorkerHomeScreen(
 private fun WorkerRecruitmentCard(
     workerJobPosting: WorkerJobPosting,
     applyJobPosting: (String) -> Unit,
+    addFavoriteJobPosting: (String) -> Unit,
+    removeFavoriteJobPosting: (String) -> Unit,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
     Card(
@@ -190,6 +198,7 @@ private fun WorkerRecruitmentCard(
                 Image(
                     painter = painterResource(com.idle.designresource.R.drawable.ic_star_gray),
                     contentDescription = null,
+                    modifier = Modifier.clickable { addFavoriteJobPosting(workerJobPosting.id) }
                 )
             }
 

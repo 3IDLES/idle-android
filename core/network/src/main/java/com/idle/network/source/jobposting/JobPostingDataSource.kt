@@ -40,4 +40,10 @@ class JobPostingDataSource @Inject constructor(
 
     suspend fun applyJobPosting(applyJobPostingRequest: ApplyJobPostingRequest): Result<Unit> =
         jobPostingApi.applyJobPosting(applyJobPostingRequest).onResponse()
+
+    suspend fun addFavoriteJobPosting(jobPostingId: String): Result<Unit> =
+        jobPostingApi.addFavoriteJobPosting(jobPostingId).onResponse()
+
+    suspend fun removeFavoriteJobPosting(jobPostingId: String): Result<Unit> =
+        jobPostingApi.removeFavoriteJobPosting(jobPostingId).onResponse()
 }

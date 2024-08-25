@@ -5,8 +5,10 @@ import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.job.ApplyMethod
 import com.idle.domain.model.jobposting.WorkerJobPosting
+import com.idle.domain.usecase.jobposting.AddFavoriteJobPostingUseCase
 import com.idle.domain.usecase.jobposting.ApplyJobPostingUseCase
 import com.idle.domain.usecase.jobposting.GetJobPostingsUseCase
+import com.idle.domain.usecase.jobposting.RemoveFavoriteJobPostingUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,6 +19,8 @@ import javax.inject.Inject
 class WorkerHomeViewModel @Inject constructor(
     private val getJobPostingsUseCase: GetJobPostingsUseCase,
     private val applyJobPostingUseCase: ApplyJobPostingUseCase,
+    private val addFavoriteJobPostingUseCase: AddFavoriteJobPostingUseCase,
+    private val removeFavoriteJobPostingUseCase: RemoveFavoriteJobPostingUseCase,
 ) : BaseViewModel() {
     private val next = MutableStateFlow<String?>(null)
 
@@ -55,11 +59,27 @@ class WorkerHomeViewModel @Inject constructor(
         // Todo: 크롤링 공고 호출 로직 추가
     }
 
-    fun applyJobPosting(jobPostingId: String) = viewModelScope.launch {
+    internal fun applyJobPosting(jobPostingId: String) = viewModelScope.launch {
         applyJobPostingUseCase(
             jobPostingId = jobPostingId,
             applyMethod = ApplyMethod.APP
         ).onSuccess {
+
+        }.onFailure {
+            baseEvent(CareBaseEvent.Error(it.message.toString()))
+        }
+    }
+
+    internal fun addFavoriteJobPosting(jobPostingId: String) = viewModelScope.launch {
+        addFavoriteJobPostingUseCase(jobPostingId).onSuccess {
+
+        }.onFailure {
+            baseEvent(CareBaseEvent.Error(it.message.toString()))
+        }
+    }
+
+    internal fun removeFavoriteJobPosting(jobPostingId: String) = viewModelScope.launch {
+        removeFavoriteJobPostingUseCase(jobPostingId).onSuccess {
 
         }.onFailure {
             baseEvent(CareBaseEvent.Error(it.message.toString()))

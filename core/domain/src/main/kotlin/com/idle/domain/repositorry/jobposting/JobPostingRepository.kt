@@ -78,4 +78,8 @@ interface JobPostingRepository {
     suspend fun getJobPostingsInProgress(): Result<List<CenterJobPosting>>
 
     suspend fun applyJobPosting(jobPostingId: String, applyMethod: ApplyMethod): Result<Unit>
+
+    suspend fun addFavoriteJobPosting(jobPostingId: String): Result<Unit>
+
+    suspend fun removeFavoriteJobPosting(jobPostingId: String): Result<Unit>
 }

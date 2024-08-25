@@ -152,4 +152,10 @@ class JobPostingRepositoryImpl @Inject constructor(
         jobPostingDataSource.applyJobPosting(
             ApplyJobPostingRequest(jobPostingId = jobPostingId, applyMethodType = applyMethod.name)
         )
+
+    override suspend fun addFavoriteJobPosting(jobPostingId: String): Result<Unit> =
+        jobPostingDataSource.addFavoriteJobPosting(jobPostingId)
+
+    override suspend fun removeFavoriteJobPosting(jobPostingId: String): Result<Unit> =
+        jobPostingDataSource.removeFavoriteJobPosting(jobPostingId)
 }

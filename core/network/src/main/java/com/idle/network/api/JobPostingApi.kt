@@ -45,4 +45,10 @@ interface JobPostingApi {
 
     @POST("/api/v1/applys")
     suspend fun applyJobPosting(@Body applyJobPostingRequest: ApplyJobPostingRequest): Response<Unit>
+
+    @POST("/api/v1/job-postings/{job-posting-id}/favorites")
+    suspend fun addFavoriteJobPosting(@Path("job-posting-id") jobPostingId: String): Response<Unit>
+
+    @POST("/api/v1/job-postings/{job-posting-id}/remove-favorites")
+    suspend fun removeFavoriteJobPosting(@Path("job-posting-id") jobPostingId: String): Response<Unit>
 }
