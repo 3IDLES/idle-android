@@ -35,6 +35,12 @@ interface JobPostingApi {
         @Query("limit") limit: Int,
     ): Response<GetJobPostingsResponse>
 
+    @GET("/api/v1/job-postings/carer/my/applied")
+    suspend fun getJobPostingsApplied(
+        @Query("next") next: String?,
+        @Query("limit") limit: Int,
+    ): Response<GetJobPostingsResponse>
+
     @GET("/api/v1/job-postings/status/in-progress")
     suspend fun getJobPostingsInProgress(): Response<GetJobPostingsInProgressResponse>
 

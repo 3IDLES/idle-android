@@ -35,6 +35,9 @@ class JobPostingDataSource @Inject constructor(
     suspend fun getJobPostings(next: String?, limit: Int): Result<GetJobPostingsResponse> =
         jobPostingApi.getJobPostings(next = next, limit = limit).onResponse()
 
+    suspend fun getJobPostingsApplied(next: String?, limit: Int): Result<GetJobPostingsResponse> =
+        jobPostingApi.getJobPostingsApplied(next = next, limit = limit).onResponse()
+
     suspend fun getJobPostingsInProgress(): Result<GetJobPostingsInProgressResponse> =
         jobPostingApi.getJobPostingsInProgress().onResponse()
 

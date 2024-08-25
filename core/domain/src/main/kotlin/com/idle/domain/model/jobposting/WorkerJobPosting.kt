@@ -23,6 +23,8 @@ data class WorkerJobPosting(
     val startTime: String,
     val endTime: String,
     val weekdays: List<DayOfWeek>,
+    val applyTime: LocalDate,
+    val isFavorite: Boolean,
 ) {
     fun calculateDeadline(): Long {
         val seoulZone = ZoneId.of("Asia/Seoul")
