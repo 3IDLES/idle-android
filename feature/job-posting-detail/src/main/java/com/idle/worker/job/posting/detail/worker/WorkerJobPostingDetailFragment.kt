@@ -5,6 +5,7 @@ package com.idle.worker.job.posting.detail.worker
 import android.content.Intent
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -172,538 +173,547 @@ internal fun WorkerJobPostingDetailScreen(
                 )
             }
         ) { paddingValue ->
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(24.dp),
-                modifier = Modifier
-                    .padding(paddingValue)
-                    .padding(top = 24.dp)
-                    .fillMaxWidth()
-                    .verticalScroll(scrollState)
-            ) {
+            Column(modifier = Modifier.fillMaxSize()) {
                 Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(24.dp),
                     modifier = Modifier
+                        .padding(paddingValue)
+                        .padding(top = 24.dp)
                         .fillMaxWidth()
-                        .padding(horizontal = 20.dp)
+                        .weight(1f)
+                        .verticalScroll(scrollState)
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(bottom = 8.dp)
+                            .padding(horizontal = 20.dp)
                     ) {
-                        CareTag(
-                            text = "초보가능",
-                            textColor = CareTheme.colors.orange500,
-                            backgroundColor = CareTheme.colors.orange100,
-                        )
-
-                        CareTag(
-                            text = "D-10",
-                            textColor = CareTheme.colors.gray300,
-                            backgroundColor = CareTheme.colors.gray050,
-                        )
-
-                        Spacer(modifier = Modifier.weight(1f))
-
-                        Image(
-                            painter = painterResource(R.drawable.ic_star_gray),
-                            contentDescription = null,
-                        )
-                    }
-
-                    Text(
-                        text = try {
-                            jobPostingDetail.lotNumberAddress.split(" ").subList(0, 3)
-                                .joinToString(" ")
-                        } catch (e: IndexOutOfBoundsException) {
-                            ""
-                        },
-                        style = CareTheme.typography.subtitle1,
-                        color = CareTheme.colors.gray900,
-                        overflow = TextOverflow.Clip,
-                        maxLines = 1,
-                        modifier = Modifier.padding(bottom = 2.dp),
-                    )
-
-                    Text(
-                        text = "${jobPostingDetail.careLevel}등급 ${jobPostingDetail.age}세 ${jobPostingDetail.gender.displayName}",
-                        style = CareTheme.typography.body2,
-                        color = CareTheme.colors.gray900,
-                        modifier = Modifier.padding(end = 8.dp, bottom = 4.dp),
-                    )
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 2.dp)
-                    ) {
-                        Image(
-                            painter = painterResource(R.drawable.ic_clock),
-                            contentDescription = null,
-                        )
-
-                        Text(
-                            text = "${
-                                jobPostingDetail.weekdays.toList().sortedBy { it.ordinal }
-                                    .joinToString(",") { it.displayName }
-                            } | ${jobPostingDetail.startTime} - ${jobPostingDetail.endTime}",
-                            style = CareTheme.typography.body2,
-                            color = CareTheme.colors.gray500,
-                        )
-                    }
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth(),
-                    ) {
-                        Image(
-                            painter = painterResource(R.drawable.ic_money),
-                            contentDescription = null,
-                        )
-
-                        Text(
-                            text = "${jobPostingDetail.payType.displayName} ${jobPostingDetail.payAmount}원",
-                            style = CareTheme.typography.body2,
-                            color = CareTheme.colors.gray500,
-                        )
-                    }
-                }
-
-                HorizontalDivider(thickness = 8.dp, color = CareTheme.colors.gray050)
-
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp)
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.work_address),
-                        style = CareTheme.typography.subtitle1,
-                        color = CareTheme.colors.gray900,
-                        modifier = Modifier.padding(bottom = 20.dp),
-                    )
-
-                    Text(
-                        text = "거주지에서 ${jobPostingDetail.lotNumberAddress} 까지",
-                        style = CareTheme.typography.body2,
-                        color = CareTheme.colors.gray500,
-                        modifier = Modifier.padding(bottom = 4.dp),
-                    )
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(6.dp),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 20.dp),
-                    ) {
-                        Image(
-                            painter = painterResource(R.drawable.ic_walk),
-                            contentDescription = null,
-                        )
-
-                        Text(
-                            text = "걸어서 0분 ~ 5분 소요",
-                            style = CareTheme.typography.subtitle2,
-                            color = CareTheme.colors.gray500,
-                        )
-                    }
-
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(224.dp)
-                            .clip(RoundedCornerShape(8.dp)),
-                    ) {
-                        CareMap(
-                            homeLatLng = jobPostingDetail.latitude.toDouble() to jobPostingDetail.longitude.toDouble(),
-                            workspaceLatLng = jobPostingDetail.latitude.toDouble() to jobPostingDetail.longitude.toDouble(),
-                            onMapClick = { showPlaceDetail(true) },
-                            modifier = Modifier.fillMaxSize(),
-                        )
-
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_map_expand),
-                            contentDescription = null,
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(4.dp),
                             modifier = Modifier
-                                .align(Alignment.BottomEnd)
-                                .padding(12.dp),
+                                .fillMaxWidth()
+                                .padding(bottom = 8.dp)
+                        ) {
+                            CareTag(
+                                text = "초보가능",
+                                textColor = CareTheme.colors.orange500,
+                                backgroundColor = CareTheme.colors.orange100,
+                            )
+
+                            CareTag(
+                                text = "D-10",
+                                textColor = CareTheme.colors.gray300,
+                                backgroundColor = CareTheme.colors.gray050,
+                            )
+
+                            Spacer(modifier = Modifier.weight(1f))
+
+                            Image(
+                                painter = painterResource(R.drawable.ic_star_gray),
+                                contentDescription = null,
+                            )
+                        }
+
+                        Text(
+                            text = try {
+                                jobPostingDetail.lotNumberAddress.split(" ").subList(0, 3)
+                                    .joinToString(" ")
+                            } catch (e: IndexOutOfBoundsException) {
+                                ""
+                            },
+                            style = CareTheme.typography.subtitle1,
+                            color = CareTheme.colors.gray900,
+                            overflow = TextOverflow.Clip,
+                            maxLines = 1,
+                            modifier = Modifier.padding(bottom = 2.dp),
+                        )
+
+                        Text(
+                            text = "${jobPostingDetail.careLevel}등급 ${jobPostingDetail.age}세 ${jobPostingDetail.gender.displayName}",
+                            style = CareTheme.typography.body2,
+                            color = CareTheme.colors.gray900,
+                            modifier = Modifier.padding(end = 8.dp, bottom = 4.dp),
+                        )
+
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 2.dp)
+                        ) {
+                            Image(
+                                painter = painterResource(R.drawable.ic_clock),
+                                contentDescription = null,
+                            )
+
+                            Text(
+                                text = "${
+                                    jobPostingDetail.weekdays.toList().sortedBy { it.ordinal }
+                                        .joinToString(",") { it.displayName }
+                                } | ${jobPostingDetail.startTime} - ${jobPostingDetail.endTime}",
+                                style = CareTheme.typography.body2,
+                                color = CareTheme.colors.gray500,
+                            )
+                        }
+
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.fillMaxWidth(),
+                        ) {
+                            Image(
+                                painter = painterResource(R.drawable.ic_money),
+                                contentDescription = null,
+                            )
+
+                            Text(
+                                text = "${jobPostingDetail.payType.displayName} ${jobPostingDetail.payAmount}원",
+                                style = CareTheme.typography.body2,
+                                color = CareTheme.colors.gray500,
+                            )
+                        }
+                    }
+
+                    HorizontalDivider(thickness = 8.dp, color = CareTheme.colors.gray050)
+
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp)
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.work_address),
+                            style = CareTheme.typography.subtitle1,
+                            color = CareTheme.colors.gray900,
+                            modifier = Modifier.padding(bottom = 20.dp),
+                        )
+
+                        Text(
+                            text = "거주지에서 ${jobPostingDetail.lotNumberAddress} 까지",
+                            style = CareTheme.typography.body2,
+                            color = CareTheme.colors.gray500,
+                            modifier = Modifier.padding(bottom = 4.dp),
+                        )
+
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(6.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 20.dp),
+                        ) {
+                            Image(
+                                painter = painterResource(R.drawable.ic_walk),
+                                contentDescription = null,
+                            )
+
+                            Text(
+                                text = "걸어서 0분 ~ 5분 소요",
+                                style = CareTheme.typography.subtitle2,
+                                color = CareTheme.colors.gray500,
+                            )
+                        }
+
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(224.dp)
+                                .clip(RoundedCornerShape(8.dp)),
+                        ) {
+                            CareMap(
+                                homeLatLng = jobPostingDetail.latitude.toDouble() to jobPostingDetail.longitude.toDouble(),
+                                workspaceLatLng = jobPostingDetail.latitude.toDouble() to jobPostingDetail.longitude.toDouble(),
+                                onMapClick = { showPlaceDetail(true) },
+                                modifier = Modifier.fillMaxSize(),
+                            )
+
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_map_expand),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .align(Alignment.BottomEnd)
+                                    .padding(12.dp),
+                            )
+                        }
+                    }
+
+                    HorizontalDivider(thickness = 8.dp, color = CareTheme.colors.gray050)
+
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp)
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.work_conditions),
+                            style = CareTheme.typography.subtitle1,
+                            color = CareTheme.colors.gray900,
+                            modifier = Modifier.padding(bottom = 20.dp),
+                        )
+
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(32.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 8.dp),
+                        ) {
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                Text(
+                                    text = stringResource(id = R.string.work_days),
+                                    style = CareTheme.typography.body2,
+                                    color = CareTheme.colors.gray300,
+                                )
+
+                                Text(
+                                    text = stringResource(id = R.string.work_hours),
+                                    style = CareTheme.typography.body2,
+                                    color = CareTheme.colors.gray300,
+                                )
+
+                                Text(
+                                    text = stringResource(id = R.string.pay),
+                                    style = CareTheme.typography.body2,
+                                    color = CareTheme.colors.gray300,
+                                )
+
+                                Text(
+                                    text = stringResource(id = R.string.work_address),
+                                    style = CareTheme.typography.body2,
+                                    color = CareTheme.colors.gray300,
+                                )
+                            }
+
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                Text(
+                                    text = jobPostingDetail.weekdays.toList()
+                                        .sortedBy { it.ordinal }
+                                        .joinToString(",") { it.displayName },
+                                    style = CareTheme.typography.body2,
+                                    color = CareTheme.colors.gray900,
+                                )
+
+                                Text(
+                                    text = "${jobPostingDetail.startTime} - ${jobPostingDetail.endTime}",
+                                    style = CareTheme.typography.body2,
+                                    color = CareTheme.colors.gray900,
+                                )
+
+                                Text(
+                                    text = "${jobPostingDetail.payType.displayName} ${jobPostingDetail.payAmount} 원",
+                                    style = CareTheme.typography.body2,
+                                    color = CareTheme.colors.gray900,
+                                )
+
+                                Text(
+                                    text = jobPostingDetail.lotNumberAddress,
+                                    style = CareTheme.typography.body2,
+                                    color = CareTheme.colors.gray900,
+                                )
+                            }
+                        }
+                    }
+
+                    HorizontalDivider(thickness = 8.dp, color = CareTheme.colors.gray050)
+
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp)
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.customer_info),
+                            style = CareTheme.typography.subtitle1,
+                            color = CareTheme.colors.gray900,
+                            modifier = Modifier.padding(bottom = 20.dp),
+                        )
+
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(32.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 16.dp),
+                        ) {
+                            Column(
+                                verticalArrangement = Arrangement.spacedBy(8.dp),
+                                modifier = Modifier.width(60.dp),
+                            ) {
+                                Text(
+                                    text = stringResource(id = R.string.gender),
+                                    style = CareTheme.typography.body2,
+                                    color = CareTheme.colors.gray300,
+                                )
+
+                                Text(
+                                    text = stringResource(id = R.string.age),
+                                    style = CareTheme.typography.body2,
+                                    color = CareTheme.colors.gray300,
+                                )
+
+                                Text(
+                                    text = stringResource(id = R.string.weight),
+                                    style = CareTheme.typography.body2,
+                                    color = CareTheme.colors.gray300,
+                                )
+                            }
+
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                Text(
+                                    text = jobPostingDetail.gender.displayName,
+                                    style = CareTheme.typography.body2,
+                                    color = CareTheme.colors.gray900,
+                                )
+
+                                Text(
+                                    text = "${jobPostingDetail.age}세",
+                                    style = CareTheme.typography.body2,
+                                    color = CareTheme.colors.gray900,
+                                )
+
+                                Text(
+                                    text = if (jobPostingDetail.weight != null) "${jobPostingDetail.weight}kg"
+                                    else "-",
+                                    style = CareTheme.typography.body2,
+                                    color = CareTheme.colors.gray900,
+                                )
+                            }
+                        }
+
+                        HorizontalDivider(thickness = 1.dp, color = CareTheme.colors.gray100)
+
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(32.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 16.dp),
+                        ) {
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                Text(
+                                    text = stringResource(id = R.string.care_level),
+                                    style = CareTheme.typography.body2,
+                                    color = CareTheme.colors.gray300,
+                                )
+
+                                Text(
+                                    text = stringResource(id = R.string.mental_status),
+                                    style = CareTheme.typography.body2,
+                                    color = CareTheme.colors.gray300,
+                                )
+
+                                Text(
+                                    text = stringResource(id = R.string.disease),
+                                    style = CareTheme.typography.body2,
+                                    color = CareTheme.colors.gray300,
+                                )
+                            }
+
+                            Column(
+                                verticalArrangement = Arrangement.spacedBy(8.dp),
+                            ) {
+                                Text(
+                                    text = "${jobPostingDetail.careLevel}등급",
+                                    style = CareTheme.typography.body2,
+                                    color = CareTheme.colors.gray900,
+                                )
+
+                                Text(
+                                    text = jobPostingDetail.mentalStatus.displayName,
+                                    style = CareTheme.typography.body2,
+                                    color = CareTheme.colors.gray900,
+                                )
+
+                                Text(
+                                    text = jobPostingDetail.disease ?: "-",
+                                    style = CareTheme.typography.body2,
+                                    color = CareTheme.colors.gray900,
+                                )
+                            }
+                        }
+
+                        HorizontalDivider(thickness = 1.dp, color = CareTheme.colors.gray100)
+
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(32.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 16.dp),
+                        ) {
+                            Column(
+                                verticalArrangement = Arrangement.spacedBy(8.dp),
+                                modifier = Modifier.width(60.dp),
+                            ) {
+                                Text(
+                                    text = stringResource(id = R.string.meal_assistance),
+                                    style = CareTheme.typography.body2,
+                                    color = CareTheme.colors.gray300,
+                                )
+
+                                Text(
+                                    text = stringResource(id = R.string.bowel_assistance),
+                                    style = CareTheme.typography.body2,
+                                    color = CareTheme.colors.gray300,
+                                )
+
+                                Text(
+                                    text = stringResource(id = R.string.walking_assistance),
+                                    style = CareTheme.typography.body2,
+                                    color = CareTheme.colors.gray300,
+                                )
+
+                                Text(
+                                    text = stringResource(id = R.string.life_assistance),
+                                    style = CareTheme.typography.body2,
+                                    color = CareTheme.colors.gray300,
+                                )
+                            }
+
+                            Column(
+                                verticalArrangement = Arrangement.spacedBy(8.dp),
+                            ) {
+                                Text(
+                                    text = if (jobPostingDetail.isMealAssistance) stringResource(id = R.string.necessary)
+                                    else stringResource(id = R.string.unnecessary),
+                                    style = CareTheme.typography.body2,
+                                    color = CareTheme.colors.gray900,
+                                )
+
+                                Text(
+                                    text = if (jobPostingDetail.isBowelAssistance) stringResource(id = R.string.necessary)
+                                    else stringResource(id = R.string.unnecessary),
+                                    style = CareTheme.typography.body2,
+                                    color = CareTheme.colors.gray900,
+                                )
+
+                                Text(
+                                    text = if (jobPostingDetail.isWalkingAssistance) stringResource(
+                                        id = R.string.necessary
+                                    )
+                                    else stringResource(id = R.string.unnecessary),
+                                    style = CareTheme.typography.body2,
+                                    color = CareTheme.colors.gray900,
+                                )
+
+                                Text(
+                                    text = jobPostingDetail.lifeAssistance.toList()
+                                        .sortedBy { it.ordinal }
+                                        .joinToString(",") { it.displayName },
+                                    style = CareTheme.typography.body2,
+                                    color = CareTheme.colors.gray900,
+                                )
+                            }
+                        }
+
+                        HorizontalDivider(thickness = 1.dp, color = CareTheme.colors.gray100)
+
+                        Text(
+                            text = stringResource(id = R.string.speciality),
+                            style = CareTheme.typography.body2,
+                            color = CareTheme.colors.gray300,
+                            modifier = Modifier.padding(top = 16.dp, bottom = 6.dp),
+                        )
+
+                        CareTextFieldLong(
+                            value = jobPostingDetail.extraRequirement ?: "-",
+                            enabled = false,
+                            onValueChanged = {},
                         )
                     }
-                }
 
-                HorizontalDivider(thickness = 8.dp, color = CareTheme.colors.gray050)
+                    HorizontalDivider(thickness = 8.dp, color = CareTheme.colors.gray050)
 
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp)
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.work_conditions),
-                        style = CareTheme.typography.subtitle1,
-                        color = CareTheme.colors.gray900,
-                        modifier = Modifier.padding(bottom = 20.dp),
-                    )
-
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(32.dp),
-                        verticalAlignment = Alignment.CenterVertically,
+                    Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(bottom = 8.dp),
+                            .padding(horizontal = 20.dp)
                     ) {
-                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Text(
-                                text = stringResource(id = R.string.work_days),
-                                style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray300,
-                            )
+                        Text(
+                            text = stringResource(id = R.string.additional_info),
+                            style = CareTheme.typography.subtitle1,
+                            color = CareTheme.colors.gray900,
+                            modifier = Modifier.padding(bottom = 20.dp),
+                        )
 
-                            Text(
-                                text = stringResource(id = R.string.work_hours),
-                                style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray300,
-                            )
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(32.dp),
+                            modifier = Modifier.fillMaxWidth(),
+                        ) {
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                Text(
+                                    text = stringResource(id = R.string.experience_preference),
+                                    style = CareTheme.typography.body2,
+                                    color = CareTheme.colors.gray300,
+                                )
 
-                            Text(
-                                text = stringResource(id = R.string.pay),
-                                style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray300,
-                            )
+                                Text(
+                                    text = stringResource(id = R.string.apply_method),
+                                    style = CareTheme.typography.body2,
+                                    color = CareTheme.colors.gray300,
+                                )
 
-                            Text(
-                                text = stringResource(id = R.string.work_address),
-                                style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray300,
-                            )
-                        }
+                                Text(
+                                    text = stringResource(id = R.string.apply_deadline),
+                                    style = CareTheme.typography.body2,
+                                    color = CareTheme.colors.gray300,
+                                )
+                            }
 
-                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Text(
-                                text = jobPostingDetail.weekdays.toList().sortedBy { it.ordinal }
-                                    .joinToString(",") { it.displayName },
-                                style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray900,
-                            )
+                            Column(
+                                verticalArrangement = Arrangement.spacedBy(8.dp),
+                            ) {
+                                Text(
+                                    text = if (jobPostingDetail.isExperiencePreferred) stringResource(
+                                        id = R.string.experience_preferred
+                                    )
+                                    else stringResource(id = R.string.beginner_possible),
+                                    style = CareTheme.typography.body2,
+                                    color = CareTheme.colors.gray900,
+                                )
 
-                            Text(
-                                text = "${jobPostingDetail.startTime} - ${jobPostingDetail.endTime}",
-                                style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray900,
-                            )
+                                Text(
+                                    text = jobPostingDetail.applyMethod.toList()
+                                        .sortedBy { it.ordinal }
+                                        .joinToString(",") { it.displayName },
+                                    style = CareTheme.typography.body2,
+                                    color = CareTheme.colors.gray900,
+                                )
 
-                            Text(
-                                text = "${jobPostingDetail.payType.displayName} ${jobPostingDetail.payAmount} 원",
-                                style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray900,
-                            )
-
-                            Text(
-                                text = jobPostingDetail.lotNumberAddress,
-                                style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray900,
-                            )
+                                Text(
+                                    text = jobPostingDetail.applyDeadline.toString(),
+                                    style = CareTheme.typography.body2,
+                                    color = CareTheme.colors.gray900,
+                                )
+                            }
                         }
                     }
-                }
 
-                HorizontalDivider(thickness = 8.dp, color = CareTheme.colors.gray050)
+                    HorizontalDivider(thickness = 8.dp, color = CareTheme.colors.gray050)
 
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp)
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.customer_info),
-                        style = CareTheme.typography.subtitle1,
-                        color = CareTheme.colors.gray900,
-                        modifier = Modifier.padding(bottom = 20.dp),
-                    )
-
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(32.dp),
+                    Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(bottom = 16.dp),
+                            .padding(start = 20.dp, end = 20.dp, bottom = 48.dp),
                     ) {
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(8.dp),
-                            modifier = Modifier.width(60.dp),
-                        ) {
-                            Text(
-                                text = stringResource(id = R.string.gender),
-                                style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray300,
-                            )
+                        Text(
+                            text = stringResource(id = R.string.center_info),
+                            style = CareTheme.typography.subtitle1,
+                            color = CareTheme.colors.gray900,
+                            modifier = Modifier.padding(bottom = 12.dp),
+                        )
 
-                            Text(
-                                text = stringResource(id = R.string.age),
-                                style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray300,
-                            )
-
-                            Text(
-                                text = stringResource(id = R.string.weight),
-                                style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray300,
-                            )
-                        }
-
-                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Text(
-                                text = jobPostingDetail.gender.displayName,
-                                style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray900,
-                            )
-
-                            Text(
-                                text = "${jobPostingDetail.age}세",
-                                style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray900,
-                            )
-
-                            Text(
-                                text = if (jobPostingDetail.weight != null) "${jobPostingDetail.weight}kg"
-                                else "-",
-                                style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray900,
-                            )
-                        }
+                        CareCard(
+                            title = jobPostingDetail.centerName,
+                            description = jobPostingDetail.centerRoadNameAddress,
+                        )
                     }
-
-                    HorizontalDivider(thickness = 1.dp, color = CareTheme.colors.gray100)
-
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(32.dp),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 16.dp),
-                    ) {
-                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Text(
-                                text = stringResource(id = R.string.care_level),
-                                style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray300,
-                            )
-
-                            Text(
-                                text = stringResource(id = R.string.mental_status),
-                                style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray300,
-                            )
-
-                            Text(
-                                text = stringResource(id = R.string.disease),
-                                style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray300,
-                            )
-                        }
-
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(8.dp),
-                        ) {
-                            Text(
-                                text = "${jobPostingDetail.careLevel}등급",
-                                style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray900,
-                            )
-
-                            Text(
-                                text = jobPostingDetail.mentalStatus.displayName,
-                                style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray900,
-                            )
-
-                            Text(
-                                text = jobPostingDetail.disease ?: "-",
-                                style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray900,
-                            )
-                        }
-                    }
-
-                    HorizontalDivider(thickness = 1.dp, color = CareTheme.colors.gray100)
-
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(32.dp),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 16.dp),
-                    ) {
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(8.dp),
-                            modifier = Modifier.width(60.dp),
-                        ) {
-                            Text(
-                                text = stringResource(id = R.string.meal_assistance),
-                                style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray300,
-                            )
-
-                            Text(
-                                text = stringResource(id = R.string.bowel_assistance),
-                                style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray300,
-                            )
-
-                            Text(
-                                text = stringResource(id = R.string.walking_assistance),
-                                style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray300,
-                            )
-
-                            Text(
-                                text = stringResource(id = R.string.life_assistance),
-                                style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray300,
-                            )
-                        }
-
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(8.dp),
-                        ) {
-                            Text(
-                                text = if (jobPostingDetail.isMealAssistance) stringResource(id = R.string.necessary)
-                                else stringResource(id = R.string.unnecessary),
-                                style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray900,
-                            )
-
-                            Text(
-                                text = if (jobPostingDetail.isBowelAssistance) stringResource(id = R.string.necessary)
-                                else stringResource(id = R.string.unnecessary),
-                                style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray900,
-                            )
-
-                            Text(
-                                text = if (jobPostingDetail.isWalkingAssistance) stringResource(id = R.string.necessary)
-                                else stringResource(id = R.string.unnecessary),
-                                style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray900,
-                            )
-
-                            Text(
-                                text = jobPostingDetail.lifeAssistance.toList()
-                                    .sortedBy { it.ordinal }
-                                    .joinToString(",") { it.displayName },
-                                style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray900,
-                            )
-                        }
-                    }
-
-                    HorizontalDivider(thickness = 1.dp, color = CareTheme.colors.gray100)
-
-                    Text(
-                        text = stringResource(id = R.string.speciality),
-                        style = CareTheme.typography.body2,
-                        color = CareTheme.colors.gray300,
-                        modifier = Modifier.padding(top = 16.dp, bottom = 6.dp),
-                    )
-
-                    CareTextFieldLong(
-                        value = jobPostingDetail.extraRequirement ?: "-",
-                        enabled = false,
-                        onValueChanged = {},
-                    )
-                }
-
-                HorizontalDivider(thickness = 8.dp, color = CareTheme.colors.gray050)
-
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp)
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.additional_info),
-                        style = CareTheme.typography.subtitle1,
-                        color = CareTheme.colors.gray900,
-                        modifier = Modifier.padding(bottom = 20.dp),
-                    )
-
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(32.dp),
-                        modifier = Modifier.fillMaxWidth(),
-                    ) {
-                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Text(
-                                text = stringResource(id = R.string.experience_preference),
-                                style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray300,
-                            )
-
-                            Text(
-                                text = stringResource(id = R.string.apply_method),
-                                style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray300,
-                            )
-
-                            Text(
-                                text = stringResource(id = R.string.apply_deadline),
-                                style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray300,
-                            )
-                        }
-
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(8.dp),
-                        ) {
-                            Text(
-                                text = if (jobPostingDetail.isExperiencePreferred) stringResource(id = R.string.experience_preferred)
-                                else stringResource(id = R.string.beginner_possible),
-                                style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray900,
-                            )
-
-                            Text(
-                                text = jobPostingDetail.applyMethod.toList()
-                                    .sortedBy { it.ordinal }
-                                    .joinToString(",") { it.displayName },
-                                style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray900,
-                            )
-
-                            Text(
-                                text = jobPostingDetail.applyDeadline.toString(),
-                                style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray900,
-                            )
-                        }
-                    }
-                }
-
-                HorizontalDivider(thickness = 8.dp, color = CareTheme.colors.gray050)
-
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp)
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.center_info),
-                        style = CareTheme.typography.subtitle1,
-                        color = CareTheme.colors.gray900,
-                        modifier = Modifier.padding(bottom = 12.dp),
-                    )
-
-                    CareCard(
-                        title = jobPostingDetail.centerName,
-                        description = jobPostingDetail.centerRoadNameAddress,
-                    )
                 }
 
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 16.dp, bottom = 30.dp, start = 20.dp, end = 20.dp),
+                        .background(CareTheme.colors.white000)
+                        .padding(top = 12.dp, bottom = 28.dp, start = 20.dp, end = 20.dp),
                 ) {
                     CareButtonLine(
                         text = stringResource(id = R.string.inquiry),
