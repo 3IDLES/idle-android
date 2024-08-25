@@ -39,5 +39,6 @@ data class CenterJobPostingResponse(
         roadNameAddress = roadNameAddress,
         clientName = clientName,
         createdAt = createdAt,
+        applicantCount = 0,
     )
 }

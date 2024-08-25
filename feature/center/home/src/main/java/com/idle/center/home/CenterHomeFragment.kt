@@ -134,7 +134,7 @@ internal fun CenterHomeScreen(
                                     key = { it.id },
                                 ) { jobPosting ->
                                     CenterRecruitmentCard(
-                                        centerJobPosting = jobPosting,
+                                        jobPosting = jobPosting,
                                         navigateTo = navigateTo,
                                     )
                                 }
@@ -158,7 +158,7 @@ internal fun CenterHomeScreen(
                                     key = { it.id },
                                 ) { jobPosting ->
                                     CenterRecruitmentCard(
-                                        centerJobPosting = jobPosting,
+                                        jobPosting = jobPosting,
                                         navigateTo = navigateTo,
                                     )
                                 }
@@ -196,7 +196,7 @@ internal fun CenterHomeScreen(
 
 @Composable
 private fun CenterRecruitmentCard(
-    centerJobPosting: CenterJobPosting,
+    jobPosting: CenterJobPosting,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
     Card(
@@ -209,12 +209,12 @@ private fun CenterRecruitmentCard(
         ),
         border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
         modifier = Modifier.clickable {
-            navigateTo(DeepLinkDestination.CenterJobDetail(centerJobPosting.id))
+            navigateTo(DeepLinkDestination.CenterJobDetail(jobPosting.id))
         }
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
-                text = centerJobPosting.createdAt + " ~ " + centerJobPosting.applyDeadline,
+                text = jobPosting.createdAt + " ~ " + jobPosting.applyDeadline,
                 style = CareTheme.typography.body3,
                 color = CareTheme.colors.gray300,
                 overflow = TextOverflow.Clip,
@@ -223,7 +223,7 @@ private fun CenterRecruitmentCard(
             )
 
             Text(
-                text = centerJobPosting.lotNumberAddress,
+                text = jobPosting.lotNumberAddress,
                 style = CareTheme.typography.subtitle2,
                 color = CareTheme.colors.gray900,
                 overflow = TextOverflow.Clip,
@@ -232,16 +232,16 @@ private fun CenterRecruitmentCard(
             )
 
             Text(
-                text = "${centerJobPosting.clientName} | ${centerJobPosting.careLevel}등급 ${centerJobPosting.age}세 ${centerJobPosting.gender.displayName}",
+                text = "${jobPosting.clientName} | ${jobPosting.careLevel}등급 ${jobPosting.age}세 ${jobPosting.gender.displayName}",
                 style = CareTheme.typography.body2,
                 color = CareTheme.colors.gray500,
                 modifier = Modifier.padding(bottom = 12.dp)
             )
 
             CareButtonCardMedium(
-                text = "지원자 0명 조회",
-                enable = false,
-                onClick = { navigateTo(CenterApplicantInquiry(centerJobPosting.id)) },
+                text = "지원자 ${jobPosting.applicantCount}명 조회",
+                enable = jobPosting.applicantCount > 0,
+                onClick = { navigateTo(CenterApplicantInquiry(jobPosting.id)) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 4.dp),

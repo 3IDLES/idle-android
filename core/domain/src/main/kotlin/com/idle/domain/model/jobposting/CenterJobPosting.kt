@@ -14,4 +14,5 @@ data class CenterJobPosting(
     val applyDeadlineType: ApplyDeadlineType,
     val applyDeadline: String,
     val createdAt: String,
+    val applicantCount: Int,
 )
