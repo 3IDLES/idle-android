@@ -76,4 +76,6 @@ interface JobPostingRepository {
     ): Result<Pair<String?, List<WorkerJobPosting>>>
 
     suspend fun getJobPostingsInProgress(): Result<List<CenterJobPosting>>
+
+    suspend fun applyJobPosting(jobPostingId: String, applyMethod: ApplyMethod): Result<Unit>
 }
