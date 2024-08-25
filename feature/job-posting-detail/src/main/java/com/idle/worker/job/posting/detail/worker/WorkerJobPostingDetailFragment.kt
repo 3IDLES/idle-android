@@ -196,17 +196,21 @@ internal fun WorkerJobPostingDetailScreen(
                                 .fillMaxWidth()
                                 .padding(bottom = 8.dp)
                         ) {
-                            CareTag(
-                                text = "초보가능",
-                                textColor = CareTheme.colors.orange500,
-                                backgroundColor = CareTheme.colors.orange100,
-                            )
+                            if (!jobPostingDetail.isExperiencePreferred) {
+                                CareTag(
+                                    text = stringResource(id = R.string.beginner_possible),
+                                    textColor = CareTheme.colors.orange500,
+                                    backgroundColor = CareTheme.colors.orange100,
+                                )
+                            }
 
-                            CareTag(
-                                text = "D-10",
-                                textColor = CareTheme.colors.gray300,
-                                backgroundColor = CareTheme.colors.gray050,
-                            )
+                            if (jobPostingDetail.calculateDeadline() <= 14) {
+                                CareTag(
+                                    text = "D-${jobPostingDetail.calculateDeadline()}",
+                                    textColor = CareTheme.colors.gray300,
+                                    backgroundColor = CareTheme.colors.gray050,
+                                )
+                            }
 
                             Spacer(modifier = Modifier.weight(1f))
 
@@ -309,7 +313,7 @@ internal fun WorkerJobPostingDetailScreen(
                             )
 
                             Text(
-                                text = "걸어서 0분 ~ 5분 소요",
+                                text = "${jobPostingDetail.distance} km",
                                 style = CareTheme.typography.subtitle2,
                                 color = CareTheme.colors.gray500,
                             )
