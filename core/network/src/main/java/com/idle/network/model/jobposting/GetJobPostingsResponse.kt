@@ -7,6 +7,8 @@ import com.idle.domain.model.job.PayType
 import com.idle.domain.model.jobposting.WorkerJobPosting
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @Serializable
 data class GetJobPostingsResponse(
@@ -38,7 +40,7 @@ data class WorkerJobPostingResponse(
 ) {
     fun toVO(): WorkerJobPosting = WorkerJobPosting(
         age = age,
-        applyDeadline = applyDeadline,
+        applyDeadline = LocalDate.parse(applyDeadline, DateTimeFormatter.ofPattern("yyyy-MM-dd")),
         applyDeadlineType = ApplyDeadlineType.create(applyDeadlineType),
         careLevel = careLevel,
         distance = distance,

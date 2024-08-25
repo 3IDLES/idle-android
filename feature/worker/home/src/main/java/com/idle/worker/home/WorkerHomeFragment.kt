@@ -173,11 +173,13 @@ private fun WorkerRecruitmentCard(
                     )
                 }
 
-                CareTag(
-                    text = "D-10",
-                    textColor = CareTheme.colors.gray300,
-                    backgroundColor = CareTheme.colors.gray050,
-                )
+                if (workerJobPosting.calculateDeadline() <= 14) {
+                    CareTag(
+                        text = "D-${workerJobPosting.calculateDeadline()}",
+                        textColor = CareTheme.colors.gray300,
+                        backgroundColor = CareTheme.colors.gray050,
+                    )
+                }
 
                 Spacer(modifier = Modifier.weight(1f))
 

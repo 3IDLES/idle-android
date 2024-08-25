@@ -8,6 +8,8 @@ import com.idle.domain.model.job.LifeAssistance
 import com.idle.domain.model.job.MentalStatus
 import com.idle.domain.model.job.PayType
 import java.time.LocalDate
+import java.time.ZoneId
+import java.util.TimeZone
 
 data class WorkerJobPostingDetail(
     val weekdays: Set<DayOfWeek>,
@@ -39,4 +41,10 @@ data class WorkerJobPostingDetail(
     val centerName: String,
     val centerRoadNameAddress: String,
     val distance: Int,
-)
+) {
+    fun calculateDeadline(): Long {
+        val seoulZone = ZoneId.of("Asia/Seoul")
+        val nowDate = LocalDate.now(seoulZone)
+        return applyDeadline.toEpochDay() - nowDate.toEpochDay()
+    }
+}
