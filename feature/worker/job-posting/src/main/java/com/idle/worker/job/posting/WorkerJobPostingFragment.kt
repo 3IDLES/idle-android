@@ -42,6 +42,7 @@ import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.jobposting.WorkerJobPosting
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.time.format.DateTimeFormatter
 
 @AndroidEntryPoint
@@ -53,14 +54,18 @@ internal class WorkerJobPostingFragment : BaseComposeFragment() {
         fragmentViewModel.apply {
             val recruitmentPostStatus by recruitmentPostStatus.collectAsStateWithLifecycle()
             val appliedJobPostings by appliedJobPostings.collectAsStateWithLifecycle()
+            val favoritesJobPostings by favoritesJobPostings.collectAsStateWithLifecycle()
 
             LaunchedEffect(true) {
-                getAppliedJobPostings()
+                clearJobPostingStatus()
+                launch { getAppliedJobPostings() }
+                getMyFavoritesJobPostings()
             }
 
             WorkerJobPostingScreen(
                 recruitmentPostStatus = recruitmentPostStatus,
                 appliedJobPostings = appliedJobPostings,
+                favoritesJobPostings = favoritesJobPostings,
                 setRecruitmentPostStatus = ::setRecruitmentPostStatus,
                 applyJobPosting = ::applyJobPosting,
                 addFavoriteJobPosting = ::addFavoriteJobPosting,
@@ -75,6 +80,7 @@ internal class WorkerJobPostingFragment : BaseComposeFragment() {
 internal fun WorkerJobPostingScreen(
     recruitmentPostStatus: RecruitmentPostStatus,
     appliedJobPostings: List<WorkerJobPosting>,
+    favoritesJobPostings: List<WorkerJobPosting>,
     setRecruitmentPostStatus: (RecruitmentPostStatus) -> Unit,
     applyJobPosting: (String) -> Unit,
     addFavoriteJobPosting: (String) -> Unit,
@@ -150,7 +156,7 @@ internal fun WorkerJobPostingScreen(
                                 .fillMaxSize()
                         ) {
                             items(
-                                items = appliedJobPostings,
+                                items = favoritesJobPostings,
                                 key = { it.id },
                             ) { jobPosting ->
                                 WorkerRecruitmentCard(
