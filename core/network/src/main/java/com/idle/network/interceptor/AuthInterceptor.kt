@@ -1,6 +1,5 @@
 package com.idle.network.interceptor
 
-import com.idle.network.BuildConfig
 import com.idle.network.di.TokenManager
 import okhttp3.Interceptor
 import okhttp3.Request

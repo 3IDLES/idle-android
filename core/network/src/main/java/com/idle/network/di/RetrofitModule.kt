@@ -1,7 +1,9 @@
 package com.idle.network.di
 
 import com.idle.network.BuildConfig
-import com.idle.network.api.CareApi
+import com.idle.network.api.AuthApi
+import com.idle.network.api.JobPostingApi
+import com.idle.network.api.UserApi
 import com.idle.network.authenticator.CareAuthenticator
 import com.idle.network.interceptor.AuthInterceptor
 import dagger.Module
@@ -45,12 +47,34 @@ object RetrofitModule {
 
     @Singleton
     @Provides
-    fun providesCareApi(
+    fun providesAuthApi(
         okHttpClient: OkHttpClient,
-    ): CareApi = Retrofit.Builder()
+    ): AuthApi = Retrofit.Builder()
         .client(okHttpClient)
         .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
         .baseUrl(BuildConfig.CARE_BASE_URL)
         .build()
-        .create(CareApi::class.java)
+        .create(AuthApi::class.java)
+
+    @Singleton
+    @Provides
+    fun providesJobPostingApi(
+        okHttpClient: OkHttpClient,
+    ): JobPostingApi = Retrofit.Builder()
+        .client(okHttpClient)
+        .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
+        .baseUrl(BuildConfig.CARE_BASE_URL)
+        .build()
+        .create(JobPostingApi::class.java)
+
+    @Singleton
+    @Provides
+    fun providesUserApi(
+        okHttpClient: OkHttpClient,
+    ): UserApi = Retrofit.Builder()
+        .client(okHttpClient)
+        .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
+        .baseUrl(BuildConfig.CARE_BASE_URL)
+        .build()
+        .create(UserApi::class.java)
 }

@@ -17,8 +17,8 @@ class WorkerHomeViewModel @Inject constructor(
 ) : BaseViewModel() {
     private val next = MutableStateFlow<String?>(null)
 
-    private val _Worker_jobPostings = MutableStateFlow<List<WorkerJobPosting>>(emptyList())
-    val jobPostings = _Worker_jobPostings.asStateFlow()
+    private val _jobPostings = MutableStateFlow<List<WorkerJobPosting>>(emptyList())
+    val jobPostings = _jobPostings.asStateFlow()
 
     private var callType: JobPostingCallType = JobPostingCallType.IN_APP
 
@@ -28,8 +28,6 @@ class WorkerHomeViewModel @Inject constructor(
 
     fun getJobPostings() = viewModelScope.launch {
         if (callType == JobPostingCallType.END) return@launch
-
-        Log.d("test", callType.toString())
 
         when (callType) {
             JobPostingCallType.IN_APP -> fetchInAppJobPostings()
@@ -44,7 +42,7 @@ class WorkerHomeViewModel @Inject constructor(
             if (nextId == null) {
                 callType = JobPostingCallType.CRAWLING
             }
-            _Worker_jobPostings.value += postings
+            _jobPostings.value += postings
         }.onFailure {
 
         }
