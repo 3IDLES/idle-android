@@ -8,6 +8,7 @@ import com.idle.domain.model.jobposting.WorkerJobPosting
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @Serializable
@@ -58,7 +59,8 @@ data class WorkerJobPostingResponse(
         weekdays = DayOfWeek.create(weekdays)
             .toList()
             .sortedBy { it.ordinal },
-        applyTime = LocalDate.parse(applyTime, DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+        applyTime = applyTime.takeIf { it.isNotBlank() }
+            ?.let { LocalDateTime.parse(it, DateTimeFormatter.ISO_LOCAL_DATE_TIME) },
         isFavorite = isFavorite,
     )
 }
