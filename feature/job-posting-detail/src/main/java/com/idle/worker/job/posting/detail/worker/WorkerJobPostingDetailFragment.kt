@@ -54,6 +54,7 @@ import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.component.CareTextFieldLong
 import com.idle.designsystem.compose.foundation.CareTheme
+import com.idle.domain.model.job.ApplyMethod
 import com.idle.domain.model.jobposting.WorkerJobPostingDetail
 import com.idle.worker.job.posting.detail.worker.map.PlaceDetailScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -96,6 +97,7 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
                             jobPostingDetail = it,
                             showPlaceDetail = setShowPlaceDetail,
                             requestEvent = ::workerJobPostingDetailEvent,
+                            applyJobPosting = ::applyJobPosting,
                         )
                     }
                 }
@@ -118,6 +120,7 @@ internal fun WorkerJobPostingDetailScreen(
     jobPostingDetail: WorkerJobPostingDetail,
     showPlaceDetail: (Boolean) -> Unit,
     requestEvent: (WorkerJobPostingDetailEvent) -> Unit,
+    applyJobPosting: (String, ApplyMethod) -> Unit,
 ) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val scrollState = rememberScrollState()
@@ -733,7 +736,7 @@ internal fun WorkerJobPostingDetailScreen(
 
                     CareButtonLine(
                         text = stringResource(id = R.string.recruit),
-                        onClick = {},
+                        onClick = { applyJobPosting(jobPostingDetail.id, ApplyMethod.APP) },
                         containerColor = CareTheme.colors.orange500,
                         borderColor = CareTheme.colors.orange500,
                         textColor = CareTheme.colors.white000,
