@@ -62,6 +62,9 @@ internal class WorkerJobPostingFragment : BaseComposeFragment() {
                 recruitmentPostStatus = recruitmentPostStatus,
                 appliedJobPostings = appliedJobPostings,
                 setRecruitmentPostStatus = ::setRecruitmentPostStatus,
+                applyJobPosting = ::applyJobPosting,
+                addFavoriteJobPosting = ::addFavoriteJobPosting,
+                removeFavoriteJobPosting = ::removeFavoriteJobPosting,
                 navigateTo = { baseEvent(NavigateTo(it)) },
             )
         }
@@ -73,6 +76,9 @@ internal fun WorkerJobPostingScreen(
     recruitmentPostStatus: RecruitmentPostStatus,
     appliedJobPostings: List<WorkerJobPosting>,
     setRecruitmentPostStatus: (RecruitmentPostStatus) -> Unit,
+    applyJobPosting: (String) -> Unit,
+    addFavoriteJobPosting: (String) -> Unit,
+    removeFavoriteJobPosting: (String) -> Unit,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
     Scaffold(
@@ -119,6 +125,9 @@ internal fun WorkerJobPostingScreen(
                             ) { jobPosting ->
                                 WorkerRecruitmentCard(
                                     jobPosting = jobPosting,
+                                    applyJobPosting = applyJobPosting,
+                                    addFavoriteJobPosting = addFavoriteJobPosting,
+                                    removeFavoriteJobPosting = removeFavoriteJobPosting,
                                     navigateTo = navigateTo,
                                 )
                             }
@@ -146,6 +155,9 @@ internal fun WorkerJobPostingScreen(
                             ) { jobPosting ->
                                 WorkerRecruitmentCard(
                                     jobPosting = jobPosting,
+                                    applyJobPosting = applyJobPosting,
+                                    addFavoriteJobPosting = addFavoriteJobPosting,
+                                    removeFavoriteJobPosting = removeFavoriteJobPosting,
                                     navigateTo = navigateTo,
                                 )
                             }

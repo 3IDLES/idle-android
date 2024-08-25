@@ -4,8 +4,12 @@ import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
+import com.idle.domain.model.job.ApplyMethod
 import com.idle.domain.model.jobposting.WorkerJobPosting
+import com.idle.domain.usecase.jobposting.AddFavoriteJobPostingUseCase
+import com.idle.domain.usecase.jobposting.ApplyJobPostingUseCase
 import com.idle.domain.usecase.jobposting.GetJobPostingsAppliedUseCase
+import com.idle.domain.usecase.jobposting.RemoveFavoriteJobPostingUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,7 +19,11 @@ import javax.inject.Inject
 @HiltViewModel
 class WorkerJobPostingViewModel @Inject constructor(
     private val getJobPostingsAppliedUseCase: GetJobPostingsAppliedUseCase,
-) : BaseViewModel() {
+    private val applyJobPostingUseCase: ApplyJobPostingUseCase,
+    private val addFavoriteJobPostingUseCase: AddFavoriteJobPostingUseCase,
+    private val removeFavoriteJobPostingUseCase: RemoveFavoriteJobPostingUseCase,
+
+    ) : BaseViewModel() {
     private val _recruitmentPostStatus = MutableStateFlow(RecruitmentPostStatus.APPLY)
     val recruitmentPostStatus = _recruitmentPostStatus.asStateFlow()
 
@@ -40,6 +48,33 @@ class WorkerJobPostingViewModel @Inject constructor(
             }
 
             _appliedJobPostings.value += postings
+        }.onFailure {
+            baseEvent(CareBaseEvent.Error(it.message.toString()))
+        }
+    }
+
+    internal fun applyJobPosting(jobPostingId: String) = viewModelScope.launch {
+        applyJobPostingUseCase(
+            jobPostingId = jobPostingId,
+            applyMethod = ApplyMethod.APP
+        ).onSuccess {
+
+        }.onFailure {
+            baseEvent(CareBaseEvent.Error(it.message.toString()))
+        }
+    }
+
+    internal fun addFavoriteJobPosting(jobPostingId: String) = viewModelScope.launch {
+        addFavoriteJobPostingUseCase(jobPostingId).onSuccess {
+
+        }.onFailure {
+            baseEvent(CareBaseEvent.Error(it.message.toString()))
+        }
+    }
+
+    internal fun removeFavoriteJobPosting(jobPostingId: String) = viewModelScope.launch {
+        removeFavoriteJobPostingUseCase(jobPostingId).onSuccess {
+
         }.onFailure {
             baseEvent(CareBaseEvent.Error(it.message.toString()))
         }
