@@ -20,14 +20,8 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
     private val getWorkerJobPostingDetailUseCase: GetWorkerJobPostingDetailUseCase,
     private val applyJobPostingUseCase: ApplyJobPostingUseCase,
 ) : BaseViewModel() {
-    private val _eventFlow = MutableSharedFlow<WorkerJobPostingDetailEvent>()
-    val eventFlow = _eventFlow.asSharedFlow()
-
     private val _workerJobPostingDetail = MutableStateFlow<WorkerJobPostingDetail?>(null)
     val workerJobPostingDetail = _workerJobPostingDetail.asStateFlow()
-
-    internal fun workerJobPostingDetailEvent(event: WorkerJobPostingDetailEvent) =
-        viewModelScope.launch { _eventFlow.emit(event) }
 
     internal fun getJobPostingDetail(jobPostingId: String) = viewModelScope.launch {
         getWorkerJobPostingDetailUseCase(jobPostingId).onSuccess {
@@ -47,8 +41,4 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
             baseEvent(CareBaseEvent.Error(it.message.toString()))
         }
     }
-}
-
-sealed class WorkerJobPostingDetailEvent {
-    data class CallInquiry(val number: String) : WorkerJobPostingDetailEvent()
 }

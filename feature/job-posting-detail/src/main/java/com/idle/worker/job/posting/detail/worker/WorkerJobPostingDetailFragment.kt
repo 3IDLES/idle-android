@@ -4,6 +4,9 @@ package com.idle.worker.job.posting.detail.worker
 
 import android.content.Intent
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -31,6 +34,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,12 +46,12 @@ import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.navArgs
-import com.idle.binding.repeatOnStarted
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareBottomSheetLayout
 import com.idle.designsystem.compose.component.CareButtonLine
 import com.idle.designsystem.compose.component.CareCard
+import com.idle.designsystem.compose.component.CareDialog
 import com.idle.designsystem.compose.component.CareMap
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
@@ -71,10 +75,6 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
             val (showPlaceDetail, setShowPlaceDetail) = rememberSaveable { mutableStateOf(false) }
             val jobPostingDetail by workerJobPostingDetail.collectAsStateWithLifecycle()
 
-            viewLifecycleOwner.repeatOnStarted {
-                eventFlow.collect { handleJobPostingEvent(it) }
-            }
-
             LaunchedEffect(true) {
                 getJobPostingDetail(args.jobPostingId)
             }
@@ -96,20 +96,10 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
                         WorkerJobPostingDetailScreen(
                             jobPostingDetail = it,
                             showPlaceDetail = setShowPlaceDetail,
-                            requestEvent = ::workerJobPostingDetailEvent,
                             applyJobPosting = ::applyJobPosting,
                         )
                     }
                 }
-            }
-        }
-    }
-
-    private fun handleJobPostingEvent(event: WorkerJobPostingDetailEvent) {
-        when (event) {
-            is WorkerJobPostingDetailEvent.CallInquiry -> {
-                val number = "tel:" + event.number
-                startActivity(Intent(Intent.ACTION_DIAL, number.toUri()))
             }
         }
     }
@@ -119,7 +109,6 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
 internal fun WorkerJobPostingDetailScreen(
     jobPostingDetail: WorkerJobPostingDetail,
     showPlaceDetail: (Boolean) -> Unit,
-    requestEvent: (WorkerJobPostingDetailEvent) -> Unit,
     applyJobPosting: (String, ApplyMethod) -> Unit,
 ) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
@@ -129,6 +118,33 @@ internal fun WorkerJobPostingDetailScreen(
         initialValue = ModalBottomSheetValue.Hidden,
         skipHalfExpanded = true,
     )
+    var callInquiryCallback by rememberSaveable { mutableStateOf(false) }
+
+    val dialResultLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) {
+        callInquiryCallback = true
+    }
+
+    if (callInquiryCallback) {
+        CareDialog(
+            title = "이 공고에 지원하시겠습니까?",
+            leftButtonText = stringResource(id = R.string.cancel),
+            rightButtonText = stringResource(id = R.string.recruit),
+            leftButtonTextColor = CareTheme.colors.gray300,
+            leftButtonColor = CareTheme.colors.white000,
+            leftButtonBorder = BorderStroke(1.dp, CareTheme.colors.gray100),
+            rightButtonTextColor = CareTheme.colors.white000,
+            rightButtonColor = CareTheme.colors.orange500,
+            onDismissRequest = { callInquiryCallback = false },
+            onLeftButtonClick = { callInquiryCallback = false },
+            onRightButtonClick = { applyJobPosting(jobPostingDetail.id, ApplyMethod.CALLING) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+        )
+    }
+
 
     CareBottomSheetLayout(
         sheetState = sheetState,
@@ -155,7 +171,11 @@ internal fun WorkerJobPostingDetailScreen(
                             contentDescription = null,
                         )
                     },
-                    onClick = { requestEvent(WorkerJobPostingDetailEvent.CallInquiry("01012345678")) },
+                    onClick = {
+                        val number = "tel:010-1234-5678}"
+                        val dialIntent = Intent(Intent.ACTION_DIAL, number.toUri())
+                        dialResultLauncher.launch(dialIntent)
+                    },
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
