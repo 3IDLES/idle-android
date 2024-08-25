@@ -45,7 +45,7 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
             baseEvent(CareBaseEvent.Error(it.message.toString()))
         }
     }
-
+    
     internal fun addFavoriteJobPosting(jobPostingId: String) = viewModelScope.launch {
         addFavoriteJobPostingUseCase(jobPostingId).onSuccess {
 
