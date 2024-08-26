@@ -71,6 +71,7 @@
     <string name="applicant_inquiry">지원자 확인</string>
     <string name="job_posting_complete_message">요양보호사 구인 공고를\n등록했어요!</string>
     <string name="job_posting_detail">공고 정보</string>
+    <string name="job_posting_edit">공고 편집</string>
     <string name="experience_preferred">경력자 우대</string>
     <string name="beginner_possible">초보 가능</string>
     <string name="view_as_caregiver">보호사 측 화면으로 보기</string>
