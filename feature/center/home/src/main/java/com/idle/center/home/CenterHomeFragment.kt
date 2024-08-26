@@ -208,9 +208,7 @@ private fun JobPostingInProgressCard(
             disabledContentColor = CareTheme.colors.white000,
         ),
         border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
-        modifier = Modifier.clickable {
-            navigateTo(DeepLinkDestination.CenterJobDetail(jobPosting.id))
-        }
+        onClick = { navigateTo(DeepLinkDestination.CenterJobDetail(jobPosting.id)) },
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
@@ -303,9 +301,8 @@ private fun JobPostingCompletedCard(
             disabledContentColor = CareTheme.colors.white000,
         ),
         border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
-        modifier = Modifier.clickable {
-            navigateTo(DeepLinkDestination.CenterJobDetail(jobPosting.id))
-        }
+        onClick = { navigateTo(DeepLinkDestination.CenterJobDetail(jobPosting.id)) },
+        modifier = Modifier.fillMaxWidth(),
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
