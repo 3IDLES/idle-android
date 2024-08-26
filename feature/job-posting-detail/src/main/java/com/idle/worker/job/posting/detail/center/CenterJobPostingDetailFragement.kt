@@ -15,9 +15,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -28,10 +30,10 @@ import com.idle.binding.DeepLinkDestination
 import com.idle.binding.base.CareBaseEvent
 import com.idle.center.job.edit.JobEditScreen
 import com.idle.compose.base.BaseComposeFragment
+import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareBottomSheetLayout
 import com.idle.designsystem.compose.component.CareButtonLarge
-import com.idle.designsystem.compose.component.CareButtonRound
 import com.idle.designsystem.compose.component.CareCard
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
@@ -125,6 +127,7 @@ internal fun CenterJobPostingDetailScreen(
         initialValue = ModalBottomSheetValue.Hidden,
         skipHalfExpanded = true,
     )
+    val coroutineScope = rememberCoroutineScope()
 
     jobPostingDetail?.let {
         CareBottomSheetLayout(
@@ -136,23 +139,45 @@ internal fun CenterJobPostingDetailScreen(
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text(
-                        text = stringResource(id = R.string.inquiry),
+                        text = stringResource(id = R.string.job_posting_edit),
                         style = CareTheme.typography.heading3,
                         color = CareTheme.colors.gray900,
                         modifier = Modifier.padding(bottom = 20.dp),
                     )
 
-
                     CareCard(
-                        title = stringResource(id = R.string.inquiry_by_call),
-                        description = "010-1234-5678",
+                        title = stringResource(id = R.string.edit_job_posting_button),
                         titleLeftComponent = {
                             Image(
-                                painter = painterResource(R.drawable.ic_call),
+                                painter = painterResource(id = R.drawable.ic_edit_pencil_non_background),
+                                contentDescription = null,
+                                colorFilter = ColorFilter.tint(CareTheme.colors.gray500),
+                            )
+                        },
+                        onClick = {
+                            coroutineScope.launch {
+                                sheetState.hide()
+                                setEditState(true)
+                            }
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 8.dp)
+                    )
+
+                    CareCard(
+                        title = stringResource(id = R.string.end_recruiting),
+                        titleLeftComponent = {
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_red_check),
                                 contentDescription = null,
                             )
                         },
-                        onClick = {},
+                        onClick = {
+                            coroutineScope.launch {
+                                sheetState.hide()
+                            }
+                        },
                         modifier = Modifier.fillMaxWidth(),
                     )
                 }
@@ -164,9 +189,12 @@ internal fun CenterJobPostingDetailScreen(
                         title = stringResource(id = R.string.manage_job_posting),
                         onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
                         leftComponent = {
-                            CareButtonRound(
-                                text = stringResource(id = R.string.edit_job_posting_button),
-                                onClick = { setEditState(true) },
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_3dots_horizontal),
+                                contentDescription = null,
+                                modifier = Modifier.clickable {
+                                    coroutineScope.launch { sheetState.show() }
+                                }
                             )
                         },
                         modifier = Modifier
