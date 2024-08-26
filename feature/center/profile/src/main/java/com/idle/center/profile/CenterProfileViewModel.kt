@@ -18,7 +18,6 @@ class CenterProfileViewModel @Inject constructor(
     private val getLocalMyCenterProfileUseCase: GetLocalMyCenterProfileUseCase,
     private val updateCenterProfileUseCase: UpdateCenterProfileUseCase,
 ) : BaseViewModel() {
-
     private val _centerProfile = MutableStateFlow<CenterProfile?>(null)
     val centerProfile = _centerProfile.asStateFlow()
 
