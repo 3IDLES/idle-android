@@ -1,12 +1,12 @@
 package com.idle.worker.job.posting.detail.center
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.job.LifeAssistance
 import com.idle.domain.model.jobposting.CenterJobPostingDetail
 import com.idle.domain.model.jobposting.EditJobPostingDetail
+import com.idle.domain.usecase.jobposting.GetApplicantsCountUseCase
 import com.idle.domain.usecase.jobposting.GetCenterJobPostingDetailUseCase
 import com.idle.domain.usecase.jobposting.UpdateJobPostingUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,10 +18,14 @@ import javax.inject.Inject
 @HiltViewModel
 class CenterJobPostingDetailViewModel @Inject constructor(
     private val getCenterJobPostingDetailUseCase: GetCenterJobPostingDetailUseCase,
+    private val getApplicantsCountUseCase: GetApplicantsCountUseCase,
     private val updateJobPostingUseCase: UpdateJobPostingUseCase,
 ) : BaseViewModel() {
     private val _jobPostingDetail = MutableStateFlow<CenterJobPostingDetail?>(null)
     val jobPostingDetail = _jobPostingDetail.asStateFlow()
+
+    private val _applicantsCount = MutableStateFlow<Int>(0)
+    val applicantsCount = _applicantsCount.asStateFlow()
 
     private val _isEditState = MutableStateFlow(false)
     val isEditState = _isEditState.asStateFlow()
@@ -29,7 +33,13 @@ class CenterJobPostingDetailViewModel @Inject constructor(
     fun getCenterJobPostingDetail(jobPostingId: String) = viewModelScope.launch {
         getCenterJobPostingDetailUseCase(jobPostingId)
             .onSuccess { _jobPostingDetail.value = it }
-            .onFailure {  baseEvent(CareBaseEvent.Error(it.message.toString())) }
+            .onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
+    }
+
+    fun getApplicantsCount(jobPostingId: String) = viewModelScope.launch {
+        getApplicantsCountUseCase(jobPostingId).onSuccess {
+            _applicantsCount.value = it
+        }.onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
     }
 
     fun setEditState(state: Boolean) {

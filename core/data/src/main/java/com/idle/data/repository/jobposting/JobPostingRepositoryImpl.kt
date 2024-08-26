@@ -167,7 +167,7 @@ class JobPostingRepositoryImpl @Inject constructor(
     override suspend fun getJobPostingsCompleted(): Result<List<CenterJobPosting>> =
         jobPostingDataSource.getJobPostingsCompleted().mapCatching { it.toVO() }
 
-    override suspend fun getApplicantCount(jobPostingId: String): Result<Int> =
+    override suspend fun getApplicantsCount(jobPostingId: String): Result<Int> =
         jobPostingDataSource.getApplicantCount(jobPostingId).mapCatching { it.applicantCount }
 
     override suspend fun applyJobPosting(

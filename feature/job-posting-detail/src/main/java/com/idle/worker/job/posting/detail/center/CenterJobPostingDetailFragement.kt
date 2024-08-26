@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -26,6 +27,7 @@ import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.jobposting.CenterJobPostingDetail
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.ZoneId
 
@@ -38,10 +40,14 @@ internal class CenterJobPostingDetailFragment : BaseComposeFragment() {
     override fun ComposeLayout() {
         fragmentViewModel.apply {
             val jobPostingId by rememberSaveable { mutableStateOf(args.jobPostingId) }
-            getCenterJobPostingDetail(jobPostingId)
-
             val jobPostingDetail by jobPostingDetail.collectAsStateWithLifecycle()
+            val applicantsCount by applicantsCount.collectAsStateWithLifecycle()
             val isEditState by isEditState.collectAsStateWithLifecycle()
+
+            LaunchedEffect(true) {
+                getCenterJobPostingDetail(jobPostingId)
+                launch { getApplicantsCount(jobPostingId) }
+            }
 
             CareStateAnimator(
                 targetState = isEditState,
@@ -82,6 +88,7 @@ internal class CenterJobPostingDetailFragment : BaseComposeFragment() {
                     CenterJobPostingDetailScreen(
                         jobPostingId = jobPostingId,
                         jobPostingDetail = jobPostingDetail,
+                        applicantsCount = applicantsCount,
                         navigateTo = { baseEvent(CareBaseEvent.NavigateTo(it)) },
                         setEditState = ::setEditState,
                     )
@@ -95,6 +102,7 @@ internal class CenterJobPostingDetailFragment : BaseComposeFragment() {
 internal fun CenterJobPostingDetailScreen(
     jobPostingId: String,
     jobPostingDetail: CenterJobPostingDetail?,
+    applicantsCount: Int,
     navigateTo: (DeepLinkDestination) -> Unit,
     setEditState: (Boolean) -> Unit,
 ) {
@@ -151,7 +159,8 @@ internal fun CenterJobPostingDetailScreen(
                 onBackPressed = { onBackPressedDispatcher?.onBackPressed() },
                 bottomComponent = {
                     CareButtonLarge(
-                        text = "지원자 2명 조회",
+                        text = "지원자 ${applicantsCount}명 조회",
+                        enable = applicantsCount != 0,
                         onClick = {
                             navigateTo(
                                 DeepLinkDestination.CenterApplicantInquiry(jobPostingId)
