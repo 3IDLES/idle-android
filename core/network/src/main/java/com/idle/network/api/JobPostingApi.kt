@@ -10,6 +10,7 @@ import com.idle.network.model.jobposting.GetWorkerJobPostingDetailResponse
 import com.idle.network.model.jobposting.JobPostingRequest
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
@@ -78,4 +79,11 @@ interface JobPostingApi {
 
     @POST("/api/v1/job-postings/{job-posting-id}/remove-favorites")
     suspend fun removeFavoriteJobPosting(@Path("job-posting-id") jobPostingId: String): Response<Unit>
+
+    @PATCH("/api/v1/job-postings/{job-posting-id}/end")
+    suspend fun endJobPosting(@Path("job-posting-id") jobPostingId: String): Response<Unit>
+
+    @DELETE("/api/v1/job-postings/{job-posting-id}")
+    suspend fun deleteJobPosting(@Path("job-posting-id") jobPostingId: String): Response<Unit>
+
 }

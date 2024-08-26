@@ -66,4 +66,10 @@ class JobPostingDataSource @Inject constructor(
 
     suspend fun getApplicants(jobPostingId: String): Result<GetApplicantsResponse> =
         jobPostingApi.getApplicants(jobPostingId).onResponse()
+
+    suspend fun endJobPosting(jobPostingId: String): Result<Unit> =
+        jobPostingApi.endJobPosting(jobPostingId).onResponse()
+
+    suspend fun deleteJobPosting(jobPostingId: String): Result<Unit> =
+        jobPostingApi.deleteJobPosting(jobPostingId).onResponse()
 }
