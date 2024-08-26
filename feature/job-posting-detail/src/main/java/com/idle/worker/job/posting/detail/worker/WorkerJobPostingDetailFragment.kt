@@ -61,6 +61,7 @@ import com.idle.designsystem.compose.component.CareTextFieldLong
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.job.ApplyMethod
 import com.idle.domain.model.jobposting.WorkerJobPostingDetail
+import com.idle.domain.model.profile.WorkerProfile
 import com.idle.worker.job.posting.detail.worker.map.PlaceDetailScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -74,28 +75,33 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
     override fun ComposeLayout() {
         fragmentViewModel.apply {
             val (showPlaceDetail, setShowPlaceDetail) = rememberSaveable { mutableStateOf(false) }
+            val profile by profile.collectAsStateWithLifecycle()
             val jobPostingDetail by workerJobPostingDetail.collectAsStateWithLifecycle()
 
             LaunchedEffect(true) {
                 getJobPostingDetail(args.jobPostingId)
+                launch { getMyProfile() }
             }
 
-            jobPostingDetail?.let {
+            jobPostingDetail?.let { jobPosting ->
                 CareStateAnimator(
                     targetState = showPlaceDetail,
                     transitionCondition = showPlaceDetail,
                     modifier = Modifier.fillMaxSize(),
                 ) { state ->
                     if (state) {
-                        PlaceDetailScreen(
-                            callback = { setShowPlaceDetail(false) },
-                            homeLatLng = it.latitude.toDouble() to it.longitude.toDouble(),
-                            workspaceLatLng = it.latitude.toDouble() to it.longitude.toDouble(),
-                            lotNumberAddress = it.lotNumberAddress,
-                        )
+                        profile?.let { profile ->
+                            PlaceDetailScreen(
+                                callback = { setShowPlaceDetail(false) },
+                                homeLatLng = profile.latitude.toDouble() to profile.longitude.toDouble(),
+                                workspaceLatLng = jobPosting.latitude.toDouble() to jobPosting.longitude.toDouble(),
+                                lotNumberAddress = jobPosting.lotNumberAddress,
+                            )
+                        }
                     } else {
                         WorkerJobPostingDetailScreen(
-                            jobPostingDetail = it,
+                            profile = profile,
+                            jobPostingDetail = jobPosting,
                             showPlaceDetail = setShowPlaceDetail,
                             addFavoriteJobPosting = ::addFavoriteJobPosting,
                             removeFavoriteJobPosting = ::removeFavoriteJobPosting,
@@ -110,6 +116,7 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
 
 @Composable
 internal fun WorkerJobPostingDetailScreen(
+    profile: WorkerProfile?,
     jobPostingDetail: WorkerJobPostingDetail,
     showPlaceDetail: (Boolean) -> Unit,
     addFavoriteJobPosting: (String) -> Unit,
@@ -356,20 +363,28 @@ internal fun WorkerJobPostingDetailScreen(
                                 .height(224.dp)
                                 .clip(RoundedCornerShape(8.dp)),
                         ) {
-                            CareMap(
-                                homeLatLng = jobPostingDetail.latitude.toDouble() to jobPostingDetail.longitude.toDouble(),
-                                workspaceLatLng = jobPostingDetail.latitude.toDouble() to jobPostingDetail.longitude.toDouble(),
-                                onMapClick = { showPlaceDetail(true) },
-                                modifier = Modifier.fillMaxSize(),
-                            )
+                            if (profile != null) {
+                                CareMap(
+                                    homeLatLng = jobPostingDetail.latitude.toDouble() to jobPostingDetail.longitude.toDouble(),
+                                    workspaceLatLng = jobPostingDetail.latitude.toDouble() to jobPostingDetail.longitude.toDouble(),
+                                    onMapClick = { showPlaceDetail(true) },
+                                    modifier = Modifier.fillMaxSize(),
+                                )
 
-                            Image(
-                                painter = painterResource(id = R.drawable.ic_map_expand),
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .align(Alignment.BottomEnd)
-                                    .padding(12.dp),
-                            )
+                                Image(
+                                    painter = painterResource(id = R.drawable.ic_map_expand),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .align(Alignment.BottomEnd)
+                                        .padding(12.dp),
+                                )
+                            } else {
+                                Image(
+                                    painter = painterResource(id = R.drawable.ic_map_loading),
+                                    contentDescription = null,
+                                    modifier = Modifier.fillMaxSize(),
+                                )
+                            }
                         }
                     }
 
