@@ -261,7 +261,16 @@ private fun CenterRecruitmentCard(
                     text = stringResource(id = R.string.edit_job_posting),
                     style = CareTheme.typography.body3,
                     color = CareTheme.colors.gray500,
-                    modifier = Modifier.padding(end = 4.dp),
+                    modifier = Modifier
+                        .padding(end = 4.dp)
+                        .clickable {
+                            navigateTo(
+                                DeepLinkDestination.CenterJobDetail(
+                                    jobPostingId = jobPosting.id,
+                                    isEditState = true,
+                                )
+                            )
+                        },
                 )
 
                 Image(

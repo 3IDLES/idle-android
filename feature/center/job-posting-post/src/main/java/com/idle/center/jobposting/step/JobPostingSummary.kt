@@ -55,8 +55,6 @@ internal fun JobPostingSummaryScreen(
     setJobPostingStep: (JobPostingStep) -> Unit,
     postJobPosting: () -> Unit,
 ) {
-    BackHandler { setJobPostingStep(JobPostingStep.findStep(SUMMARY.step - 1)) }
-
     Scaffold(
         topBar = {
             CareSubtitleTopBar(

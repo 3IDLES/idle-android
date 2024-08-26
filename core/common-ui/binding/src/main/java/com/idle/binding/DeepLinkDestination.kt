@@ -14,7 +14,7 @@ import com.idle.domain.model.auth.UserRole
 
 sealed class DeepLinkDestination(
     val addressRes: Int,
-    val params: Map<String, String> = emptyMap(),
+    val params: Map<String, Any> = emptyMap(),
     val setDefaultAnimation: Boolean = true,
 ) {
     data object Auth : DeepLinkDestination(
@@ -78,9 +78,15 @@ sealed class DeepLinkDestination(
         addressRes = R.string.center_job_posting_post_complete_deeplink_url
     )
 
-    data class CenterJobDetail(val jobPostingId: String) : DeepLinkDestination(
+    data class CenterJobDetail(
+        val jobPostingId: String,
+        val isEditState: Boolean = false,
+    ) : DeepLinkDestination(
         addressRes = R.string.center_jobposting_detail_deeplink_url,
-        params = mapOf("jobPostingId" to jobPostingId),
+        params = mapOf(
+            "jobPostingId" to jobPostingId,
+            "isEditState" to isEditState,
+        ),
     )
 
     data object WorkerHome : DeepLinkDestination(
@@ -115,7 +121,7 @@ private fun DeepLinkDestination.getDeepLink(context: Context): String {
     val baseUrl = context.getString(this.addressRes)
 
     return params.entries.fold(baseUrl) { acc, param ->
-        acc.replace("{${param.key}}", param.value)
+        acc.replace("{${param.key}}", param.value.toString())
     }
 }
 

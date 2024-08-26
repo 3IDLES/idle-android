@@ -20,6 +20,9 @@
         <argument
             android:name="jobPostingId"
             app:argType="string" />
+        <argument
+            android:name="isEditState"
+            app:argType="boolean" />
         <deepLink app:uri="@string/center_jobposting_detail_deeplink_url" />
     </fragment>
 </navigation>

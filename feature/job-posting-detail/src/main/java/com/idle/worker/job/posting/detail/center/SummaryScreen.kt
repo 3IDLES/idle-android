@@ -1,5 +1,6 @@
 package com.idle.worker.job.posting.detail.center
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -67,6 +68,8 @@ fun SummaryScreen(
     onBackPressed: (() -> Unit)? = null,
 ) {
     val scrollState = rememberScrollState()
+
+    onBackPressed?.let { BackHandler { it.invoke() } }
 
     val payText = when (payType!!) {
         PayType.HOURLY -> stringResource(id = R.string.hourly_pay_format, payAmount)

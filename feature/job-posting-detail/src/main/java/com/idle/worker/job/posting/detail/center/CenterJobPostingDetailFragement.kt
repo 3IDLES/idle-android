@@ -45,6 +45,7 @@ internal class CenterJobPostingDetailFragment : BaseComposeFragment() {
             val isEditState by isEditState.collectAsStateWithLifecycle()
 
             LaunchedEffect(true) {
+                setEditState(args.isEditState)
                 getCenterJobPostingDetail(jobPostingId)
                 launch { getApplicantsCount(jobPostingId) }
             }
@@ -156,7 +157,6 @@ internal fun CenterJobPostingDetailScreen(
                 isExperiencePreferred = it.isExperiencePreferred,
                 applyMethod = it.applyMethod,
                 applyDeadline = it.applyDeadline,
-                onBackPressed = { onBackPressedDispatcher?.onBackPressed() },
                 bottomComponent = {
                     CareButtonLarge(
                         text = "지원자 ${applicantsCount}명 조회",
