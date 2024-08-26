@@ -5,11 +5,13 @@ import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.job.ApplyMethod
 import com.idle.domain.model.jobposting.WorkerJobPosting
+import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.usecase.jobposting.AddFavoriteJobPostingUseCase
 import com.idle.domain.usecase.jobposting.ApplyJobPostingUseCase
 import com.idle.domain.usecase.jobposting.GetJobPostingsAppliedUseCase
 import com.idle.domain.usecase.jobposting.GetMyFavoritesJobPostingsUseCase
 import com.idle.domain.usecase.jobposting.RemoveFavoriteJobPostingUseCase
+import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,8 +25,7 @@ class WorkerJobPostingViewModel @Inject constructor(
     private val applyJobPostingUseCase: ApplyJobPostingUseCase,
     private val addFavoriteJobPostingUseCase: AddFavoriteJobPostingUseCase,
     private val removeFavoriteJobPostingUseCase: RemoveFavoriteJobPostingUseCase,
-
-    ) : BaseViewModel() {
+) : BaseViewModel() {
     private val _recruitmentPostStatus = MutableStateFlow(RecruitmentPostStatus.APPLY)
     val recruitmentPostStatus = _recruitmentPostStatus.asStateFlow()
 
