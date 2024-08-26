@@ -100,4 +100,8 @@ interface JobPostingRepository {
     suspend fun removeFavoriteJobPosting(jobPostingId: String): Result<Unit>
 
     suspend fun getApplicants(jobPostingId: String): Result<Pair<JobPostingSummary, List<Applicant>>>
+
+    suspend fun endJobPosting(jobPostingId: String): Result<Unit>
+
+    suspend fun deleteJobPosting(jobPostingId: String): Result<Unit>
 }

@@ -186,4 +186,10 @@ class JobPostingRepositoryImpl @Inject constructor(
 
     override suspend fun getApplicants(jobPostingId: String): Result<Pair<JobPostingSummary, List<Applicant>>> =
         jobPostingDataSource.getApplicants(jobPostingId).mapCatching { it.toVO() }
+
+    override suspend fun endJobPosting(jobPostingId: String): Result<Unit> =
+        jobPostingDataSource.endJobPosting(jobPostingId)
+
+    override suspend fun deleteJobPosting(jobPostingId: String): Result<Unit> =
+        jobPostingDataSource.deleteJobPosting(jobPostingId)
 }
