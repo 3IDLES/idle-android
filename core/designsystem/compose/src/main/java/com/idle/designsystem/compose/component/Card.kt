@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,8 +27,8 @@ import com.idle.designsystem.compose.foundation.CareTheme
 @Composable
 fun CareCard(
     title: String,
-    description: String,
     modifier: Modifier = Modifier,
+    description: String? = null,
     titleLeftComponent: @Composable () -> Unit = {},
     descriptionLeftComponent: @Composable () -> Unit = {},
     showRightArrow: Boolean = true,
@@ -64,17 +65,19 @@ fun CareCard(
                     )
                 }
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(2.dp)
-                ) {
-                    descriptionLeftComponent()
+                if (description != null) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(2.dp)
+                    ) {
+                        descriptionLeftComponent()
 
-                    Text(
-                        text = description,
-                        style = CareTheme.typography.body3,
-                        color = CareTheme.colors.gray500,
-                    )
+                        Text(
+                            text = description,
+                            style = CareTheme.typography.body3,
+                            color = CareTheme.colors.gray500,
+                        )
+                    }
                 }
             }
 
@@ -147,7 +150,6 @@ private fun CareContactCardPreviewContent(modifier: Modifier = Modifier) {
     )
 }
 
-
 @Preview(name = "CareContactCard_Default", showBackground = true, group = "Default")
 @Composable
 private fun PreviewCareContactCardDefault() {
@@ -169,4 +171,45 @@ private fun PreviewCareContactCardFlip() {
 @Composable
 private fun PreviewCareContactCardFoldable() {
     CareContactCardPreviewContent()
+}
+
+@Composable
+private fun CareCenterEditCardPreviewContent(modifier: Modifier = Modifier) {
+    CareCard(
+        title = "공고 수정하기",
+        titleLeftComponent = {
+            Image(
+                painter = painterResource(id = com.idle.designresource.R.drawable.ic_edit_pencil_non_background),
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(CareTheme.colors.gray500),
+            )
+        },
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    )
+}
+
+
+@Preview(name = "CareCenterEditCard_Default", showBackground = true, group = "Default")
+@Composable
+private fun PreviewCareCenterCardDefault() {
+    CareCenterEditCardPreviewContent()
+}
+
+@Preview(name = "CareCenterEditCard_Flip", showBackground = true, device = FLIP, group = "Flip")
+@Composable
+private fun PreviewCareCenterCardFlip() {
+    CareCenterEditCardPreviewContent()
+}
+
+@Preview(
+    name = "CareCenterEditCard_Fold",
+    showBackground = true,
+    device = Devices.FOLDABLE,
+    group = "Fold"
+)
+@Composable
+private fun PreviewCareCenterCardFoldable() {
+    CareCenterEditCardPreviewContent()
 }
