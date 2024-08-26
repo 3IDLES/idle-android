@@ -38,8 +38,8 @@ data class WorkerJobPostingResponse(
     val roadNameAddress: String,
     val startTime: String,
     val weekdays: List<String>,
-    val applyTime: String = "",
-    val isFavorite: Boolean = false,
+    val applyTime: String?,
+    val isFavorite: Boolean,
 ) {
     fun toVO(): WorkerJobPosting = WorkerJobPosting(
         age = age,
@@ -59,8 +59,9 @@ data class WorkerJobPostingResponse(
         weekdays = DayOfWeek.create(weekdays)
             .toList()
             .sortedBy { it.ordinal },
-        applyTime = applyTime.takeIf { it.isNotBlank() }
-            ?.let { LocalDateTime.parse(it, DateTimeFormatter.ISO_LOCAL_DATE_TIME) },
+        applyTime = applyTime?.let {
+            LocalDateTime.parse(it, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+        },
         isFavorite = isFavorite,
     )
 }

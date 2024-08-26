@@ -87,9 +87,9 @@ internal fun CenterHomeScreen(
     setRecruitmentPostStatus: (RecruitmentPostStatus) -> Unit,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
-    val onGoingListState = rememberLazyListState()
-    val previousListState = rememberLazyListState()
-    val isScroll by remember { derivedStateOf { onGoingListState.isScrollInProgress || previousListState.isScrollInProgress } }
+    val inProgressListState = rememberLazyListState()
+    val completedListState = rememberLazyListState()
+    val isScroll by remember { derivedStateOf { inProgressListState.isScrollInProgress || completedListState.isScrollInProgress } }
 
     Scaffold(
         topBar = {
@@ -126,14 +126,14 @@ internal fun CenterHomeScreen(
                     when (status) {
                         RecruitmentPostStatus.IN_PROGRESS ->
                             LazyColumn(
-                                state = onGoingListState,
+                                state = inProgressListState,
                                 verticalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
                                 items(
                                     items = jobPostingsInProgresses,
                                     key = { it.id },
                                 ) { jobPosting ->
-                                    CenterRecruitmentCard(
+                                    JobPostingInProgressCard(
                                         jobPosting = jobPosting,
                                         navigateTo = navigateTo,
                                     )
@@ -150,14 +150,14 @@ internal fun CenterHomeScreen(
 
                         RecruitmentPostStatus.COMPLETED ->
                             LazyColumn(
-                                state = previousListState,
+                                state = completedListState,
                                 verticalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
                                 items(
                                     items = jobPostingsCompleted,
                                     key = { it.id },
                                 ) { jobPosting ->
-                                    CenterRecruitmentCard(
+                                    JobPostingCompletedCard(
                                         jobPosting = jobPosting,
                                         navigateTo = navigateTo,
                                     )
@@ -195,7 +195,7 @@ internal fun CenterHomeScreen(
 }
 
 @Composable
-private fun CenterRecruitmentCard(
+private fun JobPostingInProgressCard(
     jobPosting: CenterJobPosting,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
@@ -208,9 +208,7 @@ private fun CenterRecruitmentCard(
             disabledContentColor = CareTheme.colors.white000,
         ),
         border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
-        modifier = Modifier.clickable {
-            navigateTo(DeepLinkDestination.CenterJobDetail(jobPosting.id))
-        }
+        onClick = { navigateTo(DeepLinkDestination.CenterJobDetail(jobPosting.id)) },
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
@@ -285,6 +283,51 @@ private fun CenterRecruitmentCard(
                     color = CareTheme.colors.gray500,
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun JobPostingCompletedCard(
+    jobPosting: CenterJobPosting,
+    navigateTo: (DeepLinkDestination) -> Unit,
+) {
+    Card(
+        shape = RoundedCornerShape(12.dp),
+        colors = CardColors(
+            containerColor = CareTheme.colors.white000,
+            contentColor = CareTheme.colors.white000,
+            disabledContainerColor = CareTheme.colors.white000,
+            disabledContentColor = CareTheme.colors.white000,
+        ),
+        border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
+        onClick = { navigateTo(DeepLinkDestination.CenterJobDetail(jobPosting.id)) },
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                text = jobPosting.createdAt + " ~ " + jobPosting.applyDeadline,
+                style = CareTheme.typography.body3,
+                color = CareTheme.colors.gray300,
+                overflow = TextOverflow.Clip,
+                maxLines = 1,
+                modifier = Modifier.padding(bottom = 4.dp),
+            )
+
+            Text(
+                text = jobPosting.lotNumberAddress,
+                style = CareTheme.typography.subtitle2,
+                color = CareTheme.colors.gray900,
+                overflow = TextOverflow.Clip,
+                maxLines = 1,
+                modifier = Modifier.padding(bottom = 2.dp),
+            )
+
+            Text(
+                text = "${jobPosting.clientName} | ${jobPosting.careLevel}등급 ${jobPosting.age}세 ${jobPosting.gender.displayName}",
+                style = CareTheme.typography.body2,
+                color = CareTheme.colors.gray500,
+            )
         }
     }
 }
