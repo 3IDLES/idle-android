@@ -1,6 +1,5 @@
 package com.idle.domain.repositorry.profile
 
-import com.idle.domain.model.auth.UserRole
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.model.profile.JobSearchStatus
 import com.idle.domain.model.profile.WorkerProfile
@@ -10,7 +9,11 @@ interface ProfileRepository {
 
     suspend fun getMyCenterProfile(): Result<CenterProfile>
 
+    suspend fun getLocalMyCenterProfile(): Result<CenterProfile>
+
     suspend fun getMyWorkerProfile(): Result<WorkerProfile>
+
+    suspend fun getLocalMyWorkerProfile(): Result<WorkerProfile>
 
     suspend fun getWorkerProfile(workerId: String): Result<WorkerProfile>
 

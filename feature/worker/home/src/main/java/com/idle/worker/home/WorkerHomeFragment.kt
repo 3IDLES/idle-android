@@ -42,6 +42,7 @@ import com.idle.designsystem.compose.component.CareHeadingTopBar
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.jobposting.WorkerJobPosting
+import com.idle.domain.model.profile.WorkerProfile
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -51,9 +52,11 @@ internal class WorkerHomeFragment : BaseComposeFragment() {
     @Composable
     override fun ComposeLayout() {
         fragmentViewModel.apply {
+            val profile by profile.collectAsStateWithLifecycle()
             val jobPostings by jobPostings.collectAsStateWithLifecycle()
 
             WorkerHomeScreen(
+                profile = profile,
                 workerJobPostings = jobPostings,
                 getJobPostings = ::getJobPostings,
                 applyJobPosting = ::applyJobPosting,
@@ -67,6 +70,7 @@ internal class WorkerHomeFragment : BaseComposeFragment() {
 
 @Composable
 internal fun WorkerHomeScreen(
+    profile: WorkerProfile?,
     workerJobPostings: List<WorkerJobPosting>,
     getJobPostings: () -> Unit,
     applyJobPosting: (String) -> Unit,
@@ -94,7 +98,15 @@ internal fun WorkerHomeScreen(
         containerColor = CareTheme.colors.white000,
         topBar = {
             CareHeadingTopBar(
-                title = "경기 가평군 가평읍",
+                title = try {
+                    profile?.lotNumberAddress
+                        ?.split(" ")
+                        ?.subList(0, 3)
+                        ?.joinToString(" ")
+                        ?: "케어밋"
+                } catch (e: IndexOutOfBoundsException) {
+                    "케어밋"
+                },
                 leftComponent = {
                     Image(
                         painter = painterResource(R.drawable.ic_address_pin_big),

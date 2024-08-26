@@ -5,10 +5,12 @@ import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.job.ApplyMethod
 import com.idle.domain.model.jobposting.WorkerJobPosting
+import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.usecase.jobposting.AddFavoriteJobPostingUseCase
 import com.idle.domain.usecase.jobposting.ApplyJobPostingUseCase
 import com.idle.domain.usecase.jobposting.GetJobPostingsUseCase
 import com.idle.domain.usecase.jobposting.RemoveFavoriteJobPostingUseCase
+import com.idle.domain.usecase.profile.GetMyWorkerProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,11 +19,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WorkerHomeViewModel @Inject constructor(
+    private val getMyWorkerProfileUseCase: GetMyWorkerProfileUseCase,
     private val getJobPostingsUseCase: GetJobPostingsUseCase,
     private val applyJobPostingUseCase: ApplyJobPostingUseCase,
     private val addFavoriteJobPostingUseCase: AddFavoriteJobPostingUseCase,
     private val removeFavoriteJobPostingUseCase: RemoveFavoriteJobPostingUseCase,
 ) : BaseViewModel() {
+    private val _profile = MutableStateFlow<WorkerProfile?>(null)
+    val profile = _profile.asStateFlow()
+
     private val next = MutableStateFlow<String?>(null)
 
     private val _jobPostings = MutableStateFlow<List<WorkerJobPosting>>(emptyList())
@@ -31,6 +37,13 @@ class WorkerHomeViewModel @Inject constructor(
 
     init {
         getJobPostings()
+        viewModelScope.launch {
+            getMyWorkerProfileUseCase().onSuccess {
+                _profile.value = it
+            }.onFailure {
+                baseEvent(CareBaseEvent.Error(it.message.toString()))
+            }
+        }
     }
 
     fun getJobPostings() = viewModelScope.launch {
@@ -51,7 +64,7 @@ class WorkerHomeViewModel @Inject constructor(
             }
             _jobPostings.value += postings
         }.onFailure {
-
+            baseEvent(CareBaseEvent.Error(it.message.toString()))
         }
     }
 
