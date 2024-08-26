@@ -2,7 +2,6 @@ package com.idle.setting.center
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
@@ -12,7 +11,7 @@ import com.idle.binding.DeepLinkDestination.Withdrawal
 import com.idle.binding.base.BaseBindingFragment
 import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.binding.repeatOnStarted
-import com.idle.domain.model.auth.UserRole
+import com.idle.domain.model.auth.UserType
 import com.idle.setting.FAQ_URL
 import com.idle.setting.PRIVACY_POLICY_URL
 import com.idle.setting.R
@@ -67,7 +66,7 @@ internal class CenterSettingFragment :
             SettingEvent.Inquiry -> {}
             SettingEvent.Withdrawal -> fragmentViewModel.baseEvent(
                 NavigateTo(
-                    destination = Withdrawal(UserRole.CENTER),
+                    destination = Withdrawal(UserType.CENTER),
                     popUpTo = R.id.centerSettingFragment
                 )
             )

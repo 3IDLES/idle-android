@@ -5,7 +5,7 @@ import com.idle.binding.DeepLinkDestination
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
 import com.idle.binding.base.CareBaseEvent.NavigateTo
-import com.idle.domain.model.auth.UserRole
+import com.idle.domain.model.auth.UserType
 import com.idle.domain.usecase.auth.GetAccessTokenUseCase
 import com.idle.domain.usecase.auth.GetUserRoleUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,8 +21,8 @@ class AuthViewModel @Inject constructor(
     private val getAccessTokenUseCase: GetAccessTokenUseCase,
     private val getMyUserRoleUseCase: GetUserRoleUseCase,
 ) : BaseViewModel() {
-    private val _userRole = MutableStateFlow<UserRole?>(null)
-    val userRole = _userRole.asStateFlow()
+    private val _userType = MutableStateFlow<UserType?>(null)
+    val userRole = _userType.asStateFlow()
 
     private val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
         baseEvent(CareBaseEvent.Error(throwable.message.toString()))
@@ -48,14 +48,14 @@ class AuthViewModel @Inject constructor(
 
     private fun navigateToDestination(userRole: String) {
         val destination = when (userRole) {
-            UserRole.WORKER.apiValue -> DeepLinkDestination.WorkerHome
-            UserRole.CENTER.apiValue -> DeepLinkDestination.CenterHome
+            UserType.WORKER.apiValue -> DeepLinkDestination.WorkerHome
+            UserType.CENTER.apiValue -> DeepLinkDestination.CenterHome
             else -> return
         }
         baseEvent(NavigateTo(destination, R.id.authFragment))
     }
 
-    fun setUserRole(userRole: UserRole) {
-        _userRole.value = userRole
+    fun setUserRole(userType: UserType) {
+        _userType.value = userType
     }
 }

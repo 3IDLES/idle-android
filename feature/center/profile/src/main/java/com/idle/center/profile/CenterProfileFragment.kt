@@ -1,4 +1,4 @@
- package com.idle.center.profile
+package com.idle.center.profile
 
 import android.net.Uri
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
@@ -65,19 +65,21 @@ internal class CenterProfileFragment : BaseComposeFragment() {
             val isEditState by isEditState.collectAsStateWithLifecycle()
             val profileImageUri by profileImageUri.collectAsStateWithLifecycle()
 
-            CenterProfileScreen(
-                snackbarHostState = snackbarHostState,
-                centerProfile = centerProfile,
-                centerOfficeNumber = centerOfficeNumber,
-                centerIntroduce = centerIntroduce,
-                profileImageUri = profileImageUri,
-                isEditState = isEditState,
-                onCenterOfficeNumberChanged = ::setCenterOfficeNumber,
-                onCenterIntroduceChanged = ::setCenterIntroduce,
-                onProfileImageUriChanged = ::setProfileImageUrl,
-                updateCenterProfile = ::updateCenterProfile,
-                setEditState = ::setEditState,
-            )
+            centerProfile?.let {
+                CenterProfileScreen(
+                    snackbarHostState = snackbarHostState,
+                    centerProfile = it,
+                    centerOfficeNumber = centerOfficeNumber,
+                    centerIntroduce = centerIntroduce,
+                    profileImageUri = profileImageUri,
+                    isEditState = isEditState,
+                    onCenterOfficeNumberChanged = ::setCenterOfficeNumber,
+                    onCenterIntroduceChanged = ::setCenterIntroduce,
+                    onProfileImageUriChanged = ::setProfileImageUrl,
+                    updateCenterProfile = ::updateCenterProfile,
+                    setEditState = ::setEditState,
+                )
+            }
         }
     }
 }
@@ -163,7 +165,7 @@ internal fun CenterProfileScreen(
                     )
 
                     Text(
-                        text = "강남구 삼성동 512-3",
+                        text = centerProfile.lotNumberAddress,
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray900,
                     )
@@ -250,7 +252,7 @@ internal fun CenterProfileScreen(
                                 PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
                             )
                         }) {
-                        if (centerProfile.profileImageUrl.isBlank() && profileImageUri == null) {
+                        if (centerProfile.profileImageUrl == null && profileImageUri == null) {
                             if (!isEditState) {
                                 Image(
                                     painter = painterResource(R.drawable.ic_profile_empty),

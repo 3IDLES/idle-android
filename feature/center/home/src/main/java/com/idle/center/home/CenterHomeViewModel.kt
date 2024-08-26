@@ -6,6 +6,7 @@ import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.jobposting.CenterJobPosting
 import com.idle.domain.usecase.jobposting.GetJobPostingsCompletedUseCase
 import com.idle.domain.usecase.jobposting.GetJobPostingsInProgressUseCase
+import com.idle.domain.usecase.profile.GetMyCenterProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,6 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CenterHomeViewModel @Inject constructor(
+    private val getMyCenterProfileUseCase: GetMyCenterProfileUseCase,
     private val getJobPostingsInProgressUseCase: GetJobPostingsInProgressUseCase,
     private val getJobPostingsCompletedUseCase: GetJobPostingsCompletedUseCase,
 ) : BaseViewModel() {
@@ -25,6 +27,16 @@ class CenterHomeViewModel @Inject constructor(
 
     private val _jobPostingsCompleted = MutableStateFlow<List<CenterJobPosting>>(emptyList())
     val jobPostingsCompleted = _jobPostingsCompleted.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            getMyCenterProfileUseCase().onSuccess {
+
+            }.onFailure {
+
+            }
+        }
+    }
 
     internal fun setRecruitmentPostStatus(recruitmentPostStatus: RecruitmentPostStatus) {
         _recruitmentPostStatus.value = recruitmentPostStatus

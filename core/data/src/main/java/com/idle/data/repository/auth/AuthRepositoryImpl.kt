@@ -3,7 +3,7 @@ package com.idle.data.repository.auth
 import com.idle.datastore.datasource.TokenDataSource
 import com.idle.datastore.datasource.UserInfoDataSource
 import com.idle.domain.model.auth.BusinessRegistrationInfo
-import com.idle.domain.model.auth.UserRole
+import com.idle.domain.model.auth.UserType
 import com.idle.domain.repositorry.auth.AuthRepository
 import com.idle.network.model.auth.ConfirmAuthCodeRequest
 import com.idle.network.model.auth.SendPhoneRequest
@@ -64,7 +64,7 @@ class AuthRepositoryImpl @Inject constructor(
                 withContext(Dispatchers.IO) {
                     tokenDataSource.setAccessToken(tokenResponse.accessToken)
                     launch { tokenDataSource.setRefreshToken(tokenResponse.refreshToken) }
-                    launch { userInfoDataSource.setUserRole(UserRole.CENTER.apiValue) }
+                    launch { userInfoDataSource.setUserRole(UserType.CENTER.apiValue) }
                     Result.success(Unit)
                 }
             },
@@ -102,7 +102,7 @@ class AuthRepositoryImpl @Inject constructor(
             withContext(Dispatchers.IO) {
                 tokenDataSource.setAccessToken(tokenResponse.accessToken)
                 launch { tokenDataSource.setRefreshToken(tokenResponse.refreshToken) }
-                launch { userInfoDataSource.setUserRole(UserRole.WORKER.apiValue) }
+                launch { userInfoDataSource.setUserRole(UserType.WORKER.apiValue) }
                 Result.success(Unit)
             }
         },

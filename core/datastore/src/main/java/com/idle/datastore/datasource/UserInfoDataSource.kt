@@ -25,7 +25,7 @@ class UserInfoDataSource @Inject constructor(
     }
 
     suspend fun setUserInfo(userInfo: String) {
-        dataStore.setValue(USER_ROLE, userInfo)
+        dataStore.setValue(USER_INFO, userInfo)
     }
 
     suspend fun clearUserInfo(){

@@ -1,6 +1,6 @@
 package com.idle.domain.usecase.profile
 
-import com.idle.domain.model.auth.UserRole
+import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.profile.JobSearchStatus
 import com.idle.domain.repositorry.profile.ProfileRepository
 import kotlinx.coroutines.coroutineScope
@@ -34,7 +34,7 @@ class UpdateWorkerProfileUseCase @Inject constructor(
             val updateProfileImageJob = imageFileUri?.let {
                 launch {
                     profileRepository.updateProfileImage(
-                        userType = UserRole.WORKER.apiValue,
+                        userType = UserType.WORKER.apiValue,
                         imageFileUri = imageFileUri,
                     ).getOrThrow()
                 }

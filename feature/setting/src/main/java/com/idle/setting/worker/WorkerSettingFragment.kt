@@ -11,7 +11,7 @@ import com.idle.binding.DeepLinkDestination.WorkerProfile
 import com.idle.binding.base.BaseBindingFragment
 import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.binding.repeatOnStarted
-import com.idle.domain.model.auth.UserRole
+import com.idle.domain.model.auth.UserType
 import com.idle.setting.FAQ_URL
 import com.idle.setting.PRIVACY_POLICY_URL
 import com.idle.setting.R
@@ -66,7 +66,7 @@ internal class WorkerSettingFragment :
             SettingEvent.Inquiry -> {}
             SettingEvent.Withdrawal -> fragmentViewModel.baseEvent(
                 NavigateTo(
-                    destination = Withdrawal(UserRole.WORKER),
+                    destination = Withdrawal(UserType.WORKER),
                     popUpTo = R.id.workerSettingFragment
                 )
             )

@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.core.net.toUri
 import com.idle.datastore.datasource.UserInfoDataSource
 import com.idle.domain.model.auth.Gender
+import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.model.profile.JobSearchStatus
 import com.idle.domain.model.profile.MIMEType
@@ -29,7 +30,8 @@ class ProfileRepositoryImpl @Inject constructor(
     override suspend fun getMyUserRole() = userInfoDataSource.userRole.first()
 
     override suspend fun getMyCenterProfile(): Result<CenterProfile> =
-        profileDataSource.getMyCenterProfile().mapCatching { it.toVO() }
+        profileDataSource.getMyCenterProfile()
+            .mapCatching { it.toVO() }
             .onSuccess {
                 userInfoDataSource.setUserInfo(it.toString())
                 Result.success(it)
@@ -63,7 +65,6 @@ class ProfileRepositoryImpl @Inject constructor(
                 ?: throw NumberFormatException("Invalid latitude format"),
             introduce = properties["introduce"],
             profileImageUrl = properties["profileImageUrl"]
-                ?: throw IllegalArgumentException("Missing profileImageUrl")
         )
     }
 
@@ -114,11 +115,13 @@ class ProfileRepositoryImpl @Inject constructor(
         officeNumber: String,
         introduce: String?,
     ): Result<Unit> = profileDataSource.updateMyCenterProfile(
-        UpdateCenterProfileRequest(
-            officeNumber = officeNumber,
-            introduce = introduce,
-        )
-    )
+        UpdateCenterProfileRequest(officeNumber = officeNumber, introduce = introduce)
+    ).onSuccess {
+        val updatedProfile = getMyCenterProfile().getOrNull()
+        if (updatedProfile != null) {
+            userInfoDataSource.setUserInfo(updatedProfile.toString())
+        }
+    }
 
     override suspend fun updateWorkerProfile(
         experienceYear: Int?,
@@ -136,7 +139,12 @@ class ProfileRepositoryImpl @Inject constructor(
             introduce = introduce,
             speciality = speciality
         )
-    )
+    ).onSuccess {
+        val updatedProfile = getMyWorkerProfile().getOrNull()
+        if (updatedProfile != null) {
+            userInfoDataSource.setUserInfo(updatedProfile.toString())
+        }
+    }
 
     override suspend fun registerCenterProfile(
         centerName: String,
@@ -179,6 +187,22 @@ class ProfileRepositoryImpl @Inject constructor(
                 imageId = profileImageUploadUrlResponse.imageId,
                 imageFileExtension = profileImageUploadUrlResponse.imageFileExtension
             )
+
+            when (userType) {
+                UserType.CENTER.apiValue -> {
+                    val updatedProfile = getMyCenterProfile().getOrThrow().copy(
+                        profileImageUrl = profileImageUploadUrlResponse.uploadUrl
+                    )
+                    userInfoDataSource.setUserInfo(updatedProfile.toString())
+                }
+
+                UserType.WORKER.apiValue -> {
+                    val updatedProfile = getMyWorkerProfile().getOrThrow().copy(
+                        profileImageUrl = profileImageUploadUrlResponse.uploadUrl
+                    )
+                    userInfoDataSource.setUserInfo(updatedProfile.toString())
+                }
+            }
         }
     }
 
