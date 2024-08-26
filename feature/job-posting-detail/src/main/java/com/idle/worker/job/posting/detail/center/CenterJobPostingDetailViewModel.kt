@@ -1,14 +1,17 @@
 package com.idle.worker.job.posting.detail.center
 
 import androidx.lifecycle.viewModelScope
+import com.idle.binding.DeepLinkDestination
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.job.LifeAssistance
 import com.idle.domain.model.jobposting.CenterJobPostingDetail
 import com.idle.domain.model.jobposting.EditJobPostingDetail
+import com.idle.domain.usecase.jobposting.EndJobPostingUseCase
 import com.idle.domain.usecase.jobposting.GetApplicantsCountUseCase
 import com.idle.domain.usecase.jobposting.GetCenterJobPostingDetailUseCase
 import com.idle.domain.usecase.jobposting.UpdateJobPostingUseCase
+import com.idle.job.posting.detail.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,6 +23,7 @@ class CenterJobPostingDetailViewModel @Inject constructor(
     private val getCenterJobPostingDetailUseCase: GetCenterJobPostingDetailUseCase,
     private val getApplicantsCountUseCase: GetApplicantsCountUseCase,
     private val updateJobPostingUseCase: UpdateJobPostingUseCase,
+    private val endJobPostingUseCase: EndJobPostingUseCase,
 ) : BaseViewModel() {
     private val _jobPostingDetail = MutableStateFlow<CenterJobPostingDetail?>(null)
     val jobPostingDetail = _jobPostingDetail.asStateFlow()
@@ -105,6 +109,17 @@ class CenterJobPostingDetailViewModel @Inject constructor(
             )
 
             _isEditState.value = false
+        }.onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
+    }
+
+    fun endJobPosting(jobPostingId: String) = viewModelScope.launch {
+        endJobPostingUseCase(jobPostingId).onSuccess {
+            baseEvent(
+                CareBaseEvent.NavigateTo(
+                    DeepLinkDestination.CenterHome,
+                    R.id.centerJobPostingDetailFragment
+                )
+            )
         }.onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
     }
 }

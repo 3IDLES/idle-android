@@ -1,6 +1,7 @@
 package com.idle.worker.job.posting.detail.center
 
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,8 +16,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -35,6 +38,7 @@ import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareBottomSheetLayout
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareCard
+import com.idle.designsystem.compose.component.CareDialog
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.foundation.CareTheme
@@ -103,6 +107,7 @@ internal class CenterJobPostingDetailFragment : BaseComposeFragment() {
                         jobPostingId = jobPostingId,
                         jobPostingDetail = jobPostingDetail,
                         applicantsCount = applicantsCount,
+                        endJobPosting = ::endJobPosting,
                         navigateTo = { baseEvent(CareBaseEvent.NavigateTo(it)) },
                         setEditState = ::setEditState,
                     )
@@ -118,6 +123,7 @@ internal fun CenterJobPostingDetailScreen(
     jobPostingId: String,
     jobPostingDetail: CenterJobPostingDetail?,
     applicantsCount: Int,
+    endJobPosting: (String) -> Unit,
     navigateTo: (DeepLinkDestination) -> Unit,
     setEditState: (Boolean) -> Unit,
 ) {
@@ -128,6 +134,27 @@ internal fun CenterJobPostingDetailScreen(
         skipHalfExpanded = true,
     )
     val coroutineScope = rememberCoroutineScope()
+    var showEndJobPostingDialog by remember { mutableStateOf(false) }
+
+    if (showEndJobPostingDialog) {
+        CareDialog(
+            title = "채용을 종료하시겠습니까?",
+            description = "채용 종료 시 지원자 정보는 초기화됩니다.",
+            leftButtonText = stringResource(id = R.string.cancel),
+            rightButtonText = stringResource(id = R.string.end),
+            leftButtonTextColor = CareTheme.colors.gray300,
+            leftButtonColor = CareTheme.colors.white000,
+            leftButtonBorder = BorderStroke(1.dp, CareTheme.colors.gray100),
+            rightButtonTextColor = CareTheme.colors.white000,
+            rightButtonColor = CareTheme.colors.red,
+            onDismissRequest = { showEndJobPostingDialog = false },
+            onLeftButtonClick = { showEndJobPostingDialog = false },
+            onRightButtonClick = { endJobPosting(jobPostingId) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+        )
+    }
 
     jobPostingDetail?.let {
         CareBottomSheetLayout(
@@ -167,17 +194,14 @@ internal fun CenterJobPostingDetailScreen(
 
                     CareCard(
                         title = stringResource(id = R.string.end_recruiting),
+                        titleTextColor = CareTheme.colors.red,
                         titleLeftComponent = {
                             Image(
                                 painter = painterResource(id = R.drawable.ic_red_check),
                                 contentDescription = null,
                             )
                         },
-                        onClick = {
-                            coroutineScope.launch {
-                                sheetState.hide()
-                            }
-                        },
+                        onClick = { showEndJobPostingDialog = true },
                         modifier = Modifier.fillMaxWidth(),
                     )
                 }

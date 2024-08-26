@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
@@ -28,6 +29,7 @@ import com.idle.designsystem.compose.foundation.CareTheme
 fun CareCard(
     title: String,
     modifier: Modifier = Modifier,
+    titleTextColor: Color = CareTheme.colors.gray900,
     description: String? = null,
     titleLeftComponent: @Composable () -> Unit = {},
     descriptionLeftComponent: @Composable () -> Unit = {},
@@ -61,7 +63,7 @@ fun CareCard(
                     Text(
                         text = title,
                         style = CareTheme.typography.subtitle3,
-                        color = CareTheme.colors.gray900,
+                        color = titleTextColor,
                     )
                 }
 

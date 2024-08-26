@@ -61,15 +61,11 @@ fun CareDialog(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.padding(12.dp),
             ) {
-                val titleModifier =
-                    if (description != null) Modifier.padding(top = 12.dp, bottom = 16.dp)
-                    else Modifier.padding(top = 8.dp)
-
                 Text(
                     text = title,
                     style = CareTheme.typography.subtitle1,
                     color = titleColor,
-                    modifier = titleModifier,
+                    modifier = Modifier.padding(top = 8.dp),
                 )
 
                 if (description != null) {
