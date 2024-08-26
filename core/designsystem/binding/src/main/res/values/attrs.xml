@@ -17,7 +17,7 @@
 
     <declare-styleable name="CareCenterInfoCard">
         <attr name="centerName" format="string|reference" />
-        <attr name="centerAddress" format="string|reference" />
+        <attr name="centerAddress" format="string|reference"/>
     </declare-styleable>
 
     <declare-styleable name="CareDialog">
