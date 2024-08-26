@@ -1,7 +1,6 @@
 package com.idle.center.register.complete
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -38,15 +37,22 @@ internal class CenterRegisterCompleteFragment : BaseComposeFragment() {
         fragmentViewModel.apply {
             val centerProfile by centerProfile.collectAsStateWithLifecycle()
 
-            CenterRegisterCompleteScreen(
-                centerProfile = centerProfile,
-                navigateToCenterProfile = {
-                    baseEvent(NavigateTo(CenterProfile, R.id.registerCenterInfoCompleteFragment))
-                },
-                navigateToCenterHome = {
-                    baseEvent(NavigateTo(CenterHome, R.id.registerCenterInfoCompleteFragment))
-                }
-            )
+            centerProfile?.let {
+                CenterRegisterCompleteScreen(
+                    centerProfile = it,
+                    navigateToCenterProfile = {
+                        baseEvent(
+                            NavigateTo(
+                                CenterProfile,
+                                R.id.registerCenterInfoCompleteFragment
+                            )
+                        )
+                    },
+                    navigateToCenterHome = {
+                        baseEvent(NavigateTo(CenterHome, R.id.registerCenterInfoCompleteFragment))
+                    }
+                )
+            }
         }
     }
 }

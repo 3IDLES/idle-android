@@ -20,22 +20,19 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.navArgs
-import com.idle.binding.DeepLinkDestination
 import com.idle.binding.DeepLinkDestination.CenterSetting
 import com.idle.binding.DeepLinkDestination.WorkerSetting
 import com.idle.binding.base.CareBaseEvent
-import com.idle.binding.repeatOnStarted
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.foundation.CareTheme
-import com.idle.domain.model.auth.UserRole
+import com.idle.domain.model.auth.UserType
 import com.idle.withdrawal.navigation.WithdrawalNavigation
 import com.idle.withdrawal.step.PhoneNumberScreen
 import com.idle.withdrawal.step.ReasonScreen
-import com.idle.withdrawal.step.WithdrawalEvent
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -54,10 +51,10 @@ internal class WithdrawalFragment : BaseComposeFragment() {
             val authCodeTimerMinute by authCodeTimerMinute.collectAsStateWithLifecycle()
             val authCodeTimerSeconds by authCodeTimerSeconds.collectAsStateWithLifecycle()
             val isConfirmAuthCode by isConfirmAuthCode.collectAsStateWithLifecycle()
-            val userRole by rememberSaveable { mutableStateOf(UserRole.create(args.userRole)) }
+            val userType by rememberSaveable { mutableStateOf(UserType.create(args.userRole)) }
 
             WithdrawalStep(
-                userRole = userRole,
+                userType = userType,
                 withdrawalStep = withdrawalStep,
                 timerMinute = authCodeTimerMinute,
                 timerSeconds = authCodeTimerSeconds,
@@ -68,11 +65,11 @@ internal class WithdrawalFragment : BaseComposeFragment() {
                 onAuthCodeChanged = ::setAuthCode,
                 sendPhoneNumber = ::sendPhoneNumber,
                 confirmAuthCode = ::confirmAuthCode,
-                withdrawal = { withdrawal(userRole) },
+                withdrawal = { withdrawal(userType) },
                 navigateToSetting = {
                     baseEvent(
                         CareBaseEvent.NavigateTo(
-                            destination = if (userRole == UserRole.CENTER) CenterSetting
+                            destination = if (userType == UserType.CENTER) CenterSetting
                             else WorkerSetting,
                             popUpTo = com.idle.withdrawal.R.id.withdrawalFragment,
                         )
@@ -86,7 +83,7 @@ internal class WithdrawalFragment : BaseComposeFragment() {
 @ExperimentalMaterial3Api
 @Composable
 internal fun WithdrawalStep(
-    userRole: UserRole,
+    userType: UserType,
     withdrawalStep: WithdrawalStep,
     timerMinute: String,
     timerSeconds: String,
@@ -132,7 +129,7 @@ internal fun WithdrawalStep(
             ) { withdrawalStep ->
                 when (withdrawalStep) {
                     WithdrawalStep.REASON -> ReasonScreen(
-                        userRole = userRole,
+                        userType = userType,
                         onReasonChanged = onReasonChanged,
                         setWithdrawalStep = setWithdrawalStep,
                         navigateToSetting = navigateToSetting,

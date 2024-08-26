@@ -1,14 +1,13 @@
 package com.idle.worker.profile
 
 import android.net.Uri
-import android.util.Log
 import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.auth.Gender
 import com.idle.domain.model.profile.WorkerProfile
-import com.idle.domain.usecase.profile.GetMyWorkerProfileUseCase
+import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
 import com.idle.domain.usecase.profile.UpdateWorkerProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WorkerProfileViewModel @Inject constructor(
-    private val getMyWorkerProfileUseCase: GetMyWorkerProfileUseCase,
+    private val getLocalMyWorkerProfileUseCase: GetLocalMyWorkerProfileUseCase,
     private val updateWorkerProfileUseCase: UpdateWorkerProfileUseCase,
 ) : BaseViewModel() {
     private val _workerProfile = MutableStateFlow(WorkerProfile())
@@ -52,7 +51,7 @@ class WorkerProfileViewModel @Inject constructor(
     }
 
     private fun getMyWorkerProfile() = viewModelScope.launch {
-        getMyWorkerProfileUseCase().onSuccess {
+        getLocalMyWorkerProfileUseCase().onSuccess {
             _workerProfile.value = it
             _workerIntroduce.value = it.introduce ?: ""
             _specialty.value = it.speciality ?: ""

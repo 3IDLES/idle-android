@@ -7,7 +7,7 @@ import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.CountDownTimer
 import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
-import com.idle.domain.model.auth.UserRole
+import com.idle.domain.model.auth.UserType
 import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
 import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
 import com.idle.domain.usecase.auth.WithdrawalCenterUseCase
@@ -115,10 +115,10 @@ class WithdrawalViewModel @Inject constructor(
             .onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
     }
 
-    internal fun withdrawal(userRole: UserRole) = viewModelScope.launch {
-        when (userRole) {
-            UserRole.CENTER -> withdrawalCenter()
-            UserRole.WORKER -> withdrawalWorker()
+    internal fun withdrawal(userType: UserType) = viewModelScope.launch {
+        when (userType) {
+            UserType.CENTER -> withdrawalCenter()
+            UserType.WORKER -> withdrawalWorker()
         }
     }
 

@@ -45,7 +45,7 @@ import com.idle.designresource.R.string
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.designsystem.compose.foundation.PretendardMedium
-import com.idle.domain.model.auth.UserRole
+import com.idle.domain.model.auth.UserType
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -58,7 +58,7 @@ internal class AuthFragment : BaseComposeFragment() {
             val userRole by userRole.collectAsStateWithLifecycle()
 
             AuthScreen(
-                userRole = userRole,
+                userType = userRole,
                 onUserRoleChanged = ::setUserRole,
                 navigateTo = { baseEvent(NavigateTo(it, popUpTo = R.id.nav_auth)) },
             )
@@ -69,12 +69,12 @@ internal class AuthFragment : BaseComposeFragment() {
 
 @Composable
 internal fun AuthScreen(
-    userRole: UserRole?,
-    onUserRoleChanged: (UserRole) -> Unit,
+    userType: UserType?,
+    onUserRoleChanged: (UserType) -> Unit,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
     val cardColor by animateColorAsState(
-        if (userRole == UserRole.WORKER) CareTheme.colors.orange100
+        if (userType == UserType.WORKER) CareTheme.colors.orange100
         else CareTheme.colors.white000
     )
 
@@ -107,19 +107,19 @@ internal fun AuthScreen(
                     shape = RoundedCornerShape(8.dp),
                     colors = CardDefaults.cardColors().copy(
                         containerColor = animateColorAsState(
-                            if (userRole == UserRole.CENTER) CareTheme.colors.orange100
+                            if (userType == UserType.CENTER) CareTheme.colors.orange100
                             else CareTheme.colors.white000
                         ).value
                     ),
                     border = BorderStroke(
                         width = 1.dp,
-                        color = if (userRole == UserRole.CENTER) CareTheme.colors.orange400
+                        color = if (userType == UserType.CENTER) CareTheme.colors.orange400
                         else CareTheme.colors.gray100,
                     ),
                     modifier = Modifier
                         .weight(1f)
                         .wrapContentHeight()
-                        .clickable { onUserRoleChanged(UserRole.CENTER) }
+                        .clickable { onUserRoleChanged(UserType.CENTER) }
                 ) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -147,13 +147,13 @@ internal fun AuthScreen(
                     colors = CardDefaults.cardColors().copy(containerColor = cardColor),
                     border = BorderStroke(
                         width = 1.dp,
-                        color = if (userRole == UserRole.WORKER) CareTheme.colors.orange400
+                        color = if (userType == UserType.WORKER) CareTheme.colors.orange400
                         else CareTheme.colors.gray100,
                     ),
                     modifier = Modifier
                         .weight(1f)
                         .wrapContentHeight()
-                        .clickable { onUserRoleChanged(UserRole.WORKER) }
+                        .clickable { onUserRoleChanged(UserType.WORKER) }
                 ) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -187,7 +187,7 @@ internal fun AuthScreen(
                 .padding(bottom = 28.dp),
         ) {
             AnimatedVisibility(
-                visible = userRole == UserRole.WORKER,
+                visible = userType == UserType.WORKER,
                 enter = fadeIn(),
                 exit = fadeOut(),
                 modifier = Modifier.align(Alignment.BottomCenter),
@@ -200,7 +200,7 @@ internal fun AuthScreen(
             }
 
             AnimatedVisibility(
-                visible = userRole == UserRole.CENTER,
+                visible = userType == UserType.CENTER,
                 enter = fadeIn(),
                 exit = fadeOut(),
                 modifier = Modifier.align(Alignment.BottomCenter),

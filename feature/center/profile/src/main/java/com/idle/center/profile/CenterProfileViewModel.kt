@@ -1,12 +1,11 @@
 package com.idle.center.profile
 
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.profile.CenterProfile
-import com.idle.domain.usecase.profile.GetMyCenterProfileUseCase
+import com.idle.domain.usecase.profile.GetLocalMyCenterProfileUseCase
 import com.idle.domain.usecase.profile.UpdateCenterProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,11 +15,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CenterProfileViewModel @Inject constructor(
-    private val getMyCenterProfileUseCase: GetMyCenterProfileUseCase,
+    private val getLocalMyCenterProfileUseCase: GetLocalMyCenterProfileUseCase,
     private val updateCenterProfileUseCase: UpdateCenterProfileUseCase,
 ) : BaseViewModel() {
 
-    private val _centerProfile = MutableStateFlow(CenterProfile())
+    private val _centerProfile = MutableStateFlow<CenterProfile?>(null)
     val centerProfile = _centerProfile.asStateFlow()
 
     private val _centerOfficeNumber = MutableStateFlow("")
@@ -40,9 +39,9 @@ class CenterProfileViewModel @Inject constructor(
     }
 
     private fun getMyCenterProfile() = viewModelScope.launch {
-        getMyCenterProfileUseCase().onSuccess {
+        getLocalMyCenterProfileUseCase().onSuccess {
             _centerProfile.value = it
-            _centerIntroduce.value = it.introduce
+            _centerIntroduce.value = it.introduce ?: ""
             _centerOfficeNumber.value = it.officeNumber
         }.onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
     }
@@ -61,13 +60,14 @@ class CenterProfileViewModel @Inject constructor(
             officeNumber = _centerOfficeNumber.value,
             introduce = _centerIntroduce.value.ifBlank { null },
             imageFileUri = _profileImageUri.value?.toString(),
-        ).onSuccess { setEditState(false)
-        }.onFailure {  baseEvent(CareBaseEvent.Error(it.message.toString())) }
+        ).onSuccess {
+            setEditState(false)
+        }.onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
     }
 
     private fun isCenterProfileUnchanged(): Boolean {
-        return _centerOfficeNumber.value == _centerProfile.value.officeNumber &&
-                _centerIntroduce.value == _centerProfile.value.introduce &&
+        return _centerOfficeNumber.value == _centerProfile.value?.officeNumber &&
+                _centerIntroduce.value == _centerProfile.value?.introduce &&
                 profileImageUri.value == null
     }
 

@@ -10,7 +10,7 @@ import com.idle.binding.DeepLinkDestination.Auth
 import com.idle.binding.DeepLinkDestination.CenterSetting
 import com.idle.binding.DeepLinkDestination.WorkerSetting
 import com.idle.designresource.R
-import com.idle.domain.model.auth.UserRole
+import com.idle.domain.model.auth.UserType
 
 sealed class DeepLinkDestination(
     val addressRes: Int,
@@ -27,9 +27,9 @@ sealed class DeepLinkDestination(
         setDefaultAnimation = false,
     )
 
-    data class Withdrawal(val userRole: UserRole) : DeepLinkDestination(
+    data class Withdrawal(val userType: UserType) : DeepLinkDestination(
         addressRes = R.string.withdrawal_deeplink_url,
-        params = mapOf("userRole" to userRole.name),
+        params = mapOf("userRole" to userType.name),
     )
 
     data object NewPassword : DeepLinkDestination(
