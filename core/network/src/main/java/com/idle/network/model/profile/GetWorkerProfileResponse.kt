@@ -33,5 +33,8 @@ data class GetWorkerProfileResponse(
         longitude = longitude,
         latitude = latitude,
         jobSearchStatus = JobSearchStatus.create(jobSearchStatus),
+        introduce = introduce,
+        speciality = speciality,
+        profileImageUrl = profileImageUrl
     )
 }

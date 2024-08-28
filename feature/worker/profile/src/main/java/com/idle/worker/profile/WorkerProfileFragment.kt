@@ -72,20 +72,22 @@ internal class WorkerProfileFragment : BaseComposeFragment() {
                 onResult = { uri -> setProfileImageUrl(uri) }
             )
 
-            WorkerProfileScreen(
-                isEditState = isEditState,
-                workerProfile = workerProfile,
-                workerIntroduce = workerIntroduce,
-                specialty = specialty,
-                gender = gender,
-                experienceYear = experienceYear,
-                profileImageUri = profileImageUri,
-                singlePhotoPickerLauncher = singlePhotoPickerLauncher,
-                onSpecialtyChanged = ::setSpecialty,
-                onWorkerIntroduceChanged = ::setWorkerIntroduce,
-                updateWorkerProfile = ::updateWorkerProfile,
-                setEditState = ::setEditState,
-            )
+            workerProfile?.let {
+                WorkerProfileScreen(
+                    isEditState = isEditState,
+                    workerProfile = it,
+                    workerIntroduce = workerIntroduce,
+                    specialty = specialty,
+                    gender = gender,
+                    experienceYear = experienceYear,
+                    profileImageUri = profileImageUri,
+                    singlePhotoPickerLauncher = singlePhotoPickerLauncher,
+                    onSpecialtyChanged = ::setSpecialty,
+                    onWorkerIntroduceChanged = ::setWorkerIntroduce,
+                    updateWorkerProfile = ::updateWorkerProfile,
+                    setEditState = ::setEditState,
+                )
+            }
         }
     }
 }

@@ -206,7 +206,7 @@ fun SummaryScreen(
                 }
             }
 
-            Row {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = stringResource(id = R.string.view_as_caregiver),
                     style = CareTheme.typography.body2,

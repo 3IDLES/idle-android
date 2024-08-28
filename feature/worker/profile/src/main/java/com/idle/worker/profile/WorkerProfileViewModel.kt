@@ -20,7 +20,7 @@ class WorkerProfileViewModel @Inject constructor(
     private val getLocalMyWorkerProfileUseCase: GetLocalMyWorkerProfileUseCase,
     private val updateWorkerProfileUseCase: UpdateWorkerProfileUseCase,
 ) : BaseViewModel() {
-    private val _workerProfile = MutableStateFlow(WorkerProfile())
+    private val _workerProfile = MutableStateFlow<WorkerProfile?>(null)
     val workerProfile = _workerProfile.asStateFlow()
 
     private val _specialty = MutableStateFlow("")
@@ -62,18 +62,20 @@ class WorkerProfileViewModel @Inject constructor(
     }
 
     fun updateWorkerProfile() = viewModelScope.launch {
-        if (_specialty.value.isBlank()) {
+        val workerProfile = _workerProfile.value
+        if (workerProfile == null) {
+            baseEvent(CareBaseEvent.Error("로딩중입니다."))
             return@launch
         }
 
         updateWorkerProfileUseCase(
             experienceYear = _experienceYear.value,
-            roadNameAddress = "",
-            lotNumberAddress = "",
+            roadNameAddress = _roadNameAddress.value,
+            lotNumberAddress = _lotNumberAddress.value,
             speciality = _specialty.value,
             introduce = _workerIntroduce.value.ifBlank { null },
             imageFileUri = _profileImageUri.value?.toString(),
-            jobSearchStatus = _workerProfile.value.jobSearchStatus,
+            jobSearchStatus = _workerProfile.value!!.jobSearchStatus,
         ).onSuccess {
             setEditState(false)
         }.onFailure {
