@@ -221,7 +221,11 @@ private fun JobPostingInProgressCard(
             )
 
             Text(
-                text = jobPosting.lotNumberAddress,
+                text = try {
+                    jobPosting.lotNumberAddress.split(" ").subList(0, 3).joinToString(" ")
+                } catch (e: IndexOutOfBoundsException) {
+                    ""
+                },
                 style = CareTheme.typography.subtitle2,
                 color = CareTheme.colors.gray900,
                 overflow = TextOverflow.Clip,
@@ -315,7 +319,11 @@ private fun JobPostingCompletedCard(
             )
 
             Text(
-                text = jobPosting.lotNumberAddress,
+                text = try {
+                    jobPosting.lotNumberAddress.split(" ").subList(0, 3).joinToString(" ")
+                } catch (e: IndexOutOfBoundsException) {
+                    ""
+                },
                 style = CareTheme.typography.subtitle2,
                 color = CareTheme.colors.gray900,
                 overflow = TextOverflow.Clip,
