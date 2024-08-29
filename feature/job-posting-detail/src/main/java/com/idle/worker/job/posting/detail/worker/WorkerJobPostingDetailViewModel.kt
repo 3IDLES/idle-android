@@ -35,7 +35,7 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
         getLocalMyWorkerProfileUseCase().onSuccess {
             _profile.value = it
         }.onFailure {
-            baseEvent(CareBaseEvent.Error(it.message.toString()))
+            baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
         }
     }
 
@@ -55,7 +55,7 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
             ).onSuccess {
 
             }.onFailure {
-                baseEvent(CareBaseEvent.Error(it.message.toString()))
+                baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
             }
         }
 
@@ -63,7 +63,7 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
         addFavoriteJobPostingUseCase(jobPostingId).onSuccess {
 
         }.onFailure {
-            baseEvent(CareBaseEvent.Error(it.message.toString()))
+            baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
         }
     }
 
@@ -71,7 +71,7 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
         removeFavoriteJobPostingUseCase(jobPostingId).onSuccess {
 
         }.onFailure {
-            baseEvent(CareBaseEvent.Error(it.message.toString()))
+            baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
         }
     }
 }

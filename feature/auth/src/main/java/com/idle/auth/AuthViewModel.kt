@@ -25,7 +25,7 @@ class AuthViewModel @Inject constructor(
     val userRole = _userType.asStateFlow()
 
     private val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
-        baseEvent(CareBaseEvent.Error(throwable.message.toString()))
+        baseEvent(CareBaseEvent.ShowSnackBar(throwable.message.toString()))
     }
 
     init {

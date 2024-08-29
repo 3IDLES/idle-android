@@ -41,7 +41,7 @@ class WorkerHomeViewModel @Inject constructor(
             getMyWorkerProfileUseCase().onSuccess {
                 _profile.value = it
             }.onFailure {
-                baseEvent(CareBaseEvent.Error(it.message.toString()))
+                baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
             }
         }
     }
@@ -64,7 +64,7 @@ class WorkerHomeViewModel @Inject constructor(
             }
             _jobPostings.value += postings
         }.onFailure {
-            baseEvent(CareBaseEvent.Error(it.message.toString()))
+            baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
         }
     }
 
@@ -79,7 +79,7 @@ class WorkerHomeViewModel @Inject constructor(
         ).onSuccess {
 
         }.onFailure {
-            baseEvent(CareBaseEvent.Error(it.message.toString()))
+            baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
         }
     }
 
@@ -87,7 +87,7 @@ class WorkerHomeViewModel @Inject constructor(
         addFavoriteJobPostingUseCase(jobPostingId).onSuccess {
 
         }.onFailure {
-            baseEvent(CareBaseEvent.Error(it.message.toString()))
+            baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
         }
     }
 
@@ -95,7 +95,7 @@ class WorkerHomeViewModel @Inject constructor(
         removeFavoriteJobPostingUseCase(jobPostingId).onSuccess {
 
         }.onFailure {
-            baseEvent(CareBaseEvent.Error(it.message.toString()))
+            baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
         }
     }
 }

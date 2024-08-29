@@ -116,7 +116,57 @@ enum class ApiErrorCode(val serverCode: String, val description: String, val dis
         "서버 내 모든 시스템 내부 에러를 포함합니다. 특히 시스템 내에서 처리하지 못한 예외가 존재하는 경우에도 발생할 수 있습니다.",
         "서버 내부 오류입니다."
     ),
-    UnknownError("UNKNOWN", "알 수 없는 오류가 발생했습니다.", "알 수 없는 오류가 발생하였습니다.");
+
+    // JWT Errors
+    TokenDecodeException(
+        "JWT-001",
+        "유효하지 않은 토큰, 토큰을 디코딩할 때, JWT의 형식에 맞지 않는 경우 발생합니다.",
+        "유효하지 않은 토큰입니다."
+    ),
+    TokenNotValid(
+        "JWT-002",
+        "유효하지 않은 토큰, 토큰 내 값 검증에 실패한 경우 발생합니다.(ex. 알고리즘, 서명)",
+        "토큰 검증에 실패하였습니다."
+    ),
+    TokenExpiredException(
+        "JWT-003",
+        "토큰이 만료된 경우 발생합니다. 재 로그인이 필요합니다.",
+        "토큰이 만료되었습니다. 재로그인이 필요합니다."
+    ),
+    TokenNotFound(
+        "JWT-004",
+        "토큰을 찾을 수 없는 경우 발생합니다.",
+        "토큰을 찾을 수 없습니다."
+    ),
+    NotSupportUserTokenType(
+        "JWT-005",
+        "지원하지 않는 유저 토큰 타입을 사용한 경우 발생할 수 있습니다(carer, center 제외)",
+        "지원하지 않는 유저 토큰 타입입니다."
+    ),
+
+    // SMS Errors
+    ClientException(
+        "SMS-001",
+        "SMS 문자 발송에 실패한 경우 발생합니다.",
+        "SMS 발송에 실패하였습니다."
+    ),
+
+    // BUSINESS REGISTRATION Errors
+    BusinessRegistrationResultNotFound(
+        "BUSINESS-REGISTRATION-001",
+        "사업자 등록번호 조회 결과가 없는 경우 발생합니다.",
+        "사업자 등록번호 조회 결과가 없습니다."
+    ),
+
+    // GEO Code Errors
+    GeoCodeResultNotFound(
+        "GeoCode-001",
+        "입력된 주소로 Geocode 를 검색한 결과가 없는 경우 발생합니다.",
+        "해당 주소로 검색된 결과가 없습니다."
+    ),
+
+    UnknownError("UNKNOWN", "알 수 없는 오류가 발생했습니다.", "알 수 없는 오류가 발생하였습니다."),
+    ;
 
     companion object {
         fun create(serverCode: String): ApiErrorCode {

@@ -58,13 +58,13 @@ class WorkerProfileViewModel @Inject constructor(
             _gender.value = it.gender
             _profileImageUri.value = it.profileImageUrl?.toUri()
             _experienceYear.value = it.experienceYear
-        }.onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
+        }.onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
     }
 
     fun updateWorkerProfile() = viewModelScope.launch {
         val workerProfile = _workerProfile.value
         if (workerProfile == null) {
-            baseEvent(CareBaseEvent.Error("로딩중입니다."))
+            baseEvent(CareBaseEvent.ShowSnackBar("로딩중입니다."))
             return@launch
         }
 
@@ -79,7 +79,7 @@ class WorkerProfileViewModel @Inject constructor(
         ).onSuccess {
             setEditState(false)
         }.onFailure {
-            baseEvent(CareBaseEvent.Error(it.message.toString()))
+            baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
         }
     }
 

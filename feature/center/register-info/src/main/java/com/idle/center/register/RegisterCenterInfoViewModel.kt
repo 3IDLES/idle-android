@@ -1,7 +1,6 @@
 package com.idle.center.register
 
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.DeepLinkDestination.CenterRegisterComplete
 import com.idle.binding.base.BaseViewModel
@@ -54,7 +53,7 @@ class RegisterCenterInfoViewModel @Inject constructor(
             baseEvent(
                 CareBaseEvent.NavigateTo(CenterRegisterComplete, R.id.registerCenterInfoFragment)
             )
-        }.onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
+        }.onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
     }
 
     internal fun setRegistrationStep(step: RegistrationStep) {

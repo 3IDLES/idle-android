@@ -113,7 +113,7 @@ class CenterSignUpViewModel @Inject constructor(
     internal fun sendPhoneNumber() = viewModelScope.launch {
         sendPhoneNumberUseCase(_centerPhoneNumber.value)
             .onSuccess { startTimer() }
-            .onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
+            .onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
     }
 
     private fun startTimer() {
@@ -149,7 +149,7 @@ class CenterSignUpViewModel @Inject constructor(
                 cancelTimer()
                 _isConfirmAuthCode.value = true
             }
-            .onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
+            .onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
     }
 
     internal fun signUpCenter() = viewModelScope.launch {
@@ -168,19 +168,19 @@ class CenterSignUpViewModel @Inject constructor(
                     )
                 )
             }
-            .onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
+            .onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
     }
 
     internal fun validateIdentifier() = viewModelScope.launch {
         validateIdentifierUseCase(_centerId.value)
             .onSuccess { _centerIdResult.value = true }
-            .onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
+            .onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
     }
 
     internal fun validateBusinessRegistrationNumber() = viewModelScope.launch {
         validateBusinessRegistrationNumberUseCase(_businessRegistrationNumber.value)
             .onSuccess { _businessRegistrationInfo.value = it }
-            .onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
+            .onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
     }
 }
 

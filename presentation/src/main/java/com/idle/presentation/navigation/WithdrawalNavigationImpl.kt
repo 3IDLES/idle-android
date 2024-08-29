@@ -3,7 +3,7 @@ package com.idle.presentation.navigation
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.idle.presentation.R
-import com.idle.withdrawal.navigation.WithdrawalNavigation
+import com.idle.compose.base.navigation.WithdrawalNavigation
 import javax.inject.Inject
 
 class WithdrawalNavigationImpl @Inject constructor(

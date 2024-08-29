@@ -5,13 +5,11 @@ import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.job.ApplyMethod
 import com.idle.domain.model.jobposting.WorkerJobPosting
-import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.usecase.jobposting.AddFavoriteJobPostingUseCase
 import com.idle.domain.usecase.jobposting.ApplyJobPostingUseCase
 import com.idle.domain.usecase.jobposting.GetJobPostingsAppliedUseCase
 import com.idle.domain.usecase.jobposting.GetMyFavoritesJobPostingsUseCase
 import com.idle.domain.usecase.jobposting.RemoveFavoriteJobPostingUseCase
-import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -59,7 +57,7 @@ class WorkerJobPostingViewModel @Inject constructor(
 
             _appliedJobPostings.value += postings
         }.onFailure {
-            baseEvent(CareBaseEvent.Error(it.message.toString()))
+            baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
         }
     }
 
@@ -96,7 +94,7 @@ class WorkerJobPostingViewModel @Inject constructor(
         ).onSuccess {
 
         }.onFailure {
-            baseEvent(CareBaseEvent.Error(it.message.toString()))
+            baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
         }
     }
 
@@ -104,7 +102,7 @@ class WorkerJobPostingViewModel @Inject constructor(
         addFavoriteJobPostingUseCase(jobPostingId).onSuccess {
 
         }.onFailure {
-            baseEvent(CareBaseEvent.Error(it.message.toString()))
+            baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
         }
     }
 
@@ -112,7 +110,7 @@ class WorkerJobPostingViewModel @Inject constructor(
         removeFavoriteJobPostingUseCase(jobPostingId).onSuccess {
 
         }.onFailure {
-            baseEvent(CareBaseEvent.Error(it.message.toString()))
+            baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
         }
     }
 }

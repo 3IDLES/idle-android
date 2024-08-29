@@ -42,7 +42,7 @@ class CenterProfileViewModel @Inject constructor(
             _centerProfile.value = it
             _centerIntroduce.value = it.introduce ?: ""
             _centerOfficeNumber.value = it.officeNumber
-        }.onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
+        }.onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
     }
 
     fun updateCenterProfile() = viewModelScope.launch {
@@ -61,7 +61,7 @@ class CenterProfileViewModel @Inject constructor(
             imageFileUri = _profileImageUri.value?.toString(),
         ).onSuccess {
             setEditState(false)
-        }.onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
+        }.onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
     }
 
     private fun isCenterProfileUnchanged(): Boolean {

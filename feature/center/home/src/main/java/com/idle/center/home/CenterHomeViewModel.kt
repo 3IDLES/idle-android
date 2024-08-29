@@ -50,13 +50,13 @@ class CenterHomeViewModel @Inject constructor(
     internal fun getJobPostingsInProgress() = viewModelScope.launch {
         getJobPostingsInProgressUseCase().onSuccess {
             _jobPostingsInProgress.value = it
-        }.onFailure { baseEvent(CareBaseEvent.Error(it.toString())) }
+        }.onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.toString())) }
     }
 
     internal fun getJobPostingsCompleted() = viewModelScope.launch {
         getJobPostingsCompletedUseCase().onSuccess {
             _jobPostingsCompleted.value = it
-        }.onFailure { baseEvent(CareBaseEvent.Error(it.toString())) }
+        }.onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.toString())) }
     }
 }
 
