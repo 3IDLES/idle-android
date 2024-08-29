@@ -1,5 +1,6 @@
 package com.idle.network.util
 
+import com.idle.domain.model.error.ApiErrorCode
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.error.HttpResponseStatus
 import com.idle.network.model.error.ErrorResponse
@@ -19,12 +20,15 @@ internal fun <T> Response<T>.onResponse(): Result<T> {
             return Result.failure(
                 HttpResponseException(
                     status = HttpResponseStatus.create(code()),
-                    rawCode = errorResponse.code,
+                    apiErrorCode = ApiErrorCode.create(errorResponse.code),
                     msg = errorResponse.message,
                 )
             )
         } ?: return Result.failure(
-            HttpResponseException(status = HttpResponseStatus.create(-1), rawCode = "UNKNOWN")
+            HttpResponseException(
+                status = HttpResponseStatus.create(-1),
+                apiErrorCode = ApiErrorCode.UnknownError
+            )
         )
     }
 }
