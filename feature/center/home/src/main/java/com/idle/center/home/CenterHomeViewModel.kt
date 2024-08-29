@@ -3,6 +3,7 @@ package com.idle.center.home
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
+import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.jobposting.CenterJobPosting
 import com.idle.domain.usecase.jobposting.GetJobPostingsCompletedUseCase
 import com.idle.domain.usecase.jobposting.GetJobPostingsInProgressUseCase
@@ -32,9 +33,7 @@ class CenterHomeViewModel @Inject constructor(
         viewModelScope.launch {
             getMyCenterProfileUseCase().onSuccess {
 
-            }.onFailure {
-
-            }
+            }.onFailure { handleFailure(it as HttpResponseException) }
         }
     }
 
@@ -50,13 +49,13 @@ class CenterHomeViewModel @Inject constructor(
     internal fun getJobPostingsInProgress() = viewModelScope.launch {
         getJobPostingsInProgressUseCase().onSuccess {
             _jobPostingsInProgress.value = it
-        }.onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.toString())) }
+        }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
     internal fun getJobPostingsCompleted() = viewModelScope.launch {
         getJobPostingsCompletedUseCase().onSuccess {
             _jobPostingsCompleted.value = it
-        }.onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.toString())) }
+        }.onFailure { handleFailure(it as HttpResponseException) }
     }
 }
 

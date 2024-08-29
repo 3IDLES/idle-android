@@ -8,6 +8,7 @@ import com.idle.domain.model.CountDownTimer
 import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
 import com.idle.domain.model.auth.UserType
+import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
 import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
 import com.idle.domain.usecase.auth.WithdrawalCenterUseCase
@@ -112,7 +113,7 @@ class WithdrawalViewModel @Inject constructor(
                 cancelTimer()
                 _isConfirmAuthCode.value = true
             }
-            .onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
+            .onFailure { handleFailure(it as HttpResponseException) }
     }
 
     internal fun withdrawal(userType: UserType) = viewModelScope.launch {
@@ -135,7 +136,7 @@ class WithdrawalViewModel @Inject constructor(
                     popUpTo = com.idle.withdrawal.R.id.withdrawalFragment,
                 )
             )
-        }.onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
+        }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
     private suspend fun withdrawalWorker() {
@@ -150,9 +151,7 @@ class WithdrawalViewModel @Inject constructor(
                     popUpTo = com.idle.withdrawal.R.id.withdrawalFragment,
                 )
             )
-        }.onFailure {
-            baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
-        }
+        }.onFailure { handleFailure(it as HttpResponseException) }
     }
 }
 

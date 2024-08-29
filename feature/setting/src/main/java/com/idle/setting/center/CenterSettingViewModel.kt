@@ -2,7 +2,7 @@ package com.idle.setting.center
 
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.base.CareBaseEvent
+import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.usecase.auth.LogoutCenterUseCase
 import com.idle.domain.usecase.profile.GetLocalMyCenterProfileUseCase
@@ -34,15 +34,13 @@ class CenterSettingViewModel @Inject constructor(
     private fun getMyProfile() = viewModelScope.launch {
         getLocalMyCenterProfileUseCase().onSuccess {
             _centerProfile.value = it
-        }.onFailure {
-            baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
-        }
+        }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
     fun logout() = viewModelScope.launch {
         logoutCenterUseCase().onSuccess {
             centerSettingEvent(SettingEvent.LogoutSuccess)
-        }.onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
+        }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
     fun clickLogout() = centerSettingEvent(SettingEvent.Logout)

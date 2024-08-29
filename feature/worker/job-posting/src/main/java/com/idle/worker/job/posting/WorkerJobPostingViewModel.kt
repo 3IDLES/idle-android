@@ -3,6 +3,7 @@ package com.idle.worker.job.posting
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
+import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.job.ApplyMethod
 import com.idle.domain.model.jobposting.WorkerJobPosting
 import com.idle.domain.usecase.jobposting.AddFavoriteJobPostingUseCase
@@ -56,9 +57,7 @@ class WorkerJobPostingViewModel @Inject constructor(
             }
 
             _appliedJobPostings.value += postings
-        }.onFailure {
-            baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
-        }
+        }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
     fun getMyFavoritesJobPostings() = viewModelScope.launch {
@@ -78,9 +77,7 @@ class WorkerJobPostingViewModel @Inject constructor(
                 favoriteJobPostingCallType = JobPostingCallType.CRAWLING
             }
             _favoritesJobPostings.value += postings
-        }.onFailure {
-
-        }
+        }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
     private suspend fun fetchCrawlingJobPostings() {
@@ -93,25 +90,19 @@ class WorkerJobPostingViewModel @Inject constructor(
             applyMethod = ApplyMethod.APP
         ).onSuccess {
 
-        }.onFailure {
-            baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
-        }
+        }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
     internal fun addFavoriteJobPosting(jobPostingId: String) = viewModelScope.launch {
         addFavoriteJobPostingUseCase(jobPostingId).onSuccess {
 
-        }.onFailure {
-            baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
-        }
+        }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
     internal fun removeFavoriteJobPosting(jobPostingId: String) = viewModelScope.launch {
         removeFavoriteJobPostingUseCase(jobPostingId).onSuccess {
 
-        }.onFailure {
-            baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
-        }
+        }.onFailure { handleFailure(it as HttpResponseException) }
     }
 }
 

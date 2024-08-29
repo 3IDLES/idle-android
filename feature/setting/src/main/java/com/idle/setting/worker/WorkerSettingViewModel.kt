@@ -2,7 +2,7 @@ package com.idle.setting.worker
 
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.base.CareBaseEvent
+import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.usecase.auth.LogoutWorkerUseCase
 import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
@@ -33,15 +33,13 @@ class WorkerSettingViewModel @Inject constructor(
     private fun getMyProfile() = viewModelScope.launch {
         getLocalMyWorkerProfileUseCase().onSuccess {
             _workerProfile.value = it
-        }.onFailure {
-            baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
-        }
+        }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
     fun logout() = viewModelScope.launch {
         logoutWorkerUseCase().onSuccess {
             workerSettingEvent(SettingEvent.LogoutSuccess)
-        }.onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
+        }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
     fun clickLogout() = workerSettingEvent(SettingEvent.Logout)

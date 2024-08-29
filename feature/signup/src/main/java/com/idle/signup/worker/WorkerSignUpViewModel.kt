@@ -8,6 +8,7 @@ import com.idle.domain.model.CountDownTimer
 import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
 import com.idle.domain.model.auth.Gender
+import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
 import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
 import com.idle.domain.usecase.auth.SignInWorkerUseCase
@@ -143,7 +144,7 @@ class WorkerSignUpViewModel @Inject constructor(
             confirmAuthCodeUseCase(_workerPhoneNumber.value, _workerAuthCode.value).onSuccess {
                 cancelTimer()
                 _isConfirmAuthCode.value = true
-            }.onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
+            }.onFailure { handleFailure(it as HttpResponseException) }
         }
     }
 
@@ -162,7 +163,7 @@ class WorkerSignUpViewModel @Inject constructor(
                     R.id.workerSignUpFragment
                 )
             )
-        }.onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
+        }.onFailure { handleFailure(it as HttpResponseException) }
     }
 }
 

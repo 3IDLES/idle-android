@@ -3,6 +3,7 @@ package com.idle.worker.home
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
+import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.job.ApplyMethod
 import com.idle.domain.model.jobposting.WorkerJobPosting
 import com.idle.domain.model.profile.WorkerProfile
@@ -63,9 +64,7 @@ class WorkerHomeViewModel @Inject constructor(
                 callType = JobPostingCallType.CRAWLING
             }
             _jobPostings.value += postings
-        }.onFailure {
-            baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
-        }
+        }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
     private suspend fun fetchCrawlingJobPostings() {
@@ -78,25 +77,19 @@ class WorkerHomeViewModel @Inject constructor(
             applyMethod = ApplyMethod.APP
         ).onSuccess {
 
-        }.onFailure {
-            baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
-        }
+        }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
     internal fun addFavoriteJobPosting(jobPostingId: String) = viewModelScope.launch {
         addFavoriteJobPostingUseCase(jobPostingId).onSuccess {
 
-        }.onFailure {
-            baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
-        }
+        }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
     internal fun removeFavoriteJobPosting(jobPostingId: String) = viewModelScope.launch {
         removeFavoriteJobPostingUseCase(jobPostingId).onSuccess {
 
-        }.onFailure {
-            baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
-        }
+        }.onFailure { handleFailure(it as HttpResponseException) }
     }
 }
 

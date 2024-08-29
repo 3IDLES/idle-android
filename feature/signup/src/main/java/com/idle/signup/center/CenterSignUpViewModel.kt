@@ -8,6 +8,7 @@ import com.idle.domain.model.CountDownTimer
 import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
 import com.idle.domain.model.auth.BusinessRegistrationInfo
+import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
 import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
 import com.idle.domain.usecase.auth.SignUpCenterUseCase
@@ -113,7 +114,7 @@ class CenterSignUpViewModel @Inject constructor(
     internal fun sendPhoneNumber() = viewModelScope.launch {
         sendPhoneNumberUseCase(_centerPhoneNumber.value)
             .onSuccess { startTimer() }
-            .onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
+            .onFailure { handleFailure(it as HttpResponseException) }
     }
 
     private fun startTimer() {
@@ -149,7 +150,7 @@ class CenterSignUpViewModel @Inject constructor(
                 cancelTimer()
                 _isConfirmAuthCode.value = true
             }
-            .onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
+            .onFailure { handleFailure(it as HttpResponseException) }
     }
 
     internal fun signUpCenter() = viewModelScope.launch {
@@ -168,19 +169,19 @@ class CenterSignUpViewModel @Inject constructor(
                     )
                 )
             }
-            .onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
+            .onFailure { handleFailure(it as HttpResponseException) }
     }
 
     internal fun validateIdentifier() = viewModelScope.launch {
         validateIdentifierUseCase(_centerId.value)
             .onSuccess { _centerIdResult.value = true }
-            .onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
+            .onFailure { handleFailure(it as HttpResponseException) }
     }
 
     internal fun validateBusinessRegistrationNumber() = viewModelScope.launch {
         validateBusinessRegistrationNumberUseCase(_businessRegistrationNumber.value)
             .onSuccess { _businessRegistrationInfo.value = it }
-            .onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
+            .onFailure { handleFailure(it as HttpResponseException) }
     }
 }
 

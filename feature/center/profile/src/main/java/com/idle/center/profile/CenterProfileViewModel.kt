@@ -3,7 +3,7 @@ package com.idle.center.profile
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.base.CareBaseEvent
+import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.usecase.profile.GetLocalMyCenterProfileUseCase
 import com.idle.domain.usecase.profile.UpdateCenterProfileUseCase
@@ -42,7 +42,7 @@ class CenterProfileViewModel @Inject constructor(
             _centerProfile.value = it
             _centerIntroduce.value = it.introduce ?: ""
             _centerOfficeNumber.value = it.officeNumber
-        }.onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
+        }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
     fun updateCenterProfile() = viewModelScope.launch {
@@ -61,7 +61,7 @@ class CenterProfileViewModel @Inject constructor(
             imageFileUri = _profileImageUri.value?.toString(),
         ).onSuccess {
             setEditState(false)
-        }.onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
+        }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
     private fun isCenterProfileUnchanged(): Boolean {
