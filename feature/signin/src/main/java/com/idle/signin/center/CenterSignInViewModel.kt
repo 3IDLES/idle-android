@@ -3,8 +3,8 @@ package com.idle.signin.center
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.DeepLinkDestination.CenterHome
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.base.CareBaseEvent
 import com.idle.binding.base.CareBaseEvent.NavigateTo
+import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.usecase.th.SignInCenterUseCase
 import com.idle.signin.R
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,6 +34,6 @@ class CenterSignInViewModel @Inject constructor(
     internal fun signInCenter() = viewModelScope.launch {
         signInCenterUseCase(identifier = _centerId.value, password = _centerPassword.value)
             .onSuccess { baseEvent(NavigateTo(CenterHome, R.id.centerSignInFragment)) }
-            .onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
+            .onFailure { handleFailure(it as HttpResponseException) }
     }
 }

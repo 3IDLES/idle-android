@@ -3,6 +3,7 @@ package com.idle.worker.job.posting.detail.worker
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
+import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.job.ApplyMethod
 import com.idle.domain.model.jobposting.WorkerJobPostingDetail
 import com.idle.domain.model.profile.WorkerProfile
@@ -34,17 +35,13 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
     internal fun getMyProfile() = viewModelScope.launch {
         getLocalMyWorkerProfileUseCase().onSuccess {
             _profile.value = it
-        }.onFailure {
-            baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
-        }
+        }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
     internal fun getJobPostingDetail(jobPostingId: String) = viewModelScope.launch {
         getWorkerJobPostingDetailUseCase(jobPostingId).onSuccess {
             _workerJobPostingDetail.value = it
-        }.onFailure {
-
-        }
+        }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
     internal fun applyJobPosting(jobPostingId: String, applyMethod: ApplyMethod) =
@@ -54,24 +51,18 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
                 applyMethod = applyMethod,
             ).onSuccess {
 
-            }.onFailure {
-                baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
-            }
+            }.onFailure { handleFailure(it as HttpResponseException) }
         }
 
     internal fun addFavoriteJobPosting(jobPostingId: String) = viewModelScope.launch {
         addFavoriteJobPostingUseCase(jobPostingId).onSuccess {
 
-        }.onFailure {
-            baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
-        }
+        }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
     internal fun removeFavoriteJobPosting(jobPostingId: String) = viewModelScope.launch {
         removeFavoriteJobPostingUseCase(jobPostingId).onSuccess {
 
-        }.onFailure {
-            baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
-        }
+        }.onFailure { handleFailure(it as HttpResponseException) }
     }
 }

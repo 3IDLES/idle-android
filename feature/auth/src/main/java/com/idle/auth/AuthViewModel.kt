@@ -3,13 +3,11 @@ package com.idle.auth
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.DeepLinkDestination
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.base.CareBaseEvent
 import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.domain.model.auth.UserType
 import com.idle.domain.usecase.auth.GetAccessTokenUseCase
 import com.idle.domain.usecase.auth.GetUserRoleUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,12 +22,8 @@ class AuthViewModel @Inject constructor(
     private val _userType = MutableStateFlow<UserType?>(null)
     val userRole = _userType.asStateFlow()
 
-    private val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
-        baseEvent(CareBaseEvent.ShowSnackBar(throwable.message.toString()))
-    }
-
     init {
-        viewModelScope.launch(exceptionHandler) {
+        viewModelScope.launch {
             val accessTokenDeferred = async { getAccessTokenUseCase() }
             val userRoleDeferred = async { getMyUserRoleUseCase() }
 

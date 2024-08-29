@@ -7,6 +7,7 @@ import com.idle.binding.base.CareBaseEvent
 import com.idle.center.job.posting.post.R
 import com.idle.compose.JobPostingBottomSheetType
 import com.idle.domain.model.auth.Gender
+import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.job.ApplyDeadlineType
 import com.idle.domain.model.job.ApplyMethod
 import com.idle.domain.model.job.DayOfWeek
@@ -332,7 +333,7 @@ class JobPostingViewModel @Inject constructor(
                         popUpTo = R.id.jobPostingPostFragment
                     )
                 )
-            }.onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
+            }.onFailure { handleFailure(it as HttpResponseException) }
         }
     }
 }

@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.idle.binding.DeepLinkDestination
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
+import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.job.LifeAssistance
 import com.idle.domain.model.jobposting.CenterJobPostingDetail
 import com.idle.domain.model.jobposting.EditJobPostingDetail
@@ -37,13 +38,13 @@ class CenterJobPostingDetailViewModel @Inject constructor(
     fun getCenterJobPostingDetail(jobPostingId: String) = viewModelScope.launch {
         getCenterJobPostingDetailUseCase(jobPostingId)
             .onSuccess { _jobPostingDetail.value = it }
-            .onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
+            .onFailure { handleFailure(it as HttpResponseException) }
     }
 
     fun getApplicantsCount(jobPostingId: String) = viewModelScope.launch {
         getApplicantsCountUseCase(jobPostingId).onSuccess {
             _applicantsCount.value = it
-        }.onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
+        }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
     fun setEditState(state: Boolean) {
@@ -109,7 +110,7 @@ class CenterJobPostingDetailViewModel @Inject constructor(
             )
 
             _isEditState.value = false
-        }.onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
+        }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
     fun endJobPosting(jobPostingId: String) = viewModelScope.launch {
@@ -120,6 +121,6 @@ class CenterJobPostingDetailViewModel @Inject constructor(
                     R.id.centerJobPostingDetailFragment
                 )
             )
-        }.onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
+        }.onFailure { handleFailure(it as HttpResponseException) }
     }
 }

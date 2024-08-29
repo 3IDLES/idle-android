@@ -6,6 +6,7 @@ import com.idle.binding.DeepLinkDestination.CenterRegisterComplete
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
 import com.idle.center.register.info.R
+import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.usecase.profile.RegisterCenterProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -53,7 +54,7 @@ class RegisterCenterInfoViewModel @Inject constructor(
             baseEvent(
                 CareBaseEvent.NavigateTo(CenterRegisterComplete, R.id.registerCenterInfoFragment)
             )
-        }.onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
+        }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
     internal fun setRegistrationStep(step: RegistrationStep) {

@@ -3,6 +3,7 @@ package com.tgyuu.applicant.inquiry
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
+import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.jobposting.Applicant
 import com.idle.domain.model.jobposting.JobPostingSummary
 import com.idle.domain.usecase.jobposting.GetApplicantsInfoUseCase
@@ -26,8 +27,6 @@ class ApplicantInquiryViewModel @Inject constructor(
         getApplicantsInfoUseCase(jobPostingId).onSuccess { (jobPostingSummary, applicants) ->
             _jobPostingSummary.value = jobPostingSummary
             _applicants.value = applicants
-        }.onFailure {
-            baseEvent(CareBaseEvent.ShowSnackBar(it.toString()))
-        }
+        }.onFailure { handleFailure(it as HttpResponseException) }
     }
 }
