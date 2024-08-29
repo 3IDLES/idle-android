@@ -78,7 +78,7 @@ class WithdrawalViewModel @Inject constructor(
     internal fun sendPhoneNumber() = viewModelScope.launch {
         sendPhoneNumberUseCase(_phoneNumber.value)
             .onSuccess { startTimer() }
-            .onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
+            .onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
     }
 
     private fun startTimer() {
@@ -112,7 +112,7 @@ class WithdrawalViewModel @Inject constructor(
                 cancelTimer()
                 _isConfirmAuthCode.value = true
             }
-            .onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
+            .onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
     }
 
     internal fun withdrawal(userType: UserType) = viewModelScope.launch {
@@ -135,7 +135,7 @@ class WithdrawalViewModel @Inject constructor(
                     popUpTo = com.idle.withdrawal.R.id.withdrawalFragment,
                 )
             )
-        }.onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
+        }.onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
     }
 
     private suspend fun withdrawalWorker() {
@@ -151,7 +151,7 @@ class WithdrawalViewModel @Inject constructor(
                 )
             )
         }.onFailure {
-            baseEvent(CareBaseEvent.Error(it.message.toString()))
+            baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
         }
     }
 }

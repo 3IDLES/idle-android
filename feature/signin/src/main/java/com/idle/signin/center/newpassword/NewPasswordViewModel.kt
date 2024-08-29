@@ -56,13 +56,13 @@ class NewPasswordViewModel @Inject constructor(
     internal fun sendPhoneNumber() = viewModelScope.launch {
         sendPhoneNumberUseCase(_centerPhoneNumber.value)
             .onSuccess { Log.d("test", "성공!") }
-            .onFailure {  baseEvent(CareBaseEvent.Error(it.message.toString()))}
+            .onFailure {  baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))}
     }
 
     internal fun confirmAuthCode() = viewModelScope.launch {
         confirmAuthCodeUseCase(_centerPhoneNumber.value, _centerAuthCode.value)
             .onSuccess { Log.d("test", "성공!") }
-            .onFailure {  baseEvent(CareBaseEvent.Error(it.message.toString())) }
+            .onFailure {  baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
     }
 }
 

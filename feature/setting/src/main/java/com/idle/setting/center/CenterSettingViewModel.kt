@@ -35,14 +35,14 @@ class CenterSettingViewModel @Inject constructor(
         getLocalMyCenterProfileUseCase().onSuccess {
             _centerProfile.value = it
         }.onFailure {
-            baseEvent(CareBaseEvent.Error(it.message.toString()))
+            baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
         }
     }
 
     fun logout() = viewModelScope.launch {
         logoutCenterUseCase().onSuccess {
             centerSettingEvent(SettingEvent.LogoutSuccess)
-        }.onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
+        }.onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
     }
 
     fun clickLogout() = centerSettingEvent(SettingEvent.Logout)

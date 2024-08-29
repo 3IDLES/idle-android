@@ -37,13 +37,13 @@ class CenterJobPostingDetailViewModel @Inject constructor(
     fun getCenterJobPostingDetail(jobPostingId: String) = viewModelScope.launch {
         getCenterJobPostingDetailUseCase(jobPostingId)
             .onSuccess { _jobPostingDetail.value = it }
-            .onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
+            .onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
     }
 
     fun getApplicantsCount(jobPostingId: String) = viewModelScope.launch {
         getApplicantsCountUseCase(jobPostingId).onSuccess {
             _applicantsCount.value = it
-        }.onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
+        }.onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
     }
 
     fun setEditState(state: Boolean) {
@@ -109,7 +109,7 @@ class CenterJobPostingDetailViewModel @Inject constructor(
             )
 
             _isEditState.value = false
-        }.onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
+        }.onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
     }
 
     fun endJobPosting(jobPostingId: String) = viewModelScope.launch {
@@ -120,6 +120,6 @@ class CenterJobPostingDetailViewModel @Inject constructor(
                     R.id.centerJobPostingDetailFragment
                 )
             )
-        }.onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
+        }.onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
     }
 }

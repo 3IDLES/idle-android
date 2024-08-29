@@ -17,13 +17,18 @@ import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
 import com.idle.binding.deepLinkNavigateTo
 import com.idle.binding.repeatOnStarted
+import com.idle.compose.base.navigation.JwtErrorNavigation
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 abstract class BaseComposeFragment : Fragment() {
 
     protected abstract val fragmentViewModel: BaseViewModel
     protected var snackbarHostState = SnackbarHostState()
     private lateinit var composeView: ComposeView
+
+    @Inject
+    lateinit var jwtErrorNavigation: JwtErrorNavigation
 
     @Composable
     abstract fun ComposeLayout()
@@ -41,36 +46,36 @@ abstract class BaseComposeFragment : Fragment() {
     @OptIn(ExperimentalFoundationApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        viewLifecycleOwner.repeatOnStarted {
-            fragmentViewModel.baseEventFlow.collect {
-                handleEvent(it)
-            }
-        }
-
         composeView.setContent {
+            viewLifecycleOwner.repeatOnStarted {
+                fragmentViewModel.baseEventFlow.collect {
+                    handleEvent(it)
+                }
+            }
+
             CompositionLocalProvider(LocalOverscrollConfiguration provides null) {
                 ComposeLayout()
             }
         }
     }
 
-    private fun handleEvent(event: CareBaseEvent) = when (event) {
-        is CareBaseEvent.NavigateTo -> findNavController()
-            .deepLinkNavigateTo(
-                context = requireContext(),
-                deepLinkDestination = event.destination,
-                popUpTo = event.popUpTo,
-            )
+    private fun handleEvent(event: CareBaseEvent) {
+        when (event) {
+            is CareBaseEvent.NavigateTo -> findNavController()
+                .deepLinkNavigateTo(
+                    context = requireContext(),
+                    deepLinkDestination = event.destination,
+                    popUpTo = event.popUpTo,
+                )
 
-        is CareBaseEvent.Error -> handleError(event.message)
-    }
+            is CareBaseEvent.ShowSnackBar -> {
+                viewLifecycleOwner.lifecycleScope.launch {
+                    snackbarHostState.currentSnackbarData?.dismiss()
+                    snackbarHostState.showSnackbar(event.msg)
+                }
+            }
 
-    private fun handleError(message: String) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            snackbarHostState.currentSnackbarData?.dismiss()
-            snackbarHostState.showSnackbar(message)
+            is CareBaseEvent.JwtError -> jwtErrorNavigation.navigateToAuth()
         }
     }
-
 }

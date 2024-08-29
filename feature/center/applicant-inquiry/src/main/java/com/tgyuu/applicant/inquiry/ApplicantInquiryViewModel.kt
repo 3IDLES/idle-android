@@ -27,7 +27,7 @@ class ApplicantInquiryViewModel @Inject constructor(
             _jobPostingSummary.value = jobPostingSummary
             _applicants.value = applicants
         }.onFailure {
-            baseEvent(CareBaseEvent.Error(it.toString()))
+            baseEvent(CareBaseEvent.ShowSnackBar(it.toString()))
         }
     }
 }

@@ -103,7 +103,7 @@ class WorkerSignUpViewModel @Inject constructor(
     internal fun sendPhoneNumber() = viewModelScope.launch {
         sendPhoneNumberUseCase(_workerPhoneNumber.value)
             .onSuccess { startTimer() }
-            .onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
+            .onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
     }
 
     private fun startTimer() {
@@ -143,7 +143,7 @@ class WorkerSignUpViewModel @Inject constructor(
             confirmAuthCodeUseCase(_workerPhoneNumber.value, _workerAuthCode.value).onSuccess {
                 cancelTimer()
                 _isConfirmAuthCode.value = true
-            }.onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
+            }.onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
         }
     }
 
@@ -162,7 +162,7 @@ class WorkerSignUpViewModel @Inject constructor(
                     R.id.workerSignUpFragment
                 )
             )
-        }.onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
+        }.onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
     }
 }
 

@@ -1,6 +1,5 @@
 package com.idle.center.jobposting
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.DeepLinkDestination.CenterJobPostingPostComplete
 import com.idle.binding.base.BaseViewModel
@@ -142,10 +141,10 @@ class JobPostingViewModel @Inject constructor(
                 if (startTime.isBefore(endTime)) {
                     _workStartTime.value = time
                 } else {
-                    baseEvent(CareBaseEvent.Error("근무 시작 시간은 근무 종료 시간보다 빨라야 합니다."))
+                    baseEvent(CareBaseEvent.ShowSnackBar("근무 시작 시간은 근무 종료 시간보다 빨라야 합니다."))
                 }
             } catch (e: DateTimeParseException) {
-                baseEvent(CareBaseEvent.Error("근무 시작 시간은 근무 종료 시간보다 빨라야 합니다."))
+                baseEvent(CareBaseEvent.ShowSnackBar("근무 시작 시간은 근무 종료 시간보다 빨라야 합니다."))
             }
 
             return
@@ -162,10 +161,10 @@ class JobPostingViewModel @Inject constructor(
                 if (endTime.isAfter(startTime)) {
                     _workEndTime.value = time
                 } else {
-                    baseEvent(CareBaseEvent.Error("근무 종료 시간은 근무 시작 시간보다 빨라야 합니다."))
+                    baseEvent(CareBaseEvent.ShowSnackBar("근무 종료 시간은 근무 시작 시간보다 빨라야 합니다."))
                 }
             } catch (e: DateTimeParseException) {
-                baseEvent(CareBaseEvent.Error("근무 종료 시간은 근무 시작 시간보다 빨라야 합니다."))
+                baseEvent(CareBaseEvent.ShowSnackBar("근무 종료 시간은 근무 시작 시간보다 빨라야 합니다."))
             }
             return
         }
@@ -284,7 +283,7 @@ class JobPostingViewModel @Inject constructor(
                 endTime = _workEndTime.value,
                 payType = _payType.value ?: PayType.UNKNOWN,
                 payAmount = _payAmount.value.toIntOrNull() ?: let {
-                    baseEvent(CareBaseEvent.Error("급여가 잘못되었습니다."))
+                    baseEvent(CareBaseEvent.ShowSnackBar("급여가 잘못되었습니다."))
                     return@launch
                 },
                 roadNameAddress = _roadNameAddress.value,
@@ -292,26 +291,26 @@ class JobPostingViewModel @Inject constructor(
                 clientName = _clientName.value,
                 gender = _gender.value,
                 birthYear = _birthYear.value.toIntOrNull() ?: let {
-                    baseEvent(CareBaseEvent.Error("출생년도가 잘못되었습니다."))
+                    baseEvent(CareBaseEvent.ShowSnackBar("출생년도가 잘못되었습니다."))
                     return@launch
                 },
                 weight = _weight.value.toIntOrNull(),
                 careLevel = _careLevel.value.toIntOrNull() ?: let {
-                    baseEvent(CareBaseEvent.Error("요양등급이 잘못되었습니다."))
+                    baseEvent(CareBaseEvent.ShowSnackBar("요양등급이 잘못되었습니다."))
                     return@launch
                 },
                 mentalStatus = _mentalStatus.value,
                 disease = _disease.value.ifBlank { null },
                 isMealAssistance = _isMealAssistance.value ?: let {
-                    baseEvent(CareBaseEvent.Error("식사보조가 잘못되었습니다."))
+                    baseEvent(CareBaseEvent.ShowSnackBar("식사보조가 잘못되었습니다."))
                     return@launch
                 },
                 isBowelAssistance = _isBowelAssistance.value ?: let {
-                    baseEvent(CareBaseEvent.Error("배변보조가 잘못되었습니다."))
+                    baseEvent(CareBaseEvent.ShowSnackBar("배변보조가 잘못되었습니다."))
                     return@launch
                 },
                 isWalkingAssistance = _isWalkingAssistance.value ?: let {
-                    baseEvent(CareBaseEvent.Error("이동보조가 잘못되었습니다."))
+                    baseEvent(CareBaseEvent.ShowSnackBar("이동보조가 잘못되었습니다."))
                     return@launch
                 },
                 lifeAssistance = _lifeAssistance.value.toList()
@@ -319,7 +318,7 @@ class JobPostingViewModel @Inject constructor(
                     .takeIf { it.isNotEmpty() } ?: listOf(LifeAssistance.NONE),
                 extraRequirement = _extraRequirement.value.ifBlank { null },
                 isExperiencePreferred = _isExperiencePreferred.value ?: let {
-                    baseEvent(CareBaseEvent.Error("경력 우대 여부가 잘못되었습니다."))
+                    baseEvent(CareBaseEvent.ShowSnackBar("경력 우대 여부가 잘못되었습니다."))
                     return@launch
                 },
                 applyMethod = _applyMethod.value.toList()
@@ -333,7 +332,7 @@ class JobPostingViewModel @Inject constructor(
                         popUpTo = R.id.jobPostingPostFragment
                     )
                 )
-            }.onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
+            }.onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
         }
     }
 }

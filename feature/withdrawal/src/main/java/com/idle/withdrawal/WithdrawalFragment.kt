@@ -30,7 +30,7 @@ import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.UserType
-import com.idle.withdrawal.navigation.WithdrawalNavigation
+import com.idle.compose.base.navigation.WithdrawalNavigation
 import com.idle.withdrawal.step.PhoneNumberScreen
 import com.idle.withdrawal.step.ReasonScreen
 import dagger.hilt.android.AndroidEntryPoint

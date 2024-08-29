@@ -256,7 +256,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
                         },
                         setEditState = ::setEditState,
                         setBottomSheetType = ::setBottomSheetType,
-                        showSnackBar = { baseEvent(CareBaseEvent.Error(it)) },
+                        showSnackBar = { baseEvent(CareBaseEvent.ShowSnackBar(it)) },
                     )
                 }
             }

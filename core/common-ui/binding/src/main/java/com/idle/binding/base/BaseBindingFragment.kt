@@ -59,6 +59,6 @@ abstract class BaseBindingFragment<T : ViewDataBinding, V : BaseViewModel>
                 popUpTo = event.popUpTo,
             )
 
-        is CareBaseEvent.Error -> handleError(event.message)
+        is CareBaseEvent.ShowSnackBar -> handleError(event.msg)
     }
 }

@@ -34,14 +34,14 @@ class WorkerSettingViewModel @Inject constructor(
         getLocalMyWorkerProfileUseCase().onSuccess {
             _workerProfile.value = it
         }.onFailure {
-            baseEvent(CareBaseEvent.Error(it.message.toString()))
+            baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
         }
     }
 
     fun logout() = viewModelScope.launch {
         logoutWorkerUseCase().onSuccess {
             workerSettingEvent(SettingEvent.LogoutSuccess)
-        }.onFailure { baseEvent(CareBaseEvent.Error(it.message.toString())) }
+        }.onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
     }
 
     fun clickLogout() = workerSettingEvent(SettingEvent.Logout)

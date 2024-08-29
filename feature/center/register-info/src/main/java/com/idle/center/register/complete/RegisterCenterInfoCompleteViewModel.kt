@@ -22,7 +22,7 @@ class RegisterCenterInfoCompleteViewModel @Inject constructor(
         viewModelScope.launch {
             getLocalMyCenterProfileUseCase()
                 .onSuccess { _centerProfile.value = it }
-                .onFailure { baseEvent(CareBaseEvent.Error(it.toString())) }
+                .onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.toString())) }
         }
     }
 }
