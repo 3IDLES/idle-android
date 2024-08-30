@@ -30,19 +30,14 @@ import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.UserType
-import com.idle.compose.base.navigation.WithdrawalNavigation
 import com.idle.withdrawal.step.PhoneNumberScreen
 import com.idle.withdrawal.step.ReasonScreen
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 internal class WithdrawalFragment : BaseComposeFragment() {
     private val args: WithdrawalFragmentArgs by navArgs()
     override val fragmentViewModel: WithdrawalViewModel by viewModels()
-
-    @Inject
-    lateinit var withdrawalNavigation: WithdrawalNavigation
 
     @Composable
     override fun ComposeLayout() {

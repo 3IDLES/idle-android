@@ -19,9 +19,7 @@ import com.idle.setting.SettingEvent
 import com.idle.setting.TERMS_AND_POLICES_URL
 import com.idle.setting.databinding.FragmentCenterSettingBinding
 import com.idle.setting.dialog.LogoutDialogFragment
-import com.idle.setting.navigation.SettingNavigation
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 internal class CenterSettingFragment :
@@ -29,9 +27,6 @@ internal class CenterSettingFragment :
         FragmentCenterSettingBinding::inflate
     ) {
     override val fragmentViewModel: CenterSettingViewModel by viewModels()
-
-    @Inject
-    lateinit var settingNavigation: SettingNavigation
 
     private val logoutDialog: LogoutDialogFragment? by lazy {
         LogoutDialogFragment().apply {
@@ -76,8 +71,6 @@ internal class CenterSettingFragment :
                     logoutDialog?.show(parentFragmentManager, "LogoutDialogFragment")
                 }
             }
-
-            SettingEvent.LogoutSuccess -> settingNavigation.navigateToAuth()
         }
     }
 

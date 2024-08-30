@@ -2,6 +2,7 @@ package com.idle.setting.center
 
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
+import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.usecase.auth.LogoutCenterUseCase
@@ -39,7 +40,7 @@ class CenterSettingViewModel @Inject constructor(
 
     fun logout() = viewModelScope.launch {
         logoutCenterUseCase().onSuccess {
-            centerSettingEvent(SettingEvent.LogoutSuccess)
+            baseEvent(CareBaseEvent.NavigateToAuthWithClearBackStack)
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 

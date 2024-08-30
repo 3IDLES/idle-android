@@ -1,5 +1,6 @@
 package com.idle.binding.base
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.DeepLinkDestination
@@ -24,8 +25,9 @@ open class BaseViewModel : ViewModel() {
             ApiErrorCode.TokenExpiredException,
             ApiErrorCode.TokenNotFound,
             ApiErrorCode.NotSupportUserTokenType -> {
+                Log.d("test", "이쪽으로 옴")
                 _baseEventFlow.emit(CareBaseEvent.ShowSnackBar(error.apiErrorCode.displayMsg))
-                _baseEventFlow.emit(CareBaseEvent.JwtError(error.apiErrorCode.displayMsg))
+                _baseEventFlow.emit(CareBaseEvent.NavigateToAuthWithClearBackStack)
             }
 
             else -> _baseEventFlow.emit(CareBaseEvent.ShowSnackBar(error.apiErrorCode.displayMsg))
@@ -38,5 +40,5 @@ sealed class CareBaseEvent {
         CareBaseEvent()
 
     data class ShowSnackBar(val msg: String) : CareBaseEvent()
-    data class JwtError(val msg: String) : CareBaseEvent()
+    data object NavigateToAuthWithClearBackStack : CareBaseEvent()
 }
