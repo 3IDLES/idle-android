@@ -17,7 +17,7 @@ import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
 import com.idle.binding.deepLinkNavigateTo
 import com.idle.binding.repeatOnStarted
-import com.idle.compose.base.navigation.JwtErrorNavigation
+import com.idle.binding.base.navigation.BaseNavigation
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,7 +28,7 @@ abstract class BaseComposeFragment : Fragment() {
     private lateinit var composeView: ComposeView
 
     @Inject
-    lateinit var jwtErrorNavigation: JwtErrorNavigation
+    lateinit var baseNavigation: BaseNavigation
 
     @Composable
     abstract fun ComposeLayout()
@@ -75,7 +75,7 @@ abstract class BaseComposeFragment : Fragment() {
                 }
             }
 
-            is CareBaseEvent.JwtError -> jwtErrorNavigation.navigateToAuth()
+            is CareBaseEvent.NavigateToAuthWithClearBackStack -> baseNavigation.navigateToAuth()
         }
     }
 }

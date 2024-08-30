@@ -60,5 +60,6 @@ abstract class BaseBindingFragment<T : ViewDataBinding, V : BaseViewModel>
             )
 
         is CareBaseEvent.ShowSnackBar -> handleError(event.msg)
+        is CareBaseEvent.NavigateToAuthWithClearBackStack -> TODO()
     }
 }

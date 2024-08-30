@@ -1,8 +1,7 @@
 package com.idle.presentation.navigation
 
 import androidx.fragment.app.Fragment
-import com.idle.setting.navigation.SettingNavigation
-import com.idle.compose.base.navigation.WithdrawalNavigation
+import com.idle.binding.base.navigation.BaseNavigation
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,17 +14,9 @@ object NavigationModule {
 
     @Provides
     @FragmentScoped
-    fun provideWithdrawalNavigation(
+    fun provideBaseNavigation(
         fragment: Fragment
-    ): WithdrawalNavigation {
-        return WithdrawalNavigationImpl(fragment)
-    }
-
-    @Provides
-    @FragmentScoped
-    fun provideSettingNavigation(
-        fragment: Fragment
-    ): SettingNavigation {
-        return SettingNavigationImpl(fragment)
+    ): BaseNavigation {
+        return BaseNavigationImpl(fragment)
     }
 }
