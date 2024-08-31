@@ -32,13 +32,6 @@ https://github.com/user-attachments/assets/04ba9a12-8c71-4ac5-b530-291db8c8b1b1
 </details>
 
 <details>
-<summary><h3>공고 조회</h3></summary>
-
-<img src="https://github.com/user-attachments/assets/70dac78a-62d6-4562-9784-2e89b6d428bd" width="300"/>
-
-</details>
-
-<details>
 <summary><h3>회원탈퇴</h3></summary>
 
 <img src="https://github.com/user-attachments/assets/ebed8d65-09ae-48b2-babe-91d10f78bd77" width="300"/>
