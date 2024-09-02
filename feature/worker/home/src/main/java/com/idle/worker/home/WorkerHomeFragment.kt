@@ -42,6 +42,7 @@ import com.idle.designsystem.compose.component.CareButtonCardLarge
 import com.idle.designsystem.compose.component.CareHeadingTopBar
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.foundation.CareTheme
+import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.WorkerJobPosting
 import com.idle.domain.model.profile.WorkerProfile
 import dagger.hilt.android.AndroidEntryPoint
@@ -75,8 +76,8 @@ internal fun WorkerHomeScreen(
     workerJobPostings: List<WorkerJobPosting>,
     getJobPostings: () -> Unit,
     applyJobPosting: (String) -> Unit,
-    addFavoriteJobPosting: (String) -> Unit,
-    removeFavoriteJobPosting: (String) -> Unit,
+    addFavoriteJobPosting: (String, JobPostingType) -> Unit,
+    removeFavoriteJobPosting: (String, JobPostingType) -> Unit,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
     val listState = rememberLazyListState()
@@ -165,8 +166,8 @@ internal fun WorkerHomeScreen(
 private fun WorkerRecruitmentCard(
     workerJobPosting: WorkerJobPosting,
     applyJobPosting: (String) -> Unit,
-    addFavoriteJobPosting: (String) -> Unit,
-    removeFavoriteJobPosting: (String) -> Unit,
+    addFavoriteJobPosting: (String, JobPostingType) -> Unit,
+    removeFavoriteJobPosting: (String, JobPostingType) -> Unit,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
     Card(
@@ -216,7 +217,12 @@ private fun WorkerRecruitmentCard(
                 Image(
                     painter = painterResource(com.idle.designresource.R.drawable.ic_star_gray),
                     contentDescription = null,
-                    modifier = Modifier.clickable { addFavoriteJobPosting(workerJobPosting.id) }
+                    modifier = Modifier.clickable {
+                        addFavoriteJobPosting(
+                            workerJobPosting.id,
+                            workerJobPosting.jobPostingType
+                        )
+                    }
                 )
             }
 

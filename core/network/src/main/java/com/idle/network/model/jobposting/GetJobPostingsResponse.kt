@@ -40,7 +40,7 @@ data class WorkerJobPostingResponse(
     val startTime: String,
     val weekdays: List<String>,
     val applyTime: String?,
-    val jobPostingType: String = "IN_APP",
+    val jobPostingType: String = "CAREMEET",
     val isFavorite: Boolean,
 ) {
     fun toVO(): WorkerJobPosting = WorkerJobPosting(

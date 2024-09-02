@@ -60,6 +60,7 @@ import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.component.CareTextFieldLong
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.jobposting.ApplyMethod
+import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.WorkerJobPostingDetail
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.worker.job.posting.detail.worker.map.PlaceDetailScreen
@@ -122,8 +123,8 @@ internal fun WorkerJobPostingDetailScreen(
     profile: WorkerProfile?,
     jobPostingDetail: WorkerJobPostingDetail,
     showPlaceDetail: (Boolean) -> Unit,
-    addFavoriteJobPosting: (String) -> Unit,
-    removeFavoriteJobPosting: (String) -> Unit,
+    addFavoriteJobPosting: (String, JobPostingType) -> Unit,
+    removeFavoriteJobPosting: (String, JobPostingType) -> Unit,
     applyJobPosting: (String, ApplyMethod) -> Unit,
 ) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
@@ -256,7 +257,10 @@ internal fun WorkerJobPostingDetailScreen(
                                 painter = painterResource(R.drawable.ic_star_gray),
                                 contentDescription = null,
                                 modifier = Modifier.clickable {
-                                    addFavoriteJobPosting(jobPostingDetail.id)
+                                    addFavoriteJobPosting(
+                                        jobPostingDetail.id,
+                                        jobPostingDetail.jobPostingType,
+                                    )
                                 }
                             )
                         }
