@@ -59,7 +59,7 @@ import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.component.CareTextFieldLong
 import com.idle.designsystem.compose.foundation.CareTheme
-import com.idle.domain.model.job.ApplyMethod
+import com.idle.domain.model.jobposting.ApplyMethod
 import com.idle.domain.model.jobposting.WorkerJobPostingDetail
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.worker.job.posting.detail.worker.map.PlaceDetailScreen

@@ -31,7 +31,7 @@ import com.idle.designsystem.compose.component.CareTextFieldLong
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.designsystem.compose.foundation.PretendardMedium
-import com.idle.domain.model.job.LifeAssistance
+import com.idle.domain.model.jobposting.LifeAssistance
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable

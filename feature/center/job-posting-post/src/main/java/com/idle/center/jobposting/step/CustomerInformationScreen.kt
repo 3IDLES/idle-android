@@ -39,7 +39,7 @@ import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.designsystem.compose.foundation.PretendardMedium
 import com.idle.domain.model.auth.Gender
-import com.idle.domain.model.job.MentalStatus
+import com.idle.domain.model.jobposting.MentalStatus
 
 @Composable
 internal fun CustomerInformationScreen(

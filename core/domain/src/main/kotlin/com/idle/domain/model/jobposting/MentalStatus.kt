@@ -1,4 +1,4 @@
-package com.idle.domain.model.job
+package com.idle.domain.model.jobposting
 
 enum class MentalStatus(val displayName: String) {
     NORMAL("정상"),

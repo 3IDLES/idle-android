@@ -1,4 +1,4 @@
-package com.idle.domain.model.job
+package com.idle.domain.model.jobposting
 
 enum class PayType(val displayName: String) {
     HOURLY("시급"),

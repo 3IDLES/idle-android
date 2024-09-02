@@ -2,7 +2,7 @@ package com.idle.network.model.jobposting
 
 
 import com.idle.domain.model.auth.Gender
-import com.idle.domain.model.job.ApplyDeadlineType
+import com.idle.domain.model.jobposting.ApplyDeadlineType
 import com.idle.domain.model.jobposting.Applicant
 import com.idle.domain.model.jobposting.JobPostingSummary
 import com.idle.domain.model.profile.JobSearchStatus

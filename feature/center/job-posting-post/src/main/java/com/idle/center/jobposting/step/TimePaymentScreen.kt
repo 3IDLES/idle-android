@@ -27,8 +27,8 @@ import com.idle.designsystem.compose.component.CareClickableTextField
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
-import com.idle.domain.model.job.DayOfWeek
-import com.idle.domain.model.job.PayType
+import com.idle.domain.model.jobposting.DayOfWeek
+import com.idle.domain.model.jobposting.PayType
 
 @Composable
 internal fun TimePaymentScreen(

@@ -1,4 +1,4 @@
-package com.idle.domain.model.job
+package com.idle.domain.model.jobposting
 
 enum class DayOfWeek(val displayName: String) {
     MONDAY("월"),

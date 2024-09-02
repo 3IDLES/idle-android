@@ -2,9 +2,8 @@ package com.idle.worker.job.posting.detail.worker
 
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.error.HttpResponseException
-import com.idle.domain.model.job.ApplyMethod
+import com.idle.domain.model.jobposting.ApplyMethod
 import com.idle.domain.model.jobposting.WorkerJobPostingDetail
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.usecase.jobposting.AddFavoriteJobPostingUseCase

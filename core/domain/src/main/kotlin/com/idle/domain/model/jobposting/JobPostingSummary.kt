@@ -1,7 +1,6 @@
 package com.idle.domain.model.jobposting
 
 import com.idle.domain.model.auth.Gender
-import com.idle.domain.model.job.ApplyDeadlineType
 
 data class JobPostingSummary(
     val id: String,
