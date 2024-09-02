@@ -1,6 +1,5 @@
 package com.idle.worker.job.posting.detail.worker
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.error.HttpResponseException
@@ -19,6 +18,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -49,8 +49,6 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
         jobPostingId: String,
         jobPostingType: String,
     ) = viewModelScope.launch {
-        Log.d("test", jobPostingType)
-
         when (jobPostingType) {
             JobPostingType.CAREMEET.name -> getWorkerJobPostingDetailUseCase(jobPostingId).onSuccess {
                 _workerJobPostingDetail.value = it
@@ -68,7 +66,8 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
                 jobPostingId = jobPostingId,
                 applyMethod = applyMethod,
             ).onSuccess {
-
+                _workerJobPostingDetail.value =
+                    _workerJobPostingDetail.value?.copy(applyTime = LocalDateTime.now())
             }.onFailure { handleFailure(it as HttpResponseException) }
         }
 
@@ -80,7 +79,7 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
             jobPostingId = jobPostingId,
             jobPostingType = jobPostingType,
         ).onSuccess {
-
+            _workerJobPostingDetail.value = _workerJobPostingDetail.value?.copy(isFavorite = true)
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
@@ -92,7 +91,7 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
             jobPostingId = jobPostingId,
             jobPostingType = jobPostingType,
         ).onSuccess {
-
+            _workerJobPostingDetail.value = _workerJobPostingDetail.value?.copy(isFavorite = false)
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 }

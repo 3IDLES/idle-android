@@ -17,6 +17,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -77,7 +78,9 @@ class WorkerHomeViewModel @Inject constructor(
             jobPostingId = jobPostingId,
             applyMethod = ApplyMethod.APP
         ).onSuccess {
-
+            _jobPostings.value = _jobPostings.value.map {
+                if (it.id == jobPostingId) it.copy(applyTime = LocalDateTime.now()) else it
+            }
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
@@ -89,7 +92,9 @@ class WorkerHomeViewModel @Inject constructor(
             jobPostingId = jobPostingId,
             jobPostingType = jobPostingType,
         ).onSuccess {
-
+            _jobPostings.value = _jobPostings.value.map {
+                if (it.id == jobPostingId) it.copy(isFavorite = true) else it
+            }
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
@@ -101,7 +106,9 @@ class WorkerHomeViewModel @Inject constructor(
             jobPostingId = jobPostingId,
             jobPostingType = jobPostingType,
         ).onSuccess {
-
+            _jobPostings.value = _jobPostings.value.map {
+                if (it.id == jobPostingId) it.copy(isFavorite = false) else it
+            }
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 }

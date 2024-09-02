@@ -6,6 +6,7 @@ import android.content.Intent
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -38,6 +39,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -212,6 +214,12 @@ internal fun WorkerJobPostingDetailScreen(
                 )
             }
         ) { paddingValue ->
+            val starTintColor by animateColorAsState(
+                targetValue = if (jobPostingDetail.isFavorite) CareTheme.colors.orange300
+                else CareTheme.colors.gray200,
+                label = "즐겨찾기 별의 색상을 관리하는 애니메이션"
+            )
+
             Column(modifier = Modifier.fillMaxSize()) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -256,11 +264,19 @@ internal fun WorkerJobPostingDetailScreen(
                             Image(
                                 painter = painterResource(R.drawable.ic_star_gray),
                                 contentDescription = null,
+                                colorFilter = ColorFilter.tint(starTintColor),
                                 modifier = Modifier.clickable {
-                                    addFavoriteJobPosting(
-                                        jobPostingDetail.id,
-                                        jobPostingDetail.jobPostingType,
-                                    )
+                                    if(!jobPostingDetail.isFavorite) {
+                                        addFavoriteJobPosting(
+                                            jobPostingDetail.id,
+                                            jobPostingDetail.jobPostingType,
+                                        )
+                                    } else {
+                                        removeFavoriteJobPosting(
+                                            jobPostingDetail.id,
+                                            jobPostingDetail.jobPostingType,
+                                        )
+                                    }
                                 }
                             )
                         }
