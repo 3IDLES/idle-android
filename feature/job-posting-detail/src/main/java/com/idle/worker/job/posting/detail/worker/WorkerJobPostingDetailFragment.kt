@@ -79,7 +79,10 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
             val jobPostingDetail by workerJobPostingDetail.collectAsStateWithLifecycle()
 
             LaunchedEffect(true) {
-                getJobPostingDetail(args.jobPostingId)
+                getJobPostingDetail(
+                    jobPostingId = args.jobPostingId,
+                    jobPostingType = args.jobPostingType,
+                )
                 launch { getMyProfile() }
             }
 

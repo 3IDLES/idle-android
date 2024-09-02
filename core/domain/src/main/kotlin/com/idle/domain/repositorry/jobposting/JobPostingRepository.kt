@@ -10,6 +10,7 @@ import com.idle.domain.model.jobposting.CrawlingJobPosting
 import com.idle.domain.model.jobposting.CrawlingJobPostingDetail
 import com.idle.domain.model.jobposting.DayOfWeek
 import com.idle.domain.model.jobposting.JobPostingSummary
+import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.LifeAssistance
 import com.idle.domain.model.jobposting.MentalStatus
 import com.idle.domain.model.jobposting.PayType
@@ -97,9 +98,15 @@ interface JobPostingRepository {
 
     suspend fun applyJobPosting(jobPostingId: String, applyMethod: ApplyMethod): Result<Unit>
 
-    suspend fun addFavoriteJobPosting(jobPostingId: String): Result<Unit>
+    suspend fun addFavoriteJobPosting(
+        jobPostingId: String,
+        jobPostingType: JobPostingType,
+    ): Result<Unit>
 
-    suspend fun removeFavoriteJobPosting(jobPostingId: String): Result<Unit>
+    suspend fun removeFavoriteJobPosting(
+        jobPostingId: String,
+        jobPostingType: JobPostingType,
+    ): Result<Unit>
 
     suspend fun getApplicants(jobPostingId: String): Result<Pair<JobPostingSummary, List<Applicant>>>
 

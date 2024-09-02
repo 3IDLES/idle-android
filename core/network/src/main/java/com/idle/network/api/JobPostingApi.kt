@@ -1,6 +1,7 @@
 package com.idle.network.api
 
 import com.idle.network.model.jobposting.ApplyJobPostingRequest
+import com.idle.network.model.jobposting.FavoriteJobPostingRequest
 import com.idle.network.model.jobposting.GetApplicantCountResponse
 import com.idle.network.model.jobposting.GetApplicantsResponse
 import com.idle.network.model.jobposting.GetCenterJobPostingDetailResponse
@@ -77,10 +78,16 @@ interface JobPostingApi {
     suspend fun applyJobPosting(@Body applyJobPostingRequest: ApplyJobPostingRequest): Response<Unit>
 
     @POST("/api/v1/job-postings/{job-posting-id}/favorites")
-    suspend fun addFavoriteJobPosting(@Path("job-posting-id") jobPostingId: String): Response<Unit>
+    suspend fun addFavoriteJobPosting(
+        @Path("job-posting-id") jobPostingId: String,
+        @Body favoriteJobPostingRequest: FavoriteJobPostingRequest,
+    ): Response<Unit>
 
     @POST("/api/v1/job-postings/{job-posting-id}/remove-favorites")
-    suspend fun removeFavoriteJobPosting(@Path("job-posting-id") jobPostingId: String): Response<Unit>
+    suspend fun removeFavoriteJobPosting(
+        @Path("job-posting-id") jobPostingId: String,
+        @Body favoriteJobPostingRequest: FavoriteJobPostingRequest,
+    ): Response<Unit>
 
     @PATCH("/api/v1/job-postings/{job-posting-id}/end")
     suspend fun endJobPosting(@Path("job-posting-id") jobPostingId: String): Response<Unit>

@@ -263,7 +263,7 @@ private fun WorkerRecruitmentCard(
                 )
 
                 Text(
-                    text = "${jobPosting.distance} m",
+                    text = "도보 ${jobPosting.getDistanceInMinutes()}",
                     style = CareTheme.typography.body3,
                     color = CareTheme.colors.gray500,
                     modifier = Modifier.padding(end = 8.dp),

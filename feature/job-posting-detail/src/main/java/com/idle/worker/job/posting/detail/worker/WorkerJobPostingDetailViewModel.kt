@@ -4,10 +4,13 @@ import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.jobposting.ApplyMethod
+import com.idle.domain.model.jobposting.CrawlingJobPostingDetail
+import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.WorkerJobPostingDetail
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.usecase.jobposting.AddFavoriteJobPostingUseCase
 import com.idle.domain.usecase.jobposting.ApplyJobPostingUseCase
+import com.idle.domain.usecase.jobposting.GetCrawlingJobPostingsDetailUseCase
 import com.idle.domain.usecase.jobposting.GetWorkerJobPostingDetailUseCase
 import com.idle.domain.usecase.jobposting.RemoveFavoriteJobPostingUseCase
 import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
@@ -21,6 +24,7 @@ import javax.inject.Inject
 class WorkerJobPostingDetailViewModel @Inject constructor(
     private val getLocalMyWorkerProfileUseCase: GetLocalMyWorkerProfileUseCase,
     private val getWorkerJobPostingDetailUseCase: GetWorkerJobPostingDetailUseCase,
+    private val getCrawlingJobPostingsDetailUseCase: GetCrawlingJobPostingsDetailUseCase,
     private val applyJobPostingUseCase: ApplyJobPostingUseCase,
     private val addFavoriteJobPostingUseCase: AddFavoriteJobPostingUseCase,
     private val removeFavoriteJobPostingUseCase: RemoveFavoriteJobPostingUseCase,
@@ -31,16 +35,28 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
     private val _workerJobPostingDetail = MutableStateFlow<WorkerJobPostingDetail?>(null)
     val workerJobPostingDetail = _workerJobPostingDetail.asStateFlow()
 
+    private val _workerCrawlingJobPostingDetail = MutableStateFlow<CrawlingJobPostingDetail?>(null)
+    val workerCrawlingJobPostingDetail = _workerCrawlingJobPostingDetail.asStateFlow()
+
     internal fun getMyProfile() = viewModelScope.launch {
         getLocalMyWorkerProfileUseCase().onSuccess {
             _profile.value = it
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
-    internal fun getJobPostingDetail(jobPostingId: String) = viewModelScope.launch {
-        getWorkerJobPostingDetailUseCase(jobPostingId).onSuccess {
-            _workerJobPostingDetail.value = it
-        }.onFailure { handleFailure(it as HttpResponseException) }
+    internal fun getJobPostingDetail(
+        jobPostingId: String,
+        jobPostingType: String,
+    ) = viewModelScope.launch {
+        when (jobPostingType) {
+            JobPostingType.CAREMEET.name -> getWorkerJobPostingDetailUseCase(jobPostingId).onSuccess {
+                _workerJobPostingDetail.value = it
+            }.onFailure { handleFailure(it as HttpResponseException) }
+
+            JobPostingType.WORKNET.name -> getCrawlingJobPostingsDetailUseCase(jobPostingId).onSuccess {
+                _workerCrawlingJobPostingDetail.value = it
+            }.onFailure { handleFailure(it as HttpResponseException) }
+        }
     }
 
     internal fun applyJobPosting(jobPostingId: String, applyMethod: ApplyMethod) =
@@ -53,14 +69,26 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
             }.onFailure { handleFailure(it as HttpResponseException) }
         }
 
-    internal fun addFavoriteJobPosting(jobPostingId: String) = viewModelScope.launch {
-        addFavoriteJobPostingUseCase(jobPostingId).onSuccess {
+    internal fun addFavoriteJobPosting(
+        jobPostingId: String,
+        jobPostingType: JobPostingType,
+    ) = viewModelScope.launch {
+        addFavoriteJobPostingUseCase(
+            jobPostingId = jobPostingId,
+            jobPostingType = jobPostingType,
+        ).onSuccess {
 
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
-    internal fun removeFavoriteJobPosting(jobPostingId: String) = viewModelScope.launch {
-        removeFavoriteJobPostingUseCase(jobPostingId).onSuccess {
+    internal fun removeFavoriteJobPosting(
+        jobPostingId: String,
+        jobPostingType: JobPostingType,
+    ) = viewModelScope.launch {
+        removeFavoriteJobPostingUseCase(
+            jobPostingId = jobPostingId,
+            jobPostingType = jobPostingType,
+        ).onSuccess {
 
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
