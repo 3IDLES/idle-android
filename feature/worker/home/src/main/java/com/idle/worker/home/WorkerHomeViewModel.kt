@@ -11,7 +11,7 @@ import com.idle.domain.usecase.jobposting.AddFavoriteJobPostingUseCase
 import com.idle.domain.usecase.jobposting.ApplyJobPostingUseCase
 import com.idle.domain.usecase.jobposting.GetJobPostingsUseCase
 import com.idle.domain.usecase.jobposting.RemoveFavoriteJobPostingUseCase
-import com.idle.domain.usecase.profile.GetMyWorkerProfileUseCase
+import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WorkerHomeViewModel @Inject constructor(
-    private val getMyWorkerProfileUseCase: GetMyWorkerProfileUseCase,
+    private val getLocalMyWorkerProfileUseCase: GetLocalMyWorkerProfileUseCase,
     private val getJobPostingsUseCase: GetJobPostingsUseCase,
     private val applyJobPostingUseCase: ApplyJobPostingUseCase,
     private val addFavoriteJobPostingUseCase: AddFavoriteJobPostingUseCase,
@@ -39,7 +39,7 @@ class WorkerHomeViewModel @Inject constructor(
     init {
         getJobPostings()
         viewModelScope.launch {
-            getMyWorkerProfileUseCase().onSuccess {
+            getLocalMyWorkerProfileUseCase().onSuccess {
                 _profile.value = it
             }.onFailure {
                 baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
