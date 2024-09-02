@@ -38,7 +38,7 @@ class AuthInterceptor @Inject constructor(
             "/api/v1/auth/common/confirm" -> false
             "/api/v1/auth/center/join" -> false
             "/api/v1/auth/center/login" -> false
-            "/api/v1/auth/center/refresh" -> false
+            "/api/v1/auth/common/refresh" -> false
             "/api/v1/auth/carer/join" -> false
             else -> true
         }

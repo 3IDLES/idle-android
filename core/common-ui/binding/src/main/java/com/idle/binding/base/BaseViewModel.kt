@@ -1,6 +1,5 @@
 package com.idle.binding.base
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.DeepLinkDestination
@@ -19,15 +18,12 @@ open class BaseViewModel : ViewModel() {
     }
 
     open fun handleFailure(error: HttpResponseException) = viewModelScope.launch {
-        Log.d("test", "Error API Code: ${error.apiErrorCode}")
-
         when (error.apiErrorCode) {
             ApiErrorCode.TokenDecodeException,
             ApiErrorCode.TokenNotValid,
             ApiErrorCode.TokenExpiredException,
             ApiErrorCode.TokenNotFound,
             ApiErrorCode.NotSupportUserTokenType -> {
-                Log.d("test", "이쪽으로 옴")
                 _baseEventFlow.emit(CareBaseEvent.ShowSnackBar(error.apiErrorCode.displayMsg))
                 _baseEventFlow.emit(CareBaseEvent.NavigateToAuthWithClearBackStack)
             }
@@ -40,6 +36,7 @@ open class BaseViewModel : ViewModel() {
 sealed class CareBaseEvent {
     data class NavigateTo(val destination: DeepLinkDestination, val popUpTo: Int? = null) :
         CareBaseEvent()
+
     data class ShowSnackBar(val msg: String) : CareBaseEvent()
     data object NavigateToAuthWithClearBackStack : CareBaseEvent()
 }

@@ -1,6 +1,5 @@
 package com.idle.binding.base
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,8 +8,10 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import com.idle.binding.base.navigation.BaseNavigation
 import com.idle.binding.deepLinkNavigateTo
 import com.idle.binding.repeatOnStarted
+import javax.inject.Inject
 
 typealias Inflate<T> = (LayoutInflater, ViewGroup?, Boolean) -> T
 
@@ -22,12 +23,8 @@ abstract class BaseBindingFragment<T : ViewDataBinding, V : BaseViewModel>
 
     protected abstract val fragmentViewModel: V
 
-    @SuppressLint("ShowToast")
-    protected fun handleError(message: String) {
-        _binding?.root?.rootView?.let {
-            Snackbar.make(it, message, Snackbar.LENGTH_SHORT)
-        }
-    }
+    @Inject
+    lateinit var baseNavigation: BaseNavigation
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?,
@@ -46,9 +43,10 @@ abstract class BaseBindingFragment<T : ViewDataBinding, V : BaseViewModel>
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun showSnackBar(message: String) {
+        _binding?.root?.rootView?.let {
+            Snackbar.make(it, message, Snackbar.LENGTH_SHORT)
+        }
     }
 
     private fun handleEvent(event: CareBaseEvent) = when (event) {
@@ -59,7 +57,12 @@ abstract class BaseBindingFragment<T : ViewDataBinding, V : BaseViewModel>
                 popUpTo = event.popUpTo,
             )
 
-        is CareBaseEvent.ShowSnackBar -> handleError(event.msg)
-        is CareBaseEvent.NavigateToAuthWithClearBackStack -> TODO()
+        is CareBaseEvent.ShowSnackBar -> showSnackBar(event.msg)
+        is CareBaseEvent.NavigateToAuthWithClearBackStack -> baseNavigation.navigateToAuth()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

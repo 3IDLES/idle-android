@@ -13,12 +13,9 @@ import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
 import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
 import com.idle.domain.usecase.auth.WithdrawalCenterUseCase
 import com.idle.domain.usecase.auth.WithdrawalWorkerUseCase
-import com.idle.withdrawal.step.WithdrawalEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -31,9 +28,6 @@ class WithdrawalViewModel @Inject constructor(
     private val withdrawalWorkerUseCase: WithdrawalWorkerUseCase,
     private val countDownTimer: CountDownTimer,
 ) : BaseViewModel() {
-    private val _withdrawalEvent = MutableSharedFlow<WithdrawalEvent>()
-    val withdrawalEvent = _withdrawalEvent.asSharedFlow()
-
     private val _withdrawalStep = MutableStateFlow<WithdrawalStep>(WithdrawalStep.REASON)
     internal val withdrawalStep = _withdrawalStep.asStateFlow()
 
@@ -52,10 +46,6 @@ class WithdrawalViewModel @Inject constructor(
 
     private val _isConfirmAuthCode = MutableStateFlow(false)
     val isConfirmAuthCode = _isConfirmAuthCode.asStateFlow()
-
-    private fun withdrawalEvent(event: WithdrawalEvent) = viewModelScope.launch {
-        _withdrawalEvent.emit(event)
-    }
 
     internal fun setWithdrawalStep(step: WithdrawalStep) {
         _withdrawalStep.value = step
@@ -79,7 +69,7 @@ class WithdrawalViewModel @Inject constructor(
     internal fun sendPhoneNumber() = viewModelScope.launch {
         sendPhoneNumberUseCase(_phoneNumber.value)
             .onSuccess { startTimer() }
-            .onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
+            .onFailure { handleFailure(it as HttpResponseException) }
     }
 
     private fun startTimer() {

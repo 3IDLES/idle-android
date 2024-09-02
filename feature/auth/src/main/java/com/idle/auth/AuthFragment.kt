@@ -19,6 +19,9 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -43,6 +46,7 @@ import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designresource.R.string
 import com.idle.designsystem.compose.component.CareButtonLarge
+import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.designsystem.compose.foundation.PretendardMedium
 import com.idle.domain.model.auth.UserType
@@ -58,6 +62,7 @@ internal class AuthFragment : BaseComposeFragment() {
             val userRole by userRole.collectAsStateWithLifecycle()
 
             AuthScreen(
+                snackbarHostState = snackbarHostState,
                 userType = userRole,
                 onUserRoleChanged = ::setUserRole,
                 navigateTo = { baseEvent(NavigateTo(it, popUpTo = R.id.nav_auth)) },
@@ -69,6 +74,7 @@ internal class AuthFragment : BaseComposeFragment() {
 
 @Composable
 internal fun AuthScreen(
+    snackbarHostState: SnackbarHostState,
     userType: UserType?,
     onUserRoleChanged: (UserType) -> Unit,
     navigateTo: (DeepLinkDestination) -> Unit,
@@ -78,163 +84,179 @@ internal fun AuthScreen(
         else CareTheme.colors.white000
     )
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-            .padding(horizontal = 20.dp),
-    ) {
-        Column(
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.Start,
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            Spacer(modifier = Modifier.weight(3f))
-
-            Text(
-                text = stringResource(id = string.auth_title),
-                style = CareTheme.typography.heading1,
-                color = CareTheme.colors.gray900,
+    Scaffold(
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+                snackbar = { data ->
+                    CareSnackBar(
+                        data = data,
+                        modifier = Modifier.padding(bottom = 104.dp)
+                    )
+                }
             )
-
-            Spacer(modifier = Modifier.weight(2f))
-
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                Card(
-                    shape = RoundedCornerShape(8.dp),
-                    colors = CardDefaults.cardColors().copy(
-                        containerColor = animateColorAsState(
-                            if (userType == UserType.CENTER) CareTheme.colors.orange100
-                            else CareTheme.colors.white000
-                        ).value
-                    ),
-                    border = BorderStroke(
-                        width = 1.dp,
-                        color = if (userType == UserType.CENTER) CareTheme.colors.orange400
-                        else CareTheme.colors.gray100,
-                    ),
-                    modifier = Modifier
-                        .weight(1f)
-                        .wrapContentHeight()
-                        .clickable { onUserRoleChanged(UserType.CENTER) }
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(16.dp),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 28.dp),
-                    ) {
-                        Text(
-                            text = stringResource(id = string.start_center),
-                            style = CareTheme.typography.subtitle2,
-                            color = CareTheme.colors.gray900,
-                            textAlign = TextAlign.Center,
-                        )
-
-                        Image(
-                            painter = painterResource(id = com.idle.designresource.R.drawable.ic_center),
-                            contentDescription = "센터 일러스트 입니다."
-                        )
-                    }
-                }
-
-                Card(
-                    shape = RoundedCornerShape(8.dp),
-                    colors = CardDefaults.cardColors().copy(containerColor = cardColor),
-                    border = BorderStroke(
-                        width = 1.dp,
-                        color = if (userType == UserType.WORKER) CareTheme.colors.orange400
-                        else CareTheme.colors.gray100,
-                    ),
-                    modifier = Modifier
-                        .weight(1f)
-                        .wrapContentHeight()
-                        .clickable { onUserRoleChanged(UserType.WORKER) }
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(16.dp),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 28.dp),
-                    ) {
-                        Text(
-                            text = stringResource(id = string.start_worker),
-                            style = CareTheme.typography.subtitle2,
-                            color = CareTheme.colors.gray900,
-                            textAlign = TextAlign.Center,
-                        )
-
-                        Image(
-                            painter = painterResource(id = com.idle.designresource.R.drawable.ic_carer),
-                            contentDescription = "요양 보호사 일러스트 입니다."
-                        )
-                    }
-                }
-            }
-
-            Spacer(modifier = Modifier.weight(6f))
-        }
-
+        },
+        containerColor = CareTheme.colors.white000,
+    ) { paddingValue ->
         Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 28.dp),
+                .fillMaxSize()
+                .background(Color.White)
+                .padding(horizontal = 20.dp)
+                .padding(paddingValue),
         ) {
-            AnimatedVisibility(
-                visible = userType == UserType.WORKER,
-                enter = fadeIn(),
-                exit = fadeOut(),
-                modifier = Modifier.align(Alignment.BottomCenter),
+            Column(
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.Start,
+                modifier = Modifier.fillMaxSize(),
             ) {
-                CareButtonLarge(
-                    text = stringResource(id = string.start_with_phone),
-                    onClick = { navigateTo(WorkerSignUp) },
-                    modifier = Modifier.fillMaxWidth(),
+                Spacer(modifier = Modifier.weight(3f))
+
+                Text(
+                    text = stringResource(id = string.auth_title),
+                    style = CareTheme.typography.heading1,
+                    color = CareTheme.colors.gray900,
                 )
+
+                Spacer(modifier = Modifier.weight(2f))
+
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Card(
+                        shape = RoundedCornerShape(8.dp),
+                        colors = CardDefaults.cardColors().copy(
+                            containerColor = animateColorAsState(
+                                if (userType == UserType.CENTER) CareTheme.colors.orange100
+                                else CareTheme.colors.white000
+                            ).value
+                        ),
+                        border = BorderStroke(
+                            width = 1.dp,
+                            color = if (userType == UserType.CENTER) CareTheme.colors.orange400
+                            else CareTheme.colors.gray100,
+                        ),
+                        modifier = Modifier
+                            .weight(1f)
+                            .wrapContentHeight()
+                            .clickable { onUserRoleChanged(UserType.CENTER) }
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(16.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp, vertical = 28.dp),
+                        ) {
+                            Text(
+                                text = stringResource(id = string.start_center),
+                                style = CareTheme.typography.subtitle2,
+                                color = CareTheme.colors.gray900,
+                                textAlign = TextAlign.Center,
+                            )
+
+                            Image(
+                                painter = painterResource(id = com.idle.designresource.R.drawable.ic_center),
+                                contentDescription = "센터 일러스트 입니다."
+                            )
+                        }
+                    }
+
+                    Card(
+                        shape = RoundedCornerShape(8.dp),
+                        colors = CardDefaults.cardColors().copy(containerColor = cardColor),
+                        border = BorderStroke(
+                            width = 1.dp,
+                            color = if (userType == UserType.WORKER) CareTheme.colors.orange400
+                            else CareTheme.colors.gray100,
+                        ),
+                        modifier = Modifier
+                            .weight(1f)
+                            .wrapContentHeight()
+                            .clickable { onUserRoleChanged(UserType.WORKER) }
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(16.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp, vertical = 28.dp),
+                        ) {
+                            Text(
+                                text = stringResource(id = string.start_worker),
+                                style = CareTheme.typography.subtitle2,
+                                color = CareTheme.colors.gray900,
+                                textAlign = TextAlign.Center,
+                            )
+
+                            Image(
+                                painter = painterResource(id = com.idle.designresource.R.drawable.ic_carer),
+                                contentDescription = "요양 보호사 일러스트 입니다."
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.weight(6f))
             }
 
-            AnimatedVisibility(
-                visible = userType == UserType.CENTER,
-                enter = fadeIn(),
-                exit = fadeOut(),
-                modifier = Modifier.align(Alignment.BottomCenter),
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 28.dp),
             ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.BottomCenter)
+                AnimatedVisibility(
+                    visible = userType == UserType.WORKER,
+                    enter = fadeIn(),
+                    exit = fadeOut(),
+                    modifier = Modifier.align(Alignment.BottomCenter),
                 ) {
-                    Text(
-                        text = buildAnnotatedString {
-                            withStyle(
-                                style = SpanStyle(
-                                    color = CareTheme.colors.gray300,
-                                    fontFamily = PretendardMedium,
-                                )
-                            ) {
-                                append("이미 아이디가 있으신가요? ")
-                            }
-                            withStyle(style = SpanStyle(color = CareTheme.colors.orange500)) {
-                                append("로그인하기")
-                            }
-                        },
-                        style = CareTheme.typography.subtitle4,
-                        modifier = Modifier.clickable { navigateTo(CenterSignIn) }
-                    )
-
                     CareButtonLarge(
-                        text = stringResource(id = string.start_with_signup),
-                        onClick = { navigateTo(CenterSignUp) },
+                        text = stringResource(id = string.start_with_phone),
+                        onClick = { navigateTo(WorkerSignUp) },
                         modifier = Modifier.fillMaxWidth(),
                     )
+                }
+
+                AnimatedVisibility(
+                    visible = userType == UserType.CENTER,
+                    enter = fadeIn(),
+                    exit = fadeOut(),
+                    modifier = Modifier.align(Alignment.BottomCenter),
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.BottomCenter)
+                    ) {
+                        Text(
+                            text = buildAnnotatedString {
+                                withStyle(
+                                    style = SpanStyle(
+                                        color = CareTheme.colors.gray300,
+                                        fontFamily = PretendardMedium,
+                                    )
+                                ) {
+                                    append("이미 아이디가 있으신가요? ")
+                                }
+                                withStyle(style = SpanStyle(color = CareTheme.colors.orange500)) {
+                                    append("로그인하기")
+                                }
+                            },
+                            style = CareTheme.typography.subtitle4,
+                            modifier = Modifier.clickable { navigateTo(CenterSignIn) }
+                        )
+
+                        CareButtonLarge(
+                            text = stringResource(id = string.start_with_signup),
+                            onClick = { navigateTo(CenterSignUp) },
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                    }
                 }
             }
         }
