@@ -1,16 +1,18 @@
 package com.idle.data.repository.jobposting
 
 import com.idle.domain.model.auth.Gender
+import com.idle.domain.model.jobposting.Applicant
 import com.idle.domain.model.jobposting.ApplyDeadlineType
 import com.idle.domain.model.jobposting.ApplyMethod
+import com.idle.domain.model.jobposting.CenterJobPosting
+import com.idle.domain.model.jobposting.CenterJobPostingDetail
+import com.idle.domain.model.jobposting.CrawlingJobPosting
+import com.idle.domain.model.jobposting.CrawlingJobPostingDetail
 import com.idle.domain.model.jobposting.DayOfWeek
+import com.idle.domain.model.jobposting.JobPostingSummary
 import com.idle.domain.model.jobposting.LifeAssistance
 import com.idle.domain.model.jobposting.MentalStatus
 import com.idle.domain.model.jobposting.PayType
-import com.idle.domain.model.jobposting.Applicant
-import com.idle.domain.model.jobposting.CenterJobPosting
-import com.idle.domain.model.jobposting.CenterJobPostingDetail
-import com.idle.domain.model.jobposting.JobPostingSummary
 import com.idle.domain.model.jobposting.WorkerJobPosting
 import com.idle.domain.model.jobposting.WorkerJobPostingDetail
 import com.idle.domain.repositorry.jobposting.JobPostingRepository
@@ -192,4 +194,13 @@ class JobPostingRepositoryImpl @Inject constructor(
 
     override suspend fun deleteJobPosting(jobPostingId: String): Result<Unit> =
         jobPostingDataSource.deleteJobPosting(jobPostingId)
+
+    override suspend fun getCrawlingJobPostings(
+        next: String?,
+        limit: Int
+    ): Result<Pair<String?, List<CrawlingJobPosting>>> =
+        jobPostingDataSource.getCrawlingJobPostings(next, limit).mapCatching { it.toVO() }
+
+    override suspend fun getCrawlingJobPostingDetail(jobPostingId: String): Result<CrawlingJobPostingDetail> =
+        jobPostingDataSource.getCrawlingJobPostingsDetail(jobPostingId).mapCatching { it.toVO() }
 }

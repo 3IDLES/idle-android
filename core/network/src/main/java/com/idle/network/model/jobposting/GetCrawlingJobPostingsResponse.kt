@@ -2,15 +2,19 @@ package com.idle.network.model.jobposting
 
 import com.idle.domain.model.jobposting.CrawlingJobPosting
 import com.idle.domain.model.jobposting.JobPostingType
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 data class GetCrawlingJobPostingsResponse(
-    val items: List<CrawlingJobPostingResponse> = listOf(),
+    @SerialName("items") val crawlingJobPostingResponses: List<CrawlingJobPostingResponse> = listOf(),
     val next: String? = null,
     val total: Int = 0,
-)
+) {
+    fun toVO(): Pair<String?, List<CrawlingJobPosting>> =
+        next to crawlingJobPostingResponses.map { it.toVO() }
+}
 
 @Serializable
 data class CrawlingJobPostingResponse(
