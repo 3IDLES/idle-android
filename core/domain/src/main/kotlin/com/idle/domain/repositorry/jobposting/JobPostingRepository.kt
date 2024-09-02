@@ -113,5 +113,4 @@ interface JobPostingRepository {
     ): Result<Pair<String?, List<CrawlingJobPosting>>>
 
     suspend fun getCrawlingJobPostingDetail(jobPostingId: String): Result<CrawlingJobPostingDetail>
-
 }

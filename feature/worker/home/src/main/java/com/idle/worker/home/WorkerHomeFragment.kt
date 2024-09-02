@@ -179,7 +179,12 @@ private fun WorkerRecruitmentCard(
         ),
         border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
         modifier = Modifier.clickable {
-            navigateTo(WorkerJobDetail(jobPostingId = workerJobPosting.id))
+            navigateTo(
+                WorkerJobDetail(
+                    jobPostingId = workerJobPosting.id,
+                    jobPostingType = workerJobPosting.jobPostingType.name,
+                )
+            )
         },
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -236,7 +241,7 @@ private fun WorkerRecruitmentCard(
                 )
 
                 Text(
-                    text = "${workerJobPosting.distance} km",
+                    text = "걸어서 ${workerJobPosting.getDistanceInMinutes()} 소요",
                     style = CareTheme.typography.body3,
                     color = CareTheme.colors.gray500,
                     modifier = Modifier.padding(end = 8.dp),
@@ -316,7 +321,12 @@ private fun WorkerWorkNetCard(
         ),
         border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
         modifier = Modifier.clickable {
-            navigateTo(WorkerJobDetail(jobPostingId = workerJobPosting.id))
+            navigateTo(
+                WorkerJobDetail(
+                    jobPostingId = workerJobPosting.id,
+                    jobPostingType = workerJobPosting.jobPostingType.name,
+                )
+            )
         },
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -371,7 +381,7 @@ private fun WorkerWorkNetCard(
                 )
 
                 Text(
-                    text = "${workerJobPosting.distance} km",
+                    text = "${workerJobPosting.distance} m",
                     style = CareTheme.typography.body3,
                     color = CareTheme.colors.gray500,
                     modifier = Modifier.padding(end = 8.dp),
