@@ -25,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -294,6 +295,135 @@ private fun WorkerRecruitmentCard(
                 onClick = { applyJobPosting(workerJobPosting.id) },
                 modifier = Modifier.fillMaxWidth(),
             )
+        }
+    }
+}
+
+@Composable
+private fun WorkerWorkNetCard(
+    workerJobPosting: WorkerJobPosting,
+    addFavoriteJobPosting: (String) -> Unit,
+    removeFavoriteJobPosting: (String) -> Unit,
+    navigateTo: (DeepLinkDestination) -> Unit,
+) {
+    Card(
+        shape = RoundedCornerShape(12.dp),
+        colors = CardColors(
+            containerColor = CareTheme.colors.white000,
+            contentColor = CareTheme.colors.white000,
+            disabledContainerColor = CareTheme.colors.white000,
+            disabledContentColor = CareTheme.colors.white000,
+        ),
+        border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
+        modifier = Modifier.clickable {
+            navigateTo(WorkerJobDetail(jobPostingId = workerJobPosting.id))
+        },
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp)
+            ) {
+                CareTag(
+                    text = stringResource(id = R.string.worknet),
+                    textColor = Color(0xFF2B8BDC),
+                    backgroundColor = Color(0xFFD3EBFF),
+                )
+
+                if (workerJobPosting.calculateDeadline() <= 14) {
+                    CareTag(
+                        text = "D-${workerJobPosting.calculateDeadline()}",
+                        textColor = CareTheme.colors.gray300,
+                        backgroundColor = CareTheme.colors.gray050,
+                    )
+                }
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                Image(
+                    painter = painterResource(R.drawable.ic_star_gray),
+                    contentDescription = null,
+                    modifier = Modifier.clickable { addFavoriteJobPosting(workerJobPosting.id) }
+                )
+            }
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 2.dp),
+            ) {
+                Text(
+                    text = try {
+                        workerJobPosting.lotNumberAddress.split(" ").subList(0, 3).joinToString(" ")
+                    } catch (e: IndexOutOfBoundsException) {
+                        ""
+                    },
+                    style = CareTheme.typography.subtitle2,
+                    color = CareTheme.colors.gray900,
+                    overflow = TextOverflow.Clip,
+                    maxLines = 1,
+                    modifier = Modifier.weight(1f),
+                )
+
+                Text(
+                    text = "${workerJobPosting.distance} km",
+                    style = CareTheme.typography.body3,
+                    color = CareTheme.colors.gray500,
+                    modifier = Modifier.padding(end = 8.dp),
+                )
+            }
+
+            Text(
+                text = "${workerJobPosting.careLevel}등급 ${workerJobPosting.age}세 ${workerJobPosting.gender.displayName}",
+                style = CareTheme.typography.body2,
+                color = CareTheme.colors.gray900,
+                modifier = Modifier.padding(end = 8.dp, bottom = 4.dp),
+            )
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 2.dp)
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.ic_clock),
+                    contentDescription = null,
+                )
+
+                Text(
+                    text = "${
+                        workerJobPosting.weekdays
+                            .sortedBy { it.ordinal }
+                            .joinToString(", ") { it.displayName }
+                    } | ${workerJobPosting.startTime} - ${workerJobPosting.endTime}",
+                    style = CareTheme.typography.body3,
+                    color = CareTheme.colors.gray500,
+                )
+            }
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp),
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.ic_money),
+                    contentDescription = null,
+                )
+
+                Text(
+                    text = "${workerJobPosting.payType.displayName} ${workerJobPosting.payAmount} 원",
+                    style = CareTheme.typography.body3,
+                    color = CareTheme.colors.gray500,
+                )
+            }
         }
     }
 }

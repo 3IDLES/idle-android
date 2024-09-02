@@ -1,7 +1,6 @@
 package com.idle.center.profile
 
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.error.HttpResponseException
@@ -40,10 +39,6 @@ class CenterProfileViewModel @Inject constructor(
 
     private fun getMyCenterProfile() = viewModelScope.launch {
         getLocalMyCenterProfileUseCase().onSuccess {
-            Log.d("test", it.toString())
-            it.profileImageUrl?.let { notNull ->
-                Log.d("test", "이 녀석은 널이 아니여 $notNull")
-            }
             _centerProfile.value = it
             _centerIntroduce.value = it.introduce ?: ""
             _centerOfficeNumber.value = it.officeNumber
@@ -66,7 +61,9 @@ class CenterProfileViewModel @Inject constructor(
             imageFileUri = _profileImageUri.value?.toString(),
         ).onSuccess {
             setEditState(false)
-        }.onFailure { handleFailure(it as HttpResponseException) }
+        }.onFailure {
+            handleFailure(it as HttpResponseException)
+        }
     }
 
     private fun isCenterProfileUnchanged(): Boolean {
@@ -75,19 +72,19 @@ class CenterProfileViewModel @Inject constructor(
                 profileImageUri.value == null
     }
 
-    fun setCenterOfficeNumber(number: String) {
+    internal fun setCenterOfficeNumber(number: String) {
         _centerOfficeNumber.value = number
     }
 
-    fun setCenterIntroduce(introduce: String) {
+    internal fun setCenterIntroduce(introduce: String) {
         _centerIntroduce.value = introduce
     }
 
-    fun setEditState(state: Boolean) {
+    internal fun setEditState(state: Boolean) {
         _isEditState.value = state
     }
 
-    fun setProfileImageUrl(uri: Uri?) {
+    internal fun setProfileImageUrl(uri: Uri?) {
         _profileImageUri.value = uri
     }
 }
