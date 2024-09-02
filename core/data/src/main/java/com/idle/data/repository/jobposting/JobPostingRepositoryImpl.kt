@@ -1,12 +1,12 @@
 package com.idle.data.repository.jobposting
 
 import com.idle.domain.model.auth.Gender
-import com.idle.domain.model.job.ApplyDeadlineType
-import com.idle.domain.model.job.ApplyMethod
-import com.idle.domain.model.job.DayOfWeek
-import com.idle.domain.model.job.LifeAssistance
-import com.idle.domain.model.job.MentalStatus
-import com.idle.domain.model.job.PayType
+import com.idle.domain.model.jobposting.ApplyDeadlineType
+import com.idle.domain.model.jobposting.ApplyMethod
+import com.idle.domain.model.jobposting.DayOfWeek
+import com.idle.domain.model.jobposting.LifeAssistance
+import com.idle.domain.model.jobposting.MentalStatus
+import com.idle.domain.model.jobposting.PayType
 import com.idle.domain.model.jobposting.Applicant
 import com.idle.domain.model.jobposting.CenterJobPosting
 import com.idle.domain.model.jobposting.CenterJobPostingDetail

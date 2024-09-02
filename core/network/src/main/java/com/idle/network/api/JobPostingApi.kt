@@ -4,6 +4,8 @@ import com.idle.network.model.jobposting.ApplyJobPostingRequest
 import com.idle.network.model.jobposting.GetApplicantCountResponse
 import com.idle.network.model.jobposting.GetApplicantsResponse
 import com.idle.network.model.jobposting.GetCenterJobPostingDetailResponse
+import com.idle.network.model.jobposting.GetCrawlingJobPostingDetailResponse
+import com.idle.network.model.jobposting.GetCrawlingJobPostingsResponse
 import com.idle.network.model.jobposting.GetJobPostingsCenterResponse
 import com.idle.network.model.jobposting.GetJobPostingsResponse
 import com.idle.network.model.jobposting.GetWorkerJobPostingDetailResponse
@@ -86,4 +88,14 @@ interface JobPostingApi {
     @DELETE("/api/v1/job-postings/{job-posting-id}")
     suspend fun deleteJobPosting(@Path("job-posting-id") jobPostingId: String): Response<Unit>
 
+    @GET("/api/v1/crawling-job-postings")
+    suspend fun getCrawlingJobPostings(
+        @Query("next") next: String?,
+        @Query("limit") limit: Int,
+    ): Response<GetCrawlingJobPostingsResponse>
+
+    @GET("/api/v1/crawling-job-postings/{crawling-job-posting-id}")
+    suspend fun getCrawlingJobPostingsDetail(
+        @Path("crawling-job-posting-id") jobPostingId: String
+    ): Response<GetCrawlingJobPostingDetailResponse>
 }

@@ -1,6 +1,6 @@
 package com.idle.domain.usecase.jobposting
 
-import com.idle.domain.model.job.ApplyMethod
+import com.idle.domain.model.jobposting.ApplyMethod
 import com.idle.domain.repositorry.jobposting.JobPostingRepository
 import javax.inject.Inject
 

@@ -32,8 +32,8 @@ import com.idle.designsystem.compose.component.CareClickableTextField
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.designsystem.compose.foundation.PretendardMedium
-import com.idle.domain.model.job.ApplyDeadlineType
-import com.idle.domain.model.job.ApplyMethod
+import com.idle.domain.model.jobposting.ApplyDeadlineType
+import com.idle.domain.model.jobposting.ApplyMethod
 import java.time.LocalDate
 
 @Composable

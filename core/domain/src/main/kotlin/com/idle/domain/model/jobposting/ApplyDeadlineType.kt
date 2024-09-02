@@ -1,4 +1,4 @@
-package com.idle.domain.model.job
+package com.idle.domain.model.jobposting
 
 enum class ApplyDeadlineType(val displayName: String) {
     UNLIMITED("채용시까지"),

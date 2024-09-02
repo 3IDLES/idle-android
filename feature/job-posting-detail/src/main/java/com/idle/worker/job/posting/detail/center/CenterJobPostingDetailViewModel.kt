@@ -5,7 +5,7 @@ import com.idle.binding.DeepLinkDestination
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.error.HttpResponseException
-import com.idle.domain.model.job.LifeAssistance
+import com.idle.domain.model.jobposting.LifeAssistance
 import com.idle.domain.model.jobposting.CenterJobPostingDetail
 import com.idle.domain.model.jobposting.EditJobPostingDetail
 import com.idle.domain.usecase.jobposting.EndJobPostingUseCase

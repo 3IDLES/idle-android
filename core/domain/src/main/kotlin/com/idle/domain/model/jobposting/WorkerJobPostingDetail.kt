@@ -1,12 +1,6 @@
 package com.idle.domain.model.jobposting
 
 import com.idle.domain.model.auth.Gender
-import com.idle.domain.model.job.ApplyDeadlineType
-import com.idle.domain.model.job.ApplyMethod
-import com.idle.domain.model.job.DayOfWeek
-import com.idle.domain.model.job.LifeAssistance
-import com.idle.domain.model.job.MentalStatus
-import com.idle.domain.model.job.PayType
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId

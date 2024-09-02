@@ -1,6 +1,5 @@
 package com.idle.center.jobposting.step
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,11 +18,11 @@ import com.idle.designsystem.compose.component.CareButtonRound
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.Gender
-import com.idle.domain.model.job.ApplyMethod
-import com.idle.domain.model.job.DayOfWeek
-import com.idle.domain.model.job.LifeAssistance
-import com.idle.domain.model.job.MentalStatus
-import com.idle.domain.model.job.PayType
+import com.idle.domain.model.jobposting.ApplyMethod
+import com.idle.domain.model.jobposting.DayOfWeek
+import com.idle.domain.model.jobposting.LifeAssistance
+import com.idle.domain.model.jobposting.MentalStatus
+import com.idle.domain.model.jobposting.PayType
 import com.idle.worker.job.posting.detail.center.SummaryScreen
 import java.time.LocalDate
 
