@@ -7,6 +7,8 @@ import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.domain.model.auth.UserType
 import com.idle.domain.usecase.auth.GetAccessTokenUseCase
 import com.idle.domain.usecase.auth.GetUserRoleUseCase
+import com.idle.domain.usecase.profile.GetMyCenterProfileUseCase
+import com.idle.domain.usecase.profile.GetMyWorkerProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,6 +20,8 @@ import javax.inject.Inject
 class AuthViewModel @Inject constructor(
     private val getAccessTokenUseCase: GetAccessTokenUseCase,
     private val getMyUserRoleUseCase: GetUserRoleUseCase,
+    private val getMyCenterProfileUseCase: GetMyCenterProfileUseCase,
+    private val getMyWorkerProfileUseCase: GetMyWorkerProfileUseCase,
 ) : BaseViewModel() {
     private val _userType = MutableStateFlow<UserType?>(null)
     val userRole = _userType.asStateFlow()
@@ -34,7 +38,15 @@ class AuthViewModel @Inject constructor(
                 return@launch
             }
 
-            // Todo:토큰이 실제 서버에서 유효한지 확인하는 추가 로직 필요
+            when (userRole) {
+                UserType.CENTER.apiValue -> getMyCenterProfileUseCase().onFailure {
+                    return@launch
+                }
+
+                UserType.WORKER.apiValue -> getMyWorkerProfileUseCase().onFailure {
+                    return@launch
+                }
+            }
 
             navigateToDestination(userRole)
         }

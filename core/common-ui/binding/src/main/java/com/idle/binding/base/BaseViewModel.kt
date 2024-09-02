@@ -19,6 +19,8 @@ open class BaseViewModel : ViewModel() {
     }
 
     open fun handleFailure(error: HttpResponseException) = viewModelScope.launch {
+        Log.d("test", "Error API Code: ${error.apiErrorCode}")
+
         when (error.apiErrorCode) {
             ApiErrorCode.TokenDecodeException,
             ApiErrorCode.TokenNotValid,
@@ -38,7 +40,6 @@ open class BaseViewModel : ViewModel() {
 sealed class CareBaseEvent {
     data class NavigateTo(val destination: DeepLinkDestination, val popUpTo: Int? = null) :
         CareBaseEvent()
-
     data class ShowSnackBar(val msg: String) : CareBaseEvent()
     data object NavigateToAuthWithClearBackStack : CareBaseEvent()
 }

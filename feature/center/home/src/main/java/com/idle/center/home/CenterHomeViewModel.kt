@@ -1,8 +1,8 @@
 package com.idle.center.home
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.jobposting.CenterJobPosting
 import com.idle.domain.usecase.jobposting.GetJobPostingsCompletedUseCase
@@ -16,7 +16,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CenterHomeViewModel @Inject constructor(
-    private val getMyCenterProfileUseCase: GetMyCenterProfileUseCase,
     private val getJobPostingsInProgressUseCase: GetJobPostingsInProgressUseCase,
     private val getJobPostingsCompletedUseCase: GetJobPostingsCompletedUseCase,
 ) : BaseViewModel() {
@@ -28,14 +27,6 @@ class CenterHomeViewModel @Inject constructor(
 
     private val _jobPostingsCompleted = MutableStateFlow<List<CenterJobPosting>>(emptyList())
     val jobPostingsCompleted = _jobPostingsCompleted.asStateFlow()
-
-    init {
-        viewModelScope.launch {
-            getMyCenterProfileUseCase().onSuccess {
-
-            }.onFailure { handleFailure(it as HttpResponseException) }
-        }
-    }
 
     internal fun setRecruitmentPostStatus(recruitmentPostStatus: RecruitmentPostStatus) {
         _recruitmentPostStatus.value = recruitmentPostStatus
@@ -49,7 +40,9 @@ class CenterHomeViewModel @Inject constructor(
     internal fun getJobPostingsInProgress() = viewModelScope.launch {
         getJobPostingsInProgressUseCase().onSuccess {
             _jobPostingsInProgress.value = it
-        }.onFailure { handleFailure(it as HttpResponseException) }
+        }.onFailure {
+            handleFailure(it as HttpResponseException)
+        }
     }
 
     internal fun getJobPostingsCompleted() = viewModelScope.launch {
