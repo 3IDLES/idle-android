@@ -5,6 +5,7 @@ import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.jobposting.ApplyMethod
+import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.WorkerJobPosting
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.usecase.jobposting.AddFavoriteJobPostingUseCase
@@ -80,14 +81,26 @@ class WorkerHomeViewModel @Inject constructor(
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
-    internal fun addFavoriteJobPosting(jobPostingId: String) = viewModelScope.launch {
-        addFavoriteJobPostingUseCase(jobPostingId).onSuccess {
+    internal fun addFavoriteJobPosting(
+        jobPostingId: String,
+        jobPostingType: JobPostingType,
+    ) = viewModelScope.launch {
+        addFavoriteJobPostingUseCase(
+            jobPostingId = jobPostingId,
+            jobPostingType = jobPostingType,
+        ).onSuccess {
 
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
-    internal fun removeFavoriteJobPosting(jobPostingId: String) = viewModelScope.launch {
-        removeFavoriteJobPostingUseCase(jobPostingId).onSuccess {
+    internal fun removeFavoriteJobPosting(
+        jobPostingId: String,
+        jobPostingType: JobPostingType,
+    ) = viewModelScope.launch {
+        removeFavoriteJobPostingUseCase(
+            jobPostingId = jobPostingId,
+            jobPostingType = jobPostingType,
+        ).onSuccess {
 
         }.onFailure { handleFailure(it as HttpResponseException) }
     }

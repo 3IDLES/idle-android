@@ -1,5 +1,6 @@
 package com.idle.worker.job.posting
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +23,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -40,6 +42,7 @@ import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareTabBar
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.foundation.CareTheme
+import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.WorkerJobPosting
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -83,8 +86,8 @@ internal fun WorkerJobPostingScreen(
     favoritesJobPostings: List<WorkerJobPosting>,
     setRecruitmentPostStatus: (RecruitmentPostStatus) -> Unit,
     applyJobPosting: (String) -> Unit,
-    addFavoriteJobPosting: (String) -> Unit,
-    removeFavoriteJobPosting: (String) -> Unit,
+    addFavoriteJobPosting: (String, JobPostingType) -> Unit,
+    removeFavoriteJobPosting: (String, JobPostingType) -> Unit,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
     Scaffold(
@@ -186,11 +189,17 @@ internal fun WorkerJobPostingScreen(
 @Composable
 private fun WorkerRecruitmentCard(
     jobPosting: WorkerJobPosting,
-    applyJobPosting: (String) -> Unit = {},
-    addFavoriteJobPosting: (String) -> Unit = {},
-    removeFavoriteJobPosting: (String) -> Unit = {},
+    applyJobPosting: (String) -> Unit,
+    addFavoriteJobPosting: (String, JobPostingType) -> Unit,
+    removeFavoriteJobPosting: (String, JobPostingType) -> Unit,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
+    val starTintColor by animateColorAsState(
+        targetValue = if (jobPosting.isFavorite) CareTheme.colors.orange300
+        else CareTheme.colors.gray200,
+        label = "즐겨찾기 별의 색상을 관리하는 애니메이션"
+    )
+
     Card(
         shape = RoundedCornerShape(12.dp),
         colors = CardColors(
@@ -238,7 +247,14 @@ private fun WorkerRecruitmentCard(
                 Image(
                     painter = painterResource(com.idle.designresource.R.drawable.ic_star_gray),
                     contentDescription = null,
-                    modifier = Modifier.clickable { addFavoriteJobPosting(jobPosting.id) }
+                    colorFilter = ColorFilter.tint(starTintColor),
+                    modifier = Modifier.clickable {
+                        if (!jobPosting.isFavorite) {
+                            addFavoriteJobPosting(jobPosting.id, jobPosting.jobPostingType)
+                        } else {
+                            removeFavoriteJobPosting(jobPosting.id, jobPosting.jobPostingType)
+                        }
+                    }
                 )
             }
 

@@ -1,5 +1,6 @@
 package com.idle.worker.job.posting.detail.worker
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.error.HttpResponseException
@@ -48,6 +49,8 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
         jobPostingId: String,
         jobPostingType: String,
     ) = viewModelScope.launch {
+        Log.d("test", jobPostingType)
+
         when (jobPostingType) {
             JobPostingType.CAREMEET.name -> getWorkerJobPostingDetailUseCase(jobPostingId).onSuccess {
                 _workerJobPostingDetail.value = it

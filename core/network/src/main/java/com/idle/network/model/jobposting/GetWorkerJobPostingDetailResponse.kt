@@ -5,6 +5,7 @@ import com.idle.domain.model.auth.Gender
 import com.idle.domain.model.jobposting.ApplyDeadlineType
 import com.idle.domain.model.jobposting.ApplyMethod
 import com.idle.domain.model.jobposting.DayOfWeek
+import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.LifeAssistance
 import com.idle.domain.model.jobposting.MentalStatus
 import com.idle.domain.model.jobposting.PayType
@@ -47,6 +48,7 @@ data class GetWorkerJobPostingDetailResponse(
     val weight: Int?,
     val applyTime: String?,
     val isFavorite: Boolean,
+    val jobPostingType: String = "CAREMEET",
 ) {
     fun toVO() = WorkerJobPostingDetail(
         weekdays = DayOfWeek.create(weekdays),
@@ -78,9 +80,10 @@ data class GetWorkerJobPostingDetailResponse(
         centerId = centerId,
         longitude = longitude,
         latitude = latitude,
-        applyTime = applyTime?.let{
+        applyTime = applyTime?.let {
             LocalDateTime.parse(it, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
         },
         isFavorite = isFavorite,
+        jobPostingType = JobPostingType.create(jobPostingType),
     )
 }

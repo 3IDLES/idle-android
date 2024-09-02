@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.jobposting.ApplyMethod
+import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.WorkerJobPosting
 import com.idle.domain.usecase.jobposting.AddFavoriteJobPostingUseCase
 import com.idle.domain.usecase.jobposting.ApplyJobPostingUseCase
@@ -14,6 +15,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -45,6 +47,8 @@ class WorkerJobPostingViewModel @Inject constructor(
     internal fun clearJobPostingStatus() {
         _appliedJobPostings.value = emptyList()
         _favoritesJobPostings.value = emptyList()
+        appliedJobPostingCallType = JobPostingCallType.IN_APP
+        favoriteJobPostingCallType = JobPostingCallType.IN_APP
     }
 
     internal fun getAppliedJobPostings() = viewModelScope.launch {
@@ -88,19 +92,46 @@ class WorkerJobPostingViewModel @Inject constructor(
             jobPostingId = jobPostingId,
             applyMethod = ApplyMethod.APP
         ).onSuccess {
-
+            _appliedJobPostings.value = _appliedJobPostings.value.map{
+                if (it.id == jobPostingId) it.copy(applyTime = LocalDateTime.now()) else it
+            }
+            _appliedJobPostings.value = _appliedJobPostings.value.map{
+                if (it.id == jobPostingId) it.copy(applyTime = LocalDateTime.now()) else it
+            }
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
-    internal fun addFavoriteJobPosting(jobPostingId: String) = viewModelScope.launch {
-        addFavoriteJobPostingUseCase(jobPostingId).onSuccess {
-
+    internal fun addFavoriteJobPosting(
+        jobPostingId: String,
+        jobPostingType: JobPostingType,
+    ) = viewModelScope.launch {
+        addFavoriteJobPostingUseCase(
+            jobPostingId = jobPostingId,
+            jobPostingType = jobPostingType,
+        ).onSuccess {
+            _appliedJobPostings.value = _appliedJobPostings.value.map{
+                if (it.id == jobPostingId) it.copy(isFavorite = true) else it
+            }
+            _favoritesJobPostings.value = _favoritesJobPostings.value.map {
+                if (it.id == jobPostingId) it.copy(isFavorite = true) else it
+            }
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
-    internal fun removeFavoriteJobPosting(jobPostingId: String) = viewModelScope.launch {
-        removeFavoriteJobPostingUseCase(jobPostingId).onSuccess {
-
+    internal fun removeFavoriteJobPosting(
+        jobPostingId: String,
+        jobPostingType: JobPostingType,
+    ) = viewModelScope.launch {
+        removeFavoriteJobPostingUseCase(
+            jobPostingId = jobPostingId,
+            jobPostingType = jobPostingType,
+        ).onSuccess {
+            _appliedJobPostings.value = _appliedJobPostings.value.map{
+                if (it.id == jobPostingId) it.copy(isFavorite = false) else it
+            }
+            _favoritesJobPostings.value = _favoritesJobPostings.value.map {
+                if (it.id == jobPostingId) it.copy(isFavorite = false) else it
+            }
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 }

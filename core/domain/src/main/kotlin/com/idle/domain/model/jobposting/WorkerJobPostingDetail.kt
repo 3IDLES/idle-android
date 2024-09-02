@@ -36,6 +36,7 @@ data class WorkerJobPostingDetail(
     val centerRoadNameAddress: String,
     val distance: Int,
     val applyTime: LocalDateTime?,
+    val jobPostingType: JobPostingType,
     val isFavorite: Boolean,
 ) {
     fun calculateDeadline(): Long {
