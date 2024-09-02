@@ -255,7 +255,6 @@ internal fun CenterProfileScreen(
                         }) {
                         if (centerProfile.profileImageUrl == null && profileImageUri == null) {
                             if (!isEditState) {
-                                Log.d("test", "널널 수정X")
                                 Image(
                                     painter = painterResource(R.drawable.ic_profile_empty),
                                     contentDescription = null,
@@ -265,7 +264,6 @@ internal fun CenterProfileScreen(
                                         .clip(RoundedCornerShape(6.dp))
                                 )
                             } else {
-                                Log.d("test", "널널 수정O")
                                 Image(
                                     painter = painterResource(R.drawable.ic_profile_empty_edit),
                                     contentDescription = null,
@@ -276,7 +274,6 @@ internal fun CenterProfileScreen(
                                 )
                             }
                         } else {
-                            Log.d("test", "널널하지 않음 ${centerProfile.profileImageUrl} ${profileImageUri}")
                             AsyncImage(
                                 model = profileImageUri ?: centerProfile.profileImageUrl,
                                 contentDescription = "",

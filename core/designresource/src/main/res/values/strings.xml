@@ -81,6 +81,7 @@
     <string name="work_hours">근무 시간</string>
     <string name="pay">급여</string>
     <string name="recruit">지원하기</string>
+    <string name="worknet">워크넷</string>
     <string name="post_job_posting_note">공고 등록 후에도 공고 내용을 수정할 수 있어요.</string>
 
     <!-- Job Posting Details -->
