@@ -77,11 +77,16 @@
     <string name="beginner_possible">초보 가능</string>
     <string name="view_as_caregiver">보호사 측 화면으로 보기</string>
     <string name="work_conditions">근무 조건</string>
+    <string name="work_schedule">근무 형태</string>
+    <string name="recruitment_guidelines">모집 요강</string>
     <string name="work_days">근무 요일</string>
     <string name="work_hours">근무 시간</string>
     <string name="pay">급여</string>
+    <string name="pay_conditions">임금 조건</string>
+    <string name="admissions_method">전형 방법</string>
     <string name="recruit">지원하기</string>
     <string name="worknet">워크넷</string>
+    <string name="worknet_url">워크넷 링크</string>
     <string name="post_job_posting_note">공고 등록 후에도 공고 내용을 수정할 수 있어요.</string>
 
     <!-- Job Posting Details -->
@@ -105,7 +110,7 @@
     <string name="address_screen_title">근무 시간 및 급여를 입력해주세요.</string>
     <string name="worker_address_title">현재 거주 중인 곳의\n주소를 입력해주세요.</string>
     <string name="address">주소</string>
-    <string name="work_address">근무 주소</string>
+    <string name="work_address">근무 장소</string>
     <string name="road_name_address">도로명 주소</string>
     <string name="road_name_address_hint">도로명 주소를 입력해주세요.</string>
     <string name="detail_address">상세 주소</string>
@@ -163,14 +168,16 @@
     <string name="year">연차</string>
     <string name="experience_preference">경력 우대 여부</string>
     <string name="apply_method">지원 방법</string>
+    <string name="apply_method_worknet">접수 방법</string>
     <string name="apply_deadline">접수 마감일</string>
     <string name="additional_info">추가 지원 정보</string>
+    <string name="require_documentation">제출 서류</string>
     <string name="additional_info_title">추가 지원정보를 입력해주세요.</string>
     <string name="apply_method_hint">(다중 선택 가능)</string>
     <string name="apply_deadline_hint">날짜를 선택해주세요.</string>
 
     <!-- Business Registration -->
-    <string name="enter_business_registration_number">사업자 등록번호를 입력해주세요</string>
+    <string name="enter_business_registration_number">사업자 등록번호입력해주세요</string>
     <string name="business_registration_number_hint">사업자 등록번호를 입력해주세요.</string>
     <string name="is_this_the_right_facility">아래의 시설이 맞나요?</string>
 

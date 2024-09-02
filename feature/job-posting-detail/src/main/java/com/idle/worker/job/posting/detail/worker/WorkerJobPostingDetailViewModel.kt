@@ -5,6 +5,7 @@ import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.jobposting.ApplyMethod
 import com.idle.domain.model.jobposting.CrawlingJobPostingDetail
+import com.idle.domain.model.jobposting.JobPostingDetail
 import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.WorkerJobPostingDetail
 import com.idle.domain.model.profile.WorkerProfile
@@ -33,11 +34,8 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
     private val _profile = MutableStateFlow<WorkerProfile?>(null)
     val profile = _profile.asStateFlow()
 
-    private val _workerJobPostingDetail = MutableStateFlow<WorkerJobPostingDetail?>(null)
+    private val _workerJobPostingDetail = MutableStateFlow<JobPostingDetail?>(null)
     val workerJobPostingDetail = _workerJobPostingDetail.asStateFlow()
-
-    private val _workerCrawlingJobPostingDetail = MutableStateFlow<CrawlingJobPostingDetail?>(null)
-    val workerCrawlingJobPostingDetail = _workerCrawlingJobPostingDetail.asStateFlow()
 
     internal fun getMyProfile() = viewModelScope.launch {
         getLocalMyWorkerProfileUseCase().onSuccess {
@@ -55,7 +53,7 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
             }.onFailure { handleFailure(it as HttpResponseException) }
 
             JobPostingType.WORKNET.name -> getCrawlingJobPostingsDetailUseCase(jobPostingId).onSuccess {
-                _workerCrawlingJobPostingDetail.value = it
+                _workerJobPostingDetail.value = it
             }.onFailure { handleFailure(it as HttpResponseException) }
         }
     }
@@ -66,8 +64,10 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
                 jobPostingId = jobPostingId,
                 applyMethod = applyMethod,
             ).onSuccess {
-                _workerJobPostingDetail.value =
-                    _workerJobPostingDetail.value?.copy(applyTime = LocalDateTime.now())
+                if (_workerJobPostingDetail.value?.jobPostingType == JobPostingType.CAREMEET) {
+                    _workerJobPostingDetail.value =
+                        (_workerJobPostingDetail.value as WorkerJobPostingDetail).copy(applyTime = LocalDateTime.now())
+                }
             }.onFailure { handleFailure(it as HttpResponseException) }
         }
 
@@ -79,7 +79,17 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
             jobPostingId = jobPostingId,
             jobPostingType = jobPostingType,
         ).onSuccess {
-            _workerJobPostingDetail.value = _workerJobPostingDetail.value?.copy(isFavorite = true)
+            when (jobPostingType) {
+                JobPostingType.CAREMEET -> {
+                    _workerJobPostingDetail.value =
+                        (_workerJobPostingDetail.value as WorkerJobPostingDetail).copy(isFavorite = true)
+                }
+
+                else -> {
+                    _workerJobPostingDetail.value =
+                        (_workerJobPostingDetail.value as CrawlingJobPostingDetail).copy(isFavorite = true)
+                }
+            }
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
@@ -91,7 +101,17 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
             jobPostingId = jobPostingId,
             jobPostingType = jobPostingType,
         ).onSuccess {
-            _workerJobPostingDetail.value = _workerJobPostingDetail.value?.copy(isFavorite = false)
+            when (jobPostingType) {
+                JobPostingType.CAREMEET -> {
+                    _workerJobPostingDetail.value =
+                        (_workerJobPostingDetail.value as WorkerJobPostingDetail).copy(isFavorite = false)
+                }
+
+                else -> {
+                    _workerJobPostingDetail.value =
+                        (_workerJobPostingDetail.value as CrawlingJobPostingDetail).copy(isFavorite = true)
+                }
+            }
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 }

@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -112,7 +113,8 @@ fun CareTextField(
                     keyboardController?.hide()
                     onDone()
                 }),
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f)
                     .padding(top = 10.dp, bottom = 10.dp, end = 8.dp),
                 decorationBox = { innerTextField ->
                     if (value.isEmpty()) {
@@ -214,7 +216,8 @@ fun CareTextField(
                     keyboardController?.hide()
                     onDone()
                 }),
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f)
                     .padding(top = 10.dp, bottom = 10.dp, end = 8.dp),
                 decorationBox = { innerTextField ->
                     if (value.isEmpty()) {
@@ -261,7 +264,7 @@ fun CareTextFieldLong(
 
     Box(
         modifier = modifier
-            .height(156.dp)
+            .heightIn(min = 156.dp)
             .background(
                 color = if (readOnly) {
                     CareTheme.colors.gray050
@@ -401,7 +404,12 @@ private fun PreviewCareTextFieldFlip() {
     CareTextFieldDefaultContent()
 }
 
-@Preview(name = "TextField_Foldable", showBackground = true, device = Devices.FOLDABLE, group = "Fold")
+@Preview(
+    name = "TextField_Foldable",
+    showBackground = true,
+    device = Devices.FOLDABLE,
+    group = "Fold"
+)
 @Composable
 private fun PreviewCareTextFieldFoldable() {
     CareTextFieldDefaultContent()
@@ -419,7 +427,12 @@ private fun PreviewCareTextFieldLongFlip() {
     CareTextFieldLongDefaultContent()
 }
 
-@Preview(name = "TextFieldLong_Foldable", showBackground = true, device = Devices.FOLDABLE, group = "Fold")
+@Preview(
+    name = "TextFieldLong_Foldable",
+    showBackground = true,
+    device = Devices.FOLDABLE,
+    group = "Fold"
+)
 @Composable
 private fun PreviewCareTextFieldLongFoldable() {
     CareTextFieldLongDefaultContent()
@@ -437,7 +450,12 @@ private fun PreviewCareClickableTextFieldFlip() {
     CareClickableTextFieldDefaultContent()
 }
 
-@Preview(name = "ClickableTextField_Foldable", showBackground = true, device = Devices.FOLDABLE, group = "Fold")
+@Preview(
+    name = "ClickableTextField_Foldable",
+    showBackground = true,
+    device = Devices.FOLDABLE,
+    group = "Fold"
+)
 @Composable
 private fun PreviewCareClickableTextFieldFoldable() {
     CareClickableTextFieldDefaultContent()

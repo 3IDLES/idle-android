@@ -4,6 +4,8 @@ import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.jobposting.ApplyMethod
+import com.idle.domain.model.jobposting.CrawlingJobPosting
+import com.idle.domain.model.jobposting.JobPosting
 import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.WorkerJobPosting
 import com.idle.domain.usecase.jobposting.AddFavoriteJobPostingUseCase
@@ -31,10 +33,10 @@ class WorkerJobPostingViewModel @Inject constructor(
 
     private val next = MutableStateFlow<String?>(null)
 
-    private val _appliedJobPostings = MutableStateFlow<List<WorkerJobPosting>>(emptyList())
+    private val _appliedJobPostings = MutableStateFlow<List<JobPosting>>(emptyList())
     val appliedJobPostings = _appliedJobPostings.asStateFlow()
 
-    private val _favoritesJobPostings = MutableStateFlow<List<WorkerJobPosting>>(emptyList())
+    private val _favoritesJobPostings = MutableStateFlow<List<JobPosting>>(emptyList())
     val favoritesJobPostings = _favoritesJobPostings.asStateFlow()
 
     private var appliedJobPostingCallType: JobPostingCallType = JobPostingCallType.IN_APP
@@ -92,11 +94,17 @@ class WorkerJobPostingViewModel @Inject constructor(
             jobPostingId = jobPostingId,
             applyMethod = ApplyMethod.APP
         ).onSuccess {
-            _appliedJobPostings.value = _appliedJobPostings.value.map{
-                if (it.id == jobPostingId) it.copy(applyTime = LocalDateTime.now()) else it
+            _appliedJobPostings.value = _appliedJobPostings.value.map {
+                if (it.jobPostingType == JobPostingType.CAREMEET && it.id == jobPostingId) {
+                    val jobPosting = it as WorkerJobPosting
+                    jobPosting.copy(applyTime = LocalDateTime.now())
+                } else it
             }
-            _appliedJobPostings.value = _appliedJobPostings.value.map{
-                if (it.id == jobPostingId) it.copy(applyTime = LocalDateTime.now()) else it
+            _appliedJobPostings.value = _appliedJobPostings.value.map {
+                if (it.jobPostingType == JobPostingType.CAREMEET && it.id == jobPostingId) {
+                    val jobPosting = it as WorkerJobPosting
+                    jobPosting.copy(applyTime = LocalDateTime.now())
+                } else it
             }
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
@@ -109,11 +117,32 @@ class WorkerJobPostingViewModel @Inject constructor(
             jobPostingId = jobPostingId,
             jobPostingType = jobPostingType,
         ).onSuccess {
-            _appliedJobPostings.value = _appliedJobPostings.value.map{
-                if (it.id == jobPostingId) it.copy(isFavorite = true) else it
+            _appliedJobPostings.value = _appliedJobPostings.value.map {
+                when (it.jobPostingType) {
+                    JobPostingType.CAREMEET -> {
+                        it as WorkerJobPosting
+                        if (it.id == jobPostingId) it.copy(isFavorite = true) else it
+                    }
+
+                    else -> {
+                        it as CrawlingJobPosting
+                        if (it.id == jobPostingId) it.copy(isFavorite = true) else it
+                    }
+                }
             }
+
             _favoritesJobPostings.value = _favoritesJobPostings.value.map {
-                if (it.id == jobPostingId) it.copy(isFavorite = true) else it
+                when (it.jobPostingType) {
+                    JobPostingType.CAREMEET -> {
+                        it as WorkerJobPosting
+                        if (it.id == jobPostingId) it.copy(isFavorite = true) else it
+                    }
+
+                    else -> {
+                        it as CrawlingJobPosting
+                        if (it.id == jobPostingId) it.copy(isFavorite = true) else it
+                    }
+                }
             }
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
@@ -126,11 +155,31 @@ class WorkerJobPostingViewModel @Inject constructor(
             jobPostingId = jobPostingId,
             jobPostingType = jobPostingType,
         ).onSuccess {
-            _appliedJobPostings.value = _appliedJobPostings.value.map{
-                if (it.id == jobPostingId) it.copy(isFavorite = false) else it
+            _appliedJobPostings.value = _appliedJobPostings.value.map {
+                when (it.jobPostingType) {
+                    JobPostingType.CAREMEET -> {
+                        it as WorkerJobPosting
+                        if (it.id == jobPostingId) it.copy(isFavorite = false) else it
+                    }
+
+                    else -> {
+                        it as CrawlingJobPosting
+                        if (it.id == jobPostingId) it.copy(isFavorite = false) else it
+                    }
+                }
             }
             _favoritesJobPostings.value = _favoritesJobPostings.value.map {
-                if (it.id == jobPostingId) it.copy(isFavorite = false) else it
+                when (it.jobPostingType) {
+                    JobPostingType.CAREMEET -> {
+                        it as WorkerJobPosting
+                        if (it.id == jobPostingId) it.copy(isFavorite = false) else it
+                    }
+
+                    else -> {
+                        it as CrawlingJobPosting
+                        if (it.id == jobPostingId) it.copy(isFavorite = false) else it
+                    }
+                }
             }
         }.onFailure { handleFailure(it as HttpResponseException) }
     }

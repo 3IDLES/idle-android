@@ -1,7 +1,6 @@
 package com.idle.domain.model.jobposting
 
 import java.time.LocalDate
-import java.time.ZoneId
 
 data class CrawlingJobPostingDetail(
     override val id: String,
@@ -9,11 +8,11 @@ data class CrawlingJobPostingDetail(
     override val applyDeadline: LocalDate,
     override val jobPostingType: JobPostingType,
     override val isFavorite: Boolean,
+    override val longitude: String,
+    override val latitude: String,
     val title: String,
     val content: String,
     val clientAddress: String,
-    val longitude: String,
-    val latitude: String,
     val createdAt: LocalDate,
     val payInfo: String,
     val workingTime: String,
@@ -24,4 +23,4 @@ data class CrawlingJobPostingDetail(
     val centerName: String,
     val centerAddress: String,
     val jobPostingUrl: String,
-) : JobPosting(id, distance, applyDeadline, jobPostingType, isFavorite)
+) : JobPostingDetail(id, distance, applyDeadline, jobPostingType, isFavorite, latitude, longitude)
