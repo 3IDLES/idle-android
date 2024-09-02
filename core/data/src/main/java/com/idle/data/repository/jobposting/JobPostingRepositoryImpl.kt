@@ -10,6 +10,7 @@ import com.idle.domain.model.jobposting.CrawlingJobPosting
 import com.idle.domain.model.jobposting.CrawlingJobPostingDetail
 import com.idle.domain.model.jobposting.DayOfWeek
 import com.idle.domain.model.jobposting.JobPostingSummary
+import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.LifeAssistance
 import com.idle.domain.model.jobposting.MentalStatus
 import com.idle.domain.model.jobposting.PayType
@@ -17,6 +18,7 @@ import com.idle.domain.model.jobposting.WorkerJobPosting
 import com.idle.domain.model.jobposting.WorkerJobPostingDetail
 import com.idle.domain.repositorry.jobposting.JobPostingRepository
 import com.idle.network.model.jobposting.ApplyJobPostingRequest
+import com.idle.network.model.jobposting.FavoriteJobPostingRequest
 import com.idle.network.model.jobposting.JobPostingRequest
 import com.idle.network.source.jobposting.JobPostingDataSource
 import javax.inject.Inject
@@ -180,11 +182,23 @@ class JobPostingRepositoryImpl @Inject constructor(
             ApplyJobPostingRequest(jobPostingId = jobPostingId, applyMethodType = applyMethod.name)
         )
 
-    override suspend fun addFavoriteJobPosting(jobPostingId: String): Result<Unit> =
-        jobPostingDataSource.addFavoriteJobPosting(jobPostingId)
+    override suspend fun addFavoriteJobPosting(
+        jobPostingId: String,
+        jobPostingType: JobPostingType,
+    ): Result<Unit> =
+        jobPostingDataSource.addFavoriteJobPosting(
+            jobPostingId = jobPostingId,
+            favoriteJobPostingRequest = FavoriteJobPostingRequest(jobPostingType.name),
+        )
 
-    override suspend fun removeFavoriteJobPosting(jobPostingId: String): Result<Unit> =
-        jobPostingDataSource.removeFavoriteJobPosting(jobPostingId)
+    override suspend fun removeFavoriteJobPosting(
+        jobPostingId: String,
+        jobPostingType: JobPostingType,
+    ): Result<Unit> =
+        jobPostingDataSource.removeFavoriteJobPosting(
+            jobPostingId = jobPostingId,
+            favoriteJobPostingRequest = FavoriteJobPostingRequest(jobPostingType.name),
+        )
 
     override suspend fun getApplicants(jobPostingId: String): Result<Pair<JobPostingSummary, List<Applicant>>> =
         jobPostingDataSource.getApplicants(jobPostingId).mapCatching { it.toVO() }

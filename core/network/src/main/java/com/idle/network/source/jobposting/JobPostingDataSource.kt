@@ -2,6 +2,7 @@ package com.idle.network.source.jobposting
 
 import com.idle.network.api.JobPostingApi
 import com.idle.network.model.jobposting.ApplyJobPostingRequest
+import com.idle.network.model.jobposting.FavoriteJobPostingRequest
 import com.idle.network.model.jobposting.GetApplicantCountResponse
 import com.idle.network.model.jobposting.GetApplicantsResponse
 import com.idle.network.model.jobposting.GetCenterJobPostingDetailResponse
@@ -60,11 +61,23 @@ class JobPostingDataSource @Inject constructor(
     suspend fun applyJobPosting(applyJobPostingRequest: ApplyJobPostingRequest): Result<Unit> =
         jobPostingApi.applyJobPosting(applyJobPostingRequest).onResponse()
 
-    suspend fun addFavoriteJobPosting(jobPostingId: String): Result<Unit> =
-        jobPostingApi.addFavoriteJobPosting(jobPostingId).onResponse()
+    suspend fun addFavoriteJobPosting(
+        jobPostingId: String,
+        favoriteJobPostingRequest: FavoriteJobPostingRequest,
+    ): Result<Unit> =
+        jobPostingApi.addFavoriteJobPosting(
+            jobPostingId = jobPostingId,
+            favoriteJobPostingRequest = favoriteJobPostingRequest
+        ).onResponse()
 
-    suspend fun removeFavoriteJobPosting(jobPostingId: String): Result<Unit> =
-        jobPostingApi.removeFavoriteJobPosting(jobPostingId).onResponse()
+    suspend fun removeFavoriteJobPosting(
+        jobPostingId: String,
+        favoriteJobPostingRequest: FavoriteJobPostingRequest,
+    ): Result<Unit> =
+        jobPostingApi.removeFavoriteJobPosting(
+            jobPostingId = jobPostingId,
+            favoriteJobPostingRequest = favoriteJobPostingRequest
+        ).onResponse()
 
     suspend fun getApplicants(jobPostingId: String): Result<GetApplicantsResponse> =
         jobPostingApi.getApplicants(jobPostingId).onResponse()

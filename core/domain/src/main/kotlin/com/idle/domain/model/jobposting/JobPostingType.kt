@@ -1,7 +1,7 @@
 package com.idle.domain.model.jobposting
 
 enum class JobPostingType {
-    IN_APP, WORKNET, UNKNOWN;
+    CAREMEET, WORKNET, UNKNOWN;
 
     companion object {
         fun create(value: String?): JobPostingType {

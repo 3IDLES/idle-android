@@ -241,7 +241,7 @@ private fun WorkerRecruitmentCard(
                 )
 
                 Text(
-                    text = "걸어서 ${workerJobPosting.getDistanceInMinutes()} 소요",
+                    text = "도보 ${workerJobPosting.getDistanceInMinutes()}",
                     style = CareTheme.typography.body3,
                     color = CareTheme.colors.gray500,
                     modifier = Modifier.padding(end = 8.dp),
