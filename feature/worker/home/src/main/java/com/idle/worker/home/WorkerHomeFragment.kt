@@ -1,5 +1,6 @@
 package com.idle.worker.home
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -26,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -46,6 +48,7 @@ import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.WorkerJobPosting
 import com.idle.domain.model.profile.WorkerProfile
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.format.DateTimeFormatter
 
 @AndroidEntryPoint
 internal class WorkerHomeFragment : BaseComposeFragment() {
@@ -170,6 +173,12 @@ private fun WorkerRecruitmentCard(
     removeFavoriteJobPosting: (String, JobPostingType) -> Unit,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
+    val starTintColor by animateColorAsState(
+        targetValue = if (workerJobPosting.isFavorite) CareTheme.colors.orange300
+        else CareTheme.colors.gray200,
+        label = "즐겨찾기 별의 색상을 관리하는 애니메이션"
+    )
+
     Card(
         shape = RoundedCornerShape(12.dp),
         colors = CardColors(
@@ -217,11 +226,19 @@ private fun WorkerRecruitmentCard(
                 Image(
                     painter = painterResource(com.idle.designresource.R.drawable.ic_star_gray),
                     contentDescription = null,
+                    colorFilter = ColorFilter.tint(starTintColor),
                     modifier = Modifier.clickable {
-                        addFavoriteJobPosting(
-                            workerJobPosting.id,
-                            workerJobPosting.jobPostingType
-                        )
+                        if (!workerJobPosting.isFavorite) {
+                            addFavoriteJobPosting(
+                                workerJobPosting.id,
+                                workerJobPosting.jobPostingType
+                            )
+                        } else {
+                            removeFavoriteJobPosting(
+                                workerJobPosting.id,
+                                workerJobPosting.jobPostingType
+                            )
+                        }
                     }
                 )
             }
@@ -302,7 +319,14 @@ private fun WorkerRecruitmentCard(
             }
 
             CareButtonCardLarge(
-                text = stringResource(id = R.string.recruit),
+                text = if (workerJobPosting.applyTime != null) {
+                    "지원완료 ${
+                        workerJobPosting.applyTime!!.format(
+                            DateTimeFormatter.ofPattern("yyyy. MM. dd")
+                        )
+                    }"
+                } else stringResource(id = R.string.recruit),
+                enable = workerJobPosting.applyTime == null,
                 onClick = { applyJobPosting(workerJobPosting.id) },
                 modifier = Modifier.fillMaxWidth(),
             )
