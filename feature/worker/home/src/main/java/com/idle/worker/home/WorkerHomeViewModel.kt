@@ -5,6 +5,8 @@ import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.jobposting.ApplyMethod
+import com.idle.domain.model.jobposting.CrawlingJobPosting
+import com.idle.domain.model.jobposting.JobPosting
 import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.WorkerJobPosting
 import com.idle.domain.model.profile.WorkerProfile
@@ -33,7 +35,7 @@ class WorkerHomeViewModel @Inject constructor(
 
     private val next = MutableStateFlow<String?>(null)
 
-    private val _jobPostings = MutableStateFlow<List<WorkerJobPosting>>(emptyList())
+    private val _jobPostings = MutableStateFlow<List<JobPosting>>(emptyList())
     val jobPostings = _jobPostings.asStateFlow()
 
     private var callType: JobPostingCallType = JobPostingCallType.IN_APP
@@ -79,7 +81,10 @@ class WorkerHomeViewModel @Inject constructor(
             applyMethod = ApplyMethod.APP
         ).onSuccess {
             _jobPostings.value = _jobPostings.value.map {
-                if (it.id == jobPostingId) it.copy(applyTime = LocalDateTime.now()) else it
+                if (it.jobPostingType == JobPostingType.CAREMEET && it.id == jobPostingId) {
+                    val jobPosting = it as WorkerJobPosting
+                    jobPosting.copy(applyTime = LocalDateTime.now())
+                } else it
             }
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
@@ -93,7 +98,17 @@ class WorkerHomeViewModel @Inject constructor(
             jobPostingType = jobPostingType,
         ).onSuccess {
             _jobPostings.value = _jobPostings.value.map {
-                if (it.id == jobPostingId) it.copy(isFavorite = true) else it
+                when (it.jobPostingType) {
+                    JobPostingType.CAREMEET -> {
+                        it as WorkerJobPosting
+                        if (it.id == jobPostingId) it.copy(isFavorite = true) else it
+                    }
+
+                    else -> {
+                        it as CrawlingJobPosting
+                        if (it.id == jobPostingId) it.copy(isFavorite = true) else it
+                    }
+                }
             }
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
@@ -107,7 +122,17 @@ class WorkerHomeViewModel @Inject constructor(
             jobPostingType = jobPostingType,
         ).onSuccess {
             _jobPostings.value = _jobPostings.value.map {
-                if (it.id == jobPostingId) it.copy(isFavorite = false) else it
+                when (it.jobPostingType) {
+                    JobPostingType.CAREMEET -> {
+                        it as WorkerJobPosting
+                        if (it.id == jobPostingId) it.copy(isFavorite = false) else it
+                    }
+
+                    else -> {
+                        it as CrawlingJobPosting
+                        if (it.id == jobPostingId) it.copy(isFavorite = false) else it
+                    }
+                }
             }
         }.onFailure { handleFailure(it as HttpResponseException) }
     }

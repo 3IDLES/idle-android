@@ -10,11 +10,11 @@ data class WorkerJobPostingDetail(
     override val applyDeadline: LocalDate,
     override val jobPostingType: JobPostingType,
     override val isFavorite: Boolean,
+    override val longitude: String,
+    override val latitude: String,
     val weekdays: Set<DayOfWeek>,
     val startTime: String,
     val endTime: String,
-    val longitude: String,
-    val latitude: String,
     val payType: PayType,
     val payAmount: Int,
     val roadNameAddress: String,
@@ -37,4 +37,4 @@ data class WorkerJobPostingDetail(
     val centerName: String,
     val centerRoadNameAddress: String,
     val applyTime: LocalDateTime?,
-) : JobPosting(id, distance, applyDeadline, jobPostingType, isFavorite)
+) : JobPostingDetail(id, distance, applyDeadline, jobPostingType, isFavorite, latitude, longitude)

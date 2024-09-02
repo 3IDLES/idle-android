@@ -44,6 +44,8 @@ import com.idle.designsystem.compose.component.CareButtonCardLarge
 import com.idle.designsystem.compose.component.CareHeadingTopBar
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.foundation.CareTheme
+import com.idle.domain.model.jobposting.CrawlingJobPosting
+import com.idle.domain.model.jobposting.JobPosting
 import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.WorkerJobPosting
 import com.idle.domain.model.profile.WorkerProfile
@@ -76,7 +78,7 @@ internal class WorkerHomeFragment : BaseComposeFragment() {
 @Composable
 internal fun WorkerHomeScreen(
     profile: WorkerProfile?,
-    workerJobPostings: List<WorkerJobPosting>,
+    workerJobPostings: List<JobPosting>,
     getJobPostings: () -> Unit,
     applyJobPosting: (String) -> Unit,
     addFavoriteJobPosting: (String, JobPostingType) -> Unit,
@@ -144,13 +146,22 @@ internal fun WorkerHomeScreen(
                     items = workerJobPostings,
                     key = { it.id },
                 ) { jobPosting ->
-                    WorkerRecruitmentCard(
-                        workerJobPosting = jobPosting,
-                        applyJobPosting = applyJobPosting,
-                        addFavoriteJobPosting = addFavoriteJobPosting,
-                        removeFavoriteJobPosting = removeFavoriteJobPosting,
-                        navigateTo = navigateTo,
-                    )
+                    when (jobPosting.jobPostingType) {
+                        JobPostingType.CAREMEET -> WorkerRecruitmentCard(
+                            jobPosting = jobPosting as WorkerJobPosting,
+                            applyJobPosting = applyJobPosting,
+                            addFavoriteJobPosting = addFavoriteJobPosting,
+                            removeFavoriteJobPosting = removeFavoriteJobPosting,
+                            navigateTo = navigateTo,
+                        )
+
+                        else -> WorkerWorkNetCard(
+                            jobPosting = jobPosting as CrawlingJobPosting,
+                            addFavoriteJobPosting = addFavoriteJobPosting,
+                            removeFavoriteJobPosting = removeFavoriteJobPosting,
+                            navigateTo = navigateTo,
+                        )
+                    }
                 }
 
                 item {
@@ -167,14 +178,14 @@ internal fun WorkerHomeScreen(
 
 @Composable
 private fun WorkerRecruitmentCard(
-    workerJobPosting: WorkerJobPosting,
+    jobPosting: WorkerJobPosting,
     applyJobPosting: (String) -> Unit,
     addFavoriteJobPosting: (String, JobPostingType) -> Unit,
     removeFavoriteJobPosting: (String, JobPostingType) -> Unit,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
     val starTintColor by animateColorAsState(
-        targetValue = if (workerJobPosting.isFavorite) CareTheme.colors.orange300
+        targetValue = if (jobPosting.isFavorite) CareTheme.colors.orange300
         else CareTheme.colors.gray200,
         label = "즐겨찾기 별의 색상을 관리하는 애니메이션"
     )
@@ -191,8 +202,8 @@ private fun WorkerRecruitmentCard(
         modifier = Modifier.clickable {
             navigateTo(
                 WorkerJobDetail(
-                    jobPostingId = workerJobPosting.id,
-                    jobPostingType = workerJobPosting.jobPostingType.name,
+                    jobPostingId = jobPosting.id,
+                    jobPostingType = jobPosting.jobPostingType.name,
                 )
             )
         },
@@ -205,7 +216,7 @@ private fun WorkerRecruitmentCard(
                     .fillMaxWidth()
                     .padding(bottom = 8.dp)
             ) {
-                if (!workerJobPosting.isExperiencePreferred) {
+                if (!jobPosting.isExperiencePreferred) {
                     CareTag(
                         text = stringResource(id = R.string.beginner_possible),
                         textColor = CareTheme.colors.orange500,
@@ -213,9 +224,9 @@ private fun WorkerRecruitmentCard(
                     )
                 }
 
-                if (workerJobPosting.calculateDeadline() <= 14) {
+                if (jobPosting.calculateDeadline() <= 14) {
                     CareTag(
-                        text = "D-${workerJobPosting.calculateDeadline()}",
+                        text = "D-${jobPosting.calculateDeadline()}",
                         textColor = CareTheme.colors.gray300,
                         backgroundColor = CareTheme.colors.gray050,
                     )
@@ -228,15 +239,15 @@ private fun WorkerRecruitmentCard(
                     contentDescription = null,
                     colorFilter = ColorFilter.tint(starTintColor),
                     modifier = Modifier.clickable {
-                        if (!workerJobPosting.isFavorite) {
+                        if (!jobPosting.isFavorite) {
                             addFavoriteJobPosting(
-                                workerJobPosting.id,
-                                workerJobPosting.jobPostingType
+                                jobPosting.id,
+                                jobPosting.jobPostingType
                             )
                         } else {
                             removeFavoriteJobPosting(
-                                workerJobPosting.id,
-                                workerJobPosting.jobPostingType
+                                jobPosting.id,
+                                jobPosting.jobPostingType
                             )
                         }
                     }
@@ -252,7 +263,7 @@ private fun WorkerRecruitmentCard(
             ) {
                 Text(
                     text = try {
-                        workerJobPosting.lotNumberAddress.split(" ").subList(0, 3).joinToString(" ")
+                        jobPosting.lotNumberAddress.split(" ").subList(0, 3).joinToString(" ")
                     } catch (e: IndexOutOfBoundsException) {
                         ""
                     },
@@ -264,7 +275,7 @@ private fun WorkerRecruitmentCard(
                 )
 
                 Text(
-                    text = "도보 ${workerJobPosting.getDistanceInMinutes()}",
+                    text = "도보 ${jobPosting.getDistanceInMinutes()}",
                     style = CareTheme.typography.body3,
                     color = CareTheme.colors.gray500,
                     modifier = Modifier.padding(end = 8.dp),
@@ -272,7 +283,7 @@ private fun WorkerRecruitmentCard(
             }
 
             Text(
-                text = "${workerJobPosting.careLevel}등급 ${workerJobPosting.age}세 ${workerJobPosting.gender.displayName}",
+                text = "${jobPosting.careLevel}등급 ${jobPosting.age}세 ${jobPosting.gender.displayName}",
                 style = CareTheme.typography.body2,
                 color = CareTheme.colors.gray900,
                 modifier = Modifier.padding(end = 8.dp, bottom = 4.dp),
@@ -291,10 +302,10 @@ private fun WorkerRecruitmentCard(
 
                 Text(
                     text = "${
-                        workerJobPosting.weekdays
+                        jobPosting.weekdays
                             .sortedBy { it.ordinal }
                             .joinToString(", ") { it.displayName }
-                    } | ${workerJobPosting.startTime} - ${workerJobPosting.endTime}",
+                    } | ${jobPosting.startTime} - ${jobPosting.endTime}",
                     style = CareTheme.typography.body3,
                     color = CareTheme.colors.gray500,
                 )
@@ -312,22 +323,22 @@ private fun WorkerRecruitmentCard(
                 )
 
                 Text(
-                    text = "${workerJobPosting.payType.displayName} ${workerJobPosting.payAmount} 원",
+                    text = "${jobPosting.payType.displayName} ${jobPosting.payAmount} 원",
                     style = CareTheme.typography.body3,
                     color = CareTheme.colors.gray500,
                 )
             }
 
             CareButtonCardLarge(
-                text = if (workerJobPosting.applyTime != null) {
+                text = if (jobPosting.applyTime != null) {
                     "지원완료 ${
-                        workerJobPosting.applyTime!!.format(
+                        jobPosting.applyTime!!.format(
                             DateTimeFormatter.ofPattern("yyyy. MM. dd")
                         )
                     }"
                 } else stringResource(id = R.string.recruit),
-                enable = workerJobPosting.applyTime == null,
-                onClick = { applyJobPosting(workerJobPosting.id) },
+                enable = jobPosting.applyTime == null,
+                onClick = { applyJobPosting(jobPosting.id) },
                 modifier = Modifier.fillMaxWidth(),
             )
         }
@@ -336,11 +347,17 @@ private fun WorkerRecruitmentCard(
 
 @Composable
 private fun WorkerWorkNetCard(
-    workerJobPosting: WorkerJobPosting,
-    addFavoriteJobPosting: (String) -> Unit,
-    removeFavoriteJobPosting: (String) -> Unit,
+    jobPosting: CrawlingJobPosting,
+    addFavoriteJobPosting: (String, JobPostingType) -> Unit,
+    removeFavoriteJobPosting: (String, JobPostingType) -> Unit,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
+    val starTintColor by animateColorAsState(
+        targetValue = if (jobPosting.isFavorite) CareTheme.colors.orange300
+        else CareTheme.colors.gray200,
+        label = "즐겨찾기 별의 색상을 관리하는 애니메이션"
+    )
+
     Card(
         shape = RoundedCornerShape(12.dp),
         colors = CardColors(
@@ -353,8 +370,8 @@ private fun WorkerWorkNetCard(
         modifier = Modifier.clickable {
             navigateTo(
                 WorkerJobDetail(
-                    jobPostingId = workerJobPosting.id,
-                    jobPostingType = workerJobPosting.jobPostingType.name,
+                    jobPostingId = jobPosting.id,
+                    jobPostingType = jobPosting.jobPostingType.name,
                 )
             )
         },
@@ -373,9 +390,9 @@ private fun WorkerWorkNetCard(
                     backgroundColor = Color(0xFFD3EBFF),
                 )
 
-                if (workerJobPosting.calculateDeadline() <= 14) {
+                if (jobPosting.calculateDeadline() <= 14) {
                     CareTag(
-                        text = "D-${workerJobPosting.calculateDeadline()}",
+                        text = "D-${jobPosting.calculateDeadline()}",
                         textColor = CareTheme.colors.gray300,
                         backgroundColor = CareTheme.colors.gray050,
                     )
@@ -386,43 +403,29 @@ private fun WorkerWorkNetCard(
                 Image(
                     painter = painterResource(R.drawable.ic_star_gray),
                     contentDescription = null,
-                    modifier = Modifier.clickable { addFavoriteJobPosting(workerJobPosting.id) }
-                )
-            }
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 2.dp),
-            ) {
-                Text(
-                    text = try {
-                        workerJobPosting.lotNumberAddress.split(" ").subList(0, 3).joinToString(" ")
-                    } catch (e: IndexOutOfBoundsException) {
-                        ""
-                    },
-                    style = CareTheme.typography.subtitle2,
-                    color = CareTheme.colors.gray900,
-                    overflow = TextOverflow.Clip,
-                    maxLines = 1,
-                    modifier = Modifier.weight(1f),
-                )
-
-                Text(
-                    text = "${workerJobPosting.distance} m",
-                    style = CareTheme.typography.body3,
-                    color = CareTheme.colors.gray500,
-                    modifier = Modifier.padding(end = 8.dp),
+                    colorFilter = ColorFilter.tint(starTintColor),
+                    modifier = Modifier.clickable {
+                        if (!jobPosting.isFavorite) {
+                            addFavoriteJobPosting(jobPosting.id, jobPosting.jobPostingType)
+                        } else {
+                            removeFavoriteJobPosting(jobPosting.id, jobPosting.jobPostingType)
+                        }
+                    }
                 )
             }
 
             Text(
-                text = "${workerJobPosting.careLevel}등급 ${workerJobPosting.age}세 ${workerJobPosting.gender.displayName}",
-                style = CareTheme.typography.body2,
+                text = jobPosting.title,
+                style = CareTheme.typography.subtitle2,
                 color = CareTheme.colors.gray900,
-                modifier = Modifier.padding(end = 8.dp, bottom = 4.dp),
+                modifier = Modifier.padding(vertical = 8.dp),
+            )
+
+            Text(
+                text = "도보 ${jobPosting.getDistanceInMinutes()}",
+                style = CareTheme.typography.body3,
+                color = CareTheme.colors.gray900,
+                modifier = Modifier.padding(bottom = 4.dp),
             )
 
             Row(
@@ -437,11 +440,7 @@ private fun WorkerWorkNetCard(
                 )
 
                 Text(
-                    text = "${
-                        workerJobPosting.weekdays
-                            .sortedBy { it.ordinal }
-                            .joinToString(", ") { it.displayName }
-                    } | ${workerJobPosting.startTime} - ${workerJobPosting.endTime}",
+                    text = "${jobPosting.workingSchedule} | ${jobPosting.workingTime}",
                     style = CareTheme.typography.body3,
                     color = CareTheme.colors.gray500,
                 )
@@ -459,7 +458,7 @@ private fun WorkerWorkNetCard(
                 )
 
                 Text(
-                    text = "${workerJobPosting.payType.displayName} ${workerJobPosting.payAmount} 원",
+                    text = jobPosting.payInfo,
                     style = CareTheme.typography.body3,
                     color = CareTheme.colors.gray500,
                 )
