@@ -30,9 +30,9 @@ import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.post.code.PostCodeFragment
-import com.idle.signup.center.step.CenterAddressScreen
-import com.idle.signup.center.step.CenterInfoScreen
-import com.idle.signup.center.step.CenterIntroduceScreen
+import com.idle.center.register.step.CenterAddressScreen
+import com.idle.center.register.step.CenterInfoScreen
+import com.idle.center.register.step.CenterIntroduceScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -148,7 +148,6 @@ internal fun CenterRegisterScreen(
                 .padding(paddingValue)
                 .padding(start = 20.dp, end = 20.dp, top = 24.dp),
         ) {
-
             CareStateAnimator(
                 targetState = registrationStep,
                 label = stringResource(id = R.string.center_info_input_animation_label),
