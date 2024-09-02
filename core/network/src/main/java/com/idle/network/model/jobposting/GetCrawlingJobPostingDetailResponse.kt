@@ -26,6 +26,7 @@ data class GetCrawlingJobPostingDetailResponse(
     val centerAddress: String = "",
     val jobPostingUrl: String = "",
     val jobPostingType: String = "",
+    val distance: Int = 0,
     val isFavorite: Boolean = false,
 ) {
     fun toVO() = CrawlingJobPostingDetail(
@@ -48,5 +49,6 @@ data class GetCrawlingJobPostingDetailResponse(
         jobPostingUrl = jobPostingUrl,
         jobPostingType = JobPostingType.create(jobPostingType),
         isFavorite = isFavorite,
+        distance = distance,
     )
 }
