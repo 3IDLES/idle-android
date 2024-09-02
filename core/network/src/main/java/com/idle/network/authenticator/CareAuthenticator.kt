@@ -1,6 +1,5 @@
 package com.idle.network.authenticator
 
-import android.util.Log
 import com.idle.domain.model.error.HttpResponseStatus
 import com.idle.network.api.AuthApi
 import com.idle.network.di.TokenManager
@@ -58,8 +57,6 @@ class CareAuthenticator @Inject constructor(
             .header("Authorization", "Bearer ${token.accessToken}")
             .header(RETRY_HEADER, (retryCount + 1).toString())
             .build()
-
-        Log.d("test", newRequest.toString())
 
         return newRequest
     }
