@@ -13,12 +13,12 @@ import java.time.format.DateTimeFormatter
 
 @Serializable
 data class GetJobPostingsResponse(
-    @SerialName("items") val workerJobPostingRespons: List<WorkerJobPostingResponse>,
+    @SerialName("items") val workerJobPostingResponses: List<WorkerJobPostingResponse>,
     val next: String?,
     val total: Int
 ) {
     fun toVO(): Pair<String?, List<WorkerJobPosting>> =
-        next to workerJobPostingRespons.map { it.toVO() }
+        next to workerJobPostingResponses.map { it.toVO() }
 }
 
 @Serializable

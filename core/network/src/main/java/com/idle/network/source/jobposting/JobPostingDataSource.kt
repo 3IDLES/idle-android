@@ -5,6 +5,8 @@ import com.idle.network.model.jobposting.ApplyJobPostingRequest
 import com.idle.network.model.jobposting.GetApplicantCountResponse
 import com.idle.network.model.jobposting.GetApplicantsResponse
 import com.idle.network.model.jobposting.GetCenterJobPostingDetailResponse
+import com.idle.network.model.jobposting.GetCrawlingJobPostingDetailResponse
+import com.idle.network.model.jobposting.GetCrawlingJobPostingsResponse
 import com.idle.network.model.jobposting.GetJobPostingsCenterResponse
 import com.idle.network.model.jobposting.GetJobPostingsResponse
 import com.idle.network.model.jobposting.GetWorkerJobPostingDetailResponse
@@ -72,4 +74,15 @@ class JobPostingDataSource @Inject constructor(
 
     suspend fun deleteJobPosting(jobPostingId: String): Result<Unit> =
         jobPostingApi.deleteJobPosting(jobPostingId).onResponse()
+
+    suspend fun getCrawlingJobPostings(
+        next: String?,
+        limit: Int
+    ): Result<GetCrawlingJobPostingsResponse> =
+        jobPostingApi.getCrawlingJobPostings(next = next, limit = limit).onResponse()
+
+    suspend fun getCrawlingJobPostingsDetail(
+        jobPostingId: String
+    ): Result<GetCrawlingJobPostingDetailResponse> =
+        jobPostingApi.getCrawlingJobPostingsDetail(jobPostingId).onResponse()
 }
