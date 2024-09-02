@@ -23,7 +23,7 @@ data class GetCenterProfileResponse(
         detailedAddress = detailedAddress,
         longitude = longitude,
         latitude = latitude,
-        introduce = introduce ?: "",
-        profileImageUrl = profileImageUrl ?: "",
+        introduce = introduce,
+        profileImageUrl = profileImageUrl,
     )
 }
