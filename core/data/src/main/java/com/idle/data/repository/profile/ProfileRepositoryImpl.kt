@@ -18,7 +18,9 @@ import com.idle.network.model.profile.UpdateWorkerProfileRequest
 import com.idle.network.model.profile.UploadProfileImageUrlResponse
 import com.idle.network.source.profile.ProfileDataSource
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withContext
 import java.io.InputStream
 import javax.inject.Inject
 
@@ -27,7 +29,9 @@ class ProfileRepositoryImpl @Inject constructor(
     private val userInfoDataSource: UserInfoDataSource,
     @ApplicationContext private val context: Context,
 ) : ProfileRepository {
-    override suspend fun getMyUserRole() = userInfoDataSource.userRole.first()
+    override suspend fun getMyUserRole() = withContext(Dispatchers.IO) {
+        userInfoDataSource.userRole.first()
+    }
 
     override suspend fun getMyCenterProfile(): Result<CenterProfile> =
         profileDataSource.getMyCenterProfile()
@@ -38,8 +42,10 @@ class ProfileRepositoryImpl @Inject constructor(
             }
 
     override suspend fun getLocalMyCenterProfile(): Result<CenterProfile> = runCatching {
-        val userInfoString = userInfoDataSource.userInfo.first()
-            .takeIf { it.isNotBlank() } ?: throw IllegalArgumentException("Missing UserInfo")
+        val userInfoString = withContext(Dispatchers.IO) {
+            userInfoDataSource.userInfo.first()
+                .takeIf { it.isNotBlank() } ?: throw IllegalArgumentException("Missing UserInfo")
+        }
 
         val properties = userInfoString.removePrefix("CenterProfile(").removeSuffix(")")
             .split(", ")
@@ -76,8 +82,10 @@ class ProfileRepositoryImpl @Inject constructor(
             }
 
     override suspend fun getLocalMyWorkerProfile(): Result<WorkerProfile> = runCatching {
-        val userInfoString = userInfoDataSource.userInfo.first()
-            .takeIf { it.isNotBlank() } ?: throw IllegalArgumentException("Missing UserInfo")
+        val userInfoString = withContext(Dispatchers.IO) {
+            userInfoDataSource.userInfo.first()
+                .takeIf { it.isNotBlank() } ?: throw IllegalArgumentException("Missing UserInfo")
+        }
 
         val properties = userInfoString.removePrefix("WorkerProfile(").removeSuffix(")")
             .split(", ")
