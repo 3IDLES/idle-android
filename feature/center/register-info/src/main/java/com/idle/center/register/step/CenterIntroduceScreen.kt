@@ -115,7 +115,7 @@ internal fun CenterIntroduceScreen(
                 contentDescription = null,
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier
-                    .height(254.dp)
+                    .height(243.dp)
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(6.dp))
                     .clickable {

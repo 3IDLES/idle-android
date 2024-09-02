@@ -69,8 +69,8 @@ class ProfileRepositoryImpl @Inject constructor(
                 ?: throw NumberFormatException("Invalid longitude format"),
             latitude = properties["latitude"]?.toDoubleOrNull()
                 ?: throw NumberFormatException("Invalid latitude format"),
-            introduce = properties["introduce"],
-            profileImageUrl = properties["profileImageUrl"]
+            introduce = properties["introduce"].takeIf { it != "null" },
+            profileImageUrl = properties["profileImageUrl"].takeIf { it != "null" }
         )
     }
 
@@ -110,9 +110,9 @@ class ProfileRepositoryImpl @Inject constructor(
                 ?: throw IllegalArgumentException("Missing longitude"),
             latitude = properties["latitude"] ?: throw IllegalArgumentException("Missing latitude"),
             jobSearchStatus = JobSearchStatus.create(properties["jobSearchStatus"]),
-            introduce = properties["introduce"],
-            speciality = properties["speciality"],
-            profileImageUrl = properties["profileImageUrl"]
+            introduce = properties["introduce"].takeIf { it != "null" },
+            speciality = properties["speciality"].takeIf { it != "null" },
+            profileImageUrl = properties["profileImageUrl"].takeIf { it != "null" },
         )
     }
 
@@ -194,20 +194,20 @@ class ProfileRepositoryImpl @Inject constructor(
                 userType = userType,
                 imageId = profileImageUploadUrlResponse.imageId,
                 imageFileExtension = profileImageUploadUrlResponse.imageFileExtension
-            )
+            ).getOrThrow()
 
             when (userType) {
                 UserType.CENTER.apiValue -> {
-                    val updatedProfile = getMyCenterProfile().getOrThrow().copy(
-                        profileImageUrl = profileImageUploadUrlResponse.uploadUrl
-                    )
+                    val updatedProfile = getMyCenterProfile().getOrThrow()
+                        .copy(profileImageUrl = imageFileUri)
+
                     userInfoDataSource.setUserInfo(updatedProfile.toString())
                 }
 
                 UserType.WORKER.apiValue -> {
-                    val updatedProfile = getMyWorkerProfile().getOrThrow().copy(
-                        profileImageUrl = profileImageUploadUrlResponse.uploadUrl
-                    )
+                    val updatedProfile = getMyWorkerProfile().getOrThrow()
+                        .copy(profileImageUrl = imageFileUri)
+
                     userInfoDataSource.setUserInfo(updatedProfile.toString())
                 }
             }
