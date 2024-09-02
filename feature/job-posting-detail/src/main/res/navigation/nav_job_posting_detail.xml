@@ -12,6 +12,9 @@
             android:name="jobPostingId"
             app:argType="string" />
         <deepLink app:uri="@string/worker_jobposting_detail_deeplink_url" />
+        <argument
+            android:name="jobPostingType"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/centerJobPostingDetailFragment"

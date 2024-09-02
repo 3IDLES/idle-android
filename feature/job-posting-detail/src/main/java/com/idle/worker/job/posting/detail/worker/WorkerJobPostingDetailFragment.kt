@@ -351,7 +351,7 @@ internal fun WorkerJobPostingDetailScreen(
                             )
 
                             Text(
-                                text = "${jobPostingDetail.distance} km",
+                                text = "걸어서 ${jobPostingDetail.getDistanceInMinutes()} 소요",
                                 style = CareTheme.typography.subtitle2,
                                 color = CareTheme.colors.gray500,
                             )
@@ -365,7 +365,7 @@ internal fun WorkerJobPostingDetailScreen(
                         ) {
                             if (profile != null) {
                                 CareMap(
-                                    homeLatLng = jobPostingDetail.latitude.toDouble() to jobPostingDetail.longitude.toDouble(),
+                                    homeLatLng = profile.latitude.toDouble() to profile.longitude.toDouble(),
                                     workspaceLatLng = jobPostingDetail.latitude.toDouble() to jobPostingDetail.longitude.toDouble(),
                                     onMapClick = { showPlaceDetail(true) },
                                     modifier = Modifier.fillMaxSize(),

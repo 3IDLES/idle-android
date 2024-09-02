@@ -3,6 +3,7 @@ package com.idle.network.model.jobposting
 import com.idle.domain.model.auth.Gender
 import com.idle.domain.model.jobposting.ApplyDeadlineType
 import com.idle.domain.model.jobposting.DayOfWeek
+import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.PayType
 import com.idle.domain.model.jobposting.WorkerJobPosting
 import kotlinx.serialization.SerialName
@@ -39,6 +40,7 @@ data class WorkerJobPostingResponse(
     val startTime: String,
     val weekdays: List<String>,
     val applyTime: String?,
+    val jobPostingType: String = "IN_APP",
     val isFavorite: Boolean,
 ) {
     fun toVO(): WorkerJobPosting = WorkerJobPosting(
@@ -62,6 +64,7 @@ data class WorkerJobPostingResponse(
         applyTime = applyTime?.let {
             LocalDateTime.parse(it, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
         },
+        jobPostingType = JobPostingType.create(jobPostingType),
         isFavorite = isFavorite,
     )
 }

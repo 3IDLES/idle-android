@@ -201,7 +201,12 @@ private fun WorkerRecruitmentCard(
         ),
         border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
         modifier = Modifier.clickable {
-            navigateTo(WorkerJobDetail(jobPostingId = jobPosting.id))
+            navigateTo(
+                WorkerJobDetail(
+                    jobPostingId = jobPosting.id,
+                    jobPostingType = jobPosting.jobPostingType.name,
+                )
+            )
         },
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -258,7 +263,7 @@ private fun WorkerRecruitmentCard(
                 )
 
                 Text(
-                    text = "${jobPosting.distance} km",
+                    text = "${jobPosting.distance} m",
                     style = CareTheme.typography.body3,
                     color = CareTheme.colors.gray500,
                     modifier = Modifier.padding(end = 8.dp),

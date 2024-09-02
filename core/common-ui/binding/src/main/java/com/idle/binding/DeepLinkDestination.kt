@@ -107,9 +107,15 @@ sealed class DeepLinkDestination(
         setDefaultAnimation = false,
     )
 
-    data class WorkerJobDetail(val jobPostingId: String) : DeepLinkDestination(
+    data class WorkerJobDetail(
+        val jobPostingId: String,
+        val jobPostingType: String,
+    ) : DeepLinkDestination(
         addressRes = R.string.worker_jobposting_detail_deeplink_url,
-        params = mapOf("jobPostingId" to jobPostingId),
+        params = mapOf(
+            "jobPostingId" to jobPostingId,
+            "jobPostingType" to jobPostingType,
+        ),
     )
 
     data object WorkerSignUp : DeepLinkDestination(
