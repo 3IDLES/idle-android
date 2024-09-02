@@ -1,4 +1,4 @@
-package com.idle.signup.center.step
+package com.idle.center.register.step
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

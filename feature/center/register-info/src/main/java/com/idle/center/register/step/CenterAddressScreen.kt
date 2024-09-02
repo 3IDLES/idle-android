@@ -1,4 +1,4 @@
-package com.idle.signup.center.step
+package com.idle.center.register.step
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
