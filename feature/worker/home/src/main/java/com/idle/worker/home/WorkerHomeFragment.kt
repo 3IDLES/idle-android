@@ -86,17 +86,16 @@ internal fun WorkerHomeScreen(
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
     val listState = rememberLazyListState()
-
-    val isLastElement by remember {
+    val lastVisibleIndex by remember {
         derivedStateOf {
-            val lastVisibleIndex =
-                listState.firstVisibleItemIndex + listState.layoutInfo.visibleItemsInfo.size
-            workerJobPostings.isNotEmpty() && lastVisibleIndex >= workerJobPostings.size
+            listState.firstVisibleItemIndex + listState.layoutInfo.visibleItemsInfo.size - 1
         }
     }
+    val isNearEnd =
+        workerJobPostings.isNotEmpty() && lastVisibleIndex >= (workerJobPostings.size - 3)
 
-    LaunchedEffect(isLastElement) {
-        if (isLastElement) {
+    LaunchedEffect(isNearEnd) {
+        if (isNearEnd) {
             getJobPostings()
         }
     }
