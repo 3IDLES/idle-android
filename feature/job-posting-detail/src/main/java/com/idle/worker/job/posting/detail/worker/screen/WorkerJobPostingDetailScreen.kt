@@ -319,7 +319,7 @@ internal fun WorkerJobPostingDetailScreen(
                             Text(
                                 text = "걸어서 ${jobPostingDetail.getDistanceInMinutes()} 소요",
                                 style = CareTheme.typography.subtitle2,
-                                color = CareTheme.colors.gray500,
+                                color = CareTheme.colors.gray900,
                             )
                         }
 

@@ -109,7 +109,7 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
 
                 else -> {
                     _workerJobPostingDetail.value =
-                        (_workerJobPostingDetail.value as CrawlingJobPostingDetail).copy(isFavorite = true)
+                        (_workerJobPostingDetail.value as CrawlingJobPostingDetail).copy(isFavorite = false)
                 }
             }
         }.onFailure { handleFailure(it as HttpResponseException) }
