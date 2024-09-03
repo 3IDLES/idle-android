@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
+@Serializable
 data class GetCrawlingJobPostingsResponse(
     @SerialName("items") val crawlingJobPostingResponses: List<CrawlingJobPostingResponse> = listOf(),
     val next: String? = null,

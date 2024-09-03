@@ -12,6 +12,7 @@ import com.idle.domain.model.jobposting.WorkerJobPosting
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.usecase.jobposting.AddFavoriteJobPostingUseCase
 import com.idle.domain.usecase.jobposting.ApplyJobPostingUseCase
+import com.idle.domain.usecase.jobposting.GetCrawlingJobPostingsUseCase
 import com.idle.domain.usecase.jobposting.GetJobPostingsUseCase
 import com.idle.domain.usecase.jobposting.RemoveFavoriteJobPostingUseCase
 import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
@@ -26,6 +27,7 @@ import javax.inject.Inject
 class WorkerHomeViewModel @Inject constructor(
     private val getLocalMyWorkerProfileUseCase: GetLocalMyWorkerProfileUseCase,
     private val getJobPostingsUseCase: GetJobPostingsUseCase,
+    private val getCrawlingJobPostingsUseCase: GetCrawlingJobPostingsUseCase,
     private val applyJobPostingUseCase: ApplyJobPostingUseCase,
     private val addFavoriteJobPostingUseCase: AddFavoriteJobPostingUseCase,
     private val removeFavoriteJobPostingUseCase: RemoveFavoriteJobPostingUseCase,
@@ -72,7 +74,13 @@ class WorkerHomeViewModel @Inject constructor(
     }
 
     private suspend fun fetchCrawlingJobPostings() {
-        // Todo: 크롤링 공고 호출 로직 추가
+        getCrawlingJobPostingsUseCase(next = next.value).onSuccess { (nextId, postings) ->
+            next.value = nextId
+            if (nextId == null) {
+                callType = JobPostingCallType.END
+            }
+            _jobPostings.value += postings
+        }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
     internal fun applyJobPosting(jobPostingId: String) = viewModelScope.launch {

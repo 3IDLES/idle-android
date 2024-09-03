@@ -1,8 +1,10 @@
 package com.idle.worker.job.posting.detail.worker.screen
 
+import android.content.Intent
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,11 +28,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.startActivity
+import androidx.core.net.toUri
 import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareCard
@@ -53,6 +58,7 @@ internal fun CrawlingJobPostingDetailScreen(
     val onBackPressedDispatcher =
         LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val scrollState = rememberScrollState()
+    val context = LocalContext.current
 
     Scaffold(
         containerColor = CareTheme.colors.white000,
@@ -259,6 +265,11 @@ internal fun CrawlingJobPostingDetailScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .wrapContentHeight()
+                            .border(
+                                width = 1.dp,
+                                color = CareTheme.colors.gray100,
+                                shape = RoundedCornerShape(6.dp),
+                            )
                     ) {
                         Text(
                             text = jobPostingDetail.content,
@@ -440,7 +451,7 @@ internal fun CrawlingJobPostingDetailScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 20.dp, end = 20.dp, bottom = 48.dp),
+                        .padding(horizontal = 20.dp),
                 ) {
                     Text(
                         text = stringResource(id = R.string.center_info),
@@ -452,6 +463,13 @@ internal fun CrawlingJobPostingDetailScreen(
                     CareCard(
                         title = jobPostingDetail.centerName,
                         description = jobPostingDetail.centerAddress,
+                        showRightArrow = false,
+                        descriptionLeftComponent = {
+                            Image(
+                                painter = painterResource(R.drawable.ic_address_pin),
+                                contentDescription = null,
+                            )
+                        },
                     )
                 }
 
@@ -472,7 +490,13 @@ internal fun CrawlingJobPostingDetailScreen(
                     CareCard(
                         title = jobPostingDetail.title,
                         description = jobPostingDetail.jobPostingUrl,
-                        showRightArrow = true,
+                        onClick = {
+                            startActivity(
+                                context,
+                                Intent(Intent.ACTION_VIEW, jobPostingDetail.jobPostingUrl.toUri()),
+                                null
+                            )
+                        }
                     )
                 }
             }
