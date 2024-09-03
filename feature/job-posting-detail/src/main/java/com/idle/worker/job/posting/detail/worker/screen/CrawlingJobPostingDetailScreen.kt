@@ -104,14 +104,6 @@ internal fun CrawlingJobPostingDetailScreen(
                             backgroundColor = Color(0xFFD3EBFF),
                         )
 
-                        if (jobPostingDetail.calculateDeadline() <= 14) {
-                            CareTag(
-                                text = "D-${jobPostingDetail.calculateDeadline()}",
-                                textColor = CareTheme.colors.gray300,
-                                backgroundColor = CareTheme.colors.gray050,
-                            )
-                        }
-
                         Spacer(modifier = Modifier.weight(1f))
 
                         Image(
@@ -417,7 +409,7 @@ internal fun CrawlingJobPostingDetailScreen(
                             verticalArrangement = Arrangement.spacedBy(8.dp),
                         ) {
                             Text(
-                                text = jobPostingDetail.applyDeadline.toString(),
+                                text = jobPostingDetail.applyDeadline,
                                 style = CareTheme.typography.body2,
                                 color = CareTheme.colors.gray900,
                             )

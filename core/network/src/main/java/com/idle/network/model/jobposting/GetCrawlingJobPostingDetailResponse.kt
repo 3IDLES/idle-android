@@ -40,7 +40,7 @@ data class GetCrawlingJobPostingDetailResponse(
         payInfo = payInfo,
         workingTime = workingTime,
         workingSchedule = workingSchedule,
-        applyDeadline = LocalDate.parse(applyDeadline, DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+        applyDeadline = applyDeadline,
         recruitmentProcess = recruitmentProcess,
         applyMethod = applyMethod,
         requireDocumentation = requireDocumentation,

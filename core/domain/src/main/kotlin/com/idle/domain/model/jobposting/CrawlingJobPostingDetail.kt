@@ -5,11 +5,11 @@ import java.time.LocalDate
 data class CrawlingJobPostingDetail(
     override val id: String,
     override val distance: Int,
-    override val applyDeadline: LocalDate,
     override val jobPostingType: JobPostingType,
     override val isFavorite: Boolean,
     override val longitude: String,
     override val latitude: String,
+    val applyDeadline: String,
     val title: String,
     val content: String,
     val clientAddress: String,
@@ -23,4 +23,4 @@ data class CrawlingJobPostingDetail(
     val centerName: String,
     val centerAddress: String,
     val jobPostingUrl: String,
-) : JobPostingDetail(id, distance, applyDeadline, jobPostingType, isFavorite, latitude, longitude)
+) : JobPostingDetail(id, distance, jobPostingType, isFavorite, latitude, longitude)
