@@ -5,7 +5,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -54,7 +53,10 @@ fun CareCard(
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp, vertical = 16.dp)
         ) {
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+                modifier = Modifier.weight(1f),
+            ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
@@ -78,6 +80,7 @@ fun CareCard(
                         Text(
                             text = description,
                             style = CareTheme.typography.body3,
+                            maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             color = CareTheme.colors.gray500,
                         )
@@ -85,12 +88,11 @@ fun CareCard(
                 }
             }
 
-            Spacer(modifier = Modifier.weight(1f))
-
             if (showRightArrow) {
                 Image(
                     painter = painterResource(com.idle.designresource.R.drawable.ic_arrow_right),
                     contentDescription = null,
+                    modifier = Modifier.padding(start = 30.dp),
                 )
             }
         }

@@ -389,6 +389,14 @@ private fun WorkerWorkNetCard(
                     backgroundColor = Color(0xFFD3EBFF),
                 )
 
+                if (jobPosting.calculateDeadline() <= 14) {
+                    CareTag(
+                        text = "D-${jobPosting.calculateDeadline()}",
+                        textColor = CareTheme.colors.gray300,
+                        backgroundColor = CareTheme.colors.gray050,
+                    )
+                }
+
                 Spacer(modifier = Modifier.weight(1f))
 
                 Image(
