@@ -212,7 +212,7 @@ internal fun CrawlingJobPostingDetailScreen(
                         Text(
                             text = "걸어서 ${jobPostingDetail.getDistanceInMinutes()} 소요",
                             style = CareTheme.typography.subtitle2,
-                            color = CareTheme.colors.gray500,
+                            color = CareTheme.colors.gray900,
                         )
                     }
 
@@ -420,7 +420,7 @@ internal fun CrawlingJobPostingDetailScreen(
                             verticalArrangement = Arrangement.spacedBy(8.dp),
                         ) {
                             Text(
-                                text = jobPostingDetail.applyDeadline,
+                                text = jobPostingDetail.applyDeadline.toString(),
                                 style = CareTheme.typography.body2,
                                 color = CareTheme.colors.gray900,
                             )

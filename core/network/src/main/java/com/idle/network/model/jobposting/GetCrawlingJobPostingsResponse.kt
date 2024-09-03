@@ -37,7 +37,7 @@ data class CrawlingJobPostingResponse(
         workingTime = workingTime,
         workingSchedule = workingSchedule,
         payInfo = payInfo,
-        applyDeadline = applyDeadline,
+        applyDeadline = LocalDate.parse(applyDeadline, DateTimeFormatter.ofPattern("yyyy-MM-dd")),
         jobPostingType = JobPostingType.create(jobPostingType),
         createdAt = LocalDate.parse(createdAt, DateTimeFormatter.ofPattern("yyyy-MM-dd")),
         isFavorite = isFavorite,

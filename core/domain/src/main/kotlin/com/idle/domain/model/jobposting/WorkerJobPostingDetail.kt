@@ -3,16 +3,15 @@ package com.idle.domain.model.jobposting
 import com.idle.domain.model.auth.Gender
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.ZoneId
 
 data class WorkerJobPostingDetail(
     override val id: String,
     override val distance: Int,
     override val jobPostingType: JobPostingType,
+    override val applyDeadline: LocalDate,
     override val isFavorite: Boolean,
     override val longitude: String,
     override val latitude: String,
-    val applyDeadline: LocalDate,
     val weekdays: Set<DayOfWeek>,
     val startTime: String,
     val endTime: String,
@@ -38,10 +37,4 @@ data class WorkerJobPostingDetail(
     val centerName: String,
     val centerRoadNameAddress: String,
     val applyTime: LocalDateTime?,
-) : JobPostingDetail(id, distance, jobPostingType, isFavorite, latitude, longitude) {
-    fun calculateDeadline(): Long {
-        val seoulZone = ZoneId.of("Asia/Seoul")
-        val nowDate = LocalDate.now(seoulZone)
-        return applyDeadline.toEpochDay() - nowDate.toEpochDay()
-    }
-}
+) : JobPostingDetail(id, distance, jobPostingType, applyDeadline, isFavorite, latitude, longitude)
