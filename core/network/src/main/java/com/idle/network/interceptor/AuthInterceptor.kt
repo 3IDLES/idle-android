@@ -1,6 +1,7 @@
 package com.idle.network.interceptor
 
 import com.idle.network.di.TokenManager
+import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
@@ -14,7 +15,9 @@ class AuthInterceptor @Inject constructor(
         val requestBuilder = originRequest.newBuilder()
 
         if (isAccessTokenUsed(originRequest)) {
-            requestBuilder.addHeader("Authorization", "Bearer ${tokenManager.getAccessToken()}")
+            requestBuilder.addHeader(
+                "Authorization",
+                "Bearer ${runBlocking { tokenManager.getAccessToken() }}")
         }
 
         return chain.proceed(requestBuilder.build())

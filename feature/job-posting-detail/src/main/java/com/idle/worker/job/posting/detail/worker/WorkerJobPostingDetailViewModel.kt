@@ -5,7 +5,7 @@ import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.jobposting.ApplyMethod
 import com.idle.domain.model.jobposting.CrawlingJobPostingDetail
-import com.idle.domain.model.jobposting.JobPostingDetail
+import com.idle.domain.model.jobposting.JobPosting
 import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.WorkerJobPostingDetail
 import com.idle.domain.model.profile.WorkerProfile
@@ -34,7 +34,7 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
     private val _profile = MutableStateFlow<WorkerProfile?>(null)
     val profile = _profile.asStateFlow()
 
-    private val _workerJobPostingDetail = MutableStateFlow<JobPostingDetail?>(null)
+    private val _workerJobPostingDetail = MutableStateFlow<JobPosting?>(null)
     val workerJobPostingDetail = _workerJobPostingDetail.asStateFlow()
 
     internal fun getMyProfile() = viewModelScope.launch {

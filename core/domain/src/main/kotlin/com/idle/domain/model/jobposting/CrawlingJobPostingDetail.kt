@@ -6,10 +6,10 @@ data class CrawlingJobPostingDetail(
     override val id: String,
     override val distance: Int,
     override val jobPostingType: JobPostingType,
-    override val longitude: String,
-    override val latitude: String,
     override val applyDeadline: LocalDate,
     override val isFavorite: Boolean,
+    val longitude: String,
+    val latitude: String,
     val title: String,
     val content: String,
     val clientAddress: String,
@@ -23,4 +23,4 @@ data class CrawlingJobPostingDetail(
     val centerName: String,
     val centerAddress: String,
     val jobPostingUrl: String,
-) : JobPostingDetail(id, distance, jobPostingType, applyDeadline, isFavorite, latitude, longitude)
+) : JobPosting(id, distance, jobPostingType, applyDeadline, isFavorite)

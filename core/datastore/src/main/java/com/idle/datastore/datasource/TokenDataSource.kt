@@ -19,11 +19,11 @@ class TokenDataSource @Inject constructor(
     val accessToken: Flow<String> = dataStore.getValue(ACCESS_TOKEN, "")
     val refreshToken: Flow<String> = dataStore.getValue(REFRESH_TOKEN, "")
 
-    suspend fun setAccessToken(accessToken: String) = withContext(Dispatchers.IO) {
+    suspend fun setAccessToken(accessToken: String) {
         dataStore.setValue(ACCESS_TOKEN, accessToken)
     }
 
-    suspend fun setRefreshToken(refreshToken: String) = withContext(Dispatchers.IO) {
+    suspend fun setRefreshToken(refreshToken: String) {
         dataStore.setValue(REFRESH_TOKEN, refreshToken)
     }
 
