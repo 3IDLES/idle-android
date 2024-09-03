@@ -28,13 +28,3 @@ open class JobPosting(
         else -> "40분 이상"
     }
 }
-
-open class JobPostingDetail(
-    override val id: String,
-    override val distance: Int,
-    override val jobPostingType: JobPostingType,
-    override val applyDeadline: LocalDate,
-    override val isFavorite: Boolean,
-    open val latitude: String,
-    open val longitude: String,
-) : JobPosting(id, distance, jobPostingType, applyDeadline, isFavorite)

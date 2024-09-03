@@ -55,6 +55,12 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
                             val homeLatLng =
                                 profile.latitude.toDouble() to profile.longitude.toDouble()
 
+                            val workspaceLatLng = when (jobPosting) {
+                                is WorkerJobPostingDetail -> jobPosting.latitude.toDouble() to jobPosting.longitude.toDouble()
+                                is CrawlingJobPostingDetail -> jobPosting.latitude.toDouble() to jobPosting.longitude.toDouble()
+                                else -> homeLatLng
+                            }
+
                             val lotNumberAddress = when (jobPosting) {
                                 is WorkerJobPostingDetail -> jobPosting.lotNumberAddress
                                 is CrawlingJobPostingDetail -> jobPosting.clientAddress
@@ -64,7 +70,7 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
                             PlaceDetailScreen(
                                 callback = { setShowPlaceDetail(false) },
                                 homeLatLng = homeLatLng,
-                                workspaceLatLng = jobPosting.latitude.toDouble() to jobPosting.longitude.toDouble(),
+                                workspaceLatLng = workspaceLatLng,
                                 lotNumberAddress = lotNumberAddress,
                             )
                         }
