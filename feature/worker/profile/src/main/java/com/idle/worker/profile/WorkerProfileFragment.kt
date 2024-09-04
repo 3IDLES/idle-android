@@ -67,9 +67,11 @@ import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.CareTextFieldLong
+import com.idle.designsystem.compose.component.CareToggleText
 import com.idle.designsystem.compose.component.CareWheelPicker
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
+import com.idle.domain.model.profile.JobSearchStatus
 import com.idle.domain.model.profile.JobSearchStatus.NO
 import com.idle.domain.model.profile.JobSearchStatus.UNKNOWN
 import com.idle.domain.model.profile.JobSearchStatus.YES
@@ -90,8 +92,8 @@ internal class WorkerProfileFragment : BaseComposeFragment() {
                     val roadName = it.get<String>("roadNameAddress")
                     val lotNumber = it.get<String>("lotNumberAddress")
 
-                    fragmentViewModel.setRoadNameAddress(roadName ?: "")
-                    fragmentViewModel.setLotNumberAddress(lotNumber ?: "")
+                    fragmentViewModel.setRoadNameAddress(roadName ?: return@let)
+                    fragmentViewModel.setLotNumberAddress(lotNumber ?: return@let)
                 }
             }
         }
@@ -109,6 +111,7 @@ internal class WorkerProfileFragment : BaseComposeFragment() {
             val profileImageUri by profileImageUri.collectAsStateWithLifecycle()
             val experienceYear by experienceYear.collectAsStateWithLifecycle()
             val roadNameAddress by roadNameAddress.collectAsStateWithLifecycle()
+            val jobSearchStatus by jobSearchStatus.collectAsStateWithLifecycle()
 
             val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.PickVisualMedia(),
@@ -138,6 +141,7 @@ internal class WorkerProfileFragment : BaseComposeFragment() {
                         specialty = specialty,
                         experienceYear = experienceYear,
                         profileImageUri = profileImageUri,
+                        jobSearchStatus = jobSearchStatus,
                         singlePhotoPickerLauncher = singlePhotoPickerLauncher,
                         roadNameAddress = roadNameAddress,
                         showPostCodeDialog = {
@@ -148,6 +152,7 @@ internal class WorkerProfileFragment : BaseComposeFragment() {
                         onSpecialtyChanged = ::setSpecialty,
                         onWorkerIntroduceChanged = ::setWorkerIntroduce,
                         onExperienceYearChanged = ::setExperienceYear,
+                        onJobSearchStatusChanged = ::setJobSearchStatus,
                         updateWorkerProfile = ::updateWorkerProfile,
                         setEditState = ::setEditState,
                     )
@@ -167,6 +172,7 @@ internal fun WorkerProfileScreen(
     profileImageUri: Uri?,
     experienceYear: Int?,
     roadNameAddress: String,
+    jobSearchStatus: JobSearchStatus,
     isEditState: Boolean,
     singlePhotoPickerLauncher: ManagedActivityResultLauncher<PickVisualMediaRequest, Uri?>,
     showPostCodeDialog: () -> Unit,
@@ -174,6 +180,7 @@ internal fun WorkerProfileScreen(
     onSpecialtyChanged: (String) -> Unit,
     onWorkerIntroduceChanged: (String) -> Unit,
     onExperienceYearChanged: (Int) -> Unit,
+    onJobSearchStatusChanged: (JobSearchStatus) -> Unit,
     updateWorkerProfile: () -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
@@ -462,7 +469,15 @@ internal fun WorkerProfileScreen(
                             text = workerProfile.workerName,
                             style = CareTheme.typography.heading2,
                             color = CareTheme.colors.gray900,
-                            modifier = Modifier.padding(bottom = 6.dp),
+                            modifier = Modifier.padding(bottom = 8.dp),
+                        )
+
+                        CareToggleText(
+                            rightChecked = jobSearchStatus == YES,
+                            leftText = stringResource(id = R.string.is_working),
+                            rightText = stringResource(id = R.string.is_job_searching),
+                            onCheckedChanged = { onJobSearchStatusChanged(if (it) YES else NO) },
+                            modifier = Modifier.padding(bottom = 16.dp),
                         )
 
                         Row(

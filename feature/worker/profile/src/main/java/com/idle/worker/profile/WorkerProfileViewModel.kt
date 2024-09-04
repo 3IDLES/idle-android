@@ -5,7 +5,7 @@ import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
-import com.idle.domain.model.auth.Gender
+import com.idle.domain.model.profile.JobSearchStatus
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
 import com.idle.domain.usecase.profile.GetWorkerProfileUseCase
@@ -45,6 +45,9 @@ class WorkerProfileViewModel @Inject constructor(
     private val _profileImageUri = MutableStateFlow<Uri?>(null)
     val profileImageUri = _profileImageUri.asStateFlow()
 
+    private val _jobSearchStatus = MutableStateFlow(JobSearchStatus.UNKNOWN)
+    val jobSearchStatus = _jobSearchStatus.asStateFlow()
+
     internal fun getMyWorkerProfile() = viewModelScope.launch {
         getLocalMyWorkerProfileUseCase().onSuccess {
             _workerProfile.value = it
@@ -54,6 +57,7 @@ class WorkerProfileViewModel @Inject constructor(
             _experienceYear.value = it.experienceYear
             _roadNameAddress.value = it.roadNameAddress
             _lotNumberAddress.value = it.lotNumberAddress
+            _jobSearchStatus.value = it.jobSearchStatus
         }.onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
     }
 
@@ -65,7 +69,7 @@ class WorkerProfileViewModel @Inject constructor(
         }
     }
 
-    fun updateWorkerProfile() = viewModelScope.launch {
+    internal fun updateWorkerProfile() = viewModelScope.launch {
         val workerProfile = _workerProfile.value
         if (workerProfile == null) {
             baseEvent(CareBaseEvent.ShowSnackBar("로딩중입니다."))
@@ -79,7 +83,7 @@ class WorkerProfileViewModel @Inject constructor(
             speciality = _specialty.value,
             introduce = _workerIntroduce.value.ifBlank { null },
             imageFileUri = _profileImageUri.value?.toString(),
-            jobSearchStatus = _workerProfile.value!!.jobSearchStatus,
+            jobSearchStatus = _jobSearchStatus.value,
         ).onSuccess {
             getMyWorkerProfile()
             baseEvent(CareBaseEvent.ShowSnackBar("정보 수정이 완료되었어요.|SUCCESS"))
@@ -89,31 +93,35 @@ class WorkerProfileViewModel @Inject constructor(
         }
     }
 
-    fun setSpecialty(number: String) {
+    internal fun setSpecialty(number: String) {
         _specialty.value = number
     }
 
-    fun setWorkerIntroduce(introduce: String) {
+    internal fun setWorkerIntroduce(introduce: String) {
         _workerIntroduce.value = introduce
     }
 
-    fun setEditState(state: Boolean) {
+    internal fun setEditState(state: Boolean) {
         _isEditState.value = state
     }
 
-    fun setProfileImageUrl(uri: Uri?) {
+    internal fun setProfileImageUrl(uri: Uri?) {
         _profileImageUri.value = uri
     }
 
-    fun setRoadNameAddress(roadNameAddress: String) {
+    internal fun setRoadNameAddress(roadNameAddress: String) {
         _roadNameAddress.value = roadNameAddress
     }
 
-    fun setLotNumberAddress(lotNumberAddress: String) {
+    internal fun setLotNumberAddress(lotNumberAddress: String) {
         _lotNumberAddress.value = lotNumberAddress
     }
 
-    fun setExperienceYear(experienceYear: Int) {
+    internal fun setExperienceYear(experienceYear: Int) {
         _experienceYear.value = experienceYear
+    }
+
+    internal fun setJobSearchStatus(jobSearchStatus: JobSearchStatus) {
+        _jobSearchStatus.value = jobSearchStatus
     }
 }
