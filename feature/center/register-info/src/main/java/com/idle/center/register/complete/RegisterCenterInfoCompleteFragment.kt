@@ -43,7 +43,7 @@ internal class CenterRegisterCompleteFragment : BaseComposeFragment() {
                     navigateToCenterProfile = {
                         baseEvent(
                             NavigateTo(
-                                CenterProfile(""), R.id.registerCenterInfoCompleteFragment
+                                CenterProfile(), R.id.registerCenterInfoCompleteFragment
                             )
                         )
                     },

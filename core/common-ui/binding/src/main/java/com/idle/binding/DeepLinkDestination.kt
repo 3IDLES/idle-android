@@ -48,7 +48,7 @@ sealed class DeepLinkDestination(
         addressRes = R.string.center_home_deeplink_url,
     )
 
-    data class CenterProfile(val centerId: String) : DeepLinkDestination(
+    data class CenterProfile(val centerId: String ="default") : DeepLinkDestination(
         addressRes = R.string.center_profile_deeplink_url,
         params = mapOf("centerId" to centerId)
     )
@@ -94,9 +94,9 @@ sealed class DeepLinkDestination(
         addressRes = R.string.worker_home_deeplink_url,
     )
 
-    data class WorkerProfile(val workerId: String = "") : DeepLinkDestination(
+    data class WorkerProfile(val workerId: String = "default") : DeepLinkDestination(
         addressRes = R.string.worker_profile_deeplink_url,
-        params = mapOf("carerId" to workerId)
+        params = mapOf("workerId" to workerId)
     )
 
     data object WorkerSetting : DeepLinkDestination(

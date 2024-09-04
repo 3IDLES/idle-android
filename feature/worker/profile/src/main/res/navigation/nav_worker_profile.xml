@@ -10,7 +10,7 @@
         android:label="WorkerProfileFragment" >
         <deepLink app:uri="@string/worker_profile_deeplink_url"/>
         <argument
-            android:name="carerId"
+            android:name="workerId"
             app:argType="string" />
     </fragment>
 </navigation>

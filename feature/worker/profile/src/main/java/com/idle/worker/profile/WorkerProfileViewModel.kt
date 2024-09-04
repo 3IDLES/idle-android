@@ -56,6 +56,8 @@ class WorkerProfileViewModel @Inject constructor(
             _gender.value = it.gender
             _profileImageUri.value = it.profileImageUrl?.toUri()
             _experienceYear.value = it.experienceYear
+            _roadNameAddress.value = it.roadNameAddress
+            _lotNumberAddress.value = it.lotNumberAddress
         }.onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
     }
 
@@ -83,7 +85,7 @@ class WorkerProfileViewModel @Inject constructor(
             imageFileUri = _profileImageUri.value?.toString(),
             jobSearchStatus = _workerProfile.value!!.jobSearchStatus,
         ).onSuccess {
-            baseEvent(CareBaseEvent.ShowSnackBar("정보 수정이 완료되었어요.|ERROR"))
+            baseEvent(CareBaseEvent.ShowSnackBar("정보 수정이 완료되었어요.|SUCCESS"))
             setEditState(false)
         }.onFailure {
             baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
@@ -104,5 +106,13 @@ class WorkerProfileViewModel @Inject constructor(
 
     fun setProfileImageUrl(uri: Uri?) {
         _profileImageUri.value = uri
+    }
+
+    fun setRoadNameAddress(roadNameAddress: String) {
+        _roadNameAddress.value = roadNameAddress
+    }
+
+    fun setLotNumberAddress(lotNumberAddress: String) {
+        _lotNumberAddress.value = lotNumberAddress
     }
 }
