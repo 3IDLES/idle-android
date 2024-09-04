@@ -9,5 +9,8 @@
         android:name="com.idle.worker.profile.WorkerProfileFragment"
         android:label="WorkerProfileFragment" >
         <deepLink app:uri="@string/worker_profile_deeplink_url"/>
+        <argument
+            android:name="userType"
+            app:argType="string" />
     </fragment>
 </navigation>

@@ -29,7 +29,7 @@ sealed class DeepLinkDestination(
 
     data class Withdrawal(val userType: UserType) : DeepLinkDestination(
         addressRes = R.string.withdrawal_deeplink_url,
-        params = mapOf("userRole" to userType.name),
+        params = mapOf("userType" to userType.name),
     )
 
     data object NewPassword : DeepLinkDestination(
@@ -48,8 +48,9 @@ sealed class DeepLinkDestination(
         addressRes = R.string.center_home_deeplink_url,
     )
 
-    data object CenterProfile : DeepLinkDestination(
-        addressRes = R.string.center_profile_deeplink_url
+    data class CenterProfile(val userType: UserType) : DeepLinkDestination(
+        addressRes = R.string.center_profile_deeplink_url,
+        params = mapOf("userType" to userType.name)
     )
 
     data object CenterSetting : DeepLinkDestination(
@@ -93,8 +94,9 @@ sealed class DeepLinkDestination(
         addressRes = R.string.worker_home_deeplink_url,
     )
 
-    data object WorkerProfile : DeepLinkDestination(
-        addressRes = R.string.worker_profile_deeplink_url
+    data class WorkerProfile(val userType: UserType) : DeepLinkDestination(
+        addressRes = R.string.worker_profile_deeplink_url,
+        params = mapOf("userType" to userType.name)
     )
 
     data object WorkerSetting : DeepLinkDestination(

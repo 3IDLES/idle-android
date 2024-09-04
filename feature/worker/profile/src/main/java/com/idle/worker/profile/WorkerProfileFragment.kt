@@ -35,6 +35,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.fragment.navArgs
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
@@ -57,6 +58,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 internal class WorkerProfileFragment : BaseComposeFragment() {
+    private val args: WorkerProfileFragmentArgs by navArgs()
     override val fragmentViewModel: WorkerProfileViewModel by viewModels()
 
     @Composable

@@ -9,5 +9,8 @@
         android:name="com.idle.center.profile.CenterProfileFragment"
         android:label="CenterProfileFragment">
         <deepLink app:uri="@string/center_profile_deeplink_url" />
+        <argument
+            android:name="userType"
+            app:argType="string" />
     </fragment>
 </navigation>

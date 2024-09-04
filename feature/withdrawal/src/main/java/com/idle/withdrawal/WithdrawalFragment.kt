@@ -46,7 +46,7 @@ internal class WithdrawalFragment : BaseComposeFragment() {
             val authCodeTimerMinute by authCodeTimerMinute.collectAsStateWithLifecycle()
             val authCodeTimerSeconds by authCodeTimerSeconds.collectAsStateWithLifecycle()
             val isConfirmAuthCode by isConfirmAuthCode.collectAsStateWithLifecycle()
-            val userType by rememberSaveable { mutableStateOf(UserType.create(args.userRole)) }
+            val userType by rememberSaveable { mutableStateOf(UserType.create(args.userType)) }
 
             WithdrawalStep(
                 userType = userType,

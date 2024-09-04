@@ -1,7 +1,6 @@
 package com.idle.center.profile
 
 import android.net.Uri
-import android.util.Log
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -38,6 +37,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.fragment.navArgs
 import coil.compose.AsyncImage
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
@@ -49,13 +49,13 @@ import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.CareTextFieldLong
 import com.idle.designsystem.compose.component.LabeledContent
-import com.idle.designsystem.compose.component.SnackBarType
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.profile.CenterProfile
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 internal class CenterProfileFragment : BaseComposeFragment() {
+    private val args: CenterProfileFragmentArgs by navArgs()
     override val fragmentViewModel: CenterProfileViewModel by viewModels()
 
     @Composable
