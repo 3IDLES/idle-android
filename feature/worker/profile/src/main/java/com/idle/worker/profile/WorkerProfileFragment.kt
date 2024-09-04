@@ -21,7 +21,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
@@ -41,6 +43,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -59,6 +62,7 @@ import com.idle.designsystem.compose.component.CareButtonMedium
 import com.idle.designsystem.compose.component.CareButtonRound
 import com.idle.designsystem.compose.component.CareClickableTextField
 import com.idle.designsystem.compose.component.CareSnackBar
+import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.component.CareTextField
@@ -119,29 +123,35 @@ internal class WorkerProfileFragment : BaseComposeFragment() {
                 }
             }
 
-            workerProfile?.let {
-                WorkerProfileScreen(
-                    snackbarHostState = snackbarHostState,
-                    isMyProfile = isMyProfile,
-                    isEditState = isEditState,
-                    workerProfile = it,
-                    workerIntroduce = workerIntroduce,
-                    specialty = specialty,
-                    experienceYear = experienceYear,
-                    profileImageUri = profileImageUri,
-                    singlePhotoPickerLauncher = singlePhotoPickerLauncher,
-                    roadNameAddress = roadNameAddress,
-                    showPostCodeDialog = {
-                        if (!(postCodeDialog?.isAdded == true || postCodeDialog?.isVisible == true)) {
-                            postCodeDialog?.show(parentFragmentManager, "PostCodeFragment")
-                        }
-                    },
-                    onSpecialtyChanged = ::setSpecialty,
-                    onWorkerIntroduceChanged = ::setWorkerIntroduce,
-                    onExperienceYearChanged = ::setExperienceYear,
-                    updateWorkerProfile = ::updateWorkerProfile,
-                    setEditState = ::setEditState,
-                )
+            workerProfile?.let { profile ->
+                CareStateAnimator(
+                    targetState = isEditState,
+                    transitionCondition = isEditState,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    WorkerProfileScreen(
+                        snackbarHostState = snackbarHostState,
+                        isMyProfile = isMyProfile,
+                        isEditState = isEditState,
+                        workerProfile = profile,
+                        workerIntroduce = workerIntroduce,
+                        specialty = specialty,
+                        experienceYear = experienceYear,
+                        profileImageUri = profileImageUri,
+                        singlePhotoPickerLauncher = singlePhotoPickerLauncher,
+                        roadNameAddress = roadNameAddress,
+                        showPostCodeDialog = {
+                            if (!(postCodeDialog?.isAdded == true || postCodeDialog?.isVisible == true)) {
+                                postCodeDialog?.show(parentFragmentManager, "PostCodeFragment")
+                            }
+                        },
+                        onSpecialtyChanged = ::setSpecialty,
+                        onWorkerIntroduceChanged = ::setWorkerIntroduce,
+                        onExperienceYearChanged = ::setExperienceYear,
+                        updateWorkerProfile = ::updateWorkerProfile,
+                        setEditState = ::setEditState,
+                    )
+                }
             }
         }
     }
@@ -333,10 +343,12 @@ internal fun WorkerProfileScreen(
                                 },
                         ) {
                             AsyncImage(
-                                model = profileImageUri
-                                    ?: painterResource(R.drawable.ic_worker_photo_default),
+                                model = profileImageUri ?: R.drawable.ic_worker_photo_default,
                                 contentDescription = null,
-                                modifier = Modifier.align(Alignment.Center),
+                                modifier = Modifier
+                                    .align(Alignment.Center)
+                                    .size(96.dp)
+                                    .clip(CircleShape),
                             )
 
                             if (isEditState) {
