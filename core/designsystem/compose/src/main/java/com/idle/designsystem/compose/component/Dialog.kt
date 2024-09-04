@@ -65,6 +65,7 @@ fun CareDialog(
                     text = title,
                     style = CareTheme.typography.subtitle1,
                     color = titleColor,
+                    textAlign = TextAlign.Center,
                     modifier = Modifier.padding(top = 8.dp),
                 )
 
