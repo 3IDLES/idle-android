@@ -84,15 +84,17 @@ internal fun WorkerJobPostingDetailScreen(
         initialValue = ModalBottomSheetValue.Hidden,
         skipHalfExpanded = true,
     )
-    var callInquiryCallback by rememberSaveable { mutableStateOf(false) }
+    var showDialog by rememberSaveable { mutableStateOf(false) }
+    var applyMethod by rememberSaveable { mutableStateOf(ApplyMethod.APP) }
 
     val dialResultLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) {
-        callInquiryCallback = true
+        applyMethod = ApplyMethod.CALLING
+        showDialog = true
     }
 
-    if (callInquiryCallback) {
+    if (showDialog) {
         CareDialog(
             title = "이 공고에 지원하시겠습니까?",
             leftButtonText = stringResource(id = R.string.cancel),
@@ -102,9 +104,15 @@ internal fun WorkerJobPostingDetailScreen(
             leftButtonBorder = BorderStroke(1.dp, CareTheme.colors.gray100),
             rightButtonTextColor = CareTheme.colors.white000,
             rightButtonColor = CareTheme.colors.orange500,
-            onDismissRequest = { callInquiryCallback = false },
-            onLeftButtonClick = { callInquiryCallback = false },
-            onRightButtonClick = { applyJobPosting(jobPostingDetail.id, ApplyMethod.CALLING) },
+            onDismissRequest = { showDialog = false },
+            onLeftButtonClick = { showDialog = false },
+            onRightButtonClick = {
+                applyJobPosting(jobPostingDetail.id, applyMethod)
+                showDialog = false
+                coroutineScope.launch {
+                    sheetState.hide()
+                }
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp),
@@ -765,7 +773,10 @@ internal fun WorkerJobPostingDetailScreen(
 
                     CareButtonLine(
                         text = stringResource(id = R.string.recruit),
-                        onClick = { applyJobPosting(jobPostingDetail.id, ApplyMethod.APP) },
+                        onClick = {
+                            applyMethod = ApplyMethod.CALLING
+                            showDialog = true
+                        },
                         containerColor = CareTheme.colors.orange500,
                         borderColor = CareTheme.colors.orange500,
                         textColor = CareTheme.colors.white000,
