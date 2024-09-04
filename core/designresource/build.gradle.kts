@@ -5,6 +5,3 @@ plugins {
 android {
     namespace = "com.idle.designresource"
 }
-
-dependencies {
-}

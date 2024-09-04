@@ -11,4 +11,5 @@ plugins {
     alias(libs.plugins.ktlint)
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.androidx.navigation.safeargs) apply false
+    alias(libs.plugins.firebase.crashlytics) apply false
 }

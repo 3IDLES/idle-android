@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.konan.properties.Properties
 plugins {
     id("care.android.application")
     id("care.android.binding")
+    id("com.google.firebase.crashlytics")
 }
 
 android {

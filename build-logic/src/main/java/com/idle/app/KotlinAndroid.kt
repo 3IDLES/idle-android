@@ -49,6 +49,7 @@ internal fun Project.configureKotlinAndroid() {
             val bom = libs.findLibrary("firebase-bom").get()
             add("implementation", platform(bom))
             add("implementation", libs.findLibrary("firebase-analytics").get())
+            add("implementation", libs.findLibrary("firebase-crashlytics").get())
         }
     }
 

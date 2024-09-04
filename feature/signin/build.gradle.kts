@@ -5,5 +5,3 @@ plugins {
 android {
     namespace = "com.idle.signin"
 }
-
-dependencies {}
