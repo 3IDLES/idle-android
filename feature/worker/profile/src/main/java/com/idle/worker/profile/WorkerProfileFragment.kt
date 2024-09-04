@@ -49,6 +49,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import coil.compose.AsyncImage
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
@@ -331,8 +332,9 @@ internal fun WorkerProfileScreen(
                                     )
                                 },
                         ) {
-                            Image(
-                                painter = painterResource(R.drawable.ic_worker_photo_default),
+                            AsyncImage(
+                                model = profileImageUri
+                                    ?: painterResource(R.drawable.ic_worker_photo_default),
                                 contentDescription = null,
                                 modifier = Modifier.align(Alignment.Center),
                             )
