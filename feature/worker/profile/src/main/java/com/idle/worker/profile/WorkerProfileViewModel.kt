@@ -8,6 +8,7 @@ import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.auth.Gender
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
+import com.idle.domain.usecase.profile.GetWorkerProfileUseCase
 import com.idle.domain.usecase.profile.UpdateWorkerProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,6 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class WorkerProfileViewModel @Inject constructor(
     private val getLocalMyWorkerProfileUseCase: GetLocalMyWorkerProfileUseCase,
+    private val getWorkerProfileUseCase: GetWorkerProfileUseCase,
     private val updateWorkerProfileUseCase: UpdateWorkerProfileUseCase,
 ) : BaseViewModel() {
     private val _workerProfile = MutableStateFlow<WorkerProfile?>(null)
@@ -50,7 +52,7 @@ class WorkerProfileViewModel @Inject constructor(
         getMyWorkerProfile()
     }
 
-    private fun getMyWorkerProfile() = viewModelScope.launch {
+    fun getMyWorkerProfile() = viewModelScope.launch {
         getLocalMyWorkerProfileUseCase().onSuccess {
             _workerProfile.value = it
             _workerIntroduce.value = it.introduce ?: ""
@@ -59,6 +61,10 @@ class WorkerProfileViewModel @Inject constructor(
             _profileImageUri.value = it.profileImageUrl?.toUri()
             _experienceYear.value = it.experienceYear
         }.onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
+    }
+
+    fun getWorkerProfile() = viewModelScope.launch {
+
     }
 
     fun updateWorkerProfile() = viewModelScope.launch {

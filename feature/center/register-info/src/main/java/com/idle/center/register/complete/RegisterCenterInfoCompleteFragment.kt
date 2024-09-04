@@ -26,7 +26,6 @@ import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareCard
 import com.idle.designsystem.compose.foundation.CareTheme
-import com.idle.domain.model.auth.UserType
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -44,8 +43,7 @@ internal class CenterRegisterCompleteFragment : BaseComposeFragment() {
                     navigateToCenterProfile = {
                         baseEvent(
                             NavigateTo(
-                                CenterProfile(UserType.CENTER),
-                                R.id.registerCenterInfoCompleteFragment
+                                CenterProfile(""), R.id.registerCenterInfoCompleteFragment
                             )
                         )
                     },

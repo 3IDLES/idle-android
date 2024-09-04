@@ -10,7 +10,7 @@
         android:label="CenterProfileFragment">
         <deepLink app:uri="@string/center_profile_deeplink_url" />
         <argument
-            android:name="userType"
+            android:name="centerId"
             app:argType="string" />
     </fragment>
 </navigation>
