@@ -78,7 +78,7 @@ fun CareSnackBar(
     }
 }
 
-enum class SnackBarType {
+private enum class SnackBarType {
     ERROR, SUCCESS;
 
     companion object {
