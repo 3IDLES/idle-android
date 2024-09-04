@@ -40,7 +40,7 @@ fun CareSnackBar(
     val snackBarType = SnackBarType.create(type)
 
     val (backgroundColor, leftImage) = when (snackBarType) {
-        SnackBarType.SUCCESS -> CareTheme.colors.gray500 to R.drawable.ic_check_gray
+        SnackBarType.SUCCESS -> CareTheme.colors.gray500 to R.drawable.ic_success
         SnackBarType.ERROR -> CareTheme.colors.red to R.drawable.ic_error
     }
 
@@ -80,9 +80,18 @@ private enum class SnackBarType {
 
 @Preview(showBackground = true)
 @Composable
-fun CareSnackBarPreview() {
+fun CareSnackBarErrorPreview() {
     CareSnackBar(
-        data = MockSnackbarData("전화번호를 다시 확인해주세요."),
+        data = MockSnackbarData("전화번호를 다시 확인해주세요.|ERROR"),
+        modifier = Modifier.fillMaxWidth(),
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CareSnackBarSuccessPreview() {
+    CareSnackBar(
+        data = MockSnackbarData("지원이 완료되었습니다.|SUCCESS"),
         modifier = Modifier.fillMaxWidth(),
     )
 }
