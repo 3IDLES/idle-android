@@ -47,6 +47,8 @@ class CenterProfileViewModel @Inject constructor(
     internal fun getCenterProfile(centerId: String) = viewModelScope.launch {
         getCenterProfileUseCase(centerId).onSuccess {
             _centerProfile.value = it
+            _centerIntroduce.value = it.introduce ?: ""
+            _centerOfficeNumber.value = it.officeNumber
         }.onFailure {
             handleFailure(it as HttpResponseException)
         }

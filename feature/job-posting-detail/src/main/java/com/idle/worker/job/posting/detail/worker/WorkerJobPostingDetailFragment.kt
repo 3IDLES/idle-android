@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.navArgs
+import com.idle.binding.base.CareBaseEvent
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.domain.model.jobposting.CrawlingJobPostingDetail
@@ -83,6 +84,8 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
                                 addFavoriteJobPosting = ::addFavoriteJobPosting,
                                 removeFavoriteJobPosting = ::removeFavoriteJobPosting,
                                 applyJobPosting = ::applyJobPosting,
+                                navigateTo = { baseEvent(CareBaseEvent.NavigateTo(it)) }
+
                             )
                         } else {
                             CrawlingJobPostingDetailScreen(

@@ -29,7 +29,7 @@ interface UserApi {
 
     @GET("/api/v1/users/center/profile/{center-id}")
     suspend fun getCenterProfile(
-        @Path("center=id") centerId: String,
+        @Path("center-id") centerId: String,
     ): Response<GetCenterProfileResponse>
 
     @GET("/api/v1/users/{user-type}/my/profile-image/upload-url")

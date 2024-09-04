@@ -52,11 +52,11 @@ data class JobPostingSummaryResponse(
 data class JobPostingApplicantResponse(
     val age: Int,
     val carerId: String,
-    val experienceYear: Int,
+    val experienceYear: Int?,
     val gender: String,
     val jobSearchStatus: String,
     val name: String,
-    val profileImageUrl: String
+    val profileImageUrl: String?,
 ) {
     fun toVO() = Applicant(
         age = age,

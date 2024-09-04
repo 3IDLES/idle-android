@@ -151,8 +151,8 @@ fun JobEditScreen(
                     val roadName = it.get<String>("roadNameAddress")
                     val lotNumber = it.get<String>("lotNumberAddress")
 
-                    localRoadNameAddress = roadName ?: ""
-                    localLotNumberAddress = lotNumber ?: ""
+                    localRoadNameAddress = roadName ?: return@let
+                    localLotNumberAddress = lotNumber ?: return@let
                 }
             }
         }

@@ -280,11 +280,19 @@ private fun WorkerProfileCard(
                             modifier = Modifier.padding(horizontal = 8.dp),
                         )
 
-                        Text(
-                            text = "${applicant.experienceYear}년차",
-                            style = CareTheme.typography.body2,
-                            color = CareTheme.colors.gray500,
-                        )
+                        if(applicant.experienceYear != null) {
+                            Text(
+                                text = "${applicant.experienceYear}년차",
+                                style = CareTheme.typography.body2,
+                                color = CareTheme.colors.gray500,
+                            )
+                        } else {
+                            Text(
+                                text = "경력 미기입",
+                                style = CareTheme.typography.body2,
+                                color = CareTheme.colors.gray500,
+                            )
+                        }
                     }
                 }
 

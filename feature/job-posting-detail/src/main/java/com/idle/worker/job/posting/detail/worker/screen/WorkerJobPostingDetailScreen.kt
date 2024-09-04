@@ -44,6 +44,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import com.idle.binding.DeepLinkDestination
+import com.idle.binding.DeepLinkDestination.CenterProfile
 import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareBottomSheetLayout
@@ -72,6 +74,7 @@ internal fun WorkerJobPostingDetailScreen(
     addFavoriteJobPosting: (String, JobPostingType) -> Unit,
     removeFavoriteJobPosting: (String, JobPostingType) -> Unit,
     applyJobPosting: (String, ApplyMethod) -> Unit,
+    navigateTo: (DeepLinkDestination) -> Unit,
 ) {
     val onBackPressedDispatcher =
         LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
@@ -736,6 +739,7 @@ internal fun WorkerJobPostingDetailScreen(
                         CareCard(
                             title = jobPostingDetail.centerName,
                             description = jobPostingDetail.centerRoadNameAddress,
+                            onClick = { navigateTo(CenterProfile(jobPostingDetail.centerId)) }
                         )
                     }
                 }

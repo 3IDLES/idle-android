@@ -61,6 +61,8 @@ internal class CenterProfileFragment : BaseComposeFragment() {
 
     @Composable
     override fun ComposeLayout() {
+        val isMyProfile = args.centerId == "default"
+
         fragmentViewModel.apply {
             val centerProfile by centerProfile.collectAsStateWithLifecycle()
             val centerOfficeNumber by centerOfficeNumber.collectAsStateWithLifecycle()
@@ -69,7 +71,7 @@ internal class CenterProfileFragment : BaseComposeFragment() {
             val profileImageUri by profileImageUri.collectAsStateWithLifecycle()
 
             LaunchedEffect(true) {
-                if (args.centerId == "Default") {
+                if (args.centerId == "default") {
                     getMyCenterProfile()
                 } else {
                     getCenterProfile(args.centerId)
@@ -78,6 +80,7 @@ internal class CenterProfileFragment : BaseComposeFragment() {
 
             centerProfile?.let {
                 CenterProfileScreen(
+                    isMyProfile = isMyProfile,
                     snackbarHostState = snackbarHostState,
                     centerProfile = it,
                     centerOfficeNumber = centerOfficeNumber,
@@ -97,6 +100,7 @@ internal class CenterProfileFragment : BaseComposeFragment() {
 
 @Composable
 internal fun CenterProfileScreen(
+    isMyProfile: Boolean,
     snackbarHostState: SnackbarHostState,
     centerProfile: CenterProfile,
     centerOfficeNumber: String,
@@ -123,7 +127,7 @@ internal fun CenterProfileScreen(
                 title = stringResource(id = R.string.my_center_info),
                 onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
                 leftComponent = {
-                    if (isEditState) {
+                    if (isMyProfile && isEditState) {
                         Text(
                             text = stringResource(id = R.string.save),
                             style = CareTheme.typography.subtitle2,
@@ -207,7 +211,7 @@ internal fun CenterProfileScreen(
                         color = CareTheme.colors.gray900,
                     )
 
-                    if (!isEditState) {
+                    if (isMyProfile && !isEditState) {
                         CareButtonRound(
                             text = stringResource(id = R.string.edit),
                             onClick = { setEditState(true) }
