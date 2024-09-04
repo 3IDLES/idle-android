@@ -631,7 +631,7 @@ internal fun JobPostingScreen(
                             snackbar = { data ->
                                 CareSnackBar(
                                     data = data,
-                                    modifier = Modifier.padding(bottom = 108.dp)
+                                    modifier = Modifier.padding(bottom = 138.dp)
                                 )
                             }
                         )

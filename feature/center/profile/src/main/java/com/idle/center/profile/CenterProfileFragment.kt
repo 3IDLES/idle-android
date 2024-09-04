@@ -49,6 +49,7 @@ import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.CareTextFieldLong
 import com.idle.designsystem.compose.component.LabeledContent
+import com.idle.designsystem.compose.component.SnackBarType
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.profile.CenterProfile
 import dagger.hilt.android.AndroidEntryPoint
@@ -132,7 +133,12 @@ internal fun CenterProfileScreen(
         snackbarHost = {
             SnackbarHost(
                 hostState = snackbarHostState,
-                snackbar = { data -> CareSnackBar(data = data) }
+                snackbar = { data ->
+                    CareSnackBar(
+                        data = data,
+                        modifier = Modifier.padding(bottom = 138.dp)
+                    )
+                }
             )
         },
         containerColor = CareTheme.colors.white000,

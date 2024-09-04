@@ -3,7 +3,7 @@ package com.idle.domain.model.jobposting
 import java.time.LocalDate
 import java.time.ZoneId
 
-open class JobPosting(
+abstract class JobPosting(
     open val id: String,
     open val distance: Int,
     open val jobPostingType: JobPostingType,

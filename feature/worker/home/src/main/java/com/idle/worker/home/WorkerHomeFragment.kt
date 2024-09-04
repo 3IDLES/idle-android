@@ -18,6 +18,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -42,6 +44,7 @@ import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonCardLarge
 import com.idle.designsystem.compose.component.CareHeadingTopBar
+import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.jobposting.CrawlingJobPosting
@@ -63,6 +66,7 @@ internal class WorkerHomeFragment : BaseComposeFragment() {
             val jobPostings by jobPostings.collectAsStateWithLifecycle()
 
             WorkerHomeScreen(
+                snackbarHostState = snackbarHostState,
                 profile = profile,
                 workerJobPostings = jobPostings,
                 getJobPostings = ::getJobPostings,
@@ -77,6 +81,7 @@ internal class WorkerHomeFragment : BaseComposeFragment() {
 
 @Composable
 internal fun WorkerHomeScreen(
+    snackbarHostState: SnackbarHostState,
     profile: WorkerProfile?,
     workerJobPostings: List<JobPosting>,
     getJobPostings: () -> Unit,
@@ -126,7 +131,18 @@ internal fun WorkerHomeScreen(
                     bottom = 8.dp
                 ),
             )
-        }
+        },
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+                snackbar = { data ->
+                    CareSnackBar(
+                        data = data,
+                        modifier = Modifier.padding(bottom = 20.dp)
+                    )
+                }
+            )
+        },
     ) { paddingValue ->
         Column(
             modifier = Modifier

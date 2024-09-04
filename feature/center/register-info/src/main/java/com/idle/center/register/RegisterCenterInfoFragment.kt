@@ -22,6 +22,9 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
+import com.idle.center.register.step.CenterAddressScreen
+import com.idle.center.register.step.CenterInfoScreen
+import com.idle.center.register.step.CenterIntroduceScreen
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
@@ -30,9 +33,6 @@ import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.post.code.PostCodeFragment
-import com.idle.center.register.step.CenterAddressScreen
-import com.idle.center.register.step.CenterInfoScreen
-import com.idle.center.register.step.CenterIntroduceScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -134,7 +134,12 @@ internal fun CenterRegisterScreen(
         snackbarHost = {
             SnackbarHost(
                 hostState = snackbarHostState,
-                snackbar = { data -> CareSnackBar(data = data) }
+                snackbar = { data ->
+                    CareSnackBar(
+                        data = data,
+                        modifier = Modifier.padding(bottom = 138.dp)
+                    )
+                }
             )
         },
         modifier = Modifier.addFocusCleaner(focusManager),
