@@ -44,7 +44,6 @@ import com.idle.designsystem.compose.component.CareButtonCardMedium
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.foundation.CareTheme
-import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.jobposting.Applicant
 import com.idle.domain.model.jobposting.JobPostingSummary
 import dagger.hilt.android.AndroidEntryPoint
@@ -218,7 +217,7 @@ private fun WorkerProfileCard(
             disabledContentColor = CareTheme.colors.white000,
         ),
         border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
-        onClick = { navigateTo(DeepLinkDestination.WorkerProfile(UserType.CENTER)) },
+        onClick = { navigateTo(DeepLinkDestination.WorkerProfile(applicant.carerId)) },
         modifier = Modifier.fillMaxWidth(),
     ) {
         Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
