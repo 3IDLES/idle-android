@@ -6,6 +6,7 @@ import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.profile.CenterProfile
+import com.idle.domain.usecase.profile.GetCenterProfileUseCase
 import com.idle.domain.usecase.profile.GetLocalMyCenterProfileUseCase
 import com.idle.domain.usecase.profile.UpdateCenterProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,6 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CenterProfileViewModel @Inject constructor(
     private val getLocalMyCenterProfileUseCase: GetLocalMyCenterProfileUseCase,
+    private val getCenterProfileUseCase: GetCenterProfileUseCase,
     private val updateCenterProfileUseCase: UpdateCenterProfileUseCase,
 ) : BaseViewModel() {
     private val _centerProfile = MutableStateFlow<CenterProfile?>(null)
@@ -34,16 +36,20 @@ class CenterProfileViewModel @Inject constructor(
     private val _profileImageUri = MutableStateFlow<Uri?>(null)
     val profileImageUri = _profileImageUri.asStateFlow()
 
-    init {
-        getMyCenterProfile()
-    }
-
-    private fun getMyCenterProfile() = viewModelScope.launch {
+    internal fun getMyCenterProfile() = viewModelScope.launch {
         getLocalMyCenterProfileUseCase().onSuccess {
             _centerProfile.value = it
             _centerIntroduce.value = it.introduce ?: ""
             _centerOfficeNumber.value = it.officeNumber
         }.onFailure { handleFailure(it as HttpResponseException) }
+    }
+
+    internal fun getCenterProfile(centerId: String) = viewModelScope.launch {
+        getCenterProfileUseCase(centerId).onSuccess {
+            _centerProfile.value = it
+        }.onFailure {
+            handleFailure(it as HttpResponseException)
+        }
     }
 
     fun updateCenterProfile() = viewModelScope.launch {

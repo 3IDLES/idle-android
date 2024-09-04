@@ -74,6 +74,9 @@ class ProfileRepositoryImpl @Inject constructor(
         )
     }
 
+    override suspend fun getCenterProfile(centerId: String): Result<CenterProfile> =
+        profileDataSource.getCenterProfile(centerId).mapCatching { it.toVO() }
+
     override suspend fun getMyWorkerProfile(): Result<WorkerProfile> =
         profileDataSource.getMyWorkerProfile().mapCatching { it.toVo() }
             .onSuccess {

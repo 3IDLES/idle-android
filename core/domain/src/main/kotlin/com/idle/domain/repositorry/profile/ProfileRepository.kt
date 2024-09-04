@@ -11,6 +11,8 @@ interface ProfileRepository {
 
     suspend fun getLocalMyCenterProfile(): Result<CenterProfile>
 
+    suspend fun getCenterProfile(centerId: String): Result<CenterProfile>
+
     suspend fun getMyWorkerProfile(): Result<WorkerProfile>
 
     suspend fun getLocalMyWorkerProfile(): Result<WorkerProfile>
