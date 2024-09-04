@@ -25,7 +25,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,6 +45,7 @@ import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonCardLarge
+import com.idle.designsystem.compose.component.CareDialog
 import com.idle.designsystem.compose.component.CareHeadingTopBar
 import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareTag
@@ -105,6 +108,41 @@ internal fun WorkerHomeScreen(
         }
     }
 
+    var showDialog by remember { mutableStateOf(false) }
+    var selectedJobPosting by remember { mutableStateOf<WorkerJobPosting?>(null) }
+
+    if (showDialog) {
+        CareDialog(
+            title = "`${
+                try {
+                    selectedJobPosting?.lotNumberAddress
+                        ?.split(" ")
+                        ?.subList(0, 3)
+                        ?.joinToString(" ")
+                        ?: "방금 선택한"
+                } catch (e: IndexOutOfBoundsException) {
+                    "방금 선택한"
+                }
+            }`\n공고에 지원하시겠어요?",
+            leftButtonText = stringResource(id = R.string.cancel),
+            rightButtonText = stringResource(id = R.string.recruit),
+            leftButtonTextColor = CareTheme.colors.gray300,
+            leftButtonColor = CareTheme.colors.white000,
+            leftButtonBorder = BorderStroke(1.dp, CareTheme.colors.gray100),
+            rightButtonTextColor = CareTheme.colors.white000,
+            rightButtonColor = CareTheme.colors.orange500,
+            onDismissRequest = { showDialog = false },
+            onLeftButtonClick = { showDialog = false },
+            onRightButtonClick = {
+                applyJobPosting(selectedJobPosting?.id ?: return@CareDialog)
+                showDialog = false
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+        )
+    }
+
     Scaffold(
         containerColor = CareTheme.colors.white000,
         topBar = {
@@ -164,7 +202,10 @@ internal fun WorkerHomeScreen(
                     when (jobPosting.jobPostingType) {
                         JobPostingType.CAREMEET -> WorkerRecruitmentCard(
                             jobPosting = jobPosting as WorkerJobPosting,
-                            applyJobPosting = applyJobPosting,
+                            showDialog = {
+                                selectedJobPosting = it
+                                showDialog = true
+                            },
                             addFavoriteJobPosting = addFavoriteJobPosting,
                             removeFavoriteJobPosting = removeFavoriteJobPosting,
                             navigateTo = navigateTo,
@@ -194,7 +235,7 @@ internal fun WorkerHomeScreen(
 @Composable
 private fun WorkerRecruitmentCard(
     jobPosting: WorkerJobPosting,
-    applyJobPosting: (String) -> Unit,
+    showDialog: (WorkerJobPosting) -> Unit,
     addFavoriteJobPosting: (String, JobPostingType) -> Unit,
     removeFavoriteJobPosting: (String, JobPostingType) -> Unit,
     navigateTo: (DeepLinkDestination) -> Unit,
@@ -353,7 +394,7 @@ private fun WorkerRecruitmentCard(
                     }"
                 } else stringResource(id = R.string.recruit),
                 enable = jobPosting.applyTime == null,
-                onClick = { applyJobPosting(jobPosting.id) },
+                onClick = { showDialog(jobPosting) },
                 modifier = Modifier.fillMaxWidth(),
             )
         }
