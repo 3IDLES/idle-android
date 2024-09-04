@@ -45,15 +45,11 @@ class WorkerProfileViewModel @Inject constructor(
     private val _profileImageUri = MutableStateFlow<Uri?>(null)
     val profileImageUri = _profileImageUri.asStateFlow()
 
-    private val _gender = MutableStateFlow(Gender.NONE)
-    internal val gender = _gender.asStateFlow()
-
     internal fun getMyWorkerProfile() = viewModelScope.launch {
         getLocalMyWorkerProfileUseCase().onSuccess {
             _workerProfile.value = it
             _workerIntroduce.value = it.introduce ?: ""
             _specialty.value = it.speciality ?: ""
-            _gender.value = it.gender
             _profileImageUri.value = it.profileImageUrl?.toUri()
             _experienceYear.value = it.experienceYear
             _roadNameAddress.value = it.roadNameAddress
@@ -85,6 +81,7 @@ class WorkerProfileViewModel @Inject constructor(
             imageFileUri = _profileImageUri.value?.toString(),
             jobSearchStatus = _workerProfile.value!!.jobSearchStatus,
         ).onSuccess {
+            getMyWorkerProfile()
             baseEvent(CareBaseEvent.ShowSnackBar("정보 수정이 완료되었어요.|SUCCESS"))
             setEditState(false)
         }.onFailure {
@@ -114,5 +111,9 @@ class WorkerProfileViewModel @Inject constructor(
 
     fun setLotNumberAddress(lotNumberAddress: String) {
         _lotNumberAddress.value = lotNumberAddress
+    }
+
+    fun setExperienceYear(experienceYear: Int) {
+        _experienceYear.value = experienceYear
     }
 }
