@@ -91,7 +91,7 @@ internal fun AuthScreen(
                 snackbar = { data ->
                     CareSnackBar(
                         data = data,
-                        modifier = Modifier.padding(bottom = 104.dp)
+                        modifier = Modifier.padding(bottom = 138.dp)
                     )
                 }
             )

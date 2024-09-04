@@ -88,6 +88,8 @@ class WorkerHomeViewModel @Inject constructor(
             jobPostingId = jobPostingId,
             applyMethod = ApplyMethod.APP
         ).onSuccess {
+            baseEvent(CareBaseEvent.ShowSnackBar("지원이 완료되었어요.|SUCCESS"))
+
             _jobPostings.value = _jobPostings.value.map {
                 if (it.jobPostingType == JobPostingType.CAREMEET && it.id == jobPostingId) {
                     val jobPosting = it as WorkerJobPosting
@@ -105,6 +107,8 @@ class WorkerHomeViewModel @Inject constructor(
             jobPostingId = jobPostingId,
             jobPostingType = jobPostingType,
         ).onSuccess {
+            baseEvent(CareBaseEvent.ShowSnackBar("즐겨찾기에 추가되었어요.|SUCCESS"))
+
             _jobPostings.value = _jobPostings.value.map {
                 when (it.jobPostingType) {
                     JobPostingType.CAREMEET -> {
@@ -129,6 +133,8 @@ class WorkerHomeViewModel @Inject constructor(
             jobPostingId = jobPostingId,
             jobPostingType = jobPostingType,
         ).onSuccess {
+            baseEvent(CareBaseEvent.ShowSnackBar("즐겨찾기에서 제거되었어요.|SUCCESS"))
+
             _jobPostings.value = _jobPostings.value.map {
                 when (it.jobPostingType) {
                     JobPostingType.CAREMEET -> {

@@ -24,11 +24,11 @@ open class BaseViewModel : ViewModel() {
             ApiErrorCode.TokenExpiredException,
             ApiErrorCode.TokenNotFound,
             ApiErrorCode.NotSupportUserTokenType -> {
-                _baseEventFlow.emit(CareBaseEvent.ShowSnackBar(error.apiErrorCode.displayMsg))
+                _baseEventFlow.emit(CareBaseEvent.ShowSnackBar(error.apiErrorCode.displayMsg + "|Error"))
                 _baseEventFlow.emit(CareBaseEvent.NavigateToAuthWithClearBackStack)
             }
 
-            else -> _baseEventFlow.emit(CareBaseEvent.ShowSnackBar(error.apiErrorCode.displayMsg))
+            else -> _baseEventFlow.emit(CareBaseEvent.ShowSnackBar(error.apiErrorCode.displayMsg + "|Error"))
         }
     }
 }
