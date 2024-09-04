@@ -116,6 +116,9 @@ internal fun AuthScreen(
                     text = stringResource(id = string.auth_title),
                     style = CareTheme.typography.heading1,
                     color = CareTheme.colors.gray900,
+                    modifier = Modifier.clickable {
+                        throw RuntimeException("Test Crash") // Force a crash
+                    }
                 )
 
                 Spacer(modifier = Modifier.weight(2f))
