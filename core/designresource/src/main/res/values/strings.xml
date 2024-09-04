@@ -59,6 +59,8 @@
     <string name="notification_setting">알림 설정</string>
     <string name="logout"><u>로그아웃</u></string>
     <string name="withdrawal"><u>회원탈퇴</u></string>
+    <string name="is_working">근무중</string>
+    <string name="is_job_searching">구직중</string>
 
     <!-- Job Posting & Recruitment -->
     <string name="post_job_posting">공고 등록</string>
