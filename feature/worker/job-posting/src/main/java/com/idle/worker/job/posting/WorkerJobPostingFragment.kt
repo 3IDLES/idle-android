@@ -17,6 +17,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -39,6 +41,7 @@ import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonCardLarge
 import com.idle.designsystem.compose.component.CareHeadingTopBar
+import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareTabBar
 import com.idle.designsystem.compose.component.CareTag
@@ -69,6 +72,7 @@ internal class WorkerJobPostingFragment : BaseComposeFragment() {
             }
 
             WorkerJobPostingScreen(
+                snackbarHostState = snackbarHostState,
                 recruitmentPostStatus = recruitmentPostStatus,
                 appliedJobPostings = appliedJobPostings,
                 favoritesJobPostings = favoritesJobPostings,
@@ -84,6 +88,7 @@ internal class WorkerJobPostingFragment : BaseComposeFragment() {
 
 @Composable
 internal fun WorkerJobPostingScreen(
+    snackbarHostState: SnackbarHostState,
     recruitmentPostStatus: RecruitmentPostStatus,
     appliedJobPostings: List<JobPosting>,
     favoritesJobPostings: List<JobPosting>,
@@ -104,6 +109,17 @@ internal fun WorkerJobPostingScreen(
                     top = 48.dp,
                     bottom = 8.dp
                 ),
+            )
+        },
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+                snackbar = { data ->
+                    CareSnackBar(
+                        data = data,
+                        modifier = Modifier.padding(bottom = 20.dp)
+                    )
+                }
             )
         },
     ) { paddingValue ->

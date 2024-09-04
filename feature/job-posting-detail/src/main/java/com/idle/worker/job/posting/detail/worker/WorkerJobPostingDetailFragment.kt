@@ -76,6 +76,7 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
                     } else {
                         if (jobPosting.jobPostingType == JobPostingType.CAREMEET) {
                             WorkerJobPostingDetailScreen(
+                                snackbarHostState = snackbarHostState,
                                 profile = profile,
                                 jobPostingDetail = jobPosting as WorkerJobPostingDetail,
                                 showPlaceDetail = setShowPlaceDetail,
@@ -85,6 +86,7 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
                             )
                         } else {
                             CrawlingJobPostingDetailScreen(
+                                snackbarHostState = snackbarHostState,
                                 profile = profile,
                                 jobPostingDetail = jobPosting as CrawlingJobPostingDetail,
                                 showPlaceDetail = setShowPlaceDetail,

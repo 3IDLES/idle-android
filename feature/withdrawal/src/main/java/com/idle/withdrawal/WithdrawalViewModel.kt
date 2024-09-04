@@ -126,6 +126,7 @@ class WithdrawalViewModel @Inject constructor(
                     popUpTo = com.idle.withdrawal.R.id.withdrawalFragment,
                 )
             )
+            baseEvent(CareBaseEvent.ShowSnackBar("회원탈퇴가 완료되었어요.|ERROR"))
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
@@ -136,6 +137,7 @@ class WithdrawalViewModel @Inject constructor(
                 .joinToString("|"),
         ).onSuccess {
             baseEvent(CareBaseEvent.NavigateToAuthWithClearBackStack)
+            baseEvent(CareBaseEvent.ShowSnackBar("회원탈퇴가 완료되었어요.|ERROR"))
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 }

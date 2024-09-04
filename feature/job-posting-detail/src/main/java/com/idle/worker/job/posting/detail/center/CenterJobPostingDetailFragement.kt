@@ -11,6 +11,8 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -39,6 +41,7 @@ import com.idle.designsystem.compose.component.CareBottomSheetLayout
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareCard
 import com.idle.designsystem.compose.component.CareDialog
+import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.foundation.CareTheme
@@ -74,6 +77,7 @@ internal class CenterJobPostingDetailFragment : BaseComposeFragment() {
                 if (state) {
                     jobPostingDetail?.let {
                         JobEditScreen(
+                            snackbarHostState = snackbarHostState,
                             fragmentManager = parentFragmentManager,
                             weekDays = it.weekdays,
                             workStartTime = it.startTime,
@@ -104,6 +108,7 @@ internal class CenterJobPostingDetailFragment : BaseComposeFragment() {
                     }
                 } else {
                     CenterJobPostingDetailScreen(
+                        snackbarHostState = snackbarHostState,
                         jobPostingId = jobPostingId,
                         jobPostingDetail = jobPostingDetail,
                         applicantsCount = applicantsCount,
@@ -120,6 +125,7 @@ internal class CenterJobPostingDetailFragment : BaseComposeFragment() {
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun CenterJobPostingDetailScreen(
+    snackbarHostState: SnackbarHostState,
     jobPostingId: String,
     jobPostingDetail: CenterJobPostingDetail?,
     applicantsCount: Int,
@@ -229,6 +235,17 @@ internal fun CenterJobPostingDetailScreen(
                                 end = 20.dp,
                                 bottom = 12.dp
                             ),
+                    )
+                },
+                snackbarHost = {
+                    SnackbarHost(
+                        hostState = snackbarHostState,
+                        snackbar = { data ->
+                            CareSnackBar(
+                                data = data,
+                                modifier = Modifier.padding(bottom = 117.dp)
+                            )
+                        }
                     )
                 },
                 containerColor = CareTheme.colors.white000,

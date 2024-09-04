@@ -2,6 +2,7 @@ package com.idle.worker.job.posting.detail.worker
 
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
+import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.jobposting.ApplyMethod
 import com.idle.domain.model.jobposting.CrawlingJobPostingDetail
@@ -64,6 +65,8 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
                 jobPostingId = jobPostingId,
                 applyMethod = applyMethod,
             ).onSuccess {
+                baseEvent(CareBaseEvent.ShowSnackBar("지원이 완료되었어요.|SUCCESS"))
+
                 if (_workerJobPostingDetail.value?.jobPostingType == JobPostingType.CAREMEET) {
                     _workerJobPostingDetail.value =
                         (_workerJobPostingDetail.value as WorkerJobPostingDetail).copy(applyTime = LocalDateTime.now())
@@ -79,6 +82,8 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
             jobPostingId = jobPostingId,
             jobPostingType = jobPostingType,
         ).onSuccess {
+            baseEvent(CareBaseEvent.ShowSnackBar("즐겨찾기에 추가되었어요.|SUCCESS"))
+
             when (jobPostingType) {
                 JobPostingType.CAREMEET -> {
                     _workerJobPostingDetail.value =
@@ -101,6 +106,8 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
             jobPostingId = jobPostingId,
             jobPostingType = jobPostingType,
         ).onSuccess {
+            baseEvent(CareBaseEvent.ShowSnackBar("즐겨찾기에서 제거되었어요.|SUCCESS"))
+
             when (jobPostingType) {
                 JobPostingType.CAREMEET -> {
                     _workerJobPostingDetail.value =

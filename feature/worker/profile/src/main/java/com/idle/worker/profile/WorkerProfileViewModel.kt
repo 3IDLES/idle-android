@@ -77,6 +77,7 @@ class WorkerProfileViewModel @Inject constructor(
             imageFileUri = _profileImageUri.value?.toString(),
             jobSearchStatus = _workerProfile.value!!.jobSearchStatus,
         ).onSuccess {
+            baseEvent(CareBaseEvent.ShowSnackBar("정보 수정이 완료되었어요.|ERROR"))
             setEditState(false)
         }.onFailure {
             baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
@@ -97,17 +98,5 @@ class WorkerProfileViewModel @Inject constructor(
 
     fun setProfileImageUrl(uri: Uri?) {
         _profileImageUri.value = uri
-    }
-
-    internal fun setGender(gender: Gender) {
-        _gender.value = gender
-    }
-
-    internal fun setRoadNameAddress(address: String) {
-        _roadNameAddress.value = address
-    }
-
-    internal fun setLotNumberAddress(address: String) {
-        _lotNumberAddress.value = address
     }
 }
