@@ -23,6 +23,8 @@ import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -57,6 +59,7 @@ import com.idle.designsystem.compose.component.CareCalendar
 import com.idle.designsystem.compose.component.CareChipBasic
 import com.idle.designsystem.compose.component.CareChipShort
 import com.idle.designsystem.compose.component.CareClickableTextField
+import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.CareTextFieldLong
@@ -80,6 +83,7 @@ import java.time.ZoneId
 @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun JobEditScreen(
+    snackbarHostState: SnackbarHostState,
     weekDays: Set<DayOfWeek>,
     workStartTime: String,
     workEndTime: String,
@@ -430,6 +434,17 @@ fun JobEditScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 12.dp, top = 48.dp, end = 20.dp, bottom = 12.dp),
+                )
+            },
+            snackbarHost = {
+                SnackbarHost(
+                    hostState = snackbarHostState,
+                    snackbar = { data ->
+                        CareSnackBar(
+                            data = data,
+                            modifier = Modifier.padding(bottom = 138.dp)
+                        )
+                    }
                 )
             },
             containerColor = CareTheme.colors.white000,

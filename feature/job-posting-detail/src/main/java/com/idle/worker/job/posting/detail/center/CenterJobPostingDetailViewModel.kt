@@ -82,6 +82,8 @@ class CenterJobPostingDetailViewModel @Inject constructor(
             applyDeadlineType = editJobPostingDetail.applyDeadlineType,
             applyDeadline = editJobPostingDetail.applyDeadline.toString().ifBlank { null },
         ).onSuccess {
+            baseEvent(CareBaseEvent.ShowSnackBar("수정이 완료되었어요.|SUCCESS"))
+
             _jobPostingDetail.value = CenterJobPostingDetail(
                 id = _jobPostingDetail.value?.id ?: return@launch,
                 weekdays = editJobPostingDetail.weekdays,
@@ -121,6 +123,7 @@ class CenterJobPostingDetailViewModel @Inject constructor(
                     R.id.centerJobPostingDetailFragment
                 )
             )
+            baseEvent(CareBaseEvent.ShowSnackBar("채용이 종료되었어요.|SUCCESS"))
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 }

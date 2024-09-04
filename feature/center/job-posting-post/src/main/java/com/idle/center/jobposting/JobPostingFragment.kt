@@ -133,6 +133,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
             ) { state ->
                 if (state) {
                     JobEditScreen(
+                        snackbarHostState = snackbarHostState,
                         weekDays = weekDays,
                         workStartTime = workStartTime,
                         workEndTime = workEndTime,

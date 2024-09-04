@@ -20,6 +20,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,6 +42,7 @@ import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareCard
 import com.idle.designsystem.compose.component.CareMap
+import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.foundation.CareTheme
@@ -49,6 +52,7 @@ import com.idle.domain.model.profile.WorkerProfile
 
 @Composable
 internal fun CrawlingJobPostingDetailScreen(
+    snackbarHostState: SnackbarHostState,
     profile: WorkerProfile?,
     jobPostingDetail: CrawlingJobPostingDetail,
     showPlaceDetail: (Boolean) -> Unit,
@@ -73,7 +77,18 @@ internal fun CrawlingJobPostingDetailScreen(
                 ),
                 onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
             )
-        }
+        },
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+                snackbar = { data ->
+                    CareSnackBar(
+                        data = data,
+                        modifier = Modifier.padding(bottom = 20.dp)
+                    )
+                }
+            )
+        },
     ) { paddingValue ->
         val starTintColor by animateColorAsState(
             targetValue = if (jobPostingDetail.isFavorite) CareTheme.colors.orange300

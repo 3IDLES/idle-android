@@ -3,6 +3,7 @@ package com.idle.center.profile
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
+import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.usecase.profile.GetLocalMyCenterProfileUseCase
@@ -60,6 +61,7 @@ class CenterProfileViewModel @Inject constructor(
             introduce = _centerIntroduce.value.ifBlank { null },
             imageFileUri = _profileImageUri.value?.toString(),
         ).onSuccess {
+            baseEvent(CareBaseEvent.ShowSnackBar("정보 수정이 완료되었어요.|ERROR"))
             setEditState(false)
         }.onFailure {
             handleFailure(it as HttpResponseException)

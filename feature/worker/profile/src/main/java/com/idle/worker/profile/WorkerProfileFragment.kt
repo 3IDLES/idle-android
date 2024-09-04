@@ -21,6 +21,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
@@ -39,6 +41,7 @@ import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonRound
 import com.idle.designsystem.compose.component.CareClickableTextField
+import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.component.CareTextField
@@ -74,6 +77,7 @@ internal class WorkerProfileFragment : BaseComposeFragment() {
 
             workerProfile?.let {
                 WorkerProfileScreen(
+                    snackbarHostState = snackbarHostState,
                     isEditState = isEditState,
                     workerProfile = it,
                     workerIntroduce = workerIntroduce,
@@ -94,6 +98,7 @@ internal class WorkerProfileFragment : BaseComposeFragment() {
 
 @Composable
 internal fun WorkerProfileScreen(
+    snackbarHostState: SnackbarHostState,
     workerProfile: WorkerProfile,
     workerIntroduce: String,
     specialty: String,
@@ -147,6 +152,17 @@ internal fun WorkerProfileScreen(
                         .padding(start = 12.dp, top = 48.dp, end = 20.dp, bottom = 12.dp),
                 )
             }
+        },
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+                snackbar = { data ->
+                    CareSnackBar(
+                        data = data,
+                        modifier = Modifier.padding(bottom = 20.dp)
+                    )
+                }
+            )
         },
         containerColor = CareTheme.colors.white000,
         modifier = Modifier.addFocusCleaner(focusManager),
