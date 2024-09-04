@@ -23,6 +23,9 @@ class ProfileDataSource @Inject constructor(
     suspend fun updateMyCenterProfile(updateCenterProfileRequest: UpdateCenterProfileRequest): Result<Unit> =
         userApi.updateMyCenterProfile(updateCenterProfileRequest).onResponse()
 
+    suspend fun getCenterProfile(centerId: String): Result<GetCenterProfileResponse> =
+        userApi.getCenterProfile(centerId).onResponse()
+
     suspend fun getProfileImageUploadUrl(
         userType: String,
         imageFileExtension: String

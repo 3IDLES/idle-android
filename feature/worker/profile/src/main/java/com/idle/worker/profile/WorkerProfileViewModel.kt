@@ -48,11 +48,7 @@ class WorkerProfileViewModel @Inject constructor(
     private val _gender = MutableStateFlow(Gender.NONE)
     internal val gender = _gender.asStateFlow()
 
-    init {
-        getMyWorkerProfile()
-    }
-
-    fun getMyWorkerProfile() = viewModelScope.launch {
+    internal fun getMyWorkerProfile() = viewModelScope.launch {
         getLocalMyWorkerProfileUseCase().onSuccess {
             _workerProfile.value = it
             _workerIntroduce.value = it.introduce ?: ""
@@ -63,8 +59,12 @@ class WorkerProfileViewModel @Inject constructor(
         }.onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
     }
 
-    fun getWorkerProfile() = viewModelScope.launch {
-
+    internal fun getWorkerProfile(workerId: String) = viewModelScope.launch {
+        getWorkerProfileUseCase(workerId).onSuccess {
+            _workerProfile.value = it
+        }.onFailure {
+            baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
+        }
     }
 
     fun updateWorkerProfile() = viewModelScope.launch {
