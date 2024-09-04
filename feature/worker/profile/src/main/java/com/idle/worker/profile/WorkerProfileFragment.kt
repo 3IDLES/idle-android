@@ -36,6 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
@@ -55,6 +56,7 @@ import com.idle.domain.model.profile.JobSearchStatus.NO
 import com.idle.domain.model.profile.JobSearchStatus.UNKNOWN
 import com.idle.domain.model.profile.JobSearchStatus.YES
 import com.idle.domain.model.profile.WorkerProfile
+import com.idle.post.code.PostCodeFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -62,8 +64,24 @@ internal class WorkerProfileFragment : BaseComposeFragment() {
     private val args: WorkerProfileFragmentArgs by navArgs()
     override val fragmentViewModel: WorkerProfileViewModel by viewModels()
 
+    val postCodeDialog: PostCodeFragment? by lazy {
+        PostCodeFragment().apply {
+            onDismissCallback = {
+                findNavController().currentBackStackEntry?.savedStateHandle?.let {
+                    val roadName = it.get<String>("roadNameAddress")
+                    val lotNumber = it.get<String>("lotNumberAddress")
+
+                    fragmentViewModel.setRoadNameAddress(roadName ?: "")
+                    fragmentViewModel.setLotNumberAddress(lotNumber ?: "")
+                }
+            }
+        }
+    }
+
     @Composable
     override fun ComposeLayout() {
+        val isMyProfile = args.workerId == "default"
+
         fragmentViewModel.apply {
             val workerProfile by workerProfile.collectAsStateWithLifecycle()
             val workerIntroduce by workerIntroduce.collectAsStateWithLifecycle()
@@ -72,6 +90,7 @@ internal class WorkerProfileFragment : BaseComposeFragment() {
             val isEditState by isEditState.collectAsStateWithLifecycle()
             val profileImageUri by profileImageUri.collectAsStateWithLifecycle()
             val experienceYear by experienceYear.collectAsStateWithLifecycle()
+            val roadNameAddress by roadNameAddress.collectAsStateWithLifecycle()
 
             val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.PickVisualMedia(),
@@ -79,16 +98,17 @@ internal class WorkerProfileFragment : BaseComposeFragment() {
             )
 
             LaunchedEffect(true) {
-                if (args.carerId.isBlank()) {
+                if (args.workerId == "default") {
                     getMyWorkerProfile()
                 } else {
-                    getWorkerProfile(args.carerId)
+                    getWorkerProfile(args.workerId)
                 }
             }
 
             workerProfile?.let {
                 WorkerProfileScreen(
                     snackbarHostState = snackbarHostState,
+                    isMyProfile = isMyProfile,
                     isEditState = isEditState,
                     workerProfile = it,
                     workerIntroduce = workerIntroduce,
@@ -97,6 +117,12 @@ internal class WorkerProfileFragment : BaseComposeFragment() {
                     experienceYear = experienceYear,
                     profileImageUri = profileImageUri,
                     singlePhotoPickerLauncher = singlePhotoPickerLauncher,
+                    roadNameAddress = roadNameAddress,
+                    showPostCodeDialog = {
+                        if (!(postCodeDialog?.isAdded == true || postCodeDialog?.isVisible == true)) {
+                            postCodeDialog?.show(parentFragmentManager, "PostCodeFragment")
+                        }
+                    },
                     onSpecialtyChanged = ::setSpecialty,
                     onWorkerIntroduceChanged = ::setWorkerIntroduce,
                     updateWorkerProfile = ::updateWorkerProfile,
@@ -110,14 +136,17 @@ internal class WorkerProfileFragment : BaseComposeFragment() {
 @Composable
 internal fun WorkerProfileScreen(
     snackbarHostState: SnackbarHostState,
+    isMyProfile: Boolean,
     workerProfile: WorkerProfile,
     workerIntroduce: String,
     specialty: String,
     profileImageUri: Uri?,
     experienceYear: Int?,
     gender: Gender,
+    roadNameAddress: String,
     isEditState: Boolean,
     singlePhotoPickerLauncher: ManagedActivityResultLauncher<PickVisualMediaRequest, Uri?>,
+    showPostCodeDialog: () -> Unit,
     setEditState: (Boolean) -> Unit,
     onSpecialtyChanged: (String) -> Unit,
     onWorkerIntroduceChanged: (String) -> Unit,
@@ -136,26 +165,29 @@ internal fun WorkerProfileScreen(
                 ),
             ) {
                 CareSubtitleTopBar(
-                    title = stringResource(id = R.string.my_profile),
+                    title = if (isMyProfile) stringResource(id = R.string.my_profile)
+                    else stringResource(id = R.string.carer_profile),
                     onNavigationClick = {
                         if (isEditState) setEditState(false)
                         else onBackPressedDispatcher?.onBackPressed()
                     },
                     leftComponent = {
-                        if (isEditState) {
-                            Text(
-                                text = stringResource(id = R.string.save),
-                                style = CareTheme.typography.subtitle2,
-                                color = CareTheme.colors.orange500,
-                                modifier = Modifier.clickable {
-                                    updateWorkerProfile()
-                                }
-                            )
-                        } else {
-                            CareButtonRound(
-                                text = stringResource(id = R.string.edit),
-                                onClick = { setEditState(true) },
-                            )
+                        if (isMyProfile) {
+                            if (isEditState) {
+                                Text(
+                                    text = stringResource(id = R.string.save),
+                                    style = CareTheme.typography.subtitle2,
+                                    color = CareTheme.colors.orange500,
+                                    modifier = Modifier.clickable {
+                                        updateWorkerProfile()
+                                    }
+                                )
+                            } else {
+                                CareButtonRound(
+                                    text = stringResource(id = R.string.edit),
+                                    onClick = { setEditState(true) },
+                                )
+                            }
                         }
                     },
                     modifier = Modifier
@@ -429,14 +461,14 @@ internal fun WorkerProfileScreen(
                 ) {
                     if (!isEditState) {
                         Text(
-                            text = "서울특별시 강남구 삼성동 512-3",
+                            text = workerProfile.roadNameAddress,
                             style = CareTheme.typography.body3,
                             color = CareTheme.colors.gray900,
                         )
                     } else {
-                        CareTextField(
-                            value = "서울특별시 강남구 삼성동 512-3",
-                            onValueChanged = { },
+                        CareClickableTextField(
+                            value = roadNameAddress,
+                            onClick = showPostCodeDialog,
                             modifier = Modifier.fillMaxWidth(),
                         )
                     }

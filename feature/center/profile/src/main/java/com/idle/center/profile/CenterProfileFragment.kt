@@ -69,7 +69,7 @@ internal class CenterProfileFragment : BaseComposeFragment() {
             val profileImageUri by profileImageUri.collectAsStateWithLifecycle()
 
             LaunchedEffect(true) {
-                if (args.centerId.isBlank()) {
+                if (args.centerId == "Default") {
                     getMyCenterProfile()
                 } else {
                     getCenterProfile(args.centerId)
