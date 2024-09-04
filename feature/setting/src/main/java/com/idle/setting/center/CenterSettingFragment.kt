@@ -54,7 +54,7 @@ internal class CenterSettingFragment :
 
     private fun handleSettingEvent(event: SettingEvent) {
         when (event) {
-            SettingEvent.Profile -> fragmentViewModel.baseEvent(NavigateTo(CenterProfile()))
+            SettingEvent.Profile -> fragmentViewModel.baseEvent(NavigateTo(CenterProfile("default")))
             SettingEvent.FAQ -> navigateToUri(FAQ_URL)
             SettingEvent.PrivacyPolicy -> navigateToUri(PRIVACY_POLICY_URL)
             SettingEvent.TermsAndPolicies -> navigateToUri(TERMS_AND_POLICES_URL)

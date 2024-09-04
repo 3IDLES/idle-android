@@ -27,11 +27,6 @@ interface UserApi {
         @Body updateCenterProfileRequest: UpdateCenterProfileRequest
     ): Response<Unit>
 
-    @GET("/api/v1/users/center/profile/{center-id}")
-    suspend fun getCenterProfile(
-        @Path("center=id") centerId: String,
-    ): Response<GetCenterProfileResponse>
-
     @GET("/api/v1/users/{user-type}/my/profile-image/upload-url")
     suspend fun getImageUploadUrl(
         @Path("user-type") userType: String,
