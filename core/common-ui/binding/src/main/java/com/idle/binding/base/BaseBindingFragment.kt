@@ -8,6 +8,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import com.idle.analytics.helper.AnalyticsHelper
 import com.idle.binding.base.navigation.BaseNavigation
 import com.idle.binding.deepLinkNavigateTo
 import com.idle.binding.repeatOnStarted
@@ -25,6 +26,9 @@ abstract class BaseBindingFragment<T : ViewDataBinding, V : BaseViewModel>
 
     @Inject
     lateinit var baseNavigation: BaseNavigation
+
+    @Inject
+    lateinit var analyticsHelper: AnalyticsHelper
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?,

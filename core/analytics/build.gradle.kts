@@ -1,7 +1,9 @@
-import org.jetbrains.kotlin.konan.properties.Properties
+import java.util.Properties
 
 plugins {
     id("care.android.library")
+    id("care.android.compose")
+    id("care.android.hilt")
 }
 
 android {
@@ -17,7 +19,16 @@ android {
         )
     }
 
-    buildFeatures{
+    buildTypes {
+        debug {
+            buildConfigField("String", "BUILD_TYPE", "\"DEBUG\"")
+        }
+        release {
+            buildConfigField("String", "BUILD_TYPE", "\"RELEASE\"")
+        }
+    }
+
+    buildFeatures {
         buildConfig = true
     }
 }

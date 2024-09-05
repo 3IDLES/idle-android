@@ -10,6 +10,7 @@ android {
 dependencies {
     implementation(projects.core.designresource)
     implementation(projects.core.domain)
+    implementation(projects.core.analytics)
 
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

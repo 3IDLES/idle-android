@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("care.android.feature-binding")
 }
@@ -7,6 +9,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.analytics)
     implementation(projects.core.commonUi.compose)
     implementation(projects.feature.auth)
     implementation(projects.feature.postcode)

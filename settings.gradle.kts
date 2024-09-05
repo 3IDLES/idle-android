@@ -44,11 +44,9 @@ include(":feature:signup")
 include(":feature:signin")
 include(":feature:setting")
 include(":feature:postcode")
-
 include(":feature:worker:home")
 include(":feature:job-posting-detail")
 include(":feature:worker:profile")
-
 include(":feature:center:home")
 include(":feature:center:profile")
 include(":feature:center:register-info")
