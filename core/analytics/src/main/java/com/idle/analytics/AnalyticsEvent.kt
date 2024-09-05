@@ -11,6 +11,7 @@ data class AnalyticsEvent(
 
     object PropertiesKeys {
         const val SCREEN_NAME = "screen_name"
+        const val ACTION_NAME ="action_name"
         const val BUTTON_ID = "button_id"
         const val TIMESTAMP = "time_stamp"
     }

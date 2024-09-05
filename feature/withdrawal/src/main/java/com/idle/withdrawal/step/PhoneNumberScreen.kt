@@ -29,6 +29,7 @@ import com.idle.designsystem.compose.component.CareButtonSmall
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
+import com.idle.withdrawal.LogWithdrawalStep
 import com.idle.withdrawal.WithdrawalStep
 
 @Composable
@@ -178,4 +179,6 @@ internal fun PhoneNumberScreen(
             )
         }
     }
+
+    LogWithdrawalStep(step = WithdrawalStep.PHONENUMBER)
 }

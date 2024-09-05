@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.idle.analytics.helper.AnalyticsHelper
+import com.idle.analytics.helper.LocalAnalyticsHelper
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
 import com.idle.binding.base.navigation.BaseNavigation
@@ -51,13 +52,16 @@ abstract class BaseComposeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         composeView.setContent {
-            viewLifecycleOwner.repeatOnStarted {
-                fragmentViewModel.baseEventFlow.collect {
-                    handleEvent(it)
+            CompositionLocalProvider(
+                LocalAnalyticsHelper provides analyticsHelper,
+                LocalOverscrollConfiguration provides null
+            ) {
+                viewLifecycleOwner.repeatOnStarted {
+                    fragmentViewModel.baseEventFlow.collect {
+                        handleEvent(it)
+                    }
                 }
-            }
 
-            CompositionLocalProvider(LocalOverscrollConfiguration provides null) {
                 ComposeLayout()
             }
         }

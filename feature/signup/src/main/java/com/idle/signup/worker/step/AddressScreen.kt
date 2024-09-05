@@ -20,6 +20,7 @@ import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.signin.worker.WorkerSignUpStep
 import com.idle.signin.worker.WorkerSignUpStep.ADDRESS
+import com.idle.signup.LogWorkerSignUpStep
 
 @Composable
 internal fun AddressScreen(
@@ -64,4 +65,6 @@ internal fun AddressScreen(
                 .padding(bottom = 28.dp),
         )
     }
+
+    LogWorkerSignUpStep(ADDRESS)
 }

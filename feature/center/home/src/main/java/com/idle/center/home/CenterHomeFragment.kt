@@ -35,6 +35,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.idle.analytics.helper.TrackScreenViewEvent
 import com.idle.binding.DeepLinkDestination
 import com.idle.binding.DeepLinkDestination.CenterApplicantInquiry
 import com.idle.binding.base.CareBaseEvent.NavigateTo
@@ -124,7 +125,7 @@ internal fun CenterHomeScreen(
                     modifier = Modifier.padding(start = 20.dp, end = 20.dp),
                 ) { status ->
                     when (status) {
-                        RecruitmentPostStatus.IN_PROGRESS ->
+                        RecruitmentPostStatus.IN_PROGRESS -> {
                             LazyColumn(
                                 state = inProgressListState,
                                 verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -148,7 +149,10 @@ internal fun CenterHomeScreen(
                                 }
                             }
 
-                        RecruitmentPostStatus.COMPLETED ->
+                            TrackScreenViewEvent(screenName = "center_home_screen_inprogress")
+                        }
+
+                        RecruitmentPostStatus.COMPLETED -> {
                             LazyColumn(
                                 state = completedListState,
                                 verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -171,6 +175,9 @@ internal fun CenterHomeScreen(
                                     )
                                 }
                             }
+
+                            TrackScreenViewEvent(screenName = "center_home_screen_completed")
+                        }
                     }
                 }
             }

@@ -14,7 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.idle.center.jobposting.JobPostingStep
+import com.idle.center.jobposting.JobPostingStep.ADDITIONAL_INFO
 import com.idle.center.jobposting.JobPostingStep.ADDRESS
+import com.idle.center.jobposting.LogJobPostingStep
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareClickableTextField
@@ -64,4 +66,6 @@ internal fun AddressScreen(
             modifier = Modifier.fillMaxWidth(),
         )
     }
+
+    LogJobPostingStep(step = ADDRESS)
 }

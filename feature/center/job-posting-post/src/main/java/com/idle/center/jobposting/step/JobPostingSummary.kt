@@ -11,7 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.idle.center.jobposting.JobPostingStep
+import com.idle.center.jobposting.JobPostingStep.CUSTOMER_REQUIREMENT
 import com.idle.center.jobposting.JobPostingStep.SUMMARY
+import com.idle.center.jobposting.LogJobPostingStep
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareButtonRound
@@ -141,4 +143,6 @@ internal fun JobPostingSummaryScreen(
                 .padding(top = 24.dp),
         )
     }
+
+    LogJobPostingStep(step = SUMMARY)
 }

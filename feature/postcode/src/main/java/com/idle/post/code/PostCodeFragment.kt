@@ -18,10 +18,12 @@ import android.webkit.WebViewClient
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.idle.analytics.helper.AnalyticsHelper
 import com.idle.postcode.databinding.FragmentPostCodeBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class PostCodeFragment : DialogFragment() {
@@ -30,6 +32,9 @@ class PostCodeFragment : DialogFragment() {
     private val binding get() = _binding!!
     var onDismissCallback: (() -> Unit)? = null
 
+    @Inject
+    lateinit var analyticsHelper: AnalyticsHelper
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -37,6 +42,8 @@ class PostCodeFragment : DialogFragment() {
     ): View {
         _binding = FragmentPostCodeBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this.viewLifecycleOwner
+
+        analyticsHelper.logScreenView("postcode_screen")
         return binding.root
     }
 

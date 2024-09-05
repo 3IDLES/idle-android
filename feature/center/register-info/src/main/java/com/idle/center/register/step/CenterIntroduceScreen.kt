@@ -32,7 +32,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import coil.compose.AsyncImage
+import com.idle.center.register.LogRegistrationStep
 import com.idle.center.register.RegistrationStep
+import com.idle.center.register.RegistrationStep.INFO
 import com.idle.center.register.RegistrationStep.INTRODUCE
 import com.idle.compose.clickable
 import com.idle.designresource.R
@@ -134,6 +136,8 @@ internal fun CenterIntroduceScreen(
                 .padding(bottom = 28.dp),
         )
     }
+
+    LogRegistrationStep(step = INTRODUCE)
 }
 
 @Preview

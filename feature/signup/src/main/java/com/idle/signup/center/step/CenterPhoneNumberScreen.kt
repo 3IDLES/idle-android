@@ -25,7 +25,9 @@ import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.signin.center.CenterSignUpStep
+import com.idle.signin.center.CenterSignUpStep.NAME
 import com.idle.signin.center.CenterSignUpStep.PHONE_NUMBER
+import com.idle.signup.LogCenterSignUpStep
 
 @Composable
 internal fun CenterPhoneNumberScreen(
@@ -156,4 +158,6 @@ internal fun CenterPhoneNumberScreen(
                 .padding(bottom = 28.dp),
         )
     }
+
+    LogCenterSignUpStep(PHONE_NUMBER)
 }

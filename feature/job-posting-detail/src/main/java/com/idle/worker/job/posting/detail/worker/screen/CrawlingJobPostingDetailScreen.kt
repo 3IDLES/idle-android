@@ -38,6 +38,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.net.toUri
+import com.idle.analytics.helper.TrackScreenViewEvent
 import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareCard
@@ -526,4 +527,6 @@ internal fun CrawlingJobPostingDetailScreen(
             }
         }
     }
+
+    TrackScreenViewEvent(screenName = "carer_worknet_job_posting_detail_screen")
 }

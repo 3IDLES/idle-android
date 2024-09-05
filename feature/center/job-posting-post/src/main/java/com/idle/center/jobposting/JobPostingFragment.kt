@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
+import com.idle.analytics.helper.LocalAnalyticsHelper
 import com.idle.binding.base.CareBaseEvent
 import com.idle.center.job.edit.JobEditScreen
 import com.idle.center.jobposting.JobPostingStep.ADDRESS
@@ -333,6 +334,7 @@ internal fun JobPostingScreen(
         initialValue = ModalBottomSheetValue.Hidden,
         skipHalfExpanded = true,
     )
+    val analyticsHelper = LocalAnalyticsHelper.current
 
     CareStateAnimator(
         targetState = jobPostingStep == JobPostingStep.SUMMARY,
@@ -375,6 +377,8 @@ internal fun JobPostingScreen(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier.fillMaxWidth(),
                     ) {
+                        var actionStartTime by remember { mutableStateOf(System.currentTimeMillis()) }
+
                         when (bottomSheetType) {
                             JobPostingBottomSheetType.WORK_START_TIME -> {
                                 var localWorkStartAmPm by remember { mutableStateOf("오전") }
@@ -442,6 +446,13 @@ internal fun JobPostingScreen(
                                         onClick = {
                                             coroutineScope.launch {
                                                 sheetState.hide()
+                                                val actionEndTime = System.currentTimeMillis()
+                                                analyticsHelper.logActionDuration(
+                                                    screenName = "job_posting_screen",
+                                                    actionName = "work_start_time",
+                                                    isSuccess = false,
+                                                    timeMillis = (actionEndTime - actionStartTime)
+                                                )
                                             }
                                         },
                                         modifier = Modifier.weight(1f),
@@ -460,6 +471,14 @@ internal fun JobPostingScreen(
                                                     }" + ":${localWorkStartMinute}"
                                                 onWorkStartTimeChanged(startTime)
                                                 sheetState.hide()
+
+                                                val actionEndTime = System.currentTimeMillis()
+                                                analyticsHelper.logActionDuration(
+                                                    screenName = "job_posting_screen",
+                                                    actionName = "work_start_time",
+                                                    isSuccess = true,
+                                                    timeMillis = (actionEndTime - actionStartTime)
+                                                )
                                             }
                                         },
                                         modifier = Modifier.weight(1f),
@@ -533,6 +552,14 @@ internal fun JobPostingScreen(
                                         onClick = {
                                             coroutineScope.launch {
                                                 sheetState.hide()
+
+                                                val actionEndTime = System.currentTimeMillis()
+                                                analyticsHelper.logActionDuration(
+                                                    screenName = "job_posting_screen",
+                                                    actionName = "work_end_time",
+                                                    isSuccess = false,
+                                                    timeMillis = (actionEndTime - actionStartTime)
+                                                )
                                             }
                                         },
                                         modifier = Modifier.weight(1f),
@@ -551,6 +578,14 @@ internal fun JobPostingScreen(
 
                                                 onWorkEndTimeChanged(endTime)
                                                 sheetState.hide()
+
+                                                val actionEndTime = System.currentTimeMillis()
+                                                analyticsHelper.logActionDuration(
+                                                    screenName = "job_posting_screen",
+                                                    actionName = "work_end_time",
+                                                    isSuccess = true,
+                                                    timeMillis = (actionEndTime - actionStartTime)
+                                                )
                                             }
                                         },
                                         modifier = Modifier.weight(1f),
@@ -575,6 +610,14 @@ internal fun JobPostingScreen(
                                         coroutineScope.launch {
                                             onApplyDeadlineChanged(it)
                                             sheetState.hide()
+
+                                            val actionEndTime = System.currentTimeMillis()
+                                            analyticsHelper.logActionDuration(
+                                                screenName = "job_posting_screen",
+                                                actionName = "post_dead_line",
+                                                isSuccess = true,
+                                                timeMillis = (actionEndTime - actionStartTime)
+                                            )
                                         }
                                     },
                                     modifier = Modifier

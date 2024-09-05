@@ -25,7 +25,9 @@ import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.signin.worker.WorkerSignUpStep
+import com.idle.signin.worker.WorkerSignUpStep.INFO
 import com.idle.signin.worker.WorkerSignUpStep.PHONE_NUMBER
+import com.idle.signup.LogWorkerSignUpStep
 
 @Composable
 internal fun WorkerPhoneNumberScreen(
@@ -147,4 +149,6 @@ internal fun WorkerPhoneNumberScreen(
                 .padding(bottom = 28.dp),
         )
     }
+
+    LogWorkerSignUpStep(PHONE_NUMBER)
 }

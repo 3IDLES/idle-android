@@ -29,7 +29,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.idle.center.jobposting.JobPostingStep
+import com.idle.center.jobposting.JobPostingStep.ADDRESS
 import com.idle.center.jobposting.JobPostingStep.CUSTOMER_INFORMATION
+import com.idle.center.jobposting.LogJobPostingStep
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareChipBasic
@@ -245,4 +247,6 @@ internal fun CustomerInformationScreen(
                 .padding(bottom = 28.dp),
         )
     }
+
+    LogJobPostingStep(step = CUSTOMER_INFORMATION)
 }

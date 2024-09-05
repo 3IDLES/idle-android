@@ -27,6 +27,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.idle.analytics.helper.TrackScreenViewEvent
 import com.idle.binding.DeepLinkDestination.Auth
 import com.idle.binding.DeepLinkDestination.NewPassword
 import com.idle.binding.base.CareBaseEvent.NavigateTo
@@ -181,4 +182,6 @@ internal fun CenterSignInScreen(
             )
         }
     }
+
+    TrackScreenViewEvent(screenName = "center_signin_screen")
 }

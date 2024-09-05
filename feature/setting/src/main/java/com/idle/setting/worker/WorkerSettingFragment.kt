@@ -50,6 +50,8 @@ internal class WorkerSettingFragment :
                 }
             }
         }
+
+        analyticsHelper.logScreenView(screenName = "center_setting_screen")
     }
 
     private fun handleSettingEvent(event: SettingEvent) {

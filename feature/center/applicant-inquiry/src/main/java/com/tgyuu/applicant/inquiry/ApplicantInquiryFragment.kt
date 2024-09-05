@@ -35,6 +35,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.navArgs
 import coil.compose.AsyncImage
+import com.idle.analytics.helper.TrackScreenViewEvent
 import com.idle.binding.DeepLinkDestination
 import com.idle.binding.base.CareBaseEvent
 import com.idle.compose.base.BaseComposeFragment
@@ -329,4 +330,6 @@ private fun WorkerProfileCard(
             }
         }
     }
+
+    TrackScreenViewEvent(screenName = "applicant_inquiry_screen")
 }

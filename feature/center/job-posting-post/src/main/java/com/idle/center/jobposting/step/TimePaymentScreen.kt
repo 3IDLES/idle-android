@@ -17,7 +17,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.idle.center.jobposting.JobPostingStep
+import com.idle.center.jobposting.JobPostingStep.SUMMARY
 import com.idle.center.jobposting.JobPostingStep.TIME_PAYMENT
+import com.idle.center.jobposting.LogJobPostingStep
 import com.idle.compose.JobPostingBottomSheetType
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
@@ -182,4 +184,6 @@ internal fun TimePaymentScreen(
                 .padding(bottom = 28.dp),
         )
     }
+
+    LogJobPostingStep(step = TIME_PAYMENT)
 }
