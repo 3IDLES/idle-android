@@ -132,6 +132,7 @@
     <string name="center_image">센터 사진</string>
     <string name="center_info_hint">센터 정보를 입력해주세요</string>
     <string name="center_detail_info">센터 상세 정보</string>
+    <string name="register_center_info">센터 정보 등록</string>
 
     <!-- Customer Info -->
     <string name="customer_info">고객 정보</string>

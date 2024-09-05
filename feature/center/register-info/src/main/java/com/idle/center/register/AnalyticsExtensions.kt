@@ -19,7 +19,7 @@ internal fun LogRegistrationStep(
             type = SCREEN_VIEW,
             properties = mutableMapOf(
                 ACTION_NAME to "center_registration_info",
-                SCREEN_NAME to "center_registration_"+step.name.lowercase(),
+                SCREEN_NAME to "center_registration_" + step.name.lowercase(),
                 "step" to step.step,
             )
         )

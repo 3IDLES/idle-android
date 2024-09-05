@@ -34,7 +34,6 @@ import androidx.core.net.toUri
 import coil.compose.AsyncImage
 import com.idle.center.register.LogRegistrationStep
 import com.idle.center.register.RegistrationStep
-import com.idle.center.register.RegistrationStep.INFO
 import com.idle.center.register.RegistrationStep.INTRODUCE
 import com.idle.compose.clickable
 import com.idle.designresource.R
@@ -147,7 +146,7 @@ fun PreviewIntroduceScreen() {
         topBar = {
             Column(modifier = Modifier.padding(start = 12.dp, top = 48.dp, end = 20.dp)) {
                 CareSubtitleTopBar(
-                    title = "센터 정보 등록",
+                    title = stringResource(id = R.string.register_center_info),
                     onNavigationClick = {},
                     modifier = Modifier.fillMaxWidth(),
                 )

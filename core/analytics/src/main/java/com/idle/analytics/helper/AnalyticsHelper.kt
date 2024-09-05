@@ -4,7 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import com.idle.analytics.AnalyticsEvent
 import com.idle.analytics.AnalyticsEvent.PropertiesKeys.ACTION_NAME
+import com.idle.analytics.AnalyticsEvent.PropertiesKeys.ACTION_RESULT
 import com.idle.analytics.AnalyticsEvent.PropertiesKeys.BUTTON_ID
+import com.idle.analytics.AnalyticsEvent.PropertiesKeys.DURATION
 import com.idle.analytics.AnalyticsEvent.PropertiesKeys.SCREEN_NAME
 import com.idle.analytics.AnalyticsEvent.Types.BUTTON_CLICK
 import com.idle.analytics.AnalyticsEvent.Types.SCREEN_VIEW
@@ -48,7 +50,8 @@ abstract class AnalyticsHelper {
             properties = mutableMapOf(
                 SCREEN_NAME to screenName,
                 ACTION_NAME to actionName,
-                "duration" to timeMillis,
+                ACTION_RESULT to isSuccess,
+                DURATION to timeMillis,
             )
         )
     )
