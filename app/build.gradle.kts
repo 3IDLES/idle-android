@@ -17,6 +17,12 @@ android {
         val properties = Properties()
         properties.load(project.rootProject.file("local.properties").bufferedReader())
         manifestPlaceholders["NAVER_CLIENT_ID"] = properties["NAVER_CLIENT_ID"] as String
+
+        buildConfigField(
+            "String",
+            "AMPLITUDE_API_KEY",
+            "\"${properties["AMPLITUDE_API_KEY"]}\"",
+        )
     }
 
     packaging {
@@ -30,10 +36,13 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
+
+    buildFeatures{
+        buildConfig = true
+    }
 }
 
 dependencies {
-    implementation(projects.core.analytics)
     implementation(projects.core.data)
     implementation(projects.core.domain)
     implementation(projects.presentation)

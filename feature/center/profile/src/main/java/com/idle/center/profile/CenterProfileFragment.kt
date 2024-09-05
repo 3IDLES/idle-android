@@ -124,7 +124,8 @@ internal fun CenterProfileScreen(
     Scaffold(
         topBar = {
             CareSubtitleTopBar(
-                title = stringResource(id = R.string.my_center_info),
+                title = if (isMyProfile) stringResource(id = R.string.my_center_info)
+                else stringResource(id = R.string.center_info),
                 onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
                 leftComponent = {
                     if (isMyProfile && isEditState) {
@@ -265,13 +266,15 @@ internal fun CenterProfileScreen(
                         color = CareTheme.colors.gray500,
                     )
 
-                    Box(modifier = Modifier
-                        .padding(bottom = 60.dp)
-                        .clickable {
-                            if (isEditState) singlePhotoPickerLauncher.launch(
-                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                            )
-                        }) {
+                    Box(
+                        modifier = Modifier
+                            .padding(bottom = 60.dp)
+                            .clickable {
+                                if (isEditState) singlePhotoPickerLauncher.launch(
+                                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                                )
+                            },
+                    ) {
                         if (centerProfile.profileImageUrl == null && profileImageUri == null) {
                             if (!isEditState) {
                                 Image(
@@ -279,7 +282,7 @@ internal fun CenterProfileScreen(
                                     contentDescription = null,
                                     contentScale = ContentScale.FillWidth,
                                     modifier = Modifier
-                                        .fillMaxWidth()
+                                         .fillMaxWidth()
                                         .clip(RoundedCornerShape(6.dp))
                                 )
                             } else {

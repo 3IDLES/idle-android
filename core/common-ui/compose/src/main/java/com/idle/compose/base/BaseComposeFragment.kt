@@ -13,11 +13,12 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.idle.analytics.helper.AnalyticsHelper
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
+import com.idle.binding.base.navigation.BaseNavigation
 import com.idle.binding.deepLinkNavigateTo
 import com.idle.binding.repeatOnStarted
-import com.idle.binding.base.navigation.BaseNavigation
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,6 +30,9 @@ abstract class BaseComposeFragment : Fragment() {
 
     @Inject
     lateinit var baseNavigation: BaseNavigation
+
+    @Inject
+    lateinit var analyticsHelper: AnalyticsHelper
 
     @Composable
     abstract fun ComposeLayout()
