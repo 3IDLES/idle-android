@@ -38,6 +38,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.idle.analytics.helper.LocalAnalyticsHelper
 import com.idle.analytics.helper.TrackScreenViewEvent
 import com.idle.binding.DeepLinkDestination
 import com.idle.binding.DeepLinkDestination.WorkerJobDetail
@@ -203,6 +204,7 @@ internal fun WorkerHomeScreen(
                     when (jobPosting.jobPostingType) {
                         JobPostingType.CAREMEET -> WorkerRecruitmentCard(
                             jobPosting = jobPosting as WorkerJobPosting,
+                            profile = profile,
                             showDialog = {
                                 selectedJobPosting = it
                                 showDialog = true
@@ -214,6 +216,7 @@ internal fun WorkerHomeScreen(
 
                         else -> WorkerWorkNetCard(
                             jobPosting = jobPosting as CrawlingJobPosting,
+                            profile = profile,
                             addFavoriteJobPosting = addFavoriteJobPosting,
                             removeFavoriteJobPosting = removeFavoriteJobPosting,
                             navigateTo = navigateTo,
@@ -238,11 +241,14 @@ internal fun WorkerHomeScreen(
 @Composable
 private fun WorkerRecruitmentCard(
     jobPosting: WorkerJobPosting,
+    profile: WorkerProfile?,
     showDialog: (WorkerJobPosting) -> Unit,
     addFavoriteJobPosting: (String, JobPostingType) -> Unit,
     removeFavoriteJobPosting: (String, JobPostingType) -> Unit,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
+    val analyticsHelper = LocalAnalyticsHelper.current
+
     val starTintColor by animateColorAsState(
         targetValue = if (jobPosting.isFavorite) CareTheme.colors.orange300
         else CareTheme.colors.gray200,
@@ -263,6 +269,14 @@ private fun WorkerRecruitmentCard(
                 WorkerJobDetail(
                     jobPostingId = jobPosting.id,
                     jobPostingType = jobPosting.jobPostingType.name,
+                )
+            )
+
+            analyticsHelper.logButtonClick(
+                screenName = "carer_home_screen",
+                buttonId = "caremeet_job_posting_detail",
+                properties = mutableMapOf(
+                    "jobSearchStatus" to profile?.jobSearchStatus.toString(),
                 )
             )
         },
@@ -407,10 +421,12 @@ private fun WorkerRecruitmentCard(
 @Composable
 private fun WorkerWorkNetCard(
     jobPosting: CrawlingJobPosting,
+    profile: WorkerProfile?,
     addFavoriteJobPosting: (String, JobPostingType) -> Unit,
     removeFavoriteJobPosting: (String, JobPostingType) -> Unit,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
+    val analyticsHelper = LocalAnalyticsHelper.current
     val starTintColor by animateColorAsState(
         targetValue = if (jobPosting.isFavorite) CareTheme.colors.orange300
         else CareTheme.colors.gray200,
@@ -431,6 +447,14 @@ private fun WorkerWorkNetCard(
                 WorkerJobDetail(
                     jobPostingId = jobPosting.id,
                     jobPostingType = jobPosting.jobPostingType.name,
+                )
+            )
+
+            analyticsHelper.logButtonClick(
+                screenName = "carer_home_screen",
+                buttonId = "caremeet_job_posting_detail",
+                properties = mutableMapOf(
+                    "jobSearchStatus" to profile?.jobSearchStatus.toString(),
                 )
             )
         },

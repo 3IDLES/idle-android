@@ -8,6 +8,7 @@ import com.idle.analytics.AnalyticsEvent.PropertiesKeys.ACTION_RESULT
 import com.idle.analytics.AnalyticsEvent.PropertiesKeys.BUTTON_ID
 import com.idle.analytics.AnalyticsEvent.PropertiesKeys.DURATION
 import com.idle.analytics.AnalyticsEvent.PropertiesKeys.SCREEN_NAME
+import com.idle.analytics.AnalyticsEvent.Types.ACTION
 import com.idle.analytics.AnalyticsEvent.Types.BUTTON_CLICK
 import com.idle.analytics.AnalyticsEvent.Types.SCREEN_VIEW
 
@@ -27,15 +28,23 @@ abstract class AnalyticsHelper {
         )
     }
 
-    fun logButtonClick(screenName: String, buttonId: String) {
+    fun logButtonClick(
+        screenName: String,
+        buttonId: String,
+        properties: MutableMap<String, Any?>? = null,
+    ) {
+        val eventProperties = mutableMapOf<String, Any?>(
+            SCREEN_NAME to screenName,
+            BUTTON_ID to buttonId,
+        )
+
+        properties?.let { eventProperties.putAll(it) }
+
         logEvent(
             AnalyticsEvent(
                 type = BUTTON_CLICK,
-                properties = mutableMapOf(
-                    SCREEN_NAME to screenName,
-                    BUTTON_ID to buttonId,
-                )
-            ),
+                properties = eventProperties
+            )
         )
     }
 
@@ -46,7 +55,7 @@ abstract class AnalyticsHelper {
         timeMillis: Long,
     ) = logEvent(
         AnalyticsEvent(
-            type = SCREEN_VIEW,
+            type = ACTION,
             properties = mutableMapOf(
                 SCREEN_NAME to screenName,
                 ACTION_NAME to actionName,
