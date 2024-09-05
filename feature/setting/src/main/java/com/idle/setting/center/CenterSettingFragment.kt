@@ -6,6 +6,7 @@ import android.view.View
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.idle.analytics.helper.AnalyticsHelper
 import com.idle.binding.DeepLinkDestination.CenterProfile
 import com.idle.binding.DeepLinkDestination.Withdrawal
 import com.idle.binding.base.BaseBindingFragment
@@ -20,6 +21,7 @@ import com.idle.setting.TERMS_AND_POLICES_URL
 import com.idle.setting.databinding.FragmentCenterSettingBinding
 import com.idle.setting.dialog.LogoutDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 internal class CenterSettingFragment :
@@ -50,6 +52,8 @@ internal class CenterSettingFragment :
                 }
             }
         }
+
+        analyticsHelper.logScreenView(screenName = "center_setting_screen")
     }
 
     private fun handleSettingEvent(event: SettingEvent) {

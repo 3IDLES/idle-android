@@ -33,6 +33,7 @@ import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.BusinessRegistrationInfo
 import com.idle.signin.center.CenterSignUpStep
 import com.idle.signin.center.CenterSignUpStep.BUSINESS_REGISTRATION
+import com.idle.signup.LogCenterSignUpStep
 
 @Composable
 internal fun BusinessRegistrationScreen(
@@ -155,4 +156,6 @@ internal fun BusinessRegistrationScreen(
                 .padding(bottom = 28.dp),
         )
     }
+
+    LogCenterSignUpStep(BUSINESS_REGISTRATION)
 }

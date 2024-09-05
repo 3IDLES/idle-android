@@ -38,6 +38,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.idle.analytics.helper.TrackScreenViewEvent
 import com.idle.binding.DeepLinkDestination
 import com.idle.binding.DeepLinkDestination.WorkerJobDetail
 import com.idle.binding.base.CareBaseEvent.NavigateTo
@@ -230,6 +231,8 @@ internal fun WorkerHomeScreen(
             }
         }
     }
+
+    TrackScreenViewEvent(screenName = "carer_home_screen")
 }
 
 @Composable

@@ -7,6 +7,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.idle.analytics.helper.TrackScreenViewEvent
 import com.idle.designsystem.compose.component.CareMap
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.foundation.CareTheme
@@ -46,4 +47,6 @@ fun PlaceDetailScreen(
                 .fillMaxSize(),
         )
     }
+
+    TrackScreenViewEvent(screenName = "map_detail_screen")
 }

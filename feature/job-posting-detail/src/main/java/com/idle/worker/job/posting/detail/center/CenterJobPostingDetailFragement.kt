@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.navArgs
+import com.idle.analytics.helper.TrackScreenViewEvent
 import com.idle.binding.DeepLinkDestination
 import com.idle.binding.base.CareBaseEvent
 import com.idle.center.job.edit.JobEditScreen
@@ -294,4 +295,6 @@ internal fun CenterJobPostingDetailScreen(
             }
         }
     }
+
+    TrackScreenViewEvent(screenName = "center_job_posting_detail_screen")
 }

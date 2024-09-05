@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.idle.center.register.LogRegistrationStep
 import com.idle.center.register.RegistrationStep
 import com.idle.center.register.RegistrationStep.ADDRESS
 import com.idle.designresource.R
@@ -82,4 +83,6 @@ internal fun CenterAddressScreen(
                 .padding(bottom = 28.dp),
         )
     }
+
+    LogRegistrationStep(step = ADDRESS)
 }

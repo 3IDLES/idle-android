@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
+import com.idle.analytics.helper.TrackScreenViewEvent
 import com.idle.center.register.step.CenterAddressScreen
 import com.idle.center.register.step.CenterInfoScreen
 import com.idle.center.register.step.CenterIntroduceScreen
@@ -47,8 +48,8 @@ internal class RegisterCenterInfoFragment : BaseComposeFragment() {
                     val roadNameAddress = it.get<String>("roadNameAddress")
                     val lotNumberAddress = it.get<String>("lotNumberAddress")
 
-                    fragmentViewModel.setRoadNameAddress(roadNameAddress ?: "")
-                    fragmentViewModel.setLotNumberAddress(lotNumberAddress ?: "")
+                    fragmentViewModel.setRoadNameAddress(roadNameAddress ?: return@let)
+                    fragmentViewModel.setLotNumberAddress(lotNumberAddress ?: return@let)
                 }
             }
         }

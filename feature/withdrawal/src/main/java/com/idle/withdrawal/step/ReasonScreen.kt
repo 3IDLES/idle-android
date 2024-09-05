@@ -34,6 +34,7 @@ import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonMedium
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.UserType
+import com.idle.withdrawal.LogWithdrawalStep
 import com.idle.withdrawal.WithdrawalReason
 import com.idle.withdrawal.WithdrawalReason.NO_LONGER_OPERATING_CENTER
 import com.idle.withdrawal.WithdrawalReason.NO_LONGER_WISH_TO_CONTINUE
@@ -127,6 +128,8 @@ internal fun ReasonScreen(
             )
         }
     }
+
+    LogWithdrawalStep(step = WithdrawalStep.REASON)
 }
 
 @Composable

@@ -24,6 +24,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.idle.center.jobposting.JobPostingStep
 import com.idle.center.jobposting.JobPostingStep.ADDITIONAL_INFO
+import com.idle.center.jobposting.LogJobPostingStep
 import com.idle.compose.JobPostingBottomSheetType
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
@@ -163,4 +164,6 @@ internal fun AdditionalInfoScreen(
                 .padding(bottom = 28.dp),
         )
     }
+
+    LogJobPostingStep(step = ADDITIONAL_INFO)
 }

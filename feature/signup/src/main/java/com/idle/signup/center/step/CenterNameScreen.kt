@@ -24,6 +24,7 @@ import com.idle.signin.center.CenterSignUpStep
 import com.idle.designresource.R
 import com.idle.signin.center.CenterSignUpStep.BUSINESS_REGISTRATION
 import com.idle.signin.center.CenterSignUpStep.NAME
+import com.idle.signup.LogCenterSignUpStep
 
 @Composable
 internal fun CenterNameScreen(
@@ -76,4 +77,6 @@ internal fun CenterNameScreen(
                 .padding(bottom = 28.dp),
         )
     }
+
+    LogCenterSignUpStep(NAME)
 }

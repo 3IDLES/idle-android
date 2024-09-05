@@ -20,7 +20,9 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.idle.center.register.LogRegistrationStep
 import com.idle.center.register.RegistrationStep
+import com.idle.center.register.RegistrationStep.ADDRESS
 import com.idle.center.register.RegistrationStep.INFO
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
@@ -85,9 +87,8 @@ internal fun CenterInfoScreen(
                 onValueChanged = onCenterNumberChanged,
                 keyboardType = KeyboardType.Number,
                 onDone = {
-                    if (centerName.isNotBlank() && centerNumber.isNotBlank()) setRegistrationStep(
-                        RegistrationStep.ADDRESS
-                    )
+                    if (centerName.isNotBlank() && centerNumber.isNotBlank())
+                        setRegistrationStep(RegistrationStep.findStep(INFO.step + 1))
                 },
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -103,4 +104,6 @@ internal fun CenterInfoScreen(
                 .padding(bottom = 28.dp),
         )
     }
+
+    LogRegistrationStep(step = INFO)
 }
