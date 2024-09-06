@@ -1,6 +1,9 @@
 package com.idle.signin.center
 
 import androidx.lifecycle.viewModelScope
+import com.idle.analytics.AnalyticsEvent
+import com.idle.analytics.AnalyticsEvent.PropertiesKeys.ACTION_NAME
+import com.idle.analytics.AnalyticsEvent.PropertiesKeys.ACTION_RESULT
 import com.idle.analytics.helper.AnalyticsHelper
 import com.idle.binding.DeepLinkDestination.CenterHome
 import com.idle.binding.base.BaseViewModel
@@ -39,6 +42,18 @@ class CenterSignInViewModel @Inject constructor(
                 analyticsHelper.setUserId(_centerId.value)
                 baseEvent(NavigateTo(CenterHome, R.id.centerSignInFragment))
             }
-            .onFailure { handleFailure(it as HttpResponseException) }
+            .onFailure {
+                handleFailure(it as HttpResponseException)
+
+                analyticsHelper.logEvent(
+                    AnalyticsEvent(
+                        type = AnalyticsEvent.Types.ACTION,
+                        properties = mutableMapOf(
+                            ACTION_NAME to "login",
+                            ACTION_RESULT to false,
+                        )
+                    )
+                )
+            }
     }
 }

@@ -452,7 +452,7 @@ private fun WorkerWorkNetCard(
 
             analyticsHelper.logButtonClick(
                 screenName = "carer_home_screen",
-                buttonId = "caremeet_job_posting_detail",
+                buttonId = "worknet_job_posting_detail",
                 properties = mutableMapOf(
                     "jobSearchStatus" to profile?.jobSearchStatus.toString(),
                 )
