@@ -1,6 +1,12 @@
 package com.idle.worker.job.posting.detail.worker
 
 import androidx.lifecycle.viewModelScope
+import com.idle.analytics.AnalyticsEvent
+import com.idle.analytics.AnalyticsEvent.PropertiesKeys.ACTION_NAME
+import com.idle.analytics.AnalyticsEvent.PropertiesKeys.SCREEN_NAME
+import com.idle.analytics.AnalyticsEvent.Types.ACTION
+import com.idle.analytics.AnalyticsEvent.Types.SCREEN_VIEW
+import com.idle.analytics.helper.AnalyticsHelper
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.error.HttpResponseException
@@ -31,6 +37,7 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
     private val applyJobPostingUseCase: ApplyJobPostingUseCase,
     private val addFavoriteJobPostingUseCase: AddFavoriteJobPostingUseCase,
     private val removeFavoriteJobPostingUseCase: RemoveFavoriteJobPostingUseCase,
+    private val analyticsHelper: AnalyticsHelper,
 ) : BaseViewModel() {
     private val _profile = MutableStateFlow<WorkerProfile?>(null)
     val profile = _profile.asStateFlow()
@@ -71,6 +78,17 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
                     _workerJobPostingDetail.value =
                         (_workerJobPostingDetail.value as WorkerJobPostingDetail).copy(applyTime = LocalDateTime.now())
                 }
+
+                analyticsHelper.logEvent(
+                    AnalyticsEvent(
+                        type = ACTION,
+                        properties = mutableMapOf(
+                            ACTION_NAME to "apply_job_posting",
+                            SCREEN_NAME to "carer_job_posting_detail",
+                            "apply_method" to applyMethod.name.lowercase(),
+                        )
+                    )
+                )
             }.onFailure { handleFailure(it as HttpResponseException) }
         }
 

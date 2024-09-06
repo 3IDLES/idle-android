@@ -36,6 +36,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.idle.analytics.helper.LocalAnalyticsHelper
 import com.idle.analytics.helper.TrackScreenViewEvent
 import com.idle.binding.DeepLinkDestination
 import com.idle.binding.DeepLinkDestination.WorkerJobDetail
@@ -55,6 +56,7 @@ import com.idle.domain.model.jobposting.CrawlingJobPosting
 import com.idle.domain.model.jobposting.JobPosting
 import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.WorkerJobPosting
+import com.idle.domain.model.profile.WorkerProfile
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.time.format.DateTimeFormatter
@@ -69,6 +71,7 @@ internal class WorkerJobPostingFragment : BaseComposeFragment() {
             val recruitmentPostStatus by recruitmentPostStatus.collectAsStateWithLifecycle()
             val appliedJobPostings by appliedJobPostings.collectAsStateWithLifecycle()
             val favoritesJobPostings by favoritesJobPostings.collectAsStateWithLifecycle()
+            val profile by profile.collectAsStateWithLifecycle()
 
             LaunchedEffect(true) {
                 clearJobPostingStatus()
@@ -78,6 +81,7 @@ internal class WorkerJobPostingFragment : BaseComposeFragment() {
 
             WorkerJobPostingScreen(
                 snackbarHostState = snackbarHostState,
+                profile = profile,
                 recruitmentPostStatus = recruitmentPostStatus,
                 appliedJobPostings = appliedJobPostings,
                 favoritesJobPostings = favoritesJobPostings,
@@ -94,6 +98,7 @@ internal class WorkerJobPostingFragment : BaseComposeFragment() {
 @Composable
 internal fun WorkerJobPostingScreen(
     snackbarHostState: SnackbarHostState,
+    profile: WorkerProfile?,
     recruitmentPostStatus: RecruitmentPostStatus,
     appliedJobPostings: List<JobPosting>,
     favoritesJobPostings: List<JobPosting>,
@@ -194,6 +199,7 @@ internal fun WorkerJobPostingScreen(
                                 when (jobPosting.jobPostingType) {
                                     JobPostingType.CAREMEET -> WorkerRecruitmentCard(
                                         jobPosting = jobPosting as WorkerJobPosting,
+                                        profile = profile,
                                         showDialog = {
                                             selectedJobPosting = it
                                             showDialog = true
@@ -205,6 +211,7 @@ internal fun WorkerJobPostingScreen(
 
                                     else -> WorkerWorkNetCard(
                                         jobPosting = jobPosting as CrawlingJobPosting,
+                                        profile = profile,
                                         addFavoriteJobPosting = addFavoriteJobPosting,
                                         removeFavoriteJobPosting = removeFavoriteJobPosting,
                                         navigateTo = navigateTo,
@@ -236,6 +243,7 @@ internal fun WorkerJobPostingScreen(
                                 when (jobPosting.jobPostingType) {
                                     JobPostingType.CAREMEET -> WorkerRecruitmentCard(
                                         jobPosting = jobPosting as WorkerJobPosting,
+                                        profile = profile,
                                         showDialog = {
                                             selectedJobPosting = it
                                             showDialog = true
@@ -247,6 +255,7 @@ internal fun WorkerJobPostingScreen(
 
                                     else -> WorkerWorkNetCard(
                                         jobPosting = jobPosting as CrawlingJobPosting,
+                                        profile = profile,
                                         addFavoriteJobPosting = addFavoriteJobPosting,
                                         removeFavoriteJobPosting = removeFavoriteJobPosting,
                                         navigateTo = navigateTo,
@@ -268,12 +277,13 @@ internal fun WorkerJobPostingScreen(
         }
     }
 
-    TrackScreenViewEvent(screenName = "carer_manage_jobposting_screen")
+    TrackScreenViewEvent(screenName = "carer_manage_job_posting_screen")
 }
 
 @Composable
 private fun WorkerRecruitmentCard(
     jobPosting: WorkerJobPosting,
+    profile: WorkerProfile?,
     showDialog: (WorkerJobPosting) -> Unit,
     addFavoriteJobPosting: (String, JobPostingType) -> Unit,
     removeFavoriteJobPosting: (String, JobPostingType) -> Unit,
@@ -284,6 +294,7 @@ private fun WorkerRecruitmentCard(
         else CareTheme.colors.gray200,
         label = "즐겨찾기 별의 색상을 관리하는 애니메이션"
     )
+    val analyticsHelper = LocalAnalyticsHelper.current
 
     Card(
         shape = RoundedCornerShape(12.dp),
@@ -299,6 +310,14 @@ private fun WorkerRecruitmentCard(
                 WorkerJobDetail(
                     jobPostingId = jobPosting.id,
                     jobPostingType = jobPosting.jobPostingType.name,
+                )
+            )
+
+            analyticsHelper.logButtonClick(
+                screenName = "carer_manage_job_posting_screen",
+                buttonId = "caremeet_job_posting_detail",
+                properties = mutableMapOf(
+                    "jobSearchStatus" to profile?.jobSearchStatus.toString(),
                 )
             )
         },
@@ -436,6 +455,7 @@ private fun WorkerRecruitmentCard(
 
 @Composable
 private fun WorkerWorkNetCard(
+    profile: WorkerProfile?,
     jobPosting: CrawlingJobPosting,
     addFavoriteJobPosting: (String, JobPostingType) -> Unit,
     removeFavoriteJobPosting: (String, JobPostingType) -> Unit,
@@ -446,6 +466,7 @@ private fun WorkerWorkNetCard(
         else CareTheme.colors.gray200,
         label = "즐겨찾기 별의 색상을 관리하는 애니메이션"
     )
+    val analyticsHelper = LocalAnalyticsHelper.current
 
     Card(
         shape = RoundedCornerShape(12.dp),
@@ -461,6 +482,14 @@ private fun WorkerWorkNetCard(
                 WorkerJobDetail(
                     jobPostingId = jobPosting.id,
                     jobPostingType = jobPosting.jobPostingType.name,
+                )
+            )
+
+            analyticsHelper.logButtonClick(
+                screenName = "carer_manage_job_posting_screen",
+                buttonId = "worknet_job_posting_detail",
+                properties = mutableMapOf(
+                    "jobSearchStatus" to profile?.jobSearchStatus.toString(),
                 )
             )
         },
