@@ -27,7 +27,6 @@ import androidx.navigation.fragment.navArgs
 import com.idle.binding.DeepLinkDestination.CenterSetting
 import com.idle.binding.DeepLinkDestination.WorkerSetting
 import com.idle.binding.base.CareBaseEvent
-import com.idle.binding.repeatOnStarted
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
@@ -61,14 +60,6 @@ internal class WithdrawalFragment : BaseComposeFragment() {
             val userType by rememberSaveable { mutableStateOf(UserType.create(args.userType)) }
             var showDialog by rememberSaveable { mutableStateOf(false) }
 
-            viewLifecycleOwner.repeatOnStarted {
-                withdrawalEvent.collect { event ->
-                    when (event) {
-                        WithdrawalEvent.WithdrawalSuccess -> showDialog = true
-                    }
-                }
-            }
-
             if (showDialog) {
                 CareDialog(
                     title = "정말 탈퇴하시겠어요?",
@@ -84,8 +75,7 @@ internal class WithdrawalFragment : BaseComposeFragment() {
                     onDismissRequest = { showDialog = false },
                     onLeftButtonClick = { showDialog = false },
                     onRightButtonClick = {
-                        baseEvent(CareBaseEvent.NavigateToAuthWithClearBackStack)
-                        baseEvent(CareBaseEvent.ShowSnackBar("회원탈퇴가 완료되었어요.|ERROR"))
+                        withdrawal(userType)
                         showDialog = false
                     },
                     modifier = Modifier
@@ -115,7 +105,7 @@ internal class WithdrawalFragment : BaseComposeFragment() {
                 onPasswordChanged = ::setPassword,
                 sendPhoneNumber = ::sendPhoneNumber,
                 confirmAuthCode = ::confirmAuthCode,
-                withdrawal = { withdrawal(userType) },
+                withdrawal = { showDialog = true },
                 navigateToSetting = {
                     baseEvent(
                         CareBaseEvent.NavigateTo(
