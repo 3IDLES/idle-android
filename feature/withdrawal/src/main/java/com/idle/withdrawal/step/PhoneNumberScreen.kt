@@ -53,7 +53,7 @@ internal fun PhoneNumberScreen(
         focusRequester.requestFocus()
     }
 
-    BackHandler { setWithdrawalStep(WithdrawalStep.findStep(WithdrawalStep.PHONENUMBER.step - 1)) }
+    BackHandler { setWithdrawalStep(WithdrawalStep.findStep(WithdrawalStep.PHONE_NUMBER.step - 1)) }
 
     Column(
         horizontalAlignment = Alignment.Start,
@@ -81,10 +81,8 @@ internal fun PhoneNumberScreen(
                     value = phoneNumber,
                     hint = stringResource(id = R.string.phone_number_hint),
                     onValueChanged = {
-                        if (it.length <= 11) {
-                            onPhoneNumberChanged(it)
-                            phoneNumber = it
-                        }
+                        onPhoneNumberChanged(it)
+                        phoneNumber = it
                     },
                     readOnly = (timerMinute != "" && timerSeconds != ""),
                     onDone = { if (phoneNumber.length == 11) sendPhoneNumber() },
@@ -158,7 +156,9 @@ internal fun PhoneNumberScreen(
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 28.dp),
         ) {
             CareButtonMedium(
                 text = stringResource(id = R.string.cancel),
@@ -180,5 +180,5 @@ internal fun PhoneNumberScreen(
         }
     }
 
-    LogWithdrawalStep(step = WithdrawalStep.PHONENUMBER)
+    LogWithdrawalStep(step = WithdrawalStep.PHONE_NUMBER)
 }

@@ -1,5 +1,5 @@
 package com.idle.binding.base.navigation
 
 interface BaseNavigation {
-    fun navigateToAuth()
+    fun navigateToAuth(snackBarMsg: String)
 }

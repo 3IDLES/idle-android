@@ -62,7 +62,7 @@ abstract class BaseBindingFragment<T : ViewDataBinding, V : BaseViewModel>
             )
 
         is CareBaseEvent.ShowSnackBar -> showSnackBar(event.msg)
-        is CareBaseEvent.NavigateToAuthWithClearBackStack -> baseNavigation.navigateToAuth()
+        is CareBaseEvent.NavigateToAuthWithClearBackStack -> baseNavigation.navigateToAuth(event.snackBarMsg)
     }
 
     override fun onDestroyView() {

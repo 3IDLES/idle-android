@@ -83,7 +83,7 @@ abstract class BaseComposeFragment : Fragment() {
                 }
             }
 
-            is CareBaseEvent.NavigateToAuthWithClearBackStack -> baseNavigation.navigateToAuth()
+            is CareBaseEvent.NavigateToAuthWithClearBackStack -> baseNavigation.navigateToAuth(event.snackBarMsg)
         }
     }
 }

@@ -1,6 +1,5 @@
 package com.idle.auth
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.fadeIn
@@ -25,6 +24,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,12 +38,13 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.idle.analytics.helper.LocalAnalyticsHelper
+import androidx.navigation.fragment.navArgs
 import com.idle.analytics.helper.TrackScreenViewEvent
 import com.idle.binding.DeepLinkDestination
 import com.idle.binding.DeepLinkDestination.CenterSignIn
 import com.idle.binding.DeepLinkDestination.CenterSignUp
 import com.idle.binding.DeepLinkDestination.WorkerSignUp
+import com.idle.binding.base.CareBaseEvent
 import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
@@ -58,11 +59,18 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 internal class AuthFragment : BaseComposeFragment() {
     override val fragmentViewModel: AuthViewModel by viewModels()
+    private val args: AuthFragmentArgs by navArgs()
 
     @Composable
     override fun ComposeLayout() {
         fragmentViewModel.apply {
             val userRole by userRole.collectAsStateWithLifecycle()
+
+            LaunchedEffect(true) {
+                if (args.snackBarMsg != "default") {
+                    baseEvent(CareBaseEvent.ShowSnackBar(args.snackBarMsg))
+                }
+            }
 
             AuthScreen(
                 snackbarHostState = snackbarHostState,
@@ -73,7 +81,6 @@ internal class AuthFragment : BaseComposeFragment() {
         }
     }
 }
-
 
 @Composable
 internal fun AuthScreen(
@@ -94,7 +101,7 @@ internal fun AuthScreen(
                 snackbar = { data ->
                     CareSnackBar(
                         data = data,
-                        modifier = Modifier.padding(bottom = 138.dp)
+                        modifier = Modifier.padding(bottom = 20.dp)
                     )
                 }
             )
@@ -264,6 +271,6 @@ internal fun AuthScreen(
             }
         }
     }
-    
+
     TrackScreenViewEvent(screenName = "auth_screen")
 }

@@ -35,6 +35,7 @@
     <string name="withdrawal_reason_title">정말 탈퇴하시겠어요?</string>
     <string name="withdrawal_reason_description">계정을 삭제하시려는 이유를 알려주세요.\n소중한 피드백을 받아 더 나은 서비스로 보답하겠습니다.</string>
     <string name="withdrawal_phone_number_verification_title">마지막으로\n전화번호를 인증해주세요.</string>
+    <string name="withdrawal_password_verification_title">마지막으로\n비밀번호를 입력해주세요.</string>
     <string name="withdrawal_warning">탈퇴 버튼 선택 시 모든 정보가 삭제되며, 되돌릴 수 없습니다.</string>
 
     <!-- User Registration -->
@@ -193,7 +194,7 @@
     <string name="customer_info_format">%1$s등급 %2$s세 %3$s</string>
 
     <!-- Miscellaneous -->
-    <string name="auth_title">쉽고 빠르게 만나는\n집 근처 요양 일자리\n케어밋</string>
+    <string name="auth_title">쉽고 빠르게 만나는\n집 근처 요양 일자리, 케어밋</string>
     <string name="center_info_input_animation_label">센터 정보 입력을 관리하는 애니메이션</string>
     <string name="center_info_input">센터 정보를 입력해주세요.</string>
     <string name="start_center">센터 관리자로\n시작하기</string>

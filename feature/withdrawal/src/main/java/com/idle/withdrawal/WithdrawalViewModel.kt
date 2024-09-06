@@ -1,7 +1,6 @@
 package com.idle.withdrawal
 
 import androidx.lifecycle.viewModelScope
-import com.idle.binding.DeepLinkDestination
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.CountDownTimer
@@ -47,6 +46,18 @@ class WithdrawalViewModel @Inject constructor(
     private val _isConfirmAuthCode = MutableStateFlow(false)
     val isConfirmAuthCode = _isConfirmAuthCode.asStateFlow()
 
+    private val _inconvenientReason = MutableStateFlow<String>("")
+    val inconvenientReason = _inconvenientReason.asStateFlow()
+
+    private val _anotherPlatformReason = MutableStateFlow<String>("")
+    val anotherPlatformReason = _anotherPlatformReason.asStateFlow()
+
+    private val _lackFeaturesReason = MutableStateFlow<String>("")
+    val lackFeaturesReason = _lackFeaturesReason.asStateFlow()
+
+    private val _password = MutableStateFlow("")
+    val password = _password.asStateFlow()
+
     internal fun setWithdrawalStep(step: WithdrawalStep) {
         _withdrawalStep.value = step
     }
@@ -59,7 +70,9 @@ class WithdrawalViewModel @Inject constructor(
     }
 
     internal fun setPhoneNumber(phoneNumber: String) {
-        _phoneNumber.value = phoneNumber
+        if (phoneNumber.length <= 11) {
+            _phoneNumber.value = phoneNumber
+        }
     }
 
     internal fun setAuthCode(authCode: String) {
@@ -70,6 +83,22 @@ class WithdrawalViewModel @Inject constructor(
         sendPhoneNumberUseCase(_phoneNumber.value)
             .onSuccess { startTimer() }
             .onFailure { handleFailure(it as HttpResponseException) }
+    }
+
+    internal fun setInconvenientReason(reason: String) {
+        _inconvenientReason.value = reason
+    }
+
+    internal fun setAnotherPlatformReason(reason: String) {
+        _anotherPlatformReason.value = reason
+    }
+
+    internal fun setLackFeaturesReason(reason: String) {
+        _lackFeaturesReason.value = reason
+    }
+
+    internal fun setPassword(password: String) {
+        _password.value = password
     }
 
     private fun startTimer() {
@@ -117,16 +146,18 @@ class WithdrawalViewModel @Inject constructor(
         withdrawalCenterUseCase(
             reason = _withdrawalReason.value
                 .sortedBy { it.ordinal }
+                .map { reason ->
+                    when (reason) {
+                        WithdrawalReason.INCONVENIENT_PLATFORM_USE -> "${reason} : ${_inconvenientReason.value}"
+                        WithdrawalReason.USING_ANOTHER_PLATFORM -> "${reason} : ${_anotherPlatformReason.value}"
+                        WithdrawalReason.LACK_OF_DESIRED_FEATURES -> "${reason} : ${_lackFeaturesReason.value}"
+                        else -> reason
+                    }
+                }
                 .joinToString("|"),
-            password = "testpassword1234"
+            password = password.value
         ).onSuccess {
-            baseEvent(
-                CareBaseEvent.NavigateTo(
-                    destination = DeepLinkDestination.Auth,
-                    popUpTo = com.idle.withdrawal.R.id.withdrawalFragment,
-                )
-            )
-            baseEvent(CareBaseEvent.ShowSnackBar("회원탈퇴가 완료되었어요.|ERROR"))
+            baseEvent(CareBaseEvent.NavigateToAuthWithClearBackStack("회원탈퇴가 완료되었어요.|ERROR"))
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
@@ -136,14 +167,13 @@ class WithdrawalViewModel @Inject constructor(
                 .sortedBy { it.ordinal }
                 .joinToString("|"),
         ).onSuccess {
-            baseEvent(CareBaseEvent.NavigateToAuthWithClearBackStack)
-            baseEvent(CareBaseEvent.ShowSnackBar("회원탈퇴가 완료되었어요.|ERROR"))
+            baseEvent(CareBaseEvent.NavigateToAuthWithClearBackStack("회원탈퇴가 완료되었어요.|ERROR"))
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 }
 
 enum class WithdrawalStep(val step: Int) {
-    REASON(1), PHONENUMBER(2);
+    REASON(1), PHONE_NUMBER(2), PASSWORD(2);
 
     companion object {
         fun findStep(step: Int): WithdrawalStep {
