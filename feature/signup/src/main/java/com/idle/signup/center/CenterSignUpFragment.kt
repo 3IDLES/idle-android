@@ -135,8 +135,6 @@ internal fun CenterSignUpScreen(
 ) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val focusManager = LocalFocusManager.current
-    val (businessRegistrationProcessed, setBusinessRegistrationProcessed)
-            = remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -200,13 +198,11 @@ internal fun CenterSignUpScreen(
                             centerAuthCodeTimerSeconds = centerAuthCodeTimerSeconds,
                             centerAuthCode = centerAuthCode,
                             isConfirmAuthCode = isConfirmAuthCode,
-                            businessRegistrationProcessed = businessRegistrationProcessed,
                             onCenterPhoneNumberChanged = onCenterPhoneNumberChanged,
                             onCenterAuthCodeChanged = onCenterAuthCodeChanged,
                             setSignUpStep = setSignUpStep,
                             sendPhoneNumber = sendPhoneNumber,
                             confirmAuthCode = confirmAuthCode,
-                            setBusinessRegistrationProcessed = setBusinessRegistrationProcessed,
                         )
 
                     CenterSignUpStep.BUSINESS_REGISTRATION ->

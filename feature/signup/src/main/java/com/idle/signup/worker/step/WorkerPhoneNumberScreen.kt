@@ -14,8 +14,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.idle.designresource.R
@@ -25,7 +27,6 @@ import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.signin.worker.WorkerSignUpStep
-import com.idle.signin.worker.WorkerSignUpStep.INFO
 import com.idle.signin.worker.WorkerSignUpStep.PHONE_NUMBER
 import com.idle.signup.LogWorkerSignUpStep
 
@@ -36,26 +37,18 @@ internal fun WorkerPhoneNumberScreen(
     workerAuthCodeTimerSeconds: String,
     workerAuthCode: String,
     isConfirmAuthCode: Boolean,
-    addressProcessed: Boolean,
     onWorkerPhoneNumberChanged: (String) -> Unit,
     onWorkerAuthCodeChanged: (String) -> Unit,
     setSignUpStep: (WorkerSignUpStep) -> Unit,
     sendPhoneNumber: () -> Unit,
     confirmAuthCode: () -> Unit,
-    setAddressProcessed: (Boolean) -> Unit,
     navigateToAuth: () -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
-    }
-
-    LaunchedEffect(isConfirmAuthCode) {
-        if (isConfirmAuthCode && !addressProcessed) {
-            setSignUpStep(WorkerSignUpStep.findStep(PHONE_NUMBER.step + 1))
-            setAddressProcessed(true)
-        }
     }
 
     BackHandler { navigateToAuth() }
@@ -83,7 +76,13 @@ internal fun WorkerPhoneNumberScreen(
                 CareTextField(
                     value = workerPhoneNumber,
                     hint = stringResource(id = R.string.phone_number_hint),
-                    onValueChanged = onWorkerPhoneNumberChanged,
+                    onValueChanged = {
+                        onWorkerPhoneNumberChanged(it)
+                        if (it.length == 11) {
+                            sendPhoneNumber()
+                            focusManager.moveFocus(FocusDirection.Down)
+                        }
+                    },
                     readOnly = (workerAuthCodeTimerMinute != "" && workerAuthCodeTimerSeconds != ""),
                     onDone = { if (workerPhoneNumber.length == 11) sendPhoneNumber() },
                     modifier = Modifier

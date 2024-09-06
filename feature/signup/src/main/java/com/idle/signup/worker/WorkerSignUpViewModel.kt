@@ -1,5 +1,6 @@
 package com.idle.signin.worker
 
+import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.DeepLinkDestination.WorkerHome
 import com.idle.binding.base.BaseViewModel
@@ -70,7 +71,7 @@ class WorkerSignUpViewModel @Inject constructor(
     }
 
     internal fun setWorkerPhoneNumber(phoneNumber: String) {
-        if (phoneNumber.length <= 11) {
+        if (phoneNumber.isDigitsOnly() && phoneNumber.length <= 11) {
             _workerPhoneNumber.value = phoneNumber
         }
     }
@@ -144,6 +145,7 @@ class WorkerSignUpViewModel @Inject constructor(
             confirmAuthCodeUseCase(_workerPhoneNumber.value, _workerAuthCode.value).onSuccess {
                 cancelTimer()
                 _isConfirmAuthCode.value = true
+                _signUpStep.value = WorkerSignUpStep.findStep(PHONE_NUMBER.step + 1)
             }.onFailure { handleFailure(it as HttpResponseException) }
         }
     }

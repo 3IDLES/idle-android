@@ -13,8 +13,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -39,6 +41,7 @@ internal fun GenerateNewPasswordScreen(
     setNewPasswordProcess: (NewPasswordStep) -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
@@ -80,7 +83,7 @@ internal fun GenerateNewPasswordScreen(
                 hint = stringResource(id = R.string.password_hint),
                 onValueChanged = onNewPasswordChanged,
                 visualTransformation = PasswordVisualTransformation(),
-                onDone = { },
+                onDone = { focusManager.moveFocus(FocusDirection.Down) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .focusRequester(focusRequester),
@@ -96,7 +99,11 @@ internal fun GenerateNewPasswordScreen(
                 hint = stringResource(id = R.string.confirm_password_hint),
                 onValueChanged = onNewPasswordForConfirmChanged,
                 visualTransformation = PasswordVisualTransformation(),
-                onDone = { },
+                onDone = {
+                    if (newPasswordForConfirm.isNotBlank() && newPassword == newPasswordForConfirm) {
+                        //Todo
+                    }
+                },
                 modifier = Modifier.fillMaxWidth(),
             )
         }
@@ -105,8 +112,10 @@ internal fun GenerateNewPasswordScreen(
 
         CareButtonLarge(
             text = stringResource(id = R.string.change_password),
-            enable = newPasswordForConfirm.isNotBlank(),
-            onClick = { },
+            enable = newPasswordForConfirm.isNotBlank() && newPassword == newPasswordForConfirm,
+            onClick = {
+                //Todo
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 28.dp),

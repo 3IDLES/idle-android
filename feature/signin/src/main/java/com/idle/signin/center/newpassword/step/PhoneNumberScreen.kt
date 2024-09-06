@@ -13,8 +13,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.idle.designresource.R
@@ -39,6 +41,7 @@ internal fun PhoneNumberScreen(
     setNewPasswordProcess: (NewPasswordStep) -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
@@ -67,7 +70,13 @@ internal fun PhoneNumberScreen(
                 CareTextField(
                     value = phoneNumber,
                     hint = stringResource(id = R.string.phone_number_hint),
-                    onValueChanged = onPhoneNumberChanged,
+                    onValueChanged = {
+                        onPhoneNumberChanged(it)
+                        if (it.length == 11) {
+                            sendPhoneNumber()
+                            focusManager.moveFocus(FocusDirection.Down)
+                        }
+                    },
                     readOnly = (timerMinute != "" && timerSeconds != ""),
                     onDone = { if (phoneNumber.length == 11) sendPhoneNumber() },
                     modifier = Modifier
