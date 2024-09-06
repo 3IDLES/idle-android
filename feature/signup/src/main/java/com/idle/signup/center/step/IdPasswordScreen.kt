@@ -39,7 +39,6 @@ import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.signin.center.CenterSignUpStep
 import com.idle.signin.center.CenterSignUpStep.ID_PASSWORD
-import com.idle.signin.center.CenterSignUpStep.PHONE_NUMBER
 import com.idle.signup.LogCenterSignUpStep
 
 @Composable

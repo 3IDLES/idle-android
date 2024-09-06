@@ -49,7 +49,7 @@ class CenterSignInViewModel @Inject constructor(
                     AnalyticsEvent(
                         type = AnalyticsEvent.Types.ACTION,
                         properties = mutableMapOf(
-                            ACTION_NAME to "login",
+                            ACTION_NAME to "center_login",
                             ACTION_RESULT to false,
                         )
                     )

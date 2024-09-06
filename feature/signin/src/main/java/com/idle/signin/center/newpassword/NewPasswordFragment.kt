@@ -23,6 +23,7 @@ import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareSnackBar
+import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.signin.center.newpassword.step.GenerateNewPasswordScreen
@@ -37,7 +38,10 @@ class NewPasswordFragment : BaseComposeFragment() {
     override fun ComposeLayout() {
         fragmentViewModel.apply {
             val phoneNumber by phoneNumber.collectAsStateWithLifecycle()
-            val authCode by centerAuthCode.collectAsStateWithLifecycle()
+            val authCode by authCode.collectAsStateWithLifecycle()
+            val timerMinute by timerMinute.collectAsStateWithLifecycle()
+            val timerSeconds by timerSeconds.collectAsStateWithLifecycle()
+            val isConfirmAuthCode by isConfirmAuthCode.collectAsStateWithLifecycle()
             val newPasswordProcess by newPasswordProcess.collectAsStateWithLifecycle()
             val newPassword by newPassword.collectAsStateWithLifecycle()
             val newPasswordForConfirm by newPasswordForConfirm.collectAsStateWithLifecycle()
@@ -46,7 +50,10 @@ class NewPasswordFragment : BaseComposeFragment() {
                 snackbarHostState = snackbarHostState,
                 newPasswordStep = newPasswordProcess,
                 phoneNumber = phoneNumber,
-                certificationNumber = authCode,
+                authCode = authCode,
+                timerMinute = timerMinute,
+                timerSeconds = timerSeconds,
+                isConfirmAuthCode = isConfirmAuthCode,
                 newPassword = newPassword,
                 newPasswordForConfirm = newPasswordForConfirm,
                 setNewPasswordProcess = ::setNewPasswordProcess,
@@ -65,7 +72,10 @@ class NewPasswordFragment : BaseComposeFragment() {
 internal fun NewPasswordScreen(
     snackbarHostState: SnackbarHostState,
     phoneNumber: String,
-    certificationNumber: String,
+    authCode: String,
+    timerMinute: String,
+    timerSeconds: String,
+    isConfirmAuthCode: Boolean,
     newPassword: String,
     newPasswordForConfirm: String,
     newPasswordStep: NewPasswordStep,
@@ -102,24 +112,32 @@ internal fun NewPasswordScreen(
                 .padding(paddingValue)
                 .padding(start = 20.dp, end = 20.dp, top = 24.dp),
         ) {
-            when (newPasswordStep) {
-                NewPasswordStep.PHONE_NUMBER -> PhoneNumberScreen(
-                    phoneNumber = phoneNumber,
-                    certificationNumber = certificationNumber,
-                    onPhoneNumberChanged = onPhoneNumberChanged,
-                    onAuthCodeChanged = onAuthCodeChanged,
-                    sendPhoneNumber = sendPhoneNumber,
-                    confirmAuthCode = confirmAuthCode,
-                    setNewPasswordProcess = setNewPasswordProcess,
-                )
+            CareStateAnimator(
+                targetState = newPasswordStep,
+                label = "새 비밀번호 발급을 관리하는 애니메이션",
+            ) { step ->
+                when (step) {
+                    NewPasswordStep.PHONE_NUMBER -> PhoneNumberScreen(
+                        phoneNumber = phoneNumber,
+                        authCode = authCode,
+                        timerMinute = timerMinute,
+                        timerSeconds = timerSeconds,
+                        isConfirmAuthCode = isConfirmAuthCode,
+                        onPhoneNumberChanged = onPhoneNumberChanged,
+                        onAuthCodeChanged = onAuthCodeChanged,
+                        sendPhoneNumber = sendPhoneNumber,
+                        confirmAuthCode = confirmAuthCode,
+                        setNewPasswordProcess = setNewPasswordProcess,
+                    )
 
-                NewPasswordStep.GENERATE_NEW_PASSWORD -> GenerateNewPasswordScreen(
-                    newPassword = newPassword,
-                    newPasswordForConfirm = newPasswordForConfirm,
-                    onNewPasswordChanged = onNewPasswordChanged,
-                    onNewPasswordForConfirmChanged = onNewPasswordForConfirmChanged,
-                    setNewPasswordProcess = setNewPasswordProcess,
-                )
+                    NewPasswordStep.GENERATE_NEW_PASSWORD -> GenerateNewPasswordScreen(
+                        newPassword = newPassword,
+                        newPasswordForConfirm = newPasswordForConfirm,
+                        onNewPasswordChanged = onNewPasswordChanged,
+                        onNewPasswordForConfirmChanged = onNewPasswordForConfirmChanged,
+                        setNewPasswordProcess = setNewPasswordProcess,
+                    )
+                }
             }
         }
     }
