@@ -39,7 +39,7 @@ class WorkerSettingViewModel @Inject constructor(
 
     fun logout() = viewModelScope.launch {
         logoutWorkerUseCase().onSuccess {
-            baseEvent(CareBaseEvent.NavigateToAuthWithClearBackStack)
+            baseEvent(CareBaseEvent.NavigateToAuthWithClearBackStack("로그아웃이 완료되었습니다.|SUCCESS"))
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 

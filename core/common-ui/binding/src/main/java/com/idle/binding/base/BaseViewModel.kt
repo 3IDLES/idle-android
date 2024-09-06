@@ -24,8 +24,7 @@ open class BaseViewModel : ViewModel() {
             ApiErrorCode.TokenExpiredException,
             ApiErrorCode.TokenNotFound,
             ApiErrorCode.NotSupportUserTokenType -> {
-                _baseEventFlow.emit(CareBaseEvent.ShowSnackBar(error.apiErrorCode.displayMsg + "|Error"))
-                _baseEventFlow.emit(CareBaseEvent.NavigateToAuthWithClearBackStack)
+                _baseEventFlow.emit(CareBaseEvent.NavigateToAuthWithClearBackStack(error.apiErrorCode.displayMsg + "|Error"))
             }
 
             else -> _baseEventFlow.emit(CareBaseEvent.ShowSnackBar(error.apiErrorCode.displayMsg + "|Error"))
@@ -38,5 +37,5 @@ sealed class CareBaseEvent {
         CareBaseEvent()
 
     data class ShowSnackBar(val msg: String) : CareBaseEvent()
-    data object NavigateToAuthWithClearBackStack : CareBaseEvent()
+    data class NavigateToAuthWithClearBackStack(val snackBarMsg: String) : CareBaseEvent()
 }

@@ -40,7 +40,7 @@ class CenterSettingViewModel @Inject constructor(
 
     fun logout() = viewModelScope.launch {
         logoutCenterUseCase().onSuccess {
-            baseEvent(CareBaseEvent.NavigateToAuthWithClearBackStack)
+            baseEvent(CareBaseEvent.NavigateToAuthWithClearBackStack("로그아웃이 완료되었습니다.|SUCCESS"))
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 

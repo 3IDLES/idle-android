@@ -157,8 +157,7 @@ class WithdrawalViewModel @Inject constructor(
                 .joinToString("|"),
             password = password.value
         ).onSuccess {
-            baseEvent(CareBaseEvent.NavigateToAuthWithClearBackStack)
-            baseEvent(CareBaseEvent.ShowSnackBar("회원탈퇴가 완료되었어요.|ERROR"))
+            baseEvent(CareBaseEvent.NavigateToAuthWithClearBackStack("회원탈퇴가 완료되었어요.|ERROR"))
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
@@ -168,8 +167,7 @@ class WithdrawalViewModel @Inject constructor(
                 .sortedBy { it.ordinal }
                 .joinToString("|"),
         ).onSuccess {
-            baseEvent(CareBaseEvent.NavigateToAuthWithClearBackStack)
-            baseEvent(CareBaseEvent.ShowSnackBar("회원탈퇴가 완료되었어요.|ERROR"))
+            baseEvent(CareBaseEvent.NavigateToAuthWithClearBackStack("회원탈퇴가 완료되었어요.|ERROR"))
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 }

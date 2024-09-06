@@ -4,10 +4,18 @@
     android:id="@+id/nav_auth"
     app:startDestination="@id/authFragment">
 
+    <action
+        android:id="@+id/action_global_nav_auth"
+        app:destination="@id/authFragment" />
+
     <fragment
         android:id="@+id/authFragment"
         android:name="com.idle.auth.AuthFragment"
         android:label="AuthFragment">
         <deepLink app:uri="@string/auth_deeplink_url" />
+        <argument
+            android:name="snackBarMsg"
+            android:defaultValue="default"
+            app:argType="string" />
     </fragment>
 </navigation>
