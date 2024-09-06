@@ -1,9 +1,7 @@
 package com.idle.withdrawal
 
 import androidx.lifecycle.viewModelScope
-import com.idle.binding.DeepLinkDestination
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.CountDownTimer
 import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
@@ -15,7 +13,9 @@ import com.idle.domain.usecase.auth.WithdrawalCenterUseCase
 import com.idle.domain.usecase.auth.WithdrawalWorkerUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,6 +28,9 @@ class WithdrawalViewModel @Inject constructor(
     private val withdrawalWorkerUseCase: WithdrawalWorkerUseCase,
     private val countDownTimer: CountDownTimer,
 ) : BaseViewModel() {
+    private val _withdrawalEvent = MutableSharedFlow<WithdrawalEvent>()
+    val withdrawalEvent = _withdrawalEvent.asSharedFlow()
+
     private val _withdrawalStep = MutableStateFlow<WithdrawalStep>(WithdrawalStep.REASON)
     internal val withdrawalStep = _withdrawalStep.asStateFlow()
 
@@ -56,6 +59,9 @@ class WithdrawalViewModel @Inject constructor(
     private val _lackFeaturesReason = MutableStateFlow<String>("")
     val lackFeaturesReason = _lackFeaturesReason.asStateFlow()
 
+    private val _password = MutableStateFlow("")
+    val password = _password.asStateFlow()
+
     internal fun setWithdrawalStep(step: WithdrawalStep) {
         _withdrawalStep.value = step
     }
@@ -71,6 +77,10 @@ class WithdrawalViewModel @Inject constructor(
         if (phoneNumber.length <= 11) {
             _phoneNumber.value = phoneNumber
         }
+    }
+
+    internal fun event(event: WithdrawalEvent) = viewModelScope.launch {
+        _withdrawalEvent.emit(event)
     }
 
     internal fun setAuthCode(authCode: String) {
@@ -93,6 +103,10 @@ class WithdrawalViewModel @Inject constructor(
 
     internal fun setLackFeaturesReason(reason: String) {
         _lackFeaturesReason.value = reason
+    }
+
+    internal fun setPassword(password: String) {
+        _password.value = password
     }
 
     private fun startTimer() {
@@ -140,16 +154,18 @@ class WithdrawalViewModel @Inject constructor(
         withdrawalCenterUseCase(
             reason = _withdrawalReason.value
                 .sortedBy { it.ordinal }
+                .map { reason ->
+                    when (reason) {
+                        WithdrawalReason.INCONVENIENT_PLATFORM_USE -> "${reason} : ${_inconvenientReason.value}"
+                        WithdrawalReason.USING_ANOTHER_PLATFORM -> "${reason} : ${_anotherPlatformReason.value}"
+                        WithdrawalReason.LACK_OF_DESIRED_FEATURES -> "${reason} : ${_lackFeaturesReason.value}"
+                        else -> reason
+                    }
+                }
                 .joinToString("|"),
-            password = "testpassword1234"
+            password = password.value
         ).onSuccess {
-            baseEvent(
-                CareBaseEvent.NavigateTo(
-                    destination = DeepLinkDestination.Auth,
-                    popUpTo = com.idle.withdrawal.R.id.withdrawalFragment,
-                )
-            )
-            baseEvent(CareBaseEvent.ShowSnackBar("회원탈퇴가 완료되었어요.|ERROR"))
+            event(WithdrawalEvent.WithdrawalSuccess)
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
@@ -159,14 +175,13 @@ class WithdrawalViewModel @Inject constructor(
                 .sortedBy { it.ordinal }
                 .joinToString("|"),
         ).onSuccess {
-            baseEvent(CareBaseEvent.NavigateToAuthWithClearBackStack)
-            baseEvent(CareBaseEvent.ShowSnackBar("회원탈퇴가 완료되었어요.|ERROR"))
+            event(WithdrawalEvent.WithdrawalSuccess)
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 }
 
 enum class WithdrawalStep(val step: Int) {
-    REASON(1), PHONENUMBER(2);
+    REASON(1), PHONE_NUMBER(2), PASSWORD(2);
 
     companion object {
         fun findStep(step: Int): WithdrawalStep {
@@ -188,4 +203,8 @@ enum class WithdrawalReason(val displayName: String) {
 
     // 요양 보호사
     NO_LONGER_WISH_TO_CONTINUE("더 이상 구직 의사가 없음");
+}
+
+sealed class WithdrawalEvent {
+    data object WithdrawalSuccess : WithdrawalEvent()
 }

@@ -53,7 +53,7 @@ internal fun PhoneNumberScreen(
         focusRequester.requestFocus()
     }
 
-    BackHandler { setWithdrawalStep(WithdrawalStep.findStep(WithdrawalStep.PHONENUMBER.step - 1)) }
+    BackHandler { setWithdrawalStep(WithdrawalStep.findStep(WithdrawalStep.PHONE_NUMBER.step - 1)) }
 
     Column(
         horizontalAlignment = Alignment.Start,
@@ -180,5 +180,5 @@ internal fun PhoneNumberScreen(
         }
     }
 
-    LogWithdrawalStep(step = WithdrawalStep.PHONENUMBER)
+    LogWithdrawalStep(step = WithdrawalStep.PHONE_NUMBER)
 }

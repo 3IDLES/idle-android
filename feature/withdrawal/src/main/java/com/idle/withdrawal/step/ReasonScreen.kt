@@ -185,11 +185,20 @@ internal fun ReasonScreen(
                 text = stringResource(id = R.string.withdrawal),
                 textColor = CareTheme.colors.white000,
                 containerColor = CareTheme.colors.red,
-                enable = withdrawalReason.isNotEmpty() &&
-                        (WithdrawalReason.LACK_OF_DESIRED_FEATURES in withdrawalReason && lackFeaturesReason.isNotBlank()) &&
-                        (WithdrawalReason.INCONVENIENT_PLATFORM_USE in withdrawalReason && inconvenientReason.isNotBlank()) &&
-                        (WithdrawalReason.USING_ANOTHER_PLATFORM in withdrawalReason && anotherPlatformReason.isNotBlank()),
-                onClick = { setWithdrawalStep(WithdrawalStep.findStep(WithdrawalStep.REASON.step + 1)) },
+                enable = withdrawalReason.isNotEmpty() && withdrawalReason.all {
+                    when (it) {
+                        WithdrawalReason.LACK_OF_DESIRED_FEATURES -> lackFeaturesReason.isNotBlank()
+                        WithdrawalReason.INCONVENIENT_PLATFORM_USE -> inconvenientReason.isNotBlank()
+                        WithdrawalReason.USING_ANOTHER_PLATFORM -> anotherPlatformReason.isNotBlank()
+                        else -> true
+                    }
+                },
+                onClick = {
+                    when (userType) {
+                        UserType.WORKER -> setWithdrawalStep(WithdrawalStep.PHONE_NUMBER)
+                        UserType.CENTER -> setWithdrawalStep(WithdrawalStep.PASSWORD)
+                    }
+                },
                 modifier = Modifier.weight(1f),
             )
         }

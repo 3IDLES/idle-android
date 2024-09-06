@@ -94,7 +94,7 @@ enum class ApiErrorCode(val serverCode: String, val description: String, val dis
     AlreadyApplied("APPLY-001", "해당 공고에 같은 지원 수단으로 지원한 과거 이력이 존재하는 경우 발생합니다.", "이미 지원한 공고 입니다."),
 
     // API Errors
-    InvalidParameter("API-001", "API 요청 시, 잘못된 parameter를 입력한 경우 발생합니다.", "잘못된 입력입니다."),
+    InvalidParameter("API-001", "API 요청 시, 잘못된 parameter를 입력한 경우 발생합니다.", "올바르지 않은 입력입니다."),
 
     // SECURITY Errors
     UnAuthorizedRequest(
