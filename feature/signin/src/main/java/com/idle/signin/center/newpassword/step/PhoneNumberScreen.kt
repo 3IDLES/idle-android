@@ -24,12 +24,14 @@ import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.signin.center.newpassword.NewPasswordStep
-import com.idle.signin.center.newpassword.NewPasswordStep.GENERATE_NEW_PASSWORD
 
 @Composable
 internal fun PhoneNumberScreen(
     phoneNumber: String,
-    certificationNumber: String,
+    authCode: String,
+    timerMinute: String,
+    timerSeconds: String,
+    isConfirmAuthCode: Boolean,
     onPhoneNumberChanged: (String) -> Unit,
     onAuthCodeChanged: (String) -> Unit,
     sendPhoneNumber: () -> Unit,
@@ -44,7 +46,7 @@ internal fun PhoneNumberScreen(
 
     Column(
         horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(32.dp, Alignment.CenterVertically),
+        verticalArrangement = Arrangement.spacedBy(32.dp),
         modifier = Modifier.fillMaxSize()
     ) {
         Text(
@@ -58,7 +60,7 @@ internal fun PhoneNumberScreen(
             modifier = Modifier.fillMaxWidth(),
         ) {
             Row(
-                verticalAlignment = Alignment.CenterVertically,
+                verticalAlignment = Alignment.Top,
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -66,42 +68,57 @@ internal fun PhoneNumberScreen(
                     value = phoneNumber,
                     hint = stringResource(id = R.string.phone_number_hint),
                     onValueChanged = onPhoneNumberChanged,
-                    onDone = { sendPhoneNumber() },
+                    readOnly = (timerMinute != "" && timerSeconds != ""),
+                    onDone = { if (phoneNumber.length == 11) sendPhoneNumber() },
                     modifier = Modifier
                         .weight(1f)
                         .focusRequester(focusRequester),
                 )
 
                 CareButtonSmall(
-                    enable = phoneNumber.length == 13,
+                    enable = phoneNumber.length == 11 &&
+                            !(timerMinute != "" && timerSeconds != ""),
                     text = stringResource(id = R.string.verification),
                     onClick = sendPhoneNumber,
                 )
             }
         }
 
-        LabeledContent(
-            subtitle = stringResource(id = R.string.confirm_code),
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                modifier = Modifier.fillMaxWidth()
+        if (timerMinute.isNotBlank()) {
+            LabeledContent(
+                subtitle = stringResource(id = R.string.confirm_code),
+                modifier = Modifier.fillMaxWidth(),
             ) {
-                CareTextField(
-                    value = certificationNumber,
-                    hint = "",
-                    onValueChanged = onAuthCodeChanged,
-                    onDone = { confirmAuthCode() },
-                    modifier = Modifier.weight(1f),
-                )
+                Row(
+                    verticalAlignment = Alignment.Top,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    CareTextField(
+                        value = authCode,
+                        hint = "",
+                        onValueChanged = onAuthCodeChanged,
+                        onDone = { confirmAuthCode() },
+                        supportingText = if (isConfirmAuthCode) "인증이 완료되었습니다." else "",
+                        readOnly = !(timerMinute != "" && timerSeconds != "") || isConfirmAuthCode,
+                        leftComponent = {
+                            if (timerMinute != "" && timerSeconds != "") {
+                                Text(
+                                    text = "$timerMinute:$timerSeconds",
+                                    style = CareTheme.typography.body3,
+                                    color = if (!isConfirmAuthCode) CareTheme.colors.gray500 else CareTheme.colors.gray200,
+                                )
+                            }
+                        },
+                        modifier = Modifier.weight(1f),
+                    )
 
-                CareButtonSmall(
-                    enable = certificationNumber.isNotBlank(),
-                    text = stringResource(id = R.string.confirm),
-                    onClick = confirmAuthCode,
-                )
+                    CareButtonSmall(
+                        enable = authCode.isNotBlank() && !isConfirmAuthCode,
+                        text = stringResource(id = R.string.confirm),
+                        onClick = confirmAuthCode,
+                    )
+                }
             }
         }
 
@@ -109,8 +126,8 @@ internal fun PhoneNumberScreen(
 
         CareButtonLarge(
             text = stringResource(id = R.string.next),
-            enable = certificationNumber.isNotBlank(),
-            onClick = { setNewPasswordProcess(GENERATE_NEW_PASSWORD) },
+            enable = isConfirmAuthCode,
+            onClick = { setNewPasswordProcess(NewPasswordStep.GENERATE_NEW_PASSWORD) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 28.dp),

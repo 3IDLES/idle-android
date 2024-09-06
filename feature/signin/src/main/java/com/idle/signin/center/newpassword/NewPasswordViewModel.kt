@@ -1,13 +1,18 @@
 package com.idle.signin.center.newpassword
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
+import com.idle.binding.base.CareBaseEvent
+import com.idle.domain.model.CountDownTimer
+import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
+import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
 import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
+import com.idle.signin.center.newpassword.NewPasswordStep.GENERATE_NEW_PASSWORD
 import com.idle.signin.center.newpassword.NewPasswordStep.PHONE_NUMBER
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -17,12 +22,24 @@ import javax.inject.Inject
 class NewPasswordViewModel @Inject constructor(
     private val sendPhoneNumberUseCase: SendPhoneNumberUseCase,
     private val confirmAuthCodeUseCase: ConfirmAuthCodeUseCase,
+    private val countDownTimer: CountDownTimer,
 ) : BaseViewModel() {
-    private val _centerPhoneNumber = MutableStateFlow("")
-    internal val phoneNumber = _centerPhoneNumber.asStateFlow()
+    private val _phoneNumber = MutableStateFlow("")
+    internal val phoneNumber = _phoneNumber.asStateFlow()
 
-    private val _centerAuthCode = MutableStateFlow("")
-    internal val centerAuthCode = _centerAuthCode.asStateFlow()
+    private val _authCode = MutableStateFlow("")
+    internal val authCode = this._authCode.asStateFlow()
+
+    private var timerJob: Job? = null
+
+    private val _timerMinute = MutableStateFlow("")
+    val timerMinute = _timerMinute.asStateFlow()
+
+    private val _timerSeconds = MutableStateFlow("")
+    val timerSeconds = _timerSeconds.asStateFlow()
+
+    private val _isConfirmAuthCode = MutableStateFlow(false)
+    val isConfirmAuthCode = _isConfirmAuthCode.asStateFlow()
 
     private val _newPasswordProcess = MutableStateFlow(PHONE_NUMBER)
     internal val newPasswordProcess = _newPasswordProcess.asStateFlow()
@@ -34,11 +51,11 @@ class NewPasswordViewModel @Inject constructor(
     internal val newPasswordForConfirm = _newPasswordForConfirm.asStateFlow()
 
     internal fun setPhoneNumber(phoneNumber: String) {
-        _centerPhoneNumber.value = phoneNumber
+        _phoneNumber.value = phoneNumber
     }
 
     internal fun setAuthCode(certificateNumber: String) {
-        _centerAuthCode.value = certificateNumber
+        this._authCode.value = certificateNumber
     }
 
     internal fun setNewPasswordProcess(process: NewPasswordStep) {
@@ -54,15 +71,47 @@ class NewPasswordViewModel @Inject constructor(
     }
 
     internal fun sendPhoneNumber() = viewModelScope.launch {
-        sendPhoneNumberUseCase(_centerPhoneNumber.value)
-            .onSuccess { Log.d("test", "성공!") }
-            .onFailure { handleFailure(it as HttpResponseException) }
+        sendPhoneNumberUseCase(_phoneNumber.value)
+            .onSuccess { startTimer() }
+            .onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
+    }
+
+    private fun startTimer() {
+        cancelTimer()
+
+        timerJob = viewModelScope.launch {
+            countDownTimer.start(limitTime = TICK_INTERVAL * SECONDS_PER_MINUTE * 5)
+                .collect { timeMillis ->
+                    updateTimerDisplay(timeMillis)
+                }
+        }
+    }
+
+    private fun updateTimerDisplay(timeMillis: Long) {
+        val minutes =
+            (timeMillis / (TICK_INTERVAL * SECONDS_PER_MINUTE)).toString().padStart(2, '0')
+        val seconds =
+            ((timeMillis % (TICK_INTERVAL * SECONDS_PER_MINUTE)) / TICK_INTERVAL).toString()
+                .padStart(2, '0')
+
+        _timerMinute.value = minutes
+        _timerSeconds.value = seconds
+    }
+
+    private fun cancelTimer() {
+        timerJob?.cancel()
+        timerJob = null
     }
 
     internal fun confirmAuthCode() = viewModelScope.launch {
-        confirmAuthCodeUseCase(_centerPhoneNumber.value, _centerAuthCode.value)
-            .onSuccess { Log.d("test", "성공!") }
-            .onFailure { handleFailure(it as HttpResponseException) }
+        confirmAuthCodeUseCase(
+            _phoneNumber.value,
+            this@NewPasswordViewModel._authCode.value
+        ).onSuccess {
+            cancelTimer()
+            _isConfirmAuthCode.value = true
+            _newPasswordProcess.value = GENERATE_NEW_PASSWORD
+        }.onFailure { handleFailure(it as HttpResponseException) }
     }
 }
 

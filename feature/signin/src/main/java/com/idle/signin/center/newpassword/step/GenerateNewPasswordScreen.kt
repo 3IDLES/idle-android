@@ -18,6 +18,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -78,6 +79,7 @@ internal fun GenerateNewPasswordScreen(
                 value = newPassword,
                 hint = stringResource(id = R.string.password_hint),
                 onValueChanged = onNewPasswordChanged,
+                visualTransformation = PasswordVisualTransformation(),
                 onDone = { },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -93,6 +95,7 @@ internal fun GenerateNewPasswordScreen(
                 value = newPasswordForConfirm,
                 hint = stringResource(id = R.string.confirm_password_hint),
                 onValueChanged = onNewPasswordForConfirmChanged,
+                visualTransformation = PasswordVisualTransformation(),
                 onDone = { },
                 modifier = Modifier.fillMaxWidth(),
             )
