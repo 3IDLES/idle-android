@@ -1,5 +1,6 @@
 package com.idle.signin.center.newpassword
 
+import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
@@ -51,7 +52,9 @@ class NewPasswordViewModel @Inject constructor(
     internal val newPasswordForConfirm = _newPasswordForConfirm.asStateFlow()
 
     internal fun setPhoneNumber(phoneNumber: String) {
-        _phoneNumber.value = phoneNumber
+        if (phoneNumber.isDigitsOnly() && phoneNumber.length <= 11) {
+            _phoneNumber.value = phoneNumber
+        }
     }
 
     internal fun setAuthCode(certificateNumber: String) {

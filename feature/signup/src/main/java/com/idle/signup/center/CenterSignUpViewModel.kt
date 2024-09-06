@@ -1,5 +1,6 @@
 package com.idle.signin.center
 
+import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.DeepLinkDestination
 import com.idle.binding.base.BaseViewModel
@@ -84,7 +85,7 @@ class CenterSignUpViewModel @Inject constructor(
     }
 
     internal fun setCenterPhoneNumber(phoneNumber: String) {
-        if (phoneNumber.length <= 11) {
+        if (phoneNumber.isDigitsOnly() && phoneNumber.length <= 11) {
             _centerPhoneNumber.value = phoneNumber
         }
     }
@@ -149,6 +150,8 @@ class CenterSignUpViewModel @Inject constructor(
             .onSuccess {
                 cancelTimer()
                 _isConfirmAuthCode.value = true
+
+                _signUpStep.value = CenterSignUpStep.BUSINESS_REGISTRATION
             }
             .onFailure { handleFailure(it as HttpResponseException) }
     }

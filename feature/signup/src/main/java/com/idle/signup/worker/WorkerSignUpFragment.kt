@@ -138,7 +138,6 @@ internal fun WorkerSignUpScreen(
 ) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val focusManager = LocalFocusManager.current
-    val (addressProcessed, setAddressProcessed) = remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -191,13 +190,11 @@ internal fun WorkerSignUpScreen(
                         workerAuthCodeTimerSeconds = workerAuthCodeTimerSeconds,
                         workerAuthCode = workerAuthCode,
                         isConfirmAuthCode = isConfirmAuthCode,
-                        addressProcessed = addressProcessed,
                         onWorkerPhoneNumberChanged = onWorkerPhoneNumberChanged,
                         onWorkerAuthCodeChanged = onWorkerAuthCodeChanged,
                         setSignUpStep = setSignUpStep,
                         sendPhoneNumber = sendPhoneNumber,
                         confirmAuthCode = confirmAuthCode,
-                        setAddressProcessed = setAddressProcessed,
                         navigateToAuth = navigateToAuth,
                     )
 
