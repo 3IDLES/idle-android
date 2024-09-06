@@ -47,6 +47,15 @@ class WithdrawalViewModel @Inject constructor(
     private val _isConfirmAuthCode = MutableStateFlow(false)
     val isConfirmAuthCode = _isConfirmAuthCode.asStateFlow()
 
+    private val _inconvenientReason = MutableStateFlow<String>("")
+    val inconvenientReason = _inconvenientReason.asStateFlow()
+
+    private val _anotherPlatformReason = MutableStateFlow<String>("")
+    val anotherPlatformReason = _anotherPlatformReason.asStateFlow()
+
+    private val _lackFeaturesReason = MutableStateFlow<String>("")
+    val lackFeaturesReason = _lackFeaturesReason.asStateFlow()
+
     internal fun setWithdrawalStep(step: WithdrawalStep) {
         _withdrawalStep.value = step
     }
@@ -59,7 +68,9 @@ class WithdrawalViewModel @Inject constructor(
     }
 
     internal fun setPhoneNumber(phoneNumber: String) {
-        _phoneNumber.value = phoneNumber
+        if (phoneNumber.length <= 11) {
+            _phoneNumber.value = phoneNumber
+        }
     }
 
     internal fun setAuthCode(authCode: String) {
@@ -70,6 +81,18 @@ class WithdrawalViewModel @Inject constructor(
         sendPhoneNumberUseCase(_phoneNumber.value)
             .onSuccess { startTimer() }
             .onFailure { handleFailure(it as HttpResponseException) }
+    }
+
+    internal fun setInconvenientReason(reason: String) {
+        _inconvenientReason.value = reason
+    }
+
+    internal fun setAnotherPlatformReason(reason: String) {
+        _anotherPlatformReason.value = reason
+    }
+
+    internal fun setLackFeaturesReason(reason: String) {
+        _lackFeaturesReason.value = reason
     }
 
     private fun startTimer() {

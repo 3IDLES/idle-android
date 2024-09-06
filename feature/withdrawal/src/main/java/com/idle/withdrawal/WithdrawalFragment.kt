@@ -47,6 +47,9 @@ internal class WithdrawalFragment : BaseComposeFragment() {
             val authCodeTimerSeconds by authCodeTimerSeconds.collectAsStateWithLifecycle()
             val isConfirmAuthCode by isConfirmAuthCode.collectAsStateWithLifecycle()
             val userType by rememberSaveable { mutableStateOf(UserType.create(args.userType)) }
+            val inconvenientReason by inconvenientReason.collectAsStateWithLifecycle()
+            val anotherPlatformReason by anotherPlatformReason.collectAsStateWithLifecycle()
+            val lackFeaturesReason by lackFeaturesReason.collectAsStateWithLifecycle()
 
             WithdrawalStep(
                 userType = userType,
@@ -54,8 +57,14 @@ internal class WithdrawalFragment : BaseComposeFragment() {
                 timerMinute = authCodeTimerMinute,
                 timerSeconds = authCodeTimerSeconds,
                 isConfirmAuthCode = isConfirmAuthCode,
+                inconvenientReason = inconvenientReason,
+                anotherPlatformReason = anotherPlatformReason,
+                lackFeaturesReason = lackFeaturesReason,
                 setWithdrawalStep = ::setWithdrawalStep,
                 onReasonChanged = ::setWithdrawalReason,
+                onInconvenientReasonChanged = ::setInconvenientReason,
+                onAnotherPlatformReasonChanged = ::setAnotherPlatformReason,
+                onLackFeaturesReasonChanged = ::setLackFeaturesReason,
                 onPhoneNumberChanged = ::setPhoneNumber,
                 onAuthCodeChanged = ::setAuthCode,
                 sendPhoneNumber = ::sendPhoneNumber,
@@ -83,8 +92,14 @@ internal fun WithdrawalStep(
     timerMinute: String,
     timerSeconds: String,
     isConfirmAuthCode: Boolean,
+    inconvenientReason: String,
+    anotherPlatformReason: String,
+    lackFeaturesReason: String,
     setWithdrawalStep: (WithdrawalStep) -> Unit,
     onReasonChanged: (WithdrawalReason) -> Unit,
+    onInconvenientReasonChanged: (String) -> Unit,
+    onAnotherPlatformReasonChanged: (String) -> Unit,
+    onLackFeaturesReasonChanged: (String) -> Unit,
     onPhoneNumberChanged: (String) -> Unit,
     onAuthCodeChanged: (String) -> Unit,
     sendPhoneNumber: () -> Unit,
@@ -116,7 +131,7 @@ internal fun WithdrawalStep(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .padding(paddingValue)
-                .padding(start = 20.dp, end = 20.dp, top = 24.dp, bottom = 28.dp),
+                .padding(start = 20.dp, end = 20.dp, top = 24.dp),
         ) {
             CareStateAnimator(
                 targetState = withdrawalStep,
@@ -125,8 +140,14 @@ internal fun WithdrawalStep(
                 when (withdrawalStep) {
                     WithdrawalStep.REASON -> ReasonScreen(
                         userType = userType,
+                        inconvenientReason = inconvenientReason,
+                        anotherPlatformReason = anotherPlatformReason,
+                        lackFeaturesReason = lackFeaturesReason,
                         onReasonChanged = onReasonChanged,
                         setWithdrawalStep = setWithdrawalStep,
+                        onInconvenientReasonChanged = onInconvenientReasonChanged,
+                        onAnotherPlatformReasonChanged = onAnotherPlatformReasonChanged,
+                        onLackFeaturesReasonChanged = onLackFeaturesReasonChanged,
                         navigateToSetting = navigateToSetting,
                     )
 
