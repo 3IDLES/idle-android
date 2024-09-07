@@ -3,6 +3,7 @@ package com.idle.network.source.auth
 import com.idle.network.api.AuthApi
 import com.idle.network.model.auth.BusinessRegistrationResponse
 import com.idle.network.model.auth.ConfirmAuthCodeRequest
+import com.idle.network.model.auth.GenerateNewPasswordRequest
 import com.idle.network.model.auth.SendPhoneRequest
 import com.idle.network.model.auth.SignInCenterRequest
 import com.idle.network.model.auth.SignInWorkerRequest
@@ -52,4 +53,8 @@ class AuthDataSource @Inject constructor(
         businessRegistrationNumber: String
     ): Result<BusinessRegistrationResponse> =
         authApi.validateBusinessRegistrationNumber(businessRegistrationNumber).onResponse()
+
+    suspend fun generateNewPassword(
+        generateNewPasswordRequest: GenerateNewPasswordRequest
+    ): Result<Unit> = authApi.generateNewPassword(generateNewPasswordRequest).onResponse()
 }
