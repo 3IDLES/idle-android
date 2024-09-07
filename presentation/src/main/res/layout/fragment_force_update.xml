@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.idle.presentation.forceupdate.ForceUpdateViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_dialog"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingHorizontal="12dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="12dp">
+
+        <TextView
+            style="@style/Subtitle1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@string/app_update_title"
+            android:textAlignment="center"
+            android:textColor="@color/gray_900" />
+
+        <TextView
+            style="@style/Body3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:text="@{viewModel.forceUpdate.noticeMsg}"
+            android:textAlignment="center"
+            android:textColor="@color/gray_500" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/dialog_left_BTN"
+            style="@style/Heading4"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape_button_white"
+            android:onClick="@{()->viewModel.dismiss()}"
+            android:text="@string/end_short"
+            android:textColor="@color/gray_300" />
+
+        <Button
+            android:id="@+id/dialog_right_BTN"
+            style="@style/Heading4"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape_button_red"
+            android:backgroundTint="@color/orange_500"
+            android:onClick="@{()->viewModel.update()}"
+            android:text="@string/app_update"
+            android:textColor="@color/white" />
+    </LinearLayout>
+</LinearLayout></layout>

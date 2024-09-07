@@ -72,6 +72,7 @@
     <string name="previous_job_posting">이전 공고</string>
     <string name="end_recruiting">채용 종료</string>
     <string name="end">종료하기</string>
+    <string name="end_short">종료</string>
     <string name="recruiting">채용하기</string>
     <string name="applicant_inquiry">지원자 확인</string>
     <string name="job_posting_complete_message">요양보호사 구인 공고를\n등록했어요!</string>
@@ -206,4 +207,6 @@
     <string name="inquiry">문의하기</string>
     <string name="inquiry_by_call">전화로 문의하기</string>
     <string name="inquiry_by_chat">채팅으로 문의하기</string>
+    <string name="app_update_title">최신 버전의 앱이 있어요</string>
+    <string name="app_update">앱 업데이트</string>
 </resources>

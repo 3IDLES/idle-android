@@ -30,7 +30,7 @@ class MainViewModel @Inject constructor(
         _navigationMenuType.value = navigationMenuType
     }
 
-    fun getForceUpdateInfo() = viewModelScope.launch {
+    private fun getForceUpdateInfo() = viewModelScope.launch {
         getForceUpdateInfoUseCase().onSuccess {
             _forceUpdate.value = it
         }.onFailure {
