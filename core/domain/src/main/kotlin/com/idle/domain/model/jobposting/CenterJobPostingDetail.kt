@@ -28,4 +28,5 @@ data class CenterJobPostingDetail(
     val applyMethod: Set<ApplyMethod>,
     val applyDeadlineType: ApplyDeadlineType,
     val applyDeadline: LocalDate?,
+    val jobPostingStatus: JobPostingStatus,
 )
