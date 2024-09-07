@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_pending"
+    app:startDestination="@id/centerPendingFragment">
+
+    <fragment
+        android:id="@+id/centerPendingFragment"
+        android:name="com.idle.pending.CenterPendingFragment"
+        android:label="CenterPendingFragment">
+        <deepLink app:uri="@string/center_pending_deeplink_url" />
+    </fragment>
+</navigation>

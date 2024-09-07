@@ -49,6 +49,10 @@ sealed class DeepLinkDestination(
         addressRes = R.string.center_home_deeplink_url,
     )
 
+    data object CenterPending : DeepLinkDestination(
+        addressRes = R.string.center_pending_deeplink_url,
+    )
+
     data class CenterProfile(val centerId: String = "default") : DeepLinkDestination(
         addressRes = R.string.center_profile_deeplink_url,
         params = mapOf("centerId" to centerId)

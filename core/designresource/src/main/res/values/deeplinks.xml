@@ -15,6 +15,7 @@
     <string name="center_signup_deeplink_url">care://center/signUp</string>
     <string name="new_password_deeplink_url">care://newPassword</string>
     <string name="center_home_deeplink_url">care://center/home</string>
+    <string name="center_pending_deeplink_url">care://center/pending</string>
     <string name="center_profile_deeplink_url">care://center/profile/{centerId}</string>
     <string name="center_setting_deeplink_url">care://center/setting</string>
     <string name="center_register_info_deeplink_url">care://center/register/info</string>

@@ -5,6 +5,7 @@ import com.idle.analytics.AnalyticsEvent
 import com.idle.analytics.AnalyticsEvent.PropertiesKeys.ACTION_NAME
 import com.idle.analytics.AnalyticsEvent.PropertiesKeys.ACTION_RESULT
 import com.idle.analytics.helper.AnalyticsHelper
+import com.idle.binding.DeepLinkDestination
 import com.idle.binding.DeepLinkDestination.CenterHome
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent.NavigateTo
@@ -66,7 +67,13 @@ class CenterSignInViewModel @Inject constructor(
                 CenterManagerAccountStatus.APPROVED ->
                     baseEvent(NavigateTo(CenterHome, R.id.centerSignInFragment))
 
-                else -> {}
+                else ->
+                    baseEvent(
+                        NavigateTo(
+                            DeepLinkDestination.CenterPending,
+                            R.id.centerSignInFragment
+                        )
+                    )
             }
         }.onFailure {
             handleFailure(it as HttpResponseException)
