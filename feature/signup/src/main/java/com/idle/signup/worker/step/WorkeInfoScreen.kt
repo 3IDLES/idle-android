@@ -43,6 +43,7 @@ internal fun WorkerInformationScreen(
     onBirthYearChanged: (String) -> Unit,
     onGenderChanged: (Gender) -> Unit,
     setSignUpStep: (WorkerSignUpStep) -> Unit,
+    showSnackBar: (String) -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
@@ -113,7 +114,12 @@ internal fun WorkerInformationScreen(
                     text = Gender.WOMAN.displayName,
                     onClick = {
                         onGenderChanged(Gender.WOMAN)
-                        if (workerName.isNotBlank() && birthYear.isNotBlank()) {
+
+                        if ((birthYear.toIntOrNull() ?: return@CareChipBasic) < 1900) {
+                            return@CareChipBasic
+                        }
+
+                        if (workerName.isNotBlank() && birthYear.length == 4) {
                             setSignUpStep(WorkerSignUpStep.findStep(INFO.step + 1))
                         }
                     },
@@ -125,7 +131,12 @@ internal fun WorkerInformationScreen(
                     text = Gender.MAN.displayName,
                     onClick = {
                         onGenderChanged(Gender.MAN)
-                        if (workerName.isNotBlank() && birthYear.isNotBlank()) {
+
+                        if ((birthYear.toIntOrNull() ?: return@CareChipBasic) < 1900) {
+                            return@CareChipBasic
+                        }
+
+                        if (workerName.isNotBlank() && birthYear.length == 4) {
                             setSignUpStep(WorkerSignUpStep.findStep(INFO.step + 1))
                         }
                     },
@@ -139,8 +150,13 @@ internal fun WorkerInformationScreen(
 
         CareButtonLarge(
             text = stringResource(id = R.string.next),
-            enable = workerName.isNotBlank() && gender != Gender.NONE && birthYear.isNotBlank(),
+            enable = workerName.isNotBlank() && gender != Gender.NONE && birthYear.length == 4,
             onClick = {
+                if ((birthYear.toIntOrNull() ?: return@CareButtonLarge) < 1900) {
+                    showSnackBar("출생년도가 잘못되었습니다.|Error")
+                    return@CareButtonLarge
+                }
+
                 setSignUpStep(WorkerSignUpStep.findStep(INFO.step + 1))
             },
             modifier = Modifier

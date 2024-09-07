@@ -12,8 +12,6 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,6 +22,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.idle.binding.DeepLinkDestination.Auth
+import com.idle.binding.base.CareBaseEvent
 import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
@@ -104,7 +103,8 @@ internal class WorkerSignUpFragment : BaseComposeFragment() {
                             popUpTo = com.idle.signup.R.id.workerSignUpFragment,
                         )
                     )
-                }
+                },
+                showSnackBar = { baseEvent(CareBaseEvent.ShowSnackBar(it)) }
             )
         }
     }
@@ -135,6 +135,7 @@ internal fun WorkerSignUpScreen(
     confirmAuthCode: () -> Unit,
     signUpWorker: () -> Unit,
     navigateToAuth: () -> Unit,
+    showSnackBar: (String) -> Unit,
 ) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val focusManager = LocalFocusManager.current
@@ -205,7 +206,8 @@ internal fun WorkerSignUpScreen(
                         onWorkerNameChanged = onWorkerNameChanged,
                         onBirthYearChanged = onBirthYearChanged,
                         onGenderChanged = onGenderChanged,
-                        setSignUpStep = setSignUpStep
+                        setSignUpStep = setSignUpStep,
+                        showSnackBar = showSnackBar,
                     )
 
                     WorkerSignUpStep.ADDRESS -> AddressScreen(

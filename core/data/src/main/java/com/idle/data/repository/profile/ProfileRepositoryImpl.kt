@@ -255,6 +255,6 @@ class ProfileRepositoryImpl @Inject constructor(
         )
     )
 
-    private suspend fun getWorkerId(): Result<String> = profileDataSource.getWorkerId()
+    override suspend fun getWorkerId(): Result<String> = profileDataSource.getWorkerId()
         .mapCatching { it.carerId }
 }
