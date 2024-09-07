@@ -102,7 +102,14 @@ internal fun NewPasswordScreen(
                     .padding(start = 12.dp, top = 48.dp, end = 20.dp, bottom = 12.dp),
             )
         },
-        snackbarHost = { SnackbarHost(snackbarHostState) { data -> CareSnackBar(data = data) } },
+        snackbarHost = {
+            SnackbarHost(snackbarHostState) { data ->
+                CareSnackBar(
+                    data = data,
+                    modifier = Modifier.padding(bottom = 116.dp)
+                )
+            }
+        },
         modifier = Modifier.addFocusCleaner(focusManager),
     ) { paddingValue ->
         Column(
