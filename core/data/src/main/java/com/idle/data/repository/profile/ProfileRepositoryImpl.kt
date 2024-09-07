@@ -7,6 +7,7 @@ import com.idle.datastore.datasource.UserInfoDataSource
 import com.idle.domain.model.auth.Gender
 import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.profile.CenterProfile
+import com.idle.domain.model.profile.CenterRegistrationStatus
 import com.idle.domain.model.profile.JobSearchStatus
 import com.idle.domain.model.profile.MIMEType
 import com.idle.domain.model.profile.WorkerProfile
@@ -257,4 +258,8 @@ class ProfileRepositoryImpl @Inject constructor(
 
     override suspend fun getWorkerId(): Result<String> = profileDataSource.getWorkerId()
         .mapCatching { it.carerId }
+
+    override suspend fun getCenterStatus(): Result<CenterRegistrationStatus> =
+        profileDataSource.getCenterStatus()
+            .mapCatching { it.toVO() }
 }

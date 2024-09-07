@@ -33,7 +33,6 @@ class CenterSignUpViewModel @Inject constructor(
     private val validateBusinessRegistrationNumberUseCase: ValidateBusinessRegistrationNumberUseCase,
     private val countDownTimer: CountDownTimer,
 ) : BaseViewModel() {
-
     private val _signUpStep = MutableStateFlow<CenterSignUpStep>(NAME)
     val signUpStep = _signUpStep.asStateFlow()
 

@@ -3,6 +3,7 @@ package com.idle.network.api
 import com.idle.network.model.auth.GetWorkerIdResponse
 import com.idle.network.model.profile.CallbackImageUploadRequest
 import com.idle.network.model.profile.GetCenterProfileResponse
+import com.idle.network.model.profile.GetCenterStatusResponse
 import com.idle.network.model.profile.GetWorkerProfileResponse
 import com.idle.network.model.profile.RegisterCenterProfileRequest
 import com.idle.network.model.profile.UpdateCenterProfileRequest
@@ -71,4 +72,7 @@ interface UserApi {
 
     @GET("/api/v1/logs/users/carer/my")
     suspend fun getWorkerId(): Response<GetWorkerIdResponse>
+
+    @GET("/api/v1/auth/center/join/status")
+    suspend fun getCenterStatus(): Response<GetCenterStatusResponse>
 }

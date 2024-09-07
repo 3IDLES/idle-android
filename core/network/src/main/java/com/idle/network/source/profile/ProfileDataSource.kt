@@ -4,6 +4,7 @@ import com.idle.network.api.UserApi
 import com.idle.network.model.auth.GetWorkerIdResponse
 import com.idle.network.model.profile.CallbackImageUploadRequest
 import com.idle.network.model.profile.GetCenterProfileResponse
+import com.idle.network.model.profile.GetCenterStatusResponse
 import com.idle.network.model.profile.GetWorkerProfileResponse
 import com.idle.network.model.profile.RegisterCenterProfileRequest
 import com.idle.network.model.profile.UpdateCenterProfileRequest
@@ -73,4 +74,7 @@ class ProfileDataSource @Inject constructor(
     ): Result<Unit> = userApi.registerCenterProfile(registerCenterProfileRequest).onResponse()
 
     suspend fun getWorkerId(): Result<GetWorkerIdResponse> = userApi.getWorkerId().onResponse()
+
+    suspend fun getCenterStatus(): Result<GetCenterStatusResponse> =
+        userApi.getCenterStatus().onResponse()
 }
