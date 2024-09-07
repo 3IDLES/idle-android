@@ -2,14 +2,18 @@ package com.idle.signin.center.newpassword
 
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.viewModelScope
+import com.idle.binding.DeepLinkDestination
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
+import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.domain.model.CountDownTimer
 import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
+import com.idle.domain.usecase.auth.GenerateNewPasswordUseCase
 import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
+import com.idle.signin.R
 import com.idle.signin.center.newpassword.NewPasswordStep.GENERATE_NEW_PASSWORD
 import com.idle.signin.center.newpassword.NewPasswordStep.PHONE_NUMBER
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,6 +27,7 @@ import javax.inject.Inject
 class NewPasswordViewModel @Inject constructor(
     private val sendPhoneNumberUseCase: SendPhoneNumberUseCase,
     private val confirmAuthCodeUseCase: ConfirmAuthCodeUseCase,
+    private val generateNewPasswordUseCase: GenerateNewPasswordUseCase,
     private val countDownTimer: CountDownTimer,
 ) : BaseViewModel() {
     private val _phoneNumber = MutableStateFlow("")
@@ -114,6 +119,16 @@ class NewPasswordViewModel @Inject constructor(
             cancelTimer()
             _isConfirmAuthCode.value = true
             _newPasswordProcess.value = GENERATE_NEW_PASSWORD
+        }.onFailure { handleFailure(it as HttpResponseException) }
+    }
+
+
+    internal fun generateNewPassword() = viewModelScope.launch {
+        generateNewPasswordUseCase(
+            newPassword = _newPassword.value,
+            phoneNumber = _phoneNumber.value
+        ).onSuccess {
+            baseEvent(NavigateTo(DeepLinkDestination.CenterSignIn, R.id.newPasswordFragment))
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 }

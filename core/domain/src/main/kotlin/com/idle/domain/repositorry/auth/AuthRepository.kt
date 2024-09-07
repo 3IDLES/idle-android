@@ -44,5 +44,5 @@ interface AuthRepository {
 
     suspend fun withdrawalWorker(reason: String): Result<Unit>
 
-    suspend fun generateNewPassword(newPassword: String): Result<Unit>
+    suspend fun generateNewPassword(newPassword: String, phoneNumber: String): Result<Unit>
 }

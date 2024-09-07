@@ -9,6 +9,7 @@ import com.idle.binding.DeepLinkDestination.CenterHome
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.domain.model.error.HttpResponseException
+import com.idle.domain.usecase.auth.GenerateNewPasswordUseCase
 import com.idle.domain.usecase.th.SignInCenterUseCase
 import com.idle.signin.R
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,6 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CenterSignInViewModel @Inject constructor(
     private val signInCenterUseCase: SignInCenterUseCase,
+    private val generateNewPasswordUseCase: GenerateNewPasswordUseCase,
     private val analyticsHelper: AnalyticsHelper,
 ) : BaseViewModel() {
     private val _centerId = MutableStateFlow("")
