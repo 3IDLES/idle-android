@@ -9,6 +9,9 @@
         android:name="com.idle.signin.center.CenterSignInFragment"
         android:label="CenterSignInFragment">
         <deepLink app:uri="@string/center_signin_deeplink_url" />
+        <argument
+            android:name="snackBarMsg"
+            app:argType="string" />
     </fragment>
 
     <fragment

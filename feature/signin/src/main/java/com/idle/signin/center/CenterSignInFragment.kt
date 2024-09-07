@@ -27,10 +27,11 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.idle.analytics.helper.LocalAnalyticsHelper
+import androidx.navigation.fragment.navArgs
 import com.idle.analytics.helper.TrackScreenViewEvent
 import com.idle.binding.DeepLinkDestination.Auth
 import com.idle.binding.DeepLinkDestination.NewPassword
+import com.idle.binding.base.CareBaseEvent
 import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
@@ -46,6 +47,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 internal class CenterSignInFragment : BaseComposeFragment() {
+    private val args: CenterSignInFragmentArgs by navArgs()
     override val fragmentViewModel: CenterSignInViewModel by viewModels()
 
     @Composable
@@ -53,6 +55,12 @@ internal class CenterSignInFragment : BaseComposeFragment() {
         fragmentViewModel.apply {
             val centerId by centerId.collectAsStateWithLifecycle()
             val centerPassword by centerPassword.collectAsStateWithLifecycle()
+
+            LaunchedEffect(Unit) {
+                if (args.snackBarMsg != "default") {
+                    baseEvent(CareBaseEvent.ShowSnackBar(args.snackBarMsg))
+                }
+            }
 
             CenterSignInScreen(
                 snackbarHostState = snackbarHostState,

@@ -258,7 +258,7 @@ internal fun AuthScreen(
                                 }
                             },
                             style = CareTheme.typography.subtitle4,
-                            modifier = Modifier.clickable { navigateTo(CenterSignIn) }
+                            modifier = Modifier.clickable { navigateTo(CenterSignIn()) }
                         )
 
                         CareButtonLarge(

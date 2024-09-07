@@ -27,4 +27,12 @@
         app:exitAnim="@anim/anim_pop_slide_out_horizontally"
         app:popUpTo="@id/nav_main"
         app:popUpToInclusive="true" />
+
+    <action
+        android:id="@+id/action_global_nav_signin"
+        app:destination="@id/nav_signin"
+        app:enterAnim="@anim/anim_pop_slide_in_horizontally"
+        app:exitAnim="@anim/anim_pop_slide_out_horizontally"
+        app:popUpTo="@id/nav_main"
+        app:popUpToInclusive="true" />
 </navigation>
