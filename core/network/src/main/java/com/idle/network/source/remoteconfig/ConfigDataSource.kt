@@ -4,11 +4,12 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigValue
 import com.google.firebase.remoteconfig.get
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.serialization.json.Json
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
-class RemoteConfigDataSource @Inject constructor(
+class ConfigDataSource @Inject constructor(
     private val remoteConfig: FirebaseRemoteConfig,
 ) {
     suspend fun getValue(key: String): FirebaseRemoteConfigValue? =
@@ -25,4 +26,26 @@ class RemoteConfigDataSource @Inject constructor(
 
     suspend fun getString(key: String, defaultValue: String): String =
         getValue(key)?.asString() ?: defaultValue
+
+    suspend inline fun <reified T> getReferenceType(key: String): T? {
+        val json = Json {
+            coerceInputValues = true
+            ignoreUnknownKeys = true
+            isLenient = true
+            explicitNulls = false
+            allowStructuredMapKeys = true
+        }
+
+        return getString(key, "").let {
+            runCatching { json.decodeFromString<T>(it) }.getOrNull()
+        }
+    }
+
+    suspend inline fun <reified T> getReferenceType(key: String, defaultValue: T): T {
+        return getReferenceType<T>(key) ?: defaultValue
+    }
+
+    companion object Key {
+        const val FORCE_UPDATE = "forceUpdate"
+    }
 }
