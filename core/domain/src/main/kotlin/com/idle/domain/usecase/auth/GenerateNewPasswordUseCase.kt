@@ -6,6 +6,6 @@ import javax.inject.Inject
 class GenerateNewPasswordUseCase @Inject constructor(
     private val authRepository: AuthRepository,
 ) {
-    suspend operator fun invoke(newPassword: String) =
-        authRepository.generateNewPassword(newPassword)
+    suspend operator fun invoke(newPassword: String, phoneNumber: String) =
+        authRepository.generateNewPassword(newPassword = newPassword, phoneNumber = phoneNumber)
 }

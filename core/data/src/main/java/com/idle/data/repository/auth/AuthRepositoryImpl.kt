@@ -188,6 +188,14 @@ class AuthRepositoryImpl @Inject constructor(
                 onFailure = { Result.failure(it) }
             )
 
-    override suspend fun generateNewPassword(newPassword: String): Result<Unit> =
-        authDataSource.generateNewPassword(GenerateNewPasswordRequest(newPassword))
+    override suspend fun generateNewPassword(
+        newPassword: String,
+        phoneNumber: String
+    ): Result<Unit> =
+        authDataSource.generateNewPassword(
+            GenerateNewPasswordRequest(
+                newPassword = newPassword,
+                phoneNumber = phoneNumber
+            )
+        )
 }

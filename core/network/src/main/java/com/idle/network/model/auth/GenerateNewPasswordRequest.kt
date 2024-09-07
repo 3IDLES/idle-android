@@ -4,5 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GenerateNewPasswordRequest(
-    val newPassword: String
+    val phoneNumber: String,
+    val newPassword: String,
 )

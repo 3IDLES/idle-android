@@ -39,6 +39,7 @@ internal fun GenerateNewPasswordScreen(
     onNewPasswordChanged: (String) -> Unit,
     onNewPasswordForConfirmChanged: (String) -> Unit,
     setNewPasswordProcess: (NewPasswordStep) -> Unit,
+    generateNewPassword: () -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
@@ -101,7 +102,7 @@ internal fun GenerateNewPasswordScreen(
                 visualTransformation = PasswordVisualTransformation(),
                 onDone = {
                     if (newPasswordForConfirm.isNotBlank() && newPassword == newPasswordForConfirm) {
-                        //Todo
+                        generateNewPassword()
                     }
                 },
                 modifier = Modifier.fillMaxWidth(),
@@ -113,9 +114,7 @@ internal fun GenerateNewPasswordScreen(
         CareButtonLarge(
             text = stringResource(id = R.string.change_password),
             enable = newPasswordForConfirm.isNotBlank() && newPassword == newPasswordForConfirm,
-            onClick = {
-                //Todo
-            },
+            onClick = generateNewPassword,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 28.dp),

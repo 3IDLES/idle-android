@@ -63,6 +63,7 @@ class NewPasswordFragment : BaseComposeFragment() {
                 confirmAuthCode = ::confirmAuthCode,
                 onNewPasswordChanged = ::setNewPassword,
                 onNewPasswordForConfirmChanged = ::setNewPasswordForConfirm,
+                generateNewPassword = ::generateNewPassword,
             )
         }
     }
@@ -86,6 +87,7 @@ internal fun NewPasswordScreen(
     onNewPasswordChanged: (String) -> Unit,
     onNewPasswordForConfirmChanged: (String) -> Unit,
     setNewPasswordProcess: (NewPasswordStep) -> Unit,
+    generateNewPassword: () -> Unit,
 ) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val focusManager = LocalFocusManager.current
@@ -136,6 +138,7 @@ internal fun NewPasswordScreen(
                         onNewPasswordChanged = onNewPasswordChanged,
                         onNewPasswordForConfirmChanged = onNewPasswordForConfirmChanged,
                         setNewPasswordProcess = setNewPasswordProcess,
+                        generateNewPassword = generateNewPassword,
                     )
                 }
             }
