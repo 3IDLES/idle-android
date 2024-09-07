@@ -5,7 +5,6 @@ import com.idle.analytics.AnalyticsEvent
 import com.idle.analytics.AnalyticsEvent.PropertiesKeys.ACTION_NAME
 import com.idle.analytics.AnalyticsEvent.PropertiesKeys.SCREEN_NAME
 import com.idle.analytics.AnalyticsEvent.Types.ACTION
-import com.idle.analytics.AnalyticsEvent.Types.SCREEN_VIEW
 import com.idle.analytics.helper.AnalyticsHelper
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
@@ -120,10 +119,7 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
         jobPostingId: String,
         jobPostingType: JobPostingType,
     ) = viewModelScope.launch {
-        removeFavoriteJobPostingUseCase(
-            jobPostingId = jobPostingId,
-            jobPostingType = jobPostingType,
-        ).onSuccess {
+        removeFavoriteJobPostingUseCase(jobPostingId = jobPostingId).onSuccess {
             baseEvent(CareBaseEvent.ShowSnackBar("즐겨찾기에서 제거되었어요.|SUCCESS"))
 
             when (jobPostingType) {

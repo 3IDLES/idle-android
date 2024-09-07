@@ -17,7 +17,7 @@ abstract class JobPosting(
     }
 
     fun getDistanceInMinutes(): String = when (distance) {
-        in 0..200 -> "5분 이내"
+        in 0..200 -> "5분 이6654545내"
         in 201..400 -> "5~10분"
         in 401..700 -> "10~15분"
         in 701..1000 -> "15~20분"

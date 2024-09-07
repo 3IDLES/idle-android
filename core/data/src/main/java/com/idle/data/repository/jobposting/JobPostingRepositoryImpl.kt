@@ -156,14 +156,13 @@ class JobPostingRepositoryImpl @Inject constructor(
         limit = limit
     ).mapCatching { it.toVO() }
 
-    override suspend fun getMyFavoritesJobPostings(
-        next: String?,
-        limit: Int
-    ): Result<Pair<String?, List<WorkerJobPosting>>> =
-        jobPostingDataSource.getMyFavoritesJobPostings(
-            next = next,
-            limit = limit
-        ).mapCatching { it.toVO() }
+    override suspend fun getMyFavoritesJobPostings(): Result<List<WorkerJobPosting>> =
+        jobPostingDataSource.getMyFavoriteJobPostings()
+            .mapCatching { it.toVO() }
+
+    override suspend fun getMyFavoritesCrawlingJobPostings(): Result<List<CrawlingJobPosting>> =
+        jobPostingDataSource.getMyFavoriteCrawlingJobPostings()
+            .mapCatching { it.toVO() }
 
     override suspend fun getJobPostingsInProgress(): Result<List<CenterJobPosting>> =
         jobPostingDataSource.getJobPostingsInProgress().mapCatching { it.toVO() }
@@ -191,14 +190,8 @@ class JobPostingRepositoryImpl @Inject constructor(
             favoriteJobPostingRequest = FavoriteJobPostingRequest(jobPostingType.name),
         )
 
-    override suspend fun removeFavoriteJobPosting(
-        jobPostingId: String,
-        jobPostingType: JobPostingType,
-    ): Result<Unit> =
-        jobPostingDataSource.removeFavoriteJobPosting(
-            jobPostingId = jobPostingId,
-            favoriteJobPostingRequest = FavoriteJobPostingRequest(jobPostingType.name),
-        )
+    override suspend fun removeFavoriteJobPosting(jobPostingId: String): Result<Unit> =
+        jobPostingDataSource.removeFavoriteJobPosting(jobPostingId = jobPostingId)
 
     override suspend fun getApplicants(jobPostingId: String): Result<Pair<JobPostingSummary, List<Applicant>>> =
         jobPostingDataSource.getApplicants(jobPostingId).mapCatching { it.toVO() }

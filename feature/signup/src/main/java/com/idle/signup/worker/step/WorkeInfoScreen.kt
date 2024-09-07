@@ -19,6 +19,7 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -30,7 +31,6 @@ import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.Gender
 import com.idle.signin.worker.WorkerSignUpStep
-import com.idle.signin.worker.WorkerSignUpStep.ADDRESS
 import com.idle.signin.worker.WorkerSignUpStep.INFO
 import com.idle.signup.LogWorkerSignUpStep
 
@@ -46,6 +46,7 @@ internal fun WorkerInformationScreen(
 ) {
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
@@ -87,7 +88,12 @@ internal fun WorkerInformationScreen(
             CareTextField(
                 value = birthYear,
                 hint = stringResource(id = R.string.worker_birth_year_hint),
-                onValueChanged = onBirthYearChanged,
+                onValueChanged = {
+                    onBirthYearChanged(it)
+                    if (it.length == 4) {
+                        keyboardController?.hide()
+                    }
+                },
                 keyboardType = KeyboardType.Number,
                 onDone = {},
                 modifier = Modifier.fillMaxWidth(),
@@ -107,7 +113,7 @@ internal fun WorkerInformationScreen(
                     text = Gender.WOMAN.displayName,
                     onClick = {
                         onGenderChanged(Gender.WOMAN)
-                        if (workerName.isNotBlank() && gender != Gender.NONE && birthYear.isNotBlank()) {
+                        if (workerName.isNotBlank() && birthYear.isNotBlank()) {
                             setSignUpStep(WorkerSignUpStep.findStep(INFO.step + 1))
                         }
                     },
@@ -119,7 +125,7 @@ internal fun WorkerInformationScreen(
                     text = Gender.MAN.displayName,
                     onClick = {
                         onGenderChanged(Gender.MAN)
-                        if (workerName.isNotBlank() && gender != Gender.NONE && birthYear.isNotBlank()) {
+                        if (workerName.isNotBlank() && birthYear.isNotBlank()) {
                             setSignUpStep(WorkerSignUpStep.findStep(INFO.step + 1))
                         }
                     },
@@ -137,7 +143,8 @@ internal fun WorkerInformationScreen(
             onClick = {
                 setSignUpStep(WorkerSignUpStep.findStep(INFO.step + 1))
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(bottom = 28.dp),
         )
     }
