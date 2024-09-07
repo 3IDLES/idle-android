@@ -9,8 +9,9 @@ import com.idle.binding.DeepLinkDestination.CenterHome
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.domain.model.error.HttpResponseException
-import com.idle.domain.usecase.auth.GenerateNewPasswordUseCase
-import com.idle.domain.usecase.th.SignInCenterUseCase
+import com.idle.domain.model.profile.CenterManagerAccountStatus
+import com.idle.domain.usecase.auth.SignInCenterUseCase
+import com.idle.domain.usecase.profile.GetCenterStatusUseCase
 import com.idle.signin.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,7 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CenterSignInViewModel @Inject constructor(
     private val signInCenterUseCase: SignInCenterUseCase,
-    private val generateNewPasswordUseCase: GenerateNewPasswordUseCase,
+    private val getCenterStatusUseCase: GetCenterStatusUseCase,
     private val analyticsHelper: AnalyticsHelper,
 ) : BaseViewModel() {
     private val _centerId = MutableStateFlow("")
@@ -42,7 +43,7 @@ class CenterSignInViewModel @Inject constructor(
         signInCenterUseCase(identifier = _centerId.value, password = _centerPassword.value)
             .onSuccess {
                 analyticsHelper.setUserId(_centerId.value)
-                baseEvent(NavigateTo(CenterHome, R.id.centerSignInFragment))
+                getCenterStatus()
             }
             .onFailure {
                 handleFailure(it as HttpResponseException)
@@ -57,5 +58,18 @@ class CenterSignInViewModel @Inject constructor(
                     )
                 )
             }
+    }
+
+    private fun getCenterStatus() = viewModelScope.launch {
+        getCenterStatusUseCase().onSuccess {
+            when (it.centerManagerAccountStatus) {
+                CenterManagerAccountStatus.APPROVED ->
+                    baseEvent(NavigateTo(CenterHome, R.id.centerSignInFragment))
+
+                else -> {}
+            }
+        }.onFailure {
+            handleFailure(it as HttpResponseException)
+        }
     }
 }
