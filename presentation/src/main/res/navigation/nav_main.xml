@@ -10,6 +10,7 @@
     <include app:graph="@navigation/nav_signup" />
     <include app:graph="@navigation/nav_withdrawal" />
     <include app:graph="@navigation/nav_center_home" />
+    <include app:graph="@navigation/nav_center_pending" />
     <include app:graph="@navigation/nav_applicant_inquiry" />
     <include app:graph="@navigation/nav_center_profile" />
     <include app:graph="@navigation/nav_center_setting" />
@@ -23,14 +24,6 @@
     <action
         android:id="@+id/action_global_nav_auth"
         app:destination="@id/nav_auth"
-        app:enterAnim="@anim/anim_pop_slide_in_horizontally"
-        app:exitAnim="@anim/anim_pop_slide_out_horizontally"
-        app:popUpTo="@id/nav_main"
-        app:popUpToInclusive="true" />
-
-    <action
-        android:id="@+id/action_global_nav_signin"
-        app:destination="@id/nav_signin"
         app:enterAnim="@anim/anim_pop_slide_in_horizontally"
         app:exitAnim="@anim/anim_pop_slide_out_horizontally"
         app:popUpTo="@id/nav_main"

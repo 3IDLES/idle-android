@@ -18,6 +18,7 @@ dependencies {
     implementation(projects.feature.withdrawal)
     implementation(projects.feature.jobPostingDetail)
     implementation(projects.feature.center.home)
+    implementation(projects.feature.center.pending)
     implementation(projects.feature.center.applicantInquiry)
     implementation(projects.feature.center.profile)
     implementation(projects.feature.center.registerInfo)
