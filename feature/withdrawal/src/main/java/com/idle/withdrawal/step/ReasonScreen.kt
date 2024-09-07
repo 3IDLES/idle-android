@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonMedium
+import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.CareTextFieldLong
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.UserType
@@ -88,7 +89,7 @@ internal fun ReasonScreen(
                 if (userType == UserType.CENTER && reason == NO_LONGER_WISH_TO_CONTINUE) return@forEach
 
                 when (reason) {
-                    WithdrawalReason.INCONVENIENT_PLATFORM_USE -> WithdrawalReasonItem(
+                    WithdrawalReason.INCONVENIENT_PLATFORM_USE -> WithdrawalLongReasonItem(
                         text = reason.displayName,
                         checked = (reason in withdrawalReason),
                         description = "어떤 부분에서 불편함을 느끼셨나요?",
@@ -122,7 +123,7 @@ internal fun ReasonScreen(
                         },
                     )
 
-                    WithdrawalReason.LACK_OF_DESIRED_FEATURES -> WithdrawalReasonItem(
+                    WithdrawalReason.LACK_OF_DESIRED_FEATURES -> WithdrawalLongReasonItem(
                         text = reason.displayName,
                         checked = (reason in withdrawalReason),
                         description = "어떤 기능이 필요하신가요?",
@@ -139,7 +140,7 @@ internal fun ReasonScreen(
                         },
                     )
 
-                    else -> WithdrawalReasonItem(
+                    else -> WithdrawalLongReasonItem(
                         text = reason.displayName,
                         checked = (reason in withdrawalReason),
                         onClick = {
@@ -208,7 +209,7 @@ internal fun ReasonScreen(
 }
 
 @Composable
-private fun WithdrawalReasonItem(
+private fun WithdrawalLongReasonItem(
     text: String,
     checked: Boolean,
     onClick: () -> Unit,
@@ -282,11 +283,86 @@ private fun WithdrawalReasonItem(
     }
 }
 
+@Composable
+private fun WithdrawalReasonItem(
+    text: String,
+    checked: Boolean,
+    onClick: () -> Unit,
+    useReasonTextField: Boolean = false,
+    description: String = "",
+    reason: String = "",
+    hint: String = "",
+    onReasonChanged: (String) -> Unit = {},
+) {
+    val backgroundColor by animateColorAsState(
+        targetValue = if (!checked) CareTheme.colors.white000
+        else CareTheme.colors.orange500,
+    )
+    val borderColor by animateColorAsState(
+        targetValue = if (!checked) CareTheme.colors.gray100
+        else CareTheme.colors.orange500
+    )
+
+    Column(horizontalAlignment = Alignment.Start) {
+        Row(
+            verticalAlignment = Alignment.Top,
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .size(20.dp)
+                    .background(
+                        color = backgroundColor,
+                        shape = RoundedCornerShape(2.dp),
+                    )
+                    .border(
+                        width = 1.dp,
+                        color = borderColor,
+                        shape = RoundedCornerShape(2.dp),
+                    )
+                    .clickable { onClick() }
+            ) {
+                AnimatedVisibility(visible = checked) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_check),
+                        contentDescription = null
+                    )
+                }
+            }
+
+            Text(
+                text = text,
+                style = CareTheme.typography.body2,
+                color = CareTheme.colors.gray500,
+            )
+        }
+
+        if (useReasonTextField && checked) {
+            Text(
+                text = description,
+                style = CareTheme.typography.subtitle4,
+                color = CareTheme.colors.gray500,
+                modifier = Modifier.padding(top = 12.dp, bottom = 6.dp),
+            )
+
+            CareTextField(
+                value = reason,
+                onValueChanged = onReasonChanged,
+                hint = hint,
+                modifier = Modifier.padding(bottom = 8.dp),
+            )
+        }
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun PreviewWithdrawalReasonItem() {
     CareTheme {
-        WithdrawalReasonItem(
+        WithdrawalLongReasonItem(
             text = "Sample Withdrawal Reason",
             checked = true,
             onClick = { /* No action for preview */ },
