@@ -6,6 +6,7 @@ import com.idle.domain.model.auth.BusinessRegistrationInfo
 import com.idle.domain.model.auth.UserType
 import com.idle.domain.repositorry.auth.AuthRepository
 import com.idle.network.model.auth.ConfirmAuthCodeRequest
+import com.idle.network.model.auth.GenerateNewPasswordRequest
 import com.idle.network.model.auth.SendPhoneRequest
 import com.idle.network.model.auth.SignInCenterRequest
 import com.idle.network.model.auth.SignInWorkerRequest
@@ -186,4 +187,7 @@ class AuthRepositoryImpl @Inject constructor(
                 },
                 onFailure = { Result.failure(it) }
             )
+
+    override suspend fun generateNewPassword(newPassword: String): Result<Unit> =
+        authDataSource.generateNewPassword(GenerateNewPasswordRequest(newPassword))
 }
