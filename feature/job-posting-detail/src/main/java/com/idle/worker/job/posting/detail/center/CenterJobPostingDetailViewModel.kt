@@ -1,18 +1,17 @@
 package com.idle.worker.job.posting.detail.center
 
 import androidx.lifecycle.viewModelScope
-import com.idle.binding.DeepLinkDestination
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.error.HttpResponseException
-import com.idle.domain.model.jobposting.LifeAssistance
 import com.idle.domain.model.jobposting.CenterJobPostingDetail
 import com.idle.domain.model.jobposting.EditJobPostingDetail
+import com.idle.domain.model.jobposting.JobPostingStatus
+import com.idle.domain.model.jobposting.LifeAssistance
 import com.idle.domain.usecase.jobposting.EndJobPostingUseCase
 import com.idle.domain.usecase.jobposting.GetApplicantsCountUseCase
 import com.idle.domain.usecase.jobposting.GetCenterJobPostingDetailUseCase
 import com.idle.domain.usecase.jobposting.UpdateJobPostingUseCase
-import com.idle.job.posting.detail.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -109,6 +108,7 @@ class CenterJobPostingDetailViewModel @Inject constructor(
                 applyMethod = editJobPostingDetail.applyMethod,
                 applyDeadlineType = editJobPostingDetail.applyDeadlineType,
                 applyDeadline = editJobPostingDetail.applyDeadline,
+                jobPostingStatus = _jobPostingDetail.value?.jobPostingStatus ?: return@launch,
             )
 
             _isEditState.value = false
@@ -117,12 +117,8 @@ class CenterJobPostingDetailViewModel @Inject constructor(
 
     fun endJobPosting(jobPostingId: String) = viewModelScope.launch {
         endJobPostingUseCase(jobPostingId).onSuccess {
-            baseEvent(
-                CareBaseEvent.NavigateTo(
-                    DeepLinkDestination.CenterHome,
-                    R.id.centerJobPostingDetailFragment
-                )
-            )
+            _jobPostingDetail.value =
+                _jobPostingDetail.value?.copy(jobPostingStatus = JobPostingStatus.COMPLETED)
             baseEvent(CareBaseEvent.ShowSnackBar("채용이 종료되었어요.|SUCCESS"))
         }.onFailure { handleFailure(it as HttpResponseException) }
     }

@@ -3,6 +3,7 @@ package com.idle.worker.job.posting.detail.center
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -47,6 +48,7 @@ import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.jobposting.CenterJobPostingDetail
+import com.idle.domain.model.jobposting.JobPostingStatus
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -156,7 +158,13 @@ internal fun CenterJobPostingDetailScreen(
             rightButtonColor = CareTheme.colors.red,
             onDismissRequest = { showEndJobPostingDialog = false },
             onLeftButtonClick = { showEndJobPostingDialog = false },
-            onRightButtonClick = { endJobPosting(jobPostingId) },
+            onRightButtonClick = {
+                coroutineScope.launch {
+                    showEndJobPostingDialog = false
+                    sheetState.hide()
+                    endJobPosting(jobPostingId)
+                }
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp),
@@ -277,15 +285,23 @@ internal fun CenterJobPostingDetailScreen(
                     bottomComponent = {
                         CareButtonLarge(
                             text = "지원자 ${applicantsCount}명 조회",
-                            enable = applicantsCount != 0,
+                            enable = applicantsCount != 0 && it.jobPostingStatus == JobPostingStatus.IN_PROGRESS,
                             onClick = {
                                 navigateTo(
                                     DeepLinkDestination.CenterApplicantInquiry(jobPostingId)
                                 )
                             },
+                            disabledContainerColor = if (it.jobPostingStatus == JobPostingStatus.IN_PROGRESS) CareTheme.colors.gray200
+                            else CareTheme.colors.white000,
+                            border = if (it.jobPostingStatus == JobPostingStatus.IN_PROGRESS) null
+                            else BorderStroke(width = 1.dp, color = CareTheme.colors.gray200),
+                            textColor = if (it.jobPostingStatus == JobPostingStatus.IN_PROGRESS) CareTheme.colors.white000
+                            else CareTheme.colors.gray300,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(start = 20.dp, end = 20.dp, bottom = 32.dp),
+                                .background(CareTheme.colors.white000)
+                                .align(Alignment.BottomCenter)
+                                .padding(top = 12.dp, start = 20.dp, end = 20.dp, bottom = 28.dp),
                         )
                     },
                     modifier = Modifier
