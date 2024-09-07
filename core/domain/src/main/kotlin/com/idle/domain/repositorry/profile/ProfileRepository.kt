@@ -43,4 +43,6 @@ interface ProfileRepository {
         userType: String,
         imageFileUri: String,
     ): Result<Unit>
+
+    suspend fun getWorkerId(): Result<String>
 }

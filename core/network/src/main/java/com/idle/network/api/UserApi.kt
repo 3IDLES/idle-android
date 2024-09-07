@@ -1,5 +1,6 @@
 package com.idle.network.api
 
+import com.idle.network.model.auth.GetWorkerIdResponse
 import com.idle.network.model.profile.CallbackImageUploadRequest
 import com.idle.network.model.profile.GetCenterProfileResponse
 import com.idle.network.model.profile.GetWorkerProfileResponse
@@ -67,4 +68,7 @@ interface UserApi {
     suspend fun registerCenterProfile(
         @Body registerCenterProfileRequest: RegisterCenterProfileRequest
     ): Response<Unit>
+
+    @GET("/api/v1/logs/users/carer/my")
+    suspend fun getWorkerId(): Response<GetWorkerIdResponse>
 }

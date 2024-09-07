@@ -29,7 +29,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.idle.center.jobposting.JobPostingStep
-import com.idle.center.jobposting.JobPostingStep.ADDRESS
 import com.idle.center.jobposting.JobPostingStep.CUSTOMER_INFORMATION
 import com.idle.center.jobposting.LogJobPostingStep
 import com.idle.designresource.R
@@ -237,11 +236,12 @@ internal fun CustomerInformationScreen(
             enable = gender != Gender.NONE && birthYear.isNotBlank() && weight.isNotBlank() && mentalStatus != MentalStatus.UNKNOWN,
             onClick = {
                 if ((birthYear.toIntOrNull() ?: return@CareButtonLarge) < 1900) {
-                    showSnackBar("출생년도가 잘못되었습니다.")
+                    showSnackBar("출생년도가 잘못되었습니다.|Error")
                     return@CareButtonLarge
                 }
 
-                setJobPostingStep(JobPostingStep.findStep(CUSTOMER_INFORMATION.step + 1)) },
+                setJobPostingStep(JobPostingStep.findStep(CUSTOMER_INFORMATION.step + 1))
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 28.dp),
