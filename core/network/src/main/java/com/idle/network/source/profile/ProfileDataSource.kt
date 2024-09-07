@@ -1,6 +1,7 @@
 package com.idle.network.source.profile
 
 import com.idle.network.api.UserApi
+import com.idle.network.model.auth.GetWorkerIdResponse
 import com.idle.network.model.profile.CallbackImageUploadRequest
 import com.idle.network.model.profile.GetCenterProfileResponse
 import com.idle.network.model.profile.GetWorkerProfileResponse
@@ -69,6 +70,7 @@ class ProfileDataSource @Inject constructor(
 
     suspend fun registerCenterProfile(
         registerCenterProfileRequest: RegisterCenterProfileRequest
-    ): Result<Unit> =
-        userApi.registerCenterProfile(registerCenterProfileRequest).onResponse()
+    ): Result<Unit> = userApi.registerCenterProfile(registerCenterProfileRequest).onResponse()
+
+    suspend fun getWorkerId(): Result<GetWorkerIdResponse> = userApi.getWorkerId().onResponse()
 }

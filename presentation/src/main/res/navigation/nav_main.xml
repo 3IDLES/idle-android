@@ -20,7 +20,6 @@
     <include app:graph="@navigation/nav_worker_setting" />
     <include app:graph="@navigation/nav_job_posting_detail" />
     <include app:graph="@navigation/nav_worker_job_posting" />
-
     <action
         android:id="@+id/action_global_nav_auth"
         app:destination="@id/nav_auth"

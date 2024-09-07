@@ -254,4 +254,7 @@ class ProfileRepositoryImpl @Inject constructor(
             imageFileExtension = imageFileExtension,
         )
     )
+
+    private suspend fun getWorkerId(): Result<String> = profileDataSource.getWorkerId()
+        .mapCatching { it.carerId }
 }

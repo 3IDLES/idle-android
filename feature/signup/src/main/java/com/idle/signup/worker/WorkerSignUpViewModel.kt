@@ -2,6 +2,7 @@ package com.idle.signin.worker
 
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.viewModelScope
+import com.idle.analytics.helper.AnalyticsHelper
 import com.idle.binding.DeepLinkDestination.WorkerHome
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
@@ -14,6 +15,7 @@ import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
 import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
 import com.idle.domain.usecase.auth.SignInWorkerUseCase
 import com.idle.domain.usecase.auth.SignUpWorkerUseCase
+import com.idle.domain.usecase.profile.GetWorkerIdUseCase
 import com.idle.signin.worker.WorkerSignUpStep.PHONE_NUMBER
 import com.idle.signup.R
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,11 +27,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WorkerSignUpViewModel @Inject constructor(
+    private val getWorkerIdUseCase: GetWorkerIdUseCase,
     private val signUpWorkerUseCase: SignUpWorkerUseCase,
     private val signInWorkerUseCase: SignInWorkerUseCase,
     private val sendPhoneNumberUseCase: SendPhoneNumberUseCase,
     private val confirmAuthCodeUseCase: ConfirmAuthCodeUseCase,
     private val countDownTimer: CountDownTimer,
+    private val analyticsHelper: AnalyticsHelper,
 ) : BaseViewModel() {
 
     private val _signUpStep = MutableStateFlow<WorkerSignUpStep>(PHONE_NUMBER)
@@ -140,6 +144,7 @@ class WorkerSignUpViewModel @Inject constructor(
             phoneNumber = _workerPhoneNumber.value,
             authCode = _workerAuthCode.value,
         ).onSuccess {
+            getWorkerIdUseCase().onSuccess { analyticsHelper.setUserId(it) }
             baseEvent(CareBaseEvent.NavigateTo(WorkerHome, R.id.workerSignUpFragment))
         }.onFailure {
             confirmAuthCodeUseCase(_workerPhoneNumber.value, _workerAuthCode.value).onSuccess {
@@ -159,6 +164,7 @@ class WorkerSignUpViewModel @Inject constructor(
             roadNameAddress = _roadNameAddress.value,
             lotNumberAddress = _lotNumberAddress.value,
         ).onSuccess {
+            getWorkerIdUseCase().onSuccess { analyticsHelper.setUserId(it) }
             baseEvent(
                 CareBaseEvent.NavigateTo(
                     WorkerHome,
