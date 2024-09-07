@@ -84,23 +84,28 @@ fun CareButtonLarge(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enable: Boolean = true,
+    containerColor: Color = CareTheme.colors.orange500,
+    disabledContainerColor: Color = CareTheme.colors.gray200,
+    textColor: Color = CareTheme.colors.white000,
+    border: BorderStroke? = null,
 ) {
     Button(
         onClick = onClick,
         enabled = enable,
         shape = RoundedCornerShape(8.dp),
         colors = ButtonColors(
-            containerColor = CareTheme.colors.orange500,
-            contentColor = CareTheme.colors.orange500,
-            disabledContentColor = CareTheme.colors.gray200,
-            disabledContainerColor = CareTheme.colors.gray200,
+            containerColor = containerColor,
+            contentColor = containerColor,
+            disabledContentColor = disabledContainerColor,
+            disabledContainerColor = disabledContainerColor,
         ),
+        border = border,
         modifier = modifier.height(58.dp),
     ) {
         Text(
             text = text,
             style = CareTheme.typography.heading4,
-            color = CareTheme.colors.white000,
+            color = textColor,
         )
     }
 }
