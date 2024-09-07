@@ -92,7 +92,7 @@ internal fun WorkerHomeScreen(
     getJobPostings: () -> Unit,
     applyJobPosting: (String) -> Unit,
     addFavoriteJobPosting: (String, JobPostingType) -> Unit,
-    removeFavoriteJobPosting: (String, JobPostingType) -> Unit,
+    removeFavoriteJobPosting: (String) -> Unit,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
     val listState = rememberLazyListState()
@@ -244,7 +244,7 @@ private fun WorkerRecruitmentCard(
     profile: WorkerProfile?,
     showDialog: (WorkerJobPosting) -> Unit,
     addFavoriteJobPosting: (String, JobPostingType) -> Unit,
-    removeFavoriteJobPosting: (String, JobPostingType) -> Unit,
+    removeFavoriteJobPosting: (String) -> Unit,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
     val analyticsHelper = LocalAnalyticsHelper.current
@@ -318,10 +318,7 @@ private fun WorkerRecruitmentCard(
                                 jobPosting.jobPostingType
                             )
                         } else {
-                            removeFavoriteJobPosting(
-                                jobPosting.id,
-                                jobPosting.jobPostingType
-                            )
+                            removeFavoriteJobPosting(jobPosting.id)
                         }
                     }
                 )
@@ -423,7 +420,7 @@ private fun WorkerWorkNetCard(
     jobPosting: CrawlingJobPosting,
     profile: WorkerProfile?,
     addFavoriteJobPosting: (String, JobPostingType) -> Unit,
-    removeFavoriteJobPosting: (String, JobPostingType) -> Unit,
+    removeFavoriteJobPosting: (String) -> Unit,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
     val analyticsHelper = LocalAnalyticsHelper.current
@@ -491,7 +488,7 @@ private fun WorkerWorkNetCard(
                         if (!jobPosting.isFavorite) {
                             addFavoriteJobPosting(jobPosting.id, jobPosting.jobPostingType)
                         } else {
-                            removeFavoriteJobPosting(jobPosting.id, jobPosting.jobPostingType)
+                            removeFavoriteJobPosting(jobPosting.id)
                         }
                     }
                 )

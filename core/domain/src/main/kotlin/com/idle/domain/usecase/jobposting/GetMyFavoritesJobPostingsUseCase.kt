@@ -6,6 +6,6 @@ import javax.inject.Inject
 class GetMyFavoritesJobPostingsUseCase @Inject constructor(
     private val jobPostingRepository: JobPostingRepository,
 ) {
-    suspend operator fun invoke(next: String?, limit: Int = 10) =
-        jobPostingRepository.getMyFavoritesJobPostings(next, limit)
+    suspend operator fun invoke() =
+        jobPostingRepository.getMyFavoritesJobPostings()
 }

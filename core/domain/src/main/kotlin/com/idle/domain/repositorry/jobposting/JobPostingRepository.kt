@@ -85,10 +85,9 @@ interface JobPostingRepository {
         limit: Int
     ): Result<Pair<String?, List<WorkerJobPosting>>>
 
-    suspend fun getMyFavoritesJobPostings(
-        next: String?,
-        limit: Int
-    ): Result<Pair<String?, List<WorkerJobPosting>>>
+    suspend fun getMyFavoritesJobPostings(): Result<List<WorkerJobPosting>>
+
+    suspend fun getMyFavoritesCrawlingJobPostings(): Result<List<CrawlingJobPosting>>
 
     suspend fun getJobPostingsInProgress(): Result<List<CenterJobPosting>>
 
@@ -103,10 +102,7 @@ interface JobPostingRepository {
         jobPostingType: JobPostingType,
     ): Result<Unit>
 
-    suspend fun removeFavoriteJobPosting(
-        jobPostingId: String,
-        jobPostingType: JobPostingType,
-    ): Result<Unit>
+    suspend fun removeFavoriteJobPosting(jobPostingId: String): Result<Unit>
 
     suspend fun getApplicants(jobPostingId: String): Result<Pair<JobPostingSummary, List<Applicant>>>
 

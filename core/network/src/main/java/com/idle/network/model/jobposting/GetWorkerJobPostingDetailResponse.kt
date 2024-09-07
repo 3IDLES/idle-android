@@ -48,7 +48,7 @@ data class GetWorkerJobPostingDetailResponse(
     val weight: Int?,
     val applyTime: String?,
     val isFavorite: Boolean,
-    val jobPostingType: String = "CAREMEET",
+    val jobPostingType: String,
 ) {
     fun toVO() = WorkerJobPostingDetail(
         weekdays = DayOfWeek.create(weekdays),

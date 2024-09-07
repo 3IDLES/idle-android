@@ -125,14 +125,8 @@ class WorkerHomeViewModel @Inject constructor(
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
-    internal fun removeFavoriteJobPosting(
-        jobPostingId: String,
-        jobPostingType: JobPostingType,
-    ) = viewModelScope.launch {
-        removeFavoriteJobPostingUseCase(
-            jobPostingId = jobPostingId,
-            jobPostingType = jobPostingType,
-        ).onSuccess {
+    internal fun removeFavoriteJobPosting(jobPostingId: String) = viewModelScope.launch {
+        removeFavoriteJobPostingUseCase(jobPostingId = jobPostingId).onSuccess {
             baseEvent(CareBaseEvent.ShowSnackBar("즐겨찾기에서 제거되었어요.|SUCCESS"))
 
             _jobPostings.value = _jobPostings.value.map {

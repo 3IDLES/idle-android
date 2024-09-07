@@ -7,6 +7,8 @@ import com.idle.network.model.jobposting.GetApplicantsResponse
 import com.idle.network.model.jobposting.GetCenterJobPostingDetailResponse
 import com.idle.network.model.jobposting.GetCrawlingJobPostingDetailResponse
 import com.idle.network.model.jobposting.GetCrawlingJobPostingsResponse
+import com.idle.network.model.jobposting.GetFavoriteCrawlingJobPostingsResponse
+import com.idle.network.model.jobposting.GetFavoriteJobPostingsResponse
 import com.idle.network.model.jobposting.GetJobPostingsCenterResponse
 import com.idle.network.model.jobposting.GetJobPostingsResponse
 import com.idle.network.model.jobposting.GetWorkerJobPostingDetailResponse
@@ -48,10 +50,10 @@ interface JobPostingApi {
     ): Response<GetJobPostingsResponse>
 
     @GET("/api/v1/job-postings/my/favorites")
-    suspend fun getMyFavoritesJobPostings(
-        @Query("next") next: String?,
-        @Query("limit") limit: Int,
-    ): Response<GetJobPostingsResponse>
+    suspend fun getMyFavoriteJobPostings(): Response<GetFavoriteJobPostingsResponse>
+
+    @GET("/api/v1/crawling-job-postings/my/favorites")
+    suspend fun getMyFavoriteCrawlingJobPostings(): Response<GetFavoriteCrawlingJobPostingsResponse>
 
     @GET("/api/v1/job-postings/status/in-progress")
     suspend fun getJobPostingsInProgress(): Response<GetJobPostingsCenterResponse>
@@ -83,11 +85,8 @@ interface JobPostingApi {
         @Body favoriteJobPostingRequest: FavoriteJobPostingRequest,
     ): Response<Unit>
 
-    @POST("/api/v1/job-postings/{job-posting-id}/remove-favorites")
-    suspend fun removeFavoriteJobPosting(
-        @Path("job-posting-id") jobPostingId: String,
-        @Body favoriteJobPostingRequest: FavoriteJobPostingRequest,
-    ): Response<Unit>
+    @DELETE("/api/v1/job-postings/{job-posting-id}/remove-favorites")
+    suspend fun removeFavoriteJobPosting(@Path("job-posting-id") jobPostingId: String): Response<Unit>
 
     @PATCH("/api/v1/job-postings/{job-posting-id}/end")
     suspend fun endJobPosting(@Path("job-posting-id") jobPostingId: String): Response<Unit>

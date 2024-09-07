@@ -8,6 +8,8 @@ import com.idle.network.model.jobposting.GetApplicantsResponse
 import com.idle.network.model.jobposting.GetCenterJobPostingDetailResponse
 import com.idle.network.model.jobposting.GetCrawlingJobPostingDetailResponse
 import com.idle.network.model.jobposting.GetCrawlingJobPostingsResponse
+import com.idle.network.model.jobposting.GetFavoriteCrawlingJobPostingsResponse
+import com.idle.network.model.jobposting.GetFavoriteJobPostingsResponse
 import com.idle.network.model.jobposting.GetJobPostingsCenterResponse
 import com.idle.network.model.jobposting.GetJobPostingsResponse
 import com.idle.network.model.jobposting.GetWorkerJobPostingDetailResponse
@@ -43,11 +45,11 @@ class JobPostingDataSource @Inject constructor(
     suspend fun getJobPostingsApplied(next: String?, limit: Int): Result<GetJobPostingsResponse> =
         jobPostingApi.getJobPostingsApplied(next = next, limit = limit).onResponse()
 
-    suspend fun getMyFavoritesJobPostings(
-        next: String?,
-        limit: Int
-    ): Result<GetJobPostingsResponse> =
-        jobPostingApi.getMyFavoritesJobPostings(next = next, limit = limit).onResponse()
+    suspend fun getMyFavoriteJobPostings(): Result<GetFavoriteJobPostingsResponse> =
+        jobPostingApi.getMyFavoriteJobPostings().onResponse()
+
+    suspend fun getMyFavoriteCrawlingJobPostings(): Result<GetFavoriteCrawlingJobPostingsResponse> =
+        jobPostingApi.getMyFavoriteCrawlingJobPostings().onResponse()
 
     suspend fun getJobPostingsInProgress(): Result<GetJobPostingsCenterResponse> =
         jobPostingApi.getJobPostingsInProgress().onResponse()
@@ -70,14 +72,8 @@ class JobPostingDataSource @Inject constructor(
             favoriteJobPostingRequest = favoriteJobPostingRequest
         ).onResponse()
 
-    suspend fun removeFavoriteJobPosting(
-        jobPostingId: String,
-        favoriteJobPostingRequest: FavoriteJobPostingRequest,
-    ): Result<Unit> =
-        jobPostingApi.removeFavoriteJobPosting(
-            jobPostingId = jobPostingId,
-            favoriteJobPostingRequest = favoriteJobPostingRequest
-        ).onResponse()
+    suspend fun removeFavoriteJobPosting(jobPostingId: String): Result<Unit> =
+        jobPostingApi.removeFavoriteJobPosting(jobPostingId = jobPostingId).onResponse()
 
     suspend fun getApplicants(jobPostingId: String): Result<GetApplicantsResponse> =
         jobPostingApi.getApplicants(jobPostingId).onResponse()
