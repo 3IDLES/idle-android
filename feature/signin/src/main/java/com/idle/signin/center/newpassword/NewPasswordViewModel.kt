@@ -128,7 +128,12 @@ class NewPasswordViewModel @Inject constructor(
             newPassword = _newPassword.value,
             phoneNumber = _phoneNumber.value
         ).onSuccess {
-            baseEvent(NavigateTo(DeepLinkDestination.CenterSignIn, R.id.newPasswordFragment))
+            baseEvent(
+                NavigateTo(
+                    destination = DeepLinkDestination.CenterSignIn("새 비밀번호를 발급하였습니다.|SUCCESS"),
+                    popUpTo = R.id.newPasswordFragment,
+                )
+            )
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 }

@@ -167,7 +167,7 @@ class CenterSignUpViewModel @Inject constructor(
             .onSuccess {
                 baseEvent(
                     CareBaseEvent.NavigateTo(
-                        DeepLinkDestination.CenterSignIn,
+                        DeepLinkDestination.CenterSignIn("회원가입을 성공하였습니다.|SUCCESS"),
                         R.id.centerSignUpFragment
                     )
                 )

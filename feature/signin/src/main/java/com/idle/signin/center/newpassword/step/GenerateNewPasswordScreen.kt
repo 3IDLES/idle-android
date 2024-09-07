@@ -74,7 +74,7 @@ internal fun GenerateNewPasswordScreen(
                         fontSize = 12.sp,
                     )
                 ) {
-                    append("(영문+숫자 조합 10자리 이상 등 조건)")
+                    append(stringResource(id = R.string.password_conditions))
                 }
             },
             modifier = Modifier.fillMaxWidth(),

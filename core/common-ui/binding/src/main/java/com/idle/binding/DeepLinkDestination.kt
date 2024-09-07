@@ -36,8 +36,9 @@ sealed class DeepLinkDestination(
         addressRes = R.string.new_password_deeplink_url
     )
 
-    data object CenterSignIn : DeepLinkDestination(
-        addressRes = R.string.center_signin_deeplink_url
+    data class CenterSignIn(val snackBarMsg: String = "default") : DeepLinkDestination(
+        addressRes = R.string.center_signin_deeplink_url,
+        params = mapOf("snackBarMsg" to snackBarMsg)
     )
 
     data object CenterSignUp : DeepLinkDestination(
@@ -48,7 +49,7 @@ sealed class DeepLinkDestination(
         addressRes = R.string.center_home_deeplink_url,
     )
 
-    data class CenterProfile(val centerId: String ="default") : DeepLinkDestination(
+    data class CenterProfile(val centerId: String = "default") : DeepLinkDestination(
         addressRes = R.string.center_profile_deeplink_url,
         params = mapOf("centerId" to centerId)
     )
