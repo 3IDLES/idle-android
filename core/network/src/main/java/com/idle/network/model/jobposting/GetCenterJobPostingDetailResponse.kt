@@ -3,11 +3,12 @@ package com.idle.network.model.jobposting
 import com.idle.domain.model.auth.Gender
 import com.idle.domain.model.jobposting.ApplyDeadlineType
 import com.idle.domain.model.jobposting.ApplyMethod
+import com.idle.domain.model.jobposting.CenterJobPostingDetail
 import com.idle.domain.model.jobposting.DayOfWeek
+import com.idle.domain.model.jobposting.JobPostingStatus
 import com.idle.domain.model.jobposting.LifeAssistance
 import com.idle.domain.model.jobposting.MentalStatus
 import com.idle.domain.model.jobposting.PayType
-import com.idle.domain.model.jobposting.CenterJobPostingDetail
 import kotlinx.serialization.Serializable
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -38,6 +39,7 @@ data class GetCenterJobPostingDetailResponse(
     val applyMethod: List<String> = listOf(),
     val applyDeadlineType: String = "",
     val applyDeadline: String? = null,
+    val jobPostingStatus: String = "",
 ) {
     fun toVO() = CenterJobPostingDetail(
         weekdays = DayOfWeek.create(weekdays),
@@ -66,5 +68,6 @@ data class GetCenterJobPostingDetailResponse(
         applyDeadline = applyDeadline?.let {
             LocalDate.parse(it, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         },
+        jobPostingStatus = JobPostingStatus.create(jobPostingStatus),
     )
 }
