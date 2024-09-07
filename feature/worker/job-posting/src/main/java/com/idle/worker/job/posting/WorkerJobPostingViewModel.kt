@@ -13,6 +13,7 @@ import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.usecase.jobposting.AddFavoriteJobPostingUseCase
 import com.idle.domain.usecase.jobposting.ApplyJobPostingUseCase
 import com.idle.domain.usecase.jobposting.GetJobPostingsAppliedUseCase
+import com.idle.domain.usecase.jobposting.GetMyFavoritesCrawlingJobPostingsUseCase
 import com.idle.domain.usecase.jobposting.GetMyFavoritesJobPostingsUseCase
 import com.idle.domain.usecase.jobposting.RemoveFavoriteJobPostingUseCase
 import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
@@ -28,6 +29,7 @@ class WorkerJobPostingViewModel @Inject constructor(
     private val getLocalMyWorkerProfileUseCase: GetLocalMyWorkerProfileUseCase,
     private val getJobPostingsAppliedUseCase: GetJobPostingsAppliedUseCase,
     private val getMyFavoritesJobPostingsUseCase: GetMyFavoritesJobPostingsUseCase,
+    private val getMyFavoritesCrawlingJobPostingsUseCase: GetMyFavoritesCrawlingJobPostingsUseCase,
     private val applyJobPostingUseCase: ApplyJobPostingUseCase,
     private val addFavoriteJobPostingUseCase: AddFavoriteJobPostingUseCase,
     private val removeFavoriteJobPostingUseCase: RemoveFavoriteJobPostingUseCase,
@@ -80,10 +82,17 @@ class WorkerJobPostingViewModel @Inject constructor(
 
     fun getMyFavoritesJobPostings() = viewModelScope.launch {
         getFavoriteCareMeetJobPostings()
+        launch { getFavoriteCrawlingJobPostings() }
     }
 
     private suspend fun getFavoriteCareMeetJobPostings() {
         getMyFavoritesJobPostingsUseCase().onSuccess {
+            _favoriteJobPostings.value += it
+        }.onFailure { handleFailure(it as HttpResponseException) }
+    }
+
+    private suspend fun getFavoriteCrawlingJobPostings() {
+        getMyFavoritesCrawlingJobPostingsUseCase().onSuccess {
             _favoriteJobPostings.value += it
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
