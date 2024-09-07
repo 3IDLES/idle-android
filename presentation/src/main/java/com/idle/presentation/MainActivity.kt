@@ -1,6 +1,7 @@
 package com.idle.presentation
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -46,12 +47,22 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        installSplashScreen()
+        val splashScreen = installSplashScreen()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         repeatOnStarted {
             viewModel.navigationMenuType.collect { menuType -> setNavigationMenuType(menuType) }
+        }
+
+        repeatOnStarted {
+            viewModel.forceUpdate.collect {
+                it?.let { info ->
+                    val nowVersion = packageManager.getPackageInfo(packageName, 0).versionName
+                    val minAppVersion = info.minVersion
+                    val shouldUpdate = checkShouldUpdate(nowVersion, minAppVersion).toString()
+                }
+            }
         }
 
         binding.apply {
@@ -100,6 +111,29 @@ class MainActivity : AppCompatActivity() {
         NavigationMenuType.Hide -> binding.apply {
             mainBNVCenter.visibility = View.GONE
             mainBNVWorker.visibility = View.GONE
+        }
+    }
+
+    private fun checkShouldUpdate(currentVersion: String, minVersion: String): Boolean {
+        val current = normalizeVersion(currentVersion)
+        val min = normalizeVersion(minVersion)
+
+        Log.d("test", "current : $current min : $min")
+
+        // 버전 비교 (메이저, 마이너, 패치 순으로 비교)
+        for (i in 0..2) {
+            if (current[i] < min[i]) return true
+            if (current[i] > min[i]) return false
+        }
+        return false
+    }
+
+    private fun normalizeVersion(version: String): List<Int> {
+        return version.split('.').map { it.toIntOrNull() ?: 0 }.let {
+            when (it.size) {
+                2 -> it + listOf(0) // 1.0 -> 1.0.0 형태로 변환
+                else -> it
+            }
         }
     }
 }

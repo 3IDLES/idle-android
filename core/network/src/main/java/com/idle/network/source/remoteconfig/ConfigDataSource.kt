@@ -1,5 +1,6 @@
 package com.idle.network.source.remoteconfig
 
+import android.util.Log
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigValue
 import com.google.firebase.remoteconfig.get
@@ -29,11 +30,7 @@ class ConfigDataSource @Inject constructor(
 
     suspend inline fun <reified T> getReferenceType(key: String): T? {
         val json = Json {
-            coerceInputValues = true
             ignoreUnknownKeys = true
-            isLenient = true
-            explicitNulls = false
-            allowStructuredMapKeys = true
         }
 
         return getString(key, "").let {
