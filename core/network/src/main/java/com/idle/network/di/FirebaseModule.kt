@@ -21,6 +21,5 @@ object FirebaseModule {
             minimumFetchIntervalInSeconds = 3600
         }
         setConfigSettingsAsync(configSettings)
-        setDefaultsAsync(R.xml.remote_config_defaults)
     }
 }

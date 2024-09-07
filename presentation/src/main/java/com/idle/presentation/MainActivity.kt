@@ -11,6 +11,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.idle.binding.repeatOnStarted
 import com.idle.presentation.databinding.ActivityMainBinding
+import com.idle.presentation.forceupdate.ForceUpdateFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -18,6 +19,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private val viewModel: MainViewModel by viewModels()
+    lateinit var forceUpdateDialog: ForceUpdateFragment
 
     private val centerBottomNavDestinationIds: Set<Int> by lazy {
         resources.obtainTypedArray(R.array.centerNavDestinationIds).let { typedArray ->
@@ -50,7 +52,6 @@ class MainActivity : AppCompatActivity() {
         val splashScreen = installSplashScreen()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         repeatOnStarted {
             viewModel.navigationMenuType.collect { menuType -> setNavigationMenuType(menuType) }
         }
@@ -60,7 +61,14 @@ class MainActivity : AppCompatActivity() {
                 it?.let { info ->
                     val nowVersion = packageManager.getPackageInfo(packageName, 0).versionName
                     val minAppVersion = info.minVersion
-                    val shouldUpdate = checkShouldUpdate(nowVersion, minAppVersion).toString()
+                    val shouldUpdate = checkShouldUpdate(nowVersion, minAppVersion)
+
+                    if (shouldUpdate) {
+                        forceUpdateDialog = ForceUpdateFragment(info).apply {
+                            isCancelable = false
+                        }
+                        forceUpdateDialog.show(supportFragmentManager, forceUpdateDialog.tag)
+                    }
                 }
             }
         }
