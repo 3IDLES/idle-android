@@ -22,15 +22,11 @@ class MainViewModel @Inject constructor(
     private val _forceUpdate = MutableStateFlow<ForceUpdate?>(null)
     val forceUpdate = _forceUpdate.asStateFlow()
 
-    init {
-        getForceUpdateInfo()
-    }
-
     fun setNavigationMenuType(navigationMenuType: NavigationMenuType) {
         _navigationMenuType.value = navigationMenuType
     }
 
-    private fun getForceUpdateInfo() = viewModelScope.launch {
+    fun getForceUpdateInfo() = viewModelScope.launch {
         getForceUpdateInfoUseCase().onSuccess {
             _forceUpdate.value = it
         }.onFailure {

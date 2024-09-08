@@ -31,30 +31,32 @@ class AuthViewModel @Inject constructor(
     private val _userType = MutableStateFlow<UserType?>(null)
     val userRole = _userType.asStateFlow()
 
-    init {
-        viewModelScope.launch {
-            val accessTokenDeferred = async { getAccessTokenUseCase() }
-            val userRoleDeferred = async { getMyUserRoleUseCase() }
+    init{
+        initializeUserSession()
+    }
 
-            val accessToken = accessTokenDeferred.await()
-            val userRole = userRoleDeferred.await()
+    internal fun initializeUserSession() = viewModelScope.launch {
+        val accessTokenDeferred = async { getAccessTokenUseCase() }
+        val userRoleDeferred = async { getMyUserRoleUseCase() }
 
-            if (accessToken.isBlank() || userRole.isBlank()) {
+        val accessToken = accessTokenDeferred.await()
+        val userRole = userRoleDeferred.await()
+
+        if (accessToken.isBlank() || userRole.isBlank()) {
+            return@launch
+        }
+
+        when (userRole) {
+            UserType.CENTER.apiValue -> getMyCenterProfileUseCase().onFailure {
                 return@launch
             }
 
-            when (userRole) {
-                UserType.CENTER.apiValue -> getMyCenterProfileUseCase().onFailure {
-                    return@launch
-                }
-
-                UserType.WORKER.apiValue -> getMyWorkerProfileUseCase().onFailure {
-                    return@launch
-                }
+            UserType.WORKER.apiValue -> getMyWorkerProfileUseCase().onFailure {
+                return@launch
             }
-
-            navigateToDestination(userRole)
         }
+
+        navigateToDestination(userRole)
     }
 
     private fun navigateToDestination(userRole: String) {
