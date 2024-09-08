@@ -1,9 +1,11 @@
 package com.idle.presentation
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.provider.Settings.ACTION_WIFI_SETTINGS
 import android.view.View
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
@@ -12,15 +14,19 @@ import androidx.navigation.ui.setupWithNavController
 import com.idle.binding.repeatOnStarted
 import com.idle.presentation.databinding.ActivityMainBinding
 import com.idle.presentation.forceupdate.ForceUpdateFragment
+import com.idle.presentation.network.NetworkObserver
+import com.idle.presentation.network.NetworkState
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+    @Inject
+    lateinit var networkObserver: NetworkObserver
+    private lateinit var forceUpdateFragment: ForceUpdateFragment
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private val viewModel: MainViewModel by viewModels()
-    lateinit var forceUpdateDialog: ForceUpdateFragment
-
     private val centerBottomNavDestinationIds: Set<Int> by lazy {
         resources.obtainTypedArray(R.array.centerNavDestinationIds).let { typedArray ->
             val destinationIds = mutableSetOf<Int>()
@@ -33,7 +39,6 @@ class MainActivity : AppCompatActivity() {
             destinationIds
         }
     }
-
     private val workerBottomNavDestinationIds: Set<Int> by lazy {
         resources.obtainTypedArray(R.array.workerNavDestinationIds).let { typedArray ->
             val destinationIds = mutableSetOf<Int>()
@@ -49,11 +54,17 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val splashScreen = installSplashScreen()
+        installSplashScreen()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         repeatOnStarted {
-            viewModel.navigationMenuType.collect { menuType -> setNavigationMenuType(menuType) }
+            networkObserver.networkState.collect { state ->
+                if (state == NetworkState.NOT_CONNECTED) {
+                    showNetworkDialog()
+                } else {
+                    viewModel.getForceUpdateInfo()
+                }
+            }
         }
 
         repeatOnStarted {
@@ -64,13 +75,17 @@ class MainActivity : AppCompatActivity() {
                     val shouldUpdate = checkShouldUpdate(nowVersion, minAppVersion)
 
                     if (shouldUpdate) {
-                        forceUpdateDialog = ForceUpdateFragment(info).apply {
+                        forceUpdateFragment = ForceUpdateFragment(info).apply {
                             isCancelable = false
                         }
-                        forceUpdateDialog.show(supportFragmentManager, forceUpdateDialog.tag)
+                        forceUpdateFragment.show(supportFragmentManager, forceUpdateFragment.tag)
                     }
                 }
             }
+        }
+
+        repeatOnStarted {
+            viewModel.navigationMenuType.collect { menuType -> setNavigationMenuType(menuType) }
         }
 
         binding.apply {
@@ -83,6 +98,32 @@ class MainActivity : AppCompatActivity() {
         }
 
         setDestinationListener()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        networkObserver.checkNetworkState()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        networkObserver.unsubscribeNetworkCallback()
+    }
+
+    private fun showNetworkDialog() {
+        AlertDialog.Builder(this@MainActivity).apply {
+            setTitle("인터넷이 연결되어 있지 않아요")
+            setMessage("Wi-Fi 또는 데이터 연결을 확인한 후 다시 시도해 주세요.")
+            setPositiveButton("설정") { _, _ ->
+                startActivity(Intent(ACTION_WIFI_SETTINGS))
+            }
+            setNegativeButton("종료") { _, _ ->
+                finish()
+            }
+            setCancelable(false)
+            create()
+            show()
+        }
     }
 
     private fun setDestinationListener() {
