@@ -114,7 +114,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showNetworkDialog() {
-        if (networkDialog == null || networkDialog?.isShowing == false) {
+        networkDialog?.show() ?: run {
             networkDialog = AlertDialog.Builder(this@MainActivity).apply {
                 setTitle("인터넷이 연결되어 있지 않아요")
                 setMessage("Wi-Fi 또는 데이터 연결을 확인한 후 다시 시도해 주세요.")
