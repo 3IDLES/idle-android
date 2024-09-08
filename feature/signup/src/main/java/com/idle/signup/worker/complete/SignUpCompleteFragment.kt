@@ -1,4 +1,4 @@
-package com.idle.center.jobposting.complete
+package com.idle.signup.worker.complete
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,24 +19,26 @@ import androidx.fragment.app.viewModels
 import com.idle.analytics.helper.TrackScreenViewEvent
 import com.idle.binding.DeepLinkDestination
 import com.idle.binding.base.CareBaseEvent
-import com.idle.center.job.posting.post.R.*
+import com.idle.center.jobposting.complete.SignUpCompleteViewModel
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.foundation.CareTheme
+import dagger.hilt.android.AndroidEntryPoint
 
-class JobPostingCompleteFragment : BaseComposeFragment() {
-    override val fragmentViewModel: JobPostingCompleteViewModel by viewModels()
+@AndroidEntryPoint
+class SignUpCompleteFragment : BaseComposeFragment() {
+    override val fragmentViewModel: SignUpCompleteViewModel by viewModels()
 
     @Composable
     override fun ComposeLayout() {
         fragmentViewModel.apply {
-            JobPostingCompleteScreen(
+            SignUpCompleteScreen(
                 navigateTo = {
                     baseEvent(
                         CareBaseEvent.NavigateTo(
                             destination = it,
-                            popUpTo = com.idle.center.job.posting.post.R.id.jobPostingPostCompleteFragment,
+                            popUpTo = com.idle.signup.R.id.signUpCompleteFragment,
                         )
                     )
                 },
@@ -46,7 +48,7 @@ class JobPostingCompleteFragment : BaseComposeFragment() {
 }
 
 @Composable
-internal fun JobPostingCompleteScreen(
+internal fun SignUpCompleteScreen(
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
     Column(
@@ -65,22 +67,22 @@ internal fun JobPostingCompleteScreen(
         )
 
         Text(
-            text = stringResource(id = R.string.job_posting_complete_message),
+            text = stringResource(id = R.string.signup_complete_message),
             style = CareTheme.typography.heading1,
             color = CareTheme.colors.gray900,
-            textAlign = TextAlign. Center,
+            textAlign = TextAlign.Center,
         )
 
         Spacer(modifier = Modifier.weight(1f))
 
         CareButtonLarge(
-            text = stringResource(id = R.string.confirm_short),
+            text = stringResource(id = R.string.start),
             onClick = { navigateTo(DeepLinkDestination.CenterHome) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 28.dp),
         )
     }
-    
-    TrackScreenViewEvent(screenName = "jobposting_complete_screen")
+
+    TrackScreenViewEvent(screenName = "signup_complete_screen")
 }

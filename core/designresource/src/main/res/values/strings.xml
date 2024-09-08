@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Common Strings -->
-    <string name="confirm">확인</string>
-    <string name="confirm2">확인했어요</string>
+    <string name="confirm_short">확인</string>
+    <string name="confirm">확인했어요</string>
     <string name="complete">완료</string>
     <string name="cancel">취소</string>
     <string name="save">저장</string>
     <string name="search">검색</string>
     <string name="next">다음</string>
     <string name="edit">수정하기</string>
+    <string name="start">시작하기</string>
 
     <!-- Authentication Strings -->
     <string name="login">로그인</string>
@@ -28,6 +29,7 @@
     <string name="verification">인증</string>
     <string name="confirm_code">인증번호</string>
     <string name="confirm_success">인증이 완료되었습니다.</string>
+    <string name="signup_complete_message">요양보호사 회원가입을\n완료했어요!</string>
     <string name="worker_name_hint">성함을 입력해주세요</string>
     <string name="worker_name_title">본인의 인적사항을 입력해주세요.</string>
     <string name="worker_signup">요양보호사 회원가입</string>

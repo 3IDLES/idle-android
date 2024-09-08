@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.idle.center.jobposting.JobPostingStep
-import com.idle.center.jobposting.JobPostingStep.CUSTOMER_REQUIREMENT
 import com.idle.center.jobposting.JobPostingStep.SUMMARY
 import com.idle.center.jobposting.LogJobPostingStep
 import com.idle.designresource.R
@@ -130,7 +129,7 @@ internal fun JobPostingSummaryScreen(
                     )
 
                     CareButtonLarge(
-                        text = stringResource(id = R.string.confirm2),
+                        text = stringResource(id = R.string.confirm),
                         onClick = postJobPosting,
                         modifier = Modifier
                             .fillMaxWidth()
