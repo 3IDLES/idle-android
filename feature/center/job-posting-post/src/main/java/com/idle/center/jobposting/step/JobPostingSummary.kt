@@ -1,5 +1,6 @@
 package com.idle.center.jobposting.step
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -117,10 +119,13 @@ internal fun JobPostingSummaryScreen(
                     ),
                 )
             },
-            bottomComponent = {
+            additionalComponent = {
                 Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(12.dp),
-                    modifier = Modifier.padding(horizontal = 20.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(CareTheme.colors.white000)
                 ) {
                     Text(
                         text = stringResource(id = R.string.post_job_posting_note),
@@ -133,7 +138,7 @@ internal fun JobPostingSummaryScreen(
                         onClick = postJobPosting,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(bottom = 32.dp),
+                            .padding(top = 12.dp, start = 20.dp, end = 20.dp, bottom = 28.dp),
                     )
                 }
             },
