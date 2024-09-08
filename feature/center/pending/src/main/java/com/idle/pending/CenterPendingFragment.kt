@@ -50,7 +50,13 @@ internal fun CenterPendingScreen() {
     Scaffold(
         containerColor = CareTheme.colors.white000,
     ) { paddingValue ->
-        val pagerState = rememberPagerState(pageCount = { 3 })
+        val actualPageCount = 3
+        val pageCount = 600
+        val maxNumOfRounds = 600 / actualPageCount
+        val pagerState = rememberPagerState(
+            initialPage = (maxNumOfRounds / 2) * actualPageCount,
+            pageCount = { pageCount },
+        )
 
         Box(
             modifier = Modifier
@@ -61,18 +67,21 @@ internal fun CenterPendingScreen() {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.fillMaxSize()
             ) {
-                PageIndicators(pagerState.pageCount, pagerState.currentPage)
+                PageIndicators(actualPageCount, pagerState.currentPage % actualPageCount)
 
                 HorizontalPager(state = pagerState) { page ->
-                    when (page) {
+                    val actualPage = page % actualPageCount
+                    when (actualPage) {
                         0 -> PendingPageContent(
                             headerText = "요양보호사 정보를 \n한눈에 확인할 수 있어요",
                             imageResId = R.drawable.ic_pending_screen_1
                         )
+
                         1 -> PendingPageContent(
                             headerText = "요양보호사 구인 공고를\n간편하게 등록할 수 있어요",
                             imageResId = R.drawable.ic_pending_screen_2
                         )
+
                         2 -> PendingPageContent(
                             headerText = "요양보호사를 즐겨찾기하고\n직접 연락해 능동적으로 구인해요",
                             imageResId = R.drawable.ic_pending_screen_3
