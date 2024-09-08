@@ -67,7 +67,11 @@ private fun CenterPendingScreen() {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.fillMaxSize()
             ) {
-                PageIndicators(actualPageCount, pagerState.currentPage % actualPageCount)
+                PageIndicators(
+                    totalPages = actualPageCount,
+                    currentPage = pagerState.currentPage % actualPageCount,
+                    modifier = Modifier.padding(top = 56.dp, bottom = 28.dp),
+                )
 
                 HorizontalPager(state = pagerState) { page ->
                     val actualPage = page % actualPageCount
@@ -104,10 +108,14 @@ private fun CenterPendingScreen() {
 }
 
 @Composable
-private fun PageIndicators(totalPages: Int, currentPage: Int) {
+private fun PageIndicators(
+    totalPages: Int,
+    currentPage: Int,
+    modifier: Modifier = Modifier,
+) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
-        modifier = Modifier.padding(top = 56.dp, bottom = 28.dp),
+        modifier = modifier,
     ) {
         repeat(totalPages) { page ->
             val color = if (currentPage == page) CareTheme.colors.orange500
