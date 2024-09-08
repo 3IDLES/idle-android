@@ -61,84 +61,22 @@ internal fun CenterPendingScreen() {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.fillMaxSize()
             ) {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    modifier = Modifier.padding(top = 56.dp, bottom = 28.dp),
-                ) {
-                    repeat(pagerState.pageCount) { page ->
-                        val color = if (pagerState.currentPage == page) CareTheme.colors.orange500
-                        else CareTheme.colors.gray100
-
-                        Box(
-                            modifier = Modifier
-                                .clip(CircleShape)
-                                .size(8.dp)
-                                .background(color),
-                        )
-                    }
-                }
+                PageIndicators(pagerState.pageCount, pagerState.currentPage)
 
                 HorizontalPager(state = pagerState) { page ->
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.fillMaxSize(),
-                    ) {
-                        Text(
-                            text = "센터 관리자 인증 시",
-                            style = CareTheme.typography.heading3,
-                            color = CareTheme.colors.orange500,
-                            modifier = Modifier.padding(bottom = 4.dp),
+                    when (page) {
+                        0 -> PendingPageContent(
+                            headerText = "요양보호사 정보를 \n한눈에 확인할 수 있어요",
+                            imageResId = R.drawable.ic_pending_screen_1
                         )
-
-                        when (page) {
-                            0 -> {
-                                Text(
-                                    text = "요양보호사 정보를 \n" +
-                                            "한눈에 확인할 수 있어요",
-                                    style = CareTheme.typography.heading1,
-                                    textAlign = TextAlign.Center,
-                                    color = CareTheme.colors.gray700,
-                                    modifier = Modifier.padding(bottom = 32.dp),
-                                )
-
-                                Image(
-                                    painter = painterResource(id = R.drawable.ic_pending_screen_1),
-                                    contentDescription = null,
-                                )
-                            }
-
-                            1 -> {
-                                Text(
-                                    text = "요양보호사 구인 공고를\n" +
-                                            "간편하게 등록할 수 있어요",
-                                    textAlign = TextAlign.Center,
-                                    style = CareTheme.typography.heading1,
-                                    color = CareTheme.colors.gray700,
-                                    modifier = Modifier.padding(bottom = 32.dp),
-                                )
-
-                                Image(
-                                    painter = painterResource(id = R.drawable.ic_pending_screen_2),
-                                    contentDescription = null,
-                                )
-                            }
-
-                            2 -> {
-                                Text(
-                                    text = "요양보호사를 즐겨찾기하고\n" +
-                                            "직접 연락해 능동적으로 구인해요",
-                                    textAlign = TextAlign.Center,
-                                    style = CareTheme.typography.heading1,
-                                    color = CareTheme.colors.gray700,
-                                    modifier = Modifier.padding(bottom = 32.dp),
-                                )
-
-                                Image(
-                                    painter = painterResource(id = R.drawable.ic_pending_screen_3),
-                                    contentDescription = null,
-                                )
-                            }
-                        }
+                        1 -> PendingPageContent(
+                            headerText = "요양보호사 구인 공고를\n간편하게 등록할 수 있어요",
+                            imageResId = R.drawable.ic_pending_screen_2
+                        )
+                        2 -> PendingPageContent(
+                            headerText = "요양보호사를 즐겨찾기하고\n직접 연락해 능동적으로 구인해요",
+                            imageResId = R.drawable.ic_pending_screen_3
+                        )
                     }
                 }
             }
@@ -153,5 +91,53 @@ internal fun CenterPendingScreen() {
                     .padding(top = 12.dp, start = 20.dp, end = 20.dp, bottom = 28.dp),
             )
         }
+    }
+}
+
+@Composable
+fun PageIndicators(totalPages: Int, currentPage: Int) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        modifier = Modifier.padding(top = 56.dp, bottom = 28.dp),
+    ) {
+        repeat(totalPages) { page ->
+            val color = if (currentPage == page) CareTheme.colors.orange500
+            else CareTheme.colors.gray100
+
+            Box(
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .size(8.dp)
+                    .background(color),
+            )
+        }
+    }
+}
+
+@Composable
+fun PendingPageContent(headerText: String, imageResId: Int) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxSize(),
+    ) {
+        Text(
+            text = "센터 관리자 인증 시",
+            style = CareTheme.typography.heading3,
+            color = CareTheme.colors.orange500,
+            modifier = Modifier.padding(bottom = 4.dp),
+        )
+
+        Text(
+            text = headerText,
+            style = CareTheme.typography.heading1,
+            textAlign = TextAlign.Center,
+            color = CareTheme.colors.gray700,
+            modifier = Modifier.padding(bottom = 32.dp),
+        )
+
+        Image(
+            painter = painterResource(id = imageResId),
+            contentDescription = null,
+        )
     }
 }
