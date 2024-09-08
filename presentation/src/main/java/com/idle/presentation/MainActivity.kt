@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var forceUpdateFragment: ForceUpdateFragment
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
+    private var networkDialog: AlertDialog? = null
     private val viewModel: MainViewModel by viewModels()
     private val centerBottomNavDestinationIds: Set<Int> by lazy {
         resources.obtainTypedArray(R.array.centerNavDestinationIds).let { typedArray ->
@@ -57,11 +58,13 @@ class MainActivity : AppCompatActivity() {
         installSplashScreen()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         repeatOnStarted {
             networkObserver.networkState.collect { state ->
                 if (state == NetworkState.NOT_CONNECTED) {
                     showNetworkDialog()
                 } else {
+                    dismissNetworkDialog()
                     viewModel.getForceUpdateInfo()
                 }
             }
@@ -111,19 +114,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showNetworkDialog() {
-        AlertDialog.Builder(this@MainActivity).apply {
-            setTitle("인터넷이 연결되어 있지 않아요")
-            setMessage("Wi-Fi 또는 데이터 연결을 확인한 후 다시 시도해 주세요.")
-            setPositiveButton("설정") { _, _ ->
-                startActivity(Intent(ACTION_WIFI_SETTINGS))
-            }
-            setNegativeButton("종료") { _, _ ->
-                finish()
-            }
-            setCancelable(false)
-            create()
-            show()
+        if (networkDialog == null || networkDialog?.isShowing == false) {
+            networkDialog = AlertDialog.Builder(this@MainActivity).apply {
+                setTitle("인터넷이 연결되어 있지 않아요")
+                setMessage("Wi-Fi 또는 데이터 연결을 확인한 후 다시 시도해 주세요.")
+                setPositiveButton("설정") { _, _ ->
+                    startActivity(Intent(ACTION_WIFI_SETTINGS))
+                }
+                setNegativeButton("종료") { _, _ ->
+                    finish()
+                }
+                setCancelable(false)
+            }.show()
         }
+    }
+
+    private fun dismissNetworkDialog() {
+        networkDialog?.dismiss()
+        networkDialog = null
     }
 
     private fun setDestinationListener() {
