@@ -117,13 +117,7 @@ fun SummaryScreen(
                                 .fillMaxWidth()
                                 .padding(bottom = 8.dp)
                         ) {
-                            if (isExperiencePreferred == false) {
-                                CareTag(
-                                    text = stringResource(id = R.string.experience_preferred),
-                                    textColor = CareTheme.colors.orange500,
-                                    backgroundColor = CareTheme.colors.orange100,
-                                )
-                            } else {
+                            if (isExperiencePreferred == true) {
                                 CareTag(
                                     text = stringResource(id = R.string.beginner_possible),
                                     textColor = CareTheme.colors.orange500,
@@ -131,17 +125,11 @@ fun SummaryScreen(
                                 )
                             }
 
-                            if (applyDeadline != null) {
-                                val today = LocalDate.now(ZoneId.of("Asia/Seoul"))
-                                val dDay = ChronoUnit.DAYS.between(applyDeadline, today)
-                                if (dDay in 0..14) {
-                                    CareTag(
-                                        text = "D-$dDay",
-                                        textColor = CareTheme.colors.gray300,
-                                        backgroundColor = CareTheme.colors.gray050,
-                                    )
-                                }
-                            }
+                            CareTag(
+                                text = "도보 15분 ~ 20분",
+                                textColor = CareTheme.colors.gray300,
+                                backgroundColor = CareTheme.colors.gray050,
+                            )
                         }
 
                         Text(

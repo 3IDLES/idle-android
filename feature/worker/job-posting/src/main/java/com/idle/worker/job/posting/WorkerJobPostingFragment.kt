@@ -338,14 +338,6 @@ private fun WorkerRecruitmentCard(
                     )
                 }
 
-                if (jobPosting.calculateDeadline() <= 14) {
-                    CareTag(
-                        text = "D-${jobPosting.calculateDeadline()}",
-                        textColor = CareTheme.colors.gray300,
-                        backgroundColor = CareTheme.colors.gray050,
-                    )
-                }
-
                 CareTag(
                     text = "도보 ${jobPosting.getDistanceInMinutes()}",
                     textColor = CareTheme.colors.gray300,
@@ -500,14 +492,6 @@ private fun WorkerWorkNetCard(
                     textColor = Color(0xFF2B8BDC),
                     backgroundColor = Color(0xFFD3EBFF),
                 )
-
-                if (jobPosting.calculateDeadline() <= 14) {
-                    CareTag(
-                        text = "D-${jobPosting.calculateDeadline()}",
-                        textColor = CareTheme.colors.gray300,
-                        backgroundColor = CareTheme.colors.gray050,
-                    )
-                }
 
                 CareTag(
                     text = "도보 ${jobPosting.getDistanceInMinutes()}",
