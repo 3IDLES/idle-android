@@ -346,6 +346,12 @@ private fun WorkerRecruitmentCard(
                     )
                 }
 
+                CareTag(
+                    text = "도보 ${jobPosting.getDistanceInMinutes()}",
+                    textColor = CareTheme.colors.gray300,
+                    backgroundColor = CareTheme.colors.gray050,
+                )
+
                 Spacer(modifier = Modifier.weight(1f))
 
                 Image(
@@ -362,33 +368,20 @@ private fun WorkerRecruitmentCard(
                 )
             }
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            Text(
+                text = try {
+                    jobPosting.lotNumberAddress.split(" ").subList(0, 3).joinToString(" ")
+                } catch (e: IndexOutOfBoundsException) {
+                    ""
+                },
+                style = CareTheme.typography.subtitle2,
+                color = CareTheme.colors.gray900,
+                overflow = TextOverflow.Clip,
+                maxLines = 1,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 2.dp),
-            ) {
-                Text(
-                    text = try {
-                        jobPosting.lotNumberAddress.split(" ").subList(0, 3).joinToString(" ")
-                    } catch (e: IndexOutOfBoundsException) {
-                        ""
-                    },
-                    style = CareTheme.typography.subtitle2,
-                    color = CareTheme.colors.gray900,
-                    overflow = TextOverflow.Clip,
-                    maxLines = 1,
-                    modifier = Modifier.weight(1f),
-                )
-
-                Text(
-                    text = "도보 ${jobPosting.getDistanceInMinutes()}",
-                    style = CareTheme.typography.body3,
-                    color = CareTheme.colors.gray500,
-                    modifier = Modifier.padding(end = 8.dp),
-                )
-            }
+            )
 
             Text(
                 text = "${jobPosting.careLevel}등급 ${jobPosting.age}세 ${jobPosting.gender.displayName}",
@@ -508,6 +501,20 @@ private fun WorkerWorkNetCard(
                     backgroundColor = Color(0xFFD3EBFF),
                 )
 
+                if (jobPosting.calculateDeadline() <= 14) {
+                    CareTag(
+                        text = "D-${jobPosting.calculateDeadline()}",
+                        textColor = CareTheme.colors.gray300,
+                        backgroundColor = CareTheme.colors.gray050,
+                    )
+                }
+
+                CareTag(
+                    text = "도보 ${jobPosting.getDistanceInMinutes()}",
+                    textColor = CareTheme.colors.gray300,
+                    backgroundColor = CareTheme.colors.gray050,
+                )
+
                 Spacer(modifier = Modifier.weight(1f))
 
                 Image(
@@ -529,13 +536,6 @@ private fun WorkerWorkNetCard(
                 style = CareTheme.typography.subtitle2,
                 color = CareTheme.colors.gray900,
                 modifier = Modifier.padding(vertical = 8.dp),
-            )
-
-            Text(
-                text = "도보 ${jobPosting.getDistanceInMinutes()}",
-                style = CareTheme.typography.body3,
-                color = CareTheme.colors.gray900,
-                modifier = Modifier.padding(bottom = 4.dp),
             )
 
             Row(
