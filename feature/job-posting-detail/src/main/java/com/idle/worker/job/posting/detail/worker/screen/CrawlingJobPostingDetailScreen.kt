@@ -134,6 +134,12 @@ internal fun CrawlingJobPostingDetailScreen(
                             )
                         }
 
+                        CareTag(
+                            text = "도보 ${jobPostingDetail.getDistanceInMinutes()}",
+                            textColor = CareTheme.colors.gray300,
+                            backgroundColor = CareTheme.colors.gray050,
+                        )
+
                         Spacer(modifier = Modifier.weight(1f))
 
                         Image(
