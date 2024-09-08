@@ -3,6 +3,7 @@ package com.idle.signin.worker
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.viewModelScope
 import com.idle.analytics.helper.AnalyticsHelper
+import com.idle.binding.DeepLinkDestination
 import com.idle.binding.DeepLinkDestination.WorkerHome
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
@@ -167,7 +168,7 @@ class WorkerSignUpViewModel @Inject constructor(
             getWorkerIdUseCase().onSuccess { analyticsHelper.setUserId(it) }
             baseEvent(
                 CareBaseEvent.NavigateTo(
-                    WorkerHome,
+                    DeepLinkDestination.SignUpComplete,
                     R.id.workerSignUpFragment
                 )
             )

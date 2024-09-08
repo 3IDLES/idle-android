@@ -130,7 +130,7 @@ internal fun WorkerPhoneNumberScreen(
 
                     CareButtonSmall(
                         enable = workerAuthCode.isNotBlank() && !isConfirmAuthCode,
-                        text = stringResource(id = R.string.confirm),
+                        text = stringResource(id = R.string.confirm_short),
                         onClick = confirmAuthCode,
                     )
                 }

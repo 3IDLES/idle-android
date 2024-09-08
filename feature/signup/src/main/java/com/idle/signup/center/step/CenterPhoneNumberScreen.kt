@@ -142,7 +142,7 @@ internal fun CenterPhoneNumberScreen(
 
                     CareButtonSmall(
                         enable = centerAuthCode.isNotBlank() && !isConfirmAuthCode,
-                        text = stringResource(id = R.string.confirm),
+                        text = stringResource(id = R.string.confirm_short),
                         onClick = confirmAuthCode,
                     )
                 }

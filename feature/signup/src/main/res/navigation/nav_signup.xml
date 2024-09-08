@@ -16,4 +16,10 @@
         android:label="WorkerSignUpFragment">
         <deepLink app:uri="@string/worker_signup_deeplink_url" />
     </fragment>
+    <fragment
+        android:id="@+id/signUpCompleteFragment"
+        android:name="com.idle.signup.worker.complete.SignUpCompleteFragment"
+        android:label="SignUpCompleteFragment">
+        <deepLink app:uri="@string/signup_complete_deeplink_url" />
+    </fragment>
 </navigation>
