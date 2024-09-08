@@ -135,8 +135,6 @@ retrofit-core = { group = "com.squareup.retrofit2", name = "retrofit", version.r
 retrofit-kotlin-serialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "retrofit" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 
-amplitude-analytics = { module = "com.amplitude:analytics-android", version.ref = "amplitudeAnalytics" }
-
 androidx-runner = { group = "androidx.test", name = "runner", version.ref = "androidxTestRunner" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidxTestExt" }
 junit4 = { group = "junit", name = "junit", version.ref = "junit4" }
@@ -154,6 +152,8 @@ firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.r
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
 firebase-config = { group = "com.google.firebase", name = "firebase-config-ktx" }
+
+amplitude-analytics = { module = "com.amplitude:analytics-android", version.ref = "amplitudeAnalytics" }
 
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 
