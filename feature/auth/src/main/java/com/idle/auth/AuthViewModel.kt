@@ -35,7 +35,7 @@ class AuthViewModel @Inject constructor(
         initializeUserSession()
     }
 
-    internal fun initializeUserSession() = viewModelScope.launch {
+    private fun initializeUserSession() = viewModelScope.launch {
         val accessTokenDeferred = async { getAccessTokenUseCase() }
         val userRoleDeferred = async { getMyUserRoleUseCase() }
 
@@ -74,7 +74,7 @@ class AuthViewModel @Inject constructor(
         getCenterStatusUseCase().onSuccess {
             val destination = when (it.centerManagerAccountStatus) {
                 CenterManagerAccountStatus.APPROVED -> CenterHome
-                else -> DeepLinkDestination.CenterPending
+                else -> CenterHome
             }
             baseEvent(NavigateTo(destination, R.id.authFragment))
         }.onFailure {

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,6 +29,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.component.CareTextFieldLong
@@ -67,6 +69,7 @@ fun SummaryScreen(
     applyDeadline: LocalDate?,
     modifier: Modifier = Modifier,
     titleComponent: @Composable (() -> Unit)? = null,
+    additionalComponent: @Composable (ColumnScope.() -> Unit)? = null,
     bottomComponent: @Composable (BoxScope.() -> Unit)? = null,
     onBackPressed: (() -> Unit)? = null,
 ) {
@@ -203,6 +206,9 @@ fun SummaryScreen(
                         text = stringResource(id = R.string.view_as_caregiver),
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray300,
+                        modifier = Modifier.clickable {
+
+                        }
                     )
 
                     Image(
@@ -590,13 +596,16 @@ fun SummaryScreen(
                     }
                 }
             }
+            additionalComponent?.invoke(this)
 
-            Spacer(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(96.dp)
-                    .padding(top = 24.dp),
-            )
+            if (bottomComponent != null) {
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(96.dp)
+                        .padding(top = 24.dp),
+                )
+            }
         }
 
         bottomComponent?.invoke(this)
