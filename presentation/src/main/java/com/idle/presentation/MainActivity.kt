@@ -126,8 +126,6 @@ class MainActivity : AppCompatActivity() {
         val current = normalizeVersion(currentVersion)
         val min = normalizeVersion(minVersion)
 
-        Log.d("test", "current : $current min : $min")
-
         // 버전 비교 (메이저, 마이너, 패치 순으로 비교)
         for (i in 0..2) {
             if (current[i] < min[i]) return true
