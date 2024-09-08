@@ -12,49 +12,49 @@ import com.idle.network.model.auth.SignUpWorkerRequest
 import com.idle.network.model.auth.WithdrawalCenterRequest
 import com.idle.network.model.auth.WithdrawalWorkerRequest
 import com.idle.network.model.token.TokenResponse
-import com.idle.network.util.onResponse
+import com.idle.network.util.safeApiCall
 import javax.inject.Inject
 
 class AuthDataSource @Inject constructor(
     private val authApi: AuthApi
 ) {
     suspend fun sendPhoneNumber(sendPhoneRequest: SendPhoneRequest): Result<Unit> =
-        authApi.sendPhoneNumber(sendPhoneRequest).onResponse()
+        safeApiCall { authApi.sendPhoneNumber(sendPhoneRequest) }
 
     suspend fun confirmAuthCode(confirmAuthCodeRequest: ConfirmAuthCodeRequest): Result<Unit> =
-        authApi.confirmAuthCode(confirmAuthCodeRequest).onResponse()
+        safeApiCall { authApi.confirmAuthCode(confirmAuthCodeRequest) }
 
     suspend fun signUpCenter(signUpCenterRequest: SignUpCenterRequest): Result<Unit> =
-        authApi.signUpCenter(signUpCenterRequest).onResponse()
+        safeApiCall { authApi.signUpCenter(signUpCenterRequest) }
 
     suspend fun signInCenter(signInCenterRequest: SignInCenterRequest): Result<TokenResponse> =
-        authApi.signInCenter(signInCenterRequest).onResponse()
+        safeApiCall { authApi.signInCenter(signInCenterRequest) }
 
     suspend fun signUpWorker(signUpWorkerRequest: SignUpWorkerRequest): Result<TokenResponse> =
-        authApi.signUpWorker(signUpWorkerRequest).onResponse()
+        safeApiCall { authApi.signUpWorker(signUpWorkerRequest) }
 
     suspend fun signInWorker(signInWorkerRequest: SignInWorkerRequest): Result<TokenResponse> =
-        authApi.signInWorker(signInWorkerRequest).onResponse()
+        safeApiCall { authApi.signInWorker(signInWorkerRequest) }
 
-    suspend fun logoutWorker(): Result<Unit> = authApi.logoutWorker().onResponse()
+    suspend fun logoutWorker(): Result<Unit> = safeApiCall { authApi.logoutWorker() }
 
-    suspend fun logoutCenter(): Result<Unit> = authApi.logoutCenter().onResponse()
+    suspend fun logoutCenter(): Result<Unit> = safeApiCall { authApi.logoutCenter() }
 
     suspend fun withdrawalCenter(withdrawalCenterRequest: WithdrawalCenterRequest): Result<Unit> =
-        authApi.withdrawalCenter(withdrawalCenterRequest).onResponse()
+        safeApiCall { authApi.withdrawalCenter(withdrawalCenterRequest) }
 
     suspend fun withdrawalWorker(withdrawalWorkerRequest: WithdrawalWorkerRequest): Result<Unit> =
-        authApi.withdrawalWorker(withdrawalWorkerRequest).onResponse()
+        safeApiCall { authApi.withdrawalWorker(withdrawalWorkerRequest) }
 
     suspend fun validateIdentifier(identifier: String): Result<Unit> =
-        authApi.validateIdentifier(identifier).onResponse()
+        safeApiCall { authApi.validateIdentifier(identifier) }
 
     suspend fun validateBusinessRegistrationNumber(
         businessRegistrationNumber: String
     ): Result<BusinessRegistrationResponse> =
-        authApi.validateBusinessRegistrationNumber(businessRegistrationNumber).onResponse()
+        safeApiCall { authApi.validateBusinessRegistrationNumber(businessRegistrationNumber) }
 
     suspend fun generateNewPassword(
         generateNewPasswordRequest: GenerateNewPasswordRequest
-    ): Result<Unit> = authApi.generateNewPassword(generateNewPasswordRequest).onResponse()
+    ): Result<Unit> = safeApiCall { authApi.generateNewPassword(generateNewPasswordRequest) }
 }
