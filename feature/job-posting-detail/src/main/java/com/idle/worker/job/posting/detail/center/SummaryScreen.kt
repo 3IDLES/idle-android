@@ -40,7 +40,6 @@ import com.idle.domain.model.jobposting.MentalStatus
 import com.idle.domain.model.jobposting.PayType
 import java.time.LocalDate
 import java.time.ZoneId
-import java.time.temporal.ChronoUnit
 
 @Composable
 fun SummaryScreen(
