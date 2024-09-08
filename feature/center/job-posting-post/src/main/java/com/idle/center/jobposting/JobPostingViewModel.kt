@@ -14,7 +14,9 @@ import com.idle.domain.model.jobposting.DayOfWeek
 import com.idle.domain.model.jobposting.LifeAssistance
 import com.idle.domain.model.jobposting.MentalStatus
 import com.idle.domain.model.jobposting.PayType
+import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.usecase.jobposting.PostJobPostingUseCase
+import com.idle.domain.usecase.profile.GetLocalMyCenterProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,8 +30,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class JobPostingViewModel @Inject constructor(
+    private val getLocalMyCenterProfileUseCase: GetLocalMyCenterProfileUseCase,
     private val postJobPostingUseCase: PostJobPostingUseCase,
 ) : BaseViewModel() {
+    private val _centerProfile = MutableStateFlow<CenterProfile?>(null)
+    val centerProfile = _centerProfile.asStateFlow()
 
     private val _weekDays = MutableStateFlow<Set<DayOfWeek>>(setOf())
     val weekDays = _weekDays.asStateFlow()
@@ -114,6 +119,16 @@ class JobPostingViewModel @Inject constructor(
 
     private val _bottomSheetType = MutableStateFlow<JobPostingBottomSheetType?>(null)
     val bottomSheetType = _bottomSheetType.asStateFlow()
+
+    init {
+        getMyCenterProfile()
+    }
+
+    private fun getMyCenterProfile() = viewModelScope.launch {
+        getLocalMyCenterProfileUseCase().onSuccess {
+            _centerProfile.value = it
+        }.onFailure { handleFailure(it as HttpResponseException) }
+    }
 
     internal fun setWeekDays(dayOfWeek: DayOfWeek) {
         _weekDays.value = _weekDays.value.toMutableSet().apply {
@@ -339,8 +354,14 @@ class JobPostingViewModel @Inject constructor(
 }
 
 enum class JobPostingStep(val step: Int) {
-    TIME_PAYMENT(1), ADDRESS(2), CUSTOMER_INFORMATION(3),
-    CUSTOMER_REQUIREMENT(4), ADDITIONAL_INFO(5), SUMMARY(6);
+    TIME_PAYMENT(1),
+    ADDRESS(2),
+    CUSTOMER_INFORMATION(3),
+    CUSTOMER_REQUIREMENT(4),
+    ADDITIONAL_INFO(5),
+    SUMMARY(6),
+    WORKER_SIDE(7),
+    ;
 
     companion object {
         fun findStep(step: Int): JobPostingStep {
