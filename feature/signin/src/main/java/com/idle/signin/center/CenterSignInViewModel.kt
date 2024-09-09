@@ -66,7 +66,7 @@ class CenterSignInViewModel @Inject constructor(
     private fun navigateBasedOnCenterStatus(status: CenterManagerAccountStatus) {
         when (status) {
             CenterManagerAccountStatus.APPROVED -> fetchAndNavigateToProfile()
-            else -> baseEvent(NavigateTo(CenterPending, R.id.centerSignInFragment))
+            else -> baseEvent(NavigateTo(CenterPending(status.name), R.id.centerSignInFragment))
         }
     }
 
