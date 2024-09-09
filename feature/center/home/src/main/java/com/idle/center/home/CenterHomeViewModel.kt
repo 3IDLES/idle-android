@@ -2,8 +2,10 @@ package com.idle.center.home
 
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
+import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.jobposting.CenterJobPosting
+import com.idle.domain.usecase.jobposting.EndJobPostingUseCase
 import com.idle.domain.usecase.jobposting.GetJobPostingsCompletedUseCase
 import com.idle.domain.usecase.jobposting.GetJobPostingsInProgressUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,6 +18,7 @@ import javax.inject.Inject
 class CenterHomeViewModel @Inject constructor(
     private val getJobPostingsInProgressUseCase: GetJobPostingsInProgressUseCase,
     private val getJobPostingsCompletedUseCase: GetJobPostingsCompletedUseCase,
+    private val endJobPostingUseCase: EndJobPostingUseCase,
 ) : BaseViewModel() {
     private val _recruitmentPostStatus = MutableStateFlow(RecruitmentPostStatus.IN_PROGRESS)
     val recruitmentPostStatus = _recruitmentPostStatus.asStateFlow()
@@ -46,6 +49,20 @@ class CenterHomeViewModel @Inject constructor(
     internal fun getJobPostingsCompleted() = viewModelScope.launch {
         getJobPostingsCompletedUseCase().onSuccess {
             _jobPostingsCompleted.value = it
+        }.onFailure { handleFailure(it as HttpResponseException) }
+    }
+
+    internal fun endJobPosting(jobPostingId: String) = viewModelScope.launch {
+        endJobPostingUseCase(jobPostingId).onSuccess {
+            _jobPostingsCompleted.value += _jobPostingsInProgress.value.first {
+                it.id == jobPostingId
+            }
+
+            _jobPostingsInProgress.value = _jobPostingsInProgress.value.filter {
+                it.id != jobPostingId
+            }
+
+            baseEvent(CareBaseEvent.ShowSnackBar("채용이 종료되었어요.|SUCCESS"))
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 }

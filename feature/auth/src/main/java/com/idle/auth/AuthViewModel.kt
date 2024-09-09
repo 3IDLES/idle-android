@@ -3,7 +3,6 @@ package com.idle.auth
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.DeepLinkDestination
 import com.idle.binding.DeepLinkDestination.CenterHome
-import com.idle.binding.DeepLinkDestination.CenterPending
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.domain.model.auth.UserType
@@ -75,7 +74,7 @@ class AuthViewModel @Inject constructor(
         getCenterStatusUseCase().onSuccess {
             val destination = when (it.centerManagerAccountStatus) {
                 CenterManagerAccountStatus.APPROVED -> CenterHome
-                else -> CenterPending
+                else -> CenterHome
             }
             baseEvent(NavigateTo(destination, R.id.authFragment))
         }.onFailure {

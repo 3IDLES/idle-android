@@ -126,7 +126,7 @@ internal fun WorkerHomeScreen(
                     "방금 선택한"
                 }
             }`\n공고에 지원하시겠어요?",
-            leftButtonText = stringResource(id = R.string.cancel),
+            leftButtonText = stringResource(id = R.string.cancel_short),
             rightButtonText = stringResource(id = R.string.recruit),
             leftButtonTextColor = CareTheme.colors.gray300,
             leftButtonColor = CareTheme.colors.white000,

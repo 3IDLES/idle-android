@@ -98,7 +98,7 @@ internal fun WorkerJobPostingDetailScreen(
     if (showDialog) {
         CareDialog(
             title = "이 공고에 지원하시겠습니까?",
-            leftButtonText = stringResource(id = R.string.cancel),
+            leftButtonText = stringResource(id = R.string.cancel_short),
             rightButtonText = stringResource(id = R.string.recruit),
             leftButtonTextColor = CareTheme.colors.gray300,
             leftButtonColor = CareTheme.colors.white000,

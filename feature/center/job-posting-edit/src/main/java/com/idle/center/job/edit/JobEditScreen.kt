@@ -227,7 +227,7 @@ fun JobEditScreen(
                             modifier = Modifier.fillMaxWidth(),
                         ) {
                             CareButtonMedium(
-                                text = stringResource(id = R.string.cancel),
+                                text = stringResource(id = R.string.cancel_short),
                                 border = BorderStroke(
                                     width = 1.dp,
                                     color = CareTheme.colors.orange400
@@ -319,7 +319,7 @@ fun JobEditScreen(
                             modifier = Modifier.fillMaxWidth(),
                         ) {
                             CareButtonMedium(
-                                text = stringResource(id = R.string.cancel),
+                                text = stringResource(id = R.string.cancel_short),
                                 border = BorderStroke(
                                     width = 1.dp,
                                     color = CareTheme.colors.orange400
