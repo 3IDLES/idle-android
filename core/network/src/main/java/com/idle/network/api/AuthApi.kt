@@ -69,4 +69,7 @@ interface AuthApi {
     suspend fun generateNewPassword(
         @Body generateNewPasswordRequest: GenerateNewPasswordRequest
     ): Response<Unit>
+
+    @PATCH("/api/v1/auth/center/join/verify")
+    suspend fun sendCenterVerificationRequest(): Response<Unit>
 }

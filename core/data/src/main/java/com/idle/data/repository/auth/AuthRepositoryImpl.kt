@@ -72,7 +72,6 @@ class AuthRepositoryImpl @Inject constructor(
             onFailure = { Result.failure(it) }
         )
 
-
     override suspend fun validateIdentifier(identifier: String): Result<Unit> =
         authDataSource.validateIdentifier(identifier)
 
@@ -198,4 +197,7 @@ class AuthRepositoryImpl @Inject constructor(
                 phoneNumber = phoneNumber
             )
         )
+
+    override suspend fun sendCenterVerificationRequest(): Result<Unit> =
+        authDataSource.sendCenterVerificationRequest()
 }
