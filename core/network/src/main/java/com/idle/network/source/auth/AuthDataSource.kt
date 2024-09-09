@@ -57,4 +57,7 @@ class AuthDataSource @Inject constructor(
     suspend fun generateNewPassword(
         generateNewPasswordRequest: GenerateNewPasswordRequest
     ): Result<Unit> = safeApiCall { authApi.generateNewPassword(generateNewPasswordRequest) }
+
+    suspend fun sendCenterVerificationRequest(): Result<Unit> =
+        safeApiCall { authApi.sendCenterVerificationRequest() }
 }
