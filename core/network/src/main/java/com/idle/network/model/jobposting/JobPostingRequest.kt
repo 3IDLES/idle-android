@@ -24,7 +24,7 @@ data class JobPostingRequest(
     val lifeAssistance: List<String>,
     val extraRequirement: String?,
     val isExperiencePreferred: Boolean,
-    val applyMethod: List<String>,
+    val applyMethod: List<String>?,
     val applyDeadlineType: String,
     val applyDeadline: String?,
 )

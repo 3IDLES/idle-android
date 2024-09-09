@@ -35,7 +35,7 @@ class UpdateJobPostingUseCase @Inject constructor(
         lifeAssistance: List<LifeAssistance>,
         extraRequirement: String?,
         isExperiencePreferred: Boolean,
-        applyMethod: List<ApplyMethod>,
+        applyMethod: List<ApplyMethod>?,
         applyDeadlineType: ApplyDeadlineType,
         applyDeadline: String?,
     ) = jobPostingRepository.updateJobPosting(

@@ -42,19 +42,10 @@ class AuthViewModel @Inject constructor(
     private fun initializeUserSession() = viewModelScope.launch {
         val (accessToken, userRole) = getAccessTokenAndUserRole()
 
-        if (accessToken.isBlank() || userRole.isBlank()) return@launch
+        if (accessToken.isBlank() || userRole.isBlank()) {
+            return@launch
+        }
 
-        loadUserProfile(userRole)
-        navigateToDestination(userRole)
-    }
-
-    private suspend fun getAccessTokenAndUserRole(): Pair<String, String> = coroutineScope {
-        val accessTokenDeferred = async { getAccessTokenUseCase() }
-        val userRoleDeferred = async { getMyUserRoleUseCase() }
-        accessTokenDeferred.await() to userRoleDeferred.await()
-    }
-
-    private fun loadUserProfile(userRole: String) = viewModelScope.launch {
         when (userRole) {
             UserType.CENTER.apiValue -> getMyCenterProfileUseCase().onFailure {
                 return@launch
@@ -64,6 +55,14 @@ class AuthViewModel @Inject constructor(
                 return@launch
             }
         }
+
+        navigateToDestination(userRole)
+    }
+
+    private suspend fun getAccessTokenAndUserRole(): Pair<String, String> = coroutineScope {
+        val accessTokenDeferred = async { getAccessTokenUseCase() }
+        val userRoleDeferred = async { getMyUserRoleUseCase() }
+        accessTokenDeferred.await() to userRoleDeferred.await()
     }
 
     private fun navigateToDestination(userRole: String) {
@@ -77,8 +76,6 @@ class AuthViewModel @Inject constructor(
     private fun getCenterStatus() = viewModelScope.launch {
         getCenterStatusUseCase().onSuccess { centerStatusResponse ->
             handleCenterStatus(centerStatusResponse.centerManagerAccountStatus)
-        }.onFailure { exception ->
-            handleFailure(exception as HttpResponseException)
         }
     }
 
@@ -92,11 +89,8 @@ class AuthViewModel @Inject constructor(
             baseEvent(NavigateTo(CenterHome, R.id.authFragment))
         }.onFailure {
             val error = it as HttpResponseException
-
             if (error.apiErrorCode == ApiErrorCode.CenterNotFound) {
                 baseEvent(NavigateTo(CenterRegister, R.id.authFragment))
-            } else {
-                handleFailure(error)
             }
         }
     }

@@ -100,7 +100,7 @@ class JobPostingRepositoryImpl @Inject constructor(
         lifeAssistance: List<LifeAssistance>,
         extraRequirement: String?,
         isExperiencePreferred: Boolean,
-        applyMethod: List<ApplyMethod>,
+        applyMethod: List<ApplyMethod>?,
         applyDeadLineType: ApplyDeadlineType,
         applyDeadline: String?,
     ): Result<Unit> = jobPostingDataSource.updateJobPosting(
@@ -126,7 +126,7 @@ class JobPostingRepositoryImpl @Inject constructor(
             lifeAssistance = lifeAssistance.map { it.name },
             extraRequirement = extraRequirement,
             isExperiencePreferred = isExperiencePreferred,
-            applyMethod = applyMethod.map { it.name },
+            applyMethod = applyMethod?.map { it.name },
             applyDeadlineType = applyDeadLineType.name,
             applyDeadline = applyDeadline,
         )

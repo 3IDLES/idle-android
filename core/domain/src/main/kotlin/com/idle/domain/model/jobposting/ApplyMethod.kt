@@ -2,7 +2,6 @@ package com.idle.domain.model.jobposting
 
 enum class ApplyMethod(val displayName: String) {
     CALLING("전화 지원"),
-    MESSAGE("문자 지원"),
     APP("어플 지원");
 
     companion object {

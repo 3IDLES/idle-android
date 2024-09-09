@@ -98,7 +98,8 @@ class CenterJobPostingDetailViewModel @Inject constructor(
                 extraRequirement = editJobPostingDetail.extraRequirement,
                 isExperiencePreferred = editJobPostingDetail.isExperiencePreferred,
                 applyMethod = editJobPostingDetail.applyMethod.toList()
-                    .sortedBy { it.ordinal },
+                    .sortedBy { it.ordinal }
+                    .ifEmpty { null },
                 applyDeadlineType = editJobPostingDetail.applyDeadlineType,
                 applyDeadline = editJobPostingDetail.applyDeadline.toString().ifBlank { null },
             ).onSuccess {
