@@ -110,7 +110,7 @@ fun JobEditScreen(
     applyDeadlineType: ApplyDeadlineType,
     applyDeadline: LocalDate?,
     updateJobPosting: (EditJobPostingDetail) -> Unit,
-    setEditState: (Boolean) -> Unit,
+    setJobPostingDetailState: (Boolean) -> Unit,
 ) {
     var localWeekDays by remember { mutableStateOf(weekDays) }
     var localWorkStartTime by remember { mutableStateOf(workStartTime) }
@@ -160,7 +160,7 @@ fun JobEditScreen(
     }
 
 
-    BackHandler { setEditState(false) }
+    BackHandler { setJobPostingDetailState(false) }
 
     CareBottomSheetLayout(
         sheetState = sheetState,
@@ -391,7 +391,7 @@ fun JobEditScreen(
             topBar = {
                 CareSubtitleTopBar(
                     title = stringResource(id = R.string.edit_job_posting),
-                    onNavigationClick = { setEditState(false) },
+                    onNavigationClick = { setJobPostingDetailState(false) },
                     leftComponent = {
                         Text(
                             text = stringResource(id = R.string.save),

@@ -206,7 +206,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
 
                             setEditState(false)
                         },
-                        setEditState = ::setEditState,
+                        setJobPostingDetailState = ::setEditState,
                     )
                 } else {
                     JobPostingScreen(

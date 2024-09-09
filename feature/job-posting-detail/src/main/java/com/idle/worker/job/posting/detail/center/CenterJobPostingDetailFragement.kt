@@ -65,21 +65,23 @@ internal class CenterJobPostingDetailFragment : BaseComposeFragment() {
             val jobPostingId by rememberSaveable { mutableStateOf(args.jobPostingId) }
             val jobPostingDetail by jobPostingDetail.collectAsStateWithLifecycle()
             val applicantsCount by applicantsCount.collectAsStateWithLifecycle()
-            val isEditState by isEditState.collectAsStateWithLifecycle()
+            val jobPostingDetailState by jobPostingState.collectAsStateWithLifecycle()
+            val profile by profile.collectAsStateWithLifecycle()
 
             LaunchedEffect(true) {
-                setEditState(args.isEditState)
+                if (args.isEditState) {
+                    setJobPostingState(JobPostingDetailState.EDIT)
+                }
                 getCenterJobPostingDetail(jobPostingId)
                 launch { getApplicantsCount(jobPostingId) }
             }
 
             CareStateAnimator(
-                targetState = isEditState,
-                transitionCondition = isEditState
+                targetState = jobPostingDetailState,
             ) { state ->
-                if (state) {
-                    jobPostingDetail?.let {
-                        JobEditScreen(
+                jobPostingDetail?.let {
+                    when (state) {
+                        JobPostingDetailState.EDIT -> JobEditScreen(
                             snackbarHostState = snackbarHostState,
                             fragmentManager = parentFragmentManager,
                             weekDays = it.weekdays,
@@ -106,19 +108,49 @@ internal class CenterJobPostingDetailFragment : BaseComposeFragment() {
                             applyDeadline = it.applyDeadline,
                             applyDeadlineType = it.applyDeadlineType,
                             updateJobPosting = ::updateJobPosting,
-                            setEditState = ::setEditState,
+                            setJobPostingDetailState = {
+                                if (it) setJobPostingState(JobPostingDetailState.EDIT)
+                                else setJobPostingState(JobPostingDetailState.SUMMARY)
+                            },
                         )
+
+                        JobPostingDetailState.PREVIEW -> JobPostingPreviewScreen(
+                            weekdays = it.weekdays,
+                            workStartTime = it.startTime,
+                            workEndTime = it.endTime,
+                            payType = it.payType,
+                            payAmount = it.payAmount.toString(),
+                            lotNumberAddress = it.lotNumberAddress,
+                            gender = it.gender,
+                            birthYear = (LocalDate.now(ZoneId.of("Asia/Seoul")).year - it.age + 1).toString(),
+                            weight = it.weight.toString(),
+                            careLevel = it.careLevel.toString(),
+                            mentalStatus = it.mentalStatus,
+                            disease = it.disease,
+                            isMealAssistance = it.isMealAssistance,
+                            isBowelAssistance = it.isBowelAssistance,
+                            isWalkingAssistance = it.isWalkingAssistance,
+                            lifeAssistance = it.lifeAssistance,
+                            extraRequirement = it.extraRequirement.toString(),
+                            isExperiencePreferred = it.isExperiencePreferred,
+                            applyMethod = it.applyMethod,
+                            applyDeadline = it.applyDeadline,
+                            centerProfile = profile,
+                            onBackPressed = { setJobPostingState(JobPostingDetailState.SUMMARY) },
+                        )
+
+                        else -> {
+                            CenterJobPostingDetailScreen(
+                                snackbarHostState = snackbarHostState,
+                                jobPostingId = jobPostingId,
+                                jobPostingDetail = jobPostingDetail,
+                                applicantsCount = applicantsCount,
+                                endJobPosting = ::endJobPosting,
+                                navigateTo = { baseEvent(CareBaseEvent.NavigateTo(it)) },
+                                setJobPostingDetailState = ::setJobPostingState,
+                            )
+                        }
                     }
-                } else {
-                    CenterJobPostingDetailScreen(
-                        snackbarHostState = snackbarHostState,
-                        jobPostingId = jobPostingId,
-                        jobPostingDetail = jobPostingDetail,
-                        applicantsCount = applicantsCount,
-                        endJobPosting = ::endJobPosting,
-                        navigateTo = { baseEvent(CareBaseEvent.NavigateTo(it)) },
-                        setEditState = ::setEditState,
-                    )
                 }
             }
         }
@@ -134,7 +166,7 @@ internal fun CenterJobPostingDetailScreen(
     applicantsCount: Int,
     endJobPosting: (String) -> Unit,
     navigateTo: (DeepLinkDestination) -> Unit,
-    setEditState: (Boolean) -> Unit,
+    setJobPostingDetailState: (JobPostingDetailState) -> Unit,
 ) {
     val onBackPressedDispatcher =
         LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
@@ -199,7 +231,7 @@ internal fun CenterJobPostingDetailScreen(
                         onClick = {
                             coroutineScope.launch {
                                 sheetState.hide()
-                                setEditState(true)
+                                setJobPostingDetailState(JobPostingDetailState.EDIT)
                             }
                         },
                         modifier = Modifier
@@ -282,6 +314,7 @@ internal fun CenterJobPostingDetailScreen(
                     isExperiencePreferred = it.isExperiencePreferred,
                     applyMethod = it.applyMethod,
                     applyDeadline = it.applyDeadline,
+                    onClickPreview = { setJobPostingDetailState(JobPostingDetailState.PREVIEW) },
                     bottomComponent = {
                         CareButtonLarge(
                             text = "지원자 ${applicantsCount}명 조회",
@@ -294,14 +327,22 @@ internal fun CenterJobPostingDetailScreen(
                             disabledContainerColor = if (it.jobPostingStatus == JobPostingStatus.IN_PROGRESS) CareTheme.colors.gray200
                             else CareTheme.colors.white000,
                             border = if (it.jobPostingStatus == JobPostingStatus.IN_PROGRESS) null
-                            else BorderStroke(width = 1.dp, color = CareTheme.colors.gray200),
+                            else BorderStroke(
+                                width = 1.dp,
+                                color = CareTheme.colors.gray200
+                            ),
                             textColor = if (it.jobPostingStatus == JobPostingStatus.IN_PROGRESS) CareTheme.colors.white000
                             else CareTheme.colors.gray300,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(CareTheme.colors.white000)
                                 .align(Alignment.BottomCenter)
-                                .padding(top = 12.dp, start = 20.dp, end = 20.dp, bottom = 28.dp),
+                                .padding(
+                                    top = 12.dp,
+                                    start = 20.dp,
+                                    end = 20.dp,
+                                    bottom = 28.dp
+                                ),
                         )
                     },
                     modifier = Modifier
