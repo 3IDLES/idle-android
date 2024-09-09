@@ -2,6 +2,7 @@
 
 package com.idle.pending
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,16 +20,23 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import com.idle.center.pending.R
 import com.idle.compose.base.BaseComposeFragment
+import com.idle.compose.clickable
 import com.idle.designsystem.compose.component.CareButtonLarge
+import com.idle.designsystem.compose.component.CareDialog
 import com.idle.designsystem.compose.foundation.CareTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -40,13 +48,17 @@ internal class CenterPendingFragment : BaseComposeFragment() {
     override fun ComposeLayout() {
         fragmentViewModel.apply {
 
-            CenterPendingScreen()
+            CenterPendingScreen(
+                logout = ::logout,
+            )
         }
     }
 }
 
 @Composable
-private fun CenterPendingScreen() {
+private fun CenterPendingScreen(
+    logout: () -> Unit,
+) {
     Scaffold(
         containerColor = CareTheme.colors.white000,
     ) { paddingValue ->
@@ -58,6 +70,29 @@ private fun CenterPendingScreen() {
             pageCount = { pageCount },
         )
 
+        var showDialog by remember { mutableStateOf(false) }
+        if (showDialog) {
+            CareDialog(
+                title = "로그아웃하시겠어요?",
+                leftButtonText = stringResource(id = com.idle.designresource.R.string.cancel),
+                rightButtonText = stringResource(id = com.idle.designresource.R.string.logout),
+                onDismissRequest = { showDialog = false },
+                onLeftButtonClick = { showDialog = false },
+                onRightButtonClick = {
+                    showDialog = false
+                    logout()
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp),
+                leftButtonTextColor = CareTheme.colors.gray300,
+                leftButtonColor = CareTheme.colors.white000,
+                leftButtonBorder = BorderStroke(1.dp, CareTheme.colors.gray100),
+                rightButtonTextColor = CareTheme.colors.white000,
+                rightButtonColor = CareTheme.colors.red,
+            )
+        }
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -67,11 +102,28 @@ private fun CenterPendingScreen() {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.fillMaxSize()
             ) {
-                PageIndicators(
-                    totalPages = actualPageCount,
-                    currentPage = pagerState.currentPage % actualPageCount,
-                    modifier = Modifier.padding(top = 56.dp, bottom = 28.dp),
-                )
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 56.dp, bottom = 28.dp),
+                ) {
+                    PageIndicators(
+                        totalPages = actualPageCount,
+                        currentPage = pagerState.currentPage % actualPageCount,
+                        modifier = Modifier.align(Alignment.Center),
+                    )
+
+                    Text(
+                        text = stringResource(id = com.idle.designresource.R.string.logout),
+                        style = CareTheme.typography.body3,
+                        color = CareTheme.colors.gray300,
+                        modifier = Modifier
+                            .align(Alignment.CenterEnd)
+                            .padding(end = 20.dp)
+                            .clickable { showDialog = true },
+                    )
+                }
 
                 HorizontalPager(state = pagerState) { page ->
                     val actualPage = page % actualPageCount
