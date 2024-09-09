@@ -347,7 +347,7 @@ internal fun CenterJobPostingDetailScreen(
                     lotNumberAddress = it.lotNumberAddress,
                     clientName = it.clientName,
                     gender = it.gender,
-                    birthYear = (LocalDate.now(ZoneId.of("Asia/Seoul")).year - it.age).toString(),
+                    age = it.age.toString(),
                     weight = it.weight.toString(),
                     careLevel = it.careLevel.toString(),
                     mentalStatus = it.mentalStatus,

@@ -88,7 +88,7 @@ internal fun JobPostingSummaryScreen(
             lotNumberAddress = lotNumberAddress,
             clientName = clientName,
             gender = gender,
-            birthYear = birthYear,
+            age = (LocalDate.now().year - birthYear.toInt() + 1).toString(),
             weight = weight,
             careLevel = careLevel,
             mentalStatus = mentalStatus,
