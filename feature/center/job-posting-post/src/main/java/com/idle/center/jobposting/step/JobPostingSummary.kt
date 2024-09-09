@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.idle.center.jobposting.JobPostingStep
+import com.idle.center.jobposting.JobPostingStep.PREVIEW
 import com.idle.center.jobposting.JobPostingStep.SUMMARY
 import com.idle.center.jobposting.LogJobPostingStep
 import com.idle.designresource.R
@@ -107,6 +108,7 @@ internal fun JobPostingSummaryScreen(
                     )
                 )
             },
+            onClickPreview = { setJobPostingStep(PREVIEW) },
             titleComponent = {
                 Text(
                     text = stringResource(id = R.string.summary_title),
