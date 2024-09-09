@@ -1,6 +1,8 @@
 package com.idle.center.jobposting.step
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,11 +17,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -41,6 +45,7 @@ import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.designsystem.compose.foundation.PretendardMedium
 import com.idle.domain.model.auth.Gender
 import com.idle.domain.model.jobposting.MentalStatus
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun CustomerInformationScreen(
@@ -65,6 +70,8 @@ internal fun CustomerInformationScreen(
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
     val scrollState = rememberScrollState()
+    val density = LocalDensity.current
+    val coroutineScope = rememberCoroutineScope()
 
     BackHandler { setJobPostingStep(JobPostingStep.findStep(CUSTOMER_INFORMATION.step - 1)) }
 
@@ -179,7 +186,15 @@ internal fun CustomerInformationScreen(
                     CareChipShort(
                         text = level.toString(),
                         enable = careLevel == level.toString(),
-                        onClick = { onCareLevelChanged(level.toString()) },
+                        onClick = {
+                            onCareLevelChanged(level.toString())
+                            coroutineScope.launch {
+                                scrollState.animateScrollTo(
+                                    value = with(density) { 150.dp.toPx() }.toInt(),
+                                    animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+                                )
+                            }
+                        },
                     )
                 }
             }
