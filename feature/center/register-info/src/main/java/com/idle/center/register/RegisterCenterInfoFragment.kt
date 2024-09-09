@@ -22,7 +22,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.idle.binding.DeepLinkDestination
 import com.idle.binding.base.CareBaseEvent
-import com.idle.center.register.info.R.*
 import com.idle.center.register.step.CenterAddressScreen
 import com.idle.center.register.step.CenterInfoScreen
 import com.idle.center.register.step.CenterIntroduceScreen
@@ -82,14 +81,6 @@ internal class RegisterCenterInfoFragment : BaseComposeFragment() {
                         roadNameAddress = roadNameAddress,
                         setRegistrationStep = ::setRegistrationStep,
                         registerCenterProfile = ::registerCenterProfile,
-                        navigateToHome = {
-                            baseEvent(
-                                CareBaseEvent.NavigateTo(
-                                    DeepLinkDestination.CenterHome,
-                                    com.idle.center.register.info.R.id.registerCenterInfoCompleteFragment
-                                )
-                            )
-                        },
                     )
                 } else {
                     CenterRegisterScreen(

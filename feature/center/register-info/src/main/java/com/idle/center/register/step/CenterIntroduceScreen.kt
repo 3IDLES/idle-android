@@ -39,7 +39,6 @@ import com.idle.center.register.RegistrationStep
 import com.idle.center.register.RegistrationStep.INTRODUCE
 import com.idle.compose.clickable
 import com.idle.designresource.R
-import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareButtonMedium
 import com.idle.designsystem.compose.component.CareProgressBar
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
@@ -75,7 +74,6 @@ internal fun CenterIntroduceScreen(
             .fillMaxSize()
             .verticalScroll(scrollState),
     ) {
-
         Text(
             text = stringResource(id = R.string.introduce_my_center),
             style = CareTheme.typography.heading2,
@@ -111,7 +109,7 @@ internal fun CenterIntroduceScreen(
             subtitle = stringResource(id = R.string.center_image),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 24.dp),
+                .padding(bottom = 48.dp),
         ) {
             AsyncImage(
                 model = centerProfileImageUri ?: R.drawable.ic_profile_empty_edit,
@@ -133,14 +131,14 @@ internal fun CenterIntroduceScreen(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 48.dp, bottom = 28.dp),
+                .padding(top = 12.dp, bottom = 28.dp),
         ) {
             CareButtonMedium(
                 text = stringResource(id = R.string.previous),
                 textColor = CareTheme.colors.gray300,
                 containerColor = CareTheme.colors.white000,
                 border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray200),
-                onClick = { setRegistrationStep(RegistrationStep.findStep(RegistrationStep.SUMMARY.step - 1)) },
+                onClick = { setRegistrationStep(RegistrationStep.findStep(RegistrationStep.INTRODUCE.step - 1)) },
                 modifier = Modifier.weight(1f),
             )
 

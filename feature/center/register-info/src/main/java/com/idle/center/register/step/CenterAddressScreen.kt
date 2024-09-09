@@ -80,7 +80,7 @@ internal fun CenterAddressScreen(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 48.dp, bottom = 28.dp),
+                .padding(top = 12.dp, bottom = 28.dp),
         ) {
             CareButtonMedium(
                 text = stringResource(id = R.string.previous),

@@ -50,7 +50,6 @@ internal fun CenterRegisterSummaryScreen(
     roadNameAddress: String,
     setRegistrationStep: (RegistrationStep) -> Unit,
     registerCenterProfile: () -> Unit,
-    navigateToHome: () -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
     val scrollState = rememberScrollState()
@@ -61,7 +60,9 @@ internal fun CenterRegisterSummaryScreen(
         topBar = {
             CareSubtitleTopBar(
                 title = stringResource(id = R.string.register_center_info),
-                onNavigationClick = navigateToHome,
+                onNavigationClick = {
+                    setRegistrationStep(RegistrationStep.findStep(SUMMARY.step - 1))
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 12.dp, top = 48.dp, end = 20.dp, bottom = 12.dp),
