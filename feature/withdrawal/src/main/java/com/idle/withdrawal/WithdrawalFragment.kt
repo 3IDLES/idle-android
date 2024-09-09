@@ -65,7 +65,7 @@ internal class WithdrawalFragment : BaseComposeFragment() {
                     title = "정말 탈퇴하시겠어요?",
                     description = "탈퇴 버튼 선택 시 모든 정보가 삭제되며,\n" +
                             "되돌릴 수 없습니다.",
-                    leftButtonText = stringResource(id = R.string.cancel),
+                    leftButtonText = stringResource(id = R.string.cancel_short),
                     rightButtonText = stringResource(id = R.string.withdrawal),
                     leftButtonTextColor = CareTheme.colors.gray300,
                     leftButtonColor = CareTheme.colors.white000,

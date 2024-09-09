@@ -181,7 +181,7 @@ internal fun CenterJobPostingDetailScreen(
         CareDialog(
             title = "채용을 종료하시겠습니까?",
             description = "채용 종료 시 지원자 정보는 초기화됩니다.",
-            leftButtonText = stringResource(id = R.string.cancel),
+            leftButtonText = stringResource(id = R.string.cancel_short),
             rightButtonText = stringResource(id = R.string.end),
             leftButtonTextColor = CareTheme.colors.gray300,
             leftButtonColor = CareTheme.colors.white000,

@@ -79,7 +79,7 @@ internal fun PasswordScreen(
                 .padding(bottom = 28.dp),
         ) {
             CareButtonMedium(
-                text = stringResource(id = R.string.cancel),
+                text = stringResource(id = R.string.cancel_short),
                 textColor = CareTheme.colors.gray300,
                 containerColor = CareTheme.colors.white000,
                 border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray200),
