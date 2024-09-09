@@ -1,8 +1,10 @@
 package com.idle.center.register.step
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,7 +19,7 @@ import com.idle.center.register.LogRegistrationStep
 import com.idle.center.register.RegistrationStep
 import com.idle.center.register.RegistrationStep.ADDRESS
 import com.idle.designresource.R
-import com.idle.designsystem.compose.component.CareButtonLarge
+import com.idle.designsystem.compose.component.CareButtonMedium
 import com.idle.designsystem.compose.component.CareClickableTextField
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.LabeledContent
@@ -74,14 +76,28 @@ internal fun CenterAddressScreen(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        CareButtonLarge(
-            text = stringResource(id = R.string.next),
-            enable = centerDetailAddress.isNotBlank(),
-            onClick = { setRegistrationStep(RegistrationStep.findStep(ADDRESS.step + 1)) },
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 28.dp),
-        )
+                .padding(top = 48.dp, bottom = 28.dp),
+        ) {
+            CareButtonMedium(
+                text = stringResource(id = R.string.previous),
+                textColor = CareTheme.colors.gray300,
+                containerColor = CareTheme.colors.white000,
+                border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray200),
+                onClick = { setRegistrationStep(RegistrationStep.findStep(ADDRESS.step - 1)) },
+                modifier = Modifier.weight(1f),
+            )
+
+            CareButtonMedium(
+                text = stringResource(id = R.string.next),
+                enable = centerDetailAddress.isNotBlank(),
+                onClick = { setRegistrationStep(RegistrationStep.findStep(ADDRESS.step + 1)) },
+                modifier = Modifier.weight(1f),
+            )
+        }
     }
 
     LogRegistrationStep(step = ADDRESS)

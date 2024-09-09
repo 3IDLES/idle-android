@@ -1,7 +1,6 @@
 package com.idle.center.register
 
 import android.net.Uri
-import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,6 +20,9 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
+import com.idle.binding.DeepLinkDestination
+import com.idle.binding.base.CareBaseEvent
+import com.idle.center.register.info.R.*
 import com.idle.center.register.step.CenterAddressScreen
 import com.idle.center.register.step.CenterInfoScreen
 import com.idle.center.register.step.CenterIntroduceScreen
@@ -80,6 +82,14 @@ internal class RegisterCenterInfoFragment : BaseComposeFragment() {
                         roadNameAddress = roadNameAddress,
                         setRegistrationStep = ::setRegistrationStep,
                         registerCenterProfile = ::registerCenterProfile,
+                        navigateToHome = {
+                            baseEvent(
+                                CareBaseEvent.NavigateTo(
+                                    DeepLinkDestination.CenterHome,
+                                    com.idle.center.register.info.R.id.registerCenterInfoCompleteFragment
+                                )
+                            )
+                        },
                     )
                 } else {
                     CenterRegisterScreen(
@@ -102,6 +112,14 @@ internal class RegisterCenterInfoFragment : BaseComposeFragment() {
                         },
                         onCenterDetailAddressChanged = ::setCenterDetailAddress,
                         onProfileImageUriChanged = ::setProfileImageUri,
+                        navigateToHome = {
+                            baseEvent(
+                                CareBaseEvent.NavigateTo(
+                                    DeepLinkDestination.CenterHome,
+                                    com.idle.center.register.info.R.id.registerCenterInfoCompleteFragment
+                                )
+                            )
+                        },
                     )
                 }
             }
@@ -126,8 +144,8 @@ internal fun CenterRegisterScreen(
     onCenterDetailAddressChanged: (String) -> Unit,
     onProfileImageUriChanged: (Uri?) -> Unit,
     setRegistrationStep: (RegistrationStep) -> Unit,
+    navigateToHome: () -> Unit,
 ) {
-    val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val focusManager = LocalFocusManager.current
 
     Scaffold(
@@ -135,7 +153,7 @@ internal fun CenterRegisterScreen(
             Column(modifier = Modifier.padding(start = 12.dp, top = 48.dp, end = 20.dp)) {
                 CareSubtitleTopBar(
                     title = stringResource(id = R.string.register_center_info),
-                    onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
+                    onNavigationClick = navigateToHome,
                     modifier = Modifier.fillMaxWidth(),
                 )
 
