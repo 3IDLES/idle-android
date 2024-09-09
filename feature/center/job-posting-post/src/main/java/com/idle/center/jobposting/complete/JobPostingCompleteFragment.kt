@@ -19,12 +19,13 @@ import androidx.fragment.app.viewModels
 import com.idle.analytics.helper.TrackScreenViewEvent
 import com.idle.binding.DeepLinkDestination
 import com.idle.binding.base.CareBaseEvent
-import com.idle.center.job.posting.post.R.*
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.foundation.CareTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class JobPostingCompleteFragment : BaseComposeFragment() {
     override val fragmentViewModel: JobPostingCompleteViewModel by viewModels()
 
@@ -68,7 +69,7 @@ internal fun JobPostingCompleteScreen(
             text = stringResource(id = R.string.job_posting_complete_message),
             style = CareTheme.typography.heading1,
             color = CareTheme.colors.gray900,
-            textAlign = TextAlign. Center,
+            textAlign = TextAlign.Center,
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -81,6 +82,6 @@ internal fun JobPostingCompleteScreen(
                 .padding(bottom = 28.dp),
         )
     }
-    
+
     TrackScreenViewEvent(screenName = "jobposting_complete_screen")
 }
