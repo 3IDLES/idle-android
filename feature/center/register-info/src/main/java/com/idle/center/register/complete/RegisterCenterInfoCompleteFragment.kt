@@ -21,12 +21,10 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.idle.binding.DeepLinkDestination.CenterHome
-import com.idle.binding.DeepLinkDestination.CenterProfile
 import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.center.register.info.R
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.component.CareButtonLarge
-import com.idle.designsystem.compose.component.CareCard
 import com.idle.designsystem.compose.foundation.CareTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -70,8 +68,8 @@ internal fun CenterRegisterCompleteScreen(navigateToCenterHome: () -> Unit) {
         )
 
         Text(
-            text = "센터 정보를 등록했어요!",
-            style = CareTheme.typography.body3,
+            text = stringResource(id = com.idle.designresource.R.string.register_center_complete),
+            style = CareTheme.typography.heading1,
             color = CareTheme.colors.gray900,
             modifier = Modifier.padding(top = 24.dp),
         )

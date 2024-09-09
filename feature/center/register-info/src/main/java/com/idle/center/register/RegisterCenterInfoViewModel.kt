@@ -1,6 +1,7 @@
 package com.idle.center.register
 
 import android.net.Uri
+import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.DeepLinkDestination.CenterRegisterComplete
 import com.idle.binding.base.BaseViewModel
@@ -66,7 +67,9 @@ class RegisterCenterInfoViewModel @Inject constructor(
     }
 
     internal fun setCenterNumber(phoneNumber: String) {
-        _centerNumber.value = phoneNumber
+        if (phoneNumber.isDigitsOnly()) {
+            _centerNumber.value = phoneNumber
+        }
     }
 
     internal fun setProfileImageUri(uri: Uri?) {

@@ -129,9 +129,7 @@ internal fun CenterIntroduceScreen(
         CareButtonLarge(
             text = stringResource(id = R.string.next),
             onClick = {
-                if (centerIntroduce.isNotBlank()) {
-                    setRegistrationStep(RegistrationStep.findStep(INTRODUCE.step + 1))
-                }
+                setRegistrationStep(RegistrationStep.findStep(INTRODUCE.step + 1))
             },
             modifier = Modifier
                 .fillMaxWidth()

@@ -171,7 +171,7 @@ internal fun CenterRegisterSummaryScreen(
                 subtitle = stringResource(id = R.string.center_image),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 20.dp, end = 20.dp, bottom = 48.dp),
+                    .padding(start = 20.dp, end = 20.dp),
             ) {
                 if (centerProfileImageUri == null) {
                     Image(
@@ -186,7 +186,7 @@ internal fun CenterRegisterSummaryScreen(
                     AsyncImage(
                         model = centerProfileImageUri,
                         contentDescription = "",
-                        placeholder = painterResource(R.drawable.ic_profile_empty ),
+                        placeholder = painterResource(R.drawable.ic_profile_empty),
                         contentScale = ContentScale.FillWidth,
                         modifier = Modifier
                             .height(243.dp)
@@ -200,7 +200,7 @@ internal fun CenterRegisterSummaryScreen(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 20.dp, end = 20.dp, bottom = 28.dp),
+                    .padding(start = 20.dp, end = 20.dp, top = 48.dp, bottom = 28.dp),
             ) {
                 CareButtonMedium(
                     text = stringResource(id = R.string.previous),
