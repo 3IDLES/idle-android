@@ -42,7 +42,6 @@ internal fun WorkerPhoneNumberScreen(
     setSignUpStep: (WorkerSignUpStep) -> Unit,
     sendPhoneNumber: () -> Unit,
     confirmAuthCode: () -> Unit,
-    navigateToAuth: () -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
@@ -50,8 +49,6 @@ internal fun WorkerPhoneNumberScreen(
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
-
-    BackHandler { navigateToAuth() }
 
     Column(
         horizontalAlignment = Alignment.Start,

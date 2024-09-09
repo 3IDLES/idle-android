@@ -17,12 +17,11 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.signin.center.CenterSignUpStep
-import com.idle.designresource.R
-import com.idle.signin.center.CenterSignUpStep.BUSINESS_REGISTRATION
 import com.idle.signin.center.CenterSignUpStep.NAME
 import com.idle.signup.LogCenterSignUpStep
 
@@ -31,15 +30,12 @@ internal fun CenterNameScreen(
     centerName: String,
     onCenterNameChanged: (String) -> Unit,
     setSignUpStep: (CenterSignUpStep) -> Unit,
-    navigateToAuth: () -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
-
-    BackHandler { navigateToAuth() }
 
     Column(
         horizontalAlignment = Alignment.Start,
@@ -71,7 +67,7 @@ internal fun CenterNameScreen(
         CareButtonLarge(
             text = stringResource(id = R.string.next),
             enable = centerName.isNotBlank(),
-            onClick = { setSignUpStep(CenterSignUpStep.findStep(NAME.step -1)) },
+            onClick = { setSignUpStep(CenterSignUpStep.findStep(NAME.step + 1)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 28.dp),

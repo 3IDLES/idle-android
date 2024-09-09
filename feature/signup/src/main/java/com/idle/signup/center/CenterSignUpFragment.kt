@@ -133,7 +133,6 @@ internal fun CenterSignUpScreen(
     validateBusinessRegistrationNumber: () -> Unit,
     navigateToAuth: () -> Unit,
 ) {
-    val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val focusManager = LocalFocusManager.current
 
     Scaffold(
@@ -141,7 +140,7 @@ internal fun CenterSignUpScreen(
             Column(modifier = Modifier.padding(start = 12.dp, top = 48.dp, end = 20.dp)) {
                 CareSubtitleTopBar(
                     title = stringResource(id = R.string.center_signup),
-                    onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
+                    onNavigationClick = navigateToAuth,
                     modifier = Modifier
                         .fillMaxWidth()
 
@@ -188,7 +187,6 @@ internal fun CenterSignUpScreen(
                             centerName = centerName,
                             onCenterNameChanged = onCenterNameChanged,
                             setSignUpStep = setSignUpStep,
-                            navigateToAuth = navigateToAuth,
                         )
 
                     CenterSignUpStep.PHONE_NUMBER ->

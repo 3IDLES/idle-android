@@ -1,6 +1,5 @@
 package com.idle.signin.worker
 
-import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -137,7 +136,6 @@ internal fun WorkerSignUpScreen(
     navigateToAuth: () -> Unit,
     showSnackBar: (String) -> Unit,
 ) {
-    val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val focusManager = LocalFocusManager.current
 
     Scaffold(
@@ -145,7 +143,7 @@ internal fun WorkerSignUpScreen(
             Column(modifier = Modifier.padding(start = 12.dp, top = 48.dp, end = 20.dp)) {
                 CareSubtitleTopBar(
                     title = stringResource(id = R.string.worker_signup),
-                    onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
+                    onNavigationClick = navigateToAuth,
                     modifier = Modifier.fillMaxWidth(),
                 )
 
@@ -196,7 +194,6 @@ internal fun WorkerSignUpScreen(
                         setSignUpStep = setSignUpStep,
                         sendPhoneNumber = sendPhoneNumber,
                         confirmAuthCode = confirmAuthCode,
-                        navigateToAuth = navigateToAuth,
                     )
 
                     WorkerSignUpStep.INFO -> WorkerInformationScreen(

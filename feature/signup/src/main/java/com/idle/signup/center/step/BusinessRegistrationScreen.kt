@@ -1,6 +1,7 @@
 package com.idle.signup.center.step
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -25,7 +26,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.idle.designresource.R
-import com.idle.designsystem.compose.component.CareButtonLarge
+import com.idle.designsystem.compose.component.CareButtonMedium
 import com.idle.designsystem.compose.component.CareButtonSmall
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.LabeledContent
@@ -147,14 +148,28 @@ internal fun BusinessRegistrationScreen(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        CareButtonLarge(
-            text = stringResource(id = R.string.next),
-            enable = businessRegistrationInfo != null,
-            onClick = { setSignUpStep(CenterSignUpStep.findStep(BUSINESS_REGISTRATION.step + 1)) },
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 28.dp),
-        )
+                .padding(top = 12.dp, bottom = 28.dp),
+        ) {
+            CareButtonMedium(
+                text = stringResource(id = R.string.previous),
+                textColor = CareTheme.colors.gray300,
+                containerColor = CareTheme.colors.white000,
+                border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray200),
+                onClick = { setSignUpStep(CenterSignUpStep.findStep(BUSINESS_REGISTRATION.step - 1)) },
+                modifier = Modifier.weight(1f),
+            )
+
+            CareButtonMedium(
+                text = stringResource(id = R.string.next),
+                enable = businessRegistrationInfo != null,
+                onClick = { setSignUpStep(CenterSignUpStep.findStep(BUSINESS_REGISTRATION.step + 1)) },
+                modifier = Modifier.weight(1f),
+            )
+        }
     }
 
     LogCenterSignUpStep(BUSINESS_REGISTRATION)

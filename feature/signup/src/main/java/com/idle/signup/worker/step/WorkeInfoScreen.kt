@@ -1,6 +1,7 @@
 package com.idle.signup.worker.step
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,6 +26,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
+import com.idle.designsystem.compose.component.CareButtonMedium
 import com.idle.designsystem.compose.component.CareChipBasic
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.LabeledContent
@@ -114,7 +116,7 @@ internal fun WorkerInformationScreen(
                     text = Gender.WOMAN.displayName,
                     onClick = {
                         onGenderChanged(Gender.WOMAN)
-                        
+
                         if ((birthYear.toIntOrNull() ?: return@CareChipBasic) < 1900) {
                             return@CareChipBasic
                         }
@@ -148,21 +150,35 @@ internal fun WorkerInformationScreen(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        CareButtonLarge(
-            text = stringResource(id = R.string.next),
-            enable = workerName.isNotBlank() && gender != Gender.NONE && birthYear.length == 4,
-            onClick = {
-                if ((birthYear.toIntOrNull() ?: return@CareButtonLarge) < 1900) {
-                    showSnackBar("출생년도가 잘못되었습니다.|Error")
-                    return@CareButtonLarge
-                }
-
-                setSignUpStep(WorkerSignUpStep.findStep(INFO.step + 1))
-            },
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 28.dp),
-        )
+                .padding(top = 12.dp, bottom = 28.dp),
+        ) {
+            CareButtonMedium(
+                text = stringResource(id = R.string.previous),
+                textColor = CareTheme.colors.gray300,
+                containerColor = CareTheme.colors.white000,
+                border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray200),
+                onClick = { setSignUpStep(WorkerSignUpStep.findStep(INFO.step - 1)) },
+                modifier = Modifier.weight(1f),
+            )
+
+            CareButtonMedium(
+                text = stringResource(id = R.string.next),
+                enable = workerName.isNotBlank() && gender != Gender.NONE && birthYear.length == 4,
+                onClick = {
+                    if ((birthYear.toIntOrNull() ?: return@CareButtonMedium) < 1900) {
+                        showSnackBar("출생년도가 잘못되었습니다.|Error")
+                        return@CareButtonMedium
+                    }
+
+                    setSignUpStep(WorkerSignUpStep.findStep(INFO.step + 1))
+                },
+                modifier = Modifier.weight(1f),
+            )
+        }
     }
 
     LogWorkerSignUpStep(INFO)
