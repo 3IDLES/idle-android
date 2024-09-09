@@ -6,7 +6,7 @@
         android:id="@+id/logoutDialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:leftButtonText="취소하기"
+        app:leftButtonText="@string/cancel"
         app:rightButtonText="@string/logout"
-        app:title="로그아웃하시겠어요?" />
+        app:title="@string/logout_dialog" />
 </layout>

@@ -73,7 +73,7 @@ private fun CenterPendingScreen(
         var showDialog by remember { mutableStateOf(false) }
         if (showDialog) {
             CareDialog(
-                title = "로그아웃하시겠어요?",
+                title = stringResource(id = com.idle.designresource.R.string.logout_dialog),
                 leftButtonText = stringResource(id = com.idle.designresource.R.string.cancel),
                 rightButtonText = stringResource(id = com.idle.designresource.R.string.logout),
                 onDismissRequest = { showDialog = false },
