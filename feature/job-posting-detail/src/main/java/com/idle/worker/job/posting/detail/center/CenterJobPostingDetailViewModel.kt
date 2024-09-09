@@ -135,7 +135,7 @@ class CenterJobPostingDetailViewModel @Inject constructor(
         endJobPostingUseCase(jobPostingId).onSuccess {
             _jobPostingDetail.value =
                 _jobPostingDetail.value?.copy(jobPostingStatus = JobPostingStatus.COMPLETED)
-            baseEvent(CareBaseEvent.ShowSnackBar("채용이 종료되었어요.|SUCCESS"))
+            baseEvent(CareBaseEvent.ShowSnackBar("채용을 종료했어요.|SUCCESS"))
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 }

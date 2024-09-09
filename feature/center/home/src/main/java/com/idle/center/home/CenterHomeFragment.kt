@@ -106,9 +106,8 @@ internal fun CenterHomeScreen(
 
     if (showDialog) {
         CareDialog(
-            title = "채용을 종료하시겠어요?",
-            description = "종료된 채용 공고는 \n" +
-                    "‘이전 공고' 탭에서 확인할 수 있어요.",
+            title = stringResource(id = R.string.end_job_posting_title),
+            description = stringResource(id = R.string.end_job_posting_description),
             leftButtonText = stringResource(id = R.string.cancel),
             rightButtonText = stringResource(id = R.string.end),
             leftButtonTextColor = CareTheme.colors.gray300,
