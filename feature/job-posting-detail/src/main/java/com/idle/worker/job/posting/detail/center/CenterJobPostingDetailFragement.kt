@@ -146,6 +146,7 @@ internal class CenterJobPostingDetailFragment : BaseComposeFragment() {
                                 jobPostingDetail = jobPostingDetail,
                                 applicantsCount = applicantsCount,
                                 endJobPosting = ::endJobPosting,
+                                deleteJobPosting = ::deleteJobPosting,
                                 navigateTo = { baseEvent(CareBaseEvent.NavigateTo(it)) },
                                 setJobPostingDetailState = ::setJobPostingState,
                             )
@@ -165,6 +166,7 @@ internal fun CenterJobPostingDetailScreen(
     jobPostingDetail: CenterJobPostingDetail?,
     applicantsCount: Int,
     endJobPosting: (String) -> Unit,
+    deleteJobPosting: (String) -> Unit,
     navigateTo: (DeepLinkDestination) -> Unit,
     setJobPostingDetailState: (JobPostingDetailState) -> Unit,
 ) {
@@ -221,7 +223,7 @@ internal fun CenterJobPostingDetailScreen(
                 coroutineScope.launch {
                     showEndJobPostingDialog = false
                     sheetState.hide()
-                    endJobPosting(jobPostingId)
+                    deleteJobPosting(jobPostingId)
                 }
             },
             modifier = Modifier
@@ -283,7 +285,7 @@ internal fun CenterJobPostingDetailScreen(
 
                     if (jobPostingDetail.jobPostingStatus == JobPostingStatus.COMPLETED) {
                         CareCard(
-                            title = stringResource(id = R.string.end_recruiting),
+                            title = stringResource(id = R.string.delete_job_posting),
                             titleTextColor = CareTheme.colors.red,
                             titleLeftComponent = {
                                 Image(
@@ -291,7 +293,7 @@ internal fun CenterJobPostingDetailScreen(
                                     contentDescription = null,
                                 )
                             },
-                            onClick = { showEndJobPostingDialog = true },
+                            onClick = { showDeleteJobPostingDialog = true },
                             modifier = Modifier.fillMaxWidth(),
                         )
                     }
