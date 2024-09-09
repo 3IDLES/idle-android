@@ -40,7 +40,7 @@ import java.util.Locale
 fun CareCalendar(
     year: Int,
     month: Int,
-    startMonth: Int,
+    startDate: LocalDate,
     onMonthChanged: (Int) -> Unit,
     onDayClick: (LocalDate) -> Unit,
     modifier: Modifier = Modifier,
@@ -48,6 +48,7 @@ fun CareCalendar(
 ) {
     var currentMonth by rememberSaveable { mutableIntStateOf(month) }
     var currentYear by rememberSaveable { mutableIntStateOf(year) }
+    val startMonth = startDate.monthValue
 
     Column(
         verticalArrangement = Arrangement.spacedBy(26.dp),
@@ -83,6 +84,7 @@ fun CareCalendar(
                     year = currentYear,
                     month = currentMonth,
                     selectedDate = selectedDate,
+                    startDate = startDate,
                     onDayClick = {
                         onDayClick(it)
                         onMonthChanged(currentMonth)
@@ -161,6 +163,7 @@ private fun CalendarBody(
     year: Int,
     month: Int,
     selectedDate: LocalDate?,
+    startDate: LocalDate,
     onDayClick: (LocalDate) -> Unit,
 ) {
     LazyVerticalGrid(
@@ -193,12 +196,19 @@ private fun CalendarBody(
         val thisMonthLastDate = calendarDate.lengthOfMonth()
         val thisMonthDaysToShow: List<Int> = (1..thisMonthLastDate).toList()
         items(thisMonthDaysToShow) { day ->
+            val currentDate = calendarDate.withDayOfMonth(day)
+            val isBeforeStartDate = currentDate.isBefore(startDate)
+
             CalendarDayText(
                 day = day,
-                color = CareTheme.colors.gray700,
+                color = if (isBeforeStartDate) CareTheme.colors.gray300 else CareTheme.colors.gray700,
                 isSelected = (selectedDate?.monthValue == calendarDate.monthValue) &&
                         (selectedDate.dayOfMonth == day),
-                onClick = { onDayClick(calendarDate.withDayOfMonth(day)) },
+                onClick = {
+                    if (!isBeforeStartDate) {
+                        onDayClick(currentDate)
+                    }
+                }
             )
         }
 
@@ -286,7 +296,7 @@ private fun PreviewCareCalendarDefaultWithoutSelect() {
     CareCalendar(
         year = 2024,
         month = 7,
-        startMonth = 7,
+        startDate = LocalDate.now(),
         onMonthChanged = {},
         onDayClick = {},
         modifier = Modifier
@@ -305,7 +315,7 @@ private fun PreviewCareCalendarDefaultWithSelect() {
     CareCalendar(
         year = 2024,
         month = 8,
-        startMonth = 7,
+        startDate = LocalDate.now(),
         selectedDate = LocalDate.of(2024, 8, 6),
         onMonthChanged = {},
         onDayClick = {},
@@ -326,7 +336,7 @@ private fun PreviewCareCalendarFoldableWithoutSelect() {
     CareCalendar(
         year = 2024,
         month = 7,
-        startMonth = 7,
+        startDate = LocalDate.now(),
         onMonthChanged = {},
         onDayClick = {},
         modifier = Modifier
@@ -346,7 +356,7 @@ private fun PreviewCareCalendarFoldableWithSelect() {
     CareCalendar(
         year = 2024,
         month = 7,
-        startMonth = 7,
+        startDate = LocalDate.now(),
         selectedDate = LocalDate.of(2024, 7, 4),
         onMonthChanged = {},
         onDayClick = {},
@@ -367,7 +377,7 @@ private fun PreviewCareCalendarFlipWithoutSelect() {
     CareCalendar(
         year = 2024,
         month = 8,
-        startMonth = 7,
+        startDate = LocalDate.now(),
         onMonthChanged = {},
         onDayClick = {},
         modifier = Modifier
@@ -387,7 +397,7 @@ private fun PreviewCareCalendarFlipWithSelect() {
     CareCalendar(
         year = 2024,
         month = 8,
-        startMonth = 7,
+        startDate = LocalDate.now(),
         selectedDate = LocalDate.of(2024, 8, 6),
         onMonthChanged = {},
         onDayClick = {},

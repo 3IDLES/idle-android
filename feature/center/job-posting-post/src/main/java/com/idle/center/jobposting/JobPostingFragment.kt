@@ -652,7 +652,7 @@ internal fun JobPostingScreen(
                                         year = calendarDate.year,
                                         month = calendarDate.monthValue,
                                         selectedDate = applyDeadline,
-                                        startMonth = startDateTime.monthValue,
+                                        startDate = startDateTime,
                                         onMonthChanged = onCalendarMonthChanged,
                                         onDayClick = {
                                             coroutineScope.launch {

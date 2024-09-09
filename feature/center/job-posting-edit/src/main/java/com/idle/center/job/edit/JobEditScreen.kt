@@ -364,7 +364,7 @@ fun JobEditScreen(
                             year = localApplyDeadline?.year ?: startDate.year,
                             month = localApplyDeadline?.monthValue ?: startDate.monthValue,
                             selectedDate = localApplyDeadline,
-                            startMonth = startDate.monthValue,
+                            startDate = startDate,
                             onMonthChanged = {
                                 localApplyDeadline =
                                     localApplyDeadline?.withMonth(it) ?: startDate.withMonth(it)

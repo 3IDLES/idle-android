@@ -96,7 +96,7 @@ private fun CalendarBottomSheetContent() {
         CareCalendar(
             year = 2024,
             month = 8,
-            startMonth = 7,
+            startDate = LocalDate.of(2024,7,1),
             selectedDate = LocalDate.of(2024, 8, 6),
             onMonthChanged = {},
             onDayClick = {},
