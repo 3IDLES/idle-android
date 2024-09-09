@@ -72,6 +72,11 @@ class CenterJobPostingDetailViewModel @Inject constructor(
 
     internal fun updateJobPosting(editJobPostingDetail: EditJobPostingDetail) =
         viewModelScope.launch {
+            if (editJobPostingDetail.applyMethod.isEmpty()) {
+                baseEvent(CareBaseEvent.ShowSnackBar("반드시 1개 이상의 지원 방법을 선택해야합니다.|ERROR"))
+                return@launch
+            }
+
             updateJobPostingUseCase(
                 jobPostingId = _jobPostingDetail.value?.id ?: return@launch,
                 weekdays = editJobPostingDetail.weekdays.toList()
@@ -98,10 +103,10 @@ class CenterJobPostingDetailViewModel @Inject constructor(
                 extraRequirement = editJobPostingDetail.extraRequirement,
                 isExperiencePreferred = editJobPostingDetail.isExperiencePreferred,
                 applyMethod = editJobPostingDetail.applyMethod.toList()
-                    .sortedBy { it.ordinal }
-                    .ifEmpty { null },
+                    .sortedBy { it.ordinal },
                 applyDeadlineType = editJobPostingDetail.applyDeadlineType,
-                applyDeadline = editJobPostingDetail.applyDeadline.toString().ifBlank { null },
+                applyDeadline = editJobPostingDetail.applyDeadline.toString()
+                    .ifBlank { null },
             ).onSuccess {
                 baseEvent(CareBaseEvent.ShowSnackBar("수정이 완료되었어요.|SUCCESS"))
 
