@@ -1,6 +1,7 @@
 package com.idle.center.register.complete
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -39,14 +41,6 @@ internal class CenterRegisterCompleteFragment : BaseComposeFragment() {
 
             centerProfile?.let {
                 CenterRegisterCompleteScreen(
-                    centerProfile = it,
-                    navigateToCenterProfile = {
-                        baseEvent(
-                            NavigateTo(
-                                CenterProfile(), R.id.registerCenterInfoCompleteFragment
-                            )
-                        )
-                    },
                     navigateToCenterHome = {
                         baseEvent(NavigateTo(CenterHome, R.id.registerCenterInfoCompleteFragment))
                     }
@@ -57,26 +51,16 @@ internal class CenterRegisterCompleteFragment : BaseComposeFragment() {
 }
 
 @Composable
-internal fun CenterRegisterCompleteScreen(
-    centerProfile: com.idle.domain.model.profile.CenterProfile,
-    navigateToCenterProfile: () -> Unit,
-    navigateToCenterHome: () -> Unit,
-) {
+internal fun CenterRegisterCompleteScreen(navigateToCenterHome: () -> Unit) {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
+            .background(CareTheme.colors.white000)
             .padding(horizontal = 20.dp),
     ) {
-        Spacer(modifier = Modifier.weight(3f))
-
-        Text(
-            text = "센터 회원으로 가입했어요.",
-            style = CareTheme.typography.heading1,
-            color = CareTheme.colors.gray900,
-            modifier = Modifier.padding(bottom = 20.dp),
-        )
+        Spacer(modifier = Modifier.weight(1f))
 
         Image(
             painter = painterResource(id = com.idle.designresource.R.drawable.ic_check_with_circle),
@@ -86,23 +70,16 @@ internal fun CenterRegisterCompleteScreen(
         )
 
         Text(
-            text = "아래의 센터가 맞나요?",
+            text = "센터 정보를 등록했어요!",
             style = CareTheme.typography.body3,
-            color = CareTheme.colors.gray300,
-            modifier = Modifier.padding(top = 44.dp, bottom = 8.dp),
+            color = CareTheme.colors.gray900,
+            modifier = Modifier.padding(top = 24.dp),
         )
 
-        CareCard(
-            title = centerProfile.centerName,
-            description = centerProfile.roadNameAddress,
-            onClick = { navigateToCenterProfile() },
-            modifier = Modifier.fillMaxWidth(),
-        )
-
-        Spacer(modifier = Modifier.weight(2f))
+        Spacer(modifier = Modifier.weight(1f))
 
         CareButtonLarge(
-            text = "시작하기",
+            text = stringResource(id = com.idle.designresource.R.string.confirm_short),
             onClick = navigateToCenterHome,
             modifier = Modifier
                 .fillMaxWidth()

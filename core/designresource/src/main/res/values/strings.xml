@@ -11,6 +11,7 @@
     <string name="next">다음</string>
     <string name="edit">수정하기</string>
     <string name="start">시작하기</string>
+    <string name="previous">이전</string>
 
     <!-- Authentication Strings -->
     <string name="login">로그인</string>

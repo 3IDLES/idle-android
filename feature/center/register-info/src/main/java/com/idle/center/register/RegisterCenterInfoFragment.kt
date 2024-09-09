@@ -2,8 +2,8 @@ package com.idle.center.register
 
 import android.net.Uri
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,17 +15,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
-import com.idle.analytics.helper.TrackScreenViewEvent
 import com.idle.center.register.step.CenterAddressScreen
 import com.idle.center.register.step.CenterInfoScreen
 import com.idle.center.register.step.CenterIntroduceScreen
+import com.idle.center.register.step.CenterRegisterSummaryScreen
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
@@ -33,6 +32,7 @@ import com.idle.designsystem.compose.component.CareProgressBar
 import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
+import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.post.code.PostCodeFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -66,28 +66,45 @@ internal class RegisterCenterInfoFragment : BaseComposeFragment() {
             val roadNameAddress by roadNameAddress.collectAsStateWithLifecycle()
             val centerDetailAddress by centerDetailAddress.collectAsStateWithLifecycle()
 
-            CenterRegisterScreen(
-                snackbarHostState = snackbarHostState,
-                registrationStep = registrationStep,
-                centerName = centerName,
-                centerNumber = centerNumber,
-                centerIntroduce = centerIntroduce,
-                centerProfileImageUri = centerProfileImageUri,
-                roadNameAddress = roadNameAddress,
-                centerDetailAddress = centerDetailAddress,
-                setRegistrationStep = ::setRegistrationStep,
-                onCenterNameChanged = ::setCenterName,
-                onCenterNumberChanged = ::setCenterNumber,
-                onCenterIntroduceChanged = ::setCenterIntroduce,
-                showPostCodeDialog = {
-                    if (!(postCodeDialog?.isAdded == true || postCodeDialog?.isVisible == true)) {
-                        postCodeDialog?.show(parentFragmentManager, "PostCodeFragment")
-                    }
-                },
-                onCenterDetailAddressChanged = ::setCenterDetailAddress,
-                onProfileImageUriChanged = ::setProfileImageUri,
-                registerCenterProfile = ::registerCenterProfile,
-            )
+            CareStateAnimator(
+                targetState = registrationStep == RegistrationStep.SUMMARY,
+                transitionCondition = registrationStep == RegistrationStep.SUMMARY
+            ) { isSummary ->
+                if (isSummary) {
+                    CenterRegisterSummaryScreen(
+                        snackbarHostState = snackbarHostState,
+                        centerName = centerName,
+                        centerNumber = centerNumber,
+                        centerIntroduce = centerIntroduce,
+                        centerProfileImageUri = centerProfileImageUri,
+                        roadNameAddress = roadNameAddress,
+                        setRegistrationStep = ::setRegistrationStep,
+                        registerCenterProfile = ::registerCenterProfile,
+                    )
+                } else {
+                    CenterRegisterScreen(
+                        snackbarHostState = snackbarHostState,
+                        registrationStep = registrationStep,
+                        centerName = centerName,
+                        centerNumber = centerNumber,
+                        centerIntroduce = centerIntroduce,
+                        centerProfileImageUri = centerProfileImageUri,
+                        roadNameAddress = roadNameAddress,
+                        centerDetailAddress = centerDetailAddress,
+                        setRegistrationStep = ::setRegistrationStep,
+                        onCenterNameChanged = ::setCenterName,
+                        onCenterNumberChanged = ::setCenterNumber,
+                        onCenterIntroduceChanged = ::setCenterIntroduce,
+                        showPostCodeDialog = {
+                            if (!(postCodeDialog?.isAdded == true || postCodeDialog?.isVisible == true)) {
+                                postCodeDialog?.show(parentFragmentManager, "PostCodeFragment")
+                            }
+                        },
+                        onCenterDetailAddressChanged = ::setCenterDetailAddress,
+                        onProfileImageUriChanged = ::setProfileImageUri,
+                    )
+                }
+            }
         }
     }
 }
@@ -109,7 +126,6 @@ internal fun CenterRegisterScreen(
     onCenterDetailAddressChanged: (String) -> Unit,
     onProfileImageUriChanged: (Uri?) -> Unit,
     setRegistrationStep: (RegistrationStep) -> Unit,
-    registerCenterProfile: () -> Unit,
 ) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val focusManager = LocalFocusManager.current
@@ -118,14 +134,14 @@ internal fun CenterRegisterScreen(
         topBar = {
             Column(modifier = Modifier.padding(start = 12.dp, top = 48.dp, end = 20.dp)) {
                 CareSubtitleTopBar(
-                    title = "센터 정보 등록",
+                    title = stringResource(id = R.string.register_center_info),
                     onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
                     modifier = Modifier.fillMaxWidth(),
                 )
 
                 CareProgressBar(
                     currentStep = registrationStep.step,
-                    totalSteps = RegistrationStep.entries.size,
+                    totalSteps = RegistrationStep.entries.size - 1,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 8.dp, top = 8.dp, bottom = 8.dp),
@@ -143,6 +159,7 @@ internal fun CenterRegisterScreen(
                 }
             )
         },
+        containerColor = CareTheme.colors.white000,
         modifier = Modifier.addFocusCleaner(focusManager),
     ) { paddingValue ->
         Column(
@@ -150,7 +167,6 @@ internal fun CenterRegisterScreen(
             verticalArrangement = Arrangement.spacedBy(32.dp, Alignment.CenterVertically),
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White)
                 .padding(paddingValue)
                 .padding(start = 20.dp, end = 20.dp, top = 24.dp),
         ) {
@@ -181,8 +197,9 @@ internal fun CenterRegisterScreen(
                         onCenterIntroduceChanged = onCenterIntroduceChanged,
                         onProfileImageUriChanged = onProfileImageUriChanged,
                         setRegistrationStep = setRegistrationStep,
-                        registerCenterProfile = registerCenterProfile,
                     )
+
+                    else -> Box(modifier = Modifier.fillMaxSize())
                 }
             }
         }

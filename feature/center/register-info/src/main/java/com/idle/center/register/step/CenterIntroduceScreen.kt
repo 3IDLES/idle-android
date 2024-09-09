@@ -51,7 +51,6 @@ internal fun CenterIntroduceScreen(
     onCenterIntroduceChanged: (String) -> Unit,
     onProfileImageUriChanged: (Uri?) -> Unit,
     setRegistrationStep: (RegistrationStep) -> Unit,
-    registerCenterProfile: () -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
     val scrollState = rememberScrollState()
@@ -129,7 +128,11 @@ internal fun CenterIntroduceScreen(
 
         CareButtonLarge(
             text = stringResource(id = R.string.next),
-            onClick = { if (centerIntroduce.isNotBlank()) registerCenterProfile() },
+            onClick = {
+                if (centerIntroduce.isNotBlank()) {
+                    setRegistrationStep(RegistrationStep.findStep(INTRODUCE.step + 1))
+                }
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 28.dp),
@@ -176,7 +179,6 @@ fun PreviewIntroduceScreen() {
                 onCenterIntroduceChanged = {},
                 onProfileImageUriChanged = {},
                 setRegistrationStep = {},
-                registerCenterProfile = {},
             )
         }
     }
