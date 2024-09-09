@@ -108,7 +108,7 @@ internal class CenterJobPostingDetailFragment : BaseComposeFragment() {
                             applyDeadline = it.applyDeadline,
                             applyDeadlineType = it.applyDeadlineType,
                             updateJobPosting = ::updateJobPosting,
-                            setJobPostingDetailState = {
+                            setEditState = {
                                 if (it) setJobPostingState(JobPostingDetailState.EDIT)
                                 else setJobPostingState(JobPostingDetailState.SUMMARY)
                             },
