@@ -109,35 +109,7 @@ class CenterJobPostingDetailViewModel @Inject constructor(
                     .ifBlank { null },
             ).onSuccess {
                 baseEvent(CareBaseEvent.ShowSnackBar("수정이 완료되었어요.|SUCCESS"))
-
-                _jobPostingDetail.value = CenterJobPostingDetail(
-                    id = _jobPostingDetail.value?.id ?: return@launch,
-                    weekdays = editJobPostingDetail.weekdays,
-                    startTime = editJobPostingDetail.startTime,
-                    endTime = editJobPostingDetail.endTime,
-                    payType = editJobPostingDetail.payType,
-                    payAmount = editJobPostingDetail.payAmount.toIntOrNull() ?: return@launch,
-                    roadNameAddress = editJobPostingDetail.roadNameAddress,
-                    lotNumberAddress = editJobPostingDetail.lotNumberAddress,
-                    clientName = editJobPostingDetail.clientName,
-                    gender = editJobPostingDetail.gender,
-                    age = editJobPostingDetail.birthYear.toIntOrNull() ?: return@launch,
-                    weight = editJobPostingDetail.weight?.toInt(),
-                    careLevel = editJobPostingDetail.careLevel.toIntOrNull() ?: return@launch,
-                    mentalStatus = editJobPostingDetail.mentalStatus,
-                    disease = editJobPostingDetail.disease,
-                    isMealAssistance = editJobPostingDetail.isMealAssistance,
-                    isBowelAssistance = editJobPostingDetail.isBowelAssistance,
-                    isWalkingAssistance = editJobPostingDetail.isWalkingAssistance,
-                    lifeAssistance = editJobPostingDetail.lifeAssistance,
-                    extraRequirement = editJobPostingDetail.extraRequirement,
-                    isExperiencePreferred = editJobPostingDetail.isExperiencePreferred,
-                    applyMethod = editJobPostingDetail.applyMethod,
-                    applyDeadlineType = editJobPostingDetail.applyDeadlineType,
-                    applyDeadline = editJobPostingDetail.applyDeadline,
-                    jobPostingStatus = _jobPostingDetail.value?.jobPostingStatus ?: return@launch,
-                )
-
+                getCenterJobPostingDetailUseCase(_jobPostingDetail.value?.id ?: return@launch)
                 _jobPostingState.value = JobPostingDetailState.SUMMARY
             }.onFailure { handleFailure(it as HttpResponseException) }
         }

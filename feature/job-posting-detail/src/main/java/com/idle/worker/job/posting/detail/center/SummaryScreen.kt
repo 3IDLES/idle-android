@@ -54,7 +54,7 @@ fun SummaryScreen(
     lotNumberAddress: String,
     clientName: String,
     gender: Gender,
-    birthYear: String,
+    age: String,
     weight: String,
     careLevel: String,
     mentalStatus: MentalStatus,
@@ -152,7 +152,7 @@ fun SummaryScreen(
                             text = stringResource(
                                 id = R.string.customer_info_format,
                                 careLevel,
-                                (LocalDate.now(ZoneId.of("Asia/Seoul")).year - birthYear.toInt() + 1),
+                                (LocalDate.now(ZoneId.of("Asia/Seoul")).year - age.toInt() + 1),
                                 gender.displayName
                             ),
                             style = CareTheme.typography.body2,
@@ -377,7 +377,7 @@ fun SummaryScreen(
                         )
 
                         Text(
-                            text = "${(LocalDate.now(ZoneId.of("Asia/Seoul")).year - birthYear.toInt())}세",
+                            text = "${age}세",
                             style = CareTheme.typography.body2,
                             color = CareTheme.colors.gray900,
                         )
