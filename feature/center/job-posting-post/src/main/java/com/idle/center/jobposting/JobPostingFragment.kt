@@ -48,6 +48,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.idle.analytics.helper.LocalAnalyticsHelper
+import com.idle.binding.DeepLinkDestination
 import com.idle.binding.base.CareBaseEvent
 import com.idle.center.job.edit.JobEditScreen
 import com.idle.center.jobposting.JobPostingStep.ADDRESS
@@ -64,7 +65,6 @@ import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareBottomSheetLayout
 import com.idle.designsystem.compose.component.CareButtonMedium
-import com.idle.designsystem.compose.component.CareButtonRound
 import com.idle.designsystem.compose.component.CareCalendar
 import com.idle.designsystem.compose.component.CareProgressBar
 import com.idle.designsystem.compose.component.CareSnackBar
@@ -273,6 +273,14 @@ internal class JobPostingFragment : BaseComposeFragment() {
                         setEditState = ::setEditState,
                         setBottomSheetType = ::setBottomSheetType,
                         showSnackBar = { baseEvent(CareBaseEvent.ShowSnackBar(it)) },
+                        navigateToHome = {
+                            baseEvent(
+                                CareBaseEvent.NavigateTo(
+                                    DeepLinkDestination.CenterHome,
+                                    com.idle.center.job.posting.post.R.id.jobPostingPostFragment
+                                )
+                            )
+                        },
                     )
                 }
             }
@@ -339,6 +347,7 @@ internal fun JobPostingScreen(
     setEditState: (Boolean) -> Unit,
     setBottomSheetType: (JobPostingBottomSheetType) -> Unit,
     showSnackBar: (String) -> Unit,
+    navigateToHome: () -> Unit,
 ) {
     val onBackPressedDispatcher =
         LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
@@ -689,24 +698,12 @@ internal fun JobPostingScreen(
                                     end = 20.dp
                                 )
                             ) {
-                                val bottomPadding =
-                                    if (jobPostingStep != JobPostingStep.SUMMARY) 12.dp
-                                    else 0.dp
-
                                 CareSubtitleTopBar(
                                     title = stringResource(id = R.string.post_job_posting),
-                                    onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
-                                    leftComponent = {
-                                        if (jobPostingStep == JobPostingStep.SUMMARY) {
-                                            CareButtonRound(
-                                                text = stringResource(id = R.string.edit_job_posting_button),
-                                                onClick = { setEditState(true) },
-                                            )
-                                        }
-                                    },
+                                    onNavigationClick = navigateToHome,
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(bottom = bottomPadding),
+                                        .padding(bottom = 12.dp),
                                 )
 
                                 CareProgressBar(

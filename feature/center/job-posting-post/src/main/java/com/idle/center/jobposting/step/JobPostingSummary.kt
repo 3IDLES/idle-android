@@ -140,7 +140,7 @@ internal fun JobPostingSummaryScreen(
                         onClick = postJobPosting,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 12.dp, start = 20.dp, end = 20.dp, bottom = 28.dp),
+                            .padding(start = 20.dp, end = 20.dp, bottom = 28.dp),
                     )
                 }
             },

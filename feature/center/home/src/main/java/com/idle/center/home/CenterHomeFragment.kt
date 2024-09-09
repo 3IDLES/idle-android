@@ -82,7 +82,14 @@ internal class CenterHomeFragment : BaseComposeFragment() {
                 jobPostingsCompleted = jobPostingsCompleted,
                 setRecruitmentPostStatus = ::setRecruitmentPostStatus,
                 endJobPosting = ::endJobPosting,
-                navigateTo = { baseEvent(NavigateTo(it)) }
+                navigateTo = {
+                    baseEvent(
+                        NavigateTo(
+                            destination = it,
+                            popUpTo = com.idle.center.home.R.id.centerHomeFragment,
+                        )
+                    )
+                }
             )
         }
     }
@@ -242,9 +249,7 @@ internal fun CenterHomeScreen(
             ) {
                 CareFloatingButton(
                     text = "+ 공고 등록",
-                    onClick = {
-                        navigateTo(DeepLinkDestination.CenterJobPostingPost)
-                    },
+                    onClick = { navigateTo(DeepLinkDestination.CenterJobPostingPost) },
                 )
             }
         }

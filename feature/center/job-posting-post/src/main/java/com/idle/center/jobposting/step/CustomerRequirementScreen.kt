@@ -3,6 +3,7 @@ package com.idle.center.jobposting.step
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -27,16 +28,20 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.idle.center.jobposting.JobPostingStep
+import com.idle.center.jobposting.JobPostingStep.CUSTOMER_INFORMATION
 import com.idle.center.jobposting.JobPostingStep.CUSTOMER_REQUIREMENT
 import com.idle.center.jobposting.LogJobPostingStep
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
+import com.idle.designsystem.compose.component.CareButtonMedium
 import com.idle.designsystem.compose.component.CareChipBasic
 import com.idle.designsystem.compose.component.CareTextFieldLong
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.designsystem.compose.foundation.PretendardMedium
+import com.idle.domain.model.auth.Gender
 import com.idle.domain.model.jobposting.LifeAssistance
+import com.idle.domain.model.jobposting.MentalStatus
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -129,7 +134,7 @@ internal fun CustomerRequirementScreen(
                         onWalkingAssistanceChanged(true)
                         coroutineScope.launch {
                             scrollState.animateScrollTo(
-                                value = with(density) { 120.dp.toPx() }.toInt(),
+                                value = with(density) { 130.dp.toPx() }.toInt(),
                                 animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
                             )
                         }
@@ -212,14 +217,28 @@ internal fun CustomerRequirementScreen(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        CareButtonLarge(
-            text = stringResource(id = R.string.next),
-            enable = isMealAssistance != null && isBowelAssistance != null && isWalkingAssistance != null,
-            onClick = { setJobPostingStep(JobPostingStep.findStep(CUSTOMER_REQUIREMENT.step + 1)) },
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 28.dp),
-        )
+                .padding(top = 12.dp, bottom = 28.dp),
+        ) {
+            CareButtonMedium(
+                text = stringResource(id = R.string.previous),
+                textColor = CareTheme.colors.gray300,
+                containerColor = CareTheme.colors.white000,
+                border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray200),
+                onClick = { setJobPostingStep(JobPostingStep.findStep(CUSTOMER_REQUIREMENT.step - 1)) },
+                modifier = Modifier.weight(1f),
+            )
+
+            CareButtonMedium(
+                text = stringResource(id = R.string.next),
+                enable = isMealAssistance != null && isBowelAssistance != null && isWalkingAssistance != null,
+                onClick = { setJobPostingStep(JobPostingStep.findStep(CUSTOMER_REQUIREMENT.step + 1)) },
+                modifier = Modifier.weight(1f),
+            )
+        }
     }
 
     LogJobPostingStep(step = CUSTOMER_REQUIREMENT)

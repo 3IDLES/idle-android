@@ -20,6 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.idle.analytics.helper.TrackScreenViewEvent
 import com.idle.binding.DeepLinkDestination.CenterHome
 import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.center.register.info.R
@@ -84,4 +85,6 @@ internal fun CenterRegisterCompleteScreen(navigateToCenterHome: () -> Unit) {
                 .padding(bottom = 28.dp),
         )
     }
+
+    TrackScreenViewEvent(screenName = "center_register_info_complete_screen")
 }

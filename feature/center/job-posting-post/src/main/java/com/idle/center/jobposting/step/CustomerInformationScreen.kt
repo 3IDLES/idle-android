@@ -3,6 +3,7 @@ package com.idle.center.jobposting.step
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -37,6 +38,7 @@ import com.idle.center.jobposting.JobPostingStep.CUSTOMER_INFORMATION
 import com.idle.center.jobposting.LogJobPostingStep
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
+import com.idle.designsystem.compose.component.CareButtonMedium
 import com.idle.designsystem.compose.component.CareChipBasic
 import com.idle.designsystem.compose.component.CareChipShort
 import com.idle.designsystem.compose.component.CareTextField
@@ -246,21 +248,35 @@ internal fun CustomerInformationScreen(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        CareButtonLarge(
-            text = stringResource(id = R.string.next),
-            enable = gender != Gender.NONE && birthYear.isNotBlank() && weight.isNotBlank() && mentalStatus != MentalStatus.UNKNOWN,
-            onClick = {
-                if ((birthYear.toIntOrNull() ?: return@CareButtonLarge) < 1900) {
-                    showSnackBar("출생년도가 잘못되었습니다.|Error")
-                    return@CareButtonLarge
-                }
-
-                setJobPostingStep(JobPostingStep.findStep(CUSTOMER_INFORMATION.step + 1))
-            },
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 28.dp),
-        )
+                .padding(top = 12.dp, bottom = 28.dp),
+        ) {
+            CareButtonMedium(
+                text = stringResource(id = R.string.previous),
+                textColor = CareTheme.colors.gray300,
+                containerColor = CareTheme.colors.white000,
+                border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray200),
+                onClick = { setJobPostingStep(JobPostingStep.findStep(CUSTOMER_INFORMATION.step - 1)) },
+                modifier = Modifier.weight(1f),
+            )
+
+            CareButtonMedium(
+                text = stringResource(id = R.string.next),
+                enable = gender != Gender.NONE && birthYear.isNotBlank() && weight.isNotBlank() && mentalStatus != MentalStatus.UNKNOWN,
+                onClick = {
+                    if ((birthYear.toIntOrNull() ?: return@CareButtonMedium) < 1900) {
+                        showSnackBar("출생년도가 잘못되었습니다.|Error")
+                        return@CareButtonMedium
+                    }
+
+                    setJobPostingStep(JobPostingStep.findStep(CUSTOMER_INFORMATION.step + 1))
+                },
+                modifier = Modifier.weight(1f),
+            )
+        }
     }
 
     LogJobPostingStep(step = CUSTOMER_INFORMATION)

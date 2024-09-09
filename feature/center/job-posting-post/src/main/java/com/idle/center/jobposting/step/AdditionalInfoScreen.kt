@@ -1,4 +1,4 @@
-package com.idle.center.jobposting.step
+ package com.idle.center.jobposting.step
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image

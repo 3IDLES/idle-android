@@ -123,7 +123,7 @@
     <string name="currency_unit">원</string>
 
     <!-- Address -->
-    <string name="address_screen_title">근무 시간 및 급여를 입력해주세요.</string>
+    <string name="address_screen_title">근무지 주소를 입력해주세요.</string>
     <string name="worker_address_title">현재 거주 중인 곳의\n주소를 입력해주세요.</string>
     <string name="address">주소</string>
     <string name="work_address">근무 장소</string>
