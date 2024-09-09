@@ -1,11 +1,14 @@
 package com.idle.auth
 
 import androidx.lifecycle.viewModelScope
-import com.idle.binding.DeepLinkDestination
 import com.idle.binding.DeepLinkDestination.CenterHome
+import com.idle.binding.DeepLinkDestination.CenterPending
+import com.idle.binding.DeepLinkDestination.CenterRegister
+import com.idle.binding.DeepLinkDestination.WorkerHome
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.domain.model.auth.UserType
+import com.idle.domain.model.error.ApiErrorCode
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.profile.CenterManagerAccountStatus
 import com.idle.domain.usecase.auth.GetAccessTokenUseCase
@@ -15,6 +18,7 @@ import com.idle.domain.usecase.profile.GetMyCenterProfileUseCase
 import com.idle.domain.usecase.profile.GetMyWorkerProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -36,16 +40,21 @@ class AuthViewModel @Inject constructor(
     }
 
     private fun initializeUserSession() = viewModelScope.launch {
+        val (accessToken, userRole) = getAccessTokenAndUserRole()
+
+        if (accessToken.isBlank() || userRole.isBlank()) return@launch
+
+        loadUserProfile(userRole)
+        navigateToDestination(userRole)
+    }
+
+    private suspend fun getAccessTokenAndUserRole(): Pair<String, String> = coroutineScope {
         val accessTokenDeferred = async { getAccessTokenUseCase() }
         val userRoleDeferred = async { getMyUserRoleUseCase() }
+        accessTokenDeferred.await() to userRoleDeferred.await()
+    }
 
-        val accessToken = accessTokenDeferred.await()
-        val userRole = userRoleDeferred.await()
-
-        if (accessToken.isBlank() || userRole.isBlank()) {
-            return@launch
-        }
-
+    private fun loadUserProfile(userRole: String) = viewModelScope.launch {
         when (userRole) {
             UserType.CENTER.apiValue -> getMyCenterProfileUseCase().onFailure {
                 return@launch
@@ -55,30 +64,40 @@ class AuthViewModel @Inject constructor(
                 return@launch
             }
         }
-
-        navigateToDestination(userRole)
     }
 
     private fun navigateToDestination(userRole: String) {
         when (userRole) {
-            UserType.WORKER.apiValue -> baseEvent(
-                NavigateTo(DeepLinkDestination.WorkerHome, R.id.authFragment)
-            )
-
+            UserType.WORKER.apiValue -> baseEvent(NavigateTo(WorkerHome, R.id.authFragment))
             UserType.CENTER.apiValue -> getCenterStatus()
             else -> Unit
         }
     }
 
     private fun getCenterStatus() = viewModelScope.launch {
-        getCenterStatusUseCase().onSuccess {
-            val destination = when (it.centerManagerAccountStatus) {
-                CenterManagerAccountStatus.APPROVED -> CenterHome
-                else -> CenterHome
-            }
-            baseEvent(NavigateTo(destination, R.id.authFragment))
+        getCenterStatusUseCase().onSuccess { centerStatusResponse ->
+            handleCenterStatus(centerStatusResponse.centerManagerAccountStatus)
+        }.onFailure { exception ->
+            handleFailure(exception as HttpResponseException)
+        }
+    }
+
+    private fun handleCenterStatus(status: CenterManagerAccountStatus) = when (status) {
+        CenterManagerAccountStatus.APPROVED -> handleApprovedCenterStatus()
+        else -> baseEvent(NavigateTo(CenterPending, R.id.authFragment))
+    }
+
+    private fun handleApprovedCenterStatus() = viewModelScope.launch {
+        getMyCenterProfileUseCase().onSuccess {
+            baseEvent(NavigateTo(CenterHome, R.id.authFragment))
         }.onFailure {
-            handleFailure(it as HttpResponseException)
+            val error = it as HttpResponseException
+
+            if (error.apiErrorCode == ApiErrorCode.CenterNotFound) {
+                baseEvent(NavigateTo(CenterRegister, R.id.authFragment))
+            } else {
+                handleFailure(error)
+            }
         }
     }
 
