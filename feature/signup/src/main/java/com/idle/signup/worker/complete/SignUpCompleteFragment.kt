@@ -85,7 +85,7 @@ internal fun SignUpCompleteScreen(
 
         CareButtonLarge(
             text = stringResource(id = R.string.start),
-            onClick = { navigateTo(DeepLinkDestination.CenterHome) },
+            onClick = { navigateTo(DeepLinkDestination.WorkerHome) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 28.dp),
