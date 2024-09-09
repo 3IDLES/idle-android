@@ -9,5 +9,8 @@
         android:name="com.idle.pending.CenterPendingFragment"
         android:label="CenterPendingFragment">
         <deepLink app:uri="@string/center_pending_deeplink_url" />
+        <argument
+            android:name="status"
+            app:argType="string" />
     </fragment>
 </navigation>

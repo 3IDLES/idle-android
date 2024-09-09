@@ -8,7 +8,7 @@ data class CenterRegistrationStatus(
 )
 
 enum class CenterManagerAccountStatus {
-    PENDING, APPROVED, UNKNOWN;
+    NEW, PENDING, APPROVED, UNKNOWN;
 
     companion object {
         fun create(value: String): CenterManagerAccountStatus {
