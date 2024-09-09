@@ -151,7 +151,7 @@ internal fun CenterProfileScreen(
                 snackbar = { data ->
                     CareSnackBar(
                         data = data,
-                        modifier = Modifier.padding(bottom = 138.dp)
+                        modifier = Modifier.padding(bottom = 20.dp)
                     )
                 }
             )

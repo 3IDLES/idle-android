@@ -69,7 +69,7 @@ class CenterProfileViewModel @Inject constructor(
             introduce = _centerIntroduce.value.ifBlank { null },
             imageFileUri = _profileImageUri.value?.toString(),
         ).onSuccess {
-            baseEvent(CareBaseEvent.ShowSnackBar("정보 수정이 완료되었어요.|ERROR"))
+            baseEvent(CareBaseEvent.ShowSnackBar("정보 수정이 완료되었어요.|SUCCESS"))
             setEditState(false)
         }.onFailure {
             handleFailure(it as HttpResponseException)
