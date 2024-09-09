@@ -94,8 +94,10 @@ class CenterSignUpViewModel @Inject constructor(
     }
 
     internal fun setBusinessRegistrationNumber(businessRegistrationNumber: String) {
-        _businessRegistrationNumber.value = businessRegistrationNumber
-        _businessRegistrationInfo.value = null
+        if (businessRegistrationNumber.isDigitsOnly() && businessRegistrationNumber.length <= 10) {
+            _businessRegistrationNumber.value = businessRegistrationNumber
+            _businessRegistrationInfo.value = null
+        }
     }
 
     internal fun setCenterId(id: String) {

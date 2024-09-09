@@ -77,7 +77,7 @@ internal fun BusinessRegistrationScreen(
                     hint = stringResource(id = R.string.business_registration_number_hint),
                     onValueChanged = onBusinessRegistrationNumberChanged,
                     onDone = {
-                        if (businessRegistrationNumber.isNotBlank()) {
+                        if (businessRegistrationNumber.length == 10) {
                             validateBusinessRegistrationNumber()
                         }
                     },
@@ -87,7 +87,7 @@ internal fun BusinessRegistrationScreen(
                 )
 
                 CareButtonSmall(
-                    enable = businessRegistrationNumber.isNotBlank(),
+                    enable = businessRegistrationNumber.length == 10,
                     text = stringResource(id = R.string.search),
                     onClick = {
                         validateBusinessRegistrationNumber()
