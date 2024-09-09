@@ -84,7 +84,7 @@ class AuthViewModel @Inject constructor(
 
     private fun handleCenterStatus(status: CenterManagerAccountStatus) = when (status) {
         CenterManagerAccountStatus.APPROVED -> handleApprovedCenterStatus()
-        else -> baseEvent(NavigateTo(CenterPending, R.id.authFragment))
+        else -> baseEvent(NavigateTo(CenterPending(status.name), R.id.authFragment))
     }
 
     private fun handleApprovedCenterStatus() = viewModelScope.launch {
