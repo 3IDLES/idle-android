@@ -8,10 +8,12 @@ import com.idle.domain.model.jobposting.CenterJobPostingDetail
 import com.idle.domain.model.jobposting.EditJobPostingDetail
 import com.idle.domain.model.jobposting.JobPostingStatus
 import com.idle.domain.model.jobposting.LifeAssistance
+import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.usecase.jobposting.EndJobPostingUseCase
 import com.idle.domain.usecase.jobposting.GetApplicantsCountUseCase
 import com.idle.domain.usecase.jobposting.GetCenterJobPostingDetailUseCase
 import com.idle.domain.usecase.jobposting.UpdateJobPostingUseCase
+import com.idle.domain.usecase.profile.GetLocalMyCenterProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,19 +22,33 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CenterJobPostingDetailViewModel @Inject constructor(
+    private val getLocalMyCenterProfileUseCase: GetLocalMyCenterProfileUseCase,
     private val getCenterJobPostingDetailUseCase: GetCenterJobPostingDetailUseCase,
     private val getApplicantsCountUseCase: GetApplicantsCountUseCase,
     private val updateJobPostingUseCase: UpdateJobPostingUseCase,
     private val endJobPostingUseCase: EndJobPostingUseCase,
 ) : BaseViewModel() {
+    private val _profile = MutableStateFlow<CenterProfile?>(null)
+    val profile = _profile.asStateFlow()
+
     private val _jobPostingDetail = MutableStateFlow<CenterJobPostingDetail?>(null)
     val jobPostingDetail = _jobPostingDetail.asStateFlow()
 
     private val _applicantsCount = MutableStateFlow<Int>(0)
     val applicantsCount = _applicantsCount.asStateFlow()
 
-    private val _isEditState = MutableStateFlow(false)
-    val isEditState = _isEditState.asStateFlow()
+    private val _jobPostingState = MutableStateFlow(JobPostingDetailState.SUMMARY)
+    val jobPostingState = _jobPostingState.asStateFlow()
+
+    init {
+        getMyCenterProfile()
+    }
+
+    private fun getMyCenterProfile() = viewModelScope.launch {
+        getLocalMyCenterProfileUseCase().onSuccess {
+            _profile.value = it
+        }.onFailure { handleFailure(it as HttpResponseException) }
+    }
 
     fun getCenterJobPostingDetail(jobPostingId: String) = viewModelScope.launch {
         getCenterJobPostingDetailUseCase(jobPostingId)
@@ -46,8 +62,8 @@ class CenterJobPostingDetailViewModel @Inject constructor(
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
-    fun setEditState(state: Boolean) {
-        _isEditState.value = state
+    fun setJobPostingState(state: JobPostingDetailState) {
+        _jobPostingState.value = state
     }
 
     fun updateJobPosting(editJobPostingDetail: EditJobPostingDetail) = viewModelScope.launch {
@@ -111,7 +127,7 @@ class CenterJobPostingDetailViewModel @Inject constructor(
                 jobPostingStatus = _jobPostingDetail.value?.jobPostingStatus ?: return@launch,
             )
 
-            _isEditState.value = false
+            _jobPostingState.value = JobPostingDetailState.SUMMARY
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
@@ -122,4 +138,11 @@ class CenterJobPostingDetailViewModel @Inject constructor(
             baseEvent(CareBaseEvent.ShowSnackBar("채용이 종료되었어요.|SUCCESS"))
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
+}
+
+enum class JobPostingDetailState(val step: Int) {
+    SUMMARY(1),
+    EDIT(2),
+    PREVIEW(3),
+    ;
 }

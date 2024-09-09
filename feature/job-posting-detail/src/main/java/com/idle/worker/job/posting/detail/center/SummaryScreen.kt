@@ -71,7 +71,7 @@ fun SummaryScreen(
     titleComponent: @Composable (() -> Unit)? = null,
     additionalComponent: @Composable (ColumnScope.() -> Unit)? = null,
     bottomComponent: @Composable (BoxScope.() -> Unit)? = null,
-    onClickPreview: () -> Unit = {},
+    onClickPreview: () -> Unit,
     onBackPressed: (() -> Unit)? = null,
 ) {
     val scrollState = rememberScrollState()
