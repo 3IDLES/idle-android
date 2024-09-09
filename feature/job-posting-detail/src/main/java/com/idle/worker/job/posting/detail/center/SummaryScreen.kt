@@ -71,6 +71,7 @@ fun SummaryScreen(
     titleComponent: @Composable (() -> Unit)? = null,
     additionalComponent: @Composable (ColumnScope.() -> Unit)? = null,
     bottomComponent: @Composable (BoxScope.() -> Unit)? = null,
+    onClickPreview: () -> Unit = {},
     onBackPressed: (() -> Unit)? = null,
 ) {
     val scrollState = rememberScrollState()
@@ -206,9 +207,7 @@ fun SummaryScreen(
                         text = stringResource(id = R.string.view_as_caregiver),
                         style = CareTheme.typography.body2,
                         color = CareTheme.colors.gray300,
-                        modifier = Modifier.clickable {
-
-                        }
+                        modifier = Modifier.clickable { onClickPreview() },
                     )
 
                     Image(

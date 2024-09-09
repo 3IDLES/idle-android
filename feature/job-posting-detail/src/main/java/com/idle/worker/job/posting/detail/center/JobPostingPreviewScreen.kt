@@ -1,4 +1,4 @@
-package com.idle.center.jobposting.step
+package com.idle.worker.job.posting.detail.center
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
@@ -23,12 +23,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.idle.analytics.helper.TrackScreenViewEvent
-import com.idle.center.jobposting.JobPostingStep
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLine
 import com.idle.designsystem.compose.component.CareCard
@@ -48,7 +49,7 @@ import java.time.LocalDate
 import java.time.ZoneId
 
 @Composable
-internal fun WorkerJobPostingDetailScreen(
+fun JobPostingPreviewScreen(
     weekdays: Set<DayOfWeek>,
     workStartTime: String,
     workEndTime: String,
@@ -70,12 +71,12 @@ internal fun WorkerJobPostingDetailScreen(
     applyMethod: Set<ApplyMethod>,
     applyDeadline: LocalDate?,
     centerProfile: CenterProfile?,
-    setJobPostingStep: (JobPostingStep) -> Unit,
+    onBackPressed: (() -> Unit),
 ) {
     val scrollState = rememberScrollState()
     val age = (LocalDate.now(ZoneId.of("Asia/Seoul")).year - birthYear.toInt() + 1)
 
-    BackHandler { setJobPostingStep(JobPostingStep.SUMMARY) }
+    BackHandler { onBackPressed() }
 
     Scaffold(
         containerColor = CareTheme.colors.white000,
@@ -88,7 +89,7 @@ internal fun WorkerJobPostingDetailScreen(
                     end = 20.dp,
                     bottom = 12.dp
                 ),
-                onNavigationClick = { setJobPostingStep(JobPostingStep.SUMMARY) },
+                onNavigationClick = { onBackPressed() },
             )
         },
     ) { paddingValue ->
@@ -257,6 +258,24 @@ internal fun WorkerJobPostingDetailScreen(
                                 .align(Alignment.BottomEnd)
                                 .padding(12.dp),
                         )
+
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(Color(0xff5E6573).copy(alpha = 0.7f))
+                                .align(Alignment.BottomCenter),
+                        ) {
+                            Text(
+                                text = "이미지 속 위치는 실제 위치가 아니며, 실제 공고 등록 시 \n" +
+                                        "근무지 위치와 요양보호사의 위치가 반영되어 표시됩니다.",
+                                style = CareTheme.typography.caption,
+                                color = CareTheme.colors.white000,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier
+                                    .padding(vertical = 10.dp)
+                            )
+                        }
                     }
                 }
 
@@ -445,7 +464,8 @@ internal fun WorkerJobPostingDetailScreen(
                             )
 
                             Text(
-                                text = disease ?: "-",
+                                text = if (disease.isNullOrBlank()) "-"
+                                else disease,
                                 style = CareTheme.typography.body2,
                                 color = CareTheme.colors.gray900,
                             )
@@ -659,5 +679,6 @@ internal fun WorkerJobPostingDetailScreen(
             }
         }
     }
+
     TrackScreenViewEvent(screenName = "job_posting_carer_side_screen")
 }

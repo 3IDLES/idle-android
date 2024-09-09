@@ -33,8 +33,8 @@ class JobPostingViewModel @Inject constructor(
     private val getLocalMyCenterProfileUseCase: GetLocalMyCenterProfileUseCase,
     private val postJobPostingUseCase: PostJobPostingUseCase,
 ) : BaseViewModel() {
-    private val _centerProfile = MutableStateFlow<CenterProfile?>(null)
-    val centerProfile = _centerProfile.asStateFlow()
+    private val _profile = MutableStateFlow<CenterProfile?>(null)
+    val profile = _profile.asStateFlow()
 
     private val _weekDays = MutableStateFlow<Set<DayOfWeek>>(setOf())
     val weekDays = _weekDays.asStateFlow()
@@ -126,7 +126,7 @@ class JobPostingViewModel @Inject constructor(
 
     private fun getMyCenterProfile() = viewModelScope.launch {
         getLocalMyCenterProfileUseCase().onSuccess {
-            _centerProfile.value = it
+            _profile.value = it
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
@@ -353,14 +353,14 @@ class JobPostingViewModel @Inject constructor(
     }
 }
 
-enum class JobPostingStep(val step: Int) {
-    TIME_PAYMENT(1),
-    ADDRESS(2),
-    CUSTOMER_INFORMATION(3),
-    CUSTOMER_REQUIREMENT(4),
-    ADDITIONAL_INFO(5),
-    SUMMARY(6),
-    WORKER_SIDE(7),
+enum class JobPostingStep(val step: Int, val topBarStep: Int) {
+    TIME_PAYMENT(1, 0),
+    ADDRESS(2, 0),
+    CUSTOMER_INFORMATION(3, 0),
+    CUSTOMER_REQUIREMENT(4, 0),
+    ADDITIONAL_INFO(5, 0),
+    SUMMARY(6, 1),
+    PREVIEW(7, 2),
     ;
 
     companion object {
