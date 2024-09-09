@@ -53,8 +53,9 @@ sealed class DeepLinkDestination(
         addressRes = R.string.center_home_deeplink_url,
     )
 
-    data object CenterPending : DeepLinkDestination(
+    data class CenterPending(val status: String) : DeepLinkDestination(
         addressRes = R.string.center_pending_deeplink_url,
+        params = mapOf("status" to status)
     )
 
     data class CenterProfile(val centerId: String = "default") : DeepLinkDestination(

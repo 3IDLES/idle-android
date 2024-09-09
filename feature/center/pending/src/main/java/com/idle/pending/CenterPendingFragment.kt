@@ -22,6 +22,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,6 +35,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.fragment.navArgs
 import com.idle.center.pending.R
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
@@ -41,18 +44,26 @@ import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareDialog
 import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.foundation.CareTheme
+import com.idle.domain.model.profile.CenterManagerAccountStatus
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 internal class CenterPendingFragment : BaseComposeFragment() {
+    private val args: CenterPendingFragmentArgs by navArgs()
     override val fragmentViewModel: CenterPendingViewModel by viewModels()
 
     @Composable
     override fun ComposeLayout() {
         fragmentViewModel.apply {
+            val status by status.collectAsStateWithLifecycle()
+
+            LaunchedEffect(Unit) {
+                setStatus(args.status)
+            }
 
             CenterPendingScreen(
                 snackbarHostState = snackbarHostState,
+                status = status,
                 logout = ::logout,
                 sendVerificationRequest = ::sendVerificationRequest,
             )
@@ -63,6 +74,7 @@ internal class CenterPendingFragment : BaseComposeFragment() {
 @Composable
 private fun CenterPendingScreen(
     snackbarHostState: SnackbarHostState,
+    status: CenterManagerAccountStatus,
     logout: () -> Unit,
     sendVerificationRequest: () -> Unit,
 ) {
@@ -167,6 +179,7 @@ private fun CenterPendingScreen(
             CareButtonLarge(
                 text = "인증 요청하기",
                 onClick = sendVerificationRequest,
+                enable = status == CenterManagerAccountStatus.NEW,
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(CareTheme.colors.white000)
