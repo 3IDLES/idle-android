@@ -176,12 +176,39 @@ internal fun CenterJobPostingDetailScreen(
     )
     val coroutineScope = rememberCoroutineScope()
     var showEndJobPostingDialog by remember { mutableStateOf(false) }
+    var showDeleteJobPostingDialog by remember { mutableStateOf(false) }
 
     if (showEndJobPostingDialog) {
         CareDialog(
-            title = "채용을 종료하시겠습니까?",
-            description = "채용 종료 시 지원자 정보는 초기화됩니다.",
-            leftButtonText = stringResource(id = R.string.cancel_short),
+            title = stringResource(id = R.string.end_job_posting_title),
+            description = stringResource(id = R.string.end_job_posting_description),
+            leftButtonText = stringResource(id = R.string.cancel),
+            rightButtonText = stringResource(id = R.string.end),
+            leftButtonTextColor = CareTheme.colors.gray300,
+            leftButtonColor = CareTheme.colors.white000,
+            leftButtonBorder = BorderStroke(1.dp, CareTheme.colors.gray100),
+            rightButtonTextColor = CareTheme.colors.white000,
+            rightButtonColor = CareTheme.colors.red,
+            onDismissRequest = { showEndJobPostingDialog = false },
+            onLeftButtonClick = { showEndJobPostingDialog = false },
+            onRightButtonClick = {
+                coroutineScope.launch {
+                    showEndJobPostingDialog = false
+                    sheetState.hide()
+                    endJobPosting(jobPostingId)
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+        )
+    }
+
+    if (showDeleteJobPostingDialog) {
+        CareDialog(
+            title = stringResource(id = R.string.delete_job_posting_title),
+            description = stringResource(id = R.string.delete_job_posting_description),
+            leftButtonText = stringResource(id = R.string.cancel),
             rightButtonText = stringResource(id = R.string.end),
             leftButtonTextColor = CareTheme.colors.gray300,
             leftButtonColor = CareTheme.colors.white000,
@@ -219,38 +246,55 @@ internal fun CenterJobPostingDetailScreen(
                         modifier = Modifier.padding(bottom = 20.dp),
                     )
 
-                    CareCard(
-                        title = stringResource(id = R.string.edit_job_posting_button),
-                        titleLeftComponent = {
-                            Image(
-                                painter = painterResource(id = R.drawable.ic_edit_pencil_non_background),
-                                contentDescription = null,
-                                colorFilter = ColorFilter.tint(CareTheme.colors.gray500),
-                            )
-                        },
-                        onClick = {
-                            coroutineScope.launch {
-                                sheetState.hide()
-                                setJobPostingDetailState(JobPostingDetailState.EDIT)
-                            }
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 8.dp)
-                    )
+                    if (jobPostingDetail.jobPostingStatus == JobPostingStatus.IN_PROGRESS) {
+                        CareCard(
+                            title = stringResource(id = R.string.edit_job_posting_button),
+                            titleLeftComponent = {
+                                Image(
+                                    painter = painterResource(id = R.drawable.ic_edit_pencil_non_background),
+                                    contentDescription = null,
+                                    colorFilter = ColorFilter.tint(CareTheme.colors.gray500),
+                                )
+                            },
+                            onClick = {
+                                coroutineScope.launch {
+                                    sheetState.hide()
+                                    setJobPostingDetailState(JobPostingDetailState.EDIT)
+                                }
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 8.dp)
+                        )
 
-                    CareCard(
-                        title = stringResource(id = R.string.end_recruiting),
-                        titleTextColor = CareTheme.colors.red,
-                        titleLeftComponent = {
-                            Image(
-                                painter = painterResource(id = R.drawable.ic_red_check),
-                                contentDescription = null,
-                            )
-                        },
-                        onClick = { showEndJobPostingDialog = true },
-                        modifier = Modifier.fillMaxWidth(),
-                    )
+                        CareCard(
+                            title = stringResource(id = R.string.end_recruiting),
+                            titleTextColor = CareTheme.colors.red,
+                            titleLeftComponent = {
+                                Image(
+                                    painter = painterResource(id = R.drawable.ic_red_check),
+                                    contentDescription = null,
+                                )
+                            },
+                            onClick = { showEndJobPostingDialog = true },
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                    }
+
+                    if (jobPostingDetail.jobPostingStatus == JobPostingStatus.COMPLETED) {
+                        CareCard(
+                            title = stringResource(id = R.string.end_recruiting),
+                            titleTextColor = CareTheme.colors.red,
+                            titleLeftComponent = {
+                                Image(
+                                    painter = painterResource(id = R.drawable.ic_red_check),
+                                    contentDescription = null,
+                                )
+                            },
+                            onClick = { showEndJobPostingDialog = true },
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                    }
                 }
             },
         ) {

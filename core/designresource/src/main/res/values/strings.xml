@@ -74,7 +74,8 @@
     <string name="manage_job_posting">공고 관리</string>
     <string name="ongoing_job_posting">진행중인 공고</string>
     <string name="previous_job_posting">이전 공고</string>
-    <string name="end_recruiting">채용 종료</string>
+    <string name="end_recruiting">채용 종료하기</string>
+    <string name="delete_job_posting">공고 삭제하기</string>
     <string name="end">종료하기</string>
     <string name="end_short">종료</string>
     <string name="recruiting">채용하기</string>
@@ -97,6 +98,10 @@
     <string name="worknet">워크넷</string>
     <string name="worknet_url">워크넷 링크</string>
     <string name="post_job_posting_note">공고 등록 후에도 공고 내용을 수정할 수 있어요.</string>
+    <string name="end_job_posting_title">채용을 종료하시겠어요?</string>
+    <string name="end_job_posting_description">종료된 채용 공고는 \n \‘이전 공고\' 탭에서 확인할 수 있어요.</string>
+    <string name="delete_job_posting_title">공고를 삭제하시겠어요?</string>
+    <string name="delete_job_posting_description">삭제 시 공고를 복구할 수 없어요.</string>
 
     <!-- Job Posting Details -->
     <string name="work_start_time">근무 시작 시간</string>

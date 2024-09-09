@@ -62,7 +62,7 @@ class CenterHomeViewModel @Inject constructor(
                 it.id != jobPostingId
             }
 
-            baseEvent(CareBaseEvent.ShowSnackBar("채용이 종료되었어요.|SUCCESS"))
+            baseEvent(CareBaseEvent.ShowSnackBar("채용을 종료했어요.|SUCCESS"))
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 }
