@@ -66,7 +66,7 @@ interface JobPostingRepository {
         lifeAssistance: List<LifeAssistance>,
         extraRequirement: String?,
         isExperiencePreferred: Boolean,
-        applyMethod: List<ApplyMethod>,
+        applyMethod: List<ApplyMethod>?,
         applyDeadLineType: ApplyDeadlineType,
         applyDeadline: String?,
     ): Result<Unit>
