@@ -1,5 +1,6 @@
 package com.idle.center.jobposting.complete
 
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -17,8 +18,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import com.idle.analytics.helper.TrackScreenViewEvent
-import com.idle.binding.DeepLinkDestination
-import com.idle.binding.base.CareBaseEvent
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
@@ -32,24 +31,15 @@ class JobPostingCompleteFragment : BaseComposeFragment() {
     @Composable
     override fun ComposeLayout() {
         fragmentViewModel.apply {
-            JobPostingCompleteScreen(
-                navigateTo = {
-                    baseEvent(
-                        CareBaseEvent.NavigateTo(
-                            destination = it,
-                            popUpTo = com.idle.center.job.posting.post.R.id.jobPostingPostCompleteFragment,
-                        )
-                    )
-                },
-            )
+            JobPostingCompleteScreen()
         }
     }
 }
 
 @Composable
-internal fun JobPostingCompleteScreen(
-    navigateTo: (DeepLinkDestination) -> Unit,
-) {
+internal fun JobPostingCompleteScreen() {
+    val backPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -76,7 +66,7 @@ internal fun JobPostingCompleteScreen(
 
         CareButtonLarge(
             text = stringResource(id = R.string.confirm_short),
-            onClick = { navigateTo(DeepLinkDestination.CenterHome) },
+            onClick = { backPressedDispatcher?.onBackPressed() },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 28.dp),

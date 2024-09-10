@@ -1,7 +1,4 @@
-@file:OptIn(
-    ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class,
-    ExperimentalMaterialApi::class
-)
+@file:OptIn(ExperimentalMaterialApi::class)
 
 package com.idle.center.jobposting
 
@@ -86,6 +83,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
+@OptIn(ExperimentalMaterial3Api::class)
 @AndroidEntryPoint
 internal class JobPostingFragment : BaseComposeFragment() {
 
@@ -721,7 +719,7 @@ internal fun JobPostingScreen(
                                 snackbar = { data ->
                                     CareSnackBar(
                                         data = data,
-                                        modifier = Modifier.padding(bottom = 138.dp)
+                                        modifier = Modifier.padding(bottom = 116.dp)
                                     )
                                 }
                             )

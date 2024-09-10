@@ -82,14 +82,7 @@ internal class CenterHomeFragment : BaseComposeFragment() {
                 jobPostingsCompleted = jobPostingsCompleted,
                 setRecruitmentPostStatus = ::setRecruitmentPostStatus,
                 endJobPosting = ::endJobPosting,
-                navigateTo = {
-                    baseEvent(
-                        NavigateTo(
-                            destination = it,
-                            popUpTo = com.idle.center.home.R.id.centerHomeFragment,
-                        )
-                    )
-                }
+                navigateTo = { baseEvent(NavigateTo(destination = it)) }
             )
         }
     }

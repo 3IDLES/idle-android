@@ -1,5 +1,6 @@
 package com.idle.signup.worker.complete
 
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -17,8 +18,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import com.idle.analytics.helper.TrackScreenViewEvent
-import com.idle.binding.DeepLinkDestination
-import com.idle.binding.base.CareBaseEvent
 import com.idle.center.jobposting.complete.SignUpCompleteViewModel
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
@@ -33,24 +32,15 @@ class SignUpCompleteFragment : BaseComposeFragment() {
     @Composable
     override fun ComposeLayout() {
         fragmentViewModel.apply {
-            SignUpCompleteScreen(
-                navigateTo = {
-                    baseEvent(
-                        CareBaseEvent.NavigateTo(
-                            destination = it,
-                            popUpTo = com.idle.signup.R.id.signUpCompleteFragment,
-                        )
-                    )
-                },
-            )
+            SignUpCompleteScreen()
         }
     }
 }
 
 @Composable
-internal fun SignUpCompleteScreen(
-    navigateTo: (DeepLinkDestination) -> Unit,
-) {
+internal fun SignUpCompleteScreen() {
+    val backPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -85,7 +75,7 @@ internal fun SignUpCompleteScreen(
 
         CareButtonLarge(
             text = stringResource(id = R.string.start),
-            onClick = { navigateTo(DeepLinkDestination.WorkerHome) },
+            onClick = { backPressedDispatcher?.onBackPressed() },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 28.dp),
