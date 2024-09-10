@@ -271,7 +271,7 @@ internal fun CustomerInformationScreen(
                 enable = clientName.isNotBlank() && gender != Gender.NONE && birthYear.isNotBlank() && weight.isNotBlank() && mentalStatus != MentalStatus.UNKNOWN,
                 onClick = {
                     if ((birthYear.toIntOrNull() ?: return@CareButtonMedium) < 1900) {
-                        showSnackBar("출생년도가 잘못되었습니다.|Error")
+                        showSnackBar("출생년도는 1900년 이후로 입력 가능합니다.|Error")
                         return@CareButtonMedium
                     }
 

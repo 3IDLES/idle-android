@@ -205,6 +205,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
                             setEditState(false)
                         },
                         setEditState = ::setEditState,
+                        showSnackBar = { baseEvent(CareBaseEvent.ShowSnackBar(it)) },
                     )
                 } else {
                     JobPostingScreen(
