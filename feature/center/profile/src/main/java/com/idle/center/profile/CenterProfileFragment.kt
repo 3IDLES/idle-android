@@ -47,6 +47,7 @@ import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonRound
 import com.idle.designsystem.compose.component.CareSnackBar
+import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.CareTextFieldLong
@@ -79,21 +80,27 @@ internal class CenterProfileFragment : BaseComposeFragment() {
                 }
             }
 
-            centerProfile?.let {
-                CenterProfileScreen(
-                    isMyProfile = isMyProfile,
-                    snackbarHostState = snackbarHostState,
-                    centerProfile = it,
-                    centerOfficeNumber = centerOfficeNumber,
-                    centerIntroduce = centerIntroduce,
-                    profileImageUri = profileImageUri,
-                    isEditState = isEditState,
-                    onCenterOfficeNumberChanged = ::setCenterOfficeNumber,
-                    onCenterIntroduceChanged = ::setCenterIntroduce,
-                    onProfileImageUriChanged = ::setProfileImageUrl,
-                    updateCenterProfile = ::updateCenterProfile,
-                    setEditState = ::setEditState,
-                )
+            centerProfile?.let { profile ->
+                CareStateAnimator(
+                    targetState = isEditState,
+                    transitionCondition = isEditState
+                ) {
+                    CenterProfileScreen(
+                        isMyProfile = isMyProfile,
+                        snackbarHostState = snackbarHostState,
+                        centerProfile = profile,
+                        centerOfficeNumber = centerOfficeNumber,
+                        centerIntroduce = centerIntroduce,
+                        profileImageUri = profileImageUri,
+                        isEditState = isEditState,
+                        onCenterOfficeNumberChanged = ::setCenterOfficeNumber,
+                        onCenterIntroduceChanged = ::setCenterIntroduce,
+                        onProfileImageUriChanged = ::setProfileImageUrl,
+                        updateCenterProfile = ::updateCenterProfile,
+                        setEditState = ::setEditState,
+                    )
+                }
+
             }
         }
     }
@@ -283,7 +290,7 @@ internal fun CenterProfileScreen(
                                     contentDescription = null,
                                     contentScale = ContentScale.FillWidth,
                                     modifier = Modifier
-                                         .fillMaxWidth()
+                                        .fillMaxWidth()
                                         .clip(RoundedCornerShape(6.dp))
                                 )
                             } else {
