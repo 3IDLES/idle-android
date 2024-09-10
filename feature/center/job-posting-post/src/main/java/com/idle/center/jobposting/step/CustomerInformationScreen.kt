@@ -37,7 +37,6 @@ import com.idle.center.jobposting.JobPostingStep
 import com.idle.center.jobposting.JobPostingStep.CUSTOMER_INFORMATION
 import com.idle.center.jobposting.LogJobPostingStep
 import com.idle.designresource.R
-import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareButtonMedium
 import com.idle.designsystem.compose.component.CareChipBasic
 import com.idle.designsystem.compose.component.CareChipShort
@@ -241,7 +240,11 @@ internal fun CustomerInformationScreen(
                 value = disease,
                 onValueChanged = onDiseaseChanged,
                 hint = stringResource(id = R.string.disease_hint),
-                onDone = { setJobPostingStep(JobPostingStep.findStep(CUSTOMER_INFORMATION.step + 1)) },
+                onDone = {
+                    if (clientName.isNotBlank() && gender != Gender.NONE && birthYear.isNotBlank() && weight.isNotBlank() && mentalStatus != MentalStatus.UNKNOWN) {
+                        setJobPostingStep(JobPostingStep.findStep(CUSTOMER_INFORMATION.step + 1))
+                    }
+                },
                 modifier = Modifier.fillMaxWidth(),
             )
         }
@@ -265,7 +268,7 @@ internal fun CustomerInformationScreen(
 
             CareButtonMedium(
                 text = stringResource(id = R.string.next),
-                enable = gender != Gender.NONE && birthYear.isNotBlank() && weight.isNotBlank() && mentalStatus != MentalStatus.UNKNOWN,
+                enable = clientName.isNotBlank() && gender != Gender.NONE && birthYear.isNotBlank() && weight.isNotBlank() && mentalStatus != MentalStatus.UNKNOWN,
                 onClick = {
                     if ((birthYear.toIntOrNull() ?: return@CareButtonMedium) < 1900) {
                         showSnackBar("출생년도가 잘못되었습니다.|Error")
