@@ -311,28 +311,14 @@ private fun WorkerProfileCard(
                 Spacer(modifier = Modifier.weight(1f))
             }
 
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                CareButtonCardMedium(
-                    text = "프로필 보기",
-                    onClick = { /*TODO*/ },
-                    containerColor = CareTheme.colors.white000,
-                    textColor = CareTheme.colors.gray300,
-                    border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
-                    modifier = Modifier.weight(1f),
-                )
-
-                CareButtonCardMedium(
-                    text = stringResource(id = R.string.recruiting),
-                    onClick = { /*TODO*/ },
-                    containerColor = CareTheme.colors.white000,
-                    textColor = CareTheme.colors.orange500,
-                    border = BorderStroke(width = 1.dp, color = CareTheme.colors.orange400),
-                    modifier = Modifier.weight(1f),
-                )
-            }
+            CareButtonCardMedium(
+                text = "프로필 보기",
+                onClick = { navigateTo(DeepLinkDestination.WorkerProfile(applicant.carerId)) },
+                containerColor = CareTheme.colors.white000,
+                textColor = CareTheme.colors.gray300,
+                border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
+                modifier = Modifier.weight(1f),
+            )
         }
     }
 
