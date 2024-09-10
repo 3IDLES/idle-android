@@ -42,6 +42,7 @@ fun PlaceDetailScreen(
             isScrollGesturesEnabled = true,
             isZoomControlEnabled = true,
             isRotateGesturesEnabled = true,
+            isZoomGesturesEnabled = true,
             modifier = Modifier
                 .padding(paddingValue)
                 .fillMaxSize(),

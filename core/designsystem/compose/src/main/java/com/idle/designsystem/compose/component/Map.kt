@@ -34,6 +34,7 @@ fun CareMap(
     isScaleBarEnabled: Boolean = false,
     isScrollGesturesEnabled: Boolean = false,
     isZoomControlEnabled: Boolean = false,
+    isZoomGesturesEnabled: Boolean = false,
     isTiltGesturesEnabled: Boolean = false,
     isRotateGesturesEnabled: Boolean = false,
     pathColor: Color = CareTheme.colors.orange400,
@@ -88,6 +89,7 @@ fun CareMap(
                 this.isZoomControlEnabled = isZoomControlEnabled
                 this.isTiltGesturesEnabled = isTiltGesturesEnabled
                 this.isRotateGesturesEnabled = isRotateGesturesEnabled
+                this.isZoomGesturesEnabled = isZoomGesturesEnabled
             }
 
             naverMap.setOnMapClickListener { _, _ ->
