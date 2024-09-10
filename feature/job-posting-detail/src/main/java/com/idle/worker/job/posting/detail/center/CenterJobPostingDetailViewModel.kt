@@ -108,8 +108,8 @@ class CenterJobPostingDetailViewModel @Inject constructor(
                 applyDeadline = editJobPostingDetail.applyDeadline.toString()
                     .ifBlank { null },
             ).onSuccess {
+                getCenterJobPostingDetail(_jobPostingDetail.value?.id ?: return@launch)
                 baseEvent(CareBaseEvent.ShowSnackBar("수정이 완료되었어요.|SUCCESS"))
-                getCenterJobPostingDetailUseCase(_jobPostingDetail.value?.id ?: return@launch)
                 _jobPostingState.value = JobPostingDetailState.SUMMARY
             }.onFailure { handleFailure(it as HttpResponseException) }
         }
