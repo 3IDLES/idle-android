@@ -13,6 +13,7 @@ import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.binding.repeatOnStarted
 import com.idle.domain.model.auth.UserType
 import com.idle.setting.FAQ_URL
+import com.idle.setting.INQUIRY
 import com.idle.setting.PRIVACY_POLICY_URL
 import com.idle.setting.R
 import com.idle.setting.SettingEvent
@@ -60,7 +61,7 @@ internal class WorkerSettingFragment :
             SettingEvent.FAQ -> navigateToUri(FAQ_URL)
             SettingEvent.PrivacyPolicy -> navigateToUri(PRIVACY_POLICY_URL)
             SettingEvent.TermsAndPolicies -> navigateToUri(TERMS_AND_POLICES_URL)
-            SettingEvent.Inquiry -> {}
+            SettingEvent.Inquiry -> navigateToUri(INQUIRY)
             SettingEvent.Withdrawal -> fragmentViewModel.baseEvent(
                 NavigateTo(
                     destination = Withdrawal(UserType.WORKER),
