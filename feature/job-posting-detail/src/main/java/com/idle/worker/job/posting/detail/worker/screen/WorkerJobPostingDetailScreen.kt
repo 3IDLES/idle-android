@@ -138,7 +138,7 @@ internal fun WorkerJobPostingDetailScreen(
 
                 CareCard(
                     title = stringResource(id = R.string.inquiry_by_call),
-                    description = "${jobPostingDetail.centerName} | 010-1234-5678",
+                    description = "${jobPostingDetail.centerName} | ${jobPostingDetail.centerOfficeNumber}",
                     titleLeftComponent = {
                         Image(
                             painter = painterResource(R.drawable.ic_call),
@@ -146,7 +146,7 @@ internal fun WorkerJobPostingDetailScreen(
                         )
                     },
                     onClick = {
-                        val number = "tel:010-1234-5678"
+                        val number = "tel:${jobPostingDetail.centerOfficeNumber}"
                         val dialIntent = Intent(Intent.ACTION_DIAL, number.toUri())
                         dialResultLauncher.launch(dialIntent)
                     },

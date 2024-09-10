@@ -217,6 +217,7 @@
     <string name="privacy_and_policy">개인정보 처리 방침</string>
     <string name="faq">자주 묻는 질문</string>
     <string name="inquiry">문의하기</string>
+    <string name="call">통화하기</string>
     <string name="inquiry_by_call">전화로 문의하기</string>
     <string name="inquiry_by_chat">채팅으로 문의하기</string>
     <string name="app_update_title">최신 버전의 앱이 있어요</string>

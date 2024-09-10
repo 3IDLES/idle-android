@@ -348,8 +348,6 @@ internal fun JobPostingScreen(
     showSnackBar: (String) -> Unit,
     navigateToHome: () -> Unit,
 ) {
-    val onBackPressedDispatcher =
-        LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val focusManager = LocalFocusManager.current
     val coroutineScope = rememberCoroutineScope()
     val startDateTime by rememberSaveable { mutableStateOf(calendarDate) }

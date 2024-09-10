@@ -8,7 +8,6 @@ data class WorkerJobPosting(
     override val id: String,
     override val distance: Int,
     override val jobPostingType: JobPostingType,
-    override val applyDeadline: LocalDate,
     override val isFavorite: Boolean,
     val age: Int,
     val applyDeadlineType: ApplyDeadlineType,
@@ -22,5 +21,6 @@ data class WorkerJobPosting(
     val startTime: String,
     val endTime: String,
     val weekdays: List<DayOfWeek>,
+    val applyDeadline: LocalDate,
     val applyTime: LocalDateTime?,
-) : JobPosting(id, distance, jobPostingType, applyDeadline, isFavorite)
+) : JobPosting(id, distance, jobPostingType, isFavorite)

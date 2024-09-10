@@ -8,7 +8,6 @@ data class WorkerJobPostingDetail(
     override val id: String,
     override val distance: Int,
     override val jobPostingType: JobPostingType,
-    override val applyDeadline: LocalDate,
     override val isFavorite: Boolean,
     val longitude: String,
     val latitude: String,
@@ -21,6 +20,7 @@ data class WorkerJobPostingDetail(
     val lotNumberAddress: String,
     val gender: Gender,
     val age: Int,
+    val applyDeadline: LocalDate,
     val weight: Int?,
     val careLevel: Int,
     val mentalStatus: MentalStatus,
@@ -37,4 +37,5 @@ data class WorkerJobPostingDetail(
     val centerName: String,
     val centerRoadNameAddress: String,
     val applyTime: LocalDateTime?,
-) : JobPosting(id, distance, jobPostingType, applyDeadline, isFavorite)
+    val centerOfficeNumber: String,
+) : JobPosting(id, distance, jobPostingType, isFavorite)
