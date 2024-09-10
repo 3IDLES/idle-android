@@ -442,7 +442,7 @@ internal fun CrawlingJobPostingDetailScreen(
                             verticalArrangement = Arrangement.spacedBy(8.dp),
                         ) {
                             Text(
-                                text = jobPostingDetail.applyDeadline.toString(),
+                                text = jobPostingDetail.applyDeadline,
                                 style = CareTheme.typography.body2,
                                 color = CareTheme.colors.gray900,
                             )

@@ -2,6 +2,7 @@
 
 package com.idle.worker.profile
 
+import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.activity.compose.ManagedActivityResultLauncher
@@ -44,10 +45,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
@@ -59,6 +62,7 @@ import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareBottomSheetLayout
+import com.idle.designsystem.compose.component.CareButtonCardMedium
 import com.idle.designsystem.compose.component.CareButtonMedium
 import com.idle.designsystem.compose.component.CareButtonRound
 import com.idle.designsystem.compose.component.CareClickableTextField
@@ -184,6 +188,7 @@ internal fun WorkerProfileScreen(
     onJobSearchStatusChanged: (JobSearchStatus) -> Unit,
     updateWorkerProfile: () -> Unit,
 ) {
+    val context = LocalContext.current
     val focusManager = LocalFocusManager.current
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val scrollState = rememberScrollState()
@@ -537,6 +542,15 @@ internal fun WorkerProfileScreen(
                             )
                         }
                     }
+
+                    CareButtonCardMedium(
+                        text = stringResource(id = R.string.inquiry_by_call),
+                        onClick = {
+                            val number = "tel:${workerProfile.phoneNumber}"
+                            val dialIntent = Intent(Intent.ACTION_DIAL, number.toUri())
+                            context.startActivity(dialIntent)
+                        },
+                    )
 
                     HorizontalDivider(
                         thickness = 8.dp,

@@ -1,23 +1,13 @@
 package com.idle.domain.model.jobposting
 
-import java.time.LocalDate
-import java.time.ZoneId
-
 abstract class JobPosting(
     open val id: String,
     open val distance: Int,
     open val jobPostingType: JobPostingType,
-    open val applyDeadline: LocalDate,
     open val isFavorite: Boolean,
 ) {
-    fun calculateDeadline(): Long {
-        val seoulZone = ZoneId.of("Asia/Seoul")
-        val nowDate = LocalDate.now(seoulZone)
-        return applyDeadline.toEpochDay() - nowDate.toEpochDay()
-    }
-
     fun getDistanceInMinutes(): String = when (distance) {
-        in 0..200 -> "5분 이6654545내"
+        in 0..200 -> "5분 이내"
         in 201..400 -> "5~10분"
         in 401..700 -> "10~15분"
         in 701..1000 -> "15~20분"
