@@ -112,6 +112,7 @@ internal class CenterJobPostingDetailFragment : BaseComposeFragment() {
                                 if (it) setJobPostingState(JobPostingDetailState.EDIT)
                                 else setJobPostingState(JobPostingDetailState.SUMMARY)
                             },
+                            showSnackBar = { baseEvent(CareBaseEvent.ShowSnackBar(it)) }
                         )
 
                         JobPostingDetailState.PREVIEW -> JobPostingPreviewScreen(

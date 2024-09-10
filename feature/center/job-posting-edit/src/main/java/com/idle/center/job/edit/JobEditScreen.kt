@@ -72,14 +72,16 @@ import com.idle.domain.model.auth.Gender
 import com.idle.domain.model.jobposting.ApplyDeadlineType
 import com.idle.domain.model.jobposting.ApplyMethod
 import com.idle.domain.model.jobposting.DayOfWeek
+import com.idle.domain.model.jobposting.EditJobPostingDetail
 import com.idle.domain.model.jobposting.LifeAssistance
 import com.idle.domain.model.jobposting.MentalStatus
 import com.idle.domain.model.jobposting.PayType
-import com.idle.domain.model.jobposting.EditJobPostingDetail
 import com.idle.post.code.PostCodeFragment
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.ZoneId
+import java.time.format.DateTimeParseException
 
 @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterialApi::class)
 @Composable
@@ -111,6 +113,7 @@ fun JobEditScreen(
     applyDeadline: LocalDate?,
     updateJobPosting: (EditJobPostingDetail) -> Unit,
     setEditState: (Boolean) -> Unit,
+    showSnackBar: (String) -> Unit,
 ) {
     var localWeekDays by remember { mutableStateOf(weekDays) }
     var localWorkStartTime by remember { mutableStateOf(workStartTime) }
@@ -246,14 +249,28 @@ fun JobEditScreen(
                                 text = stringResource(id = R.string.save),
                                 onClick = {
                                     coroutineScope.launch {
-                                        val startTime =
+                                        val startDateTime =
                                             "${
                                                 if (tempWorkStartAmPm == "오전" && tempWorkStartHour == "12") "00"
                                                 else if (tempWorkStartAmPm == "오전") tempWorkStartHour
                                                 else if (tempWorkStartAmPm == "오후" && tempWorkStartHour == "12") "12"
                                                 else tempWorkStartHour.toInt() + 12
                                             }" + ":${tempWorkStartMinute}"
-                                        localWorkStartTime = startTime
+
+                                        if (localWorkEndTime.isNotEmpty()) {
+                                            try {
+                                                val startTime = LocalTime.parse(startDateTime)
+                                                val endTime = LocalTime.parse(localWorkEndTime)
+                                                if (startTime.isBefore(endTime)) {
+                                                    localWorkStartTime = startDateTime
+                                                } else {
+                                                    showSnackBar("근무 시작 시간은 근무 종료 시간보다 빨라야 합니다.|ERROR")
+                                                }
+                                            } catch (e: DateTimeParseException) {
+                                                showSnackBar("근무 시작 시간은 근무 종료 시간보다 빨라야 합니다.|ERROR")
+                                            }
+                                        }
+
                                         sheetState.hide()
                                     }
                                 },
@@ -338,13 +355,26 @@ fun JobEditScreen(
                                 text = stringResource(id = R.string.save),
                                 onClick = {
                                     coroutineScope.launch {
-                                        val endTime = "${
+                                        val endDateTime = "${
                                             if (tempWorkEndAmPm == "오전" && tempWorkEndHour == "12") "00"
                                             else if (tempWorkEndAmPm == "오전") tempWorkEndHour
                                             else if (tempWorkEndAmPm == "오후" && tempWorkEndHour == "12") "12"
                                             else tempWorkEndHour.toInt() + 12
                                         }" + ":${tempWorkEndMinute}"
-                                        localWorkEndTime = endTime
+
+                                        if (localWorkStartTime.isNotEmpty()) {
+                                            try {
+                                                val startTime = LocalTime.parse(localWorkStartTime)
+                                                val endTime = LocalTime.parse(endDateTime)
+                                                if (endTime.isAfter(startTime)) {
+                                                    localWorkEndTime = endDateTime
+                                                } else {
+                                                    showSnackBar("근무 종료 시간은 근무 시작 시간보다 빨라야 합니다.|ERROR")
+                                                }
+                                            } catch (e: DateTimeParseException) {
+                                                showSnackBar("근무 종료 시간은 근무 시작 시간보다 빨라야 합니다.|ERROR")
+                                            }
+                                        }
                                         sheetState.hide()
                                     }
                                 },
@@ -397,11 +427,32 @@ fun JobEditScreen(
                             text = stringResource(id = R.string.save),
                             style = CareTheme.typography.subtitle2,
                             color = CareTheme.colors.orange500,
-                            modifier = Modifier.clickable(
-                                enabled = localWeekDays.isNotEmpty() &&
-                                        applyMethod.isNotEmpty() &&
-                                        clientName.isNotBlank()
-                            ) {
+                            modifier = Modifier.clickable {
+                                if (localWeekDays.isEmpty()) {
+                                    showSnackBar("근무 요일은 최소한 하나 이상을 선택해야 합니다.|ERROR")
+                                    return@clickable
+                                }
+
+                                if (localApplyMethod.isEmpty()) {
+                                    showSnackBar("지원 방법은 최소한 하나 이상을 선택해야 합니다.|ERROR")
+                                    return@clickable
+                                }
+
+                                if (localClientName.isBlank()) {
+                                    showSnackBar("고객의 이름은 비어있을 수 없습니다.|ERROR")
+                                    return@clickable
+                                }
+
+                                if ((localPayAmount.toIntOrNull() ?: return@clickable) < 9860) {
+                                    showSnackBar("급여는 최저 시급인 9860원보다 많아야 합니다.|ERROR")
+                                    return@clickable
+                                }
+
+                                if ((localBirthYear.toIntOrNull() ?: return@clickable) < 1900) {
+                                    showSnackBar("출생년도는 1900년 이후로 입력 가능합니다.|Error")
+                                    return@clickable
+                                }
+
                                 updateJobPosting(
                                     EditJobPostingDetail(
                                         weekdays = localWeekDays,
