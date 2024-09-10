@@ -47,6 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
+            android:onClick="@{() -> viewModel.clickInquiry()}"
             app:title="@string/inquiry" />
 
         <com.google.android.material.divider.MaterialDivider

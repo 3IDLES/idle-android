@@ -34,7 +34,7 @@ fun CareTag(
             style = CareTheme.typography.caption,
             color = textColor,
             maxLines = 1,
-            modifier = Modifier.padding(horizontal = 4.dp, vertical = 0.5.dp),
+            modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp),
         )
     }
 }

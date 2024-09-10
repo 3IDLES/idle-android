@@ -48,6 +48,7 @@ class CenterSettingViewModel @Inject constructor(
     fun clickWithdrawal() = centerSettingEvent(SettingEvent.Withdrawal)
     fun clickCenterProfile() = centerSettingEvent(SettingEvent.Profile)
     fun clickFAQ() = centerSettingEvent(SettingEvent.FAQ)
+    fun clickInquiry() = centerSettingEvent(SettingEvent.Inquiry)
     fun clickTermsAndPolicies() = centerSettingEvent(SettingEvent.TermsAndPolicies)
     fun clickPrivacyAndPolicy() = centerSettingEvent(SettingEvent.PrivacyPolicy)
 

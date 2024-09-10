@@ -2,7 +2,6 @@ package com.tgyuu.applicant.inquiry
 
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -28,7 +27,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
@@ -39,7 +37,6 @@ import com.idle.analytics.helper.TrackScreenViewEvent
 import com.idle.binding.DeepLinkDestination
 import com.idle.binding.base.CareBaseEvent
 import com.idle.compose.base.BaseComposeFragment
-import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonCardMedium
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
@@ -47,6 +44,9 @@ import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.jobposting.Applicant
 import com.idle.domain.model.jobposting.JobPostingSummary
+import com.idle.domain.model.profile.JobSearchStatus.NO
+import com.idle.domain.model.profile.JobSearchStatus.UNKNOWN
+import com.idle.domain.model.profile.JobSearchStatus.YES
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -227,26 +227,37 @@ private fun WorkerProfileCard(
                 modifier = Modifier.padding(bottom = 12.dp),
             ) {
                 AsyncImage(
-                    model = R.drawable.ic_worker_profile_default,
+                    model = applicant.profileImageUrl ?: R.drawable.ic_worker_profile_default,
                     contentDescription = null,
                     modifier = Modifier
                         .size(72.dp)
                         .clip(CircleShape)
-                        .padding(end = 16.dp),
+                        .padding(end = 16.dp, bottom = 4.dp),
                 )
 
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(
-                        space = 2.dp,
-                        alignment = Alignment.CenterVertically,
-                    ),
+                    verticalArrangement = Arrangement.spacedBy(2.dp),
                     horizontalAlignment = Alignment.Start
                 ) {
-                    CareTag(
-                        text = applicant.jobSearchStatus.displayName,
-                        textColor = CareTheme.colors.orange500,
-                        backgroundColor = CareTheme.colors.orange100,
-                    )
+                    when (applicant.jobSearchStatus) {
+                        YES -> CareTag(
+                            text = applicant.jobSearchStatus.displayName,
+                            textColor = CareTheme.colors.orange500,
+                            backgroundColor = CareTheme.colors.orange100,
+                        )
+
+                        NO -> CareTag(
+                            text = applicant.jobSearchStatus.displayName,
+                            textColor = CareTheme.colors.gray300,
+                            backgroundColor = CareTheme.colors.gray050,
+                        )
+
+                        UNKNOWN -> CareTag(
+                            text = applicant.jobSearchStatus.displayName,
+                            textColor = CareTheme.colors.gray300,
+                            backgroundColor = CareTheme.colors.gray100,
+                        )
+                    }
 
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -281,7 +292,7 @@ private fun WorkerProfileCard(
                             modifier = Modifier.padding(horizontal = 8.dp),
                         )
 
-                        if(applicant.experienceYear != null) {
+                        if (applicant.experienceYear != null) {
                             Text(
                                 text = "${applicant.experienceYear}년차",
                                 style = CareTheme.typography.body2,
@@ -298,12 +309,6 @@ private fun WorkerProfileCard(
                 }
 
                 Spacer(modifier = Modifier.weight(1f))
-
-                Image(
-                    painter = painterResource(id = R.drawable.ic_star_gray),
-                    contentDescription = null,
-                    modifier = Modifier.clickable { },
-                )
             }
 
             Row(

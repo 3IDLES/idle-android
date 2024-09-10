@@ -47,6 +47,7 @@ class WorkerSettingViewModel @Inject constructor(
     fun clickWithdrawal() = workerSettingEvent(SettingEvent.Withdrawal)
     fun clickProfile() = workerSettingEvent(SettingEvent.Profile)
     fun clickFAQ() = workerSettingEvent(SettingEvent.FAQ)
+    fun clickInquiry() = workerSettingEvent(SettingEvent.Inquiry)
     fun clickTermsAndPolicies() = workerSettingEvent(SettingEvent.TermsAndPolicies)
     fun clickPrivacyAndPolicy() = workerSettingEvent(SettingEvent.PrivacyPolicy)
 
