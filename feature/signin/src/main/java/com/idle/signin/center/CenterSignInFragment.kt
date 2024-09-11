@@ -14,12 +14,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -96,7 +93,6 @@ internal fun CenterSignInScreen(
     navigateToNewPassword: () -> Unit = {},
 ) {
     val focusManager = LocalFocusManager.current
-    val focusRequester = remember { FocusRequester() }
 
     BackHandler { navigateToAuth() }
 
@@ -123,11 +119,6 @@ internal fun CenterSignInScreen(
         },
         modifier = Modifier.addFocusCleaner(focusManager),
     ) { paddingValue ->
-
-        LaunchedEffect(Unit) {
-            focusRequester.requestFocus()
-        }
-
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
@@ -149,9 +140,7 @@ internal fun CenterSignInScreen(
                     hint = stringResource(id = R.string.id_hint),
                     onValueChanged = onCenterIdChanged,
                     onDone = { if (centerId.isNotBlank()) focusManager.moveFocus(FocusDirection.Down) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .focusRequester(focusRequester),
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
 

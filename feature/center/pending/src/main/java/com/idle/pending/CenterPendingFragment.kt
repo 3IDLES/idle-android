@@ -177,7 +177,8 @@ private fun CenterPendingScreen(
             }
 
             CareButtonLarge(
-                text = "인증 요청하기",
+                text = if (status == CenterManagerAccountStatus.NEW) "인증 요청하기"
+                else "관리자 인증 요청 중이에요",
                 onClick = sendVerificationRequest,
                 enable = status == CenterManagerAccountStatus.NEW,
                 modifier = Modifier
