@@ -1,6 +1,7 @@
 package com.idle.setting.center
 
 import androidx.lifecycle.viewModelScope
+import com.idle.analytics.helper.AnalyticsHelper
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.error.HttpResponseException
@@ -20,6 +21,7 @@ import javax.inject.Inject
 class CenterSettingViewModel @Inject constructor(
     private val getLocalMyCenterProfileUseCase: GetLocalMyCenterProfileUseCase,
     private val logoutCenterUseCase: LogoutCenterUseCase,
+    private val analyticsHelper: AnalyticsHelper,
 ) : BaseViewModel() {
     private val _centerProfile =
         MutableStateFlow<CenterProfile>(CenterProfile("", "", "", "", "", 0.0, 0.0, "", ""))
@@ -40,6 +42,7 @@ class CenterSettingViewModel @Inject constructor(
 
     fun logout() = viewModelScope.launch {
         logoutCenterUseCase().onSuccess {
+            analyticsHelper.setUserId(null)
             baseEvent(CareBaseEvent.NavigateToAuthWithClearBackStack("로그아웃이 완료되었습니다.|SUCCESS"))
         }.onFailure { handleFailure(it as HttpResponseException) }
     }

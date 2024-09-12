@@ -14,7 +14,7 @@ import com.idle.analytics.AnalyticsEvent.Types.SCREEN_VIEW
 
 abstract class AnalyticsHelper {
     abstract fun logEvent(event: AnalyticsEvent)
-    abstract fun setUserId(userId: String)
+    abstract fun setUserId(userId: String?)
 
     // XML로 구성된 화면이 존재하기 때문에 public으로 냅둠
     fun logScreenView(screenName: String) {

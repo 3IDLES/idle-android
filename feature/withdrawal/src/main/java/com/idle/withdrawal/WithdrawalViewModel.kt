@@ -1,6 +1,7 @@
 package com.idle.withdrawal
 
 import androidx.lifecycle.viewModelScope
+import com.idle.analytics.helper.AnalyticsHelper
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.CountDownTimer
@@ -26,6 +27,7 @@ class WithdrawalViewModel @Inject constructor(
     private val withdrawalCenterUseCase: WithdrawalCenterUseCase,
     private val withdrawalWorkerUseCase: WithdrawalWorkerUseCase,
     private val countDownTimer: CountDownTimer,
+    private val analyticsHelper: AnalyticsHelper,
 ) : BaseViewModel() {
     private val _withdrawalStep = MutableStateFlow<WithdrawalStep>(WithdrawalStep.REASON)
     internal val withdrawalStep = _withdrawalStep.asStateFlow()
@@ -157,6 +159,7 @@ class WithdrawalViewModel @Inject constructor(
                 .joinToString("|"),
             password = password.value
         ).onSuccess {
+            analyticsHelper.setUserId(null)
             baseEvent(CareBaseEvent.NavigateToAuthWithClearBackStack("회원탈퇴가 완료되었어요.|ERROR"))
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
@@ -167,6 +170,7 @@ class WithdrawalViewModel @Inject constructor(
                 .sortedBy { it.ordinal }
                 .joinToString("|"),
         ).onSuccess {
+            analyticsHelper.setUserId(null)
             baseEvent(CareBaseEvent.NavigateToAuthWithClearBackStack("회원탈퇴가 완료되었어요.|ERROR"))
         }.onFailure { handleFailure(it as HttpResponseException) }
     }

@@ -12,7 +12,7 @@ class AmplitudeAnalyticsHelper @Inject constructor(
         amplitude.track(event = event.toAmplitudeEvent())
     }
 
-    override fun setUserId(userId: String) {
+    override fun setUserId(userId: String?) {
         amplitude.setUserId(userId)
     }
 

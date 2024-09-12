@@ -11,8 +11,8 @@ class DebugAnalyticsHelper @Inject constructor(
         Log.d("DebugAnalyticsHelper", "${this.userId}, $event")
     }
 
-    override fun setUserId(userId: String) {
-        this.userId = userId
+    override fun setUserId(userId: String?) {
+        this.userId = userId ?: ""
         Log.d("DebugAnalyticsHelper", "setUserId 호출 : ${this.userId}")
     }
 }
