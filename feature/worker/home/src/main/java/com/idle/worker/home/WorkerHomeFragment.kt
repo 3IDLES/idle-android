@@ -1,9 +1,11 @@
 package com.idle.worker.home
 
+import android.util.Log
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -34,6 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
@@ -47,6 +50,7 @@ import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonCardLarge
+import com.idle.designsystem.compose.component.CareButtonMedium
 import com.idle.designsystem.compose.component.CareDialog
 import com.idle.designsystem.compose.component.CareHeadingTopBar
 import com.idle.designsystem.compose.component.CareSnackBar
@@ -184,52 +188,89 @@ internal fun WorkerHomeScreen(
             )
         },
     ) { paddingValue ->
-        Column(
+        Box(
             modifier = Modifier
                 .padding(paddingValue)
                 .padding(top = 20.dp)
                 .fillMaxSize(),
         ) {
-            LazyColumn(
-                state = listState,
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier
-                    .padding(start = 20.dp, end = 20.dp)
-                    .fillMaxSize()
-            ) {
-                items(
-                    items = workerJobPostings,
-                    key = { it.id },
-                ) { jobPosting ->
-                    when (jobPosting.jobPostingType) {
-                        JobPostingType.CAREMEET -> WorkerRecruitmentCard(
-                            jobPosting = jobPosting as WorkerJobPosting,
-                            profile = profile,
-                            showDialog = {
-                                selectedJobPosting = it
-                                showDialog = true
-                            },
-                            addFavoriteJobPosting = addFavoriteJobPosting,
-                            removeFavoriteJobPosting = removeFavoriteJobPosting,
-                            navigateTo = navigateTo,
-                        )
+            if (workerJobPostings.isEmpty()) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .fillMaxWidth()
+                ) {
+                    Text(
+                        text = "아직 해당 지역의 공고가 없어요.",
+                        style = CareTheme.typography.heading2,
+                        color = CareTheme.colors.gray900,
+                        modifier = Modifier.padding(bottom = 8.dp),
+                    )
 
-                        else -> WorkerWorkNetCard(
-                            jobPosting = jobPosting as CrawlingJobPosting,
-                            profile = profile,
-                            addFavoriteJobPosting = addFavoriteJobPosting,
-                            removeFavoriteJobPosting = removeFavoriteJobPosting,
-                            navigateTo = navigateTo,
+                    Text(
+                        text = "나의 위치를 근처 다른 지역으로 바꿔\n" +
+                                "새로운 공고를 탐색해보세요.\n" +
+                                "나의 위치는 추후에 다시 변경할 수 있어요.",
+                        style = CareTheme.typography.body3,
+                        color = CareTheme.colors.gray300,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(bottom = 20.dp),
+                    )
+
+                    CareButtonMedium(
+                        text = "내 프로필 수정",
+                        textColor = CareTheme.colors.gray300,
+                        containerColor = CareTheme.colors.white000,
+                        border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray200),
+                        onClick = {
+                            Log.d("test", "버튼 클릭!")
+                            navigateTo(DeepLinkDestination.WorkerProfile())
+                        },
+                    )
+                }
+            } else {
+                LazyColumn(
+                    state = listState,
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier
+                        .padding(start = 20.dp, end = 20.dp)
+                        .fillMaxSize()
+                ) {
+                    items(
+                        items = workerJobPostings,
+                        key = { it.id },
+                    ) { jobPosting ->
+                        when (jobPosting.jobPostingType) {
+                            JobPostingType.CAREMEET -> WorkerRecruitmentCard(
+                                jobPosting = jobPosting as WorkerJobPosting,
+                                profile = profile,
+                                showDialog = {
+                                    selectedJobPosting = it
+                                    showDialog = true
+                                },
+                                addFavoriteJobPosting = addFavoriteJobPosting,
+                                removeFavoriteJobPosting = removeFavoriteJobPosting,
+                                navigateTo = navigateTo,
+                            )
+
+                            else -> WorkerWorkNetCard(
+                                jobPosting = jobPosting as CrawlingJobPosting,
+                                profile = profile,
+                                addFavoriteJobPosting = addFavoriteJobPosting,
+                                removeFavoriteJobPosting = removeFavoriteJobPosting,
+                                navigateTo = navigateTo,
+                            )
+                        }
+                    }
+
+                    item {
+                        Spacer(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(28.dp)
                         )
                     }
-                }
-
-                item {
-                    Spacer(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(28.dp)
-                    )
                 }
             }
         }
@@ -237,6 +278,7 @@ internal fun WorkerHomeScreen(
 
     TrackScreenViewEvent(screenName = "carer_home_screen")
 }
+
 
 @Composable
 private fun WorkerRecruitmentCard(

@@ -543,20 +543,22 @@ internal fun WorkerProfileScreen(
                         }
                     }
 
-                    CareButtonCardMedium(
-                        text = stringResource(id = R.string.call),
-                        containerColor = CareTheme.colors.white000,
-                        textColor = CareTheme.colors.orange500,
-                        border = BorderStroke(width = 1.dp, color = CareTheme.colors.orange400),
-                        onClick = {
-                            val number = "tel:${workerProfile.phoneNumber}"
-                            val dialIntent = Intent(Intent.ACTION_DIAL, number.toUri())
-                            context.startActivity(dialIntent)
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 24.dp, start = 35.dp, end = 35.dp),
-                    )
+                    if (!isMyProfile) {
+                        CareButtonCardMedium(
+                            text = stringResource(id = R.string.call),
+                            containerColor = CareTheme.colors.white000,
+                            textColor = CareTheme.colors.orange500,
+                            border = BorderStroke(width = 1.dp, color = CareTheme.colors.orange400),
+                            onClick = {
+                                val number = "tel:${workerProfile.phoneNumber}"
+                                val dialIntent = Intent(Intent.ACTION_DIAL, number.toUri())
+                                context.startActivity(dialIntent)
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 24.dp, start = 35.dp, end = 35.dp),
+                        )
+                    }
 
                     HorizontalDivider(
                         thickness = 8.dp,
