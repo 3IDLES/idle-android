@@ -158,6 +158,13 @@ class CenterSignUpViewModel @Inject constructor(
     }
 
     internal fun signUpCenter() = viewModelScope.launch {
+        val passwordPattern = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d!@#\$%^&*()_+=-]{8,20}$".toRegex()
+
+        if (!_centerPassword.value.matches(passwordPattern)) {
+            baseEvent(CareBaseEvent.ShowSnackBar("비밀번호가 형식에 맞지 않습니다.|ERROR"))
+            return@launch
+        }
+
         signUpCenterUseCase(
             identifier = _centerId.value,
             password = _centerPassword.value,
