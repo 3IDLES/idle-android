@@ -51,6 +51,7 @@ import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareBottomSheetLayout
 import com.idle.designsystem.compose.component.CareButtonLine
+import com.idle.designsystem.compose.component.CareButtonMedium
 import com.idle.designsystem.compose.component.CareCard
 import com.idle.designsystem.compose.component.CareDialog
 import com.idle.designsystem.compose.component.CareMap
@@ -770,15 +771,16 @@ internal fun WorkerJobPostingDetailScreen(
                         modifier = Modifier.weight(1f),
                     )
 
-                    CareButtonLine(
-                        text = stringResource(id = R.string.recruit),
+                    val applyEnable = jobPostingDetail.applyTime == null
+
+                    CareButtonMedium(
+                        text = if (applyEnable) stringResource(id = R.string.recruit)
+                        else stringResource(id = R.string.recruit_complete),
                         onClick = {
-                            applyMethod = ApplyMethod.CALLING
+                            applyMethod = ApplyMethod.APP
                             showDialog = true
                         },
-                        containerColor = CareTheme.colors.orange500,
-                        borderColor = CareTheme.colors.orange500,
-                        textColor = CareTheme.colors.white000,
+                        enable = applyEnable,
                         modifier = Modifier.weight(1f),
                     )
                 }

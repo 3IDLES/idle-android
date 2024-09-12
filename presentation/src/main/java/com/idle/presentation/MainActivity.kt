@@ -1,10 +1,12 @@
 package com.idle.presentation
 
+import android.animation.Animator
+import android.animation.ValueAnimator
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings.ACTION_WIFI_SETTINGS
 import android.view.View
-import android.view.animation.TranslateAnimation
+import android.view.ViewGroup
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -206,18 +208,58 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun slideUp(view: View) {
-        val slide = TranslateAnimation(0f, 0f, view.height.toFloat(), 0f)
+        view.measure(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        val targetHeight = view.measuredHeight
+        view.layoutParams.height = 0
+
+        val slide = ValueAnimator.ofInt(0, targetHeight)
+        slide.addUpdateListener { valueAnimator ->
+            val animatedValue = valueAnimator.animatedValue as Int
+            val layoutParams = view.layoutParams
+            layoutParams.height = animatedValue
+            view.layoutParams = layoutParams
+        }
         slide.duration = 300
-        slide.fillAfter = true
-        view.startAnimation(slide)
-        view.visibility = View.VISIBLE
+        slide.addListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator) {
+                view.visibility = View.VISIBLE
+            }
+
+            override fun onAnimationEnd(animation: Animator) {
+                view.isClickable = true
+            }
+
+            override fun onAnimationCancel(animation: Animator) {}
+            override fun onAnimationRepeat(animation: Animator) {}
+        })
+        slide.start()
     }
 
     private fun slideDown(view: View) {
-        val slide = TranslateAnimation(0f, 0f, 0f, view.height.toFloat())
+        val initialHeight = view.measuredHeight
+
+        val slide = ValueAnimator.ofInt(initialHeight, 0)
+        slide.addUpdateListener { valueAnimator ->
+            val animatedValue = valueAnimator.animatedValue as Int
+            val layoutParams = view.layoutParams
+            layoutParams.height = animatedValue
+            view.layoutParams = layoutParams
+        }
         slide.duration = 300
-        slide.fillAfter = true
-        view.startAnimation(slide)
-        view.visibility = View.GONE
+        slide.addListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator) {}
+
+            override fun onAnimationEnd(animation: Animator) {
+                view.visibility = View.GONE
+                view.isClickable = false
+            }
+
+            override fun onAnimationCancel(animation: Animator) {}
+            override fun onAnimationRepeat(animation: Animator) {}
+        })
+        slide.start()
     }
 }

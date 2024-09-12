@@ -97,6 +97,7 @@
     <string name="pay_conditions">임금 조건</string>
     <string name="admissions_method">전형 방법</string>
     <string name="recruit">지원하기</string>
+    <string name="recruit_complete">지원 완료</string>
     <string name="worknet">워크넷</string>
     <string name="worknet_url">워크넷 링크</string>
     <string name="post_job_posting_note">공고 등록 후에도 공고 내용을 수정할 수 있어요.</string>
