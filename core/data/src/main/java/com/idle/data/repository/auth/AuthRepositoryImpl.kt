@@ -118,11 +118,11 @@ class AuthRepositoryImpl @Inject constructor(
             authCode = authCode,
         )
     ).fold(
-        onSuccess = {
+        onSuccess = { tokenResponse ->
             withContext(Dispatchers.IO) {
-                tokenDataSource.clearToken()
-                launch { userInfoDataSource.clearUserRole() }
-                launch { userInfoDataSource.clearUserInfo() }
+                tokenDataSource.setAccessToken(tokenResponse.accessToken)
+                launch { tokenDataSource.setRefreshToken(tokenResponse.refreshToken) }
+                launch { userInfoDataSource.setUserRole(UserType.WORKER.apiValue) }
                 Result.success(Unit)
             }
         },
