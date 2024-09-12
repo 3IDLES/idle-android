@@ -8,6 +8,7 @@ import com.idle.domain.model.CountDownTimer
 import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
 import com.idle.domain.model.auth.UserType
+import com.idle.domain.model.error.ApiErrorCode
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
 import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
@@ -161,7 +162,14 @@ class WithdrawalViewModel @Inject constructor(
         ).onSuccess {
             analyticsHelper.setUserId(null)
             baseEvent(CareBaseEvent.NavigateToAuthWithClearBackStack("회원탈퇴가 완료되었어요.|ERROR"))
-        }.onFailure { handleFailure(it as HttpResponseException) }
+        }.onFailure {
+            val exception = it as HttpResponseException
+            if (exception.apiErrorCode == ApiErrorCode.InvalidParameter) {
+                baseEvent(CareBaseEvent.ShowSnackBar("비밀번호가 맞지 않습니다.|ERROR"))
+            } else {
+                handleFailure(exception)
+            }
+        }
     }
 
     private suspend fun withdrawalWorker() {
