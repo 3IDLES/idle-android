@@ -182,7 +182,7 @@ internal fun WorkerHomeScreen(
                 snackbar = { data ->
                     CareSnackBar(
                         data = data,
-                        modifier = Modifier.padding(bottom = 20.dp)
+                        modifier = Modifier.padding(bottom = 84.dp)
                     )
                 }
             )
@@ -223,10 +223,7 @@ internal fun WorkerHomeScreen(
                         textColor = CareTheme.colors.gray300,
                         containerColor = CareTheme.colors.white000,
                         border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray200),
-                        onClick = {
-                            Log.d("test", "버튼 클릭!")
-                            navigateTo(DeepLinkDestination.WorkerProfile())
-                        },
+                        onClick = { navigateTo(DeepLinkDestination.WorkerProfile()) },
                     )
                 }
             } else {

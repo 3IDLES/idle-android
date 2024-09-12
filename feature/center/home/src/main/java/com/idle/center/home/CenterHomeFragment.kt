@@ -140,7 +140,7 @@ internal fun CenterHomeScreen(
                 snackbar = { data ->
                     CareSnackBar(
                         data = data,
-                        modifier = Modifier.padding(bottom = 20.dp)
+                        modifier = Modifier.padding(bottom = 84.dp)
                     )
                 }
             )

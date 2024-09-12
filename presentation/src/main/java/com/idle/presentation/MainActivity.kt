@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings.ACTION_WIFI_SETTINGS
 import android.view.View
+import android.view.animation.TranslateAnimation
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -150,24 +151,36 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setNavigationMenuType(menuType: NavigationMenuType) = when (menuType) {
-        NavigationMenuType.Center -> binding.apply {
-            mainBNVWorker.visibility = View.INVISIBLE
-            mainBNVCenter.visibility = View.VISIBLE
-            mainBNVCenter.setupWithNavController(navController)
-        }
+    private fun setNavigationMenuType(menuType: NavigationMenuType) {
+        when (menuType) {
+            NavigationMenuType.Center -> binding.apply {
+                if (mainBNVWorker.visibility == View.VISIBLE) {
+                    slideDown(mainBNVWorker)
+                }
+                if (mainBNVCenter.visibility != View.VISIBLE) {
+                    slideUp(mainBNVCenter)
+                    mainBNVCenter.setupWithNavController(navController)
+                }
+            }
 
+            NavigationMenuType.Worker -> binding.apply {
+                if (mainBNVCenter.visibility == View.VISIBLE) {
+                    slideDown(mainBNVCenter)
+                }
+                if (mainBNVWorker.visibility != View.VISIBLE) {
+                    slideUp(mainBNVWorker)
+                    mainBNVWorker.setupWithNavController(navController)
+                }
+            }
 
-        NavigationMenuType.Worker -> binding.apply {
-            mainBNVCenter.visibility = View.INVISIBLE
-            mainBNVWorker.visibility = View.VISIBLE
-            mainBNVWorker.setupWithNavController(navController)
-        }
-
-
-        NavigationMenuType.Hide -> binding.apply {
-            mainBNVCenter.visibility = View.GONE
-            mainBNVWorker.visibility = View.GONE
+            NavigationMenuType.Hide -> binding.apply {
+                if (mainBNVCenter.visibility == View.VISIBLE) {
+                    slideDown(mainBNVCenter)
+                }
+                if (mainBNVWorker.visibility == View.VISIBLE) {
+                    slideDown(mainBNVWorker)
+                }
+            }
         }
     }
 
@@ -190,5 +203,21 @@ class MainActivity : AppCompatActivity() {
                 else -> it
             }
         }
+    }
+
+    private fun slideUp(view: View) {
+        val slide = TranslateAnimation(0f, 0f, view.height.toFloat(), 0f)
+        slide.duration = 300
+        slide.fillAfter = true
+        view.startAnimation(slide)
+        view.visibility = View.VISIBLE
+    }
+
+    private fun slideDown(view: View) {
+        val slide = TranslateAnimation(0f, 0f, 0f, view.height.toFloat())
+        slide.duration = 300
+        slide.fillAfter = true
+        view.startAnimation(slide)
+        view.visibility = View.GONE
     }
 }
