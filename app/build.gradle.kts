@@ -10,8 +10,8 @@ android {
     namespace = "com.idle.care"
 
     defaultConfig {
-        versionCode = 3
-        versionName = "1.0.2"
+        versionCode = 4
+        versionName = "1.0.3"
         targetSdk = 34
 
         val properties = Properties()

@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GetFavoriteCrawlingJobPostingsResponse(
-    @SerialName("favoriteJobPostings") val workerJobPostingResponses: List<CrawlingJobPostingResponse>,
+    @SerialName("favoriteCrawlingJobPostings") val workerJobPostingResponses: List<CrawlingJobPostingResponse>,
 ) {
     fun toVO(): List<CrawlingJobPosting> =
         workerJobPostingResponses.map { it.toVO() }
