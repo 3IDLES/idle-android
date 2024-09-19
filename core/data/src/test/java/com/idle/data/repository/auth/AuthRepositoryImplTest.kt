@@ -11,7 +11,7 @@ import io.mockk.coVerify
 import io.mockk.just
 import io.mockk.mockk
 import junit.framework.TestCase.assertTrue
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -38,7 +38,7 @@ class AuthRepositoryImplTest {
     }
 
     @Test
-    fun `센터장이 로그인 성공했을 경우 토큰을 저장한다`() = runBlocking {
+    fun `센터장이 로그인 성공했을 경우 토큰을 저장한다`() = runTest {
         // Given
         val tokenResponse = TokenResponse("accessToken", "refreshToken")
         coEvery { authDataSource.signInCenter(any()) } returns Result.success(tokenResponse)
@@ -54,7 +54,7 @@ class AuthRepositoryImplTest {
     }
 
     @Test
-    fun `요양보호사가 회원가입에 성공했을 경우 토큰을 저장한다`() = runBlocking {
+    fun `요양보호사가 회원가입에 성공했을 경우 토큰을 저장한다`() = runTest {
         // Given
         val tokenResponse = TokenResponse("accessToken", "refreshToken")
         coEvery { authDataSource.signUpWorker(any()) } returns Result.success(tokenResponse)
@@ -70,7 +70,7 @@ class AuthRepositoryImplTest {
     }
 
     @Test
-    fun `요양보호사가 로그인했을 경우 토큰을 저장한다`() = runBlocking {
+    fun `요양보호사가 로그인했을 경우 토큰을 저장한다`() = runTest {
         // Given
         val tokenResponse = TokenResponse("accessToken", "refreshToken")
         coEvery { authDataSource.signInWorker(any()) } returns Result.success(tokenResponse)
@@ -86,7 +86,7 @@ class AuthRepositoryImplTest {
     }
 
     @Test
-    fun `요양보호사가 로그아웃했을 경우 토큰을 제거한다`() = runBlocking {
+    fun `요양보호사가 로그아웃했을 경우 토큰을 제거한다`() = runTest {
         // Given
         coEvery { authDataSource.logoutWorker() } returns Result.success(Unit)
 
@@ -101,7 +101,7 @@ class AuthRepositoryImplTest {
     }
 
     @Test
-    fun `요양보호사가 회원탈퇴했을 경우 토큰을 제거한다`() = runBlocking {
+    fun `요양보호사가 회원탈퇴했을 경우 토큰을 제거한다`() = runTest {
         // Given
         coEvery { authDataSource.withdrawalWorker(any()) } returns Result.success(Unit)
 
@@ -116,7 +116,7 @@ class AuthRepositoryImplTest {
     }
 
     @Test
-    fun `센터장이 로그아웃했을 경우 토큰을 제거한다`() = runBlocking {
+    fun `센터장이 로그아웃했을 경우 토큰을 제거한다`() = runTest {
         // Given
         coEvery { authDataSource.logoutCenter() } returns Result.success(Unit)
 
@@ -131,7 +131,7 @@ class AuthRepositoryImplTest {
     }
 
     @Test
-    fun `센터장이 회원탈퇴했을 경우 토큰을 제거한다`() = runBlocking {
+    fun `센터장이 회원탈퇴했을 경우 토큰을 제거한다`() = runTest {
         // Given
         coEvery { authDataSource.withdrawalCenter(any()) } returns Result.success(Unit)
 
