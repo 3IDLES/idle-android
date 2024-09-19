@@ -54,8 +54,9 @@ class CareAuthenticator @Inject constructor(
         }.getOrNull() ?: return null
 
         runBlocking {
+            val job = launch { tokenManager.setRefreshToken(token.refreshToken) }
             tokenManager.setAccessToken(token.accessToken)
-            launch { tokenManager.setRefreshToken(token.refreshToken) }
+            job.join()
         }
 
         val newRequest = response.request
