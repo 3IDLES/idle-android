@@ -6,10 +6,9 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import com.idle.datastore.util.clear
 import com.idle.datastore.util.getValue
 import com.idle.datastore.util.setValue
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -27,7 +26,7 @@ class TokenDataSource @Inject constructor(
         dataStore.setValue(REFRESH_TOKEN, refreshToken)
     }
 
-    suspend fun clearToken() = withContext(Dispatchers.IO) {
+    suspend fun clearToken() = coroutineScope {
         dataStore.clear(ACCESS_TOKEN)
         launch { dataStore.clear(REFRESH_TOKEN) }
     }

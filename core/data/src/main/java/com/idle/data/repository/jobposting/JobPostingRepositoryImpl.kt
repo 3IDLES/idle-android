@@ -204,7 +204,7 @@ class JobPostingRepositoryImpl @Inject constructor(
 
     override suspend fun getCrawlingJobPostings(
         next: String?,
-        limit: Int
+        limit: Int,
     ): Result<Pair<String?, List<CrawlingJobPosting>>> =
         jobPostingDataSource.getCrawlingJobPostings(next, limit).mapCatching { it.toVO() }
 

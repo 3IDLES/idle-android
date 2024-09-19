@@ -7,6 +7,8 @@ import com.idle.network.model.token.RefreshTokenRequest
 import com.idle.network.util.onResponse
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
@@ -18,6 +20,8 @@ class CareAuthenticator @Inject constructor(
     private val tokenManager: TokenManager,
     private val authApi: Provider<AuthApi>,
 ) : Authenticator {
+    private val lock = Mutex()
+
     override fun authenticate(route: Route?, response: Response): Request? {
         val originRequest = response.request
 
@@ -43,8 +47,10 @@ class CareAuthenticator @Inject constructor(
         }
 
         val token = runBlocking {
-            authApi.get().refreshToken(RefreshTokenRequest(tokenManager.getRefreshToken()))
-                .onResponse()
+            lock.withLock {
+                authApi.get().refreshToken(RefreshTokenRequest(tokenManager.getRefreshToken()))
+                    .onResponse()
+            }
         }.getOrNull() ?: return null
 
         runBlocking {
