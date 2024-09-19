@@ -26,9 +26,11 @@ class TokenDataSource @Inject constructor(
         dataStore.setValue(REFRESH_TOKEN, refreshToken)
     }
 
-    suspend fun clearToken() = coroutineScope {
-        dataStore.clear(ACCESS_TOKEN)
-        launch { dataStore.clear(REFRESH_TOKEN) }
+    suspend fun clearToken() {
+        coroutineScope {
+            launch { dataStore.clear(REFRESH_TOKEN) }
+            dataStore.clear(ACCESS_TOKEN)
+        }
     }
 
     companion object {
