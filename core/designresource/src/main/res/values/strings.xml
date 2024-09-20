@@ -48,11 +48,11 @@
     <string name="start_with_signup">회원가입하고 시작하기</string>
     <string name="set_id_and_password">아이디와 비밀번호를 설정해주세요</string>
     <string name="set_id_label">아이디 설정</string>
-    <string name="id_conditions">(영문+숫자 조합 10자리 이상 등 조건)</string>
+    <string name="id_conditions">(최소 6자 ~ 최대 20자까지 허용)</string>
     <string name="id_available">사용 가능한 아이디 입니다</string>
     <string name="check_duplicate">중복 확인</string>
     <string name="set_password_label">비밀번호 설정</string>
-    <string name="password_conditions">(영문+숫자 조합 8자리 이상 등 조건)</string>
+    <string name="password_conditions">(최소 8자 이상 ~ 최대 20자까지 허용)</string>
     <string name="password_available">사용 가능한 비밀번호 입니다.</string>
     <string name="password_mismatch">비밀번호가 일치하지 않습니다.</string>
 

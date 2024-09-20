@@ -1,6 +1,5 @@
-package com.idle.signin.center
+package com.idle.signup.center
 
-import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,8 +11,6 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -59,6 +56,8 @@ internal class CenterSignUpFragment : BaseComposeFragment() {
             val centerIdResult by centerIdResult.collectAsStateWithLifecycle()
             val centerPassword by centerPassword.collectAsStateWithLifecycle()
             val centerPasswordForConfirm by centerPasswordForConfirm.collectAsStateWithLifecycle()
+            val isValidId by isValidId.collectAsStateWithLifecycle()
+            val isValidPassword by isValidPassword.collectAsStateWithLifecycle()
 
             CenterSignUpScreen(
                 snackbarHostState = snackbarHostState,
@@ -75,6 +74,8 @@ internal class CenterSignUpFragment : BaseComposeFragment() {
                 centerIdResult = centerIdResult,
                 centerPassword = centerPassword,
                 centerPasswordForConfirm = centerPasswordForConfirm,
+                isValidId = isValidId,
+                isValidPassword = isValidPassword,
                 setSignUpStep = ::setCenterSignUpStep,
                 onCenterNameChanged = ::setCenterName,
                 onCenterPhoneNumberChanged = ::setCenterPhoneNumber,
@@ -118,6 +119,8 @@ internal fun CenterSignUpScreen(
     centerIdResult: Boolean,
     centerPassword: String,
     centerPasswordForConfirm: String,
+    isValidId: Boolean,
+    isValidPassword: Boolean,
     setSignUpStep: (CenterSignUpStep) -> Unit,
     onCenterNameChanged: (String) -> Unit,
     onCenterPhoneNumberChanged: (String) -> Unit,
@@ -218,6 +221,8 @@ internal fun CenterSignUpScreen(
                             centerIdResult = centerIdResult,
                             centerPassword = centerPassword,
                             centerPasswordForConfirm = centerPasswordForConfirm,
+                            isValidId = isValidId,
+                            isValidPassword = isValidPassword,
                             onCenterIdChanged = onCenterIdChanged,
                             onCenterPasswordChanged = onCenterPasswordChanged,
                             onCenterPasswordForConfirmChanged = onCenterPasswordForConfirmChanged,

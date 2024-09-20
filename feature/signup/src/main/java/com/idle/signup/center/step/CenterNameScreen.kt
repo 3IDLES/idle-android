@@ -1,6 +1,5 @@
 package com.idle.signup.center.step
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -21,8 +20,8 @@ import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.foundation.CareTheme
-import com.idle.signin.center.CenterSignUpStep
-import com.idle.signin.center.CenterSignUpStep.NAME
+import com.idle.signup.center.CenterSignUpStep
+import com.idle.signup.center.CenterSignUpStep.NAME
 import com.idle.signup.LogCenterSignUpStep
 
 @Composable

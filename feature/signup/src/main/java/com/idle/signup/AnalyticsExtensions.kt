@@ -8,7 +8,7 @@ import com.idle.analytics.AnalyticsEvent.PropertiesKeys.SCREEN_NAME
 import com.idle.analytics.AnalyticsEvent.Types.SCREEN_VIEW
 import com.idle.analytics.helper.AnalyticsHelper
 import com.idle.analytics.helper.LocalAnalyticsHelper
-import com.idle.signin.center.CenterSignUpStep
+import com.idle.signup.center.CenterSignUpStep
 import com.idle.signin.worker.WorkerSignUpStep
 
 @Composable

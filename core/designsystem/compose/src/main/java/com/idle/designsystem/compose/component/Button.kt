@@ -31,6 +31,7 @@ fun CareButtonSmall(
         onClick = onClick,
         enabled = enable,
         shape = RoundedCornerShape(8.dp),
+        contentPadding = PaddingValues(0.dp),
         colors = ButtonColors(
             containerColor = CareTheme.colors.orange500,
             contentColor = CareTheme.colors.orange500,
@@ -317,6 +318,14 @@ private fun PreviewButtonMedium() {
 }
 
 @Composable
+private fun PreviewButtonSmall() {
+    Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
+        CareButtonSmall(text = "중복확인", onClick = {}, enable = true)
+        CareButtonSmall(text = "중복확인", onClick = {}, enable = false)
+    }
+}
+
+@Composable
 private fun PreviewButtonCardLarge() {
     Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
         CareButtonCardLarge(text = "저장하기", onClick = {}, modifier = Modifier.fillMaxWidth())
@@ -376,7 +385,6 @@ private fun PreviewFloatingButton() {
     CareFloatingButton(text = "+ 공고 등록", onClick = {})
 }
 
-// Default Group Previews
 @Preview(name = "Button_Primary_Default_Large", showBackground = true, group = "Default")
 @Composable
 private fun PreviewButtonPrimaryDefaultLarge() {
@@ -387,6 +395,12 @@ private fun PreviewButtonPrimaryDefaultLarge() {
 @Composable
 private fun PreviewButtonPrimaryDefaultMedium() {
     PreviewButtonMedium()
+}
+
+@Preview(name = "Button_Primary_Default_Small", showBackground = true, group = "Default")
+@Composable
+private fun PreviewButtonPrimaryDefaultSmall() {
+    PreviewButtonSmall()
 }
 
 @Preview(name = "Button_Primary_Default_CardLarge", showBackground = true, group = "Default")
@@ -436,6 +450,12 @@ private fun PreviewButtonPrimaryFlipLarge() {
 @Composable
 private fun PreviewButtonPrimaryFlipMedium() {
     PreviewButtonMedium()
+}
+
+@Preview(name = "Button_Primary_Flip_Small", showBackground = true, group = "Flip")
+@Composable
+private fun PreviewButtonPrimaryFlipSmall() {
+    PreviewButtonSmall()
 }
 
 @Preview(
@@ -521,6 +541,14 @@ private fun PreviewButtonPrimaryFoldableLarge() {
 private fun PreviewButtonPrimaryFoldableMedium() {
     PreviewButtonMedium()
 }
+
+
+@Preview(name = "Button_Primary_Foldable_Small", showBackground = true, group = "Fold")
+@Composable
+private fun PreviewButtonPrimaryFoldableSmall() {
+    PreviewButtonSmall()
+}
+
 
 @Preview(
     name = "Button_Primary_Foldable_CardLarge",

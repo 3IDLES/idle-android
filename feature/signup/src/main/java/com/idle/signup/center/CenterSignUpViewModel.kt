@@ -1,4 +1,4 @@
-package com.idle.signin.center
+package com.idle.signup.center
 
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.viewModelScope
@@ -15,7 +15,7 @@ import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
 import com.idle.domain.usecase.auth.SignUpCenterUseCase
 import com.idle.domain.usecase.auth.ValidateBusinessRegistrationNumberUseCase
 import com.idle.domain.usecase.auth.ValidateIdentifierUseCase
-import com.idle.signin.center.CenterSignUpStep.NAME
+import com.idle.signup.center.CenterSignUpStep.NAME
 import com.idle.signup.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -75,6 +75,12 @@ class CenterSignUpViewModel @Inject constructor(
     private val _centerPasswordForConfirm = MutableStateFlow("")
     val centerPasswordForConfirm = _centerPasswordForConfirm.asStateFlow()
 
+    private val _isValidId = MutableStateFlow(false)
+    val isValidId = _isValidId.asStateFlow()
+
+    private val _isValidPassword = MutableStateFlow(false)
+    val isValidPassword = _isValidPassword.asStateFlow()
+
     internal fun setCenterSignUpStep(step: CenterSignUpStep) {
         _signUpStep.value = step
     }
@@ -103,10 +109,12 @@ class CenterSignUpViewModel @Inject constructor(
     internal fun setCenterId(id: String) {
         _centerId.value = id
         _centerIdResult.value = false
+        validateId(id)
     }
 
     internal fun setCenterPassword(password: String) {
         _centerPassword.value = password
+        validatePassword(password)
     }
 
     internal fun setCenterPasswordForConfirm(passwordForConfirm: String) {
@@ -155,6 +163,64 @@ class CenterSignUpViewModel @Inject constructor(
                 _signUpStep.value = CenterSignUpStep.BUSINESS_REGISTRATION
             }
             .onFailure { handleFailure(it as HttpResponseException) }
+    }
+
+    private fun validateId(id: String) {
+        if (id.length !in 6..20) {
+            _isValidId.value = false
+            return
+        }
+
+        if (!id.matches(Regex("^[A-Za-z0-9]+$"))) {
+            _isValidId.value = false
+            return
+        }
+
+        _isValidId.value = true
+    }
+
+    private fun validatePassword(password: String) {
+        if (password.length !in 8..20) {
+            _isValidPassword.value = false
+            return
+        }
+
+        if (!password.matches(Regex("^[A-Za-z0-9!@#\$%^&*()_+=-]+$"))) {
+            _isValidPassword.value = false
+            return
+        }
+
+        if (!password.matches(Regex(".*[A-Za-z].*")) || !password.matches(Regex(".*\\d.*"))) {
+            _isValidPassword.value = false
+            return
+        }
+
+        if (password.contains(" ")) {
+            _isValidPassword.value = false
+            return
+        }
+
+        if (containsSequentialCharacters(password)) {
+            _isValidPassword.value = false
+            return
+        }
+
+        _isValidPassword.value = true
+    }
+
+    private fun containsSequentialCharacters(password: String): Boolean {
+        val limit = 3
+        var maxSequence = 1
+
+        for (i in 1 until password.length) {
+            if (password[i] == password[i - 1]) {
+                maxSequence += 1
+                if (maxSequence >= limit) return true
+            } else {
+                maxSequence = 1
+            }
+        }
+        return false
     }
 
     internal fun signUpCenter() = viewModelScope.launch {

@@ -15,21 +15,19 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.idle.designresource.R
-import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareButtonMedium
 import com.idle.designsystem.compose.component.CareButtonSmall
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
-import com.idle.signin.center.CenterSignUpStep
-import com.idle.signin.center.CenterSignUpStep.PHONE_NUMBER
+import com.idle.signup.center.CenterSignUpStep
+import com.idle.signup.center.CenterSignUpStep.PHONE_NUMBER
 import com.idle.signup.LogCenterSignUpStep
 
 @Composable

@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/centerSignUpFragment"
-        android:name="com.idle.signin.center.CenterSignUpFragment"
+        android:name="com.idle.signup.center.CenterSignUpFragment"
         android:label="CenterSignUpFragment">
         <deepLink app:uri="@string/center_signup_deeplink_url" />
     </fragment>

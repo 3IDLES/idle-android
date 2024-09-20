@@ -32,8 +32,8 @@ import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.BusinessRegistrationInfo
-import com.idle.signin.center.CenterSignUpStep
-import com.idle.signin.center.CenterSignUpStep.BUSINESS_REGISTRATION
+import com.idle.signup.center.CenterSignUpStep
+import com.idle.signup.center.CenterSignUpStep.BUSINESS_REGISTRATION
 import com.idle.signup.LogCenterSignUpStep
 
 @Composable
