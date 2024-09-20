@@ -1,7 +1,5 @@
 package com.idle.domain.model.jobposting
 
-import java.time.LocalDate
-
 data class CrawlingJobPosting(
     override val id: String,
     override val distance: Int,
@@ -12,5 +10,4 @@ data class CrawlingJobPosting(
     val workingSchedule: String,
     val payInfo: String,
     val applyDeadline: String,
-    val createdAt: LocalDate,
 ) : JobPosting(id, distance, jobPostingType, isFavorite)
