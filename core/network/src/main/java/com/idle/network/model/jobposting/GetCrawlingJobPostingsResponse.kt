@@ -27,7 +27,6 @@ data class CrawlingJobPostingResponse(
     val payInfo: String,
     val applyDeadline: String,
     val jobPostingType: String,
-    val createdAt: String,
     val isFavorite: Boolean,
 ) {
     fun toVO() = CrawlingJobPosting(
@@ -39,7 +38,6 @@ data class CrawlingJobPostingResponse(
         payInfo = payInfo,
         applyDeadline = applyDeadline,
         jobPostingType = JobPostingType.create(jobPostingType),
-        createdAt = LocalDate.parse(createdAt, DateTimeFormatter.ofPattern("yyyy-MM-dd")),
         isFavorite = isFavorite,
     )
 }
