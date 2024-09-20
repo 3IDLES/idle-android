@@ -1,8 +1,8 @@
 package com.idle.data.repository.profile
 
 import com.idle.datastore.datasource.UserInfoDataSource
-import com.idle.domain.model.auth.Gender
 import com.idle.domain.model.profile.CenterProfile
+import com.idle.domain.model.profile.Gender
 import com.idle.domain.model.profile.JobSearchStatus
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.network.model.profile.GetCenterProfileResponse

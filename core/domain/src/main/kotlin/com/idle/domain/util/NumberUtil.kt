@@ -1,13 +1,20 @@
 package com.idle.domain.util
 
-internal fun formatPhoneNumber(phoneNumber: String): String {
-    // 입력된 전화번호가 11자리 숫자인 경우에만 포맷팅을 적용
-    return if (phoneNumber.length == 11) {
+fun formatPhoneNumber(phoneNumber: String): String {
+    require(
+        (phoneNumber.length == 11 && phoneNumber.all { it.isDigit() }) ||
+                (phoneNumber.contains("-") && phoneNumber.length == 13)
+    ) {
+        "전화번호는 11자리 숫자이거나, 이미 포맷된 경우 13자리여야 합니다."
+    }
+
+    // 이미 '-'가 포함된 경우 그대로 반환
+    return if (phoneNumber.contains("-")) {
+        phoneNumber
+    } else {
         phoneNumber.replaceFirst(
             Regex("(\\d{3})(\\d{4})(\\d{4})"),
             "$1-$2-$3"
         )
-    } else {
-        phoneNumber  // 비정상적인 경우 원본 번호 반환
     }
 }
