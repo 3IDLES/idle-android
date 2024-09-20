@@ -484,9 +484,7 @@ private fun WorkerWorkNetCard(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 8.dp)
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 CareTag(
                     text = stringResource(id = R.string.worknet),
@@ -543,9 +541,7 @@ private fun WorkerWorkNetCard(
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 8.dp),
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 Image(
                     painter = painterResource(R.drawable.ic_money),
