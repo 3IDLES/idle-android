@@ -92,6 +92,9 @@ class CenterProfileViewModel @Inject constructor(
 
     internal fun setEditState(state: Boolean) {
         _isEditState.value = state
+        if(!state){
+            getMyCenterProfile()
+        }
     }
 
     internal fun setProfileImageUrl(uri: Uri?) {

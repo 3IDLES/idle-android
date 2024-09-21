@@ -102,6 +102,9 @@ class WorkerProfileViewModel @Inject constructor(
 
     internal fun setEditState(state: Boolean) {
         _isEditState.value = state
+        if (!state) {
+            getMyWorkerProfile()
+        }
     }
 
     internal fun setProfileImageUrl(uri: Uri?) {
