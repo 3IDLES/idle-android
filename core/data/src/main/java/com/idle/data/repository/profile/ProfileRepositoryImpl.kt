@@ -200,7 +200,9 @@ class ProfileRepositoryImpl @Inject constructor(
             reqWidth = reqWidth,
             reqHeight = reqHeight,
         ).use { inputStream ->
-            val imageFormat = MIMEType.WEBP
+            val imageFormat = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                MIMEType.WEBP
+            } else MIMEType.JPG
 
             val profileImageUploadUrlResponse = getProfileImageUploadUrl(
                 userType = userType,
@@ -237,12 +239,6 @@ class ProfileRepositoryImpl @Inject constructor(
         }
     }
 
-    private fun getImageFormat(context: Context, uri: Uri): MIMEType {
-        val contentResolver = context.contentResolver
-        val mimeType = contentResolver.getType(uri)
-        return MIMEType.create(mimeType)
-    }
-
     private fun resizeImage(
         context: Context,
         uri: Uri,
@@ -264,9 +260,11 @@ class ProfileRepositoryImpl @Inject constructor(
                 val byteArrayOutputStream = ByteArrayOutputStream()
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                     resizedBitmap?.compress(
-                        Bitmap.CompressFormat.WEBP_LOSSY,
-                        100,
-                        byteArrayOutputStream
+                        Bitmap.CompressFormat.WEBP_LOSSY, 100, byteArrayOutputStream
+                    )
+                } else {
+                    resizedBitmap?.compress(
+                        Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream
                     )
                 }
                 val byteArray = byteArrayOutputStream.toByteArray()
