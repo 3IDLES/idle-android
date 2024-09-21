@@ -43,6 +43,8 @@ interface ProfileRepository {
     suspend fun updateProfileImage(
         userType: String,
         imageFileUri: String,
+        reqWidth: Int,
+        reqHeight: Int
     ): Result<Unit>
 
     suspend fun getWorkerId(): Result<String>

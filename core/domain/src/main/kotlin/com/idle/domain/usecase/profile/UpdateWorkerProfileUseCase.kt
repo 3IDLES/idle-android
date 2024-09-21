@@ -36,6 +36,8 @@ class UpdateWorkerProfileUseCase @Inject constructor(
                     profileRepository.updateProfileImage(
                         userType = UserType.WORKER.apiValue,
                         imageFileUri = imageFileUri,
+                        reqWidth = 278,
+                        reqHeight = 278,
                     ).getOrThrow()
                 }
             }

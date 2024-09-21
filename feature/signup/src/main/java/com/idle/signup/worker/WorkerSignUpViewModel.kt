@@ -110,7 +110,7 @@ class WorkerSignUpViewModel @Inject constructor(
     internal fun sendPhoneNumber() = viewModelScope.launch {
         sendPhoneNumberUseCase(_workerPhoneNumber.value)
             .onSuccess { startTimer() }
-            .onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
+            .onFailure { handleFailure(it as HttpResponseException) }
     }
 
     private fun startTimer() {

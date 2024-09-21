@@ -5,6 +5,7 @@ import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
+import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.profile.JobSearchStatus
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
@@ -58,15 +59,13 @@ class WorkerProfileViewModel @Inject constructor(
             _roadNameAddress.value = it.roadNameAddress
             _lotNumberAddress.value = it.lotNumberAddress
             _jobSearchStatus.value = it.jobSearchStatus
-        }.onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
+        }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
     internal fun getWorkerProfile(workerId: String) = viewModelScope.launch {
         getWorkerProfileUseCase(workerId).onSuccess {
             _workerProfile.value = it
-        }.onFailure {
-            baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
-        }
+        }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
     internal fun updateWorkerProfile() = viewModelScope.launch {
@@ -89,7 +88,7 @@ class WorkerProfileViewModel @Inject constructor(
             baseEvent(CareBaseEvent.ShowSnackBar("정보 수정이 완료되었어요.|SUCCESS"))
             setEditState(false)
         }.onFailure {
-            baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
+            handleFailure(it as HttpResponseException)
         }
     }
 

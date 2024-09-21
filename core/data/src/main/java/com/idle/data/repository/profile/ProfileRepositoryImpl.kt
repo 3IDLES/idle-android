@@ -1,6 +1,8 @@
 package com.idle.data.repository.profile
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.core.net.toUri
 import com.idle.datastore.datasource.UserInfoDataSource
@@ -22,6 +24,8 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import javax.inject.Inject
 
@@ -135,6 +139,13 @@ class ProfileRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getWorkerId(): Result<String> = profileDataSource.getWorkerId()
+        .mapCatching { it.carerId }
+
+    override suspend fun getCenterStatus(): Result<CenterRegistrationStatus> =
+        profileDataSource.getCenterStatus()
+            .mapCatching { it.toVO() }
+
     override suspend fun updateWorkerProfile(
         experienceYear: Int?,
         roadNameAddress: String,
@@ -179,8 +190,15 @@ class ProfileRepositoryImpl @Inject constructor(
     override suspend fun updateProfileImage(
         userType: String,
         imageFileUri: String,
+        reqWidth: Int,
+        reqHeight: Int
     ): Result<Unit> = runCatching {
-        getImageInputStream(context, imageFileUri.toUri())?.use { inputStream ->
+        resizeImage(
+            context = context,
+            uri = imageFileUri.toUri(),
+            reqWidth = reqWidth,
+            reqHeight = reqHeight,
+        ).use { inputStream ->
             val imageFormat = getImageFormat(context, imageFileUri.toUri())
 
             val profileImageUploadUrlResponse = getProfileImageUploadUrl(
@@ -224,8 +242,54 @@ class ProfileRepositoryImpl @Inject constructor(
         return MIMEType.create(mimeType)
     }
 
-    private fun getImageInputStream(context: Context, uri: Uri): InputStream? {
-        return context.contentResolver.openInputStream(uri)
+    private fun resizeImage(
+        context: Context,
+        uri: Uri,
+        reqWidth: Int,
+        reqHeight: Int
+    ): InputStream {
+        context.contentResolver.openInputStream(uri)?.use { inputStream ->
+            val options = BitmapFactory.Options().apply {
+                inJustDecodeBounds = true
+            }
+            BitmapFactory.decodeStream(inputStream, null, options)
+
+            options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight)
+            options.inJustDecodeBounds = false
+
+            context.contentResolver.openInputStream(uri)?.use { newInputStream ->
+                val resizedBitmap = BitmapFactory.decodeStream(newInputStream, null, options)
+
+                val byteArrayOutputStream = ByteArrayOutputStream()
+                resizedBitmap?.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+                val byteArray = byteArrayOutputStream.toByteArray()
+
+                return ByteArrayInputStream(byteArray)
+            }
+        }
+
+        throw IllegalArgumentException("Unable to open InputStream for the given URI")
+    }
+
+    private fun calculateInSampleSize(
+        options: BitmapFactory.Options,
+        reqWidth: Int,
+        reqHeight: Int
+    ): Int {
+        val (height: Int, width: Int) = options.run { outHeight to outWidth }
+        var inSampleSize = 1
+
+        if (height > reqHeight || width > reqWidth) {
+
+            val halfHeight: Int = height / 2
+            val halfWidth: Int = width / 2
+
+            while (halfHeight / inSampleSize >= reqHeight && halfWidth / inSampleSize >= reqWidth) {
+                inSampleSize *= 2
+            }
+        }
+
+        return inSampleSize
     }
 
     private suspend fun getProfileImageUploadUrl(
@@ -255,11 +319,4 @@ class ProfileRepositoryImpl @Inject constructor(
             imageFileExtension = imageFileExtension,
         )
     )
-
-    override suspend fun getWorkerId(): Result<String> = profileDataSource.getWorkerId()
-        .mapCatching { it.carerId }
-
-    override suspend fun getCenterStatus(): Result<CenterRegistrationStatus> =
-        profileDataSource.getCenterStatus()
-            .mapCatching { it.toVO() }
 }
