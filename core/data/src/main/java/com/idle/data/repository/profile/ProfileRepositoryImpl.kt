@@ -194,12 +194,14 @@ class ProfileRepositoryImpl @Inject constructor(
         reqWidth: Int,
         reqHeight: Int
     ): Result<Unit> = runCatching {
-        resizeImage(
+        val resizeImage = resizeImage(
             context = context,
             uri = imageFileUri.toUri(),
             reqWidth = reqWidth,
             reqHeight = reqHeight,
-        ).use { inputStream ->
+        )
+
+        resizeImage.use { inputStream ->
             val imageFormat = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 MIMEType.WEBP
             } else MIMEType.JPG
@@ -245,7 +247,9 @@ class ProfileRepositoryImpl @Inject constructor(
         reqWidth: Int,
         reqHeight: Int
     ): InputStream {
-        context.contentResolver.openInputStream(uri)?.use { inputStream ->
+        val originImageStream = context.contentResolver.openInputStream(uri)
+
+        originImageStream?.use { inputStream ->
             val options = BitmapFactory.Options().apply {
                 inJustDecodeBounds = true
             }

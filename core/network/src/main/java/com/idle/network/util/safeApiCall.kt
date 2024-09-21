@@ -1,6 +1,5 @@
 package com.idle.network.util
 
-import android.util.Log
 import com.idle.domain.model.error.ApiErrorCode
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.error.HttpResponseStatus
@@ -13,8 +12,6 @@ internal inline fun <T> safeApiCall(apiCall: () -> Response<T>): Result<T> {
         val response = apiCall()
         response.onResponse()
     } catch (e: Exception) {
-        Log.d("test", e.stackTraceToString())
-
         Result.failure(
             HttpResponseException(
                 status = HttpResponseStatus.create(-1),
