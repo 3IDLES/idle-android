@@ -66,7 +66,7 @@ https://github.com/user-attachments/assets/04ba9a12-8c71-4ac5-b530-291db8c8b1b1
 - Coil
 - Naver Map SDK
 - Amplitude, Firebase Crashlytics, Firebase RemoteConfig
-- KtLint
+- KtLint, junit, mockk
 
 <br><br>
 
