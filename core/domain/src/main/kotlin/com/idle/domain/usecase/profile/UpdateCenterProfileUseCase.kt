@@ -27,8 +27,8 @@ class UpdateCenterProfileUseCase @Inject constructor(
                     profileRepository.updateProfileImage(
                         userType = UserType.CENTER.apiValue,
                         imageFileUri = imageFileUri,
-                        reqWidth = 1005,
-                        reqHeight = 762,
+                        reqWidth = 1340,
+                        reqHeight = 1016,
                     ).getOrThrow()
                 }
             }
