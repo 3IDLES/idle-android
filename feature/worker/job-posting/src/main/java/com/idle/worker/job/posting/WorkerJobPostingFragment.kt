@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
@@ -22,6 +23,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -85,6 +87,7 @@ internal class WorkerJobPostingFragment : BaseComposeFragment() {
                 recruitmentPostStatus = recruitmentPostStatus,
                 appliedJobPostings = appliedJobPostings,
                 favoritesJobPostings = favoritesJobPostings,
+                getAppliedJobPostings = ::getAppliedJobPostings,
                 setRecruitmentPostStatus = ::setRecruitmentPostStatus,
                 applyJobPosting = ::applyJobPosting,
                 addFavoriteJobPosting = ::addFavoriteJobPosting,
@@ -102,6 +105,7 @@ internal fun WorkerJobPostingScreen(
     recruitmentPostStatus: RecruitmentPostStatus,
     appliedJobPostings: List<JobPosting>,
     favoritesJobPostings: List<JobPosting>,
+    getAppliedJobPostings: () -> Unit,
     setRecruitmentPostStatus: (RecruitmentPostStatus) -> Unit,
     applyJobPosting: (String) -> Unit,
     addFavoriteJobPosting: (String, JobPostingType) -> Unit,
@@ -110,6 +114,20 @@ internal fun WorkerJobPostingScreen(
 ) {
     var showDialog by remember { mutableStateOf(false) }
     var selectedJobPosting by remember { mutableStateOf<WorkerJobPosting?>(null) }
+    val listState = rememberLazyListState()
+    val lastVisibleIndex by remember {
+        derivedStateOf {
+            listState.firstVisibleItemIndex + listState.layoutInfo.visibleItemsInfo.size - 1
+        }
+    }
+    val isNearEnd =
+        appliedJobPostings.isNotEmpty() && lastVisibleIndex >= (appliedJobPostings.size - 3)
+
+    LaunchedEffect(isNearEnd) {
+        if (isNearEnd) {
+            getAppliedJobPostings()
+        }
+    }
 
     if (showDialog) {
         CareDialog(
@@ -187,6 +205,7 @@ internal fun WorkerJobPostingScreen(
                 when (status) {
                     RecruitmentPostStatus.APPLY -> {
                         LazyColumn(
+                            state = listState,
                             verticalArrangement = Arrangement.spacedBy(8.dp),
                             modifier = Modifier
                                 .padding(start = 20.dp, end = 20.dp, top = 16.dp)

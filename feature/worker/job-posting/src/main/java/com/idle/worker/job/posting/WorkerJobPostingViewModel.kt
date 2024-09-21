@@ -69,6 +69,10 @@ class WorkerJobPostingViewModel @Inject constructor(
     }
 
     internal fun getAppliedJobPostings() = viewModelScope.launch {
+        if(appliedJobPostingCallType == JobPostingCallType.END){
+            return@launch
+        }
+
         getJobPostingsAppliedUseCase(next = next.value).onSuccess { (nextId, postings) ->
             next.value = nextId
 

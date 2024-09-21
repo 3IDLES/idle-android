@@ -70,6 +70,10 @@ class WorkerHomeViewModel @Inject constructor(
                 callType = JobPostingCallType.CRAWLING
             }
             _jobPostings.value += postings
+
+            if (_jobPostings.value.isEmpty()) {
+                getJobPostings()
+            }
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 

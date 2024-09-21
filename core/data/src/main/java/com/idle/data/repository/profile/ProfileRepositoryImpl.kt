@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import androidx.core.net.toUri
 import com.idle.datastore.datasource.UserInfoDataSource
 import com.idle.domain.model.auth.Gender
@@ -199,7 +200,7 @@ class ProfileRepositoryImpl @Inject constructor(
             reqWidth = reqWidth,
             reqHeight = reqHeight,
         ).use { inputStream ->
-            val imageFormat = getImageFormat(context, imageFileUri.toUri())
+            val imageFormat = MIMEType.WEBP
 
             val profileImageUploadUrlResponse = getProfileImageUploadUrl(
                 userType = userType,
@@ -261,7 +262,13 @@ class ProfileRepositoryImpl @Inject constructor(
                 val resizedBitmap = BitmapFactory.decodeStream(newInputStream, null, options)
 
                 val byteArrayOutputStream = ByteArrayOutputStream()
-                resizedBitmap?.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    resizedBitmap?.compress(
+                        Bitmap.CompressFormat.WEBP_LOSSY,
+                        100,
+                        byteArrayOutputStream
+                    )
+                }
                 val byteArray = byteArrayOutputStream.toByteArray()
 
                 return ByteArrayInputStream(byteArray)
