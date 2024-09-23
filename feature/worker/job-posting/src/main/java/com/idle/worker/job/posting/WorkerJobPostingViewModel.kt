@@ -50,6 +50,8 @@ class WorkerJobPostingViewModel @Inject constructor(
 
     private var appliedJobPostingCallType: JobPostingCallType = JobPostingCallType.IN_APP
 
+    private var isLoading = false
+
     init {
         viewModelScope.launch {
             getLocalMyWorkerProfileUseCase().onSuccess {
@@ -69,19 +71,30 @@ class WorkerJobPostingViewModel @Inject constructor(
     }
 
     internal fun getAppliedJobPostings() = viewModelScope.launch {
-        if(appliedJobPostingCallType == JobPostingCallType.END){
+        if (isLoading) {
             return@launch
         }
+        isLoading = true
 
-        getJobPostingsAppliedUseCase(next = next.value).onSuccess { (nextId, postings) ->
-            next.value = nextId
-
-            if (nextId == null) {
-                appliedJobPostingCallType = JobPostingCallType.END
+        try {
+            if (appliedJobPostingCallType == JobPostingCallType.END) {
+                return@launch
             }
 
-            _appliedJobPostings.value += postings
-        }.onFailure { handleFailure(it as HttpResponseException) }
+            getJobPostingsAppliedUseCase(next = next.value).onSuccess { (nextId, postings) ->
+                next.value = nextId
+
+                if (nextId == null) {
+                    appliedJobPostingCallType = JobPostingCallType.END
+                }
+
+                _appliedJobPostings.value += postings
+            }.onFailure {
+                handleFailure(it as HttpResponseException)
+            }
+        } finally {
+            isLoading = false
+        }
     }
 
     fun getMyFavoritesJobPostings() = viewModelScope.launch {

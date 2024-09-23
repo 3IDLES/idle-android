@@ -9,18 +9,29 @@ plugins {
 android {
     namespace = "com.idle.network"
 
-    buildFeatures {
-        buildConfig = true
+    val properties = Properties()
+    properties.load(project.rootProject.file("local.properties").bufferedReader())
+
+    buildTypes {
+        debug {
+            buildConfigField(
+                "String",
+                "CARE_BASE_URL",
+                "\"${properties["CARE_DEV_BASE_URL"]}\"",
+            )
+        }
+        release {
+            buildConfigField(
+                "String",
+                "CARE_BASE_URL",
+                "\"${properties["CARE_PROD_BASE_URL"]}\"",
+            )
+
+        }
     }
 
-    defaultConfig {
-        val properties = Properties()
-        properties.load(project.rootProject.file("local.properties").bufferedReader())
-        buildConfigField(
-            "String",
-            "CARE_BASE_URL",
-            "\"${properties["CARE_BASE_URL"]}\"",
-        )
+    buildFeatures {
+        buildConfig = true
     }
 }
 

@@ -1,6 +1,5 @@
 package com.idle.worker.home
 
-import android.util.Log
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -105,11 +104,10 @@ internal fun WorkerHomeScreen(
             listState.firstVisibleItemIndex + listState.layoutInfo.visibleItemsInfo.size - 1
         }
     }
-    val isNearEnd =
-        workerJobPostings.isNotEmpty() && lastVisibleIndex >= (workerJobPostings.size - 3)
+    val isNearEnd = lastVisibleIndex >= (workerJobPostings.size - 3)
 
     LaunchedEffect(isNearEnd) {
-        if (isNearEnd) {
+        if (workerJobPostings.isNotEmpty() && isNearEnd) {
             getJobPostings()
         }
     }

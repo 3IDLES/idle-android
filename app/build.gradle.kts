@@ -1,4 +1,4 @@
-import org.jetbrains.kotlin.konan.properties.Properties
+import java.util.Properties
 
 plugins {
     id("care.android.application")
@@ -25,13 +25,28 @@ android {
         )
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file(project.findProperty("STORE_FILE") as String)
+            storePassword = project.findProperty("STORE_PASSWORD") as String
+            keyAlias = project.findProperty("KEY_ALIAS") as String
+            keyPassword = project.findProperty("KEY_PASSWORD") as String
+        }
+    }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
 
-    buildFeatures{
+    buildTypes {
+        release {
+            signingConfig = signingConfigs.getByName("release")
+        }
+    }
+
+    buildFeatures {
         buildConfig = true
     }
 }
