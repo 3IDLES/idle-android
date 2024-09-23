@@ -1,4 +1,4 @@
-import org.jetbrains.kotlin.konan.properties.Properties
+import java.util.Properties
 
 plugins {
     id("care.android.application")
@@ -31,7 +31,7 @@ android {
         }
     }
 
-    buildFeatures{
+    buildFeatures {
         buildConfig = true
     }
 }
