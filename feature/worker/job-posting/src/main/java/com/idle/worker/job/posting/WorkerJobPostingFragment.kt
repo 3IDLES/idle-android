@@ -75,7 +75,7 @@ internal class WorkerJobPostingFragment : BaseComposeFragment() {
             val favoritesJobPostings by favoritesJobPostings.collectAsStateWithLifecycle()
             val profile by profile.collectAsStateWithLifecycle()
 
-            LaunchedEffect(true) {
+            LaunchedEffect(Unit) {
                 clearJobPostingStatus()
                 getMyFavoritesJobPostings()
                 launch { getAppliedJobPostings() }
@@ -120,11 +120,10 @@ internal fun WorkerJobPostingScreen(
             listState.firstVisibleItemIndex + listState.layoutInfo.visibleItemsInfo.size - 1
         }
     }
-    val isNearEnd =
-        appliedJobPostings.isNotEmpty() && lastVisibleIndex >= (appliedJobPostings.size - 3)
+    val isNearEnd = lastVisibleIndex >= (appliedJobPostings.size - 3)
 
     LaunchedEffect(isNearEnd) {
-        if (isNearEnd) {
+        if (appliedJobPostings.isNotEmpty() && isNearEnd) {
             getAppliedJobPostings()
         }
     }
