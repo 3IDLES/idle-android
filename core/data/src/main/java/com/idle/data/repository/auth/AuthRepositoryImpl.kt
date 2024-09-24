@@ -63,9 +63,9 @@ class AuthRepositoryImpl @Inject constructor(
         ).fold(
             onSuccess = { tokenResponse ->
                 withContext(Dispatchers.IO) {
-                    tokenDataSource.setAccessToken(tokenResponse.accessToken)
                     launch { tokenDataSource.setRefreshToken(tokenResponse.refreshToken) }
                     launch { userInfoDataSource.setUserRole(UserType.CENTER.apiValue) }
+                    tokenDataSource.setAccessToken(tokenResponse.accessToken)
                     Result.success(Unit)
                 }
             },
@@ -100,9 +100,9 @@ class AuthRepositoryImpl @Inject constructor(
     ).fold(
         onSuccess = { tokenResponse ->
             withContext(Dispatchers.IO) {
-                tokenDataSource.setAccessToken(tokenResponse.accessToken)
                 launch { tokenDataSource.setRefreshToken(tokenResponse.refreshToken) }
                 launch { userInfoDataSource.setUserRole(UserType.WORKER.apiValue) }
+                tokenDataSource.setAccessToken(tokenResponse.accessToken)
                 Result.success(Unit)
             }
         },
@@ -120,9 +120,9 @@ class AuthRepositoryImpl @Inject constructor(
     ).fold(
         onSuccess = { tokenResponse ->
             withContext(Dispatchers.IO) {
-                tokenDataSource.setAccessToken(tokenResponse.accessToken)
                 launch { tokenDataSource.setRefreshToken(tokenResponse.refreshToken) }
                 launch { userInfoDataSource.setUserRole(UserType.WORKER.apiValue) }
+                tokenDataSource.setAccessToken(tokenResponse.accessToken)
                 Result.success(Unit)
             }
         },
@@ -133,9 +133,9 @@ class AuthRepositoryImpl @Inject constructor(
         .fold(
             onSuccess = {
                 withContext(Dispatchers.IO) {
-                    tokenDataSource.clearToken()
                     launch { userInfoDataSource.clearUserRole() }
                     launch { userInfoDataSource.clearUserInfo() }
+                    tokenDataSource.clearToken()
                     Result.success(Unit)
                 }
             },
@@ -146,9 +146,9 @@ class AuthRepositoryImpl @Inject constructor(
         .fold(
             onSuccess = {
                 withContext(Dispatchers.IO) {
-                    tokenDataSource.clearToken()
                     launch { userInfoDataSource.clearUserRole() }
                     launch { userInfoDataSource.clearUserInfo() }
+                    tokenDataSource.clearToken()
                     Result.success(Unit)
                 }
             },
@@ -164,9 +164,9 @@ class AuthRepositoryImpl @Inject constructor(
         ).fold(
             onSuccess = {
                 withContext(Dispatchers.IO) {
-                    tokenDataSource.clearToken()
                     launch { userInfoDataSource.clearUserRole() }
                     launch { userInfoDataSource.clearUserInfo() }
+                    tokenDataSource.clearToken()
                     Result.success(Unit)
                 }
             },
@@ -178,9 +178,9 @@ class AuthRepositoryImpl @Inject constructor(
             .fold(
                 onSuccess = {
                     withContext(Dispatchers.IO) {
-                        tokenDataSource.clearToken()
                         launch { userInfoDataSource.clearUserRole() }
                         launch { userInfoDataSource.clearUserInfo() }
+                        tokenDataSource.clearToken()
                         Result.success(Unit)
                     }
                 },
