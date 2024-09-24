@@ -47,6 +47,9 @@ interface AuthApi {
     @POST("/api/v1/auth/carer/logout")
     suspend fun logoutWorker(): Response<Unit>
 
+    @POST("/api/v1/common/token")
+    suspend fun postDeviceToken(token:String): Response<Unit>
+
     @POST("/api/v1/auth/center/withdraw")
     suspend fun withdrawalCenter(
         @Body withdrawalCenterRequest: WithdrawalCenterRequest

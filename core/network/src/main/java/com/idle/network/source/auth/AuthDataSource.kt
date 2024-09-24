@@ -36,6 +36,9 @@ class AuthDataSource @Inject constructor(
     suspend fun signInWorker(signInWorkerRequest: SignInWorkerRequest): Result<TokenResponse> =
         safeApiCall { authApi.signInWorker(signInWorkerRequest) }
 
+    suspend fun postDeviceToken(token: String): Result<Unit> =
+        safeApiCall { authApi.postDeviceToken(token) }
+
     suspend fun logoutWorker(): Result<Unit> = safeApiCall { authApi.logoutWorker() }
 
     suspend fun logoutCenter(): Result<Unit> = safeApiCall { authApi.logoutCenter() }
