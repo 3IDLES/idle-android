@@ -3,6 +3,7 @@ package com.idle.network.api
 import com.idle.network.model.auth.BusinessRegistrationResponse
 import com.idle.network.model.auth.ConfirmAuthCodeRequest
 import com.idle.network.model.auth.GenerateNewPasswordRequest
+import com.idle.network.model.auth.PostDeviceTokenRequest
 import com.idle.network.model.auth.SendPhoneRequest
 import com.idle.network.model.auth.SignInCenterRequest
 import com.idle.network.model.auth.SignInWorkerRequest
@@ -48,7 +49,7 @@ interface AuthApi {
     suspend fun logoutWorker(): Response<Unit>
 
     @POST("/api/v1/common/token")
-    suspend fun postDeviceToken(token:String): Response<Unit>
+    suspend fun postDeviceToken(@Body postDeviceTokenRequest: PostDeviceTokenRequest): Response<Unit>
 
     @POST("/api/v1/auth/center/withdraw")
     suspend fun withdrawalCenter(
