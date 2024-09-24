@@ -55,4 +55,6 @@ dependencies {
     implementation(projects.core.data)
     implementation(projects.core.domain)
     implementation(projects.presentation)
+
+    implementation(libs.firebase.messaging)
 }

@@ -85,8 +85,9 @@ ktlint = "12.1.1"
 
 ## firebase
 googleServices = "4.4.2"
-firebaseBom = "33.1.2"
+firebaseBom = "33.3.0"
 crashlytics = "3.0.2"
+messaging = "23.2.1"
 
 # https://coil-kt.github.io/coil/#jetpack-compose
 coil = "2.7.0"
@@ -152,6 +153,7 @@ firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.r
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
 firebase-config = { group = "com.google.firebase", name = "firebase-config-ktx" }
+firebase-messaging = { module = "com.google.firebase:firebase-messaging", version.ref = "messaging" }
 
 amplitude-analytics = { module = "com.amplitude:analytics-android", version.ref = "amplitudeAnalytics" }
 
