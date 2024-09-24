@@ -2,6 +2,7 @@ package com.idle.data.repository.auth
 
 import com.idle.datastore.datasource.TokenDataSource
 import com.idle.domain.repositorry.auth.TokenRepository
+import com.idle.network.model.auth.PostDeviceTokenRequest
 import com.idle.network.source.auth.AuthDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -16,6 +17,6 @@ class TokenRepositoryImpl @Inject constructor(
         tokenDataSource.accessToken.first()
     }
 
-    override suspend fun putFCMDeviceToken(token: String): Result<Unit> =
-        authDataSource.postDeviceToken(token)
+    override suspend fun putDeviceToken(token: String): Result<Unit> =
+        authDataSource.postDeviceToken(PostDeviceTokenRequest(token))
 }

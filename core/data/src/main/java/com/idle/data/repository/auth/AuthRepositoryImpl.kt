@@ -5,6 +5,7 @@ import com.idle.datastore.datasource.UserInfoDataSource
 import com.idle.domain.model.auth.BusinessRegistrationInfo
 import com.idle.domain.model.auth.UserType
 import com.idle.domain.repositorry.auth.AuthRepository
+import com.idle.domain.repositorry.auth.TokenRepository
 import com.idle.network.model.auth.ConfirmAuthCodeRequest
 import com.idle.network.model.auth.GenerateNewPasswordRequest
 import com.idle.network.model.auth.SendPhoneRequest
@@ -16,6 +17,7 @@ import com.idle.network.model.auth.WithdrawalCenterRequest
 import com.idle.network.model.auth.WithdrawalWorkerRequest
 import com.idle.network.source.auth.AuthDataSource
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -24,6 +26,7 @@ class AuthRepositoryImpl @Inject constructor(
     private val authDataSource: AuthDataSource,
     private val tokenDataSource: TokenDataSource,
     private val userInfoDataSource: UserInfoDataSource,
+    private val tokenRepository: TokenRepository,
 ) : AuthRepository {
     override suspend fun sendPhoneNumber(phoneNumber: String): Result<Unit> =
         authDataSource.sendPhoneNumber(SendPhoneRequest(phoneNumber))
@@ -65,9 +68,12 @@ class AuthRepositoryImpl @Inject constructor(
                 withContext(Dispatchers.IO) {
                     launch { tokenDataSource.setRefreshToken(tokenResponse.refreshToken) }
                     launch { userInfoDataSource.setUserRole(UserType.CENTER.apiValue) }
-                    tokenDataSource.setAccessToken(tokenResponse.accessToken)
+                    launch { tokenDataSource.setAccessToken(tokenResponse.accessToken) }
+                    val deviceToken = async { getDeviceToken() }
+                    tokenRepository.putDeviceToken(deviceToken.await())
                     Result.success(Unit)
                 }
+
             },
             onFailure = { Result.failure(it) }
         )
@@ -102,7 +108,9 @@ class AuthRepositoryImpl @Inject constructor(
             withContext(Dispatchers.IO) {
                 launch { tokenDataSource.setRefreshToken(tokenResponse.refreshToken) }
                 launch { userInfoDataSource.setUserRole(UserType.WORKER.apiValue) }
-                tokenDataSource.setAccessToken(tokenResponse.accessToken)
+                launch { tokenDataSource.setAccessToken(tokenResponse.accessToken) }
+                val deviceToken = async { getDeviceToken() }
+                tokenRepository.putDeviceToken(deviceToken.await())
                 Result.success(Unit)
             }
         },
@@ -122,7 +130,9 @@ class AuthRepositoryImpl @Inject constructor(
             withContext(Dispatchers.IO) {
                 launch { tokenDataSource.setRefreshToken(tokenResponse.refreshToken) }
                 launch { userInfoDataSource.setUserRole(UserType.WORKER.apiValue) }
-                tokenDataSource.setAccessToken(tokenResponse.accessToken)
+                launch { tokenDataSource.setAccessToken(tokenResponse.accessToken) }
+                val deviceToken = async { getDeviceToken() }
+                tokenRepository.putDeviceToken(deviceToken.await())
                 Result.success(Unit)
             }
         },
@@ -200,4 +210,6 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun sendCenterVerificationRequest(): Result<Unit> =
         authDataSource.sendCenterVerificationRequest()
+
+    private suspend fun getDeviceToken() = authDataSource.getDeviceToken()
 }

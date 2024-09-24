@@ -5,6 +5,7 @@ import com.idle.network.api.AuthApi
 import com.idle.network.model.auth.BusinessRegistrationResponse
 import com.idle.network.model.auth.ConfirmAuthCodeRequest
 import com.idle.network.model.auth.GenerateNewPasswordRequest
+import com.idle.network.model.auth.PostDeviceTokenRequest
 import com.idle.network.model.auth.SendPhoneRequest
 import com.idle.network.model.auth.SignInCenterRequest
 import com.idle.network.model.auth.SignInWorkerRequest
@@ -41,8 +42,8 @@ class AuthDataSource @Inject constructor(
     suspend fun signInWorker(signInWorkerRequest: SignInWorkerRequest): Result<TokenResponse> =
         safeApiCall { authApi.signInWorker(signInWorkerRequest) }
 
-    suspend fun postDeviceToken(token: String): Result<Unit> =
-        safeApiCall { authApi.postDeviceToken(token) }
+    suspend fun postDeviceToken(postDeviceTokenRequest: PostDeviceTokenRequest): Result<Unit> =
+        safeApiCall { authApi.postDeviceToken(postDeviceTokenRequest) }
 
     suspend fun logoutWorker(): Result<Unit> = safeApiCall { authApi.logoutWorker() }
 
