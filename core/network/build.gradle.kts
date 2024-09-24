@@ -43,4 +43,5 @@ dependencies {
     implementation(libs.okhttp.logging)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.firebase.config)
+    implementation(libs.firebase.messaging)
 }

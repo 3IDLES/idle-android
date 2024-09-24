@@ -19,7 +19,9 @@ class ConfigDataSource @Inject constructor(
                     continuation.resume(remoteConfig[key])
                 } else {
                     task.exception?.let { continuation.resumeWithException(it) }
-                        ?: continuation.resume(null)
+                        ?: continuation.resumeWithException(
+                            Exception("Unknown error occurred when use remoteConfig")
+                        )
                 }
             }
         }

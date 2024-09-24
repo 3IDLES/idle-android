@@ -1,5 +1,6 @@
 package com.idle.network.source.auth
 
+import com.google.firebase.messaging.FirebaseMessaging
 import com.idle.network.api.AuthApi
 import com.idle.network.model.auth.BusinessRegistrationResponse
 import com.idle.network.model.auth.ConfirmAuthCodeRequest
@@ -13,10 +14,14 @@ import com.idle.network.model.auth.WithdrawalCenterRequest
 import com.idle.network.model.auth.WithdrawalWorkerRequest
 import com.idle.network.model.token.TokenResponse
 import com.idle.network.util.safeApiCall
+import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 class AuthDataSource @Inject constructor(
-    private val authApi: AuthApi
+    private val authApi: AuthApi,
+    private val firebaseMessaging: FirebaseMessaging,
 ) {
     suspend fun sendPhoneNumber(sendPhoneRequest: SendPhoneRequest): Result<Unit> =
         safeApiCall { authApi.sendPhoneNumber(sendPhoneRequest) }
@@ -63,4 +68,18 @@ class AuthDataSource @Inject constructor(
 
     suspend fun sendCenterVerificationRequest(): Result<Unit> =
         safeApiCall { authApi.sendCenterVerificationRequest() }
+
+    suspend fun getDeviceToken(): String = suspendCancellableCoroutine { continuation ->
+        firebaseMessaging.token.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                continuation.resume(task.result)
+            } else {
+                task.exception?.let { exception ->
+                    continuation.resumeWithException(exception)
+                } ?: continuation.resumeWithException(
+                    Exception("Unknown error occurred while fetching FCM token")
+                )
+            }
+        }
+    }
 }
