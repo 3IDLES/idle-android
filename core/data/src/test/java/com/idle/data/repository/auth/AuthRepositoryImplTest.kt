@@ -21,13 +21,20 @@ class AuthRepositoryImplTest {
     private lateinit var tokenDataSource: TokenDataSource
     private lateinit var userInfoDataSource: UserInfoDataSource
     private lateinit var authRepository: AuthRepositoryImpl
+    private lateinit var tokenRepository: TokenRepositoryImpl
 
     @BeforeEach
     fun setUp() {
         authDataSource = mockk()
         tokenDataSource = mockk()
         userInfoDataSource = mockk()
-        authRepository = AuthRepositoryImpl(authDataSource, tokenDataSource, userInfoDataSource)
+        tokenRepository = mockk()
+        authRepository = AuthRepositoryImpl(
+            authDataSource = authDataSource,
+            tokenDataSource = tokenDataSource,
+            userInfoDataSource = userInfoDataSource,
+            tokenRepository = tokenRepository,
+        )
 
         coEvery { tokenDataSource.setAccessToken(any()) } just Runs
         coEvery { tokenDataSource.setRefreshToken(any()) } just Runs
@@ -35,10 +42,12 @@ class AuthRepositoryImplTest {
         coEvery { tokenDataSource.clearToken() } just Runs
         coEvery { userInfoDataSource.clearUserRole() } just Runs
         coEvery { userInfoDataSource.clearUserInfo() } just Runs
+        coEvery { authDataSource.getDeviceToken() } returns "testToken"
+        coEvery { tokenRepository.setDeviceToken(any())} returns Result.success(Unit)
     }
 
     @Test
-    fun `센터장이 로그인 성공했을 경우 토큰을 저장한다`() = runTest {
+    fun `센터장이 로그인 성공했을 경우 토큰을 저장하고 디바이스 토큰을 서버로 보낸다`() = runTest {
         // Given
         val tokenResponse = TokenResponse("accessToken", "refreshToken")
         coEvery { authDataSource.signInCenter(any()) } returns Result.success(tokenResponse)
@@ -51,10 +60,11 @@ class AuthRepositoryImplTest {
         coVerify { tokenDataSource.setAccessToken("accessToken") }
         coVerify { tokenDataSource.setRefreshToken("refreshToken") }
         coVerify { userInfoDataSource.setUserRole(UserType.CENTER.apiValue) }
+        coVerify { tokenRepository.setDeviceToken("testToken") }
     }
 
     @Test
-    fun `요양보호사가 회원가입에 성공했을 경우 토큰을 저장한다`() = runTest {
+    fun `요양보호사가 회원가입에 성공했을 경우 토큰을 저장하고 디바이스 토큰을 서버로 보낸다`() = runTest {
         // Given
         val tokenResponse = TokenResponse("accessToken", "refreshToken")
         coEvery { authDataSource.signUpWorker(any()) } returns Result.success(tokenResponse)
@@ -67,10 +77,11 @@ class AuthRepositoryImplTest {
         coVerify { tokenDataSource.setAccessToken("accessToken") }
         coVerify { tokenDataSource.setRefreshToken("refreshToken") }
         coVerify { userInfoDataSource.setUserRole(UserType.WORKER.apiValue) }
+        coVerify { tokenRepository.setDeviceToken("testToken") }
     }
 
     @Test
-    fun `요양보호사가 로그인했을 경우 토큰을 저장한다`() = runTest {
+    fun `요양보호사가 로그인했을 경우 토큰을 저장하고 디바이스 토큰을 서버로 보낸다`() = runTest {
         // Given
         val tokenResponse = TokenResponse("accessToken", "refreshToken")
         coEvery { authDataSource.signInWorker(any()) } returns Result.success(tokenResponse)
@@ -83,6 +94,7 @@ class AuthRepositoryImplTest {
         coVerify { tokenDataSource.setAccessToken("accessToken") }
         coVerify { tokenDataSource.setRefreshToken("refreshToken") }
         coVerify { userInfoDataSource.setUserRole(UserType.WORKER.apiValue) }
+        coVerify { tokenRepository.setDeviceToken("testToken") }
     }
 
     @Test

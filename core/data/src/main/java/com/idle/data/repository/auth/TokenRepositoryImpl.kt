@@ -17,6 +17,6 @@ class TokenRepositoryImpl @Inject constructor(
         tokenDataSource.accessToken.first()
     }
 
-    override suspend fun putDeviceToken(token: String): Result<Unit> =
+    override suspend fun setDeviceToken(token: String): Result<Unit> =
         authDataSource.postDeviceToken(PostDeviceTokenRequest(token))
 }

@@ -15,6 +15,7 @@ import com.idle.network.model.auth.SignUpCenterRequest
 import com.idle.network.model.auth.SignUpWorkerRequest
 import com.idle.network.model.auth.WithdrawalCenterRequest
 import com.idle.network.model.auth.WithdrawalWorkerRequest
+import com.idle.network.model.token.TokenResponse
 import com.idle.network.source.auth.AuthDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -59,21 +60,11 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun signInCenter(identifier: String, password: String): Result<Unit> =
         authDataSource.signInCenter(
-            SignInCenterRequest(
-                identifier = identifier,
-                password = password
-            )
+            SignInCenterRequest(identifier = identifier, password = password)
         ).fold(
             onSuccess = { tokenResponse ->
-                withContext(Dispatchers.IO) {
-                    launch { tokenDataSource.setRefreshToken(tokenResponse.refreshToken) }
-                    launch { userInfoDataSource.setUserRole(UserType.CENTER.apiValue) }
-                    launch { tokenDataSource.setAccessToken(tokenResponse.accessToken) }
-                    val deviceToken = async { getDeviceToken() }
-                    tokenRepository.putDeviceToken(deviceToken.await())
-                    Result.success(Unit)
-                }
-
+                handleSignInSuccess(tokenResponse, UserType.CENTER.apiValue)
+                Result.success(Unit)
             },
             onFailure = { Result.failure(it) }
         )
@@ -105,14 +96,8 @@ class AuthRepositoryImpl @Inject constructor(
         )
     ).fold(
         onSuccess = { tokenResponse ->
-            withContext(Dispatchers.IO) {
-                launch { tokenDataSource.setRefreshToken(tokenResponse.refreshToken) }
-                launch { userInfoDataSource.setUserRole(UserType.WORKER.apiValue) }
-                launch { tokenDataSource.setAccessToken(tokenResponse.accessToken) }
-                val deviceToken = async { getDeviceToken() }
-                tokenRepository.putDeviceToken(deviceToken.await())
-                Result.success(Unit)
-            }
+            handleSignInSuccess(tokenResponse, UserType.WORKER.apiValue)
+            Result.success(Unit)
         },
         onFailure = { Result.failure(it) }
     )
@@ -121,81 +106,31 @@ class AuthRepositoryImpl @Inject constructor(
         phoneNumber: String,
         authCode: String,
     ): Result<Unit> = authDataSource.signInWorker(
-        SignInWorkerRequest(
-            phoneNumber = phoneNumber,
-            authCode = authCode,
-        )
+        SignInWorkerRequest(phoneNumber = phoneNumber, authCode = authCode)
     ).fold(
         onSuccess = { tokenResponse ->
-            withContext(Dispatchers.IO) {
-                launch { tokenDataSource.setRefreshToken(tokenResponse.refreshToken) }
-                launch { userInfoDataSource.setUserRole(UserType.WORKER.apiValue) }
-                launch { tokenDataSource.setAccessToken(tokenResponse.accessToken) }
-                val deviceToken = async { getDeviceToken() }
-                tokenRepository.putDeviceToken(deviceToken.await())
-                Result.success(Unit)
-            }
+            handleSignInSuccess(tokenResponse, UserType.WORKER.apiValue)
+            Result.success(Unit)
         },
         onFailure = { Result.failure(it) }
     )
 
-    override suspend fun logoutWorker(): Result<Unit> = authDataSource.logoutWorker()
-        .fold(
-            onSuccess = {
-                withContext(Dispatchers.IO) {
-                    launch { userInfoDataSource.clearUserRole() }
-                    launch { userInfoDataSource.clearUserInfo() }
-                    tokenDataSource.clearToken()
-                    Result.success(Unit)
-                }
-            },
-            onFailure = { Result.failure(it) }
-        )
+    override suspend fun logoutWorker(): Result<Unit> {
+        return authDataSource.logoutWorker()
+            .onSuccess { clearUserData() }
+    }
 
     override suspend fun logoutCenter(): Result<Unit> = authDataSource.logoutCenter()
-        .fold(
-            onSuccess = {
-                withContext(Dispatchers.IO) {
-                    launch { userInfoDataSource.clearUserRole() }
-                    launch { userInfoDataSource.clearUserInfo() }
-                    tokenDataSource.clearToken()
-                    Result.success(Unit)
-                }
-            },
-            onFailure = { Result.failure(it) }
-        )
+        .onSuccess { clearUserData() }
 
     override suspend fun withdrawalCenter(reason: String, password: String): Result<Unit> =
         authDataSource.withdrawalCenter(
-            WithdrawalCenterRequest(
-                reason = reason,
-                password = password
-            )
-        ).fold(
-            onSuccess = {
-                withContext(Dispatchers.IO) {
-                    launch { userInfoDataSource.clearUserRole() }
-                    launch { userInfoDataSource.clearUserInfo() }
-                    tokenDataSource.clearToken()
-                    Result.success(Unit)
-                }
-            },
-            onFailure = { Result.failure(it) }
-        )
+            WithdrawalCenterRequest(reason = reason, password = password)
+        ).onSuccess { clearUserData() }
 
     override suspend fun withdrawalWorker(reason: String): Result<Unit> =
         authDataSource.withdrawalWorker(WithdrawalWorkerRequest(reason))
-            .fold(
-                onSuccess = {
-                    withContext(Dispatchers.IO) {
-                        launch { userInfoDataSource.clearUserRole() }
-                        launch { userInfoDataSource.clearUserInfo() }
-                        tokenDataSource.clearToken()
-                        Result.success(Unit)
-                    }
-                },
-                onFailure = { Result.failure(it) }
-            )
+            .onSuccess { clearUserData() }
 
     override suspend fun generateNewPassword(
         newPassword: String,
@@ -210,6 +145,24 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun sendCenterVerificationRequest(): Result<Unit> =
         authDataSource.sendCenterVerificationRequest()
+
+    private suspend fun handleSignInSuccess(
+        tokenResponse: TokenResponse,
+        userRole: String,
+    ): Unit = withContext(Dispatchers.IO) {
+        launch { tokenDataSource.setRefreshToken(tokenResponse.refreshToken) }
+        launch { userInfoDataSource.setUserRole(userRole) }
+        launch { tokenDataSource.setAccessToken(tokenResponse.accessToken) }
+
+        val deviceToken = async { getDeviceToken() }
+        tokenRepository.setDeviceToken(deviceToken.await())
+    }
+
+    private suspend fun clearUserData() = withContext(Dispatchers.IO) {
+        launch { userInfoDataSource.clearUserRole() }
+        launch { userInfoDataSource.clearUserInfo() }
+        tokenDataSource.clearToken()
+    }
 
     private suspend fun getDeviceToken() = authDataSource.getDeviceToken()
 }

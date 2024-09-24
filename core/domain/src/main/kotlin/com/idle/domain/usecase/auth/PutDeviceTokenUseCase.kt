@@ -6,5 +6,5 @@ import javax.inject.Inject
 class PutDeviceTokenUseCase @Inject constructor(
     private val tokenRepository: TokenRepository,
 ) {
-    suspend operator fun invoke(token: String) = tokenRepository.putDeviceToken(token)
+    suspend operator fun invoke(token: String) = tokenRepository.setDeviceToken(token)
 }
