@@ -9,3 +9,4 @@
 .cxx
 local.properties
 /.kotlin/
+app/src/main/res/xml/network_security_config.xml
