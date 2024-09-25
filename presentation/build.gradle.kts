@@ -12,6 +12,7 @@ dependencies {
     implementation(projects.core.commonUi.compose)
     implementation(projects.feature.auth)
     implementation(projects.feature.postcode)
+    implementation(projects.feature.notification)
     implementation(projects.feature.signin)
     implementation(projects.feature.signup)
     implementation(projects.feature.setting)

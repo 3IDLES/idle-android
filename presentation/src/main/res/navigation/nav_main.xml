@@ -28,4 +28,5 @@
         app:exitAnim="@anim/anim_pop_slide_out_horizontally"
         app:popUpTo="@id/nav_main"
         app:popUpToInclusive="true" />
+    <include app:graph="@navigation/nav_notification" />
 </navigation>

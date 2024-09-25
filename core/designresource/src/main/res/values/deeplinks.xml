@@ -25,4 +25,6 @@
     <string name="center_job_posting_post_complete_deeplink_url">care://center/jobposting/post/complete</string>
     <string name="center_jobposting_detail_deeplink_url">care://center/jobposting/detail/{jobPostingId}/{isEditState}</string>
     <string name="center_applicant_inquiry_deeplink_url">care://center/applicant/inquiry/{jobPostingId}</string>
+
+    <string name="notification_deeplink_url">care://notification</string>
 </resources>
