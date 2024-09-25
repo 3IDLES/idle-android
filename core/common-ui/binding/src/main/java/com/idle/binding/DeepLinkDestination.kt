@@ -40,6 +40,10 @@ sealed class DeepLinkDestination(
         addressRes = R.string.signup_complete_deeplink_url,
     )
 
+    data object Notification : DeepLinkDestination(
+        addressRes = R.string.notification_deeplink_url,
+    )
+
     data class CenterSignIn(val snackBarMsg: String = "default") : DeepLinkDestination(
         addressRes = R.string.center_signin_deeplink_url,
         params = mapOf("snackBarMsg" to snackBarMsg)

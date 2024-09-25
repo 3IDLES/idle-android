@@ -182,6 +182,9 @@
     <string name="specialty">특기</string>
     <string name="worker_introduce">한줄 소개</string>
 
+    <!-- Notification -->
+    <string name="notification">알림</string>
+
     <!-- Experience & Application -->
     <string name="experience">경력</string>
     <string name="year">연차</string>

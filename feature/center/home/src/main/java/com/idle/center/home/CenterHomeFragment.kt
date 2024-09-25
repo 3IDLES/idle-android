@@ -132,6 +132,15 @@ internal fun CenterHomeScreen(
             CareHeadingTopBar(
                 title = stringResource(id = R.string.manage_job_posting),
                 modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 48.dp, bottom = 8.dp),
+                rightComponent = {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_notification),
+                        contentDescription = null,
+                        modifier = Modifier.clickable {
+                            navigateTo(DeepLinkDestination.Notification)
+                        }
+                    )
+                },
             )
         },
         snackbarHost = {

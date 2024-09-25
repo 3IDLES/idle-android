@@ -166,6 +166,15 @@ internal fun WorkerHomeScreen(
                         contentDescription = null,
                     )
                 },
+                rightComponent = {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_notification),
+                        contentDescription = null,
+                        modifier = Modifier.clickable {
+                            navigateTo(DeepLinkDestination.Notification)
+                        }
+                    )
+                },
                 modifier = Modifier.padding(
                     start = 20.dp,
                     end = 20.dp,
