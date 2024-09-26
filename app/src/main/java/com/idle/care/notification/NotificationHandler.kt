@@ -6,6 +6,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import com.idle.presentation.MainActivity
 import com.idle.presentation.R
 import javax.inject.Inject
@@ -39,7 +40,8 @@ class NotificationHandler @Inject constructor(private val context: Context) {
         )
 
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(com.idle.care.R.mipmap.ic_launcher)
+            .setSmallIcon(com.idle.care.R.drawable.ic_notification_icon)
+            .setColor(ContextCompat.getColor(context, com.idle.designsystem.binding.R.color.orange_500))
             .setContentTitle(title)
             .setContentText(body)
             .setContentIntent(pendingIntent)
