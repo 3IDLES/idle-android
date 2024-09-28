@@ -155,13 +155,15 @@ class AuthRepositoryImpl @Inject constructor(
         launch { tokenDataSource.setAccessToken(tokenResponse.accessToken) }
 
         val deviceToken = async { getDeviceToken() }
-        tokenRepository.setDeviceToken(deviceToken.await())
+        tokenRepository.postDeviceToken(deviceToken.await())
     }
 
     private suspend fun clearUserData() = withContext(Dispatchers.IO) {
         launch { userInfoDataSource.clearUserRole() }
         launch { userInfoDataSource.clearUserInfo() }
-        tokenDataSource.clearToken()
+        launch { tokenDataSource.clearToken() }
+
+        tokenRepository.deleteDeviceToken()
     }
 
     private suspend fun getDeviceToken() = authDataSource.getDeviceToken()

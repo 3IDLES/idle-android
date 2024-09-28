@@ -43,7 +43,8 @@ class AuthRepositoryImplTest {
         coEvery { userInfoDataSource.clearUserRole() } just Runs
         coEvery { userInfoDataSource.clearUserInfo() } just Runs
         coEvery { authDataSource.getDeviceToken() } returns "testToken"
-        coEvery { tokenRepository.setDeviceToken(any())} returns Result.success(Unit)
+        coEvery { tokenRepository.postDeviceToken(any())} returns Result.success(Unit)
+        coEvery { tokenRepository.deleteDeviceToken()} returns Result.success(Unit)
     }
 
     @Test
@@ -60,7 +61,7 @@ class AuthRepositoryImplTest {
         coVerify { tokenDataSource.setAccessToken("accessToken") }
         coVerify { tokenDataSource.setRefreshToken("refreshToken") }
         coVerify { userInfoDataSource.setUserRole(UserType.CENTER.apiValue) }
-        coVerify { tokenRepository.setDeviceToken("testToken") }
+        coVerify { tokenRepository.postDeviceToken("testToken") }
     }
 
     @Test
@@ -77,7 +78,7 @@ class AuthRepositoryImplTest {
         coVerify { tokenDataSource.setAccessToken("accessToken") }
         coVerify { tokenDataSource.setRefreshToken("refreshToken") }
         coVerify { userInfoDataSource.setUserRole(UserType.WORKER.apiValue) }
-        coVerify { tokenRepository.setDeviceToken("testToken") }
+        coVerify { tokenRepository.postDeviceToken("testToken") }
     }
 
     @Test
@@ -94,7 +95,7 @@ class AuthRepositoryImplTest {
         coVerify { tokenDataSource.setAccessToken("accessToken") }
         coVerify { tokenDataSource.setRefreshToken("refreshToken") }
         coVerify { userInfoDataSource.setUserRole(UserType.WORKER.apiValue) }
-        coVerify { tokenRepository.setDeviceToken("testToken") }
+        coVerify { tokenRepository.postDeviceToken("testToken") }
     }
 
     @Test
@@ -108,6 +109,7 @@ class AuthRepositoryImplTest {
         // Then
         assertTrue(result.isSuccess)
         coVerify { tokenDataSource.clearToken() }
+        coVerify { tokenRepository.deleteDeviceToken() }
         coVerify { userInfoDataSource.clearUserRole() }
         coVerify { userInfoDataSource.clearUserInfo() }
     }
@@ -123,6 +125,7 @@ class AuthRepositoryImplTest {
         // Then
         assertTrue(result.isSuccess)
         coVerify { tokenDataSource.clearToken() }
+        coVerify { tokenRepository.deleteDeviceToken() }
         coVerify { userInfoDataSource.clearUserRole() }
         coVerify { userInfoDataSource.clearUserInfo() }
     }
@@ -138,6 +141,7 @@ class AuthRepositoryImplTest {
         // Then
         assertTrue(result.isSuccess)
         coVerify { tokenDataSource.clearToken() }
+        coVerify { tokenRepository.deleteDeviceToken() }
         coVerify { userInfoDataSource.clearUserRole() }
         coVerify { userInfoDataSource.clearUserInfo() }
     }
@@ -153,6 +157,7 @@ class AuthRepositoryImplTest {
         // Then
         assertTrue(result.isSuccess)
         coVerify { tokenDataSource.clearToken() }
+        coVerify { tokenRepository.deleteDeviceToken() }
         coVerify { userInfoDataSource.clearUserRole() }
         coVerify { userInfoDataSource.clearUserInfo() }
     }

@@ -3,4 +3,4 @@ package com.idle.network.model.auth
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class PostDeviceTokenRequest(val token: String)
+data class FCMTokenRequest(val deviceToken: String)
