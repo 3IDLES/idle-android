@@ -3,6 +3,7 @@ package com.idle.worker.home
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,9 +13,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
@@ -31,6 +34,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
@@ -72,6 +76,7 @@ internal class WorkerHomeFragment : BaseComposeFragment() {
         fragmentViewModel.apply {
             val profile by profile.collectAsStateWithLifecycle()
             val jobPostings by jobPostings.collectAsStateWithLifecycle()
+            val unreadNotificationCount by unreadNotificationCount.collectAsStateWithLifecycle()
 
             LaunchedEffect(true) {
                 getUnreadNotificationCount()
@@ -81,6 +86,7 @@ internal class WorkerHomeFragment : BaseComposeFragment() {
                 snackbarHostState = snackbarHostState,
                 profile = profile,
                 workerJobPostings = jobPostings,
+                unreadNotificationCount = unreadNotificationCount,
                 getJobPostings = ::getJobPostings,
                 applyJobPosting = ::applyJobPosting,
                 addFavoriteJobPosting = ::addFavoriteJobPosting,
@@ -96,6 +102,7 @@ internal fun WorkerHomeScreen(
     snackbarHostState: SnackbarHostState,
     profile: WorkerProfile?,
     workerJobPostings: List<JobPosting>,
+    unreadNotificationCount: Int,
     getJobPostings: () -> Unit,
     applyJobPosting: (String) -> Unit,
     addFavoriteJobPosting: (String, JobPostingType) -> Unit,
@@ -171,13 +178,26 @@ internal fun WorkerHomeScreen(
                     )
                 },
                 rightComponent = {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_notification),
-                        contentDescription = null,
-                        modifier = Modifier.clickable {
-                            navigateTo(DeepLinkDestination.Notification)
+                    Box(modifier = Modifier
+                        .size(32.dp)
+                        .clickable { navigateTo(DeepLinkDestination.Notification) }
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_notification),
+                            contentDescription = null,
+                        )
+
+                        if (unreadNotificationCount > 0) {
+                            Box(
+                                modifier = Modifier
+                                    .align(Alignment.TopEnd)
+                                    .padding(top = 1.dp)
+                                    .clip(CircleShape)
+                                    .size(6.dp)
+                                    .background(CareTheme.colors.red),
+                            )
                         }
-                    )
+                    }
                 },
                 modifier = Modifier.padding(
                     start = 20.dp,
