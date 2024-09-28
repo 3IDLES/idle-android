@@ -8,7 +8,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings.ACTION_WIFI_SETTINGS
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
@@ -20,7 +19,14 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.idle.binding.DeepLinkDestination.CenterApplicantInquiry
+import com.idle.binding.DeepLinkDestination.CenterHome
+import com.idle.binding.DeepLinkDestination.CenterJobDetail
+import com.idle.binding.DeepLinkDestination.WorkerHome
+import com.idle.binding.DeepLinkDestination.WorkerJobDetail
+import com.idle.binding.deepLinkNavigateTo
 import com.idle.binding.repeatOnStarted
+import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.presentation.databinding.ActivityMainBinding
 import com.idle.presentation.forceupdate.ForceUpdateFragment
 import com.idle.presentation.network.NetworkObserver
@@ -98,7 +104,10 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        Log.d("test", intent?.data.toString())
+        handleNotificationNavigate(
+            isColdStart = true,
+            extras = intent?.extras,
+        )
 
         repeatOnStarted {
             networkObserver.networkState.collect { state ->
@@ -158,7 +167,60 @@ class MainActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        Log.d("test", intent?.data.toString())
+        handleNotificationNavigate(
+            isColdStart = false,
+            extras = intent?.extras,
+        )
+    }
+
+    private fun handleNotificationNavigate(
+        isColdStart: Boolean,
+        extras: Bundle?,
+    ) {
+        val destination = extras?.getString("destination") ?: return
+
+        when (destination) {
+            "APPLICANTS" -> {
+                val jobPostingId = extras.getString("jobPostingId") ?: return
+                val screenDepth = if (isColdStart) {
+                    listOf(
+                        CenterHome,
+                        CenterJobDetail(jobPostingId),
+                        CenterApplicantInquiry(jobPostingId)
+                    )
+                } else {
+                    listOf(
+                        CenterJobDetail(jobPostingId),
+                        CenterApplicantInquiry(jobPostingId)
+                    )
+                }
+
+                screenDepth.forEach {
+                    navController.deepLinkNavigateTo(
+                        context = this,
+                        deepLinkDestination = it,
+                    )
+                }
+            }
+
+            "JOB_POSTING_DETAIL" -> {
+                val jobPostingId = extras.getString("jobPostingId") ?: return
+                val screenDepth = listOf(
+                    WorkerHome,
+                    WorkerJobDetail(
+                        jobPostingId = jobPostingId,
+                        jobPostingType = JobPostingType.CAREMEET.name
+                    ),
+                )
+
+                screenDepth.forEach {
+                    navController.deepLinkNavigateTo(
+                        context = this,
+                        deepLinkDestination = it,
+                    )
+                }
+            }
+        }
     }
 
     private fun showNetworkDialog() {
