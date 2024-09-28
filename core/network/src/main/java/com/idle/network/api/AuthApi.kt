@@ -49,15 +49,6 @@ interface AuthApi {
     @POST("/api/v1/auth/carer/logout")
     suspend fun logoutWorker(): Response<Unit>
 
-    @POST("/api/v1/fcm/token")
-    suspend fun postFCMToken(@Body fcmTokenRequest: FCMTokenRequest): Response<Unit>
-
-    @PATCH("/api/v1/fcm/token")
-    suspend fun patchFCMToken(@Body fcmTokenRequest: FCMTokenRequest): Response<Unit>
-
-    @DELETE("/api/v1/fcm/token")
-    suspend fun deleteFCMToken(): Response<Unit>
-
     @POST("/api/v1/auth/center/withdraw")
     suspend fun withdrawalCenter(
         @Body withdrawalCenterRequest: WithdrawalCenterRequest

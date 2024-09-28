@@ -8,11 +8,14 @@ import javax.inject.Inject
 class NotificationRepositoryImpl @Inject constructor(
     private val notificationDataSource: NotificationDataSource,
 ) : NotificationRepository {
-    override suspend fun getNotifications(): Result<List<Notification>> =
-        notificationDataSource.getNotifications()
-            .mapCatching {
-                it.notifications.map { response ->
-                    Notification(response)
-                }
-            }
+    override suspend fun getMyNotifications(): Result<Notification> =
+        notificationDataSource.getMyNotifications()
+            .mapCatching { it.toVO() }
+
+    override suspend fun readNotification(notificationId: String): Result<Unit> =
+        notificationDataSource.readNotification(notificationId)
+
+    override suspend fun getUnreadNotificationCount(): Result<Int> =
+        notificationDataSource.getUnreadNotificationCount()
+            .mapCatching { it.unreadNotificationCount ?: 0 }
 }

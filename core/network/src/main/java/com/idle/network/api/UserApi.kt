@@ -76,7 +76,4 @@ interface UserApi {
 
     @GET("/api/v1/auth/center/join/status")
     suspend fun getCenterStatus(): Response<GetCenterStatusResponse>
-
-    @GET("/api/v1/auth/common/notification")
-    suspend fun getNotification(): Response<GetNotificationResponse>
 }

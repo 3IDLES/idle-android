@@ -3,6 +3,7 @@ package com.idle.network.di
 import com.idle.network.BuildConfig
 import com.idle.network.api.AuthApi
 import com.idle.network.api.JobPostingApi
+import com.idle.network.api.NotificationApi
 import com.idle.network.api.UserApi
 import com.idle.network.authenticator.CareAuthenticator
 import com.idle.network.interceptor.AuthInterceptor
@@ -77,4 +78,16 @@ object RetrofitModule {
         .baseUrl(BuildConfig.CARE_BASE_URL)
         .build()
         .create(UserApi::class.java)
+
+
+    @Singleton
+    @Provides
+    fun providesNotificationApi(
+        okHttpClient: OkHttpClient,
+    ): NotificationApi = Retrofit.Builder()
+        .client(okHttpClient)
+        .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
+        .baseUrl(BuildConfig.CARE_BASE_URL)
+        .build()
+        .create(NotificationApi::class.java)
 }
