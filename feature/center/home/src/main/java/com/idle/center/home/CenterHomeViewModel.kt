@@ -1,6 +1,5 @@
 package com.idle.center.home
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
@@ -32,9 +31,12 @@ class CenterHomeViewModel @Inject constructor(
     private val _jobPostingsCompleted = MutableStateFlow<List<CenterJobPosting>>(emptyList())
     val jobPostingsCompleted = _jobPostingsCompleted.asStateFlow()
 
+    private val _unreadNotificationCount = MutableStateFlow(0)
+    val unreadNotificationCount = _unreadNotificationCount.asStateFlow()
+
     internal fun getUnreadNotificationCount() = viewModelScope.launch {
         getUnreadNotificationCountUseCase().onSuccess {
-            Log.d("test", it.toString())
+            _unreadNotificationCount.value = it
         }.onFailure {
             handleFailure(it as HttpResponseException)
         }

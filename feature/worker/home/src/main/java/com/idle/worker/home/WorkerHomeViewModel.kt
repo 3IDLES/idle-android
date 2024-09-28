@@ -45,6 +45,9 @@ class WorkerHomeViewModel @Inject constructor(
 
     private var callType: JobPostingCallType = JobPostingCallType.IN_APP
 
+    private val _unreadNotificationCount = MutableStateFlow(0)
+    val unreadNotificationCount = _unreadNotificationCount.asStateFlow()
+
     init {
         getJobPostings()
         viewModelScope.launch {
@@ -68,7 +71,7 @@ class WorkerHomeViewModel @Inject constructor(
 
     internal fun getUnreadNotificationCount() = viewModelScope.launch {
         getUnreadNotificationCountUseCase().onSuccess {
-            Log.d("test", it.toString())
+            _unreadNotificationCount.value = it
         }.onFailure {
             handleFailure(it as HttpResponseException)
         }

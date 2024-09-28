@@ -5,6 +5,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,9 +15,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
@@ -33,6 +36,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -68,6 +72,7 @@ internal class CenterHomeFragment : BaseComposeFragment() {
             val recruitmentPostStatus by recruitmentPostStatus.collectAsStateWithLifecycle()
             val jobPostingsInProgress by jobPostingsInProgress.collectAsStateWithLifecycle()
             val jobPostingsCompleted by jobPostingsCompleted.collectAsStateWithLifecycle()
+            val unreadNotificationCount by unreadNotificationCount.collectAsStateWithLifecycle()
 
             LaunchedEffect(true) {
                 clearJobPostingStatus()
@@ -81,6 +86,7 @@ internal class CenterHomeFragment : BaseComposeFragment() {
                 recruitmentPostStatus = recruitmentPostStatus,
                 jobPostingsInProgresses = jobPostingsInProgress,
                 jobPostingsCompleted = jobPostingsCompleted,
+                unreadNotificationCount = unreadNotificationCount,
                 setRecruitmentPostStatus = ::setRecruitmentPostStatus,
                 endJobPosting = ::endJobPosting,
                 navigateTo = { baseEvent(NavigateTo(destination = it)) }
@@ -95,6 +101,7 @@ internal fun CenterHomeScreen(
     recruitmentPostStatus: RecruitmentPostStatus,
     jobPostingsInProgresses: List<CenterJobPosting>,
     jobPostingsCompleted: List<CenterJobPosting>,
+    unreadNotificationCount: Int,
     setRecruitmentPostStatus: (RecruitmentPostStatus) -> Unit,
     endJobPosting: (String) -> Unit,
     navigateTo: (DeepLinkDestination) -> Unit,
@@ -134,13 +141,27 @@ internal fun CenterHomeScreen(
                 title = stringResource(id = R.string.manage_job_posting),
                 modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 48.dp, bottom = 8.dp),
                 rightComponent = {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_notification),
-                        contentDescription = null,
-                        modifier = Modifier.clickable {
-                            navigateTo(DeepLinkDestination.Notification)
+                    Box(
+                        modifier = Modifier
+                            .size(32.dp)
+                            .clickable { navigateTo(DeepLinkDestination.Notification) },
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_notification),
+                            contentDescription = null,
+                        )
+
+                        if (unreadNotificationCount > 0) {
+                            Box(
+                                modifier = Modifier
+                                    .align(Alignment.TopEnd)
+                                    .padding(top = 1.dp)
+                                    .clip(CircleShape)
+                                    .size(6.dp)
+                                    .background(CareTheme.colors.red),
+                            )
                         }
-                    )
+                    }
                 },
             )
         },
