@@ -1,7 +1,5 @@
 package com.idle.domain.repositorry.auth
 
-import com.idle.domain.model.notification.Notification
-
 interface TokenRepository {
     suspend fun getAccessToken(): String
 

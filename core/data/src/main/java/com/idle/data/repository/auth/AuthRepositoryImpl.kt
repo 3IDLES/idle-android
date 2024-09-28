@@ -116,21 +116,33 @@ class AuthRepositoryImpl @Inject constructor(
     )
 
     override suspend fun logoutWorker(): Result<Unit> {
+        tokenRepository.deleteDeviceToken()
+
         return authDataSource.logoutWorker()
             .onSuccess { clearUserData() }
     }
 
-    override suspend fun logoutCenter(): Result<Unit> = authDataSource.logoutCenter()
-        .onSuccess { clearUserData() }
+    override suspend fun logoutCenter(): Result<Unit> {
+        tokenRepository.deleteDeviceToken()
 
-    override suspend fun withdrawalCenter(reason: String, password: String): Result<Unit> =
-        authDataSource.withdrawalCenter(
+        return authDataSource.logoutCenter()
+            .onSuccess { clearUserData() }
+    }
+
+    override suspend fun withdrawalCenter(reason: String, password: String): Result<Unit> {
+        tokenRepository.deleteDeviceToken()
+
+        return authDataSource.withdrawalCenter(
             WithdrawalCenterRequest(reason = reason, password = password)
         ).onSuccess { clearUserData() }
+    }
 
-    override suspend fun withdrawalWorker(reason: String): Result<Unit> =
-        authDataSource.withdrawalWorker(WithdrawalWorkerRequest(reason))
+    override suspend fun withdrawalWorker(reason: String): Result<Unit> {
+        tokenRepository.deleteDeviceToken()
+
+        return authDataSource.withdrawalWorker(WithdrawalWorkerRequest(reason))
             .onSuccess { clearUserData() }
+    }
 
     override suspend fun generateNewPassword(
         newPassword: String,
@@ -160,9 +172,7 @@ class AuthRepositoryImpl @Inject constructor(
     private suspend fun clearUserData() = withContext(Dispatchers.IO) {
         launch { userInfoDataSource.clearUserRole() }
         launch { userInfoDataSource.clearUserInfo() }
-        launch { tokenDataSource.clearToken() }
-
-        tokenRepository.deleteDeviceToken()
+        tokenDataSource.clearToken()
     }
 
     private suspend fun getDeviceToken() = authDataSource.getDeviceToken()
