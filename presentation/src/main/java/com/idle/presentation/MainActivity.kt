@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings.ACTION_WIFI_SETTINGS
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
@@ -97,6 +98,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        Log.d("test", intent?.data.toString())
+
         repeatOnStarted {
             networkObserver.networkState.collect { state ->
                 if (state == NetworkState.NOT_CONNECTED) {
@@ -151,6 +154,11 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         networkObserver.unsubscribeNetworkCallback()
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        Log.d("test", intent?.data.toString())
     }
 
     private fun showNetworkDialog() {
