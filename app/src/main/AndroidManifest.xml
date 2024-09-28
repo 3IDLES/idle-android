@@ -36,13 +36,13 @@
             </intent-filter>
         </service>
         <meta-data
-            android:name="com.naver.maps.map.CLIENT_ID"
-            android:value="${NAVER_CLIENT_ID}" />
-        <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_notification_icon" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/orange_500" />
+        <meta-data
+            android:name="com.naver.maps.map.CLIENT_ID"
+            android:value="${NAVER_CLIENT_ID}" />
     </application>
 </manifest>
