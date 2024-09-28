@@ -3,7 +3,7 @@ package com.idle.network.api
 import com.idle.network.model.auth.BusinessRegistrationResponse
 import com.idle.network.model.auth.ConfirmAuthCodeRequest
 import com.idle.network.model.auth.GenerateNewPasswordRequest
-import com.idle.network.model.auth.PostDeviceTokenRequest
+import com.idle.network.model.auth.FCMTokenRequest
 import com.idle.network.model.auth.SendPhoneRequest
 import com.idle.network.model.auth.SignInCenterRequest
 import com.idle.network.model.auth.SignInWorkerRequest
@@ -15,6 +15,7 @@ import com.idle.network.model.token.RefreshTokenRequest
 import com.idle.network.model.token.TokenResponse
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
@@ -48,8 +49,14 @@ interface AuthApi {
     @POST("/api/v1/auth/carer/logout")
     suspend fun logoutWorker(): Response<Unit>
 
-    @POST("/api/v1/common/token")
-    suspend fun postDeviceToken(@Body postDeviceTokenRequest: PostDeviceTokenRequest): Response<Unit>
+    @POST("/api/v1/fcm/token")
+    suspend fun postFCMToken(@Body fcmTokenRequest: FCMTokenRequest): Response<Unit>
+
+    @PATCH("/api/v1/fcm/token")
+    suspend fun patchFCMToken(@Body fcmTokenRequest: FCMTokenRequest): Response<Unit>
+
+    @DELETE("/api/v1/fcm/token")
+    suspend fun deleteFCMToken(): Response<Unit>
 
     @POST("/api/v1/auth/center/withdraw")
     suspend fun withdrawalCenter(

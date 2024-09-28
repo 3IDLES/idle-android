@@ -4,8 +4,8 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.idle.network.api.AuthApi
 import com.idle.network.model.auth.BusinessRegistrationResponse
 import com.idle.network.model.auth.ConfirmAuthCodeRequest
+import com.idle.network.model.auth.FCMTokenRequest
 import com.idle.network.model.auth.GenerateNewPasswordRequest
-import com.idle.network.model.auth.PostDeviceTokenRequest
 import com.idle.network.model.auth.SendPhoneRequest
 import com.idle.network.model.auth.SignInCenterRequest
 import com.idle.network.model.auth.SignInWorkerRequest
@@ -42,8 +42,13 @@ class AuthDataSource @Inject constructor(
     suspend fun signInWorker(signInWorkerRequest: SignInWorkerRequest): Result<TokenResponse> =
         safeApiCall { authApi.signInWorker(signInWorkerRequest) }
 
-    suspend fun postDeviceToken(postDeviceTokenRequest: PostDeviceTokenRequest): Result<Unit> =
-        safeApiCall { authApi.postDeviceToken(postDeviceTokenRequest) }
+    suspend fun postFCMToken(fcmTokenRequest: FCMTokenRequest): Result<Unit> =
+        safeApiCall { authApi.postFCMToken(fcmTokenRequest) }
+
+    suspend fun updateFCMToken(fcmTokenRequest: FCMTokenRequest): Result<Unit> =
+        safeApiCall { authApi.patchFCMToken(fcmTokenRequest) }
+
+    suspend fun deleteFCMToken(): Result<Unit> = safeApiCall { authApi.deleteFCMToken() }
 
     suspend fun logoutWorker(): Result<Unit> = safeApiCall { authApi.logoutWorker() }
 
