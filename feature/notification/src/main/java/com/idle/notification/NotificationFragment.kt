@@ -7,28 +7,34 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.foundation.CareTheme
+import com.idle.domain.model.notification.Notification
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -38,9 +44,20 @@ internal class NotificationFragment : BaseComposeFragment() {
     @Composable
     override fun ComposeLayout() {
         fragmentViewModel.apply {
+            val todayNotification by todayNotification.collectAsStateWithLifecycle()
+            val weeklyNotification by weeklyNotification.collectAsStateWithLifecycle()
+            val monthlyNotification by monthlyNotification.collectAsStateWithLifecycle()
+
+            LaunchedEffect(true) {
+                clearNotifications()
+                getMyNotifications()
+            }
+
             NotificationScreen(
                 snackbarHostState = snackbarHostState,
-                notificationList = listOf("", "", "", "", "", ""),
+                todayNotification = todayNotification,
+                weeklyNotification = weeklyNotification,
+                monthlyNotification = monthlyNotification,
                 navigateUp = { findNavController().navigateUp() },
             )
         }
@@ -50,7 +67,9 @@ internal class NotificationFragment : BaseComposeFragment() {
 @Composable
 private fun NotificationScreen(
     snackbarHostState: SnackbarHostState,
-    notificationList: List<String>,
+    todayNotification: List<Notification>,
+    weeklyNotification: List<Notification>,
+    monthlyNotification: List<Notification>,
     navigateUp: () -> Unit,
 ) {
     Scaffold(
@@ -80,8 +99,7 @@ private fun NotificationScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(CareTheme.colors.white000)
-                .padding(paddingValue)
-                .padding(top = 24.dp),
+                .padding(paddingValue),
         ) {
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 item {
@@ -93,8 +111,48 @@ private fun NotificationScreen(
                     )
                 }
 
-                items(items = notificationList) { notification ->
+                items(items = todayNotification) { notification ->
                     NotificationItem()
+                }
+
+                item {
+                    HorizontalDivider(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(8.dp)
+                            .background(CareTheme.colors.gray050)
+                    )
+
+                    Text(
+                        text = "최근 7일",
+                        style = CareTheme.typography.subtitle2,
+                        color = CareTheme.colors.gray900,
+                        modifier = Modifier.padding(start = 20.dp, top = 24.dp, bottom = 8.dp),
+                    )
+                }
+
+                items(items = weeklyNotification) { notification ->
+                    NotificationItem()
+                }
+
+                item {
+                    HorizontalDivider(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(CareTheme.colors.gray050)
+                            .height(8.dp)
+                    )
+
+                    Text(
+                        text = "그 이후",
+                        style = CareTheme.typography.subtitle2,
+                        color = CareTheme.colors.gray900,
+                        modifier = Modifier.padding(start = 20.dp, top = 24.dp, bottom = 8.dp),
+                    )
+                }
+
+                items(items = monthlyNotification) { notification ->
+                    NotificationItem( )
                 }
             }
         }
@@ -117,8 +175,8 @@ private fun NotificationItem(modifier: Modifier = Modifier) {
             Box(
                 modifier = Modifier
                     .size(48.dp)
-                    .background(CareTheme.colors.gray100)
                     .clip(CircleShape)
+                    .background(CareTheme.colors.gray100)
             )
 
             Column(modifier = Modifier.fillMaxWidth()) {
