@@ -55,13 +55,13 @@ abstract class DataModule {
 
     @Binds
     @Singleton
-    abstract fun bindsTokenProvider(
-        tokenProviderImpl: TokenManagerImpl,
-    ): TokenManager
+    abstract fun bindsNotificationRepository(
+        notificationRepositoryImpl: NotificationRepositoryImpl,
+    ): NotificationRepository
 
     @Binds
     @Singleton
-    abstract fun bindsNotificationProvider(
-        notificationRepositoryImpl: NotificationRepositoryImpl,
-    ): NotificationRepository
+    abstract fun bindsTokenProvider(
+        tokenProviderImpl: TokenManagerImpl,
+    ): TokenManager
 }

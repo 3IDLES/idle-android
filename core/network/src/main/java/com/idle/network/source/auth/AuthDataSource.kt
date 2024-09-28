@@ -42,14 +42,6 @@ class AuthDataSource @Inject constructor(
     suspend fun signInWorker(signInWorkerRequest: SignInWorkerRequest): Result<TokenResponse> =
         safeApiCall { authApi.signInWorker(signInWorkerRequest) }
 
-    suspend fun postFCMToken(fcmTokenRequest: FCMTokenRequest): Result<Unit> =
-        safeApiCall { authApi.postFCMToken(fcmTokenRequest) }
-
-    suspend fun updateFCMToken(fcmTokenRequest: FCMTokenRequest): Result<Unit> =
-        safeApiCall { authApi.patchFCMToken(fcmTokenRequest) }
-
-    suspend fun deleteFCMToken(): Result<Unit> = safeApiCall { authApi.deleteFCMToken() }
-
     suspend fun logoutWorker(): Result<Unit> = safeApiCall { authApi.logoutWorker() }
 
     suspend fun logoutCenter(): Result<Unit> = safeApiCall { authApi.logoutCenter() }
