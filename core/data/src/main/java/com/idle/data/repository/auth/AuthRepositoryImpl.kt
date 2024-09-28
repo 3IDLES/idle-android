@@ -135,13 +135,12 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun generateNewPassword(
         newPassword: String,
         phoneNumber: String
-    ): Result<Unit> =
-        authDataSource.generateNewPassword(
-            GenerateNewPasswordRequest(
-                newPassword = newPassword,
-                phoneNumber = phoneNumber
-            )
+    ): Result<Unit> = authDataSource.generateNewPassword(
+        GenerateNewPasswordRequest(
+            newPassword = newPassword,
+            phoneNumber = phoneNumber
         )
+    )
 
     override suspend fun sendCenterVerificationRequest(): Result<Unit> =
         authDataSource.sendCenterVerificationRequest()
@@ -149,7 +148,7 @@ class AuthRepositoryImpl @Inject constructor(
     private suspend fun handleSignInSuccess(
         tokenResponse: TokenResponse,
         userRole: String,
-    ): Unit = withContext(Dispatchers.IO) {
+    ) = withContext(Dispatchers.IO) {
         launch { tokenDataSource.setRefreshToken(tokenResponse.refreshToken) }
         launch { userInfoDataSource.setUserRole(userRole) }
         launch { tokenDataSource.setAccessToken(tokenResponse.accessToken) }

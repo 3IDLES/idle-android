@@ -5,7 +5,7 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.idle.domain.model.auth.UserType
 import com.idle.domain.usecase.auth.GetUserRoleUseCase
-import com.idle.domain.usecase.auth.PutDeviceTokenUseCase
+import com.idle.domain.usecase.auth.UpdateDeviceTokenUseCase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
@@ -18,7 +18,7 @@ import javax.inject.Inject
 class NotificationService : FirebaseMessagingService() {
 
     @Inject
-    lateinit var putDeviceTokenUseCase: PutDeviceTokenUseCase
+    lateinit var updateDeviceTokenUseCase: UpdateDeviceTokenUseCase
 
     @Inject
     lateinit var getUserRoleUseCase: GetUserRoleUseCase
@@ -39,7 +39,7 @@ class NotificationService : FirebaseMessagingService() {
             val userRole = getUserRoleUseCase()
 
             when (userRole) {
-                UserType.CENTER.apiValue, UserType.WORKER.apiValue -> putDeviceTokenUseCase(token)
+                UserType.CENTER.apiValue, UserType.WORKER.apiValue -> updateDeviceTokenUseCase(token)
             }
         }
     }
