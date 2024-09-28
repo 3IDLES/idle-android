@@ -1,4 +1,4 @@
-package com.idle.domain.usecase.auth
+package com.idle.domain.usecase.notification
 
 import com.idle.domain.repositorry.auth.TokenRepository
 import javax.inject.Inject

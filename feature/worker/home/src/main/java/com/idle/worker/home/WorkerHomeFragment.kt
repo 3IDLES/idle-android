@@ -73,6 +73,10 @@ internal class WorkerHomeFragment : BaseComposeFragment() {
             val profile by profile.collectAsStateWithLifecycle()
             val jobPostings by jobPostings.collectAsStateWithLifecycle()
 
+            LaunchedEffect(true) {
+                getUnreadNotificationCount()
+            }
+
             WorkerHomeScreen(
                 snackbarHostState = snackbarHostState,
                 profile = profile,

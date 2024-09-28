@@ -1,5 +1,6 @@
 package com.idle.center.home
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
@@ -8,6 +9,7 @@ import com.idle.domain.model.jobposting.CenterJobPosting
 import com.idle.domain.usecase.jobposting.EndJobPostingUseCase
 import com.idle.domain.usecase.jobposting.GetJobPostingsCompletedUseCase
 import com.idle.domain.usecase.jobposting.GetJobPostingsInProgressUseCase
+import com.idle.domain.usecase.notification.GetUnreadNotificationCountUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,6 +21,7 @@ class CenterHomeViewModel @Inject constructor(
     private val getJobPostingsInProgressUseCase: GetJobPostingsInProgressUseCase,
     private val getJobPostingsCompletedUseCase: GetJobPostingsCompletedUseCase,
     private val endJobPostingUseCase: EndJobPostingUseCase,
+    private val getUnreadNotificationCountUseCase: GetUnreadNotificationCountUseCase,
 ) : BaseViewModel() {
     private val _recruitmentPostStatus = MutableStateFlow(RecruitmentPostStatus.IN_PROGRESS)
     val recruitmentPostStatus = _recruitmentPostStatus.asStateFlow()
@@ -28,6 +31,14 @@ class CenterHomeViewModel @Inject constructor(
 
     private val _jobPostingsCompleted = MutableStateFlow<List<CenterJobPosting>>(emptyList())
     val jobPostingsCompleted = _jobPostingsCompleted.asStateFlow()
+
+    internal fun getUnreadNotificationCount() = viewModelScope.launch {
+        getUnreadNotificationCountUseCase().onSuccess {
+            Log.d("test", it.toString())
+        }.onFailure {
+            handleFailure(it as HttpResponseException)
+        }
+    }
 
     internal fun setRecruitmentPostStatus(recruitmentPostStatus: RecruitmentPostStatus) {
         _recruitmentPostStatus.value = recruitmentPostStatus
