@@ -5,7 +5,7 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.idle.domain.model.auth.UserType
 import com.idle.domain.usecase.auth.GetUserRoleUseCase
-import com.idle.domain.usecase.auth.UpdateDeviceTokenUseCase
+import com.idle.domain.usecase.notification.UpdateDeviceTokenUseCase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope

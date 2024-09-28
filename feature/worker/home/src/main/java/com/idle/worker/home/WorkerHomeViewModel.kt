@@ -1,5 +1,6 @@
 package com.idle.worker.home
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
@@ -15,6 +16,7 @@ import com.idle.domain.usecase.jobposting.ApplyJobPostingUseCase
 import com.idle.domain.usecase.jobposting.GetCrawlingJobPostingsUseCase
 import com.idle.domain.usecase.jobposting.GetJobPostingsUseCase
 import com.idle.domain.usecase.jobposting.RemoveFavoriteJobPostingUseCase
+import com.idle.domain.usecase.notification.GetUnreadNotificationCountUseCase
 import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,6 +33,7 @@ class WorkerHomeViewModel @Inject constructor(
     private val applyJobPostingUseCase: ApplyJobPostingUseCase,
     private val addFavoriteJobPostingUseCase: AddFavoriteJobPostingUseCase,
     private val removeFavoriteJobPostingUseCase: RemoveFavoriteJobPostingUseCase,
+    private val getUnreadNotificationCountUseCase: GetUnreadNotificationCountUseCase,
 ) : BaseViewModel() {
     private val _profile = MutableStateFlow<WorkerProfile?>(null)
     val profile = _profile.asStateFlow()
@@ -53,7 +56,7 @@ class WorkerHomeViewModel @Inject constructor(
         }
     }
 
-    fun getJobPostings() = viewModelScope.launch {
+    internal fun getJobPostings() = viewModelScope.launch {
         if (callType == JobPostingCallType.END) return@launch
 
         when (callType) {
@@ -63,28 +66,12 @@ class WorkerHomeViewModel @Inject constructor(
         }
     }
 
-    private suspend fun fetchInAppJobPostings() {
-        getJobPostingsUseCase(next = next.value).onSuccess { (nextId, postings) ->
-            next.value = nextId
-            if (nextId == null) {
-                callType = JobPostingCallType.CRAWLING
-            }
-            _jobPostings.value += postings
-
-            if (_jobPostings.value.isEmpty()) {
-                getJobPostings()
-            }
-        }.onFailure { handleFailure(it as HttpResponseException) }
-    }
-
-    private suspend fun fetchCrawlingJobPostings() {
-        getCrawlingJobPostingsUseCase(next = next.value).onSuccess { (nextId, postings) ->
-            next.value = nextId
-            if (nextId == null) {
-                callType = JobPostingCallType.END
-            }
-            _jobPostings.value += postings
-        }.onFailure { handleFailure(it as HttpResponseException) }
+    internal fun getUnreadNotificationCount() = viewModelScope.launch {
+        getUnreadNotificationCountUseCase().onSuccess {
+            Log.d("test", it.toString())
+        }.onFailure {
+            handleFailure(it as HttpResponseException)
+        }
     }
 
     internal fun applyJobPosting(jobPostingId: String) = viewModelScope.launch {
@@ -146,6 +133,30 @@ class WorkerHomeViewModel @Inject constructor(
                     }
                 }
             }
+        }.onFailure { handleFailure(it as HttpResponseException) }
+    }
+
+    private suspend fun fetchInAppJobPostings() {
+        getJobPostingsUseCase(next = next.value).onSuccess { (nextId, postings) ->
+            next.value = nextId
+            if (nextId == null) {
+                callType = JobPostingCallType.CRAWLING
+            }
+            _jobPostings.value += postings
+
+            if (_jobPostings.value.isEmpty()) {
+                getJobPostings()
+            }
+        }.onFailure { handleFailure(it as HttpResponseException) }
+    }
+
+    private suspend fun fetchCrawlingJobPostings() {
+        getCrawlingJobPostingsUseCase(next = next.value).onSuccess { (nextId, postings) ->
+            next.value = nextId
+            if (nextId == null) {
+                callType = JobPostingCallType.END
+            }
+            _jobPostings.value += postings
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 }

@@ -71,8 +71,9 @@ internal class CenterHomeFragment : BaseComposeFragment() {
 
             LaunchedEffect(true) {
                 clearJobPostingStatus()
-                getJobPostingsInProgress()
                 launch { getJobPostingsCompleted() }
+                launch { getJobPostingsInProgress() }
+                launch { getUnreadNotificationCount() }
             }
 
             CenterHomeScreen(

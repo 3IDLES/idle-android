@@ -3,8 +3,8 @@ package com.idle.domain.usecase.notification
 import com.idle.domain.repositorry.notification.NotificationRepository
 import javax.inject.Inject
 
-class GetNotificationUseCase @Inject constructor(
+class GetUnreadNotificationCountUseCase @Inject constructor(
     private val notificationRepository: NotificationRepository
 ) {
-    suspend operator fun invoke() = notificationRepository.getNotifications()
+    suspend operator fun invoke() = notificationRepository.getUnreadNotificationCount()
 }
