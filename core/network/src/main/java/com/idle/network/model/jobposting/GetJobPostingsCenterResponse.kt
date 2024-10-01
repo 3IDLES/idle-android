@@ -9,36 +9,35 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GetJobPostingsCenterResponse(
-    @SerialName("jobPostings")
-    val jobPostings: List<CenterJobPostingResponse>
+    @SerialName("jobPostings") val jobPostings: List<CenterJobPostingResponse>? = null,
 ) {
-    fun toVO(): List<CenterJobPosting> = jobPostings.map { it.toVO() }
+    fun toVO(): List<CenterJobPosting> = jobPostings?.map { it.toVO() } ?: emptyList()
 }
 
 @Serializable
 data class CenterJobPostingResponse(
-    val id: String,
-    val roadNameAddress: String,
-    val lotNumberAddress: String,
-    val clientName: String,
-    val gender: String,
-    val age: Int,
-    val careLevel: Int,
-    val applyDeadlineType: String,
-    val applyDeadline: String,
-    val createdAt: String,
+    val id: String? = null,
+    val roadNameAddress: String? = null,
+    val lotNumberAddress: String? = null,
+    val clientName: String? = null,
+    val gender: String? = null,
+    val age: Int? = null,
+    val careLevel: Int? = null,
+    val applyDeadlineType: String? = null,
+    val applyDeadline: String? = null,
+    val createdAt: String? = null,
 ) {
     fun toVO(): CenterJobPosting = CenterJobPosting(
-        age = age,
-        applyDeadline = applyDeadline,
-        applyDeadlineType = ApplyDeadlineType.create(applyDeadlineType),
-        careLevel = careLevel,
-        gender = Gender.create(gender),
-        id = id,
-        lotNumberAddress = lotNumberAddress,
-        roadNameAddress = roadNameAddress,
-        clientName = clientName,
-        createdAt = createdAt,
+        age = age ?: -1,
+        applyDeadline = applyDeadline ?: "",
+        applyDeadlineType = ApplyDeadlineType.create(applyDeadlineType ?: ""),
+        careLevel = careLevel ?: -1,
+        gender = Gender.create(gender ?: ""),
+        id = id ?: "",
+        lotNumberAddress = lotNumberAddress ?: "",
+        roadNameAddress = roadNameAddress ?: "",
+        clientName = clientName ?: "",
+        createdAt = createdAt ?: "",
         applicantCount = 0,
     )
 }
