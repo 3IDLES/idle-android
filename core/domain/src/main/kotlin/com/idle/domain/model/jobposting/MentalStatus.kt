@@ -7,7 +7,7 @@ enum class MentalStatus(val displayName: String) {
     UNKNOWN("");
 
     companion object {
-        fun create(mentalStatus: String): MentalStatus {
+        fun create(mentalStatus: String?): MentalStatus {
             return MentalStatus.entries.firstOrNull { it.name == mentalStatus } ?: UNKNOWN
         }
     }

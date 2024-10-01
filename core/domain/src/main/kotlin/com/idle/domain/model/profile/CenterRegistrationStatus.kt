@@ -11,7 +11,7 @@ enum class CenterManagerAccountStatus {
     NEW, PENDING, APPROVED, UNKNOWN;
 
     companion object {
-        fun create(value: String): CenterManagerAccountStatus {
+        fun create(value: String?): CenterManagerAccountStatus {
             return CenterManagerAccountStatus.entries.firstOrNull { it.name == value } ?: UNKNOWN
         }
     }

@@ -6,15 +6,17 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GetCenterStatusResponse(
-    val id: String,
-    val managerName: String,
-    val phoneNumber: String,
-    val centerManagerAccountStatus: String,
+    val id: String? = null,
+    val managerName: String? = null,
+    val phoneNumber: String? = null,
+    val centerManagerAccountStatus: String? = null,
 ) {
     fun toVO() = CenterRegistrationStatus(
-        id = id,
-        managerName = managerName,
-        phoneNumber = phoneNumber,
-        centerManagerAccountStatus = CenterManagerAccountStatus.create(centerManagerAccountStatus),
+        id = id ?: "",
+        managerName = managerName ?: "",
+        phoneNumber = phoneNumber ?: "",
+        centerManagerAccountStatus = CenterManagerAccountStatus.create(
+            centerManagerAccountStatus ?: ""
+        )
     )
 }

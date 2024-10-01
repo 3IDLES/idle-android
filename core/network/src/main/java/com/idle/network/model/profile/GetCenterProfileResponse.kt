@@ -5,24 +5,24 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GetCenterProfileResponse(
-    val centerName: String = "",
-    val officeNumber: String = "",
-    val roadNameAddress: String = "",
-    val lotNumberAddress: String = "",
-    val detailedAddress: String = "",
-    val longitude: Double = 0.0,
-    val latitude: Double = 0.0,
+    val centerName: String? = null,
+    val officeNumber: String? = null,
+    val roadNameAddress: String? = null,
+    val lotNumberAddress: String? = null,
+    val detailedAddress: String? = null,
+    val longitude: Double? = null,
+    val latitude: Double? = null,
     val introduce: String? = null,
     val profileImageUrl: String? = null,
 ) {
     fun toVO(): CenterProfile = CenterProfile(
-        centerName = centerName,
-        officeNumber = officeNumber,
-        roadNameAddress = roadNameAddress,
-        lotNumberAddress = lotNumberAddress,
-        detailedAddress = detailedAddress,
-        longitude = longitude,
-        latitude = latitude,
+        centerName = centerName ?: "",
+        officeNumber = officeNumber ?: "",
+        roadNameAddress = roadNameAddress ?: "",
+        lotNumberAddress = lotNumberAddress ?: "",
+        detailedAddress = detailedAddress ?: "",
+        longitude = longitude ?: 0.0,
+        latitude = latitude ?: 0.0,
         introduce = introduce,
         profileImageUrl = profileImageUrl,
     )
