@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings.ACTION_WIFI_SETTINGS
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
@@ -22,7 +23,6 @@ import androidx.navigation.ui.setupWithNavController
 import com.idle.binding.DeepLinkDestination.CenterApplicantInquiry
 import com.idle.binding.DeepLinkDestination.CenterHome
 import com.idle.binding.DeepLinkDestination.CenterJobDetail
-import com.idle.binding.DeepLinkDestination.WorkerHome
 import com.idle.binding.DeepLinkDestination.WorkerJobDetail
 import com.idle.binding.deepLinkNavigateTo
 import com.idle.binding.repeatOnStarted
@@ -104,11 +104,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        handleNotificationNavigate(
-            isColdStart = true,
-            extras = intent?.extras,
-        )
-
         repeatOnStarted {
             networkObserver.networkState.collect { state ->
                 if (state == NetworkState.NOT_CONNECTED) {
@@ -153,6 +148,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         setDestinationListener()
+
+        handleNotificationNavigate(
+            isColdStart = true,
+            extras = intent?.extras,
+        )
     }
 
     override fun onResume() {
@@ -167,6 +167,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
+
         handleNotificationNavigate(
             isColdStart = false,
             extras = intent?.extras,
@@ -206,7 +207,6 @@ class MainActivity : AppCompatActivity() {
             "JOB_POSTING_DETAIL" -> {
                 val jobPostingId = extras.getString("jobPostingId") ?: return
                 val screenDepth = listOf(
-                    WorkerHome,
                     WorkerJobDetail(
                         jobPostingId = jobPostingId,
                         jobPostingType = JobPostingType.CAREMEET.name

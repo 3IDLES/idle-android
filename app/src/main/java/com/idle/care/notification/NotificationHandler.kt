@@ -19,7 +19,10 @@ class NotificationHandler @Inject constructor(private val context: Context) {
         body: String,
         data: Map<String, String>
     ) {
-        val intent = Intent(context, MainActivity::class.java)
+        val intent = Intent(context, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+        }
+
         if (data.isNotEmpty()) {
             data.forEach { (key, value) ->
                 intent.putExtra(key, value)
