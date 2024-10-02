@@ -96,63 +96,81 @@ private fun NotificationScreen(
     ) { paddingValue ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(
+                space = 8.dp,
+                alignment = Alignment.CenterVertically
+            ),
             modifier = Modifier
                 .fillMaxSize()
                 .background(CareTheme.colors.white000)
                 .padding(paddingValue),
         ) {
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
-                item {
-                    Text(
-                        text = "오늘",
-                        style = CareTheme.typography.subtitle2,
-                        color = CareTheme.colors.gray900,
-                        modifier = Modifier.padding(start = 20.dp, top = 24.dp, bottom = 8.dp),
-                    )
-                }
+            if (todayNotification.isEmpty() && weeklyNotification.isEmpty() && monthlyNotification.isEmpty()) {
+                Text(
+                    text = stringResource(id = R.string.no_received_notification),
+                    style = CareTheme.typography.heading2,
+                    color = CareTheme.colors.gray900,
+                )
 
-                items(items = todayNotification) { notification ->
-                    NotificationItem()
-                }
+                Text(
+                    text = stringResource(id = R.string.notification_description),
+                    style = CareTheme.typography.body3,
+                    color = CareTheme.colors.gray300,
+                )
+            } else {
+                LazyColumn(modifier = Modifier.fillMaxSize()) {
+                    item {
+                        Text(
+                            text = stringResource(id = R.string.today),
+                            style = CareTheme.typography.subtitle2,
+                            color = CareTheme.colors.gray900,
+                            modifier = Modifier.padding(start = 20.dp, top = 24.dp, bottom = 8.dp),
+                        )
+                    }
 
-                item {
-                    HorizontalDivider(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(8.dp)
-                            .background(CareTheme.colors.gray050)
-                    )
+                    items(items = todayNotification) { notification ->
+                        NotificationItem()
+                    }
 
-                    Text(
-                        text = "최근 7일",
-                        style = CareTheme.typography.subtitle2,
-                        color = CareTheme.colors.gray900,
-                        modifier = Modifier.padding(start = 20.dp, top = 24.dp, bottom = 8.dp),
-                    )
-                }
+                    item {
+                        HorizontalDivider(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(8.dp)
+                                .background(CareTheme.colors.gray050)
+                        )
 
-                items(items = weeklyNotification) { notification ->
-                    NotificationItem()
-                }
+                        Text(
+                            text = stringResource(id = R.string.recent_a_week),
+                            style = CareTheme.typography.subtitle2,
+                            color = CareTheme.colors.gray900,
+                            modifier = Modifier.padding(start = 20.dp, top = 24.dp, bottom = 8.dp),
+                        )
+                    }
 
-                item {
-                    HorizontalDivider(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(CareTheme.colors.gray050)
-                            .height(8.dp)
-                    )
+                    items(items = weeklyNotification) { notification ->
+                        NotificationItem()
+                    }
 
-                    Text(
-                        text = "그 이후",
-                        style = CareTheme.typography.subtitle2,
-                        color = CareTheme.colors.gray900,
-                        modifier = Modifier.padding(start = 20.dp, top = 24.dp, bottom = 8.dp),
-                    )
-                }
+                    item {
+                        HorizontalDivider(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(CareTheme.colors.gray050)
+                                .height(8.dp)
+                        )
 
-                items(items = monthlyNotification) { notification ->
-                    NotificationItem( )
+                        Text(
+                            text = stringResource(id = R.string.other_days),
+                            style = CareTheme.typography.subtitle2,
+                            color = CareTheme.colors.gray900,
+                            modifier = Modifier.padding(start = 20.dp, top = 24.dp, bottom = 8.dp),
+                        )
+                    }
+
+                    items(items = monthlyNotification) { notification ->
+                        NotificationItem()
+                    }
                 }
             }
         }
