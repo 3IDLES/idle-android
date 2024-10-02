@@ -35,8 +35,8 @@ class ProfileRepositoryImpl @Inject constructor(
     private val userInfoDataSource: UserInfoDataSource,
     @ApplicationContext private val context: Context,
 ) : ProfileRepository {
-    override suspend fun getMyUserRole() = withContext(Dispatchers.IO) {
-        userInfoDataSource.userRole.first()
+    override suspend fun getMyUserType() = withContext(Dispatchers.IO) {
+        userInfoDataSource.userType.first()
     }
 
     override suspend fun getMyCenterProfile(): Result<CenterProfile> =

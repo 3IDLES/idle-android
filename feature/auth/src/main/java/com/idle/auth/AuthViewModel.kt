@@ -12,7 +12,7 @@ import com.idle.domain.model.error.ApiErrorCode
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.profile.CenterManagerAccountStatus
 import com.idle.domain.usecase.auth.GetAccessTokenUseCase
-import com.idle.domain.usecase.auth.GetUserRoleUseCase
+import com.idle.domain.usecase.auth.GetUserTypeUseCase
 import com.idle.domain.usecase.profile.GetCenterStatusUseCase
 import com.idle.domain.usecase.profile.GetMyCenterProfileUseCase
 import com.idle.domain.usecase.profile.GetMyWorkerProfileUseCase
@@ -27,7 +27,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val getAccessTokenUseCase: GetAccessTokenUseCase,
-    private val getMyUserRoleUseCase: GetUserRoleUseCase,
+    private val getMyUserRoleUseCase: GetUserTypeUseCase,
     private val getMyCenterProfileUseCase: GetMyCenterProfileUseCase,
     private val getMyWorkerProfileUseCase: GetMyWorkerProfileUseCase,
     private val getCenterStatusUseCase: GetCenterStatusUseCase,

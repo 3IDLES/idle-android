@@ -17,11 +17,13 @@ class TokenRepositoryImpl @Inject constructor(
         tokenDataSource.accessToken.first()
     }
 
-    override suspend fun postDeviceToken(deviceToken: String): Result<Unit> =
-        notificationDataSource.postFCMToken(FCMTokenRequest(deviceToken))
-
-    override suspend fun updateDeviceToken(deviceToken: String): Result<Unit> =
-        notificationDataSource.updateFCMToken(FCMTokenRequest(deviceToken))
+    override suspend fun postDeviceToken(deviceToken: String, userType: String): Result<Unit> =
+        notificationDataSource.postFCMToken(
+            FCMTokenRequest(
+                deviceToken = deviceToken,
+                userType = userType,
+            )
+        )
 
     override suspend fun deleteDeviceToken(): Result<Unit> = notificationDataSource.deleteFCMToken()
 }

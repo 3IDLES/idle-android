@@ -1,7 +1,7 @@
 package com.idle.domain.model.auth
 
 enum class UserType(val apiValue: String) {
-    CENTER("center"), WORKER("carer");
+    CENTER("CENTER"), WORKER("CARER");
 
     companion object {
         fun create(value: String?): UserType {
