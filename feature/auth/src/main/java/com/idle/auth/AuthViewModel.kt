@@ -25,75 +25,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AuthViewModel @Inject constructor(
-    private val getAccessTokenUseCase: GetAccessTokenUseCase,
-    private val getMyUserRoleUseCase: GetUserTypeUseCase,
-    private val getMyCenterProfileUseCase: GetMyCenterProfileUseCase,
-    private val getMyWorkerProfileUseCase: GetMyWorkerProfileUseCase,
-    private val getCenterStatusUseCase: GetCenterStatusUseCase,
-) : BaseViewModel() {
+class AuthViewModel @Inject constructor() : BaseViewModel() {
     private val _userType = MutableStateFlow<UserType?>(null)
     val userRole = _userType.asStateFlow()
-
-    init {
-        initializeUserSession()
-    }
-
-    private fun initializeUserSession() = viewModelScope.launch {
-        val (accessToken, userRole) = getAccessTokenAndUserRole()
-
-        if (accessToken.isBlank() || userRole.isBlank()) {
-            return@launch
-        }
-
-        when (userRole) {
-            UserType.CENTER.apiValue -> getMyCenterProfileUseCase().onFailure {
-                return@launch
-            }
-
-            UserType.WORKER.apiValue -> getMyWorkerProfileUseCase().onFailure {
-                return@launch
-            }
-        }
-
-        navigateToDestination(userRole)
-    }
-
-    private suspend fun getAccessTokenAndUserRole(): Pair<String, String> = coroutineScope {
-        val accessTokenDeferred = async { getAccessTokenUseCase() }
-        val userRoleDeferred = async { getMyUserRoleUseCase() }
-        accessTokenDeferred.await() to userRoleDeferred.await()
-    }
-
-    private fun navigateToDestination(userRole: String) {
-        when (userRole) {
-            UserType.WORKER.apiValue -> baseEvent(NavigateTo(WorkerHome, R.id.authFragment))
-            UserType.CENTER.apiValue -> getCenterStatus()
-            else -> Unit
-        }
-    }
-
-    private fun getCenterStatus() = viewModelScope.launch {
-        getCenterStatusUseCase().onSuccess { centerStatusResponse ->
-            handleCenterStatus(centerStatusResponse.centerManagerAccountStatus)
-        }
-    }
-
-    private fun handleCenterStatus(status: CenterManagerAccountStatus) = when (status) {
-        CenterManagerAccountStatus.APPROVED -> handleApprovedCenterStatus()
-        else -> baseEvent(NavigateTo(CenterPending(status.name), R.id.authFragment))
-    }
-
-    private fun handleApprovedCenterStatus() = viewModelScope.launch {
-        getMyCenterProfileUseCase().onSuccess {
-            baseEvent(NavigateTo(CenterHome, R.id.authFragment))
-        }.onFailure {
-            val error = it as HttpResponseException
-            if (error.apiErrorCode == ApiErrorCode.CenterNotFound) {
-                baseEvent(NavigateTo(CenterRegister, R.id.authFragment))
-            }
-        }
-    }
 
     internal fun setUserRole(userType: UserType) {
         _userType.value = userType

@@ -8,7 +8,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings.ACTION_WIFI_SETTINGS
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
@@ -23,6 +22,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.idle.binding.DeepLinkDestination.CenterApplicantInquiry
 import com.idle.binding.DeepLinkDestination.CenterHome
 import com.idle.binding.DeepLinkDestination.CenterJobDetail
+import com.idle.binding.DeepLinkDestination.WorkerHome
 import com.idle.binding.DeepLinkDestination.WorkerJobDetail
 import com.idle.binding.deepLinkNavigateTo
 import com.idle.binding.repeatOnStarted
@@ -138,6 +138,18 @@ class MainActivity : AppCompatActivity() {
             viewModel.navigationMenuType.collect { menuType -> setNavigationMenuType(menuType) }
         }
 
+        repeatOnStarted {
+            viewModel.eventFlow.collect {
+                when (it) {
+                    is MainEvent.NavigateTo -> navController.deepLinkNavigateTo(
+                        context = this@MainActivity,
+                        deepLinkDestination = it.destination,
+                        popUpTo = it.popUpTo,
+                    )
+                }
+            }
+        }
+
         binding.apply {
             val navHostFragment =
                 supportFragmentManager.findFragmentById(R.id.main_FCV) as NavHostFragment
@@ -170,7 +182,7 @@ class MainActivity : AppCompatActivity() {
 
         handleNotificationNavigate(
             isColdStart = false,
-            extras = intent?.extras,
+            extras = intent?.extras ?: return,
         )
     }
 
@@ -178,11 +190,18 @@ class MainActivity : AppCompatActivity() {
         isColdStart: Boolean,
         extras: Bundle?,
     ) {
-        val destination = extras?.getString("destination") ?: return
+        val destination = extras?.getString("destination") ?: run {
+            if (isColdStart) viewModel.initializeUserSession()
+            return
+        }
 
         when (destination) {
             "APPLICANTS" -> {
-                val jobPostingId = extras.getString("jobPostingId") ?: return
+                val jobPostingId = extras.getString("jobPostingId") ?: run {
+                    if (isColdStart) viewModel.initializeUserSession()
+                    return
+                }
+
                 val screenDepth = if (isColdStart) {
                     listOf(
                         CenterHome,
@@ -205,8 +224,14 @@ class MainActivity : AppCompatActivity() {
             }
 
             "JOB_POSTING_DETAIL" -> {
-                val jobPostingId = extras.getString("jobPostingId") ?: return
+                val jobPostingId =
+                    extras.getString("jobPostingId") ?: run {
+                        if (isColdStart) viewModel.initializeUserSession()
+                        return
+                    }
+
                 val screenDepth = listOf(
+                    WorkerHome,
                     WorkerJobDetail(
                         jobPostingId = jobPostingId,
                         jobPostingType = JobPostingType.CAREMEET.name
@@ -217,6 +242,7 @@ class MainActivity : AppCompatActivity() {
                     navController.deepLinkNavigateTo(
                         context = this,
                         deepLinkDestination = it,
+                        popUpTo = if (it == WorkerHome) com.idle.auth.R.id.nav_auth else null
                     )
                 }
             }

@@ -1,0 +1,4 @@
+com.idle.splash
+id nav_splash
+id splashFragment
+navigation nav_splash
