@@ -52,11 +52,8 @@ class NotificationService : FirebaseMessagingService() {
 
         val title = message.notification?.title ?: "케어밋"
         val body = message.notification?.body ?: ""
-//        val data = message.data
-        val data = mapOf(
-            "destination" to "JOB_POSTING_DETAIL",
-            "jobPostingId" to "01920467-e697-7167-aee8-9c5477c2ce0e"
-        )
+        val data = message.data
+
         notificationHandler.deliverNotification(
             title = title,
             body = body,
