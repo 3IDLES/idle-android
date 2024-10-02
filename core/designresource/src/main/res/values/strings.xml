@@ -184,6 +184,11 @@
 
     <!-- Notification -->
     <string name="notification">알림</string>
+    <string name="no_received_notification">아직 받은 알림이 없어요.</string>
+    <string name="notification_description">최근 30일 이내의 알림만 확인할 수 있어요.</string>
+    <string name="today">오늘</string>
+    <string name="recent_a_week">최근 7일</string>
+    <string name="other_days">그 이후</string>
 
     <!-- Experience & Application -->
     <string name="experience">경력</string>

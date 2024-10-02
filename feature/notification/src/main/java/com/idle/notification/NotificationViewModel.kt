@@ -54,7 +54,7 @@ class NotificationViewModel @Inject constructor(
     }
 
     internal fun clearNotifications() {
-//        myNotifications.value = emptyList()
+        myNotifications.value = emptyList()
     }
 
     internal fun readNotification(notificationId: String) = viewModelScope.launch {
