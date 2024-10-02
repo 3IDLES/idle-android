@@ -159,18 +159,18 @@ class AuthRepositoryImpl @Inject constructor(
 
     private suspend fun handleSignInSuccess(
         tokenResponse: TokenResponse,
-        userRole: String,
+        userType: String,
     ) = withContext(Dispatchers.IO) {
         launch { tokenDataSource.setRefreshToken(tokenResponse.refreshToken) }
-        launch { userInfoDataSource.setUserRole(userRole) }
+        launch { userInfoDataSource.setUserType(userType) }
         launch { tokenDataSource.setAccessToken(tokenResponse.accessToken) }
 
         val deviceToken = async { getDeviceToken() }
-        tokenRepository.postDeviceToken(deviceToken.await())
+        tokenRepository.postDeviceToken(deviceToken.await(), userType = userType)
     }
 
     private suspend fun clearUserData() = withContext(Dispatchers.IO) {
-        launch { userInfoDataSource.clearUserRole() }
+        launch { userInfoDataSource.clearUserType() }
         launch { userInfoDataSource.clearUserInfo() }
         tokenDataSource.clearToken()
     }

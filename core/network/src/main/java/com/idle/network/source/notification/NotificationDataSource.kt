@@ -13,9 +13,6 @@ class NotificationDataSource @Inject constructor(
     suspend fun postFCMToken(fcmTokenRequest: FCMTokenRequest): Result<Unit> =
         safeApiCall { notificationApi.postFCMToken(fcmTokenRequest) }
 
-    suspend fun updateFCMToken(fcmTokenRequest: FCMTokenRequest): Result<Unit> =
-        safeApiCall { notificationApi.patchFCMToken(fcmTokenRequest) }
-
     suspend fun deleteFCMToken(): Result<Unit> = safeApiCall { notificationApi.deleteFCMToken() }
 
     suspend fun getMyNotifications(): Result<GetNotificationResponse> =

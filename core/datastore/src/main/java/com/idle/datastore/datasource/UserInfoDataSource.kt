@@ -13,15 +13,15 @@ import javax.inject.Named
 class UserInfoDataSource @Inject constructor(
     @Named("userInfo") private val dataStore: DataStore<Preferences>
 ) {
-    val userRole: Flow<String> = dataStore.getValue(USER_ROLE, "")
+    val userType: Flow<String> = dataStore.getValue(USER_TYPE, "")
     val userInfo: Flow<String> = dataStore.getValue(USER_INFO, "")
 
-    suspend fun setUserRole(userRole: String) {
-        dataStore.setValue(USER_ROLE, userRole)
+    suspend fun setUserType(userRole: String) {
+        dataStore.setValue(USER_TYPE, userRole)
     }
 
-    suspend fun clearUserRole() {
-        dataStore.clear(USER_ROLE)
+    suspend fun clearUserType() {
+        dataStore.clear(USER_TYPE)
     }
 
     suspend fun setUserInfo(userInfo: String) {
@@ -33,7 +33,7 @@ class UserInfoDataSource @Inject constructor(
     }
 
     companion object {
-        private val USER_ROLE = stringPreferencesKey("USER_ROLE")
+        private val USER_TYPE = stringPreferencesKey("USER_TYPE")
         private val USER_INFO = stringPreferencesKey("USER_INFO")
     }
 }

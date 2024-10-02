@@ -6,7 +6,7 @@ import com.idle.domain.model.profile.JobSearchStatus
 import com.idle.domain.model.profile.WorkerProfile
 
 interface ProfileRepository {
-    suspend fun getMyUserRole(): String
+    suspend fun getMyUserType(): String
 
     suspend fun getMyCenterProfile(): Result<CenterProfile>
 

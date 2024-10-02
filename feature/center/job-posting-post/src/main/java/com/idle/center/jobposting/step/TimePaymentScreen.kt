@@ -1,4 +1,4 @@
- package com.idle.center.jobposting.step
+package com.idle.center.jobposting.step
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -17,7 +17,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.idle.center.jobposting.JobPostingStep
-import com.idle.center.jobposting.JobPostingStep.SUMMARY
 import com.idle.center.jobposting.JobPostingStep.TIME_PAYMENT
 import com.idle.center.jobposting.LogJobPostingStep
 import com.idle.compose.JobPostingBottomSheetType
