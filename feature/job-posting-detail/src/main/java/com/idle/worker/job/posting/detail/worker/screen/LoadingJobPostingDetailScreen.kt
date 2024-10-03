@@ -591,5 +591,5 @@ internal fun LoadingJobPostingDetailScreen(snackbarHostState: SnackbarHostState)
         }
     }
 
-    TrackScreenViewEvent(screenName = "carer_caremeet_job_posting_detail_screen")
+    TrackScreenViewEvent(screenName = "caremeet_job_posting_detail_loading_screen")
 }
