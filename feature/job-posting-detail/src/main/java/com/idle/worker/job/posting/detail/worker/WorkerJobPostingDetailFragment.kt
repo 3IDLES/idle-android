@@ -21,6 +21,7 @@ import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.WorkerJobPostingDetail
 import com.idle.worker.job.posting.detail.worker.map.PlaceDetailScreen
 import com.idle.worker.job.posting.detail.worker.screen.CrawlingJobPostingDetailScreen
+import com.idle.worker.job.posting.detail.worker.screen.LoadingJobPostingDetailScreen
 import com.idle.worker.job.posting.detail.worker.screen.WorkerJobPostingDetailScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -99,7 +100,7 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
                         }
                     }
                 }
-            }
+            } ?: LoadingJobPostingDetailScreen(snackbarHostState = snackbarHostState)
         }
     }
 }
