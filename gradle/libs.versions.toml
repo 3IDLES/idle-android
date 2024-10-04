@@ -92,6 +92,9 @@ messaging = "23.2.1"
 # https://coil-kt.github.io/coil/#jetpack-compose
 coil = "2.7.0"
 
+# https://airbnb.io/lottie/#/android-compose
+lottie-compose = "6.5.2"
+
 # https://navermaps.github.io/android-map-sdk/guide-ko/1.html
 naverMap = "3.18.0"
 
@@ -158,6 +161,7 @@ firebase-messaging = { module = "com.google.firebase:firebase-messaging", versio
 amplitude-analytics = { module = "com.amplitude:analytics-android", version.ref = "amplitudeAnalytics" }
 
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie-compose" }
 
 naver-map = { module = "com.naver.maps:map-sdk", version.ref = "naverMap" }
 

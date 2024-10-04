@@ -19,42 +19,35 @@ class NotificationViewModel @Inject constructor(
     private val getMyNotificationUseCase: GetMyNotificationUseCase,
     private val readNotificationUseCase: ReadNotificationUseCase,
 ) : BaseViewModel() {
-    private val myNotifications = MutableStateFlow<List<Notification>>(
-        listOf(
-            Notification(""),
-            Notification(""),
-            Notification(""),
-        )
-    )
+    private val myNotifications = MutableStateFlow<List<Notification>?>(null)
 
     val todayNotification = myNotifications.filter { true }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.Lazily,
-            initialValue = emptyList(),
+            initialValue = null,
         )
 
     val weeklyNotification = myNotifications.filter { true }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.Lazily,
-            initialValue = emptyList(),
+            initialValue = null,
         )
 
     val monthlyNotification = myNotifications.filter { true }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.Lazily,
-            initialValue = emptyList(),
+            initialValue = null,
         )
 
     internal fun getMyNotifications() = viewModelScope.launch {
-        getMyNotificationUseCase().onSuccess { }
-            .onFailure { }
-    }
-
-    internal fun clearNotifications() {
-        myNotifications.value = emptyList()
+        getMyNotificationUseCase().onSuccess {
+            myNotifications.value = it
+        }.onFailure {
+            handleFailure(it as HttpResponseException)
+        }
     }
 
     internal fun readNotification(notificationId: String) = viewModelScope.launch {

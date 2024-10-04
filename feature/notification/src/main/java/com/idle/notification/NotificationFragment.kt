@@ -33,9 +33,11 @@ import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
+import com.idle.designsystem.compose.component.LoadingCircle
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.notification.Notification
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 
 @AndroidEntryPoint
 internal class NotificationFragment : BaseComposeFragment() {
@@ -49,7 +51,7 @@ internal class NotificationFragment : BaseComposeFragment() {
             val monthlyNotification by monthlyNotification.collectAsStateWithLifecycle()
 
             LaunchedEffect(true) {
-                clearNotifications()
+                delay(1000L)
                 getMyNotifications()
             }
 
@@ -67,9 +69,9 @@ internal class NotificationFragment : BaseComposeFragment() {
 @Composable
 private fun NotificationScreen(
     snackbarHostState: SnackbarHostState,
-    todayNotification: List<Notification>,
-    weeklyNotification: List<Notification>,
-    monthlyNotification: List<Notification>,
+    todayNotification: List<Notification>?,
+    weeklyNotification: List<Notification>?,
+    monthlyNotification: List<Notification>?,
     navigateUp: () -> Unit,
 ) {
     Scaffold(
@@ -105,7 +107,9 @@ private fun NotificationScreen(
                 .background(CareTheme.colors.white000)
                 .padding(paddingValue),
         ) {
-            if (todayNotification.isEmpty() && weeklyNotification.isEmpty() && monthlyNotification.isEmpty()) {
+            if (todayNotification?.isEmpty() == true && weeklyNotification?.isEmpty() == true
+                && monthlyNotification?.isEmpty() == true
+            ) {
                 Text(
                     text = stringResource(id = R.string.no_received_notification),
                     style = CareTheme.typography.heading2,
@@ -118,58 +122,88 @@ private fun NotificationScreen(
                     color = CareTheme.colors.gray300,
                 )
             } else {
-                LazyColumn(modifier = Modifier.fillMaxSize()) {
-                    item {
-                        Text(
-                            text = stringResource(id = R.string.today),
-                            style = CareTheme.typography.subtitle2,
-                            color = CareTheme.colors.gray900,
-                            modifier = Modifier.padding(start = 20.dp, top = 24.dp, bottom = 8.dp),
-                        )
-                    }
-
-                    items(items = todayNotification) { notification ->
-                        NotificationItem()
-                    }
-
-                    item {
-                        HorizontalDivider(
+                if (todayNotification == null && weeklyNotification == null &&
+                    monthlyNotification == null
+                ) {
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        LoadingCircle(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .height(8.dp)
-                                .background(CareTheme.colors.gray050)
-                        )
-
-                        Text(
-                            text = stringResource(id = R.string.recent_a_week),
-                            style = CareTheme.typography.subtitle2,
-                            color = CareTheme.colors.gray900,
-                            modifier = Modifier.padding(start = 20.dp, top = 24.dp, bottom = 8.dp),
+                                .align(Alignment.Center)
+                                .padding(bottom = 40.dp),
                         )
                     }
+                } else {
+                    LazyColumn(modifier = Modifier.fillMaxSize()) {
+                        if (todayNotification?.isNotEmpty() == true) {
+                            item {
+                                Text(
+                                    text = stringResource(id = R.string.today),
+                                    style = CareTheme.typography.subtitle2,
+                                    color = CareTheme.colors.gray900,
+                                    modifier = Modifier.padding(
+                                        start = 20.dp,
+                                        top = 24.dp,
+                                        bottom = 8.dp
+                                    ),
+                                )
+                            }
 
-                    items(items = weeklyNotification) { notification ->
-                        NotificationItem()
-                    }
+                            items(items = todayNotification) { notification ->
+                                NotificationItem()
+                            }
+                        }
 
-                    item {
-                        HorizontalDivider(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(CareTheme.colors.gray050)
-                                .height(8.dp)
-                        )
+                        if (weeklyNotification?.isNotEmpty() == true) {
+                            item {
+                                HorizontalDivider(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(8.dp)
+                                        .background(CareTheme.colors.gray050)
+                                )
 
-                        Text(
-                            text = stringResource(id = R.string.other_days),
-                            style = CareTheme.typography.subtitle2,
-                            color = CareTheme.colors.gray900,
-                            modifier = Modifier.padding(start = 20.dp, top = 24.dp, bottom = 8.dp),
-                        )
-                    }
+                                Text(
+                                    text = stringResource(id = R.string.recent_a_week),
+                                    style = CareTheme.typography.subtitle2,
+                                    color = CareTheme.colors.gray900,
+                                    modifier = Modifier.padding(
+                                        start = 20.dp,
+                                        top = 24.dp,
+                                        bottom = 8.dp
+                                    ),
+                                )
+                            }
 
-                    items(items = monthlyNotification) { notification ->
-                        NotificationItem()
+                            items(items = weeklyNotification) { notification ->
+                                NotificationItem()
+                            }
+                        }
+
+                        if (monthlyNotification?.isNotEmpty() == true) {
+                            item {
+                                HorizontalDivider(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .background(CareTheme.colors.gray050)
+                                        .height(8.dp)
+                                )
+
+                                Text(
+                                    text = stringResource(id = R.string.other_days),
+                                    style = CareTheme.typography.subtitle2,
+                                    color = CareTheme.colors.gray900,
+                                    modifier = Modifier.padding(
+                                        start = 20.dp,
+                                        top = 24.dp,
+                                        bottom = 8.dp
+                                    ),
+                                )
+                            }
+
+                            items(items = monthlyNotification) { notification ->
+                                NotificationItem()
+                            }
+                        }
                     }
                 }
             }

@@ -4,6 +4,7 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -37,7 +38,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.idle.analytics.helper.LocalAnalyticsHelper
 import com.idle.analytics.helper.TrackScreenViewEvent
@@ -54,6 +54,7 @@ import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareTabBar
 import com.idle.designsystem.compose.component.CareTag
+import com.idle.designsystem.compose.component.LoadingCircle
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.jobposting.CrawlingJobPosting
 import com.idle.domain.model.jobposting.JobPosting
@@ -104,8 +105,8 @@ internal fun WorkerJobPostingScreen(
     snackbarHostState: SnackbarHostState,
     profile: WorkerProfile?,
     recruitmentPostStatus: RecruitmentPostStatus,
-    appliedJobPostings: List<JobPosting>,
-    favoritesJobPostings: List<JobPosting>,
+    appliedJobPostings: List<JobPosting>?,
+    favoritesJobPostings: List<JobPosting>?,
     getAppliedJobPostings: () -> Unit,
     setRecruitmentPostStatus: (RecruitmentPostStatus) -> Unit,
     applyJobPosting: (String) -> Unit,
@@ -121,10 +122,13 @@ internal fun WorkerJobPostingScreen(
             listState.firstVisibleItemIndex + listState.layoutInfo.visibleItemsInfo.size - 1
         }
     }
-    val isNearEnd = lastVisibleIndex >= (appliedJobPostings.size - 3)
+
+    val isNearEnd = appliedJobPostings?.let {
+        lastVisibleIndex >= it.size.minus(3)
+    } ?: false
 
     LaunchedEffect(isNearEnd) {
-        if (appliedJobPostings.isNotEmpty() && isNearEnd) {
+        if (appliedJobPostings?.isEmpty() == false && isNearEnd) {
             getAppliedJobPostings()
         }
     }
@@ -201,93 +205,116 @@ internal fun WorkerJobPostingScreen(
                     .padding(bottom = 20.dp),
             )
 
-            CareStateAnimator(targetState = recruitmentPostStatus) { status ->
+            CareStateAnimator(
+                targetState = recruitmentPostStatus,
+                modifier = Modifier.fillMaxSize(),
+            ) { status ->
                 when (status) {
                     RecruitmentPostStatus.APPLY -> {
-                        LazyColumn(
-                            state = listState,
-                            verticalArrangement = Arrangement.spacedBy(8.dp),
-                            modifier = Modifier
-                                .padding(start = 20.dp, end = 20.dp, top = 16.dp)
-                                .fillMaxSize()
-                        ) {
-                            items(
-                                items = appliedJobPostings,
-                                key = { it.id },
-                            ) { jobPosting ->
-                                when (jobPosting.jobPostingType) {
-                                    JobPostingType.CAREMEET -> WorkerRecruitmentCard(
-                                        jobPosting = jobPosting as WorkerJobPosting,
-                                        profile = profile,
-                                        showDialog = {
-                                            selectedJobPosting = it
-                                            showDialog = true
-                                        },
-                                        addFavoriteJobPosting = addFavoriteJobPosting,
-                                        removeFavoriteJobPosting = removeFavoriteJobPosting,
-                                        navigateTo = navigateTo,
-                                    )
+                        if (appliedJobPostings == null) {
+                            Box(modifier = Modifier.fillMaxSize()) {
+                                LoadingCircle(
+                                    modifier = Modifier
+                                        .align(Alignment.Center)
+                                        .padding(bottom = 40.dp),
+                                )
+                            }
+                        } else {
+                            LazyColumn(
+                                state = listState,
+                                verticalArrangement = Arrangement.spacedBy(8.dp),
+                                modifier = Modifier
+                                    .padding(start = 20.dp, end = 20.dp, top = 16.dp)
+                                    .fillMaxSize()
+                            ) {
+                                items(
+                                    items = appliedJobPostings,
+                                    key = { it.id },
+                                ) { jobPosting ->
+                                    when (jobPosting.jobPostingType) {
+                                        JobPostingType.CAREMEET -> WorkerRecruitmentCard(
+                                            jobPosting = jobPosting as WorkerJobPosting,
+                                            profile = profile,
+                                            showDialog = {
+                                                selectedJobPosting = it
+                                                showDialog = true
+                                            },
+                                            addFavoriteJobPosting = addFavoriteJobPosting,
+                                            removeFavoriteJobPosting = removeFavoriteJobPosting,
+                                            navigateTo = navigateTo,
+                                        )
 
-                                    else -> WorkerWorkNetCard(
-                                        jobPosting = jobPosting as CrawlingJobPosting,
-                                        profile = profile,
-                                        addFavoriteJobPosting = addFavoriteJobPosting,
-                                        removeFavoriteJobPosting = removeFavoriteJobPosting,
-                                        navigateTo = navigateTo,
+                                        else -> WorkerWorkNetCard(
+                                            jobPosting = jobPosting as CrawlingJobPosting,
+                                            profile = profile,
+                                            addFavoriteJobPosting = addFavoriteJobPosting,
+                                            removeFavoriteJobPosting = removeFavoriteJobPosting,
+                                            navigateTo = navigateTo,
+                                        )
+                                    }
+                                }
+
+                                item {
+                                    Spacer(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(28.dp)
                                     )
                                 }
-                            }
-
-                            item {
-                                Spacer(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(28.dp)
-                                )
                             }
                         }
                     }
 
                     RecruitmentPostStatus.MARKED -> {
-                        LazyColumn(
-                            verticalArrangement = Arrangement.spacedBy(8.dp),
-                            modifier = Modifier
-                                .padding(start = 20.dp, end = 20.dp, top = 16.dp)
-                                .fillMaxSize()
-                        ) {
-                            items(
-                                items = favoritesJobPostings,
-                                key = { it.id },
-                            ) { jobPosting ->
-                                when (jobPosting.jobPostingType) {
-                                    JobPostingType.CAREMEET -> WorkerRecruitmentCard(
-                                        jobPosting = jobPosting as WorkerJobPosting,
-                                        profile = profile,
-                                        showDialog = {
-                                            selectedJobPosting = it
-                                            showDialog = true
-                                        },
-                                        addFavoriteJobPosting = addFavoriteJobPosting,
-                                        removeFavoriteJobPosting = removeFavoriteJobPosting,
-                                        navigateTo = navigateTo,
-                                    )
+                        if (favoritesJobPostings == null) {
+                            Box(modifier = Modifier.fillMaxSize()) {
+                                LoadingCircle(
+                                    modifier = Modifier
+                                        .align(Alignment.Center)
+                                        .padding(bottom = 40.dp),
+                                )
+                            }
+                        } else {
+                            LazyColumn(
+                                verticalArrangement = Arrangement.spacedBy(8.dp),
+                                modifier = Modifier
+                                    .padding(start = 20.dp, end = 20.dp, top = 16.dp)
+                                    .fillMaxSize()
+                            ) {
+                                items(
+                                    items = favoritesJobPostings,
+                                    key = { it.id },
+                                ) { jobPosting ->
+                                    when (jobPosting.jobPostingType) {
+                                        JobPostingType.CAREMEET -> WorkerRecruitmentCard(
+                                            jobPosting = jobPosting as WorkerJobPosting,
+                                            profile = profile,
+                                            showDialog = {
+                                                selectedJobPosting = it
+                                                showDialog = true
+                                            },
+                                            addFavoriteJobPosting = addFavoriteJobPosting,
+                                            removeFavoriteJobPosting = removeFavoriteJobPosting,
+                                            navigateTo = navigateTo,
+                                        )
 
-                                    else -> WorkerWorkNetCard(
-                                        jobPosting = jobPosting as CrawlingJobPosting,
-                                        profile = profile,
-                                        addFavoriteJobPosting = addFavoriteJobPosting,
-                                        removeFavoriteJobPosting = removeFavoriteJobPosting,
-                                        navigateTo = navigateTo,
+                                        else -> WorkerWorkNetCard(
+                                            jobPosting = jobPosting as CrawlingJobPosting,
+                                            profile = profile,
+                                            addFavoriteJobPosting = addFavoriteJobPosting,
+                                            removeFavoriteJobPosting = removeFavoriteJobPosting,
+                                            navigateTo = navigateTo,
+                                        )
+                                    }
+                                }
+
+                                item {
+                                    Spacer(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(28.dp)
                                     )
                                 }
-                            }
-
-                            item {
-                                Spacer(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(28.dp)
-                                )
                             }
                         }
                     }

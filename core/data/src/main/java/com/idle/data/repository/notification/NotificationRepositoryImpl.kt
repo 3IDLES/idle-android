@@ -8,7 +8,7 @@ import javax.inject.Inject
 class NotificationRepositoryImpl @Inject constructor(
     private val notificationDataSource: NotificationDataSource,
 ) : NotificationRepository {
-    override suspend fun getMyNotifications(): Result<Notification> =
+    override suspend fun getMyNotifications(): Result<List<Notification>> =
         notificationDataSource.getMyNotifications()
             .mapCatching { it.toVO() }
 
