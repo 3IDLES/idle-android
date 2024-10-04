@@ -5,9 +5,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GetNotificationResponse(
-    val notifications: List<String> = emptyList(),
+    val notifications: String? = null,
 ) {
-    fun toVO() = Notification(
-        something = ""
+    fun toVO() = listOf(
+        Notification(something = ""),
+        Notification(something = ""),
+        Notification(something = ""),
     )
 }

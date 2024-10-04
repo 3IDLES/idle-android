@@ -1,7 +1,6 @@
 package com.idle.network.api
 
 import com.idle.network.model.auth.GetWorkerIdResponse
-import com.idle.network.model.notification.GetNotificationResponse
 import com.idle.network.model.profile.CallbackImageUploadRequest
 import com.idle.network.model.profile.GetCenterProfileResponse
 import com.idle.network.model.profile.GetCenterStatusResponse

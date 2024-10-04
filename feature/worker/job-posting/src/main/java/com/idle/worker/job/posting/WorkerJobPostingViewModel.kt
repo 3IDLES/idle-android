@@ -42,10 +42,10 @@ class WorkerJobPostingViewModel @Inject constructor(
 
     private val next = MutableStateFlow<String?>(null)
 
-    private val _appliedJobPostings = MutableStateFlow<List<JobPosting>>(emptyList())
+    private val _appliedJobPostings = MutableStateFlow<List<JobPosting>?>(null)
     val appliedJobPostings = _appliedJobPostings.asStateFlow()
 
-    private val _favoriteJobPostings = MutableStateFlow<List<JobPosting>>(emptyList())
+    private val _favoriteJobPostings = MutableStateFlow<List<JobPosting>?>(null)
     val favoritesJobPostings = _favoriteJobPostings.asStateFlow()
 
     private var appliedJobPostingCallType: JobPostingCallType = JobPostingCallType.IN_APP
@@ -65,8 +65,8 @@ class WorkerJobPostingViewModel @Inject constructor(
     }
 
     internal fun clearJobPostingStatus() {
-        _appliedJobPostings.value = emptyList()
-        _favoriteJobPostings.value = emptyList()
+        _appliedJobPostings.value = null
+        _favoriteJobPostings.value = null
         appliedJobPostingCallType = JobPostingCallType.IN_APP
     }
 
@@ -88,7 +88,7 @@ class WorkerJobPostingViewModel @Inject constructor(
                     appliedJobPostingCallType = JobPostingCallType.END
                 }
 
-                _appliedJobPostings.value += postings
+                _appliedJobPostings.value = _appliedJobPostings.value?.plus(postings) ?: postings
             }.onFailure {
                 handleFailure(it as HttpResponseException)
             }
@@ -103,14 +103,14 @@ class WorkerJobPostingViewModel @Inject constructor(
     }
 
     private suspend fun getFavoriteCareMeetJobPostings() {
-        getMyFavoritesJobPostingsUseCase().onSuccess {
-            _favoriteJobPostings.value += it
+        getMyFavoritesJobPostingsUseCase().onSuccess { postings ->
+            _favoriteJobPostings.value = _favoriteJobPostings.value?.plus(postings) ?: postings
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
     private suspend fun getFavoriteCrawlingJobPostings() {
-        getMyFavoritesCrawlingJobPostingsUseCase().onSuccess {
-            _favoriteJobPostings.value += it
+        getMyFavoritesCrawlingJobPostingsUseCase().onSuccess { postings ->
+            _favoriteJobPostings.value = _favoriteJobPostings.value?.plus(postings) ?: postings
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
@@ -121,14 +121,14 @@ class WorkerJobPostingViewModel @Inject constructor(
         ).onSuccess {
             baseEvent(CareBaseEvent.ShowSnackBar("지원이 완료되었어요.|SUCCESS"))
 
-            _appliedJobPostings.value = _appliedJobPostings.value.map {
+            _appliedJobPostings.value = _appliedJobPostings.value?.map {
                 if (it.jobPostingType == JobPostingType.CAREMEET && it.id == jobPostingId) {
                     val jobPosting = it as WorkerJobPosting
                     jobPosting.copy(applyTime = LocalDateTime.now())
                 } else it
             }
 
-            _favoriteJobPostings.value = _favoriteJobPostings.value.map {
+            _favoriteJobPostings.value = _favoriteJobPostings.value?.map {
                 if (it.jobPostingType == JobPostingType.CAREMEET && it.id == jobPostingId) {
                     val jobPosting = it as WorkerJobPosting
                     jobPosting.copy(applyTime = LocalDateTime.now())
@@ -147,7 +147,7 @@ class WorkerJobPostingViewModel @Inject constructor(
         ).onSuccess {
             baseEvent(CareBaseEvent.ShowSnackBar("즐겨찾기에 추가되었어요.|SUCCESS"))
 
-            _appliedJobPostings.value = _appliedJobPostings.value.map {
+            _appliedJobPostings.value = _appliedJobPostings.value?.map {
                 when (it.jobPostingType) {
                     JobPostingType.CAREMEET -> {
                         it as WorkerJobPosting
@@ -161,7 +161,7 @@ class WorkerJobPostingViewModel @Inject constructor(
                 }
             }
 
-            _favoriteJobPostings.value = _favoriteJobPostings.value.map {
+            _favoriteJobPostings.value = _favoriteJobPostings.value?.map {
                 when (it.jobPostingType) {
                     JobPostingType.CAREMEET -> {
                         it as WorkerJobPosting
@@ -181,7 +181,7 @@ class WorkerJobPostingViewModel @Inject constructor(
         removeFavoriteJobPostingUseCase(jobPostingId = jobPostingId).onSuccess {
             baseEvent(CareBaseEvent.ShowSnackBar("즐겨찾기에서 제거했어요.|SUCCESS"))
 
-            _appliedJobPostings.value = _appliedJobPostings.value.map {
+            _appliedJobPostings.value = _appliedJobPostings.value?.map {
                 when (it.jobPostingType) {
                     JobPostingType.CAREMEET -> {
                         it as WorkerJobPosting
@@ -195,7 +195,7 @@ class WorkerJobPostingViewModel @Inject constructor(
                 }
             }
 
-            _favoriteJobPostings.value = _favoriteJobPostings.value.map {
+            _favoriteJobPostings.value = _favoriteJobPostings.value?.map {
                 when (it.jobPostingType) {
                     JobPostingType.CAREMEET -> {
                         it as WorkerJobPosting

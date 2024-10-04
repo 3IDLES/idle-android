@@ -25,10 +25,10 @@ class CenterHomeViewModel @Inject constructor(
     private val _recruitmentPostStatus = MutableStateFlow(RecruitmentPostStatus.IN_PROGRESS)
     val recruitmentPostStatus = _recruitmentPostStatus.asStateFlow()
 
-    private val _jobPostingsInProgress = MutableStateFlow<List<CenterJobPosting>>(emptyList())
+    private val _jobPostingsInProgress = MutableStateFlow<List<CenterJobPosting>?>(null)
     val jobPostingsInProgress = _jobPostingsInProgress.asStateFlow()
 
-    private val _jobPostingsCompleted = MutableStateFlow<List<CenterJobPosting>>(emptyList())
+    private val _jobPostingsCompleted = MutableStateFlow<List<CenterJobPosting>?>(null)
     val jobPostingsCompleted = _jobPostingsCompleted.asStateFlow()
 
     private val _unreadNotificationCount = MutableStateFlow(0)
@@ -47,8 +47,8 @@ class CenterHomeViewModel @Inject constructor(
     }
 
     internal fun clearJobPostingStatus() {
-        _jobPostingsInProgress.value = emptyList()
-        _jobPostingsCompleted.value = emptyList()
+        _jobPostingsInProgress.value = null
+        _jobPostingsCompleted.value = null
     }
 
     internal fun getJobPostingsInProgress() = viewModelScope.launch {
@@ -67,16 +67,25 @@ class CenterHomeViewModel @Inject constructor(
 
     internal fun endJobPosting(jobPostingId: String) = viewModelScope.launch {
         endJobPostingUseCase(jobPostingId).onSuccess {
-            _jobPostingsCompleted.value += _jobPostingsInProgress.value.first {
-                it.id == jobPostingId
-            }
+            val jobPostingsInProgress = _jobPostingsInProgress.value ?: emptyList()
+            val jobPostingsCompleted = _jobPostingsCompleted.value ?: emptyList()
 
-            _jobPostingsInProgress.value = _jobPostingsInProgress.value.filter {
-                it.id != jobPostingId
-            }
+            val completedJobPosting = jobPostingsInProgress.firstOrNull { it.id == jobPostingId }
 
-            baseEvent(CareBaseEvent.ShowSnackBar("채용을 종료했어요.|SUCCESS"))
-        }.onFailure { handleFailure(it as HttpResponseException) }
+            if (completedJobPosting != null) {
+                _jobPostingsCompleted.value = jobPostingsCompleted + completedJobPosting
+
+                _jobPostingsInProgress.value = jobPostingsInProgress.filter {
+                    it.id != jobPostingId
+                }
+
+                baseEvent(CareBaseEvent.ShowSnackBar("채용을 종료했어요.|SUCCESS"))
+            } else {
+                baseEvent(CareBaseEvent.ShowSnackBar("채용 종료에 실패했어요.|ERROR"))
+            }
+        }.onFailure {
+            handleFailure(it as HttpResponseException)
+        }
     }
 }
 

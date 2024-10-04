@@ -13,4 +13,5 @@ dependencies {
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.naver.map)
+    implementation(libs.lottie.compose)
 }

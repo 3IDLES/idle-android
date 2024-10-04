@@ -1,6 +1,5 @@
 package com.idle.worker.home
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
@@ -40,7 +39,7 @@ class WorkerHomeViewModel @Inject constructor(
 
     private val next = MutableStateFlow<String?>(null)
 
-    private val _jobPostings = MutableStateFlow<List<JobPosting>>(emptyList())
+    private val _jobPostings = MutableStateFlow<List<JobPosting>?>(null)
     val jobPostings = _jobPostings.asStateFlow()
 
     private var callType: JobPostingCallType = JobPostingCallType.IN_APP
@@ -84,7 +83,7 @@ class WorkerHomeViewModel @Inject constructor(
         ).onSuccess {
             baseEvent(CareBaseEvent.ShowSnackBar("지원이 완료되었어요.|SUCCESS"))
 
-            _jobPostings.value = _jobPostings.value.map {
+            _jobPostings.value = _jobPostings.value?.map {
                 if (it.jobPostingType == JobPostingType.CAREMEET && it.id == jobPostingId) {
                     val jobPosting = it as WorkerJobPosting
                     jobPosting.copy(applyTime = LocalDateTime.now())
@@ -103,7 +102,7 @@ class WorkerHomeViewModel @Inject constructor(
         ).onSuccess {
             baseEvent(CareBaseEvent.ShowSnackBar("즐겨찾기에 추가되었어요.|SUCCESS"))
 
-            _jobPostings.value = _jobPostings.value.map {
+            _jobPostings.value = _jobPostings.value?.map {
                 when (it.jobPostingType) {
                     JobPostingType.CAREMEET -> {
                         it as WorkerJobPosting
@@ -123,7 +122,7 @@ class WorkerHomeViewModel @Inject constructor(
         removeFavoriteJobPostingUseCase(jobPostingId = jobPostingId).onSuccess {
             baseEvent(CareBaseEvent.ShowSnackBar("즐겨찾기에서 제거되었어요.|SUCCESS"))
 
-            _jobPostings.value = _jobPostings.value.map {
+            _jobPostings.value = _jobPostings.value?.map {
                 when (it.jobPostingType) {
                     JobPostingType.CAREMEET -> {
                         it as WorkerJobPosting
@@ -145,9 +144,9 @@ class WorkerHomeViewModel @Inject constructor(
             if (nextId == null) {
                 callType = JobPostingCallType.CRAWLING
             }
-            _jobPostings.value += postings
+            _jobPostings.value = _jobPostings.value?.plus(postings) ?: postings
 
-            if (_jobPostings.value.isEmpty()) {
+            if (_jobPostings.value?.isEmpty() != false) {
                 getJobPostings()
             }
         }.onFailure { handleFailure(it as HttpResponseException) }
@@ -159,7 +158,7 @@ class WorkerHomeViewModel @Inject constructor(
             if (nextId == null) {
                 callType = JobPostingCallType.END
             }
-            _jobPostings.value += postings
+            _jobPostings.value = _jobPostings.value?.plus(postings) ?: postings
         }.onFailure { handleFailure(it as HttpResponseException) }
     }
 }

@@ -57,6 +57,7 @@ import com.idle.designsystem.compose.component.CareHeadingTopBar
 import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareTabBar
+import com.idle.designsystem.compose.component.LoadingCircle
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.jobposting.CenterJobPosting
 import dagger.hilt.android.AndroidEntryPoint
@@ -99,8 +100,8 @@ internal class CenterHomeFragment : BaseComposeFragment() {
 internal fun CenterHomeScreen(
     snackbarHostState: SnackbarHostState,
     recruitmentPostStatus: RecruitmentPostStatus,
-    jobPostingsInProgresses: List<CenterJobPosting>,
-    jobPostingsCompleted: List<CenterJobPosting>,
+    jobPostingsInProgresses: List<CenterJobPosting>?,
+    jobPostingsCompleted: List<CenterJobPosting>?,
     unreadNotificationCount: Int,
     setRecruitmentPostStatus: (RecruitmentPostStatus) -> Unit,
     endJobPosting: (String) -> Unit,
@@ -203,61 +204,81 @@ internal fun CenterHomeScreen(
                 ) { status ->
                     when (status) {
                         RecruitmentPostStatus.IN_PROGRESS -> {
-                            LazyColumn(
-                                state = inProgressListState,
-                                verticalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                items(
-                                    items = jobPostingsInProgresses,
-                                    key = { it.id },
-                                ) { jobPosting ->
-                                    JobPostingInProgressCard(
-                                        jobPosting = jobPosting,
-                                        navigateTo = navigateTo,
-                                        endJobPosting = {
-                                            selectedJobPostingId = jobPosting.id
-                                            showDialog = true
-                                        }
-                                    )
-                                }
-
-                                item {
-                                    Spacer(
+                            if (jobPostingsInProgresses == null) {
+                                Box(modifier = Modifier.fillMaxSize()) {
+                                    LoadingCircle(
                                         modifier = Modifier
-                                            .fillMaxWidth()
-                                            .height(28.dp)
+                                            .align(Alignment.Center)
+                                            .padding(bottom = 40.dp),
                                     )
                                 }
-                            }
+                            } else {
+                                LazyColumn(
+                                    state = inProgressListState,
+                                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    items(
+                                        items = jobPostingsInProgresses,
+                                        key = { it.id },
+                                    ) { jobPosting ->
+                                        JobPostingInProgressCard(
+                                            jobPosting = jobPosting,
+                                            navigateTo = navigateTo,
+                                            endJobPosting = {
+                                                selectedJobPostingId = jobPosting.id
+                                                showDialog = true
+                                            }
+                                        )
+                                    }
 
-                            TrackScreenViewEvent(screenName = "center_home_screen_inprogress")
+                                    item {
+                                        Spacer(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .height(28.dp)
+                                        )
+                                    }
+                                }
+
+                                TrackScreenViewEvent(screenName = "center_home_screen_inprogress")
+                            }
                         }
 
                         RecruitmentPostStatus.COMPLETED -> {
-                            LazyColumn(
-                                state = completedListState,
-                                verticalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                items(
-                                    items = jobPostingsCompleted,
-                                    key = { it.id },
-                                ) { jobPosting ->
-                                    JobPostingCompletedCard(
-                                        jobPosting = jobPosting,
-                                        navigateTo = navigateTo,
-                                    )
-                                }
-
-                                item {
-                                    Spacer(
+                            if (jobPostingsCompleted == null) {
+                                Box(modifier = Modifier.fillMaxSize()) {
+                                    LoadingCircle(
                                         modifier = Modifier
-                                            .fillMaxWidth()
-                                            .height(28.dp)
+                                            .align(Alignment.Center)
+                                            .padding(bottom = 40.dp),
                                     )
                                 }
-                            }
+                            } else {
+                                LazyColumn(
+                                    state = completedListState,
+                                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    items(
+                                        items = jobPostingsCompleted,
+                                        key = { it.id },
+                                    ) { jobPosting ->
+                                        JobPostingCompletedCard(
+                                            jobPosting = jobPosting,
+                                            navigateTo = navigateTo,
+                                        )
+                                    }
 
-                            TrackScreenViewEvent(screenName = "center_home_screen_completed")
+                                    item {
+                                        Spacer(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .height(28.dp)
+                                        )
+                                    }
+                                }
+
+                                TrackScreenViewEvent(screenName = "center_home_screen_completed")
+                            }
                         }
                     }
                 }
