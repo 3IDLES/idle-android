@@ -49,7 +49,7 @@ import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.jobposting.CenterJobPostingDetail
 import com.idle.domain.model.jobposting.JobPostingStatus
-import com.idle.worker.job.posting.detail.worker.screen.LoadingJobPostingDetailScreen
+import com.idle.worker.job.posting.detail.LoadingJobPostingDetailScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.time.LocalDate
