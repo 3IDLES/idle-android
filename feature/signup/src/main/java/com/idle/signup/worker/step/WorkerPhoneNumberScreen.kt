@@ -1,8 +1,8 @@
 package com.idle.signup.worker.step
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,7 +31,7 @@ import com.idle.signin.worker.WorkerSignUpStep.PHONE_NUMBER
 import com.idle.signup.LogWorkerSignUpStep
 
 @Composable
-internal fun WorkerPhoneNumberScreen(
+internal fun ColumnScope.WorkerPhoneNumberScreen(
     workerPhoneNumber: String,
     workerAuthCodeTimerMinute: String,
     workerAuthCodeTimerSeconds: String,
@@ -50,20 +50,20 @@ internal fun WorkerPhoneNumberScreen(
         focusRequester.requestFocus()
     }
 
-    Column(
-        horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(32.dp),
-        modifier = Modifier.fillMaxSize()
-    ) {
+        // 첫 번째 Text 컴포넌트
         Text(
             text = stringResource(id = R.string.phone_number_hint),
             style = CareTheme.typography.heading2,
             color = CareTheme.colors.gray900,
+            modifier = Modifier.padding(bottom = 32.dp) // 개별 패딩 적용
         )
 
+        // LabeledContent 컴포넌트
         LabeledContent(
             subtitle = stringResource(id = R.string.phone_number),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 32.dp) // 개별 패딩 적용
         ) {
             Row(
                 verticalAlignment = Alignment.Top,
@@ -96,10 +96,13 @@ internal fun WorkerPhoneNumberScreen(
             }
         }
 
+        // 인증 코드 입력 필드
         if (workerAuthCodeTimerMinute.isNotBlank()) {
             LabeledContent(
                 subtitle = stringResource(id = R.string.confirm_code),
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 32.dp) // 개별 패딩 적용
             ) {
                 Row(
                     verticalAlignment = Alignment.Top,
@@ -134,17 +137,18 @@ internal fun WorkerPhoneNumberScreen(
             }
         }
 
+        // Spacer 컴포넌트
         Spacer(modifier = Modifier.weight(1f))
 
+        // 다음 단계로 넘어가는 버튼
         CareButtonLarge(
             text = stringResource(id = R.string.next),
             enable = isConfirmAuthCode,
             onClick = { setSignUpStep(WorkerSignUpStep.findStep(PHONE_NUMBER.step + 1)) },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 28.dp),
+                .padding(bottom = 28.dp), // 마지막 버튼에 개별 패딩 적용
         )
-    }
 
     LogWorkerSignUpStep(PHONE_NUMBER)
 }

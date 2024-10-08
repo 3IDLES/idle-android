@@ -24,6 +24,7 @@ android {
             buildConfigField("String", "BUILD_TYPE", "\"DEBUG\"")
         }
         release {
+
             buildConfigField("String", "BUILD_TYPE", "\"RELEASE\"")
         }
     }

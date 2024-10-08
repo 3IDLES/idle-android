@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.Care" parent="Theme.AppCompat.NoActionBar" />
+    <style name="Theme.Care" parent="Theme.AppCompat.NoActionBar" >
+        <item name="android:windowBackground">@android:color/white</item>
+    </style>
 
     <style name="Theme.Care.Splash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/orange_500</item>

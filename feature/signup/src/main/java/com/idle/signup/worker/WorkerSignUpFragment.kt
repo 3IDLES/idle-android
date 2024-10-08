@@ -13,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -30,6 +29,7 @@ import com.idle.designsystem.compose.component.CareProgressBar
 import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
+import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.Gender
 import com.idle.post.code.PostCodeFragment
 import com.idle.signup.worker.step.AddressScreen
@@ -169,19 +169,19 @@ internal fun WorkerSignUpScreen(
         },
         modifier = Modifier.addFocusCleaner(focusManager),
     ) { paddingValue ->
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(32.dp, Alignment.CenterVertically),
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White)
-                .padding(paddingValue)
-                .padding(start = 20.dp, end = 20.dp, top = 24.dp),
-        ) {
-            CareStateAnimator(
-                targetState = signUpStep,
-                label = "요양 보호사의 회원가입을 관리하는 애니메이션",
-            ) { signUpStep ->
+        CareStateAnimator(
+            targetState = signUpStep,
+            label = "요양 보호사의 회원가입을 관리하는 애니메이션",
+        ) { signUpStep ->
+            Column(
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.spacedBy(32.dp, Alignment.CenterVertically),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(CareTheme.colors.white000)
+                    .padding(paddingValue)
+                    .padding(start = 20.dp, end = 20.dp, top = 24.dp),
+            ) {
                 when (signUpStep) {
                     WorkerSignUpStep.PHONE_NUMBER -> WorkerPhoneNumberScreen(
                         workerPhoneNumber = workerPhoneNumber,

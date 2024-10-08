@@ -112,7 +112,6 @@ internal fun AuthScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White)
                 .padding(horizontal = 20.dp)
                 .padding(paddingValue),
         ) {
