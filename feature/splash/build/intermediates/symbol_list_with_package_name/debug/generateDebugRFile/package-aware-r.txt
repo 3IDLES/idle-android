@@ -1,4 +1,5 @@
 com.idle.splash
+drawable ic_splash_logo
 id nav_splash
 id splashFragment
 navigation nav_splash
