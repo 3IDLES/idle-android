@@ -22,15 +22,17 @@ class UpdateCenterProfileUseCase @Inject constructor(
                 ).getOrThrow()
             }
 
-            val updateProfileImageJob = imageFileUri?.let {
-                launch {
-                    profileRepository.updateProfileImage(
-                        userType = UserType.CENTER.apiValue,
-                        imageFileUri = imageFileUri,
-                        reqWidth = 1340,
-                        reqHeight = 1016,
-                    ).getOrThrow()
-                }
+            val updateProfileImageJob = imageFileUri?.let { uri ->
+                if (uri.startsWith("content://")) {
+                    launch {
+                        profileRepository.updateProfileImage(
+                            userType = UserType.CENTER.apiValue,
+                            imageFileUri = uri,
+                            reqWidth = 1340,
+                            reqHeight = 1016,
+                        ).getOrThrow()
+                    }
+                } else null
             }
 
             updateProfileJon.join()
