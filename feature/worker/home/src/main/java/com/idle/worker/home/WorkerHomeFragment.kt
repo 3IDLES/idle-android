@@ -78,6 +78,7 @@ internal class WorkerHomeFragment : BaseComposeFragment() {
             val profile by profile.collectAsStateWithLifecycle()
             val jobPostings by jobPostings.collectAsStateWithLifecycle()
             val unreadNotificationCount by unreadNotificationCount.collectAsStateWithLifecycle()
+            val callType by callType.collectAsStateWithLifecycle()
 
             LaunchedEffect(true) {
                 getUnreadNotificationCount()
@@ -88,6 +89,7 @@ internal class WorkerHomeFragment : BaseComposeFragment() {
                 profile = profile,
                 workerJobPostings = jobPostings,
                 unreadNotificationCount = unreadNotificationCount,
+                callType = callType,
                 getJobPostings = ::getJobPostings,
                 applyJobPosting = ::applyJobPosting,
                 addFavoriteJobPosting = ::addFavoriteJobPosting,
@@ -104,6 +106,7 @@ internal fun WorkerHomeScreen(
     profile: WorkerProfile?,
     workerJobPostings: List<JobPosting>?,
     unreadNotificationCount: Int,
+    callType: JobPostingCallType,
     getJobPostings: () -> Unit,
     applyJobPosting: (String) -> Unit,
     addFavoriteJobPosting: (String, JobPostingType) -> Unit,
@@ -236,7 +239,7 @@ internal fun WorkerHomeScreen(
                         .align(Alignment.Center),
                 )
             } else {
-                if (workerJobPostings.isEmpty()) {
+                if (workerJobPostings.isEmpty() && callType == JobPostingCallType.END) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
