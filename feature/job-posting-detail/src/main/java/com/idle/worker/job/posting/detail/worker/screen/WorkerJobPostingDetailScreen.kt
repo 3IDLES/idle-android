@@ -132,7 +132,7 @@ internal fun WorkerJobPostingDetailScreen(
                 Text(
                     text = stringResource(id = R.string.inquiry),
                     style = CareTheme.typography.heading3,
-                    color = CareTheme.colors.gray900,
+                    color = CareTheme.colors.black,
                     modifier = Modifier.padding(bottom = 20.dp),
                 )
 
@@ -255,7 +255,7 @@ internal fun WorkerJobPostingDetailScreen(
                                 ""
                             },
                             style = CareTheme.typography.subtitle1,
-                            color = CareTheme.colors.gray900,
+                            color = CareTheme.colors.black,
                             overflow = TextOverflow.Clip,
                             maxLines = 1,
                             modifier = Modifier.padding(bottom = 2.dp),
@@ -264,7 +264,7 @@ internal fun WorkerJobPostingDetailScreen(
                         Text(
                             text = "${jobPostingDetail.careLevel}등급 ${jobPostingDetail.age}세 ${jobPostingDetail.gender.displayName}",
                             style = CareTheme.typography.body2,
-                            color = CareTheme.colors.gray900,
+                            color = CareTheme.colors.black,
                             modifier = Modifier.padding(end = 8.dp, bottom = 4.dp),
                         )
 
@@ -316,7 +316,7 @@ internal fun WorkerJobPostingDetailScreen(
                         Text(
                             text = stringResource(id = R.string.work_address),
                             style = CareTheme.typography.subtitle1,
-                            color = CareTheme.colors.gray900,
+                            color = CareTheme.colors.black,
                             modifier = Modifier.padding(bottom = 20.dp),
                         )
 
@@ -342,7 +342,7 @@ internal fun WorkerJobPostingDetailScreen(
                             Text(
                                 text = "걸어서 ${jobPostingDetail.getDistanceInMinutes()} 소요",
                                 style = CareTheme.typography.subtitle2,
-                                color = CareTheme.colors.gray900,
+                                color = CareTheme.colors.black,
                             )
                         }
 
@@ -387,7 +387,7 @@ internal fun WorkerJobPostingDetailScreen(
                         Text(
                             text = stringResource(id = R.string.work_conditions),
                             style = CareTheme.typography.subtitle1,
-                            color = CareTheme.colors.gray900,
+                            color = CareTheme.colors.black,
                             modifier = Modifier.padding(bottom = 20.dp),
                         )
 
@@ -430,25 +430,25 @@ internal fun WorkerJobPostingDetailScreen(
                                         .sortedBy { it.ordinal }
                                         .joinToString(",") { it.displayName },
                                     style = CareTheme.typography.body2,
-                                    color = CareTheme.colors.gray900,
+                                    color = CareTheme.colors.black,
                                 )
 
                                 Text(
                                     text = "${jobPostingDetail.startTime} - ${jobPostingDetail.endTime}",
                                     style = CareTheme.typography.body2,
-                                    color = CareTheme.colors.gray900,
+                                    color = CareTheme.colors.black,
                                 )
 
                                 Text(
                                     text = "${jobPostingDetail.payType.displayName} ${jobPostingDetail.payAmount} 원",
                                     style = CareTheme.typography.body2,
-                                    color = CareTheme.colors.gray900,
+                                    color = CareTheme.colors.black,
                                 )
 
                                 Text(
                                     text = jobPostingDetail.lotNumberAddress,
                                     style = CareTheme.typography.body2,
-                                    color = CareTheme.colors.gray900,
+                                    color = CareTheme.colors.black,
                                 )
                             }
                         }
@@ -464,7 +464,7 @@ internal fun WorkerJobPostingDetailScreen(
                         Text(
                             text = stringResource(id = R.string.customer_info),
                             style = CareTheme.typography.subtitle1,
-                            color = CareTheme.colors.gray900,
+                            color = CareTheme.colors.black,
                             modifier = Modifier.padding(bottom = 20.dp),
                         )
 
@@ -501,20 +501,20 @@ internal fun WorkerJobPostingDetailScreen(
                                 Text(
                                     text = jobPostingDetail.gender.displayName,
                                     style = CareTheme.typography.body2,
-                                    color = CareTheme.colors.gray900,
+                                    color = CareTheme.colors.black,
                                 )
 
                                 Text(
                                     text = "${jobPostingDetail.age}세",
                                     style = CareTheme.typography.body2,
-                                    color = CareTheme.colors.gray900,
+                                    color = CareTheme.colors.black,
                                 )
 
                                 Text(
                                     text = if (jobPostingDetail.weight != null) "${jobPostingDetail.weight}kg"
                                     else "-",
                                     style = CareTheme.typography.body2,
-                                    color = CareTheme.colors.gray900,
+                                    color = CareTheme.colors.black,
                                 )
                             }
                         }
@@ -553,19 +553,19 @@ internal fun WorkerJobPostingDetailScreen(
                                 Text(
                                     text = "${jobPostingDetail.careLevel}등급",
                                     style = CareTheme.typography.body2,
-                                    color = CareTheme.colors.gray900,
+                                    color = CareTheme.colors.black,
                                 )
 
                                 Text(
                                     text = jobPostingDetail.mentalStatus.displayName,
                                     style = CareTheme.typography.body2,
-                                    color = CareTheme.colors.gray900,
+                                    color = CareTheme.colors.black,
                                 )
 
                                 Text(
                                     text = jobPostingDetail.disease ?: "-",
                                     style = CareTheme.typography.body2,
-                                    color = CareTheme.colors.gray900,
+                                    color = CareTheme.colors.black,
                                 )
                             }
                         }
@@ -616,7 +616,7 @@ internal fun WorkerJobPostingDetailScreen(
                                     )
                                     else stringResource(id = R.string.unnecessary),
                                     style = CareTheme.typography.body2,
-                                    color = CareTheme.colors.gray900,
+                                    color = CareTheme.colors.black,
                                 )
 
                                 Text(
@@ -625,7 +625,7 @@ internal fun WorkerJobPostingDetailScreen(
                                     )
                                     else stringResource(id = R.string.unnecessary),
                                     style = CareTheme.typography.body2,
-                                    color = CareTheme.colors.gray900,
+                                    color = CareTheme.colors.black,
                                 )
 
                                 Text(
@@ -634,7 +634,7 @@ internal fun WorkerJobPostingDetailScreen(
                                     )
                                     else stringResource(id = R.string.unnecessary),
                                     style = CareTheme.typography.body2,
-                                    color = CareTheme.colors.gray900,
+                                    color = CareTheme.colors.black,
                                 )
 
                                 Text(
@@ -642,7 +642,7 @@ internal fun WorkerJobPostingDetailScreen(
                                         .sortedBy { it.ordinal }
                                         .joinToString(",") { it.displayName },
                                     style = CareTheme.typography.body2,
-                                    color = CareTheme.colors.gray900,
+                                    color = CareTheme.colors.black,
                                 )
                             }
                         }
@@ -673,7 +673,7 @@ internal fun WorkerJobPostingDetailScreen(
                         Text(
                             text = stringResource(id = R.string.additional_info),
                             style = CareTheme.typography.subtitle1,
-                            color = CareTheme.colors.gray900,
+                            color = CareTheme.colors.black,
                             modifier = Modifier.padding(bottom = 20.dp),
                         )
 
@@ -710,7 +710,7 @@ internal fun WorkerJobPostingDetailScreen(
                                     )
                                     else stringResource(id = R.string.beginner_possible),
                                     style = CareTheme.typography.body2,
-                                    color = CareTheme.colors.gray900,
+                                    color = CareTheme.colors.black,
                                 )
 
                                 Text(
@@ -718,13 +718,13 @@ internal fun WorkerJobPostingDetailScreen(
                                         .sortedBy { it.ordinal }
                                         .joinToString(",") { it.displayName },
                                     style = CareTheme.typography.body2,
-                                    color = CareTheme.colors.gray900,
+                                    color = CareTheme.colors.black,
                                 )
 
                                 Text(
                                     text = jobPostingDetail.applyDeadline.toString(),
                                     style = CareTheme.typography.body2,
-                                    color = CareTheme.colors.gray900,
+                                    color = CareTheme.colors.black,
                                 )
                             }
                         }
@@ -740,7 +740,7 @@ internal fun WorkerJobPostingDetailScreen(
                         Text(
                             text = stringResource(id = R.string.center_info),
                             style = CareTheme.typography.subtitle1,
-                            color = CareTheme.colors.gray900,
+                            color = CareTheme.colors.black,
                             modifier = Modifier.padding(bottom = 12.dp),
                         )
 

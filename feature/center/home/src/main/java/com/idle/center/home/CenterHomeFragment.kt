@@ -335,7 +335,7 @@ private fun JobPostingInProgressCard(
                     ""
                 },
                 style = CareTheme.typography.subtitle2,
-                color = CareTheme.colors.gray900,
+                color = CareTheme.colors.black,
                 overflow = TextOverflow.Clip,
                 maxLines = 1,
                 modifier = Modifier.padding(bottom = 2.dp),
@@ -434,7 +434,7 @@ private fun JobPostingCompletedCard(
                     ""
                 },
                 style = CareTheme.typography.subtitle2,
-                color = CareTheme.colors.gray900,
+                color = CareTheme.colors.black,
                 overflow = TextOverflow.Clip,
                 maxLines = 1,
                 modifier = Modifier.padding(bottom = 2.dp),

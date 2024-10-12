@@ -92,14 +92,14 @@ internal fun CenterRegisterSummaryScreen(
             Text(
                 text = "다음의 센터 정보가 맞는지\n확인해주세요.",
                 style = CareTheme.typography.heading1,
-                color = CareTheme.colors.gray900,
+                color = CareTheme.colors.black,
                 modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 32.dp),
             )
 
             Text(
                 text = centerName,
                 style = CareTheme.typography.heading1,
-                color = CareTheme.colors.gray900,
+                color = CareTheme.colors.black,
                 modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 8.dp),
             )
 
@@ -118,7 +118,7 @@ internal fun CenterRegisterSummaryScreen(
                 Text(
                     text = roadNameAddress,
                     style = CareTheme.typography.body2,
-                    color = CareTheme.colors.gray900,
+                    color = CareTheme.colors.black,
                 )
             }
 
@@ -131,7 +131,7 @@ internal fun CenterRegisterSummaryScreen(
             Text(
                 text = stringResource(id = R.string.center_detail_info),
                 style = CareTheme.typography.subtitle1,
-                color = CareTheme.colors.gray900,
+                color = CareTheme.colors.black,
                 modifier = Modifier.padding(bottom = 20.dp, start = 20.dp, end = 20.dp),
             )
 
@@ -144,7 +144,7 @@ internal fun CenterRegisterSummaryScreen(
                 Text(
                     text = centerNumber,
                     style = CareTheme.typography.body3,
-                    color = CareTheme.colors.gray900,
+                    color = CareTheme.colors.black,
                 )
             }
 
@@ -157,7 +157,7 @@ internal fun CenterRegisterSummaryScreen(
                 Text(
                     text = centerIntroduce.ifBlank { "-" },
                     style = CareTheme.typography.body3,
-                    color = CareTheme.colors.gray900,
+                    color = CareTheme.colors.black,
                 )
             }
 

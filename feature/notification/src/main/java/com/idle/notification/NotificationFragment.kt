@@ -113,7 +113,7 @@ private fun NotificationScreen(
                 Text(
                     text = stringResource(id = R.string.no_received_notification),
                     style = CareTheme.typography.heading2,
-                    color = CareTheme.colors.gray900,
+                    color = CareTheme.colors.black,
                 )
 
                 Text(
@@ -139,7 +139,7 @@ private fun NotificationScreen(
                                 Text(
                                     text = stringResource(id = R.string.today),
                                     style = CareTheme.typography.subtitle2,
-                                    color = CareTheme.colors.gray900,
+                                    color = CareTheme.colors.black,
                                     modifier = Modifier.padding(
                                         start = 20.dp,
                                         top = 24.dp,
@@ -165,7 +165,7 @@ private fun NotificationScreen(
                                 Text(
                                     text = stringResource(id = R.string.recent_a_week),
                                     style = CareTheme.typography.subtitle2,
-                                    color = CareTheme.colors.gray900,
+                                    color = CareTheme.colors.black,
                                     modifier = Modifier.padding(
                                         start = 20.dp,
                                         top = 24.dp,
@@ -191,7 +191,7 @@ private fun NotificationScreen(
                                 Text(
                                     text = stringResource(id = R.string.other_days),
                                     style = CareTheme.typography.subtitle2,
-                                    color = CareTheme.colors.gray900,
+                                    color = CareTheme.colors.black,
                                     modifier = Modifier.padding(
                                         start = 20.dp,
                                         top = 24.dp,
@@ -242,7 +242,7 @@ private fun NotificationItem(modifier: Modifier = Modifier) {
                 Text(
                     text = "김철수 님이 공고에 지원하였습니다.",
                     style = CareTheme.typography.subtitle3,
-                    color = CareTheme.colors.gray900,
+                    color = CareTheme.colors.black,
                     modifier = Modifier.padding(bottom = 1.dp),
                 )
 

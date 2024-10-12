@@ -15,15 +15,15 @@ val Orange700 = Color(0xff994900)
 
 val White000 = Color(0xffffffff)
 val Gray050 = Color(0xffF1F2F4)
-val Gray100 = Color(0xffDFE0E3)
-val Gray200 = Color(0xffBFC1C7)
-val Gray300 = Color(0xff9EA3AB)
-val Gray400 = Color(0xff7E848F)
-val Gray500 = Color(0xff5E6573)
-val Gray600 = Color(0xff4B515C)
-val Gray700 = Color(0xff383D45)
-val Gray800 = Color(0xff26282E)
-val Gray900 = Color(0xff131417)
+val Gray100 = Color(0xffD5D7DB)
+val Gray200 = Color(0xff9EA3AB)
+val Gray300 = Color(0xff7E848F)
+val Gray400 = Color(0xff5E6573)
+val Gray500 = Color(0xff4B515C)
+val Gray600 = Color(0xff383D45)
+val Gray700 = Color(0xff26282E)
+val Gray800 = Color(0xff131417)
+val Black = Color(0xff090A0C)
 
 @Immutable
 data class CareColors(
@@ -46,5 +46,5 @@ data class CareColors(
     val gray600: Color = Gray600,
     val gray700: Color = Gray700,
     val gray800: Color = Gray800,
-    val gray900: Color = Gray900
+    val black: Color = Black
 )

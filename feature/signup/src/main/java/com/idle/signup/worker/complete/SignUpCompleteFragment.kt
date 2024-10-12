@@ -69,7 +69,7 @@ internal fun SignUpCompleteScreen(
         Text(
             text = stringResource(id = R.string.worker_signup_complete_message),
             style = CareTheme.typography.heading1,
-            color = CareTheme.colors.gray900,
+            color = CareTheme.colors.black,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(bottom = 12.dp),
         )

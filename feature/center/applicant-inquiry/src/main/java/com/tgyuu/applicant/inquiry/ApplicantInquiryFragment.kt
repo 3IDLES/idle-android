@@ -118,7 +118,7 @@ internal fun ApplicantInquiryScreen(
                     Text(
                         text = "위 공고에 지원한 보호사 목록이에요.",
                         style = CareTheme.typography.subtitle2,
-                        color = CareTheme.colors.gray900,
+                        color = CareTheme.colors.black,
                         modifier = Modifier.padding(bottom = 20.dp),
                     )
                 }
@@ -175,7 +175,7 @@ private fun RecruitInfoCard(jobPostingSummary: JobPostingSummary) {
                     ""
                 },
                 style = CareTheme.typography.subtitle2,
-                color = CareTheme.colors.gray900,
+                color = CareTheme.colors.black,
                 modifier = Modifier.padding(bottom = 2.dp),
             )
 
@@ -266,13 +266,13 @@ private fun WorkerProfileCard(
                         Text(
                             text = applicant.name,
                             style = CareTheme.typography.subtitle2,
-                            color = CareTheme.colors.gray900,
+                            color = CareTheme.colors.black,
                         )
 
                         Text(
                             text = "요양보호사",
                             style = CareTheme.typography.body3,
-                            color = CareTheme.colors.gray900,
+                            color = CareTheme.colors.black,
                         )
                     }
 

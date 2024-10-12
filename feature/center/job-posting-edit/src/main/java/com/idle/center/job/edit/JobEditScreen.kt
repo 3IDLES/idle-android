@@ -181,7 +181,7 @@ fun JobEditScreen(
                         Text(
                             text = stringResource(id = R.string.work_start_time),
                             style = CareTheme.typography.heading3,
-                            color = CareTheme.colors.gray900,
+                            color = CareTheme.colors.black,
                         )
 
                         Spacer(modifier = Modifier.height(80.dp))
@@ -209,7 +209,7 @@ fun JobEditScreen(
                             Text(
                                 text = ":",
                                 style = CareTheme.typography.subtitle2,
-                                color = CareTheme.colors.gray900,
+                                color = CareTheme.colors.black,
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier.width(20.dp),
                             )
@@ -287,7 +287,7 @@ fun JobEditScreen(
                         Text(
                             text = stringResource(id = R.string.work_end_time),
                             style = CareTheme.typography.heading3,
-                            color = CareTheme.colors.gray900,
+                            color = CareTheme.colors.black,
                         )
 
                         Spacer(modifier = Modifier.height(80.dp))
@@ -315,7 +315,7 @@ fun JobEditScreen(
                             Text(
                                 text = ":",
                                 style = CareTheme.typography.subtitle2,
-                                color = CareTheme.colors.gray900,
+                                color = CareTheme.colors.black,
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier.width(20.dp),
                             )
@@ -387,7 +387,7 @@ fun JobEditScreen(
                         Text(
                             text = stringResource(id = R.string.post_deadline),
                             style = CareTheme.typography.heading3,
-                            color = CareTheme.colors.gray900,
+                            color = CareTheme.colors.black,
                         )
 
                         CareCalendar(
@@ -520,7 +520,7 @@ fun JobEditScreen(
                     Text(
                         text = stringResource(id = R.string.work_conditions),
                         style = CareTheme.typography.subtitle1,
-                        color = CareTheme.colors.gray900,
+                        color = CareTheme.colors.black,
                     )
 
                     LabeledContent(
@@ -667,7 +667,7 @@ fun JobEditScreen(
                     Text(
                         text = stringResource(id = R.string.customer_info),
                         style = CareTheme.typography.subtitle1,
-                        color = CareTheme.colors.gray900,
+                        color = CareTheme.colors.black,
                     )
 
                     LabeledContent(
@@ -942,7 +942,7 @@ fun JobEditScreen(
                     Text(
                         text = stringResource(id = R.string.additional_info),
                         style = CareTheme.typography.subtitle1,
-                        color = CareTheme.colors.gray900,
+                        color = CareTheme.colors.black,
                     )
 
                     LabeledContent(subtitle = stringResource(id = R.string.experience_preference)) {

@@ -28,20 +28,16 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.idle.center.jobposting.JobPostingStep
-import com.idle.center.jobposting.JobPostingStep.CUSTOMER_INFORMATION
 import com.idle.center.jobposting.JobPostingStep.CUSTOMER_REQUIREMENT
 import com.idle.center.jobposting.LogJobPostingStep
 import com.idle.designresource.R
-import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareButtonMedium
 import com.idle.designsystem.compose.component.CareChipBasic
 import com.idle.designsystem.compose.component.CareTextFieldLong
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.designsystem.compose.foundation.PretendardMedium
-import com.idle.domain.model.auth.Gender
 import com.idle.domain.model.jobposting.LifeAssistance
-import com.idle.domain.model.jobposting.MentalStatus
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -75,7 +71,7 @@ internal fun CustomerRequirementScreen(
         Text(
             text = stringResource(id = R.string.customer_requirement_title),
             style = CareTheme.typography.heading2,
-            color = CareTheme.colors.gray900,
+            color = CareTheme.colors.black,
         )
 
         LabeledContent(subtitle = stringResource(id = R.string.meal_assistance)) {

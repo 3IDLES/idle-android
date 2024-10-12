@@ -44,7 +44,7 @@ internal fun CenterNameScreen(
         Text(
             text = stringResource(id = R.string.enter_your_name),
             style = CareTheme.typography.heading2,
-            color = CareTheme.colors.gray900,
+            color = CareTheme.colors.black,
         )
 
         CareTextField(

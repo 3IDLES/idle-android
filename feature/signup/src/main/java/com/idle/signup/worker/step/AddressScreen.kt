@@ -41,7 +41,7 @@ internal fun AddressScreen(
         Text(
             text = stringResource(id = R.string.worker_address_title),
             style = CareTheme.typography.heading2,
-            color = CareTheme.colors.gray900,
+            color = CareTheme.colors.black,
         )
 
         LabeledContent(

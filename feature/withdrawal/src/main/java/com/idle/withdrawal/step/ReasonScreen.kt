@@ -68,7 +68,7 @@ internal fun ReasonScreen(
         Text(
             text = stringResource(id = R.string.withdrawal_reason_title),
             style = CareTheme.typography.heading1,
-            color = CareTheme.colors.gray900,
+            color = CareTheme.colors.black,
             modifier = Modifier.padding(bottom = 8.dp),
         )
 

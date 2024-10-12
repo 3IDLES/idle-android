@@ -141,7 +141,7 @@ internal fun LoadingJobPostingDetailScreen(snackbarHostState: SnackbarHostState)
                     Text(
                         text = stringResource(id = R.string.work_address),
                         style = CareTheme.typography.subtitle1,
-                        color = CareTheme.colors.gray900,
+                        color = CareTheme.colors.black,
                         modifier = Modifier.padding(bottom = 20.dp),
                     )
 
@@ -179,7 +179,7 @@ internal fun LoadingJobPostingDetailScreen(snackbarHostState: SnackbarHostState)
                     Text(
                         text = stringResource(id = R.string.work_conditions),
                         style = CareTheme.typography.subtitle1,
-                        color = CareTheme.colors.gray900,
+                        color = CareTheme.colors.black,
                         modifier = Modifier.padding(bottom = 20.dp),
                     )
 
@@ -262,7 +262,7 @@ internal fun LoadingJobPostingDetailScreen(snackbarHostState: SnackbarHostState)
                     Text(
                         text = stringResource(id = R.string.customer_info),
                         style = CareTheme.typography.subtitle1,
-                        color = CareTheme.colors.gray900,
+                        color = CareTheme.colors.black,
                         modifier = Modifier.padding(bottom = 20.dp),
                     )
 
@@ -491,7 +491,7 @@ internal fun LoadingJobPostingDetailScreen(snackbarHostState: SnackbarHostState)
                     Text(
                         text = stringResource(id = R.string.additional_info),
                         style = CareTheme.typography.subtitle1,
-                        color = CareTheme.colors.gray900,
+                        color = CareTheme.colors.black,
                         modifier = Modifier.padding(bottom = 20.dp),
                     )
 
@@ -560,7 +560,7 @@ internal fun LoadingJobPostingDetailScreen(snackbarHostState: SnackbarHostState)
                     Text(
                         text = stringResource(id = R.string.center_info),
                         style = CareTheme.typography.subtitle1,
-                        color = CareTheme.colors.gray900,
+                        color = CareTheme.colors.black,
                         modifier = Modifier.padding(bottom = 20.dp),
                     )
 

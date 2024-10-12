@@ -29,7 +29,7 @@ import com.idle.designsystem.compose.foundation.CareTheme
 fun CareCard(
     title: String,
     modifier: Modifier = Modifier,
-    titleTextColor: Color = CareTheme.colors.gray900,
+    titleTextColor: Color = CareTheme.colors.black,
     description: String? = null,
     titleLeftComponent: @Composable () -> Unit = {},
     descriptionLeftComponent: @Composable () -> Unit = {},

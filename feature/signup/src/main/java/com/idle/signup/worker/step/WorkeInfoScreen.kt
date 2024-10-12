@@ -25,7 +25,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.idle.designresource.R
-import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareButtonMedium
 import com.idle.designsystem.compose.component.CareChipBasic
 import com.idle.designsystem.compose.component.CareTextField
@@ -65,7 +64,7 @@ internal fun WorkerInformationScreen(
         Text(
             text = stringResource(id = R.string.worker_name_title),
             style = CareTheme.typography.heading2,
-            color = CareTheme.colors.gray900,
+            color = CareTheme.colors.black,
             modifier = Modifier.padding(bottom = 4.dp),
         )
 

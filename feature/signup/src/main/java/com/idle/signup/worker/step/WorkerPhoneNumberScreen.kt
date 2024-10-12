@@ -1,6 +1,5 @@
 package com.idle.signup.worker.step
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -58,7 +57,7 @@ internal fun WorkerPhoneNumberScreen(
         Text(
             text = stringResource(id = R.string.phone_number_hint),
             style = CareTheme.typography.heading2,
-            color = CareTheme.colors.gray900,
+            color = CareTheme.colors.black,
         )
 
         LabeledContent(

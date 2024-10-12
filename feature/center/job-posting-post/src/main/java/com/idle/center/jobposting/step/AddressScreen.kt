@@ -16,14 +16,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.idle.center.jobposting.JobPostingStep
-import com.idle.center.jobposting.JobPostingStep.ADDITIONAL_INFO
 import com.idle.center.jobposting.JobPostingStep.ADDRESS
 import com.idle.center.jobposting.LogJobPostingStep
 import com.idle.designresource.R
-import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareButtonMedium
 import com.idle.designsystem.compose.component.CareClickableTextField
-import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 
@@ -43,7 +40,7 @@ internal fun AddressScreen(
         Text(
             text = stringResource(id = R.string.address_screen_title),
             style = CareTheme.typography.heading2,
-            color = CareTheme.colors.gray900,
+            color = CareTheme.colors.black,
         )
 
         LabeledContent(

@@ -66,7 +66,7 @@ inline fun <reified S : Enum<S>> CareTabBar(
                     Text(
                         text = displayName(status),
                         style = CareTheme.typography.subtitle3,
-                        color = if (selectedStatus == status) CareTheme.colors.gray900
+                        color = if (selectedStatus == status) CareTheme.colors.black
                         else CareTheme.colors.gray300,
                         textAlign = TextAlign.Center,
                         modifier = Modifier
@@ -87,7 +87,7 @@ inline fun <reified S : Enum<S>> CareTabBar(
 
         HorizontalDivider(
             thickness = 2.dp,
-            color = CareTheme.colors.gray900,
+            color = CareTheme.colors.black,
             modifier = Modifier
                 .width(screenWidthDp / 2)
                 .align(Alignment.BottomStart)

@@ -58,7 +58,7 @@ internal fun JobPostingCompleteScreen() {
         Text(
             text = stringResource(id = R.string.job_posting_complete_message),
             style = CareTheme.typography.heading1,
-            color = CareTheme.colors.gray900,
+            color = CareTheme.colors.black,
             textAlign = TextAlign.Center,
         )
 

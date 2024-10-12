@@ -71,7 +71,7 @@ internal fun CenterRegisterCompleteScreen(navigateToCenterHome: () -> Unit) {
         Text(
             text = stringResource(id = com.idle.designresource.R.string.register_center_complete),
             style = CareTheme.typography.heading1,
-            color = CareTheme.colors.gray900,
+            color = CareTheme.colors.black,
             modifier = Modifier.padding(top = 24.dp),
         )
 

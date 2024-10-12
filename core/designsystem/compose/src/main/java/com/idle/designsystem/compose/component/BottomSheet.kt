@@ -90,7 +90,7 @@ private fun CalendarBottomSheetContent() {
         Text(
             text = "접수 마감일",
             style = CareTheme.typography.heading3,
-            color = CareTheme.colors.gray900
+            color = CareTheme.colors.black
         )
 
         CareCalendar(
@@ -135,7 +135,7 @@ private fun WheelPickerBottomSheetContent() {
         Text(
             text = "근무 시작 시간",
             style = CareTheme.typography.heading3,
-            color = CareTheme.colors.gray900
+            color = CareTheme.colors.black
         )
 
         Spacer(modifier = Modifier.height(80.dp))
@@ -156,7 +156,7 @@ private fun WheelPickerBottomSheetContent() {
             Text(
                 text = ":",
                 style = CareTheme.typography.subtitle2,
-                color = CareTheme.colors.gray900,
+                color = CareTheme.colors.black,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.width(20.dp)
             )

@@ -246,7 +246,7 @@ internal fun WorkerHomeScreen(
                         Text(
                             text = "아직 해당 지역의 공고가 없어요.",
                             style = CareTheme.typography.heading2,
-                            color = CareTheme.colors.gray900,
+                            color = CareTheme.colors.black,
                             modifier = Modifier.padding(bottom = 8.dp),
                         )
 
@@ -411,7 +411,7 @@ private fun WorkerRecruitmentCard(
                     ""
                 },
                 style = CareTheme.typography.subtitle2,
-                color = CareTheme.colors.gray900,
+                color = CareTheme.colors.black,
                 overflow = TextOverflow.Clip,
                 maxLines = 1,
                 modifier = Modifier
@@ -422,7 +422,7 @@ private fun WorkerRecruitmentCard(
             Text(
                 text = "${jobPosting.careLevel}등급 ${jobPosting.age}세 ${jobPosting.gender.displayName}",
                 style = CareTheme.typography.body2,
-                color = CareTheme.colors.gray900,
+                color = CareTheme.colors.black,
                 modifier = Modifier.padding(end = 8.dp, bottom = 4.dp),
             )
 
@@ -560,7 +560,7 @@ private fun WorkerWorkNetCard(
             Text(
                 text = jobPosting.title,
                 style = CareTheme.typography.subtitle2,
-                color = CareTheme.colors.gray900,
+                color = CareTheme.colors.black,
                 modifier = Modifier.padding(vertical = 8.dp),
             )
 

@@ -210,7 +210,7 @@ internal fun WorkerProfileScreen(
                 Text(
                     text = stringResource(id = R.string.experience),
                     style = CareTheme.typography.heading3,
-                    color = CareTheme.colors.gray900,
+                    color = CareTheme.colors.black,
                 )
 
                 Spacer(modifier = Modifier.height(80.dp))
@@ -403,13 +403,13 @@ internal fun WorkerProfileScreen(
                             Text(
                                 text = workerProfile.workerName,
                                 style = CareTheme.typography.heading2,
-                                color = CareTheme.colors.gray900,
+                                color = CareTheme.colors.black,
                             )
 
                             Text(
                                 text = stringResource(id = R.string.worker),
                                 style = CareTheme.typography.subtitle3,
-                                color = CareTheme.colors.gray900,
+                                color = CareTheme.colors.black,
                             )
                         }
 
@@ -427,7 +427,7 @@ internal fun WorkerProfileScreen(
                             Text(
                                 text = "${workerProfile.age}세",
                                 style = CareTheme.typography.body3,
-                                color = CareTheme.colors.gray900,
+                                color = CareTheme.colors.black,
                             )
 
                             VerticalDivider(
@@ -446,7 +446,7 @@ internal fun WorkerProfileScreen(
                             Text(
                                 text = workerProfile.gender.displayName,
                                 style = CareTheme.typography.body3,
-                                color = CareTheme.colors.gray900,
+                                color = CareTheme.colors.black,
                             )
 
                             if (experienceYear != null) {
@@ -466,7 +466,7 @@ internal fun WorkerProfileScreen(
                                 Text(
                                     text = "${workerProfile.experienceYear}년차",
                                     style = CareTheme.typography.body3,
-                                    color = CareTheme.colors.gray900,
+                                    color = CareTheme.colors.black,
                                 )
                             }
                         }
@@ -474,7 +474,7 @@ internal fun WorkerProfileScreen(
                         Text(
                             text = workerProfile.workerName,
                             style = CareTheme.typography.heading2,
-                            color = CareTheme.colors.gray900,
+                            color = CareTheme.colors.black,
                             modifier = Modifier.padding(bottom = 8.dp),
                         )
 
@@ -500,7 +500,7 @@ internal fun WorkerProfileScreen(
                             Text(
                                 text = "${workerProfile.age}세",
                                 style = CareTheme.typography.body3,
-                                color = CareTheme.colors.gray900,
+                                color = CareTheme.colors.black,
                             )
 
                             VerticalDivider(
@@ -519,7 +519,7 @@ internal fun WorkerProfileScreen(
                             Text(
                                 text = workerProfile.gender.displayName,
                                 style = CareTheme.typography.body3,
-                                color = CareTheme.colors.gray900,
+                                color = CareTheme.colors.black,
                             )
 
                             VerticalDivider(
@@ -538,7 +538,7 @@ internal fun WorkerProfileScreen(
                             Text(
                                 text = workerProfile.phoneNumber,
                                 style = CareTheme.typography.body3,
-                                color = CareTheme.colors.gray900,
+                                color = CareTheme.colors.black,
                             )
                         }
                     }
@@ -604,7 +604,7 @@ internal fun WorkerProfileScreen(
                             Text(
                                 text = workerProfile.roadNameAddress,
                                 style = CareTheme.typography.body3,
-                                color = CareTheme.colors.gray900,
+                                color = CareTheme.colors.black,
                             )
                         } else {
                             CareClickableTextField(
@@ -625,7 +625,7 @@ internal fun WorkerProfileScreen(
                             Text(
                                 text = workerIntroduce.ifBlank { "-" },
                                 style = CareTheme.typography.body3,
-                                color = CareTheme.colors.gray900,
+                                color = CareTheme.colors.black,
                             )
                         } else {
                             CareTextField(
@@ -646,7 +646,7 @@ internal fun WorkerProfileScreen(
                             Text(
                                 text = specialty.ifBlank { "-" },
                                 style = CareTheme.typography.body3,
-                                color = CareTheme.colors.gray900,
+                                color = CareTheme.colors.black,
                             )
                         } else {
                             CareTextFieldLong(

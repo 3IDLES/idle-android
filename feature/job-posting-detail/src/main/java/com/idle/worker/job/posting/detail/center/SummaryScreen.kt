@@ -142,7 +142,7 @@ fun SummaryScreen(
                                 ""
                             },
                             style = CareTheme.typography.subtitle2,
-                            color = CareTheme.colors.gray900,
+                            color = CareTheme.colors.black,
                             overflow = TextOverflow.Clip,
                             maxLines = 1,
                             modifier = Modifier.padding(bottom = 2.dp),
@@ -156,7 +156,7 @@ fun SummaryScreen(
                                 gender.displayName
                             ),
                             style = CareTheme.typography.body2,
-                            color = CareTheme.colors.gray900,
+                            color = CareTheme.colors.black,
                             modifier = Modifier.padding(end = 8.dp, bottom = 4.dp),
                         )
 
@@ -229,7 +229,7 @@ fun SummaryScreen(
                 Text(
                     text = stringResource(id = R.string.work_conditions),
                     style = CareTheme.typography.subtitle1,
-                    color = CareTheme.colors.gray900,
+                    color = CareTheme.colors.black,
                     modifier = Modifier.padding(bottom = 12.dp),
                 )
 
@@ -269,25 +269,25 @@ fun SummaryScreen(
                                 .sortedBy { it.ordinal }
                                 .joinToString(", ") { it.displayName },
                             style = CareTheme.typography.body2,
-                            color = CareTheme.colors.gray900,
+                            color = CareTheme.colors.black,
                         )
 
                         Text(
                             text = "${workStartTime} - ${workEndTime}",
                             style = CareTheme.typography.body2,
-                            color = CareTheme.colors.gray900,
+                            color = CareTheme.colors.black,
                         )
 
                         Text(
                             text = payText,
                             style = CareTheme.typography.body2,
-                            color = CareTheme.colors.gray900,
+                            color = CareTheme.colors.black,
                         )
 
                         Text(
                             text = roadNameAddress,
                             style = CareTheme.typography.body2,
-                            color = CareTheme.colors.gray900,
+                            color = CareTheme.colors.black,
                         )
                     }
                 }
@@ -303,7 +303,7 @@ fun SummaryScreen(
                 Text(
                     text = stringResource(id = R.string.customer_info),
                     style = CareTheme.typography.subtitle1,
-                    color = CareTheme.colors.gray900,
+                    color = CareTheme.colors.black,
                     modifier = Modifier.padding(bottom = 20.dp),
                 )
 
@@ -360,7 +360,7 @@ fun SummaryScreen(
                             Text(
                                 text = clientName,
                                 style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray900,
+                                color = CareTheme.colors.black,
                             )
 
                             Text(
@@ -373,19 +373,19 @@ fun SummaryScreen(
                         Text(
                             text = gender.displayName,
                             style = CareTheme.typography.body2,
-                            color = CareTheme.colors.gray900,
+                            color = CareTheme.colors.black,
                         )
 
                         Text(
                             text = "${age}세",
                             style = CareTheme.typography.body2,
-                            color = CareTheme.colors.gray900,
+                            color = CareTheme.colors.black,
                         )
 
                         Text(
                             text = "${weight}kg",
                             style = CareTheme.typography.body2,
-                            color = CareTheme.colors.gray900,
+                            color = CareTheme.colors.black,
                         )
                     }
                 }
@@ -425,19 +425,19 @@ fun SummaryScreen(
                         Text(
                             text = "${careLevel}등급",
                             style = CareTheme.typography.body2,
-                            color = CareTheme.colors.gray900,
+                            color = CareTheme.colors.black,
                         )
 
                         Text(
                             text = mentalStatus.displayName,
                             style = CareTheme.typography.body2,
-                            color = CareTheme.colors.gray900,
+                            color = CareTheme.colors.black,
                         )
 
                         Text(
                             text = disease.ifBlank { "-" },
                             style = CareTheme.typography.body2,
-                            color = CareTheme.colors.gray900,
+                            color = CareTheme.colors.black,
                         )
                     }
                 }
@@ -485,7 +485,7 @@ fun SummaryScreen(
                                 id = R.string.unnecessary
                             ),
                             style = CareTheme.typography.body2,
-                            color = CareTheme.colors.gray900,
+                            color = CareTheme.colors.black,
                         )
 
                         Text(
@@ -493,7 +493,7 @@ fun SummaryScreen(
                                 id = R.string.unnecessary
                             ),
                             style = CareTheme.typography.body2,
-                            color = CareTheme.colors.gray900,
+                            color = CareTheme.colors.black,
                         )
 
                         Text(
@@ -501,7 +501,7 @@ fun SummaryScreen(
                                 id = R.string.unnecessary
                             ),
                             style = CareTheme.typography.body2,
-                            color = CareTheme.colors.gray900,
+                            color = CareTheme.colors.black,
                         )
 
                         Text(
@@ -510,7 +510,7 @@ fun SummaryScreen(
                                 .joinToString(", ") { it.displayName }
                                 .ifEmpty { "-" },
                             style = CareTheme.typography.body2,
-                            color = CareTheme.colors.gray900,
+                            color = CareTheme.colors.black,
                         )
                     }
                 }
@@ -543,7 +543,7 @@ fun SummaryScreen(
                 Text(
                     text = stringResource(id = R.string.additional_info),
                     style = CareTheme.typography.subtitle1,
-                    color = CareTheme.colors.gray900,
+                    color = CareTheme.colors.black,
                     modifier = Modifier.padding(bottom = 20.dp),
                 )
 
@@ -578,19 +578,19 @@ fun SummaryScreen(
                             text = if (isExperiencePreferred!!) stringResource(id = R.string.experience_preferred)
                             else stringResource(id = R.string.beginner_possible),
                             style = CareTheme.typography.body2,
-                            color = CareTheme.colors.gray900,
+                            color = CareTheme.colors.black,
                         )
 
                         Text(
                             text = applyMethod.joinToString(", ") { it.displayName },
                             style = CareTheme.typography.body2,
-                            color = CareTheme.colors.gray900,
+                            color = CareTheme.colors.black,
                         )
 
                         Text(
                             text = applyDeadline?.toString() ?: "채용시까지",
                             style = CareTheme.typography.body2,
-                            color = CareTheme.colors.gray900,
+                            color = CareTheme.colors.black,
                         )
                     }
                 }

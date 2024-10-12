@@ -90,7 +90,7 @@ internal fun CustomerInformationScreen(
         Text(
             text = stringResource(id = R.string.customer_info_title),
             style = CareTheme.typography.heading2,
-            color = CareTheme.colors.gray900,
+            color = CareTheme.colors.black,
         )
 
         LabeledContent(

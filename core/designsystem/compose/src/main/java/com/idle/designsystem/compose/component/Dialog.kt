@@ -31,7 +31,7 @@ fun CareDialog(
     onLeftButtonClick: () -> Unit,
     onRightButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
-    titleColor: Color = CareTheme.colors.gray900,
+    titleColor: Color = CareTheme.colors.black,
     description: String? = null,
     descriptionColor: Color = CareTheme.colors.gray500,
     leftButtonTextColor: Color = CareTheme.colors.white000,
