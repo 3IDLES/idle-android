@@ -42,7 +42,8 @@ class WorkerHomeViewModel @Inject constructor(
     private val _jobPostings = MutableStateFlow<List<JobPosting>?>(null)
     val jobPostings = _jobPostings.asStateFlow()
 
-    private var callType: JobPostingCallType = JobPostingCallType.IN_APP
+    private val _callType = MutableStateFlow<JobPostingCallType>(JobPostingCallType.IN_APP)
+    val callType = _callType.asStateFlow()
 
     private val _unreadNotificationCount = MutableStateFlow(0)
     val unreadNotificationCount = _unreadNotificationCount.asStateFlow()
@@ -59,9 +60,9 @@ class WorkerHomeViewModel @Inject constructor(
     }
 
     internal fun getJobPostings() = viewModelScope.launch {
-        if (callType == JobPostingCallType.END) return@launch
+        if (_callType.value == JobPostingCallType.END) return@launch
 
-        when (callType) {
+        when (_callType.value) {
             JobPostingCallType.IN_APP -> fetchInAppJobPostings()
             JobPostingCallType.CRAWLING -> fetchCrawlingJobPostings()
             JobPostingCallType.END -> return@launch
@@ -142,7 +143,7 @@ class WorkerHomeViewModel @Inject constructor(
         getJobPostingsUseCase(next = next.value).onSuccess { (nextId, postings) ->
             next.value = nextId
             if (nextId == null) {
-                callType = JobPostingCallType.CRAWLING
+                _callType.value = JobPostingCallType.CRAWLING
             }
             _jobPostings.value = _jobPostings.value?.plus(postings) ?: postings
 
@@ -156,7 +157,7 @@ class WorkerHomeViewModel @Inject constructor(
         getCrawlingJobPostingsUseCase(next = next.value).onSuccess { (nextId, postings) ->
             next.value = nextId
             if (nextId == null) {
-                callType = JobPostingCallType.END
+                _callType.value = JobPostingCallType.END
             }
             _jobPostings.value = _jobPostings.value?.plus(postings) ?: postings
         }.onFailure { handleFailure(it as HttpResponseException) }
