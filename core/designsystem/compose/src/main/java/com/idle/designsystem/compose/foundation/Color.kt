@@ -9,7 +9,7 @@ val Orange100 = Color(0xffFFE4CC)
 val Orange200 = Color(0xffFFCA99)
 val Orange300 = Color(0xffFFAF66)
 val Orange400 = Color(0xffFF9533)
-val Orange500 = Color(0xffFF7A00)
+val Orange500 = Color(0xffF97800)
 val Orange600 = Color(0xffCC6200)
 val Orange700 = Color(0xff994900)
 
