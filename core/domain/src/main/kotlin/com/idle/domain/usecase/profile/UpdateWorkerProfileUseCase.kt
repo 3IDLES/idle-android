@@ -31,15 +31,17 @@ class UpdateWorkerProfileUseCase @Inject constructor(
                 ).getOrThrow()
             }
 
-            val updateProfileImageJob = imageFileUri?.let {
-                launch {
-                    profileRepository.updateProfileImage(
-                        userType = UserType.WORKER.apiValue,
-                        imageFileUri = imageFileUri,
-                        reqWidth = 384,
-                        reqHeight = 384,
-                    ).getOrThrow()
-                }
+            val updateProfileImageJob = imageFileUri?.let { uri ->
+                if (uri.startsWith("content://")) {
+                    launch {
+                        profileRepository.updateProfileImage(
+                            userType = UserType.WORKER.apiValue,
+                            imageFileUri = uri,
+                            reqWidth = 384,
+                            reqHeight = 384,
+                        ).getOrThrow()
+                    }
+                } else null
             }
 
             updateProfileJob.join()
