@@ -82,7 +82,7 @@ fun <T> CareWheelPicker(
                     Text(
                         text = item,
                         style = CareTheme.typography.heading2,
-                        color = CareTheme.colors.gray900,
+                        color = CareTheme.colors.black,
                         modifier = Modifier.height(30.dp),
                     )
                 } else {

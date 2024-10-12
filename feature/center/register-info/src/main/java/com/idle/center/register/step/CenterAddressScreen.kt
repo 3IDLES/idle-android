@@ -43,7 +43,7 @@ internal fun CenterAddressScreen(
         Text(
             text = stringResource(id = R.string.center_info_input),
             style = CareTheme.typography.heading2,
-            color = CareTheme.colors.gray900,
+            color = CareTheme.colors.black,
         )
 
         LabeledContent(

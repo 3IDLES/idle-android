@@ -157,7 +157,7 @@ internal fun CrawlingJobPostingDetailScreen(
                     Text(
                         text = jobPostingDetail.title,
                         style = CareTheme.typography.subtitle1,
-                        color = CareTheme.colors.gray900,
+                        color = CareTheme.colors.black,
                         overflow = TextOverflow.Clip,
                         maxLines = 1,
                         modifier = Modifier.padding(bottom = 2.dp),
@@ -208,7 +208,7 @@ internal fun CrawlingJobPostingDetailScreen(
                     Text(
                         text = stringResource(id = R.string.work_address),
                         style = CareTheme.typography.subtitle1,
-                        color = CareTheme.colors.gray900,
+                        color = CareTheme.colors.black,
                         modifier = Modifier.padding(bottom = 20.dp),
                     )
 
@@ -234,7 +234,7 @@ internal fun CrawlingJobPostingDetailScreen(
                         Text(
                             text = "걸어서 ${jobPostingDetail.getDistanceInMinutes()} 소요",
                             style = CareTheme.typography.subtitle2,
-                            color = CareTheme.colors.gray900,
+                            color = CareTheme.colors.black,
                         )
                     }
 
@@ -279,7 +279,7 @@ internal fun CrawlingJobPostingDetailScreen(
                     Text(
                         text = stringResource(id = R.string.recruitment_guidelines),
                         style = CareTheme.typography.subtitle1,
-                        color = CareTheme.colors.gray900,
+                        color = CareTheme.colors.black,
                         modifier = Modifier.padding(bottom = 20.dp),
                     )
 
@@ -297,7 +297,7 @@ internal fun CrawlingJobPostingDetailScreen(
                             text = jobPostingDetail.content,
                             style = CareTheme.typography.body3,
                             textAlign = TextAlign.Start,
-                            color = CareTheme.colors.gray900,
+                            color = CareTheme.colors.black,
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
                         )
                     }
@@ -313,7 +313,7 @@ internal fun CrawlingJobPostingDetailScreen(
                     Text(
                         text = stringResource(id = R.string.work_conditions),
                         style = CareTheme.typography.subtitle1,
-                        color = CareTheme.colors.gray900,
+                        color = CareTheme.colors.black,
                         modifier = Modifier.padding(bottom = 20.dp),
                     )
 
@@ -336,7 +336,7 @@ internal fun CrawlingJobPostingDetailScreen(
                             Text(
                                 text = jobPostingDetail.workingSchedule,
                                 style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray900,
+                                color = CareTheme.colors.black,
                             )
                         }
 
@@ -354,7 +354,7 @@ internal fun CrawlingJobPostingDetailScreen(
                             Text(
                                 text = jobPostingDetail.workingTime,
                                 style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray900,
+                                color = CareTheme.colors.black,
                             )
                         }
 
@@ -371,7 +371,7 @@ internal fun CrawlingJobPostingDetailScreen(
                             Text(
                                 text = jobPostingDetail.payInfo,
                                 style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray900,
+                                color = CareTheme.colors.black,
                             )
                         }
 
@@ -388,7 +388,7 @@ internal fun CrawlingJobPostingDetailScreen(
                             Text(
                                 text = jobPostingDetail.clientAddress,
                                 style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray900,
+                                color = CareTheme.colors.black,
                             )
                         }
                     }
@@ -404,7 +404,7 @@ internal fun CrawlingJobPostingDetailScreen(
                     Text(
                         text = stringResource(id = R.string.admissions_method),
                         style = CareTheme.typography.subtitle1,
-                        color = CareTheme.colors.gray900,
+                        color = CareTheme.colors.black,
                         modifier = Modifier.padding(bottom = 20.dp),
                     )
 
@@ -444,25 +444,25 @@ internal fun CrawlingJobPostingDetailScreen(
                             Text(
                                 text = jobPostingDetail.applyDeadline,
                                 style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray900,
+                                color = CareTheme.colors.black,
                             )
 
                             Text(
                                 text = jobPostingDetail.recruitmentProcess,
                                 style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray900,
+                                color = CareTheme.colors.black,
                             )
 
                             Text(
                                 text = jobPostingDetail.applyMethod,
                                 style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray900,
+                                color = CareTheme.colors.black,
                             )
 
                             Text(
                                 text = jobPostingDetail.requireDocumentation,
                                 style = CareTheme.typography.body2,
-                                color = CareTheme.colors.gray900,
+                                color = CareTheme.colors.black,
                             )
                         }
                     }
@@ -478,7 +478,7 @@ internal fun CrawlingJobPostingDetailScreen(
                     Text(
                         text = stringResource(id = R.string.center_info),
                         style = CareTheme.typography.subtitle1,
-                        color = CareTheme.colors.gray900,
+                        color = CareTheme.colors.black,
                         modifier = Modifier.padding(bottom = 12.dp),
                     )
 
@@ -505,7 +505,7 @@ internal fun CrawlingJobPostingDetailScreen(
                     Text(
                         text = stringResource(id = R.string.worknet_url),
                         style = CareTheme.typography.subtitle1,
-                        color = CareTheme.colors.gray900,
+                        color = CareTheme.colors.black,
                         modifier = Modifier.padding(bottom = 12.dp),
                     )
 

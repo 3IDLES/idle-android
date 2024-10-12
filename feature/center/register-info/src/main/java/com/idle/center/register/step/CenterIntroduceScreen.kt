@@ -77,7 +77,7 @@ internal fun CenterIntroduceScreen(
         Text(
             text = stringResource(id = R.string.introduce_my_center),
             style = CareTheme.typography.heading2,
-            color = CareTheme.colors.gray900,
+            color = CareTheme.colors.black,
             modifier = Modifier.padding(bottom = 6.dp),
         )
 

@@ -37,7 +37,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.navArgs
 import coil.compose.AsyncImage
@@ -182,7 +181,7 @@ internal fun CenterProfileScreen(
                 Text(
                     text = centerProfile.centerName,
                     style = CareTheme.typography.heading1,
-                    color = CareTheme.colors.gray900,
+                    color = CareTheme.colors.black,
                 )
 
                 Row(
@@ -197,7 +196,7 @@ internal fun CenterProfileScreen(
                     Text(
                         text = centerProfile.lotNumberAddress,
                         style = CareTheme.typography.body2,
-                        color = CareTheme.colors.gray900,
+                        color = CareTheme.colors.black,
                     )
                 }
             }
@@ -218,7 +217,7 @@ internal fun CenterProfileScreen(
                     Text(
                         text = stringResource(id = R.string.center_detail_info),
                         style = CareTheme.typography.subtitle1,
-                        color = CareTheme.colors.gray900,
+                        color = CareTheme.colors.black,
                     )
 
                     if (isMyProfile && !isEditState) {
@@ -237,7 +236,7 @@ internal fun CenterProfileScreen(
                         Text(
                             text = centerOfficeNumber,
                             style = CareTheme.typography.body3,
-                            color = CareTheme.colors.gray900,
+                            color = CareTheme.colors.black,
                         )
                     } else {
                         CareTextField(
@@ -257,7 +256,7 @@ internal fun CenterProfileScreen(
                         Text(
                             text = centerIntroduce,
                             style = CareTheme.typography.body3,
-                            color = CareTheme.colors.gray900,
+                            color = CareTheme.colors.black,
                         )
                     } else {
                         CareTextFieldLong(

@@ -61,7 +61,7 @@ internal fun BusinessRegistrationScreen(
         Text(
             text = stringResource(id = R.string.enter_business_registration_number),
             style = CareTheme.typography.heading2,
-            color = CareTheme.colors.gray900,
+            color = CareTheme.colors.black,
         )
 
         Column(
@@ -123,7 +123,7 @@ internal fun BusinessRegistrationScreen(
                         Text(
                             businessRegistrationInfo.companyName,
                             style = CareTheme.typography.subtitle3,
-                            color = CareTheme.colors.gray900,
+                            color = CareTheme.colors.black,
                         )
 
                         Row(
@@ -138,7 +138,7 @@ internal fun BusinessRegistrationScreen(
                             Text(
                                 text = businessRegistrationInfo.businessRegistrationNumber,
                                 style = CareTheme.typography.body3,
-                                color = CareTheme.colors.gray900,
+                                color = CareTheme.colors.black,
                             )
                         }
                     }

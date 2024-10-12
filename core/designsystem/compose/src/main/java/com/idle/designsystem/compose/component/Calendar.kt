@@ -122,7 +122,7 @@ private fun CalendarHeader(
         Text(
             text = "${year}년 ${month}월",
             style = CareTheme.typography.subtitle2,
-            color = CareTheme.colors.gray900,
+            color = CareTheme.colors.black,
         )
 
         if (month == startMonth) {

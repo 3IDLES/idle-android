@@ -58,7 +58,7 @@ internal fun GenerateNewPasswordScreen(
         Text(
             text = stringResource(id = R.string.new_password_title),
             style = CareTheme.typography.heading2,
-            color = CareTheme.colors.gray900,
+            color = CareTheme.colors.black,
         )
 
         LabeledContent(

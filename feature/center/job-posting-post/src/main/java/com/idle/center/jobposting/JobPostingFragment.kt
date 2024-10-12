@@ -2,7 +2,6 @@
 
 package com.idle.center.jobposting
 
-import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -442,7 +441,7 @@ internal fun JobPostingScreen(
                                     Text(
                                         text = stringResource(id = R.string.work_start_time),
                                         style = CareTheme.typography.heading3,
-                                        color = CareTheme.colors.gray900,
+                                        color = CareTheme.colors.black,
                                     )
 
                                     Spacer(modifier = Modifier.height(80.dp))
@@ -469,7 +468,7 @@ internal fun JobPostingScreen(
                                         Text(
                                             text = ":",
                                             style = CareTheme.typography.subtitle2,
-                                            color = CareTheme.colors.gray900,
+                                            color = CareTheme.colors.black,
                                             textAlign = TextAlign.Center,
                                             modifier = Modifier.width(20.dp),
                                         )
@@ -548,7 +547,7 @@ internal fun JobPostingScreen(
                                     Text(
                                         text = stringResource(id = R.string.work_end_time),
                                         style = CareTheme.typography.heading3,
-                                        color = CareTheme.colors.gray900,
+                                        color = CareTheme.colors.black,
                                     )
 
                                     Spacer(modifier = Modifier.height(80.dp))
@@ -575,7 +574,7 @@ internal fun JobPostingScreen(
                                         Text(
                                             text = ":",
                                             style = CareTheme.typography.subtitle2,
-                                            color = CareTheme.colors.gray900,
+                                            color = CareTheme.colors.black,
                                             textAlign = TextAlign.Center,
                                             modifier = Modifier.width(20.dp),
                                         )
@@ -651,7 +650,7 @@ internal fun JobPostingScreen(
                                     Text(
                                         text = stringResource(id = R.string.post_deadline),
                                         style = CareTheme.typography.heading3,
-                                        color = CareTheme.colors.gray900,
+                                        color = CareTheme.colors.black,
                                     )
 
                                     CareCalendar(

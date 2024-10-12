@@ -50,7 +50,7 @@ internal fun PasswordScreen(
         Text(
             text = stringResource(id = R.string.withdrawal_password_verification_title),
             style = CareTheme.typography.heading2,
-            color = CareTheme.colors.gray900,
+            color = CareTheme.colors.black,
             modifier = Modifier.padding(bottom = 36.dp),
         )
 

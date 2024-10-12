@@ -58,12 +58,12 @@ fun CareToggleText(
     )
 
     val rightTextColor by animateColorAsState(
-        targetValue = if (rightChecked) CareTheme.colors.gray900
+        targetValue = if (rightChecked) CareTheme.colors.black
         else CareTheme.colors.gray300
     )
 
     val leftTextColor by animateColorAsState(
-        targetValue = if (!rightChecked) CareTheme.colors.gray900
+        targetValue = if (!rightChecked) CareTheme.colors.black
         else CareTheme.colors.gray300
     )
 

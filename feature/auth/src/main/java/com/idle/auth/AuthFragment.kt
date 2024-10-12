@@ -1,6 +1,5 @@
 package com.idle.auth
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.fadeIn
@@ -126,7 +125,7 @@ internal fun AuthScreen(
                 Text(
                     text = stringResource(id = string.auth_title),
                     style = CareTheme.typography.heading1,
-                    color = CareTheme.colors.gray900,
+                    color = CareTheme.colors.black,
                 )
 
                 Spacer(modifier = Modifier.weight(2f))
@@ -163,7 +162,7 @@ internal fun AuthScreen(
                             Text(
                                 text = stringResource(id = string.start_center),
                                 style = CareTheme.typography.subtitle2,
-                                color = CareTheme.colors.gray900,
+                                color = CareTheme.colors.black,
                                 textAlign = TextAlign.Center,
                             )
 
@@ -197,7 +196,7 @@ internal fun AuthScreen(
                             Text(
                                 text = stringResource(id = string.start_worker),
                                 style = CareTheme.typography.subtitle2,
-                                color = CareTheme.colors.gray900,
+                                color = CareTheme.colors.black,
                                 textAlign = TextAlign.Center,
                             )
 

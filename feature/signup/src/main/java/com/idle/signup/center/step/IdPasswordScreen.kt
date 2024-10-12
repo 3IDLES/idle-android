@@ -76,7 +76,7 @@ internal fun IdPasswordScreen(
         Text(
             text = stringResource(id = R.string.set_id_and_password),
             style = CareTheme.typography.heading2,
-            color = CareTheme.colors.gray900,
+            color = CareTheme.colors.black,
         )
 
         LabeledContent(

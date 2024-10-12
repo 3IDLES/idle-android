@@ -113,7 +113,7 @@ internal fun JobPostingSummaryScreen(
                 Text(
                     text = stringResource(id = R.string.summary_title),
                     style = CareTheme.typography.heading2,
-                    color = CareTheme.colors.gray900,
+                    color = CareTheme.colors.black,
                     modifier = Modifier.padding(
                         start = 20.dp,
                         end = 20.dp,

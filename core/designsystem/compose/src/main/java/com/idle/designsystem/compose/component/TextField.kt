@@ -55,7 +55,7 @@ fun CareTextField(
         color = if (readOnly) {
             CareTheme.colors.gray300
         } else {
-            CareTheme.colors.gray900
+            CareTheme.colors.black
         },
     ),
     leftComponent: @Composable () -> Unit = {},
@@ -158,7 +158,7 @@ fun CareTextField(
         color = if (readOnly) {
             CareTheme.colors.gray300
         } else {
-            CareTheme.colors.gray900
+            CareTheme.colors.black
         },
     ),
     leftComponent: @Composable () -> Unit = {},
@@ -284,7 +284,7 @@ fun CareTextFieldLong(
                 color = if (readOnly) {
                     CareTheme.colors.gray300
                 } else {
-                    CareTheme.colors.gray900
+                    CareTheme.colors.black
                 },
             ),
             readOnly = readOnly,
@@ -336,7 +336,7 @@ fun CareClickableTextField(
         Text(
             text = value,
             style = CareTheme.typography.body3,
-            color = CareTheme.colors.gray900,
+            color = CareTheme.colors.black,
         )
 
         if (value.isBlank()) {

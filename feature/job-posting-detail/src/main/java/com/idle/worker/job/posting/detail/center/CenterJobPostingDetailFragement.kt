@@ -245,7 +245,7 @@ internal fun CenterJobPostingDetailScreen(
                     Text(
                         text = stringResource(id = R.string.job_posting_edit),
                         style = CareTheme.typography.heading3,
-                        color = CareTheme.colors.gray900,
+                        color = CareTheme.colors.black,
                         modifier = Modifier.padding(bottom = 20.dp),
                     )
 

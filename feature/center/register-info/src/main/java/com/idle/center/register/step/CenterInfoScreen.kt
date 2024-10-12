@@ -22,7 +22,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.idle.center.register.LogRegistrationStep
 import com.idle.center.register.RegistrationStep
-import com.idle.center.register.RegistrationStep.ADDRESS
 import com.idle.center.register.RegistrationStep.INFO
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
@@ -54,7 +53,7 @@ internal fun CenterInfoScreen(
         Text(
             text = stringResource(id = R.string.center_info_hint),
             style = CareTheme.typography.heading2,
-            color = CareTheme.colors.gray900,
+            color = CareTheme.colors.black,
         )
 
         LabeledContent(
