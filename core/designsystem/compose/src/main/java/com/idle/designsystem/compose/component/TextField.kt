@@ -81,7 +81,7 @@ fun CareTextField(
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .height(44.dp)
+                .height(48.dp)
                 .background(
                     color = if (readOnly) {
                         CareTheme.colors.gray050
@@ -184,7 +184,7 @@ fun CareTextField(
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .height(44.dp)
+                .height(48.dp)
                 .background(
                     color = if (readOnly) {
                         CareTheme.colors.gray050
@@ -324,7 +324,7 @@ fun CareClickableTextField(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .fillMaxWidth()
-            .height(44.dp)
+            .height(48.dp)
             .background(color = CareTheme.colors.white000, shape = RoundedCornerShape(6.dp))
             .border(
                 border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
