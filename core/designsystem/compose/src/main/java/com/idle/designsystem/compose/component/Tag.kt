@@ -31,7 +31,7 @@ fun CareTag(
     ) {
         Text(
             text = text,
-            style = CareTheme.typography.caption,
+            style = CareTheme.typography.caption1,
             color = textColor,
             maxLines = 1,
             modifier = Modifier.padding(horizontal = 4.dp, vertical = 1.dp),

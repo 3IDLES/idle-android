@@ -269,7 +269,7 @@ fun JobPostingPreviewScreen(
                             Text(
                                 text = "이미지 속 위치는 실제 위치가 아니며, 실제 공고 등록 시 \n" +
                                         "근무지 위치와 요양보호사의 위치가 반영되어 표시됩니다.",
-                                style = CareTheme.typography.caption,
+                                style = CareTheme.typography.caption1,
                                 color = CareTheme.colors.white000,
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier

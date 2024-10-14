@@ -132,7 +132,7 @@ fun CareTextField(
 
         Text(
             text = supportingText,
-            style = CareTheme.typography.caption,
+            style = CareTheme.typography.caption1,
             color = if (isError) {
                 CareTheme.colors.red
             } else {

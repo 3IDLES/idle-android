@@ -137,7 +137,7 @@ internal fun CenterPhoneNumberScreen(
 
                         Text(
                             text = if (isConfirmAuthCode) "인증이 완료되었습니다." else "",
-                            style = CareTheme.typography.caption,
+                            style = CareTheme.typography.caption1,
                             color = CareTheme.colors.gray300,
                         )
                     }

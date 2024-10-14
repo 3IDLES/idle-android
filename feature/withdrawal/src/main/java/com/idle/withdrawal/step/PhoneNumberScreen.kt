@@ -138,7 +138,7 @@ internal fun PhoneNumberScreen(
                         Text(
                             text = if (isConfirmAuthCode) stringResource(id = R.string.confirm_success)
                             else "",
-                            style = CareTheme.typography.caption,
+                            style = CareTheme.typography.caption1,
                             color = CareTheme.colors.gray300,
                         )
                     }
