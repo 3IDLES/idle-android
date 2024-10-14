@@ -47,18 +47,20 @@ internal fun TimePaymentScreen(
 ) {
     Column(
         horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(28.dp),
         modifier = Modifier.fillMaxSize(),
     ) {
         Text(
             text = stringResource(id = R.string.time_payment_title),
             style = CareTheme.typography.heading2,
             color = CareTheme.colors.black,
+            modifier = Modifier.padding(bottom = 28.dp),
         )
 
         LabeledContent(
             subtitle = stringResource(id = R.string.work_days_subtitle),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 32.dp),
         ) {
             Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                 DayOfWeek.entries.forEach { day ->
@@ -73,7 +75,9 @@ internal fun TimePaymentScreen(
 
         LabeledContent(
             subtitle = stringResource(id = R.string.work_hours_subtitle),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 32.dp),
         ) {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -109,7 +113,9 @@ internal fun TimePaymentScreen(
 
         LabeledContent(
             subtitle = stringResource(id = R.string.pay),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 32.dp),
         ) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(12.dp),

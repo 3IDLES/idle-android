@@ -26,9 +26,9 @@ import com.idle.designsystem.compose.component.CareButtonSmall
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
+import com.idle.signup.LogCenterSignUpStep
 import com.idle.signup.center.CenterSignUpStep
 import com.idle.signup.center.CenterSignUpStep.PHONE_NUMBER
-import com.idle.signup.LogCenterSignUpStep
 
 @Composable
 internal fun CenterPhoneNumberScreen(
@@ -54,13 +54,13 @@ internal fun CenterPhoneNumberScreen(
 
     Column(
         horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(32.dp),
         modifier = Modifier.fillMaxSize()
     ) {
         Text(
             text = stringResource(id = R.string.phone_number_hint),
             style = CareTheme.typography.heading2,
             color = CareTheme.colors.black,
+            modifier = Modifier.padding(bottom = 28.dp),
         )
 
         LabeledContent(
@@ -70,7 +70,9 @@ internal fun CenterPhoneNumberScreen(
             Row(
                 verticalAlignment = Alignment.Top,
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 32.dp),
             ) {
                 CareTextField(
                     value = centerPhoneNumber,
@@ -102,7 +104,9 @@ internal fun CenterPhoneNumberScreen(
         if (centerAuthCodeTimerMinute.isNotBlank()) {
             LabeledContent(
                 subtitle = stringResource(id = R.string.confirm_code),
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 32.dp),
             ) {
                 Row(
                     verticalAlignment = Alignment.Top,

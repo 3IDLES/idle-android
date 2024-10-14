@@ -32,9 +32,9 @@ import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.BusinessRegistrationInfo
+import com.idle.signup.LogCenterSignUpStep
 import com.idle.signup.center.CenterSignUpStep
 import com.idle.signup.center.CenterSignUpStep.BUSINESS_REGISTRATION
-import com.idle.signup.LogCenterSignUpStep
 
 @Composable
 internal fun BusinessRegistrationScreen(
@@ -55,13 +55,13 @@ internal fun BusinessRegistrationScreen(
 
     Column(
         horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(32.dp),
         modifier = Modifier.fillMaxSize()
     ) {
         Text(
             text = stringResource(id = R.string.enter_business_registration_number),
             style = CareTheme.typography.heading2,
             color = CareTheme.colors.black,
+            modifier = Modifier.padding(bottom = 28.dp),
         )
 
         Column(
@@ -71,7 +71,9 @@ internal fun BusinessRegistrationScreen(
             Row(
                 verticalAlignment = Alignment.Top,
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 32.dp),
             ) {
                 CareTextField(
                     value = businessRegistrationNumber,
@@ -101,7 +103,9 @@ internal fun BusinessRegistrationScreen(
         if (businessRegistrationInfo != null) {
             LabeledContent(
                 subtitle = stringResource(id = R.string.is_this_the_right_facility),
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 32.dp),
             ) {
                 Box(
                     modifier = Modifier.border(

@@ -51,19 +51,20 @@ internal fun WorkerPhoneNumberScreen(
 
     Column(
         horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(32.dp),
         modifier = Modifier.fillMaxSize()
     ) {
         Text(
             text = stringResource(id = R.string.phone_number_hint),
             style = CareTheme.typography.heading2,
             color = CareTheme.colors.black,
+            modifier = Modifier.padding(bottom = 28.dp),
         )
 
         LabeledContent(
             subtitle = stringResource(id = R.string.phone_number),
-            modifier = Modifier.fillMaxWidth(),
-        ) {
+            modifier = Modifier.fillMaxWidth()
+                .padding(bottom = 32.dp),
+            ) {
             Row(
                 verticalAlignment = Alignment.Top,
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -98,8 +99,9 @@ internal fun WorkerPhoneNumberScreen(
         if (workerAuthCodeTimerMinute.isNotBlank()) {
             LabeledContent(
                 subtitle = stringResource(id = R.string.confirm_code),
-                modifier = Modifier.fillMaxWidth(),
-            ) {
+                modifier = Modifier.fillMaxWidth()
+                    .padding(bottom = 32.dp),
+                ) {
                 Row(
                     verticalAlignment = Alignment.Top,
                     horizontalArrangement = Arrangement.spacedBy(4.dp),

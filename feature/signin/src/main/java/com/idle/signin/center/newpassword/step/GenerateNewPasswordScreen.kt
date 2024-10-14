@@ -1,7 +1,6 @@
 package com.idle.signin.center.newpassword.step
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -52,13 +51,13 @@ internal fun GenerateNewPasswordScreen(
 
     Column(
         horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(32.dp, Alignment.CenterVertically),
         modifier = Modifier.fillMaxSize(),
     ) {
         Text(
             text = stringResource(id = R.string.new_password_title),
             style = CareTheme.typography.heading2,
             color = CareTheme.colors.black,
+            modifier = Modifier.padding(bottom = 28.dp),
         )
 
         LabeledContent(
@@ -77,7 +76,9 @@ internal fun GenerateNewPasswordScreen(
                     append(stringResource(id = R.string.password_conditions))
                 }
             },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 32.dp),
         ) {
             CareTextField(
                 value = newPassword,
@@ -105,7 +106,9 @@ internal fun GenerateNewPasswordScreen(
                         generateNewPassword()
                     }
                 },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 32.dp),
             )
         }
 

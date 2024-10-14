@@ -34,18 +34,19 @@ internal fun AddressScreen(
 
     Column(
         horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(28.dp),
         modifier = Modifier.fillMaxSize(),
     ) {
         Text(
             text = stringResource(id = R.string.address_screen_title),
             style = CareTheme.typography.heading2,
             color = CareTheme.colors.black,
-        )
+            modifier = Modifier.padding(bottom = 28.dp),
+            )
 
         LabeledContent(
             subtitle = stringResource(id = R.string.road_name_address),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
+                .padding(bottom = 32.dp),
         ) {
             CareClickableTextField(
                 value = roadNameAddress,
