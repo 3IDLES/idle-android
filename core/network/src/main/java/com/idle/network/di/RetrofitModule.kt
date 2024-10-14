@@ -92,7 +92,6 @@ object RetrofitModule {
         .build()
         .create(UserApi::class.java)
 
-
     @Singleton
     @Provides
     fun providesNotificationApi(

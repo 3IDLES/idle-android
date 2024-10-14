@@ -35,6 +35,7 @@ class NotificationSerializer @Inject constructor() : KSerializer<Notification> {
         val isRead = jsonObject["isRead"]?.jsonPrimitive?.boolean ?: false
         val title = jsonObject["title"]?.jsonPrimitive?.content ?: "No title"
         val body = jsonObject["body"]?.jsonPrimitive?.content ?: "No body"
+        val imageUrl = jsonObject["imageUrl"]?.jsonPrimitive?.content
         val createdAt = jsonObject["createdAt"]?.jsonPrimitive?.content
             ?.let { LocalDateTime.parse(it, DateTimeFormatter.ISO_DATE_TIME) }
             ?: LocalDateTime.now()
@@ -58,6 +59,7 @@ class NotificationSerializer @Inject constructor() : KSerializer<Notification> {
             isRead = isRead,
             title = title,
             body = body,
+            imageUrl = imageUrl,
             createdAt = createdAt,
             notificationDetails = notificationDetails
         )

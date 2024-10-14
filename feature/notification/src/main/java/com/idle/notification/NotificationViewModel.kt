@@ -9,7 +9,7 @@ import com.idle.domain.usecase.notification.ReadNotificationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -21,26 +21,29 @@ class NotificationViewModel @Inject constructor(
 ) : BaseViewModel() {
     private val myNotifications = MutableStateFlow<List<Notification>?>(null)
 
-    val todayNotification = myNotifications.filter { true }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.Lazily,
-            initialValue = null,
-        )
+    val todayNotification = myNotifications.map { list ->
+        list?.filter { it.daysSinceCreation() < 1 }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Lazily,
+        initialValue = null,
+    )
 
-    val weeklyNotification = myNotifications.filter { true }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.Lazily,
-            initialValue = null,
-        )
+    val weeklyNotification = myNotifications.map { list ->
+        list?.filter { it.daysSinceCreation() in 1 until 7 }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Lazily,
+        initialValue = null,
+    )
 
-    val monthlyNotification = myNotifications.filter { true }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.Lazily,
-            initialValue = null,
-        )
+    val monthlyNotification = myNotifications.map { list ->
+        list?.filter { it.daysSinceCreation() in 7 until 30 }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Lazily,
+        initialValue = null,
+    )
 
     internal fun getMyNotifications() = viewModelScope.launch {
         getMyNotificationUseCase().onSuccess {

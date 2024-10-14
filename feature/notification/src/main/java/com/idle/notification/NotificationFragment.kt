@@ -149,7 +149,7 @@ private fun NotificationScreen(
                             }
 
                             items(items = todayNotification) { notification ->
-                                NotificationItem()
+                                NotificationItem(notification)
                             }
                         }
 
@@ -175,7 +175,7 @@ private fun NotificationScreen(
                             }
 
                             items(items = weeklyNotification) { notification ->
-                                NotificationItem()
+                                NotificationItem(notification)
                             }
                         }
 
@@ -201,7 +201,7 @@ private fun NotificationScreen(
                             }
 
                             items(items = monthlyNotification) { notification ->
-                                NotificationItem()
+                                NotificationItem(notification)
                             }
                         }
                     }
@@ -212,7 +212,10 @@ private fun NotificationScreen(
 }
 
 @Composable
-private fun NotificationItem(modifier: Modifier = Modifier) {
+private fun NotificationItem(
+    notification: Notification,
+    modifier: Modifier = Modifier
+) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier.fillMaxWidth()
@@ -233,21 +236,21 @@ private fun NotificationItem(modifier: Modifier = Modifier) {
 
             Column(modifier = Modifier.fillMaxWidth()) {
                 Text(
-                    text = "30분 전",
+                    text = notification.daysSinceCreation().toString(),
                     style = CareTheme.typography.caption1,
                     color = CareTheme.colors.gray500,
                     modifier = Modifier.padding(bottom = 2.dp),
                 )
 
                 Text(
-                    text = "김철수 님이 공고에 지원하였습니다.",
+                    text = notification.title,
                     style = CareTheme.typography.subtitle3,
                     color = CareTheme.colors.black,
                     modifier = Modifier.padding(bottom = 1.dp),
                 )
 
                 Text(
-                    text = "서울특별시 강남구 신사동 1등급 78세 여성",
+                    text = notification.body,
                     style = CareTheme.typography.body3,
                     color = CareTheme.colors.gray300,
                 )

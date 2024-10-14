@@ -2,6 +2,8 @@ package com.idle.domain.model.notification
 
 import java.lang.reflect.Type
 import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.temporal.ChronoUnit
 
 data class Notification(
     val notificationType: NotificationType,
@@ -9,9 +11,15 @@ data class Notification(
     val isRead: Boolean,
     val title: String,
     val body: String,
+    val imageUrl: String?,
     val createdAt: LocalDateTime,
     val notificationDetails: NotificationContent,
-)
+) {
+    fun daysSinceCreation(): Long {
+        val now = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
+        return ChronoUnit.DAYS.between(createdAt, now)
+    }
+}
 
 enum class NotificationType(private val notificationTypeClass: Type) {
     APPLICANT(NotificationContent.ApplicantNotification::class.java),
