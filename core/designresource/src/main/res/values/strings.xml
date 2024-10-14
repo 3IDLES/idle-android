@@ -25,8 +25,8 @@
     <string name="change_password">비밀번호 변경</string>
     <string name="new_password_title">새로운 비밀번호를 입력해주세요</string>
     <string name="generate_new_password">신규 비밀번호 발급</string>
-    <string name="phone_number">전화번호</string>
-    <string name="phone_number_hint">전화번호를 입력해주세요</string>
+    <string name="phone_number">휴대폰 번호</string>
+    <string name="phone_number_hint">휴대폰 번호를 입력해주세요</string>
     <string name="worker_gender_title">본인의 성별을 선택해주세요</string>
     <string name="verification">인증</string>
     <string name="confirm_code">인증번호</string>
@@ -39,7 +39,7 @@
     <string name="account_withdrawal">계정 삭제</string>
     <string name="withdrawal_reason_title">정말 탈퇴하시겠어요?</string>
     <string name="withdrawal_reason_description">계정을 삭제하시려는 이유를 알려주세요.\n소중한 피드백을 받아 더 나은 서비스로 보답하겠습니다.</string>
-    <string name="withdrawal_phone_number_verification_title">마지막으로\n전화번호를 인증해주세요.</string>
+    <string name="withdrawal_phone_number_verification_title">마지막으로\n휴대폰  번호를 인증해주세요.</string>
     <string name="withdrawal_password_verification_title">마지막으로\n비밀번호를 입력해주세요.</string>
     <string name="withdrawal_warning">탈퇴 버튼 선택 시 모든 정보가 삭제되며, 되돌릴 수 없습니다.</string>
 
