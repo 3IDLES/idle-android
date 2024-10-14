@@ -7,11 +7,14 @@ import com.idle.network.api.NotificationApi
 import com.idle.network.api.UserApi
 import com.idle.network.authenticator.CareAuthenticator
 import com.idle.network.interceptor.AuthInterceptor
+import com.idle.network.serializer.NotificationSerializer
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.contextual
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -23,8 +26,15 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object RetrofitModule {
 
-    private val json = Json {
+    @Singleton
+    @Provides
+    fun provideJson(
+        notificationSerializer: NotificationSerializer
+    ): Json = Json {
         ignoreUnknownKeys = true
+        serializersModule = SerializersModule {
+            contextual(NotificationSerializer())
+        }
     }
 
     @Singleton
@@ -49,6 +59,7 @@ object RetrofitModule {
     @Singleton
     @Provides
     fun providesAuthApi(
+        json: Json,
         okHttpClient: OkHttpClient,
     ): AuthApi = Retrofit.Builder()
         .client(okHttpClient)
@@ -60,6 +71,7 @@ object RetrofitModule {
     @Singleton
     @Provides
     fun providesJobPostingApi(
+        json: Json,
         okHttpClient: OkHttpClient,
     ): JobPostingApi = Retrofit.Builder()
         .client(okHttpClient)
@@ -71,6 +83,7 @@ object RetrofitModule {
     @Singleton
     @Provides
     fun providesUserApi(
+        json: Json,
         okHttpClient: OkHttpClient,
     ): UserApi = Retrofit.Builder()
         .client(okHttpClient)
@@ -83,6 +96,7 @@ object RetrofitModule {
     @Singleton
     @Provides
     fun providesNotificationApi(
+        json: Json,
         okHttpClient: OkHttpClient,
     ): NotificationApi = Retrofit.Builder()
         .client(okHttpClient)
