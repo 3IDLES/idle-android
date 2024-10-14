@@ -70,13 +70,13 @@ internal fun IdPasswordScreen(
 
     Column(
         horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(32.dp, Alignment.CenterVertically),
         modifier = Modifier.fillMaxSize()
     ) {
         Text(
             text = stringResource(id = R.string.set_id_and_password),
             style = CareTheme.typography.heading2,
             color = CareTheme.colors.black,
+            modifier = Modifier.padding(bottom = 28.dp),
         )
 
         LabeledContent(
@@ -95,7 +95,9 @@ internal fun IdPasswordScreen(
                     append(stringResource(id = R.string.id_conditions))
                 }
             },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 32.dp),
         ) {
             Row(
                 verticalAlignment = Alignment.Top,
@@ -140,7 +142,9 @@ internal fun IdPasswordScreen(
                     append(stringResource(id = R.string.password_conditions))
                 }
             },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 32.dp),
         ) {
             CareTextField(
                 value = centerPassword,

@@ -45,6 +45,8 @@ fun CareProgressBar(
             color = CareTheme.colors.orange500,
             trackColor = CareTheme.colors.gray100,
             strokeCap = StrokeCap.Round,
+            gapSize = 0.dp,
+            drawStopIndicator = {},
             modifier = Modifier
                 .padding(vertical = 10.dp)
                 .height(4.dp)

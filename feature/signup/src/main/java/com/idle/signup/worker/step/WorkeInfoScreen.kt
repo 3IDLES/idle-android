@@ -58,20 +58,20 @@ internal fun WorkerInformationScreen(
 
     Column(
         horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(28.dp),
         modifier = Modifier.fillMaxSize()
     ) {
         Text(
             text = stringResource(id = R.string.worker_name_title),
             style = CareTheme.typography.heading2,
             color = CareTheme.colors.black,
-            modifier = Modifier.padding(bottom = 4.dp),
+            modifier = Modifier.padding(bottom = 28.dp),
         )
 
         LabeledContent(
             subtitle = stringResource(id = R.string.name),
-            modifier = Modifier.fillMaxWidth(),
-        ) {
+            modifier = Modifier.fillMaxWidth()
+                .padding(bottom = 32.dp),
+            ) {
             CareTextField(
                 value = workerName,
                 hint = stringResource(id = R.string.worker_name_hint),
@@ -85,8 +85,9 @@ internal fun WorkerInformationScreen(
 
         LabeledContent(
             subtitle = stringResource(id = R.string.birth_year),
-            modifier = Modifier.fillMaxWidth(),
-        ) {
+            modifier = Modifier.fillMaxWidth()
+                .padding(bottom = 32.dp),
+            ) {
             CareTextField(
                 value = birthYear,
                 hint = stringResource(id = R.string.worker_birth_year_hint),
@@ -104,8 +105,9 @@ internal fun WorkerInformationScreen(
 
         LabeledContent(
             subtitle = stringResource(id = R.string.gender),
-            modifier = Modifier.fillMaxWidth(),
-        ) {
+            modifier = Modifier.fillMaxWidth()
+                .padding(bottom = 32.dp),
+            ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(4.dp),

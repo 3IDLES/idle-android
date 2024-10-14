@@ -63,7 +63,6 @@ internal fun CustomerRequirementScreen(
 
     Column(
         horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(28.dp),
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(scrollState),
@@ -72,13 +71,16 @@ internal fun CustomerRequirementScreen(
             text = stringResource(id = R.string.customer_requirement_title),
             style = CareTheme.typography.heading2,
             color = CareTheme.colors.black,
+            modifier = Modifier.padding(bottom = 28.dp),
         )
 
         LabeledContent(subtitle = stringResource(id = R.string.meal_assistance)) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 32.dp),
             ) {
                 CareChipBasic(
                     text = stringResource(R.string.necessary),
@@ -100,7 +102,9 @@ internal fun CustomerRequirementScreen(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 32.dp),
             ) {
                 CareChipBasic(
                     text = stringResource(R.string.necessary),
@@ -122,7 +126,9 @@ internal fun CustomerRequirementScreen(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 32.dp),
             ) {
                 CareChipBasic(
                     text = stringResource(R.string.necessary),
@@ -169,6 +175,7 @@ internal fun CustomerRequirementScreen(
                     append("(선택)")
                 }
             },
+            modifier = Modifier.padding(bottom = 32.dp),
         ) {
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -202,6 +209,7 @@ internal fun CustomerRequirementScreen(
                     append("(선택)")
                 }
             },
+            modifier = Modifier.padding(bottom = 32.dp),
         ) {
             CareTextFieldLong(
                 value = extraRequirement,

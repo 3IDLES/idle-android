@@ -82,7 +82,6 @@ internal fun CustomerInformationScreen(
 
     Column(
         horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(28.dp),
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(scrollState),
@@ -91,11 +90,14 @@ internal fun CustomerInformationScreen(
             text = stringResource(id = R.string.customer_info_title),
             style = CareTheme.typography.heading2,
             color = CareTheme.colors.black,
+            modifier = Modifier.padding(bottom = 28.dp),
         )
 
         LabeledContent(
             subtitle = stringResource(id = R.string.name),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 32.dp),
         ) {
             CareTextField(
                 value = clientName,
@@ -109,7 +111,9 @@ internal fun CustomerInformationScreen(
 
         LabeledContent(
             subtitle = stringResource(id = R.string.gender),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 32.dp),
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -134,7 +138,9 @@ internal fun CustomerInformationScreen(
 
         LabeledContent(
             subtitle = stringResource(id = R.string.birth_year),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 32.dp),
         ) {
             CareTextField(
                 value = birthYear,
@@ -155,7 +161,9 @@ internal fun CustomerInformationScreen(
 
         LabeledContent(
             subtitle = stringResource(id = R.string.weight),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 32.dp),
         ) {
             CareTextField(
                 value = weight,
@@ -180,7 +188,9 @@ internal fun CustomerInformationScreen(
 
         LabeledContent(
             subtitle = stringResource(id = R.string.care_level),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 32.dp),
         ) {
             Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                 IntRange(1, 5).forEach { level ->
@@ -203,7 +213,9 @@ internal fun CustomerInformationScreen(
 
         LabeledContent(
             subtitle = stringResource(id = R.string.mental_status),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 32.dp),
         ) {
             Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                 MentalStatus.entries.forEach { status ->
@@ -234,7 +246,9 @@ internal fun CustomerInformationScreen(
                     append("(선택)")
                 }
             },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 32.dp),
         ) {
             CareTextField(
                 value = disease,

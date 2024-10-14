@@ -1,4 +1,4 @@
- package com.idle.center.jobposting.step
+package com.idle.center.jobposting.step
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
@@ -54,7 +54,6 @@ internal fun AdditionalInfoScreen(
 
     Column(
         horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(28.dp),
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(scrollState),
@@ -63,10 +62,12 @@ internal fun AdditionalInfoScreen(
             text = stringResource(id = R.string.additional_info_title),
             style = CareTheme.typography.heading2,
             color = CareTheme.colors.black,
+            modifier = Modifier.padding(bottom = 28.dp),
         )
 
         LabeledContent(
-            subtitle = stringResource(id = R.string.experience_preference)
+            subtitle = stringResource(id = R.string.experience_preference),
+            modifier = Modifier.padding(bottom = 32.dp),
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -102,6 +103,7 @@ internal fun AdditionalInfoScreen(
                     append(stringResource(id = R.string.apply_method_hint))
                 }
             },
+            modifier = Modifier.padding(bottom = 32.dp),
         ) {
             Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                 ApplyMethod.entries.forEach { method ->
@@ -116,7 +118,8 @@ internal fun AdditionalInfoScreen(
         }
 
         LabeledContent(
-            subtitle = stringResource(id = R.string.apply_deadline)
+            subtitle = stringResource(id = R.string.apply_deadline),
+            modifier = Modifier.padding(bottom = 32.dp),
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Row(
@@ -125,7 +128,7 @@ internal fun AdditionalInfoScreen(
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     ApplyDeadlineType.entries.forEach { type ->
-                        if(type == ApplyDeadlineType.UNKNOWN) return@forEach
+                        if (type == ApplyDeadlineType.UNKNOWN) return@forEach
 
                         CareChipBasic(
                             text = type.displayName,

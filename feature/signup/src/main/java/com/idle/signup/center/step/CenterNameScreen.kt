@@ -1,6 +1,5 @@
 package com.idle.signup.center.step
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,9 +19,9 @@ import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.foundation.CareTheme
+import com.idle.signup.LogCenterSignUpStep
 import com.idle.signup.center.CenterSignUpStep
 import com.idle.signup.center.CenterSignUpStep.NAME
-import com.idle.signup.LogCenterSignUpStep
 
 @Composable
 internal fun CenterNameScreen(
@@ -38,14 +37,14 @@ internal fun CenterNameScreen(
 
     Column(
         horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(32.dp),
         modifier = Modifier.fillMaxSize()
     ) {
         Text(
             text = stringResource(id = R.string.enter_your_name),
             style = CareTheme.typography.heading2,
             color = CareTheme.colors.black,
-        )
+            modifier = Modifier.padding(bottom = 28.dp),
+            )
 
         CareTextField(
             value = centerName,
