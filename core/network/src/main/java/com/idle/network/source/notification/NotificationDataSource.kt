@@ -1,8 +1,8 @@
 package com.idle.network.source.notification
 
+import com.idle.domain.model.notification.Notification
 import com.idle.network.api.NotificationApi
 import com.idle.network.model.auth.FCMTokenRequest
-import com.idle.network.model.notification.GetNotificationResponse
 import com.idle.network.model.notification.GetUnreadNotificationCountResponse
 import com.idle.network.util.safeApiCall
 import javax.inject.Inject
@@ -15,7 +15,7 @@ class NotificationDataSource @Inject constructor(
 
     suspend fun deleteFCMToken(): Result<Unit> = safeApiCall { notificationApi.deleteFCMToken() }
 
-    suspend fun getMyNotifications(): Result<GetNotificationResponse> =
+    suspend fun getMyNotifications(): Result<List<Notification>> =
         safeApiCall { notificationApi.getMyNotifications() }
 
     suspend fun readNotification(notificationId: String): Result<Unit> =

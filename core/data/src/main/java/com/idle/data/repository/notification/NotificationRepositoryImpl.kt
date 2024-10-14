@@ -10,7 +10,6 @@ class NotificationRepositoryImpl @Inject constructor(
 ) : NotificationRepository {
     override suspend fun getMyNotifications(): Result<List<Notification>> =
         notificationDataSource.getMyNotifications()
-            .mapCatching { it.toVO() }
 
     override suspend fun readNotification(notificationId: String): Result<Unit> =
         notificationDataSource.readNotification(notificationId)
