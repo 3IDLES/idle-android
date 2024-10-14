@@ -234,7 +234,7 @@ private fun NotificationItem(modifier: Modifier = Modifier) {
             Column(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     text = "30분 전",
-                    style = CareTheme.typography.caption,
+                    style = CareTheme.typography.caption1,
                     color = CareTheme.colors.gray500,
                     modifier = Modifier.padding(bottom = 2.dp),
                 )

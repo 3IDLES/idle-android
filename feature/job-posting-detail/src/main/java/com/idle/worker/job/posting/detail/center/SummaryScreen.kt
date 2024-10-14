@@ -329,7 +329,7 @@ fun SummaryScreen(
 
                             Text(
                                 text = "",
-                                style = CareTheme.typography.caption,
+                                style = CareTheme.typography.caption1,
                             )
                         }
 
@@ -365,7 +365,7 @@ fun SummaryScreen(
 
                             Text(
                                 text = stringResource(id = R.string.customer_name_note),
-                                style = CareTheme.typography.caption,
+                                style = CareTheme.typography.caption1,
                                 color = CareTheme.colors.gray300,
                             )
                         }

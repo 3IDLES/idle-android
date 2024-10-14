@@ -159,7 +159,7 @@ internal fun ReasonScreen(
 
         Text(
             text = stringResource(id = R.string.withdrawal_warning),
-            style = CareTheme.typography.caption,
+            style = CareTheme.typography.caption1,
             color = CareTheme.colors.red,
             textAlign = TextAlign.Center,
             modifier = Modifier

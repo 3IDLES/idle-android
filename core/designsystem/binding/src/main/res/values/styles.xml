@@ -2,24 +2,30 @@
 <resources>
     <!-- Heading styles -->
     <style name="Heading1" parent="TextAppearance.AppCompat">
-        <item name="android:textSize">24sp</item>
+        <item name="android:textSize">26sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:fontFamily">@font/pretendard_bold</item>
     </style>
 
     <style name="Heading2" parent="TextAppearance.AppCompat">
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">22sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:fontFamily">@font/pretendard_bold</item>
     </style>
 
     <style name="Heading3" parent="TextAppearance.AppCompat">
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">20sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:fontFamily">@font/pretendard_bold</item>
     </style>
 
     <style name="Heading4" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">18sp</item>
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:fontFamily">@font/pretendard_bold</item>
+    </style>
+
+    <style name="Heading5" parent="TextAppearance.AppCompat">
         <item name="android:textSize">16sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:fontFamily">@font/pretendard_bold</item>
@@ -27,24 +33,30 @@
 
     <!-- Subtitle styles -->
     <style name="Subtitle1" parent="TextAppearance.AppCompat">
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">22sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:fontFamily">@font/pretendard_semi_bold</item>
     </style>
 
     <style name="Subtitle2" parent="TextAppearance.AppCompat">
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">20sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:fontFamily">@font/pretendard_semi_bold</item>
     </style>
 
     <style name="Subtitle3" parent="TextAppearance.AppCompat">
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:letterSpacing">-0.2</item>
         <item name="android:fontFamily">@font/pretendard_semi_bold</item>
     </style>
 
     <style name="Subtitle4" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">16sp</item>
+        <item name="android:letterSpacing">-0.2</item>
+        <item name="android:fontFamily">@font/pretendard_semi_bold</item>
+    </style>
+
+    <style name="Subtitle5" parent="TextAppearance.AppCompat">
         <item name="android:textSize">14sp</item>
         <item name="android:letterSpacing">-0.2</item>
         <item name="android:fontFamily">@font/pretendard_semi_bold</item>
@@ -52,18 +64,24 @@
 
     <!-- Body styles -->
     <style name="Body1" parent="TextAppearance.AppCompat">
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">20sp</item>
         <item name="android:letterSpacing">-0.02</item>
         <item name="android:fontFamily">@font/pretendard_medium</item>
     </style>
 
     <style name="Body2" parent="TextAppearance.AppCompat">
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:letterSpacing">-0.02</item>git c
         <item name="android:fontFamily">@font/pretendard_medium</item>
     </style>
 
     <style name="Body3" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">16sp</item>
+        <item name="android:letterSpacing">-0.2</item>
+        <item name="android:fontFamily">@font/pretendard_medium</item>
+    </style>
+
+    <style name="Body4" parent="TextAppearance.AppCompat">
         <item name="android:textSize">14sp</item>
         <item name="android:letterSpacing">-0.2</item>
         <item name="android:fontFamily">@font/pretendard_medium</item>

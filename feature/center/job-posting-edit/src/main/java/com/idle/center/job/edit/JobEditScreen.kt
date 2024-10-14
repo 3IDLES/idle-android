@@ -781,7 +781,7 @@ fun JobEditScreen(
                             withStyle(
                                 style = SpanStyle(
                                     color = CareTheme.colors.gray300,
-                                    fontSize = CareTheme.typography.caption.fontSize,
+                                    fontSize = CareTheme.typography.caption1.fontSize,
                                     fontFamily = PretendardMedium,
                                 )
                             ) {
@@ -872,7 +872,7 @@ fun JobEditScreen(
                             withStyle(
                                 style = SpanStyle(
                                     color = CareTheme.colors.gray300,
-                                    fontSize = CareTheme.typography.caption.fontSize,
+                                    fontSize = CareTheme.typography.caption1.fontSize,
                                     fontFamily = PretendardMedium,
                                 )
                             ) {
@@ -914,7 +914,7 @@ fun JobEditScreen(
                             withStyle(
                                 style = SpanStyle(
                                     color = CareTheme.colors.gray300,
-                                    fontSize = CareTheme.typography.caption.fontSize,
+                                    fontSize = CareTheme.typography.caption1.fontSize,
                                     fontFamily = PretendardMedium,
                                 )
                             ) {
@@ -973,7 +973,7 @@ fun JobEditScreen(
                             withStyle(
                                 style = SpanStyle(
                                     color = CareTheme.colors.gray300,
-                                    fontSize = CareTheme.typography.caption.fontSize,
+                                    fontSize = CareTheme.typography.caption1.fontSize,
                                     fontFamily = PretendardMedium,
                                 )
                             ) {
