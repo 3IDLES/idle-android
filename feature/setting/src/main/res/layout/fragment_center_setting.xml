@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="24dp"
             android:onClick="@{() -> viewModel.clickCenterProfile()}"
             app:title="@string/my_center_info" />
 
@@ -39,6 +39,19 @@
             android:onClick="@{() -> viewModel.clickCenterProfile()}"
             app:centerAddress="@{viewModel.centerProfile.lotNumberAddress != null ? viewModel.centerProfile.lotNumberAddress : ' '}"
             app:centerName="@{viewModel.centerProfile.centerName != null ? viewModel.centerProfile.centerName : ' '}" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            app:dividerColor="@color/gray_050" />
+
+        <com.idle.designsystem.binding.component.CareRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            app:showSwitch="true"
+            app:switchState="false"
+            app:title="@string/notification_setting" />
 
         <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
@@ -94,7 +107,7 @@
             android:layout_weight="1"
             android:background="@color/gray_050"
             android:orientation="vertical"
-            android:padding="20.dp">
+            android:padding="20dp">
 
             <TextView
                 style="@style/Body3"
