@@ -31,10 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -52,7 +49,6 @@ import com.idle.designresource.R.string
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.foundation.CareTheme
-import com.idle.designsystem.compose.foundation.PretendardMedium
 import com.idle.domain.model.auth.UserType
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -243,23 +239,21 @@ internal fun AuthScreen(
                             .fillMaxWidth()
                             .align(Alignment.BottomCenter)
                     ) {
-                        Text(
-                            text = buildAnnotatedString {
-                                withStyle(
-                                    style = SpanStyle(
-                                        color = CareTheme.colors.gray300,
-                                        fontFamily = PretendardMedium,
-                                    )
-                                ) {
-                                    append("이미 아이디가 있으신가요? ")
-                                }
-                                withStyle(style = SpanStyle(color = CareTheme.colors.orange500)) {
-                                    append("로그인하기")
-                                }
-                            },
-                            style = CareTheme.typography.subtitle4,
-                            modifier = Modifier.clickable { navigateTo(CenterSignIn()) }
-                        )
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Text(
+                                text = "이미 아이디가 있으신가요?",
+                                style = CareTheme.typography.body3,
+                                color = CareTheme.colors.gray300,
+                                modifier = Modifier.clickable { navigateTo(CenterSignIn()) }
+                            )
+
+                            Text(
+                                text = "로그인하기",
+                                style = CareTheme.typography.subtitle4,
+                                color = CareTheme.colors.orange500,
+                                modifier = Modifier.clickable { navigateTo(CenterSignIn()) }
+                            )
+                        }
 
                         CareButtonLarge(
                             text = stringResource(id = string.start_with_signup),
