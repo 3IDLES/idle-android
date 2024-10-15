@@ -145,7 +145,7 @@ private fun NotificationScreen(
                                     modifier = Modifier.padding(
                                         start = 20.dp,
                                         top = 24.dp,
-                                        bottom = 8.dp
+                                        bottom = 16.dp
                                     ),
                                 )
                             }
@@ -155,7 +155,7 @@ private fun NotificationScreen(
                             }
                         }
 
-                        if (weeklyNotification?.isNotEmpty() == true) {
+                        if (todayNotification?.isNotEmpty() == true && weeklyNotification?.isNotEmpty() == true) {
                             item {
                                 HorizontalDivider(
                                     modifier = Modifier
@@ -163,7 +163,11 @@ private fun NotificationScreen(
                                         .height(8.dp)
                                         .background(CareTheme.colors.gray050)
                                 )
+                            }
+                        }
 
+                        if (weeklyNotification?.isNotEmpty() == true) {
+                            item {
                                 Text(
                                     text = stringResource(id = R.string.recent_a_week),
                                     style = CareTheme.typography.subtitle2,
@@ -171,7 +175,7 @@ private fun NotificationScreen(
                                     modifier = Modifier.padding(
                                         start = 20.dp,
                                         top = 24.dp,
-                                        bottom = 8.dp
+                                        bottom = 16.dp
                                     ),
                                 )
                             }
@@ -181,7 +185,7 @@ private fun NotificationScreen(
                             }
                         }
 
-                        if (monthlyNotification?.isNotEmpty() == true) {
+                        if (weeklyNotification?.isNotEmpty() == true && monthlyNotification?.isNotEmpty() == true) {
                             item {
                                 HorizontalDivider(
                                     modifier = Modifier
@@ -189,7 +193,11 @@ private fun NotificationScreen(
                                         .background(CareTheme.colors.gray050)
                                         .height(8.dp)
                                 )
+                            }
+                        }
 
+                        if (monthlyNotification?.isNotEmpty() == true) {
+                            item {
                                 Text(
                                     text = stringResource(id = R.string.other_days),
                                     style = CareTheme.typography.subtitle2,
@@ -197,7 +205,7 @@ private fun NotificationScreen(
                                     modifier = Modifier.padding(
                                         start = 20.dp,
                                         top = 24.dp,
-                                        bottom = 8.dp
+                                        bottom = 16.dp
                                     ),
                                 )
                             }
