@@ -430,7 +430,7 @@ internal fun JobPostingScreen(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             modifier = Modifier.fillMaxWidth(),
                         ) {
-                            var actionStartTime by remember { mutableStateOf(System.currentTimeMillis()) }
+                            val actionStartTime by remember { mutableStateOf(System.currentTimeMillis()) }
 
                             when (bottomSheetType) {
                                 JobPostingBottomSheetType.WORK_START_TIME -> {
