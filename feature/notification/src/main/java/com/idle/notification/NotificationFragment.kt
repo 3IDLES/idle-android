@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -40,7 +41,6 @@ import com.idle.designsystem.compose.component.LoadingCircle
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.notification.Notification
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 
 @AndroidEntryPoint
 internal class NotificationFragment : BaseComposeFragment() {
@@ -224,6 +224,12 @@ private fun NotificationScreen(
                                     onClick = onNotificationClick,
                                 )
                             }
+                        }
+
+                        item {
+                            Spacer(modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 52.dp))
                         }
                     }
                 }
