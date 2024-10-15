@@ -32,6 +32,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import coil.compose.AsyncImage
 import com.idle.compose.base.BaseComposeFragment
+import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
@@ -53,7 +54,6 @@ internal class NotificationFragment : BaseComposeFragment() {
             val monthlyNotification by monthlyNotification.collectAsStateWithLifecycle()
 
             LaunchedEffect(true) {
-                delay(1000L)
                 getMyNotifications()
             }
 
@@ -255,6 +255,7 @@ private fun NotificationItem(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
+                .clickable { onClick(notification) }
                 .padding(horizontal = 20.dp, vertical = 12.dp)
         ) {
             AsyncImage(
