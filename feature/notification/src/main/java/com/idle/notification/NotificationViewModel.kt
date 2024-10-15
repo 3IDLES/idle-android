@@ -53,11 +53,11 @@ class NotificationViewModel @Inject constructor(
         }
     }
 
-    internal fun readNotification(notificationId: String) = viewModelScope.launch {
-        readNotificationUseCase(notificationId).onSuccess {
+    internal fun onNotificationClick(notification: Notification) = viewModelScope.launch {
+        readNotificationUseCase(notification.id).onSuccess {
 
         }.onFailure {
-            handleFailure(it as HttpResponseException)
+
         }
     }
 }
