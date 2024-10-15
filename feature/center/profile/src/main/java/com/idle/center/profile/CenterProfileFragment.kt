@@ -136,15 +136,22 @@ internal fun CenterProfileScreen(
                 else stringResource(id = R.string.center_info),
                 onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
                 leftComponent = {
-                    if (isMyProfile && isEditState) {
-                        Text(
-                            text = stringResource(id = R.string.save),
-                            style = CareTheme.typography.subtitle2,
-                            color = CareTheme.colors.orange500,
-                            modifier = Modifier.clickable {
-                                updateCenterProfile()
-                            }
-                        )
+                    if (isMyProfile) {
+                        if (isEditState) {
+                            Text(
+                                text = stringResource(id = R.string.save),
+                                style = CareTheme.typography.subtitle2,
+                                color = CareTheme.colors.orange500,
+                                modifier = Modifier.clickable {
+                                    updateCenterProfile()
+                                }
+                            )
+                        } else {
+                            CareButtonRound(
+                                text = stringResource(id = R.string.edit),
+                                onClick = { setEditState(true) }
+                            )
+                        }
                     }
                 },
                 modifier = Modifier
@@ -175,7 +182,7 @@ internal fun CenterProfileScreen(
                 .verticalScroll(scrollState),
         ) {
             Column(
-                verticalArrangement = Arrangement.spacedBy(12.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.padding(horizontal = 20.dp)
             ) {
                 Text(
@@ -186,7 +193,7 @@ internal fun CenterProfileScreen(
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    horizontalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
                     Image(
                         painter = painterResource(R.drawable.ic_address_pin),
@@ -201,36 +208,27 @@ internal fun CenterProfileScreen(
                 }
             }
 
-            HorizontalDivider(color = CareTheme.colors.gray050, thickness = 8.dp)
+            HorizontalDivider(
+                color = CareTheme.colors.gray050,
+                thickness = 8.dp,
+                modifier = Modifier.padding(vertical = 4.dp)
+            )
 
             Column(
                 verticalArrangement = Arrangement.spacedBy(20.dp),
-                modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 4.dp),
+                modifier = Modifier.padding(start = 20.dp, end = 20.dp),
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(32.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.center_detail_info),
-                        style = CareTheme.typography.subtitle1,
-                        color = CareTheme.colors.black,
-                    )
-
-                    if (isMyProfile && !isEditState) {
-                        CareButtonRound(
-                            text = stringResource(id = R.string.edit),
-                            onClick = { setEditState(true) }
-                        )
-                    }
-                }
+                Text(
+                    text = stringResource(id = R.string.center_detail_info),
+                    style = CareTheme.typography.subtitle1,
+                    color = CareTheme.colors.black,
+                )
 
                 LabeledContent(
                     subtitle = stringResource(id = R.string.phone_number),
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp),
                 ) {
                     if (!isEditState) {
                         Text(
@@ -250,7 +248,9 @@ internal fun CenterProfileScreen(
 
                 LabeledContent(
                     subtitle = stringResource(id = R.string.center_introduce),
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp),
                 ) {
                     if (!isEditState) {
                         Text(
@@ -260,14 +260,17 @@ internal fun CenterProfileScreen(
                         )
                     } else {
                         CareTextFieldLong(
-                            value = centerIntroduce,
+                            value = centerIntroduce.ifEmpty { "-" },
                             onValueChanged = onCenterIntroduceChanged,
                             modifier = Modifier.fillMaxWidth(),
                         )
                     }
                 }
 
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(6.dp),
+                    modifier = Modifier.padding(bottom = 52.dp),
+                ) {
                     Text(
                         text = stringResource(id = R.string.center_image),
                         style = CareTheme.typography.subtitle4,
