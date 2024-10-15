@@ -59,6 +59,7 @@ import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareBottomSheetLayout
+import com.idle.designsystem.compose.component.CareButtonCardLarge
 import com.idle.designsystem.compose.component.CareButtonCardMedium
 import com.idle.designsystem.compose.component.CareButtonMedium
 import com.idle.designsystem.compose.component.CareButtonRound
@@ -542,11 +543,8 @@ internal fun WorkerProfileScreen(
                     }
 
                     if (!isMyProfile) {
-                        CareButtonCardMedium(
+                        CareButtonCardLarge(
                             text = stringResource(id = R.string.call),
-                            containerColor = CareTheme.colors.white000,
-                            textColor = CareTheme.colors.orange500,
-                            border = BorderStroke(width = 1.dp, color = CareTheme.colors.orange400),
                             onClick = {
                                 val number = "tel:${workerProfile.phoneNumber}"
                                 val dialIntent = Intent(Intent.ACTION_DIAL, number.toUri())
@@ -554,7 +552,7 @@ internal fun WorkerProfileScreen(
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(top = 24.dp, start = 35.dp, end = 35.dp),
+                                .padding(top = 16.dp, start = 35.dp, end = 35.dp),
                         )
                     }
 
