@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
@@ -29,7 +28,6 @@ import com.idle.designsystem.compose.FLIP
 import com.idle.designsystem.compose.foundation.CareTheme
 import java.time.LocalDate
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun CareBottomSheetLayout(
     sheetState: ModalBottomSheetState,
@@ -62,7 +60,6 @@ fun CareBottomSheetLayout(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun PreviewCalendarBottomSheet() {
     val sheetState = rememberModalBottomSheetState(
@@ -96,7 +93,7 @@ private fun CalendarBottomSheetContent() {
         CareCalendar(
             year = 2024,
             month = 8,
-            startDate = LocalDate.of(2024,7,1),
+            startDate = LocalDate.of(2024, 7, 1),
             selectedDate = LocalDate.of(2024, 8, 6),
             onMonthChanged = {},
             onDayClick = {},
@@ -107,7 +104,6 @@ private fun CalendarBottomSheetContent() {
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun PreviewWheelPickerBottomSheet() {
     val sheetState = rememberModalBottomSheetState(
