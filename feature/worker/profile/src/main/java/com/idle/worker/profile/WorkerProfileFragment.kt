@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterialApi::class)
-
 package com.idle.worker.profile
 
 import android.content.Intent
@@ -26,7 +24,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.HorizontalDivider
@@ -366,7 +363,7 @@ internal fun WorkerProfileScreen(
 
                             if (isEditState) {
                                 Image(
-                                    painter = painterResource(com.idle.designresource.R.drawable.ic_edit_pencil_big),
+                                    painter = painterResource(R.drawable.ic_edit_pencil_big),
                                     contentDescription = null,
                                     modifier = Modifier.align(Alignment.BottomEnd)
                                 )
@@ -396,9 +393,9 @@ internal fun WorkerProfileScreen(
                         }
 
                         Row(
-                            verticalAlignment = Alignment.Bottom,
+                            verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(4.dp),
-                            modifier = Modifier.padding(bottom = 4.dp),
+                            modifier = Modifier.padding(bottom = 2.dp),
                         ) {
                             Text(
                                 text = workerProfile.workerName,
@@ -415,7 +412,6 @@ internal fun WorkerProfileScreen(
 
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.height(IntrinsicSize.Min),
                         ) {
                             Text(
                                 text = stringResource(id = R.string.age),
@@ -433,7 +429,9 @@ internal fun WorkerProfileScreen(
                             VerticalDivider(
                                 thickness = 1.dp,
                                 color = CareTheme.colors.gray100,
-                                modifier = Modifier.padding(horizontal = 8.dp),
+                                modifier = Modifier
+                                    .height(16.dp)
+                                    .padding(horizontal = 8.dp),
                             )
 
                             Text(
@@ -453,7 +451,9 @@ internal fun WorkerProfileScreen(
                                 VerticalDivider(
                                     thickness = 1.dp,
                                     color = CareTheme.colors.gray100,
-                                    modifier = Modifier.padding(horizontal = 8.dp),
+                                    modifier = Modifier
+                                        .height(16.dp)
+                                        .padding(horizontal = 8.dp),
                                 )
 
                                 Text(
@@ -488,7 +488,9 @@ internal fun WorkerProfileScreen(
 
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.height(IntrinsicSize.Min),
+                            modifier = Modifier
+                                .height(IntrinsicSize.Min)
+                                .padding(bottom = 4.dp),
                         ) {
                             Text(
                                 text = stringResource(id = R.string.age),
@@ -521,13 +523,9 @@ internal fun WorkerProfileScreen(
                                 style = CareTheme.typography.body3,
                                 color = CareTheme.colors.black,
                             )
+                        }
 
-                            VerticalDivider(
-                                thickness = 1.dp,
-                                color = CareTheme.colors.gray100,
-                                modifier = Modifier.padding(horizontal = 8.dp),
-                            )
-
+                        Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
                                 text = stringResource(id = R.string.phone_number),
                                 style = CareTheme.typography.body3,
@@ -571,7 +569,7 @@ internal fun WorkerProfileScreen(
                             subtitle = stringResource(id = R.string.experience),
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(start = 20.dp, end = 20.dp, bottom = 32.dp),
+                                .padding(start = 20.dp, end = 20.dp, bottom = 28.dp),
                         ) {
                             CareClickableTextField(
                                 value = experienceYear?.let {
@@ -592,13 +590,22 @@ internal fun WorkerProfileScreen(
                                 modifier = Modifier.fillMaxWidth(),
                             )
                         }
+                    } else {
+                        Text(
+                            text = stringResource(R.string.detail_info),
+                            style = CareTheme.typography.subtitle1,
+                            color = CareTheme.colors.black,
+                            modifier = Modifier
+                                .align(Alignment.Start)
+                                .padding(start = 20.dp, end = 20.dp, bottom = 20.dp),
+                        )
                     }
 
                     LabeledContent(
                         subtitle = stringResource(id = R.string.address),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(start = 20.dp, end = 20.dp, bottom = 32.dp),
+                            .padding(start = 20.dp, end = 20.dp, bottom = 28.dp),
                     ) {
                         if (!isEditState) {
                             Text(
@@ -619,7 +626,7 @@ internal fun WorkerProfileScreen(
                         subtitle = stringResource(id = R.string.worker_introduce),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(start = 20.dp, end = 20.dp, bottom = 32.dp),
+                            .padding(start = 20.dp, end = 20.dp, bottom = 28.dp),
                     ) {
                         if (!isEditState) {
                             Text(
@@ -640,7 +647,7 @@ internal fun WorkerProfileScreen(
                         subtitle = stringResource(id = R.string.specialty),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(start = 20.dp, end = 20.dp, bottom = 52.dp),
+                            .padding(start = 20.dp, end = 20.dp, bottom = 20.dp),
                     ) {
                         if (!isEditState) {
                             Text(
@@ -655,6 +662,35 @@ internal fun WorkerProfileScreen(
                                 modifier = Modifier.fillMaxWidth(),
                             )
                         }
+                    }
+
+                    if (isEditState) {
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(6.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 20.dp, end = 20.dp, bottom = 6.dp),
+                        ) {
+                            Image(
+                                painter = painterResource(R.drawable.ic_notice),
+                                contentDescription = "",
+                            )
+
+                            Text(
+                                text = stringResource(R.string.specialty_description_header),
+                                style = CareTheme.typography.subtitle4,
+                                color = CareTheme.colors.gray300,
+                            )
+                        }
+
+                        Text(
+                            text = stringResource(R.string.specialty_description),
+                            style = CareTheme.typography.caption1,
+                            color = CareTheme.colors.gray700,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 20.dp, end = 20.dp, bottom = 52.dp),
+                        )
                     }
                 }
             }
