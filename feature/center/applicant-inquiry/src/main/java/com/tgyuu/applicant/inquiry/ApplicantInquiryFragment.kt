@@ -119,7 +119,7 @@ internal fun ApplicantInquiryScreen(
                         text = "위 공고에 지원한 보호사 목록이에요.",
                         style = CareTheme.typography.subtitle2,
                         color = CareTheme.colors.black,
-                        modifier = Modifier.padding(bottom = 20.dp),
+                        modifier = Modifier.padding(bottom = 8.dp),
                     )
                 }
 
