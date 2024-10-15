@@ -210,7 +210,7 @@ internal fun WorkerProfileScreen(
                     color = CareTheme.colors.black,
                 )
 
-                Spacer(modifier = Modifier.height(80.dp))
+                Spacer(modifier = Modifier.height(72.dp))
 
                 CareWheelPicker(
                     items = (1..20).map {
@@ -221,7 +221,7 @@ internal fun WorkerProfileScreen(
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                Spacer(modifier = Modifier.height(80.dp))
+                Spacer(modifier = Modifier.height(72.dp))
 
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),

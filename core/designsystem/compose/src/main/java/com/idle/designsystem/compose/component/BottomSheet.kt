@@ -50,7 +50,7 @@ fun CareBottomSheetLayout(
                     start = 20.dp,
                     end = 20.dp,
                     top = 36.dp,
-                    bottom = 28.dp
+                    bottom = 36.dp
                 ),
             ) {
                 sheetContent()
