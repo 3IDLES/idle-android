@@ -184,11 +184,7 @@ internal fun CenterHomeScreen(
                 .fillMaxWidth()
                 .padding(paddingValue)
         ) {
-            Column(
-                modifier = Modifier
-                    .padding(top = 20.dp)
-                    .fillMaxSize()
-            ) {
+            Column(modifier = Modifier.fillMaxSize()) {
                 CareTabBar(
                     selectedStatus = recruitmentPostStatus,
                     setStatus = setRecruitmentPostStatus,
