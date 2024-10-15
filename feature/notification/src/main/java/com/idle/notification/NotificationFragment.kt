@@ -62,6 +62,7 @@ internal class NotificationFragment : BaseComposeFragment() {
                 todayNotification = todayNotification,
                 weeklyNotification = weeklyNotification,
                 monthlyNotification = monthlyNotification,
+                onNotificationClick = ::onNotificationClick,
                 navigateUp = { findNavController().navigateUp() },
             )
         }
@@ -74,6 +75,7 @@ private fun NotificationScreen(
     todayNotification: List<Notification>?,
     weeklyNotification: List<Notification>?,
     monthlyNotification: List<Notification>?,
+    onNotificationClick: (Notification) -> Unit,
     navigateUp: () -> Unit,
 ) {
     Scaffold(
@@ -151,7 +153,10 @@ private fun NotificationScreen(
                             }
 
                             items(items = todayNotification) { notification ->
-                                NotificationItem(notification)
+                                NotificationItem(
+                                    notification = notification,
+                                    onClick = onNotificationClick,
+                                )
                             }
                         }
 
@@ -181,7 +186,10 @@ private fun NotificationScreen(
                             }
 
                             items(items = weeklyNotification) { notification ->
-                                NotificationItem(notification)
+                                NotificationItem(
+                                    notification = notification,
+                                    onClick = onNotificationClick,
+                                )
                             }
                         }
 
@@ -211,7 +219,10 @@ private fun NotificationScreen(
                             }
 
                             items(items = monthlyNotification) { notification ->
-                                NotificationItem(notification)
+                                NotificationItem(
+                                    notification = notification,
+                                    onClick = onNotificationClick,
+                                )
                             }
                         }
                     }
@@ -224,7 +235,8 @@ private fun NotificationScreen(
 @Composable
 private fun NotificationItem(
     notification: Notification,
-    modifier: Modifier = Modifier
+    onClick: (Notification) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val notificationItemColor = if (notification.isRead) {
         CareTheme.colors.white000
@@ -239,8 +251,8 @@ private fun NotificationItem(
             .background(color = notificationItemColor),
     ) {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalAlignment = Alignment.Top,
+            horizontalArrangement = Arrangement.spacedBy(20.dp),
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp, vertical = 12.dp)
@@ -260,14 +272,12 @@ private fun NotificationItem(
                     text = notification.daysSinceCreation().toString(),
                     style = CareTheme.typography.caption1,
                     color = CareTheme.colors.gray500,
-                    modifier = Modifier.padding(bottom = 2.dp),
                 )
 
                 Text(
                     text = notification.title,
                     style = CareTheme.typography.subtitle3,
                     color = CareTheme.colors.black,
-                    modifier = Modifier.padding(bottom = 1.dp),
                 )
 
                 Text(
