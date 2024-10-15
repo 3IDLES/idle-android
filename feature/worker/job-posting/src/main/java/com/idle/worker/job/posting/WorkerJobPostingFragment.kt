@@ -193,7 +193,6 @@ internal fun WorkerJobPostingScreen(
         Column(
             modifier = Modifier
                 .padding(paddingValue)
-                .padding(top = 20.dp)
                 .fillMaxSize(),
         ) {
             CareTabBar(
