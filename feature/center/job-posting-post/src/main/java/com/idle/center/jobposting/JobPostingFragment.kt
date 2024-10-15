@@ -444,7 +444,7 @@ internal fun JobPostingScreen(
                                         color = CareTheme.colors.black,
                                     )
 
-                                    Spacer(modifier = Modifier.height(80.dp))
+                                    Spacer(modifier = Modifier.height(72.dp))
 
                                     Row(verticalAlignment = Alignment.CenterVertically) {
                                         CareWheelPicker(
@@ -482,7 +482,7 @@ internal fun JobPostingScreen(
                                         )
                                     }
 
-                                    Spacer(modifier = Modifier.height(80.dp))
+                                    Spacer(modifier = Modifier.height(72.dp))
 
                                     Row(
                                         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -550,7 +550,7 @@ internal fun JobPostingScreen(
                                         color = CareTheme.colors.black,
                                     )
 
-                                    Spacer(modifier = Modifier.height(80.dp))
+                                    Spacer(modifier = Modifier.height(72.dp))
 
                                     Row(verticalAlignment = Alignment.CenterVertically) {
                                         CareWheelPicker(
@@ -588,7 +588,7 @@ internal fun JobPostingScreen(
                                         )
                                     }
 
-                                    Spacer(modifier = Modifier.height(80.dp))
+                                    Spacer(modifier = Modifier.height(72.dp))
 
                                     Row(
                                         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -675,7 +675,7 @@ internal fun JobPostingScreen(
                                         },
                                         modifier = Modifier
                                             .fillMaxWidth()
-                                            .padding(top = 30.dp),
+                                            .padding(top = 32.dp),
                                     )
                                 }
 

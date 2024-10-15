@@ -76,7 +76,7 @@ internal fun ReasonScreen(
             text = stringResource(id = R.string.withdrawal_reason_description),
             style = CareTheme.typography.body3,
             color = CareTheme.colors.gray300,
-            modifier = Modifier.padding(bottom = 32.dp),
+            modifier = Modifier.padding(bottom = 28.dp),
         )
 
         Column(
@@ -270,7 +270,7 @@ private fun WithdrawalLongReasonItem(
                 text = description,
                 style = CareTheme.typography.subtitle4,
                 color = CareTheme.colors.gray500,
-                modifier = Modifier.padding(top = 12.dp, bottom = 6.dp),
+                modifier = Modifier.padding(top = 16.dp, bottom = 8.dp),
             )
 
             CareTextFieldLong(
@@ -345,7 +345,7 @@ private fun WithdrawalReasonItem(
                 text = description,
                 style = CareTheme.typography.subtitle4,
                 color = CareTheme.colors.gray500,
-                modifier = Modifier.padding(top = 12.dp, bottom = 6.dp),
+                modifier = Modifier.padding(top = 16.dp, bottom = 8.dp),
             )
 
             CareTextField(
