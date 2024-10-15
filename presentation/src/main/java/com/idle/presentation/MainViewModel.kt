@@ -1,6 +1,5 @@
 package com.idle.presentation
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.idle.auth.R
 import com.idle.binding.DeepLinkDestination
