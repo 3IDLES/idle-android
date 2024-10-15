@@ -1,9 +1,14 @@
 package com.idle.notification
 
 import androidx.lifecycle.viewModelScope
+import com.idle.binding.DeepLinkDestination.CenterApplicantInquiry
+import com.idle.binding.DeepLinkDestination.CenterJobDetail
 import com.idle.binding.base.BaseViewModel
+import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.notification.Notification
+import com.idle.domain.model.notification.NotificationContent
+import com.idle.domain.model.notification.NotificationType
 import com.idle.domain.usecase.notification.GetMyNotificationUseCase
 import com.idle.domain.usecase.notification.ReadNotificationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -54,10 +59,34 @@ class NotificationViewModel @Inject constructor(
     }
 
     internal fun onNotificationClick(notification: Notification) = viewModelScope.launch {
-        readNotificationUseCase(notification.id).onSuccess {
+        launch {
+            readNotificationUseCase(notification.id).onFailure {
+                handleFailure(it as HttpResponseException)
+            }
+        }
 
-        }.onFailure {
+        handleNotificationDestination(notification)
+    }
 
+    private fun handleNotificationDestination(notification: Notification) {
+        val screenDepth = when (notification.notificationType) {
+            NotificationType.APPLICANT -> {
+                val notificationContent =
+                    notification.notificationDetails as? NotificationContent.ApplicantNotification
+
+                notificationContent?.let { content ->
+                    listOf(
+                        CenterJobDetail(content.jobPostingId),
+                        CenterApplicantInquiry(content.jobPostingId)
+                    )
+                } ?: listOf()
+            }
+
+            else -> listOf()
+        }
+
+        screenDepth.onEach { screen ->
+            baseEvent(CareBaseEvent.NavigateTo(screen))
         }
     }
 }
