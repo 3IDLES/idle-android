@@ -24,11 +24,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
+import coil.compose.AsyncImage
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareSnackBar
@@ -90,7 +92,7 @@ private fun NotificationScreen(
                 snackbar = { data ->
                     CareSnackBar(
                         data = data,
-                        modifier = Modifier.padding(bottom = 138.dp)
+                        modifier = Modifier.padding(bottom = 20.dp)
                     )
                 }
             )
@@ -216,9 +218,17 @@ private fun NotificationItem(
     notification: Notification,
     modifier: Modifier = Modifier
 ) {
+    val notificationItemColor = if (notification.isRead) {
+        CareTheme.colors.white000
+    } else {
+        CareTheme.colors.orange050
+    }
+
     Box(
         contentAlignment = Alignment.Center,
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
+            .background(color = notificationItemColor),
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -227,11 +237,14 @@ private fun NotificationItem(
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp, vertical = 12.dp)
         ) {
-            Box(
+            AsyncImage(
+                model = notification.imageUrl,
+                error = painterResource(R.drawable.ic_notification_placeholder),
+                placeholder = painterResource(R.drawable.ic_notification_placeholder),
+                contentDescription = "",
                 modifier = Modifier
                     .size(48.dp)
                     .clip(CircleShape)
-                    .background(CareTheme.colors.gray100)
             )
 
             Column(modifier = Modifier.fillMaxWidth()) {
