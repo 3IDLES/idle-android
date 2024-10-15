@@ -97,7 +97,6 @@ fun SummaryScreen(
 
             Column(
                 horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp),
@@ -111,6 +110,7 @@ fun SummaryScreen(
                         disabledContentColor = CareTheme.colors.white000,
                     ),
                     border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
+                    modifier = Modifier.padding(bottom = 10.dp),
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Row(
@@ -230,7 +230,7 @@ fun SummaryScreen(
                     text = stringResource(id = R.string.work_conditions),
                     style = CareTheme.typography.subtitle1,
                     color = CareTheme.colors.black,
-                    modifier = Modifier.padding(bottom = 12.dp),
+                    modifier = Modifier.padding(bottom = 8.dp),
                 )
 
                 Row(
@@ -304,7 +304,7 @@ fun SummaryScreen(
                     text = stringResource(id = R.string.customer_info),
                     style = CareTheme.typography.subtitle1,
                     color = CareTheme.colors.black,
-                    modifier = Modifier.padding(bottom = 20.dp),
+                    modifier = Modifier.padding(bottom = 16.dp),
                 )
 
                 Row(
@@ -538,17 +538,17 @@ fun SummaryScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 20.dp, end = 20.dp, bottom = 28.dp)
+                    .padding(start = 20.dp, end = 20.dp, bottom = 24.dp)
             ) {
                 Text(
                     text = stringResource(id = R.string.additional_info),
                     style = CareTheme.typography.subtitle1,
                     color = CareTheme.colors.black,
-                    modifier = Modifier.padding(bottom = 20.dp),
+                    modifier = Modifier.padding(bottom = 16.dp),
                 )
 
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(32.dp),
+                    horizontalArrangement = Arrangement.spacedBy(28.dp),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 20.dp),
@@ -595,6 +595,7 @@ fun SummaryScreen(
                     }
                 }
             }
+
             additionalComponent?.invoke(this)
 
             if (bottomComponent != null) {
