@@ -190,12 +190,12 @@ class MainActivity : AppCompatActivity() {
         isColdStart: Boolean,
         extras: Bundle?,
     ) {
-        val destination = extras?.getString("destination") ?: run {
+        val notificationType = extras?.getString("notificationType") ?: run {
             if (isColdStart) viewModel.initializeUserSession()
             return
         }
 
-        when (destination) {
+        when (notificationType) {
             "APPLICANTS" -> {
                 val jobPostingId = extras.getString("jobPostingId") ?: run {
                     if (isColdStart) viewModel.initializeUserSession()
