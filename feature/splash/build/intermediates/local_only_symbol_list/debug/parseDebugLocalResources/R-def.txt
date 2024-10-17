@@ -1,5 +1,0 @@
-R_DEF: Internal format may change without notice
-local
-id nav_splash
-id splashFragment
-navigation nav_splash

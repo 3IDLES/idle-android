@@ -1,3 +1,0 @@
-int id nav_splash 0x0
-int id splashFragment 0x0
-int navigation nav_splash 0x0

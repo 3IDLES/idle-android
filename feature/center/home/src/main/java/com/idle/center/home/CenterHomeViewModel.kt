@@ -5,6 +5,7 @@ import com.idle.binding.base.BaseViewModel
 import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.jobposting.CenterJobPosting
+import com.idle.domain.usecase.config.ShowNotificationCenterUseCase
 import com.idle.domain.usecase.jobposting.EndJobPostingUseCase
 import com.idle.domain.usecase.jobposting.GetJobPostingsCompletedUseCase
 import com.idle.domain.usecase.jobposting.GetJobPostingsInProgressUseCase
@@ -20,6 +21,7 @@ class CenterHomeViewModel @Inject constructor(
     private val getJobPostingsInProgressUseCase: GetJobPostingsInProgressUseCase,
     private val getJobPostingsCompletedUseCase: GetJobPostingsCompletedUseCase,
     private val endJobPostingUseCase: EndJobPostingUseCase,
+    private val showNotificationCenterUseCase: ShowNotificationCenterUseCase,
     private val getUnreadNotificationCountUseCase: GetUnreadNotificationCountUseCase,
 ) : BaseViewModel() {
     private val _recruitmentPostStatus = MutableStateFlow(RecruitmentPostStatus.IN_PROGRESS)
@@ -33,6 +35,19 @@ class CenterHomeViewModel @Inject constructor(
 
     private val _unreadNotificationCount = MutableStateFlow(0)
     val unreadNotificationCount = _unreadNotificationCount.asStateFlow()
+
+    private val _showNotificationCenter = MutableStateFlow(false)
+    val showNotificationCenter = _showNotificationCenter.asStateFlow()
+
+    init{
+        showNotificationCenter()
+    }
+
+    private fun showNotificationCenter() = viewModelScope.launch {
+        showNotificationCenterUseCase().onSuccess {
+            _showNotificationCenter.value = it
+        }
+    }
 
     internal fun getUnreadNotificationCount() = viewModelScope.launch {
         getUnreadNotificationCountUseCase().onSuccess {

@@ -74,12 +74,18 @@ internal class CenterHomeFragment : BaseComposeFragment() {
             val jobPostingsInProgress by jobPostingsInProgress.collectAsStateWithLifecycle()
             val jobPostingsCompleted by jobPostingsCompleted.collectAsStateWithLifecycle()
             val unreadNotificationCount by unreadNotificationCount.collectAsStateWithLifecycle()
+            val showNotificationCenter by showNotificationCenter.collectAsStateWithLifecycle()
 
             LaunchedEffect(true) {
                 clearJobPostingStatus()
                 launch { getJobPostingsCompleted() }
                 launch { getJobPostingsInProgress() }
-                launch { getUnreadNotificationCount() }
+            }
+
+            LaunchedEffect(showNotificationCenter) {
+                if (showNotificationCenter) {
+                    getUnreadNotificationCount()
+                }
             }
 
             CenterHomeScreen(
@@ -87,6 +93,7 @@ internal class CenterHomeFragment : BaseComposeFragment() {
                 recruitmentPostStatus = recruitmentPostStatus,
                 jobPostingsInProgresses = jobPostingsInProgress,
                 jobPostingsCompleted = jobPostingsCompleted,
+                showNotificationCenter = showNotificationCenter,
                 unreadNotificationCount = unreadNotificationCount,
                 setRecruitmentPostStatus = ::setRecruitmentPostStatus,
                 endJobPosting = ::endJobPosting,
@@ -102,6 +109,7 @@ internal fun CenterHomeScreen(
     recruitmentPostStatus: RecruitmentPostStatus,
     jobPostingsInProgresses: List<CenterJobPosting>?,
     jobPostingsCompleted: List<CenterJobPosting>?,
+    showNotificationCenter: Boolean,
     unreadNotificationCount: Int,
     setRecruitmentPostStatus: (RecruitmentPostStatus) -> Unit,
     endJobPosting: (String) -> Unit,
@@ -142,25 +150,27 @@ internal fun CenterHomeScreen(
                 title = stringResource(id = R.string.manage_job_posting),
                 modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 48.dp, bottom = 8.dp),
                 rightComponent = {
-                    Box(
-                        modifier = Modifier
-                            .size(32.dp)
-                            .clickable { navigateTo(DeepLinkDestination.Notification) },
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_notification),
-                            contentDescription = null,
-                        )
-
-                        if (unreadNotificationCount > 0) {
-                            Box(
-                                modifier = Modifier
-                                    .align(Alignment.TopEnd)
-                                    .padding(top = 1.dp)
-                                    .clip(CircleShape)
-                                    .size(6.dp)
-                                    .background(CareTheme.colors.red),
+                    if (showNotificationCenter) {
+                        Box(
+                            modifier = Modifier
+                                .size(32.dp)
+                                .clickable { navigateTo(DeepLinkDestination.Notification) },
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_notification),
+                                contentDescription = null,
                             )
+
+                            if (unreadNotificationCount > 0) {
+                                Box(
+                                    modifier = Modifier
+                                        .align(Alignment.TopEnd)
+                                        .padding(top = 1.dp)
+                                        .clip(CircleShape)
+                                        .size(6.dp)
+                                        .background(CareTheme.colors.red),
+                                )
+                            }
                         }
                     }
                 },

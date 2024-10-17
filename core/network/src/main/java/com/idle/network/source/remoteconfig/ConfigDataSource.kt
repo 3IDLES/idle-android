@@ -1,5 +1,6 @@
 package com.idle.network.source.remoteconfig
 
+import android.util.Log
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigValue
 import com.google.firebase.remoteconfig.get
@@ -29,6 +30,9 @@ class ConfigDataSource @Inject constructor(
     suspend fun getString(key: String, defaultValue: String): String =
         getValue(key)?.asString() ?: defaultValue
 
+    suspend fun getBoolean(key: String, defaultValue: Boolean): Boolean =
+        getValue(key)?.asBoolean() ?: defaultValue
+
     suspend inline fun <reified T> getReferenceType(key: String): T? {
         val json = Json {
             ignoreUnknownKeys = true
@@ -45,5 +49,6 @@ class ConfigDataSource @Inject constructor(
 
     companion object Key {
         const val FORCE_UPDATE = "forceUpdate"
+        const val SHOW_NOTIFICATION_CENTER = "show_notification_center_AOS"
     }
 }
