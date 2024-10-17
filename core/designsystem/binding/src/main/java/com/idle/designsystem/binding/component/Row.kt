@@ -1,5 +1,6 @@
 package com.idle.designsystem.binding.component
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -64,5 +65,15 @@ class CareRow @JvmOverloads constructor(
 
     fun getSwitchState(): Boolean {
         return switchView.isChecked
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    fun setOnSwitchClickListener(listener: () -> Unit) {
+        switchView.setOnTouchListener { _, event ->
+            if (event.action == android.view.MotionEvent.ACTION_UP) {
+                listener()
+            }
+            true  // 터치 이벤트를 소비하여 상태 변화 막기
+        }
     }
 }

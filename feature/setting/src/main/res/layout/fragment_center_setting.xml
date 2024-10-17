@@ -46,6 +46,7 @@
             app:dividerColor="@color/gray_050" />
 
         <com.idle.designsystem.binding.component.CareRow
+            android:id="@+id/alarmRow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
