@@ -3,10 +3,10 @@ package com.idle.setting.center
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.idle.analytics.helper.AnalyticsHelper
 import com.idle.binding.DeepLinkDestination.CenterProfile
 import com.idle.binding.DeepLinkDestination.Withdrawal
 import com.idle.binding.base.BaseBindingFragment
@@ -22,7 +22,6 @@ import com.idle.setting.TERMS_AND_POLICES_URL
 import com.idle.setting.databinding.FragmentCenterSettingBinding
 import com.idle.setting.dialog.LogoutDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 internal class CenterSettingFragment :
@@ -45,7 +44,20 @@ internal class CenterSettingFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.viewModel = fragmentViewModel
+        binding.apply {
+            viewModel = fragmentViewModel
+            alarmRow.setOnSwitchClickListener {
+                val intent = Intent().apply {
+                    action = android.provider.Settings.ACTION_APP_NOTIFICATION_SETTINGS
+                    putExtra(
+                        android.provider.Settings.EXTRA_APP_PACKAGE,
+                        requireContext().packageName
+                    )
+                }
+                startActivity(intent)
+            }
+        }
+
         fragmentViewModel.apply {
             viewLifecycleOwner.repeatOnStarted {
                 centerSettingEvent.collect {
@@ -55,6 +67,13 @@ internal class CenterSettingFragment :
         }
 
         analyticsHelper.logScreenView(screenName = "center_setting_screen")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val notificationEnable = NotificationManagerCompat.from(requireContext())
+            .areNotificationsEnabled()
+        binding.alarmRow.setSwitchState(notificationEnable)
     }
 
     private fun handleSettingEvent(event: SettingEvent) {
