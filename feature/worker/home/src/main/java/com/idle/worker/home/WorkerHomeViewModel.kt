@@ -10,6 +10,7 @@ import com.idle.domain.model.jobposting.JobPosting
 import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.WorkerJobPosting
 import com.idle.domain.model.profile.WorkerProfile
+import com.idle.domain.usecase.config.ShowNotificationCenterUseCase
 import com.idle.domain.usecase.jobposting.AddFavoriteJobPostingUseCase
 import com.idle.domain.usecase.jobposting.ApplyJobPostingUseCase
 import com.idle.domain.usecase.jobposting.GetCrawlingJobPostingsUseCase
@@ -32,6 +33,7 @@ class WorkerHomeViewModel @Inject constructor(
     private val applyJobPostingUseCase: ApplyJobPostingUseCase,
     private val addFavoriteJobPostingUseCase: AddFavoriteJobPostingUseCase,
     private val removeFavoriteJobPostingUseCase: RemoveFavoriteJobPostingUseCase,
+    private val showNotificationCenterUseCase: ShowNotificationCenterUseCase,
     private val getUnreadNotificationCountUseCase: GetUnreadNotificationCountUseCase,
 ) : BaseViewModel() {
     private val _profile = MutableStateFlow<WorkerProfile?>(null)
@@ -45,18 +47,16 @@ class WorkerHomeViewModel @Inject constructor(
     private val _callType = MutableStateFlow<JobPostingCallType>(JobPostingCallType.IN_APP)
     val callType = _callType.asStateFlow()
 
+    private val _showNotificationCenter = MutableStateFlow(false)
+    val showNotificationCenter = _showNotificationCenter.asStateFlow()
+
     private val _unreadNotificationCount = MutableStateFlow(0)
     val unreadNotificationCount = _unreadNotificationCount.asStateFlow()
 
     init {
         getJobPostings()
-        viewModelScope.launch {
-            getLocalMyWorkerProfileUseCase().onSuccess {
-                _profile.value = it
-            }.onFailure {
-                baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
-            }
-        }
+        showNotificationCenter()
+        getMyWorkerProfile()
     }
 
     internal fun getJobPostings() = viewModelScope.launch {
@@ -137,6 +137,22 @@ class WorkerHomeViewModel @Inject constructor(
                 }
             }
         }.onFailure { handleFailure(it as HttpResponseException) }
+    }
+
+    private fun showNotificationCenter() = viewModelScope.launch {
+        launch {
+            showNotificationCenterUseCase().onSuccess {
+                _showNotificationCenter.value = it
+            }
+        }
+    }
+
+    private fun getMyWorkerProfile() = viewModelScope.launch {
+        getLocalMyWorkerProfileUseCase().onSuccess {
+            _profile.value = it
+        }.onFailure {
+            baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString()))
+        }
     }
 
     private suspend fun fetchInAppJobPostings() {

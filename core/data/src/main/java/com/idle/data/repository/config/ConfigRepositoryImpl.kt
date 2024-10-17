@@ -15,4 +15,11 @@ class ConfigRepositoryImpl @Inject constructor(
             defaultValue = ForceUpdateResponse(),
         ).toVO()
     }
+
+    override suspend fun showNotificationCenter(): Result<Boolean> = runCatching {
+        configDataSource.getBoolean(
+            key = ConfigDataSource.SHOW_NOTIFICATION_CENTER,
+            defaultValue = false,
+        )
+    }
 }
