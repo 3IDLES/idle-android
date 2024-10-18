@@ -15,8 +15,8 @@ class NotificationDataSource @Inject constructor(
 
     suspend fun deleteFCMToken(): Result<Unit> = safeApiCall { notificationApi.deleteFCMToken() }
 
-    suspend fun getMyNotifications(): Result<List<Notification>> =
-        safeApiCall { notificationApi.getMyNotifications() }
+    suspend fun getMyNotifications(next: String?, limit: Int): Result<List<Notification>> =
+        safeApiCall { notificationApi.getMyNotifications(next = next, limit = limit) }
 
     suspend fun readNotification(notificationId: String): Result<Unit> =
         safeApiCall { notificationApi.readNotification(notificationId) }
