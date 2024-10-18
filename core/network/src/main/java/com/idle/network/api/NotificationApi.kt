@@ -10,6 +10,7 @@ import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface NotificationApi {
     @POST("/api/v1/fcm/token")
@@ -22,7 +23,10 @@ interface NotificationApi {
     suspend fun deleteFCMToken(): Response<Unit>
 
     @GET("/api/v1/notifications/my")
-    suspend fun getMyNotifications(): Response<List<Notification>>
+    suspend fun getMyNotifications(
+        @Query("next") next: String?,
+        @Query("limit") limit: Int,
+    ): Response<Pair<String?, List<Notification>>>
 
     @PATCH("/api/v1/notifications/{notification-id}")
     suspend fun readNotification(@Path("notification-id") notificationId: String): Response<Unit>

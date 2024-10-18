@@ -20,6 +20,7 @@ import com.idle.domain.usecase.profile.GetCenterStatusUseCase
 import com.idle.domain.usecase.profile.GetMyCenterProfileUseCase
 import com.idle.domain.usecase.profile.GetMyWorkerProfileUseCase
 import com.idle.presentation.MainEvent.NavigateTo
+import com.idle.presentation.error.ErrorHandler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -38,6 +39,7 @@ class MainViewModel @Inject constructor(
     private val getMyCenterProfileUseCase: GetMyCenterProfileUseCase,
     private val getMyWorkerProfileUseCase: GetMyWorkerProfileUseCase,
     private val getCenterStatusUseCase: GetCenterStatusUseCase,
+    private val errorHandler: ErrorHandler,
 ) : BaseViewModel() {
     private val _navigationMenuType =
         MutableStateFlow<NavigationMenuType>(NavigationMenuType.HIDE)
