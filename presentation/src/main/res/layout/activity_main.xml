@@ -19,8 +19,8 @@
         <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            app:layout_constraintBottom_toTopOf="@id/main_BNV_center"
-            app:dividerColor="#E3E3E3" />
+            app:dividerColor="#E3E3E3"
+            app:layout_constraintBottom_toTopOf="@id/main_BNV_center" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/main_BNV_center"
@@ -28,9 +28,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            app:itemBackground="@color/white"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
+            app:itemBackground="@color/white"
             app:itemPaddingBottom="8dp"
             app:itemPaddingTop="8dp"
             app:itemTextColor="@drawable/selector_menu_color"
@@ -44,9 +44,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            app:itemBackground="@color/white"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
+            app:itemBackground="@color/white"
             app:itemPaddingBottom="8dp"
             app:itemPaddingTop="8dp"
             app:itemTextColor="@drawable/selector_menu_color"

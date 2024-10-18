@@ -97,7 +97,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
@@ -274,11 +273,11 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, arguments ->
             binding.apply {
                 val navMenuType = if (destination.id in centerBottomNavDestinationIds) {
-                    NavigationMenuType.Center
+                    NavigationMenuType.CENTER
                 } else if (destination.id in workerBottomNavDestinationIds) {
-                    NavigationMenuType.Worker
+                    NavigationMenuType.WORKER
                 } else {
-                    NavigationMenuType.Hide
+                    NavigationMenuType.HIDE
                 }
 
                 viewModel.setNavigationMenuType(navMenuType)
@@ -288,27 +287,27 @@ class MainActivity : AppCompatActivity() {
 
     private fun setNavigationMenuType(menuType: NavigationMenuType) {
         when (menuType) {
-            NavigationMenuType.Center -> binding.apply {
+            NavigationMenuType.CENTER -> binding.apply {
                 if (mainBNVWorker.visibility == View.VISIBLE) {
                     slideDown(mainBNVWorker)
                 }
                 if (mainBNVCenter.visibility != View.VISIBLE) {
                     slideUp(mainBNVCenter)
-                    mainBNVCenter.setupWithNavController(navController)
                 }
+                mainBNVCenter.setupWithNavController(navController)
             }
 
-            NavigationMenuType.Worker -> binding.apply {
+            NavigationMenuType.WORKER -> binding.apply {
                 if (mainBNVCenter.visibility == View.VISIBLE) {
                     slideDown(mainBNVCenter)
                 }
                 if (mainBNVWorker.visibility != View.VISIBLE) {
                     slideUp(mainBNVWorker)
-                    mainBNVWorker.setupWithNavController(navController)
                 }
+                mainBNVWorker.setupWithNavController(navController)
             }
 
-            NavigationMenuType.Hide -> binding.apply {
+            NavigationMenuType.HIDE -> binding.apply {
                 if (mainBNVCenter.visibility == View.VISIBLE) {
                     slideDown(mainBNVCenter)
                 }
