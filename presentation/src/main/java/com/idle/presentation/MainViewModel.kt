@@ -40,7 +40,7 @@ class MainViewModel @Inject constructor(
     private val getCenterStatusUseCase: GetCenterStatusUseCase,
 ) : BaseViewModel() {
     private val _navigationMenuType =
-        MutableStateFlow<NavigationMenuType>(NavigationMenuType.Hide)
+        MutableStateFlow<NavigationMenuType>(NavigationMenuType.HIDE)
     val navigationMenuType = _navigationMenuType.asStateFlow()
 
     private val _forceUpdate = MutableStateFlow<ForceUpdate?>(null)
@@ -122,10 +122,8 @@ class MainViewModel @Inject constructor(
     }
 }
 
-sealed class NavigationMenuType {
-    data object Center : NavigationMenuType()
-    data object Worker : NavigationMenuType()
-    data object Hide : NavigationMenuType()
+enum class NavigationMenuType {
+    CENTER, WORKER, HIDE;
 }
 
 sealed class MainEvent {
