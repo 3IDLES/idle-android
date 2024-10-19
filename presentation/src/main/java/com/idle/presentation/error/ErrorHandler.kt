@@ -7,10 +7,10 @@ import javax.inject.Singleton
 
 @Singleton
 class ErrorHandler @Inject constructor() {
-    private val _baseEventFlow = MutableStateFlow<Exception?>(null)
-    val baseEventFlow = _baseEventFlow.asStateFlow()
+    private val _errorFlow = MutableStateFlow<Exception?>(null)
+    val errorFlow = _errorFlow.asStateFlow()
 
-    fun handleFailure(error: Exception?) {
-        _baseEventFlow.value = error
+    fun sendError(error: Exception) {
+        _errorFlow.value = error
     }
 }
