@@ -24,6 +24,11 @@ class NotificationViewModel @Inject constructor(
     private val getMyNotificationUseCase: GetMyNotificationUseCase,
     private val readNotificationUseCase: ReadNotificationUseCase,
 ) : BaseViewModel() {
+    private val next = MutableStateFlow<String?>(null)
+
+    private val _callType =
+        MutableStateFlow<NotificationCallType>(NotificationCallType.NOTIFICATION)
+
     private val myNotifications = MutableStateFlow<List<Notification>?>(null)
 
     val todayNotification = myNotifications.map { list ->
@@ -51,8 +56,17 @@ class NotificationViewModel @Inject constructor(
     )
 
     internal fun getMyNotifications() = viewModelScope.launch {
-        getMyNotificationUseCase().onSuccess {
-            myNotifications.value = it
+        if (_callType.value == NotificationCallType.END) {
+            return@launch
+        }
+
+        getMyNotificationUseCase(next.value).onSuccess { (nextId, notifications) ->
+            myNotifications.value = myNotifications.value?.plus(notifications) ?: notifications
+            next.value = nextId
+
+            if (nextId == null) {
+                _callType.value = NotificationCallType.END
+            }
         }.onFailure {
             handleFailure(it as HttpResponseException)
         }
@@ -89,4 +103,8 @@ class NotificationViewModel @Inject constructor(
             baseEvent(CareBaseEvent.NavigateTo(screen))
         }
     }
+}
+
+enum class NotificationCallType {
+    NOTIFICATION, END
 }

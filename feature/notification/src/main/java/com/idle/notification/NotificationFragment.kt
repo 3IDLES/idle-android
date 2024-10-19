@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
@@ -21,7 +22,9 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -63,6 +66,7 @@ internal class NotificationFragment : BaseComposeFragment() {
                 weeklyNotification = weeklyNotification,
                 monthlyNotification = monthlyNotification,
                 onNotificationClick = ::onNotificationClick,
+                getMyNotifications = ::getMyNotifications,
                 navigateUp = { findNavController().navigateUp() },
             )
         }
@@ -76,8 +80,32 @@ private fun NotificationScreen(
     weeklyNotification: List<Notification>?,
     monthlyNotification: List<Notification>?,
     onNotificationClick: (Notification) -> Unit,
+    getMyNotifications: () -> Unit,
     navigateUp: () -> Unit,
 ) {
+    val listState = rememberLazyListState()
+    val lastVisibleIndex by remember {
+        derivedStateOf {
+            listState.firstVisibleItemIndex + listState.layoutInfo.visibleItemsInfo.size - 1
+        }
+    }
+
+    val totalItemCount = (todayNotification?.size ?: 0) +
+            (weeklyNotification?.size ?: 0) +
+            (monthlyNotification?.size ?: 0)
+
+    val isNearEnd = if (totalItemCount > 0) {
+        lastVisibleIndex >= totalItemCount - 3
+    } else {
+        false
+    }
+
+    LaunchedEffect(isNearEnd) {
+        if (totalItemCount != 0 && isNearEnd) {
+            getMyNotifications()
+        }
+    }
+
     Scaffold(
         topBar = {
             CareSubtitleTopBar(
@@ -137,7 +165,10 @@ private fun NotificationScreen(
                         )
                     }
                 } else {
-                    LazyColumn(modifier = Modifier.fillMaxSize()) {
+                    LazyColumn(
+                        state = listState,
+                        modifier = Modifier.fillMaxSize()
+                    ) {
                         if (todayNotification?.isNotEmpty() == true) {
                             item {
                                 Text(
@@ -227,9 +258,11 @@ private fun NotificationScreen(
                         }
 
                         item {
-                            Spacer(modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(bottom = 52.dp))
+                            Spacer(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(bottom = 52.dp)
+                            )
                         }
                     }
                 }
