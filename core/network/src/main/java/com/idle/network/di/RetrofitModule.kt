@@ -1,5 +1,6 @@
 package com.idle.network.di
 
+import com.idle.domain.model.notification.Notification
 import com.idle.network.BuildConfig
 import com.idle.network.api.AuthApi
 import com.idle.network.api.JobPostingApi
@@ -14,7 +15,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
-import kotlinx.serialization.modules.contextual
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -33,7 +33,7 @@ object RetrofitModule {
     ): Json = Json {
         ignoreUnknownKeys = true
         serializersModule = SerializersModule {
-            contextual(NotificationSerializer())
+            contextual(Notification::class, notificationSerializer)
         }
     }
 
