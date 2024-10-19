@@ -143,7 +143,7 @@
     <string name="center_number_hint">지원자들의 연락을 받을 번호를 입력해주세요</string>
     <string name="center_introduce">센터 소개</string>
     <string name="center_introduce_title">센터 소개글을 작성하면 보호사 매칭 성공률이 높아져요.</string>
-    <string name="center_introduce_hint">추가적으로 요구사항이 있다면 작성해주세요.(예: 어쩌고저쩌고)</string>
+    <string name="center_introduce_hint">요양 보호사에게 우리 센터를 소개할만한 글을 작성해주세요.(예: 화목한 분위기에 요양 보호사분들의 근속 기간이 길어요!)</string>
     <string name="center_image">센터 사진</string>
     <string name="center_info_hint">센터 정보를 입력해주세요</string>
     <string name="center_detail_info">센터 상세 정보</string>
@@ -158,7 +158,7 @@
     <string name="customer_name">고객 이름</string>
     <string name="customer_name_hint">고객의 이름을 입력해주세요.</string>
     <string name="customer_name_note">고객 이름은 센터 측에서만 볼 수 있어요.</string>
-    <string name="speciality_hint">추가적으로 요구사항이 있다면 작성해주세요.(예: 어쩌고저쩌고)</string>
+    <string name="speciality_hint">특이사항이 있다면 작성해주세요.\n(예: 애완동물, 종교, 정치 성향 등)</string>
 
     <!-- Personal Info -->
     <string name="name">이름</string>
