@@ -1,7 +1,7 @@
 package com.idle.network.api
 
-import com.idle.domain.model.notification.Notification
 import com.idle.network.model.auth.FCMTokenRequest
+import com.idle.network.model.notification.GetMyNotificationResponse
 import com.idle.network.model.notification.GetUnreadNotificationCountResponse
 import retrofit2.Response
 import retrofit2.http.Body
@@ -26,7 +26,7 @@ interface NotificationApi {
     suspend fun getMyNotifications(
         @Query("next") next: String?,
         @Query("limit") limit: Int,
-    ): Response<Pair<String?, List<Notification>>>
+    ): Response<GetMyNotificationResponse>
 
     @PATCH("/api/v1/notifications/{notification-id}")
     suspend fun readNotification(@Path("notification-id") notificationId: String): Response<Unit>

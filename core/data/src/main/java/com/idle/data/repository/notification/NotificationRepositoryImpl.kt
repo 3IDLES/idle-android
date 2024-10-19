@@ -13,6 +13,7 @@ class NotificationRepositoryImpl @Inject constructor(
         limit: Int
     ): Result<Pair<String?, List<Notification>>> =
         notificationDataSource.getMyNotifications(next = next, limit = limit)
+            .map { it.toVO() }
 
     override suspend fun readNotification(notificationId: String): Result<Unit> =
         notificationDataSource.readNotification(notificationId)
