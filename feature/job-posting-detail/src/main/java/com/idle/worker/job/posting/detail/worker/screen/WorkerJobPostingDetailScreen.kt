@@ -547,9 +547,7 @@ internal fun WorkerJobPostingDetailScreen(
                                 )
                             }
 
-                            Column(
-                                verticalArrangement = Arrangement.spacedBy(8.dp),
-                            ) {
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                 Text(
                                     text = "${jobPostingDetail.careLevel}등급",
                                     style = CareTheme.typography.body2,
@@ -578,10 +576,7 @@ internal fun WorkerJobPostingDetailScreen(
                                 .fillMaxWidth()
                                 .padding(vertical = 16.dp),
                         ) {
-                            Column(
-                                verticalArrangement = Arrangement.spacedBy(8.dp),
-                                modifier = Modifier.width(60.dp),
-                            ) {
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                 Text(
                                     text = stringResource(id = R.string.meal_assistance),
                                     style = CareTheme.typography.body2,
@@ -607,9 +602,7 @@ internal fun WorkerJobPostingDetailScreen(
                                 )
                             }
 
-                            Column(
-                                verticalArrangement = Arrangement.spacedBy(8.dp),
-                            ) {
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                 Text(
                                     text = if (jobPostingDetail.isMealAssistance) stringResource(
                                         id = R.string.necessary
@@ -701,9 +694,7 @@ internal fun WorkerJobPostingDetailScreen(
                                 )
                             }
 
-                            Column(
-                                verticalArrangement = Arrangement.spacedBy(8.dp),
-                            ) {
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                 Text(
                                     text = if (jobPostingDetail.isExperiencePreferred) stringResource(
                                         id = R.string.experience_preferred
