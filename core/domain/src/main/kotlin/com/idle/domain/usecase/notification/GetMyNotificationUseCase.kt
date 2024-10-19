@@ -7,5 +7,9 @@ import javax.inject.Inject
 class GetMyNotificationUseCase @Inject constructor(
     private val notificationRepository: NotificationRepository
 ) {
-    suspend operator fun invoke(): Result<List<Notification>> = notificationRepository.getMyNotifications()
+    suspend operator fun invoke(
+        next: String?,
+        limit: Int = 10
+    ): Result<Pair<String?, List<Notification>>> =
+        notificationRepository.getMyNotifications(next = next, limit = limit)
 }

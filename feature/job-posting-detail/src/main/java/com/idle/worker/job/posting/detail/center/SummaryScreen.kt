@@ -315,7 +315,7 @@ fun SummaryScreen(
                 ) {
                     Column(
                         verticalArrangement = Arrangement.spacedBy(8.dp),
-                        modifier = Modifier.width(60.dp),
+                        modifier = Modifier.width(66.dp),
                     ) {
                         Column(
                             horizontalAlignment = Alignment.Start,
@@ -400,7 +400,7 @@ fun SummaryScreen(
                 ) {
                     Column(
                         verticalArrangement = Arrangement.spacedBy(8.dp),
-                        modifier = Modifier.width(60.dp)
+                        modifier = Modifier.width(66.dp)
                     ) {
                         Text(
                             text = stringResource(id = R.string.care_level),
@@ -452,7 +452,7 @@ fun SummaryScreen(
                 ) {
                     Column(
                         verticalArrangement = Arrangement.spacedBy(8.dp),
-                        modifier = Modifier.width(60.dp)
+                        modifier = Modifier.width(66.dp),
                     ) {
                         Text(
                             text = stringResource(id = R.string.meal_assistance),
