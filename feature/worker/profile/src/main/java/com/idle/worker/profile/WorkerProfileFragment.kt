@@ -89,7 +89,7 @@ internal class WorkerProfileFragment : BaseComposeFragment() {
     private val args: WorkerProfileFragmentArgs by navArgs()
     override val fragmentViewModel: WorkerProfileViewModel by viewModels()
 
-    val postCodeDialog: PostCodeFragment? by lazy {
+    private val postCodeDialog: PostCodeFragment? by lazy {
         PostCodeFragment().apply {
             onDismissCallback = {
                 findNavController().currentBackStackEntry?.savedStateHandle?.let {
@@ -117,10 +117,11 @@ internal class WorkerProfileFragment : BaseComposeFragment() {
             val roadNameAddress by roadNameAddress.collectAsStateWithLifecycle()
             val jobSearchStatus by jobSearchStatus.collectAsStateWithLifecycle()
             val isUpdateLoading by isUpdateLoading.collectAsStateWithLifecycle()
-
             val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.PickVisualMedia(),
-                onResult = { uri -> setProfileImageUrl(uri) }
+                onResult = { uri ->
+                    setProfileImageUrl(uri ?: return@rememberLauncherForActivityResult)
+                }
             )
 
             LaunchedEffect(true) {
