@@ -47,6 +47,7 @@ include(":feature:postcode")
 include(":feature:job-posting-detail")
 include(":feature:withdrawal")
 include(":feature:notification")
+include(":feature:chatting-detail")
 
 include(":feature:worker:home")
 include(":feature:worker:profile")

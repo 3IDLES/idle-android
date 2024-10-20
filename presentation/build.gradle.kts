@@ -18,6 +18,8 @@ dependencies {
     implementation(projects.feature.setting)
     implementation(projects.feature.withdrawal)
     implementation(projects.feature.jobPostingDetail)
+    implementation(projects.feature.chattingDetail)
+
     implementation(projects.feature.center.home)
     implementation(projects.feature.center.pending)
     implementation(projects.feature.center.applicantInquiry)
