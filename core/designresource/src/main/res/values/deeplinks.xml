@@ -6,6 +6,7 @@
     <string name="withdrawal_deeplink_url">care://withdrawal/{userType}</string>
     <string name="signup_complete_deeplink_url">care://signup/complete</string>
     <string name="new_password_deeplink_url">care://newPassword</string>
+    <string name="chatting_detail_deeplink_url">care://chatting/detail</string>
 
     <string name="worker_signup_deeplink_url">care://signup/worker</string>
     <string name="worker_home_deeplink_url">care://worker/home</string>
