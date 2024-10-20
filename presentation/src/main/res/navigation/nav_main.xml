@@ -9,6 +9,7 @@
     <include app:graph="@navigation/nav_signin" />
     <include app:graph="@navigation/nav_signup" />
     <include app:graph="@navigation/nav_withdrawal" />
+    <include app:graph="@navigation/nav_chatting_detail" />
     <include app:graph="@navigation/nav_center_chatting" />
     <include app:graph="@navigation/nav_center_home" />
     <include app:graph="@navigation/nav_center_pending" />

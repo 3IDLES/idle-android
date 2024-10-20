@@ -9,5 +9,11 @@
         android:name="com.idle.chatting_detail.ChattingDetailFragment"
         android:label="ChattingDetailFragment">
         <deepLink app:uri="@string/chatting_detail_deeplink_url" />
+        <argument
+            android:name="chattingRoomId"
+            app:argType="string" />
+        <argument
+            android:name="userId"
+            app:argType="string" />
     </fragment>
 </navigation>

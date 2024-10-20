@@ -26,6 +26,7 @@ import coil.compose.AsyncImage
 import com.idle.binding.DeepLinkDestination
 import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.compose.base.BaseComposeFragment
+import com.idle.compose.clickable
 import com.idle.designsystem.compose.component.CareHeadingTopBar
 import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.foundation.CareTheme
@@ -41,7 +42,7 @@ internal class WorkerChattingFragment : BaseComposeFragment() {
 
             WorkerChattingScreen(
                 snackbarHostState = snackbarHostState,
-                navigateTo = { baseEvent(NavigateTo(it, popUpTo = R.id.nav_worker_chatting)) },
+                navigateTo = { baseEvent(NavigateTo(it)) },
             )
         }
     }
@@ -78,17 +79,28 @@ internal fun WorkerChattingScreen(
                 .padding(paddingValue),
         ) {
             items(items = listOf(1, 2, 3, 4, 5)) {
-                ChattingItem()
+                ChattingItem(navigateTo = navigateTo)
             }
         }
     }
 }
 
 @Composable
-internal fun ChattingItem() {
+internal fun ChattingItem(
+    navigateTo: (DeepLinkDestination) -> Unit,
+) {
     Box(
         contentAlignment = Alignment.Center,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                navigateTo(
+                    DeepLinkDestination.ChattingDetail(
+                        chattingRoomId = "",
+                        userId = ""
+                    )
+                )
+            },
     ) {
         Row(
             verticalAlignment = Alignment.Top,

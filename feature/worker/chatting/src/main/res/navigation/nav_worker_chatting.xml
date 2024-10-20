@@ -8,6 +8,6 @@
         android:id="@+id/workerChattingFragment"
         android:name="com.idle.worker.chatting.WorkerChattingFragment"
         android:label="WorkerChattingFragment" >
-        <deepLink app:uri="@string/worker_job_posting_deeplink_url"/>
+        <deepLink app:uri="@string/worker_chatting_deeplink_url"/>
     </fragment>
 </navigation>
