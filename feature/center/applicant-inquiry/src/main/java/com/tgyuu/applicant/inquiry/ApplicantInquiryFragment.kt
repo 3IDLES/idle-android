@@ -27,6 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
@@ -229,10 +230,11 @@ private fun WorkerProfileCard(
                 AsyncImage(
                     model = applicant.profileImageUrl ?: R.drawable.ic_worker_profile_default,
                     contentDescription = null,
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
-                        .size(72.dp)
+                        .padding(end = 16.dp, bottom = 4.dp)
                         .clip(CircleShape)
-                        .padding(end = 16.dp, bottom = 4.dp),
+                        .size(72.dp),
                 )
 
                 Column(

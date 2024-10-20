@@ -42,6 +42,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -360,10 +361,11 @@ internal fun WorkerProfileScreen(
                                 AsyncImage(
                                     model = profileImageUri ?: R.drawable.ic_worker_photo_default,
                                     contentDescription = null,
+                                    contentScale = ContentScale.Crop,
                                     modifier = Modifier
                                         .align(Alignment.Center)
-                                        .size(96.dp)
-                                        .clip(CircleShape),
+                                        .clip(CircleShape)
+                                        .size(96.dp),
                                 )
 
                                 if (isEditState) {
