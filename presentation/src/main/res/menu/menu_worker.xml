@@ -9,8 +9,8 @@
         android:icon="@drawable/selector_menu_job_posting"
         android:title="공고" />
     <item
-        android:id="@id/nav_worker_setting"
-        android:icon="@drawable/selector_menu_setting"
+        android:id="@id/nav_worker_chatting"
+        android:icon="@drawable/selector_menu_job_posting"
         android:title="채팅" />
     <item
         android:id="@id/nav_worker_setting"

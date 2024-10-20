@@ -25,9 +25,11 @@ dependencies {
     implementation(projects.feature.center.registerInfo)
     implementation(projects.feature.center.jobPostingPost)
     implementation(projects.feature.center.jobPostingEdit)
+    implementation(projects.feature.center.chatting)
     implementation(projects.feature.worker.home)
     implementation(projects.feature.worker.profile)
     implementation(projects.feature.worker.jobPosting)
+    implementation(projects.feature.worker.chatting)
 
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.navigation.ui)
