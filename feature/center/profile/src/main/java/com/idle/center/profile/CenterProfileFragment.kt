@@ -131,7 +131,9 @@ internal fun CenterProfileScreen(
     val scrollState = rememberScrollState()
     val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
-        onResult = { uri -> onProfileImageUriChanged(uri) }
+        onResult = { uri ->
+            onProfileImageUriChanged(uri ?: return@rememberLauncherForActivityResult)
+        }
     )
 
     Box(modifier = Modifier.fillMaxSize()) {
