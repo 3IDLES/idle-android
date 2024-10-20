@@ -131,6 +131,4 @@ enum class NavigationMenuType {
 sealed class MainEvent {
     data class NavigateTo(val destination: DeepLinkDestination, val popUpTo: Int? = null) :
         MainEvent()
-
-    data class ShowSnackBar(val msg: String) : MainEvent()
 }

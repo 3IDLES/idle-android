@@ -9,6 +9,7 @@ android {
 
 dependencies {
     implementation(projects.core.analytics)
+    implementation(projects.core.designsystem.binding)
     implementation(projects.core.commonUi.compose)
     implementation(projects.feature.auth)
     implementation(projects.feature.postcode)
