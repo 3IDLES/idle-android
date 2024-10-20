@@ -49,6 +49,9 @@ class WorkerProfileViewModel @Inject constructor(
     private val _jobSearchStatus = MutableStateFlow(JobSearchStatus.UNKNOWN)
     val jobSearchStatus = _jobSearchStatus.asStateFlow()
 
+    private val _isUpdateLoading = MutableStateFlow(false)
+    val isUpdateLoading = _isUpdateLoading.asStateFlow()
+
     internal fun getMyWorkerProfile() = viewModelScope.launch {
         getLocalMyWorkerProfileUseCase().onSuccess {
             _workerProfile.value = it
@@ -75,6 +78,8 @@ class WorkerProfileViewModel @Inject constructor(
             return@launch
         }
 
+        _isUpdateLoading.value = true
+
         updateWorkerProfileUseCase(
             experienceYear = _experienceYear.value,
             roadNameAddress = _roadNameAddress.value,
@@ -89,6 +94,8 @@ class WorkerProfileViewModel @Inject constructor(
             setEditState(false)
         }.onFailure {
             handleFailure(it as HttpResponseException)
+        }.also {
+            _isUpdateLoading.value = false
         }
     }
 

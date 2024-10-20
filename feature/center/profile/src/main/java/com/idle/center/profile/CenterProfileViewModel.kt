@@ -36,6 +36,9 @@ class CenterProfileViewModel @Inject constructor(
     private val _profileImageUri = MutableStateFlow<Uri?>(null)
     val profileImageUri = _profileImageUri.asStateFlow()
 
+    private val _isUpdateLoading = MutableStateFlow(false)
+    val isUpdateLoading = _isUpdateLoading.asStateFlow()
+
     internal fun getMyCenterProfile() = viewModelScope.launch {
         getLocalMyCenterProfileUseCase().onSuccess {
             _centerProfile.value = it
@@ -64,6 +67,8 @@ class CenterProfileViewModel @Inject constructor(
             return@launch
         }
 
+        _isUpdateLoading.value = true
+
         updateCenterProfileUseCase(
             officeNumber = _centerOfficeNumber.value,
             introduce = _centerIntroduce.value.ifBlank { null },
@@ -73,6 +78,8 @@ class CenterProfileViewModel @Inject constructor(
             setEditState(false)
         }.onFailure {
             handleFailure(it as HttpResponseException)
+        }.also {
+            _isUpdateLoading.value = false
         }
     }
 
@@ -92,7 +99,7 @@ class CenterProfileViewModel @Inject constructor(
 
     internal fun setEditState(state: Boolean) {
         _isEditState.value = state
-        if(!state){
+        if (!state) {
             getMyCenterProfile()
         }
     }
