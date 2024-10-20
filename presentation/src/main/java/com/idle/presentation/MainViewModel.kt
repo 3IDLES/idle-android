@@ -20,7 +20,6 @@ import com.idle.domain.usecase.profile.GetCenterStatusUseCase
 import com.idle.domain.usecase.profile.GetMyCenterProfileUseCase
 import com.idle.domain.usecase.profile.GetMyWorkerProfileUseCase
 import com.idle.presentation.MainEvent.NavigateTo
-import com.idle.presentation.error.ErrorHandler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -39,10 +38,8 @@ class MainViewModel @Inject constructor(
     private val getMyCenterProfileUseCase: GetMyCenterProfileUseCase,
     private val getMyWorkerProfileUseCase: GetMyWorkerProfileUseCase,
     private val getCenterStatusUseCase: GetCenterStatusUseCase,
-    private val errorHandler: ErrorHandler,
 ) : BaseViewModel() {
-    private val _navigationMenuType =
-        MutableStateFlow<NavigationMenuType>(NavigationMenuType.HIDE)
+    private val _navigationMenuType = MutableStateFlow(NavigationMenuType.HIDE)
     val navigationMenuType = _navigationMenuType.asStateFlow()
 
     private val _forceUpdate = MutableStateFlow<ForceUpdate?>(null)
@@ -93,7 +90,7 @@ class MainViewModel @Inject constructor(
         accessTokenDeferred.await() to userRoleDeferred.await()
     }
 
-    private fun navigateToDestination(userRole: String) {
+    private suspend fun navigateToDestination(userRole: String) {
         when (userRole) {
             UserType.WORKER.apiValue -> event(NavigateTo(WorkerHome, R.id.authFragment))
             UserType.CENTER.apiValue -> getCenterStatus()
@@ -101,11 +98,10 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun getCenterStatus() = viewModelScope.launch {
+    private suspend fun getCenterStatus() =
         getCenterStatusUseCase().onSuccess { centerStatusResponse ->
             handleCenterStatus(centerStatusResponse.centerManagerAccountStatus)
         }
-    }
 
     private fun handleCenterStatus(status: CenterManagerAccountStatus) = when (status) {
         CenterManagerAccountStatus.APPROVED -> handleApprovedCenterStatus()
