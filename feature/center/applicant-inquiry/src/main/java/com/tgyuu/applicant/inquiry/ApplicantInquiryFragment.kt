@@ -319,7 +319,7 @@ private fun WorkerProfileCard(
                 containerColor = CareTheme.colors.white000,
                 textColor = CareTheme.colors.gray300,
                 border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.fillMaxWidth(),
             )
         }
     }
