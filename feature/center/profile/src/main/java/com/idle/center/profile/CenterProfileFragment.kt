@@ -162,17 +162,6 @@ internal fun CenterProfileScreen(
                         .padding(start = 12.dp, top = 48.dp, end = 20.dp, bottom = 12.dp),
                 )
             },
-            snackbarHost = {
-                SnackbarHost(
-                    hostState = snackbarHostState,
-                    snackbar = { data ->
-                        CareSnackBar(
-                            data = data,
-                            modifier = Modifier.padding(bottom = 20.dp)
-                        )
-                    }
-                )
-            },
             containerColor = CareTheme.colors.white000,
             modifier = Modifier.addFocusCleaner(focusManager),
         ) { paddingValues ->
@@ -182,23 +171,7 @@ internal fun CenterProfileScreen(
                     .padding(paddingValues)
                     .padding(top = 24.dp)
                     .fillMaxWidth()
-                    .padding(start = 12.dp, top = 48.dp, end = 20.dp, bottom = 12.dp),
-            )
-        },
-        containerColor = CareTheme.colors.white000,
-        modifier = Modifier.addFocusCleaner(focusManager),
-    ) { paddingValues ->
-        Column(
-            verticalArrangement = Arrangement.spacedBy(20.dp),
-            modifier = Modifier
-                .padding(paddingValues)
-                .padding(top = 24.dp)
-                .fillMaxWidth()
-                .verticalScroll(scrollState),
-        ) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.padding(horizontal = 20.dp),
+                    .verticalScroll(scrollState),
             ) {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(8.dp),

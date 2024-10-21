@@ -23,7 +23,6 @@ import com.idle.domain.usecase.config.GetForceUpdateInfoUseCase
 import com.idle.domain.usecase.profile.GetCenterStatusUseCase
 import com.idle.domain.usecase.profile.GetMyCenterProfileUseCase
 import com.idle.domain.usecase.profile.GetMyWorkerProfileUseCase
-import com.idle.presentation.MainEvent.NavigateTo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope

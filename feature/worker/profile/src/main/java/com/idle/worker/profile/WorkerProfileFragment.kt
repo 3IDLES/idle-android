@@ -302,17 +302,6 @@ internal fun WorkerProfileScreen(
                         )
                     }
                 },
-                snackbarHost = {
-                    SnackbarHost(
-                        hostState = snackbarHostState,
-                        snackbar = { data ->
-                            CareSnackBar(
-                                data = data,
-                                modifier = Modifier.padding(bottom = 20.dp)
-                            )
-                        }
-                    )
-                },
                 containerColor = CareTheme.colors.white000,
                 modifier = Modifier.addFocusCleaner(focusManager),
             ) { paddingValues ->

@@ -43,6 +43,25 @@ class CenterProfileViewModel @Inject constructor(
     private val _isUpdateLoading = MutableStateFlow(false)
     val isUpdateLoading = _isUpdateLoading.asStateFlow()
 
+    internal fun setCenterOfficeNumber(number: String) {
+        _centerOfficeNumber.value = number
+    }
+
+    internal fun setCenterIntroduce(introduce: String) {
+        _centerIntroduce.value = introduce
+    }
+
+    internal fun setEditState(state: Boolean) {
+        _isEditState.value = state
+        if (!state) {
+            getMyCenterProfile()
+        }
+    }
+
+    internal fun setProfileImageUrl(uri: Uri?) {
+        _profileImageUri.value = uri
+    }
+
     internal fun getMyCenterProfile() = viewModelScope.launch {
         getLocalMyCenterProfileUseCase().onSuccess {
             _centerProfile.value = it
@@ -59,7 +78,7 @@ class CenterProfileViewModel @Inject constructor(
         }.onFailure { errorHandler.sendError(it) }
     }
 
-    fun updateCenterProfile() = viewModelScope.launch {
+    internal fun updateCenterProfile() = viewModelScope.launch {
         if (_centerOfficeNumber.value.isBlank()) {
             return@launch
         }
@@ -80,30 +99,10 @@ class CenterProfileViewModel @Inject constructor(
             setEditState(false)
         }.onFailure { errorHandler.sendError(it) }
         }.also { _isUpdateLoading.value = false }
-    }
 
     private fun isCenterProfileUnchanged(): Boolean {
         return _centerOfficeNumber.value == _centerProfile.value?.officeNumber &&
                 _centerIntroduce.value == _centerProfile.value?.introduce &&
                 profileImageUri.value == null
-    }
-
-    internal fun setCenterOfficeNumber(number: String) {
-        _centerOfficeNumber.value = number
-    }
-
-    internal fun setCenterIntroduce(introduce: String) {
-        _centerIntroduce.value = introduce
-    }
-
-    internal fun setEditState(state: Boolean) {
-        _isEditState.value = state
-        if (!state) {
-            getMyCenterProfile()
-        }
-    }
-
-    internal fun setProfileImageUrl(uri: Uri?) {
-        _profileImageUri.value = uri
     }
 }
