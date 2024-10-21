@@ -109,7 +109,7 @@ internal class CenterJobPostingDetailFragment : BaseComposeFragment() {
                                 else setJobPostingState(JobPostingDetailState.SUMMARY)
                             },
                             showSnackBar = {
-                                eventHandler.sendEvent(
+                                eventHandlerHelper.sendEvent(
                                     MainEvent.ShowSnackBar(it)
                                 )
                             }
@@ -148,7 +148,7 @@ internal class CenterJobPostingDetailFragment : BaseComposeFragment() {
                                 endJobPosting = ::endJobPosting,
                                 deleteJobPosting = ::deleteJobPosting,
                                 navigateTo = {
-                                    navigationRouter.navigateTo(NavigationEvent.NavigateTo(it))
+                                    navigationHelper.navigateTo(NavigationEvent.NavigateTo(it))
                                 },
                                 setJobPostingDetailState = ::setJobPostingState,
                             )

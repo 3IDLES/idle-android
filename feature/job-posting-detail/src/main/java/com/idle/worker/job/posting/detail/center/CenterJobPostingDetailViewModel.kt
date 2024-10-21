@@ -3,12 +3,12 @@ package com.idle.worker.job.posting.detail.center
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.DeepLinkDestination
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.EventHandler
+import com.idle.binding.EventHandlerHelper
 import com.idle.binding.MainEvent
 import com.idle.binding.NavigationEvent
-import com.idle.binding.NavigationRouter
+import com.idle.binding.NavigationHelper
 import com.idle.binding.SnackBarType
-import com.idle.domain.model.error.ErrorHandler
+import com.idle.domain.model.error.ErrorHandlerHelper
 import com.idle.domain.model.jobposting.CenterJobPostingDetail
 import com.idle.domain.model.jobposting.EditJobPostingDetail
 import com.idle.domain.model.jobposting.JobPostingStatus
@@ -35,9 +35,9 @@ class CenterJobPostingDetailViewModel @Inject constructor(
     private val updateJobPostingUseCase: UpdateJobPostingUseCase,
     private val endJobPostingUseCase: EndJobPostingUseCase,
     private val deleteJobPostingUseCase: DeleteJobPostingUseCase,
-    private val errorHandler: ErrorHandler,
-    val eventHandler: EventHandler,
-    val navigationRouter: NavigationRouter,
+    private val errorHandlerHelper: ErrorHandlerHelper,
+    val eventHandlerHelper: EventHandlerHelper,
+    val navigationHelper: NavigationHelper,
 ) : BaseViewModel() {
     private val _profile = MutableStateFlow<CenterProfile?>(null)
     val profile = _profile.asStateFlow()
@@ -58,19 +58,19 @@ class CenterJobPostingDetailViewModel @Inject constructor(
     private fun getMyCenterProfile() = viewModelScope.launch {
         getLocalMyCenterProfileUseCase().onSuccess {
             _profile.value = it
-        }.onFailure { errorHandler.sendError(it) }
+        }.onFailure { errorHandlerHelper.sendError(it) }
     }
 
     internal fun getCenterJobPostingDetail(jobPostingId: String) = viewModelScope.launch {
         getCenterJobPostingDetailUseCase(jobPostingId)
             .onSuccess { _jobPostingDetail.value = it }
-            .onFailure { errorHandler.sendError(it) }
+            .onFailure { errorHandlerHelper.sendError(it) }
     }
 
     internal fun getApplicantsCount(jobPostingId: String) = viewModelScope.launch {
         getApplicantsCountUseCase(jobPostingId).onSuccess {
             _applicantsCount.value = it
-        }.onFailure { errorHandler.sendError(it) }
+        }.onFailure { errorHandlerHelper.sendError(it) }
     }
 
     internal fun setJobPostingState(state: JobPostingDetailState) {
@@ -80,7 +80,7 @@ class CenterJobPostingDetailViewModel @Inject constructor(
     internal fun updateJobPosting(editJobPostingDetail: EditJobPostingDetail) =
         viewModelScope.launch {
             if (editJobPostingDetail.applyMethod.isEmpty()) {
-                eventHandler.sendEvent(
+                eventHandlerHelper.sendEvent(
                     MainEvent.ShowSnackBar("반드시 1개 이상의 지원 방법을 선택해야합니다.")
                 )
                 return@launch
@@ -118,32 +118,32 @@ class CenterJobPostingDetailViewModel @Inject constructor(
                     .ifBlank { null },
             ).onSuccess {
                 getCenterJobPostingDetail(_jobPostingDetail.value?.id ?: return@launch)
-                eventHandler.sendEvent(
+                eventHandlerHelper.sendEvent(
                     MainEvent.ShowSnackBar("수정이 완료되었어요.", SnackBarType.SUCCESS)
                 )
                 _jobPostingState.value = JobPostingDetailState.SUMMARY
-            }.onFailure { errorHandler.sendError(it) }
+            }.onFailure { errorHandlerHelper.sendError(it) }
         }
 
     internal fun endJobPosting(jobPostingId: String) = viewModelScope.launch {
         endJobPostingUseCase(jobPostingId).onSuccess {
             _jobPostingDetail.value =
                 _jobPostingDetail.value?.copy(jobPostingStatus = JobPostingStatus.COMPLETED)
-            eventHandler.sendEvent(
+            eventHandlerHelper.sendEvent(
                 MainEvent.ShowSnackBar("채용을 종료했어요.", SnackBarType.SUCCESS)
             )
-        }.onFailure { errorHandler.sendError(it) }
+        }.onFailure { errorHandlerHelper.sendError(it) }
     }
 
     internal fun deleteJobPosting(jobPostingId: String) = viewModelScope.launch {
         deleteJobPostingUseCase(jobPostingId).onSuccess {
-            navigationRouter.navigateTo(
+            navigationHelper.navigateTo(
                 NavigationEvent.NavigateTo(
                     DeepLinkDestination.CenterHome,
                     R.id.centerJobPostingDetailFragment
                 )
             )
-        }.onFailure { errorHandler.sendError(it) }
+        }.onFailure { errorHandlerHelper.sendError(it) }
     }
 }
 

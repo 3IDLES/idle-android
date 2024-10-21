@@ -103,7 +103,7 @@ internal class WithdrawalFragment : BaseComposeFragment() {
                 confirmAuthCode = ::confirmAuthCode,
                 withdrawal = { showDialog = true },
                 navigateToSetting = {
-                    navigationRouter.navigateTo(
+                    navigationHelper.navigateTo(
                         NavigationEvent.NavigateTo(
                             destination = if (userType == UserType.CENTER) CenterSetting
                             else WorkerSetting,

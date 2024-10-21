@@ -92,14 +92,14 @@ internal class WorkerSignUpFragment : BaseComposeFragment() {
                 confirmAuthCode = ::confirmAuthCode,
                 signUpWorker = ::signUpWorker,
                 navigateToAuth = {
-                    navigationRouter.navigateTo(
+                    navigationHelper.navigateTo(
                         NavigationEvent.NavigateTo(
                             destination = Auth,
                             popUpTo = com.idle.signup.R.id.workerSignUpFragment,
                         )
                     )
                 },
-                showSnackBar = { eventHandler.sendEvent(MainEvent.ShowSnackBar(it)) }
+                showSnackBar = { eventHandlerHelper.sendEvent(MainEvent.ShowSnackBar(it)) }
             )
         }
     }

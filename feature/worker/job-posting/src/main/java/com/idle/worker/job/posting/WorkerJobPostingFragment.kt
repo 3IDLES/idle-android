@@ -90,7 +90,7 @@ internal class WorkerJobPostingFragment : BaseComposeFragment() {
                 applyJobPosting = ::applyJobPosting,
                 addFavoriteJobPosting = ::addFavoriteJobPosting,
                 removeFavoriteJobPosting = ::removeFavoriteJobPosting,
-                navigateTo = { navigationRouter.navigateTo(NavigationEvent.NavigateTo(it)) },
+                navigateTo = { navigationHelper.navigateTo(NavigationEvent.NavigateTo(it)) },
             )
         }
     }

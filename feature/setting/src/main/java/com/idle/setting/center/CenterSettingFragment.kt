@@ -78,7 +78,7 @@ internal class CenterSettingFragment :
 
     private fun handleSettingEvent(event: SettingEvent) {
         when (event) {
-            SettingEvent.Profile -> fragmentViewModel.navigationRouter.navigateTo(
+            SettingEvent.Profile -> fragmentViewModel.navigationHelper.navigateTo(
                 NavigationEvent.NavigateTo(CenterProfile("default"))
             )
 
@@ -86,7 +86,7 @@ internal class CenterSettingFragment :
             SettingEvent.PrivacyPolicy -> navigateToUri(PRIVACY_POLICY_URL)
             SettingEvent.TermsAndPolicies -> navigateToUri(TERMS_AND_POLICES_URL)
             SettingEvent.Inquiry -> navigateToUri(INQUIRY)
-            SettingEvent.Withdrawal -> fragmentViewModel.navigationRouter.navigateTo(
+            SettingEvent.Withdrawal -> fragmentViewModel.navigationHelper.navigateTo(
                 NavigationEvent.NavigateTo(
                     destination = Withdrawal(UserType.CENTER),
                     popUpTo = R.id.centerSettingFragment

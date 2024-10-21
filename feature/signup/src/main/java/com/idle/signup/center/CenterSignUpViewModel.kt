@@ -3,16 +3,16 @@ package com.idle.signup.center
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.DeepLinkDestination
-import com.idle.binding.EventHandler
+import com.idle.binding.EventHandlerHelper
 import com.idle.binding.MainEvent
 import com.idle.binding.NavigationEvent
-import com.idle.binding.NavigationRouter
+import com.idle.binding.NavigationHelper
 import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.CountDownTimer
 import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
 import com.idle.domain.model.auth.BusinessRegistrationInfo
-import com.idle.domain.model.error.ErrorHandler
+import com.idle.domain.model.error.ErrorHandlerHelper
 import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
 import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
 import com.idle.domain.usecase.auth.SignUpCenterUseCase
@@ -35,9 +35,9 @@ class CenterSignUpViewModel @Inject constructor(
     private val validateIdentifierUseCase: ValidateIdentifierUseCase,
     private val validateBusinessRegistrationNumberUseCase: ValidateBusinessRegistrationNumberUseCase,
     private val countDownTimer: CountDownTimer,
-    private val errorHandler: ErrorHandler,
-    private val eventHandler: EventHandler,
-    val navigationRouter: NavigationRouter,
+    private val errorHandlerHelper: ErrorHandlerHelper,
+    private val eventHandlerHelper: EventHandlerHelper,
+    val navigationHelper: NavigationHelper,
 ) : BaseViewModel() {
     private val _signUpStep = MutableStateFlow(NAME)
     val signUpStep = _signUpStep.asStateFlow()
@@ -130,7 +130,7 @@ class CenterSignUpViewModel @Inject constructor(
     internal fun sendPhoneNumber() = viewModelScope.launch {
         sendPhoneNumberUseCase(_centerPhoneNumber.value)
             .onSuccess { startTimer() }
-            .onFailure { errorHandler.sendError(it) }
+            .onFailure { errorHandlerHelper.sendError(it) }
     }
 
     private fun startTimer() {
@@ -168,7 +168,7 @@ class CenterSignUpViewModel @Inject constructor(
 
                 _signUpStep.value = CenterSignUpStep.BUSINESS_REGISTRATION
             }
-            .onFailure { errorHandler.sendError(it) }
+            .onFailure { errorHandlerHelper.sendError(it) }
     }
 
     private fun validateId(id: String) {
@@ -233,7 +233,7 @@ class CenterSignUpViewModel @Inject constructor(
         val passwordPattern = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d!@#\$%^&*()_+=-]{8,20}$".toRegex()
 
         if (!_centerPassword.value.matches(passwordPattern)) {
-            eventHandler.sendEvent(MainEvent.ShowSnackBar("비밀번호가 형식에 맞지 않습니다."))
+            eventHandlerHelper.sendEvent(MainEvent.ShowSnackBar("비밀번호가 형식에 맞지 않습니다."))
             return@launch
         }
 
@@ -244,26 +244,26 @@ class CenterSignUpViewModel @Inject constructor(
             managerName = _centerName.value,
             businessRegistrationNumber = _businessRegistrationNumber.value,
         ).onSuccess {
-            navigationRouter.navigateTo(
+            navigationHelper.navigateTo(
                 NavigationEvent.NavigateTo(
                     DeepLinkDestination.CenterSignIn("회원가입을 성공하였습니다.|SUCCESS"),
                     R.id.centerSignUpFragment
                 )
             )
         }
-            .onFailure { errorHandler.sendError(it) }
+            .onFailure { errorHandlerHelper.sendError(it) }
     }
 
     internal fun validateIdentifier() = viewModelScope.launch {
         validateIdentifierUseCase(_centerId.value)
             .onSuccess { _centerIdResult.value = true }
-            .onFailure { errorHandler.sendError(it) }
+            .onFailure { errorHandlerHelper.sendError(it) }
     }
 
     internal fun validateBusinessRegistrationNumber() = viewModelScope.launch {
         validateBusinessRegistrationNumberUseCase(_businessRegistrationNumber.value)
             .onSuccess { _businessRegistrationInfo.value = it }
-            .onFailure { errorHandler.sendError(it) }
+            .onFailure { errorHandlerHelper.sendError(it) }
     }
 }
 

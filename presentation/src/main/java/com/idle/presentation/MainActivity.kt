@@ -158,7 +158,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             repeatOnStarted {
-                navigationRouter.navigationFlow.collect { navigationEvent ->
+                navigationHelper.navigationFlow.collect { navigationEvent ->
                     when (navigationEvent) {
                         is NavigationEvent.NavigateTo -> navController.deepLinkNavigateTo(
                             context = this@MainActivity,
@@ -184,7 +184,7 @@ class MainActivity : AppCompatActivity() {
 
             setDestinationListener()
 
-            navigationRouter.handleNotificationNavigate(
+            navigationHelper.handleNotificationNavigate(
                 isColdStart = true,
                 extras = intent?.extras ?: return,
                 onInit = ::initializeUserSession,
@@ -205,7 +205,7 @@ class MainActivity : AppCompatActivity() {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
 
-        viewModel.navigationRouter.handleNotificationNavigate(
+        viewModel.navigationHelper.handleNotificationNavigate(
             isColdStart = false,
             extras = intent?.extras ?: return,
             onInit = viewModel::initializeUserSession,

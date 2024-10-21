@@ -6,7 +6,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ErrorHandler @Inject constructor() {
+class ErrorHandlerHelper @Inject constructor() {
     private val _errorEvent = MutableStateFlow<Throwable?>(null)
     val errorEvent = _errorEvent.asStateFlow()
 

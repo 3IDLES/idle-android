@@ -4,9 +4,9 @@ import androidx.lifecycle.viewModelScope
 import com.idle.binding.DeepLinkDestination.CenterApplicantInquiry
 import com.idle.binding.DeepLinkDestination.CenterJobDetail
 import com.idle.binding.NavigationEvent
-import com.idle.binding.NavigationRouter
+import com.idle.binding.NavigationHelper
 import com.idle.binding.base.BaseViewModel
-import com.idle.domain.model.error.ErrorHandler
+import com.idle.domain.model.error.ErrorHandlerHelper
 import com.idle.domain.model.notification.Notification
 import com.idle.domain.model.notification.NotificationContent
 import com.idle.domain.model.notification.NotificationType
@@ -24,8 +24,8 @@ import javax.inject.Inject
 class NotificationViewModel @Inject constructor(
     private val getMyNotificationUseCase: GetMyNotificationUseCase,
     private val readNotificationUseCase: ReadNotificationUseCase,
-    private val errorHandler: ErrorHandler,
-    private val navigationRouter: NavigationRouter,
+    private val errorHandlerHelper: ErrorHandlerHelper,
+    private val navigationHelper: NavigationHelper,
 ) : BaseViewModel() {
     private val next = MutableStateFlow<String?>(null)
 
@@ -70,13 +70,13 @@ class NotificationViewModel @Inject constructor(
             if (nextId == null) {
                 _callType.value = NotificationCallType.END
             }
-        }.onFailure { errorHandler.sendError(it) }
+        }.onFailure { errorHandlerHelper.sendError(it) }
     }
 
     internal fun onNotificationClick(notification: Notification) = viewModelScope.launch {
         launch {
             readNotificationUseCase(notification.id).onFailure {
-                errorHandler.sendError(it)
+                errorHandlerHelper.sendError(it)
             }
         }
 
@@ -101,7 +101,7 @@ class NotificationViewModel @Inject constructor(
         }
 
         screenDepth.onEach { screen ->
-            navigationRouter.navigateTo(NavigationEvent.NavigateTo(screen))
+            navigationHelper.navigateTo(NavigationEvent.NavigateTo(screen))
         }
     }
 }

@@ -69,7 +69,7 @@ internal class ApplicantInquiryFragment : BaseComposeFragment() {
                 ApplicantInquiryScreen(
                     jobPostingSummary = jobPostingSummary!!,
                     applicants = applicants,
-                    navigateTo = { navigationRouter.navigateTo(NavigationEvent.NavigateTo(it)) },
+                    navigateTo = { navigationHelper.navigateTo(NavigationEvent.NavigateTo(it)) },
                 )
             }
         }

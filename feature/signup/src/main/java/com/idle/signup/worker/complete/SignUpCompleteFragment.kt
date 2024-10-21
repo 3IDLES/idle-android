@@ -35,7 +35,7 @@ class SignUpCompleteFragment : BaseComposeFragment() {
         fragmentViewModel.apply {
             SignUpCompleteScreen(
                 navigateTo = {
-                    navigationRouter.navigateTo(
+                    navigationHelper.navigateTo(
                         NavigationEvent.NavigateTo(
                             destination = it,
                             popUpTo = com.idle.signup.R.id.signUpCompleteFragment,

@@ -78,7 +78,7 @@ internal class WorkerSettingFragment :
 
     private fun handleSettingEvent(event: SettingEvent) {
         when (event) {
-            SettingEvent.Profile -> fragmentViewModel.navigationRouter.navigateTo(
+            SettingEvent.Profile -> fragmentViewModel.navigationHelper.navigateTo(
                 NavigationEvent.NavigateTo(WorkerProfile())
             )
 
@@ -86,7 +86,7 @@ internal class WorkerSettingFragment :
             SettingEvent.PrivacyPolicy -> navigateToUri(PRIVACY_POLICY_URL)
             SettingEvent.TermsAndPolicies -> navigateToUri(TERMS_AND_POLICES_URL)
             SettingEvent.Inquiry -> navigateToUri(INQUIRY)
-            SettingEvent.Withdrawal -> fragmentViewModel.navigationRouter.navigateTo(
+            SettingEvent.Withdrawal -> fragmentViewModel.navigationHelper.navigateTo(
                 NavigationEvent.NavigateTo(
                     destination = Withdrawal(UserType.WORKER),
                     popUpTo = R.id.workerSettingFragment

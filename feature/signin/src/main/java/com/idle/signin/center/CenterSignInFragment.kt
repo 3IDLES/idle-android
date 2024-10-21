@@ -52,7 +52,7 @@ internal class CenterSignInFragment : BaseComposeFragment() {
 
             LaunchedEffect(Unit) {
                 if (args.snackBarMsg != "default") {
-                    eventHandler.sendEvent(MainEvent.ShowSnackBar(args.snackBarMsg))
+                    eventHandlerHelper.sendEvent(MainEvent.ShowSnackBar(args.snackBarMsg))
                 }
             }
 
@@ -63,7 +63,7 @@ internal class CenterSignInFragment : BaseComposeFragment() {
                 onCenterPasswordChanged = ::setCenterPassword,
                 signInCenter = ::signInCenter,
                 navigateToAuth = {
-                    navigationRouter.navigateTo(
+                    navigationHelper.navigateTo(
                         NavigationEvent.NavigateTo(
                             destination = Auth,
                             popUpTo = com.idle.signin.R.id.centerSignInFragment
@@ -71,7 +71,7 @@ internal class CenterSignInFragment : BaseComposeFragment() {
                     )
                 },
                 navigateToNewPassword = {
-                    navigationRouter.navigateTo(
+                    navigationHelper.navigateTo(
                         NavigationEvent.NavigateTo(NewPassword)
                     )
                 }

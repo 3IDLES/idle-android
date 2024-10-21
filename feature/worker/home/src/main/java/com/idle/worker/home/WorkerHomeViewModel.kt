@@ -2,11 +2,11 @@ package com.idle.worker.home
 
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.EventHandler
+import com.idle.binding.EventHandlerHelper
 import com.idle.binding.MainEvent
-import com.idle.binding.NavigationRouter
+import com.idle.binding.NavigationHelper
 import com.idle.binding.SnackBarType
-import com.idle.domain.model.error.ErrorHandler
+import com.idle.domain.model.error.ErrorHandlerHelper
 import com.idle.domain.model.jobposting.ApplyMethod
 import com.idle.domain.model.jobposting.CrawlingJobPosting
 import com.idle.domain.model.jobposting.JobPosting
@@ -38,9 +38,9 @@ class WorkerHomeViewModel @Inject constructor(
     private val removeFavoriteJobPostingUseCase: RemoveFavoriteJobPostingUseCase,
     private val showNotificationCenterUseCase: ShowNotificationCenterUseCase,
     private val getUnreadNotificationCountUseCase: GetUnreadNotificationCountUseCase,
-    private val errorHandler: ErrorHandler,
-    private val eventHandler: EventHandler,
-    val navigationRouter: NavigationRouter,
+    private val errorHandlerHelper: ErrorHandlerHelper,
+    private val eventHandlerHelper: EventHandlerHelper,
+    val navigationHelper: NavigationHelper,
 ) : BaseViewModel() {
     private val _profile = MutableStateFlow<WorkerProfile?>(null)
     val profile = _profile.asStateFlow()
@@ -78,7 +78,7 @@ class WorkerHomeViewModel @Inject constructor(
     internal fun getUnreadNotificationCount() = viewModelScope.launch {
         getUnreadNotificationCountUseCase().onSuccess {
             _unreadNotificationCount.value = it
-        }.onFailure { errorHandler.sendError(it) }
+        }.onFailure { errorHandlerHelper.sendError(it) }
     }
 
     internal fun applyJobPosting(jobPostingId: String) = viewModelScope.launch {
@@ -86,7 +86,7 @@ class WorkerHomeViewModel @Inject constructor(
             jobPostingId = jobPostingId,
             applyMethod = ApplyMethod.APP
         ).onSuccess {
-            eventHandler.sendEvent(MainEvent.ShowSnackBar("지원이 완료되었어요.", SnackBarType.SUCCESS))
+            eventHandlerHelper.sendEvent(MainEvent.ShowSnackBar("지원이 완료되었어요.", SnackBarType.SUCCESS))
 
             _jobPostings.value = _jobPostings.value?.map {
                 if (it.jobPostingType == JobPostingType.CAREMEET && it.id == jobPostingId) {
@@ -94,7 +94,7 @@ class WorkerHomeViewModel @Inject constructor(
                     jobPosting.copy(applyTime = LocalDateTime.now())
                 } else it
             }
-        }.onFailure { errorHandler.sendError(it) }
+        }.onFailure { errorHandlerHelper.sendError(it) }
     }
 
     internal fun addFavoriteJobPosting(
@@ -105,7 +105,7 @@ class WorkerHomeViewModel @Inject constructor(
             jobPostingId = jobPostingId,
             jobPostingType = jobPostingType,
         ).onSuccess {
-            eventHandler.sendEvent(MainEvent.ShowSnackBar("즐겨찾기에 추가되었어요.", SnackBarType.SUCCESS))
+            eventHandlerHelper.sendEvent(MainEvent.ShowSnackBar("즐겨찾기에 추가되었어요.", SnackBarType.SUCCESS))
 
             _jobPostings.value = _jobPostings.value?.map {
                 when (it.jobPostingType) {
@@ -120,12 +120,12 @@ class WorkerHomeViewModel @Inject constructor(
                     }
                 }
             }
-        }.onFailure { errorHandler.sendError(it) }
+        }.onFailure { errorHandlerHelper.sendError(it) }
     }
 
     internal fun removeFavoriteJobPosting(jobPostingId: String) = viewModelScope.launch {
         removeFavoriteJobPostingUseCase(jobPostingId = jobPostingId).onSuccess {
-            eventHandler.sendEvent(MainEvent.ShowSnackBar("즐겨찾기에서 제거되었어요", SnackBarType.SUCCESS))
+            eventHandlerHelper.sendEvent(MainEvent.ShowSnackBar("즐겨찾기에서 제거되었어요", SnackBarType.SUCCESS))
 
             _jobPostings.value = _jobPostings.value?.map {
                 when (it.jobPostingType) {
@@ -140,7 +140,7 @@ class WorkerHomeViewModel @Inject constructor(
                     }
                 }
             }
-        }.onFailure { errorHandler.sendError(it) }
+        }.onFailure { errorHandlerHelper.sendError(it) }
     }
 
     private fun showNotificationCenter() = viewModelScope.launch {
@@ -155,7 +155,7 @@ class WorkerHomeViewModel @Inject constructor(
         getLocalMyWorkerProfileUseCase().onSuccess {
             _profile.value = it
         }.onFailure {
-            eventHandler.sendEvent(MainEvent.ShowSnackBar(it.message.toString()))
+            eventHandlerHelper.sendEvent(MainEvent.ShowSnackBar(it.message.toString()))
         }
     }
 
@@ -170,7 +170,7 @@ class WorkerHomeViewModel @Inject constructor(
             if (_jobPostings.value?.isEmpty() != false) {
                 getJobPostings()
             }
-        }.onFailure { errorHandler.sendError(it) }
+        }.onFailure { errorHandlerHelper.sendError(it) }
     }
 
     private suspend fun fetchCrawlingJobPostings() {
@@ -180,7 +180,7 @@ class WorkerHomeViewModel @Inject constructor(
                 _callType.value = JobPostingCallType.END
             }
             _jobPostings.value = _jobPostings.value?.plus(postings) ?: postings
-        }.onFailure { errorHandler.sendError(it) }
+        }.onFailure { errorHandlerHelper.sendError(it) }
     }
 }
 

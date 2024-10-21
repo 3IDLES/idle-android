@@ -13,7 +13,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class NavigationRouter @Inject constructor() {
+class NavigationHelper @Inject constructor() {
     private val _navigationFlow = Channel<NavigationEvent>(BUFFERED)
     val navigationFlow = _navigationFlow.receiveAsFlow()
 
