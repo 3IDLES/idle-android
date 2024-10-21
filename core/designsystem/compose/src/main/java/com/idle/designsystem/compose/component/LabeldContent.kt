@@ -2,6 +2,7 @@ package com.idle.designsystem.compose.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,13 +19,13 @@ fun LabeledContent(
 ) {
     Column(
         horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(6.dp),
         modifier = modifier,
     ) {
         Text(
             text = subtitle,
             style = CareTheme.typography.subtitle4,
-            color = CareTheme.colors.gray500
+            color = CareTheme.colors.gray500,
+            modifier = Modifier.padding(bottom = 6.dp),
         )
 
         content()
@@ -39,13 +40,13 @@ fun LabeledContent(
 ) {
     Column(
         horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(6.dp),
         modifier = modifier,
     ) {
         Text(
             text = subtitle,
             style = CareTheme.typography.subtitle4,
-            color = CareTheme.colors.gray500
+            color = CareTheme.colors.gray500,
+            modifier = Modifier.padding(bottom = 6.dp),
         )
 
         content()

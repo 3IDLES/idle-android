@@ -34,6 +34,7 @@ internal fun PhoneNumberScreen(
     timerMinute: String,
     timerSeconds: String,
     isConfirmAuthCode: Boolean,
+    isAuthCodeError: Boolean,
     onPhoneNumberChanged: (String) -> Unit,
     onAuthCodeChanged: (String) -> Unit,
     sendPhoneNumber: () -> Unit,
@@ -98,39 +99,41 @@ internal fun PhoneNumberScreen(
         if (timerMinute.isNotBlank()) {
             LabeledContent(
                 subtitle = stringResource(id = R.string.confirm_code),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 32.dp),
+                modifier = Modifier.fillMaxWidth(),
             ) {
-                Row(
-                    verticalAlignment = Alignment.Top,
-                    horizontalArrangement = Arrangement.spacedBy(4.dp),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    CareTextField(
-                        value = authCode,
-                        hint = "",
-                        onValueChanged = onAuthCodeChanged,
-                        onDone = { confirmAuthCode() },
-                        supportingText = if (isConfirmAuthCode) "인증이 완료되었습니다." else "",
-                        readOnly = !(timerMinute != "" && timerSeconds != "") || isConfirmAuthCode,
-                        leftComponent = {
-                            if (timerMinute != "" && timerSeconds != "") {
-                                Text(
-                                    text = "$timerMinute:$timerSeconds",
-                                    style = CareTheme.typography.body3,
-                                    color = if (!isConfirmAuthCode) CareTheme.colors.gray500 else CareTheme.colors.gray200,
-                                )
-                            }
-                        },
-                        modifier = Modifier.weight(1f),
-                    )
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    Row(
+                        verticalAlignment = Alignment.Top,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        CareTextField(
+                            value = authCode,
+                            hint = "",
+                            onValueChanged = onAuthCodeChanged,
+                            isError = isAuthCodeError,
+                            onDone = { confirmAuthCode() },
+                            supportingText = if (isAuthCodeError) stringResource(R.string.confirm_code_error_description)
+                            else if (isConfirmAuthCode) "인증이 완료되었습니다." else "",
+                            readOnly = !(timerMinute != "" && timerSeconds != "") || isConfirmAuthCode,
+                            leftComponent = {
+                                if (timerMinute != "" && timerSeconds != "") {
+                                    Text(
+                                        text = "$timerMinute:$timerSeconds",
+                                        style = CareTheme.typography.body3,
+                                        color = if (!isConfirmAuthCode) CareTheme.colors.gray500 else CareTheme.colors.gray200,
+                                    )
+                                }
+                            },
+                            modifier = Modifier.weight(1f),
+                        )
 
-                    CareButtonSmall(
-                        enable = authCode.isNotBlank() && !isConfirmAuthCode,
-                        text = stringResource(id = R.string.confirm_short),
-                        onClick = confirmAuthCode,
-                    )
+                        CareButtonSmall(
+                            enable = authCode.isNotBlank() && !isConfirmAuthCode,
+                            text = stringResource(id = R.string.confirm_short),
+                            onClick = confirmAuthCode,
+                        )
+                    }
                 }
             }
         }

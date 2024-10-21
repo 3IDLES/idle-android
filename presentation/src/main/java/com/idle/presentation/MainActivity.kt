@@ -170,6 +170,8 @@ class MainActivity : AppCompatActivity() {
                             AuthFragmentDirections.actionGlobalNavAuth(navigationEvent.snackBarMsg)
                         )
                     }
+
+                    dismissSnackBar()
                 }
             }
 
@@ -283,7 +285,6 @@ class MainActivity : AppCompatActivity() {
     private fun calculateSnackBarBottomPadding() = when (navController.currentDestination?.id) {
         // Padding 104dp
         com.idle.auth.R.id.authFragment,
-        com.idle.signin.R.id.centerSignInFragment,
         com.idle.signup.R.id.centerSignUpFragment,
         com.idle.signup.R.id.workerSignUpFragment,
         com.idle.signin.R.id.newPasswordFragment,
@@ -292,8 +293,7 @@ class MainActivity : AppCompatActivity() {
         com.idle.center.register.info.R.id.registerCenterInfoCompleteFragment,
         com.idle.center.job.posting.post.R.id.jobPostingPostFragment,
         com.idle.center.job.posting.post.R.id.jobPostingPostCompleteFragment,
-        com.idle.job.posting.detail.R.id.centerJobPostingDetailFragment,
-        com.idle.job.posting.detail.R.id.workerJobPostingDetailFragment -> 104
+        com.idle.job.posting.detail.R.id.centerJobPostingDetailFragment -> 104
 
         // Padding 84dp
         com.idle.center.home.R.id.centerHomeFragment,
@@ -306,9 +306,11 @@ class MainActivity : AppCompatActivity() {
         com.idle.center.applicant.inquiry.R.id.applicantInquiryFragment,
         com.idle.center.profile.R.id.centerProfileFragment,
         com.idle.worker.profile.R.id.workerProfileFragment,
-        com.idle.notification.R.id.notificationFragment -> 20
+        com.idle.notification.R.id.notificationFragment,
+        com.idle.job.posting.detail.R.id.workerJobPostingDetailFragment -> 20
 
         // Padding 140dp
+        com.idle.signin.R.id.centerSignInFragment,
         com.idle.withdrawal.R.id.withdrawalFragment -> 140
 
         // Default padding

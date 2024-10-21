@@ -20,12 +20,14 @@
     <string name="password">비밀번호</string>
     <string name="password_hint">비밀번호를 입력해주세요.</string>
     <string name="login_error_description">* 비밀번호를 다시 확인해주세요.</string>
+    <string name="set_password">비밀번호 설정</string>
     <string name="confirm_password">비밀번호 확인</string>
     <string name="confirm_password_hint">비밀번호를 한번 더 입력해주세요.</string>
     <string name="forget_password">비밀번호가 기억나지 않나요?</string>
     <string name="change_password">비밀번호 변경</string>
     <string name="new_password_title">새로운 비밀번호를 입력해주세요</string>
     <string name="generate_new_password">신규 비밀번호 발급</string>
+    <string name="password_description">* 비밀번호는 아래의 조건에 맞추어주세요.</string>
     <string name="phone_number">휴대폰 번호</string>
     <string name="office_number">전화번호</string>
     <string name="phone_number_hint">휴대폰 번호를 입력해주세요</string>
@@ -33,6 +35,7 @@
     <string name="verification">인증</string>
     <string name="confirm_code">인증번호</string>
     <string name="confirm_success">인증이 완료되었습니다.</string>
+    <string name="confirm_code_error_description">* 인증번호를 다시 확인해주세요.</string>
     <string name="worker_signup_complete_message">요양보호사 로그인을\n완료했어요!</string>
     <string name="worker_signup_welcome_message">로그인 정보는 마지막 접속일부터\n180일간 유지될 예정이에요.</string>
     <string name="worker_name_hint">성함을 입력해주세요</string>

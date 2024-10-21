@@ -126,7 +126,7 @@ internal fun CenterSignInScreen(
                 subtitle = stringResource(id = R.string.id),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 8.dp),
+                    .padding(bottom = 32.dp),
             ) {
                 CareTextField(
                     value = centerId,
@@ -141,16 +141,25 @@ internal fun CenterSignInScreen(
                 subtitle = stringResource(id = R.string.password),
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                CareTextField(
-                    value = centerPassword,
-                    hint = stringResource(id = R.string.password_hint),
-                    onValueChanged = onCenterPasswordChanged,
-                    isError = isLoginError,
-                    errorMsg = stringResource(R.string.login_error_description),
-                    visualTransformation = PasswordVisualTransformation(),
-                    onDone = { if (centerPassword.isNotBlank()) signInCenter() },
-                    modifier = Modifier.fillMaxWidth(),
-                )
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    CareTextField(
+                        value = centerPassword,
+                        hint = stringResource(id = R.string.password_hint),
+                        onValueChanged = onCenterPasswordChanged,
+                        isError = isLoginError,
+                        visualTransformation = PasswordVisualTransformation(),
+                        onDone = { if (centerPassword.isNotBlank()) signInCenter() },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 2.dp),
+                    )
+
+                    Text(
+                        text = if (isLoginError) stringResource(R.string.login_error_description) else "",
+                        style = CareTheme.typography.caption1,
+                        color = CareTheme.colors.red,
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.weight(5f))

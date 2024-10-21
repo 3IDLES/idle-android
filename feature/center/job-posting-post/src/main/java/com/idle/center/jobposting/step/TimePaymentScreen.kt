@@ -118,11 +118,11 @@ internal fun TimePaymentScreen(
                 .fillMaxWidth()
                 .padding(bottom = 32.dp),
         ) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            Column(modifier = Modifier.fillMaxWidth()) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    modifier = Modifier.padding(bottom = 12.dp),
+                ) {
                     CareChipBasic(
                         text = stringResource(id = R.string.hourly),
                         onClick = { onPayTypeChanged(PayType.HOURLY) },
@@ -152,7 +152,6 @@ internal fun TimePaymentScreen(
                     onValueChanged = onPayAmountChanged,
                     keyboardType = KeyboardType.Number,
                     isError = isMinimumWageError,
-                    errorMsg = stringResource(R.string.minimum_wage_description),
                     leftComponent = {
                         Text(
                             text = stringResource(id = R.string.currency_unit),
@@ -170,6 +169,13 @@ internal fun TimePaymentScreen(
                             setJobPostingStep(JobPostingStep.findStep(TIME_PAYMENT.step + 1))
                         }
                     },
+                    modifier = Modifier.padding(bottom = 2.dp),
+                )
+
+                Text(
+                    text = if (isMinimumWageError) stringResource(R.string.minimum_wage_description) else "",
+                    style = CareTheme.typography.caption1,
+                    color = CareTheme.colors.red,
                 )
             }
         }

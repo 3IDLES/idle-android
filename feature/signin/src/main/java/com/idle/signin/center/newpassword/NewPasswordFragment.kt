@@ -42,6 +42,11 @@ class NewPasswordFragment : BaseComposeFragment() {
             val newPasswordProcess by newPasswordProcess.collectAsStateWithLifecycle()
             val newPassword by newPassword.collectAsStateWithLifecycle()
             val newPasswordForConfirm by newPasswordForConfirm.collectAsStateWithLifecycle()
+            val isAuthCodeError by isAuthCodeError.collectAsStateWithLifecycle()
+            val isPasswordLengthValid by isPasswordLengthValid.collectAsStateWithLifecycle()
+            val isPasswordContainsLetterAndDigit by isPasswordContainsLetterAndDigit.collectAsStateWithLifecycle()
+            val isPasswordNoWhitespace by isPasswordNoWhitespace.collectAsStateWithLifecycle()
+            val isPasswordNoSequentialChars by isPasswordNoSequentialChars.collectAsStateWithLifecycle()
 
             NewPasswordScreen(
                 newPasswordStep = newPasswordProcess,
@@ -52,6 +57,11 @@ class NewPasswordFragment : BaseComposeFragment() {
                 isConfirmAuthCode = isConfirmAuthCode,
                 newPassword = newPassword,
                 newPasswordForConfirm = newPasswordForConfirm,
+                isAuthCodeError = isAuthCodeError,
+                isPasswordLengthValid = isPasswordLengthValid,
+                isPasswordContainsLetterAndDigit = isPasswordContainsLetterAndDigit,
+                isPasswordNoWhitespace = isPasswordNoWhitespace,
+                isPasswordNoSequentialChars = isPasswordNoSequentialChars,
                 setNewPasswordProcess = ::setNewPasswordProcess,
                 onPhoneNumberChanged = ::setPhoneNumber,
                 onAuthCodeChanged = ::setAuthCode,
@@ -75,6 +85,11 @@ internal fun NewPasswordScreen(
     newPassword: String,
     newPasswordForConfirm: String,
     newPasswordStep: NewPasswordStep,
+    isAuthCodeError: Boolean,
+    isPasswordLengthValid: Boolean,
+    isPasswordContainsLetterAndDigit: Boolean,
+    isPasswordNoWhitespace: Boolean,
+    isPasswordNoSequentialChars: Boolean,
     onPhoneNumberChanged: (String) -> Unit,
     onAuthCodeChanged: (String) -> Unit,
     sendPhoneNumber: () -> Unit,
@@ -119,6 +134,7 @@ internal fun NewPasswordScreen(
                         timerMinute = timerMinute,
                         timerSeconds = timerSeconds,
                         isConfirmAuthCode = isConfirmAuthCode,
+                        isAuthCodeError = isAuthCodeError,
                         onPhoneNumberChanged = onPhoneNumberChanged,
                         onAuthCodeChanged = onAuthCodeChanged,
                         sendPhoneNumber = sendPhoneNumber,
@@ -129,6 +145,10 @@ internal fun NewPasswordScreen(
                     NewPasswordStep.GENERATE_NEW_PASSWORD -> GenerateNewPasswordScreen(
                         newPassword = newPassword,
                         newPasswordForConfirm = newPasswordForConfirm,
+                        isPasswordLengthValid = isPasswordLengthValid,
+                        isPasswordContainsLetterAndDigit = isPasswordContainsLetterAndDigit,
+                        isPasswordNoWhitespace = isPasswordNoWhitespace,
+                        isPasswordNoSequentialChars = isPasswordNoSequentialChars,
                         onNewPasswordChanged = onNewPasswordChanged,
                         onNewPasswordForConfirmChanged = onNewPasswordForConfirmChanged,
                         setNewPasswordProcess = setNewPasswordProcess,
