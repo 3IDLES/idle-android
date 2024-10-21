@@ -409,7 +409,7 @@ internal fun WorkerProfileScreen(
                                     text = stringResource(id = R.string.age),
                                     style = CareTheme.typography.body3,
                                     color = CareTheme.colors.gray500,
-                                    modifier = Modifier.padding(end = 4.dp),
+                                    modifier = Modifier.padding(end = 6.dp),
                                 )
 
                                 Text(
@@ -430,7 +430,7 @@ internal fun WorkerProfileScreen(
                                     text = stringResource(id = R.string.gender),
                                     style = CareTheme.typography.body3,
                                     color = CareTheme.colors.gray500,
-                                    modifier = Modifier.padding(end = 4.dp),
+                                    modifier = Modifier.padding(end = 6.dp),
                                 )
 
                                 Text(
@@ -452,7 +452,7 @@ internal fun WorkerProfileScreen(
                                         text = stringResource(id = R.string.experience),
                                         style = CareTheme.typography.body3,
                                         color = CareTheme.colors.gray500,
-                                        modifier = Modifier.padding(end = 4.dp),
+                                        modifier = Modifier.padding(end = 6.dp),
                                     )
 
                                     Text(
@@ -488,7 +488,7 @@ internal fun WorkerProfileScreen(
                                     text = stringResource(id = R.string.age),
                                     style = CareTheme.typography.body3,
                                     color = CareTheme.colors.gray500,
-                                    modifier = Modifier.padding(end = 4.dp),
+                                    modifier = Modifier.padding(end = 6.dp),
                                 )
 
                                 Text(
@@ -507,7 +507,7 @@ internal fun WorkerProfileScreen(
                                     text = stringResource(id = R.string.gender),
                                     style = CareTheme.typography.body3,
                                     color = CareTheme.colors.gray500,
-                                    modifier = Modifier.padding(end = 4.dp),
+                                    modifier = Modifier.padding(end = 6.dp),
                                 )
 
                                 Text(
@@ -522,7 +522,7 @@ internal fun WorkerProfileScreen(
                                     text = stringResource(id = R.string.phone_number),
                                     style = CareTheme.typography.body3,
                                     color = CareTheme.colors.gray500,
-                                    modifier = Modifier.padding(end = 4.dp),
+                                    modifier = Modifier.padding(end = 6.dp),
                                 )
 
                                 Text(
