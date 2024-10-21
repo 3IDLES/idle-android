@@ -2,9 +2,11 @@ package com.idle.center.jobposting
 
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.DeepLinkDestination.CenterJobPostingPostComplete
+import com.idle.binding.EventHandler
+import com.idle.binding.MainEvent
+import com.idle.binding.NavigationEvent
+import com.idle.binding.NavigationRouter
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.base.EventHandler
-import com.idle.binding.base.MainEvent
 import com.idle.center.job.posting.post.R
 import com.idle.compose.JobPostingBottomSheetType
 import com.idle.domain.model.auth.Gender
@@ -35,6 +37,7 @@ class JobPostingViewModel @Inject constructor(
     private val postJobPostingUseCase: PostJobPostingUseCase,
     private val errorHandler: ErrorHandler,
     val eventHandler: EventHandler,
+    val navigationRouter: NavigationRouter,
 ) : BaseViewModel() {
     private val _profile = MutableStateFlow<CenterProfile?>(null)
     val profile = _profile.asStateFlow()
@@ -338,8 +341,8 @@ class JobPostingViewModel @Inject constructor(
                 applyDeadLineType = _applyDeadlineType.value ?: ApplyDeadlineType.UNLIMITED,
                 applyDeadline = _applyDeadline.value?.toString(),
             ).onSuccess {
-                eventHandler.sendEvent(
-                    MainEvent.NavigateTo(
+                navigationRouter.navigateTo(
+                    NavigationEvent.NavigateTo(
                         destination = CenterJobPostingPostComplete,
                         popUpTo = R.id.jobPostingPostFragment
                     )

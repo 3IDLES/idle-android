@@ -9,8 +9,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.idle.binding.DeepLinkDestination.Withdrawal
 import com.idle.binding.DeepLinkDestination.WorkerProfile
+import com.idle.binding.NavigationEvent
 import com.idle.binding.base.BaseBindingFragment
-import com.idle.binding.base.MainEvent
 import com.idle.binding.repeatOnStarted
 import com.idle.domain.model.auth.UserType
 import com.idle.setting.FAQ_URL
@@ -78,20 +78,20 @@ internal class WorkerSettingFragment :
 
     private fun handleSettingEvent(event: SettingEvent) {
         when (event) {
-            SettingEvent.Profile -> fragmentViewModel.eventHandler
-                .sendEvent(MainEvent.NavigateTo(WorkerProfile()))
+            SettingEvent.Profile -> fragmentViewModel.navigationRouter.navigateTo(
+                NavigationEvent.NavigateTo(WorkerProfile())
+            )
 
             SettingEvent.FAQ -> navigateToUri(FAQ_URL)
             SettingEvent.PrivacyPolicy -> navigateToUri(PRIVACY_POLICY_URL)
             SettingEvent.TermsAndPolicies -> navigateToUri(TERMS_AND_POLICES_URL)
             SettingEvent.Inquiry -> navigateToUri(INQUIRY)
-            SettingEvent.Withdrawal -> fragmentViewModel.eventHandler
-                .sendEvent(
-                    MainEvent.NavigateTo(
-                        destination = Withdrawal(UserType.WORKER),
-                        popUpTo = R.id.workerSettingFragment
-                    )
+            SettingEvent.Withdrawal -> fragmentViewModel.navigationRouter.navigateTo(
+                NavigationEvent.NavigateTo(
+                    destination = Withdrawal(UserType.WORKER),
+                    popUpTo = R.id.workerSettingFragment
                 )
+            )
 
             SettingEvent.Logout -> {
                 if (!(logoutDialog?.isAdded == true || logoutDialog?.isVisible == true)) {

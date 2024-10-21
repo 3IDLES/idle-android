@@ -1,10 +1,11 @@
 package com.idle.center.home
 
 import androidx.lifecycle.viewModelScope
+import com.idle.binding.EventHandler
+import com.idle.binding.MainEvent
+import com.idle.binding.NavigationRouter
+import com.idle.binding.SnackBarType.SUCCESS
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.base.EventHandler
-import com.idle.binding.base.MainEvent
-import com.idle.binding.base.SnackBarType.SUCCESS
 import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.jobposting.CenterJobPosting
 import com.idle.domain.usecase.config.ShowNotificationCenterUseCase
@@ -26,7 +27,8 @@ class CenterHomeViewModel @Inject constructor(
     private val showNotificationCenterUseCase: ShowNotificationCenterUseCase,
     private val getUnreadNotificationCountUseCase: GetUnreadNotificationCountUseCase,
     private val errorHandler: ErrorHandler,
-    val eventHandler: EventHandler,
+    private val eventHandler: EventHandler,
+    val navigationRouter: NavigationRouter,
 ) : BaseViewModel() {
     private val _recruitmentPostStatus = MutableStateFlow(RecruitmentPostStatus.IN_PROGRESS)
     val recruitmentPostStatus = _recruitmentPostStatus.asStateFlow()

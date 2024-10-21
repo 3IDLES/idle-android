@@ -1,4 +1,4 @@
-package com.idle.binding.base
+package com.idle.binding
 
 import android.content.res.Resources
 

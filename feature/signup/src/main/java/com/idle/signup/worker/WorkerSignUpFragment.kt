@@ -19,7 +19,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.idle.binding.DeepLinkDestination.Auth
-import com.idle.binding.base.MainEvent
+import com.idle.binding.MainEvent
+import com.idle.binding.NavigationEvent
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
@@ -91,8 +92,8 @@ internal class WorkerSignUpFragment : BaseComposeFragment() {
                 confirmAuthCode = ::confirmAuthCode,
                 signUpWorker = ::signUpWorker,
                 navigateToAuth = {
-                    eventHandler.sendEvent(
-                        MainEvent.NavigateTo(
+                    navigationRouter.navigateTo(
+                        NavigationEvent.NavigateTo(
                             destination = Auth,
                             popUpTo = com.idle.signup.R.id.workerSignUpFragment,
                         )

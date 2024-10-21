@@ -1,6 +1,5 @@
-package com.idle.binding.base
+package com.idle.binding
 
-import com.idle.binding.DeepLinkDestination
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -18,14 +17,10 @@ class EventHandler @Inject constructor() {
 }
 
 sealed class MainEvent {
-    data class NavigateTo(val destination: DeepLinkDestination, val popUpTo: Int? = null) :
-        MainEvent()
-
     data class ShowSnackBar(val msg: String, val snackBarType: SnackBarType = SnackBarType.ERROR) :
         MainEvent()
 
     data object DismissSnackBar : MainEvent()
-    data class NavigateToAuthWithClearBackStack(val snackBarMsg: String) : MainEvent()
 }
 
 enum class SnackBarType {

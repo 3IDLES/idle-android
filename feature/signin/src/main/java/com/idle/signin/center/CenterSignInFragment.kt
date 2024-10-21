@@ -26,7 +26,8 @@ import androidx.navigation.fragment.navArgs
 import com.idle.analytics.helper.TrackScreenViewEvent
 import com.idle.binding.DeepLinkDestination.Auth
 import com.idle.binding.DeepLinkDestination.NewPassword
-import com.idle.binding.base.MainEvent
+import com.idle.binding.MainEvent
+import com.idle.binding.NavigationEvent
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
@@ -62,14 +63,18 @@ internal class CenterSignInFragment : BaseComposeFragment() {
                 onCenterPasswordChanged = ::setCenterPassword,
                 signInCenter = ::signInCenter,
                 navigateToAuth = {
-                    eventHandler.sendEvent(
-                        MainEvent.NavigateTo(
+                    navigationRouter.navigateTo(
+                        NavigationEvent.NavigateTo(
                             destination = Auth,
                             popUpTo = com.idle.signin.R.id.centerSignInFragment
                         )
                     )
                 },
-                navigateToNewPassword = { eventHandler.sendEvent(MainEvent.NavigateTo(NewPassword)) }
+                navigateToNewPassword = {
+                    navigationRouter.navigateTo(
+                        NavigationEvent.NavigateTo(NewPassword)
+                    )
+                }
             )
         }
     }

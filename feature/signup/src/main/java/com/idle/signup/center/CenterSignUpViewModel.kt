@@ -3,9 +3,11 @@ package com.idle.signup.center
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.DeepLinkDestination
+import com.idle.binding.EventHandler
+import com.idle.binding.MainEvent
+import com.idle.binding.NavigationEvent
+import com.idle.binding.NavigationRouter
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.base.EventHandler
-import com.idle.binding.base.MainEvent
 import com.idle.domain.model.CountDownTimer
 import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
@@ -34,7 +36,8 @@ class CenterSignUpViewModel @Inject constructor(
     private val validateBusinessRegistrationNumberUseCase: ValidateBusinessRegistrationNumberUseCase,
     private val countDownTimer: CountDownTimer,
     private val errorHandler: ErrorHandler,
-    val eventHandler: EventHandler,
+    private val eventHandler: EventHandler,
+    val navigationRouter: NavigationRouter,
 ) : BaseViewModel() {
     private val _signUpStep = MutableStateFlow(NAME)
     val signUpStep = _signUpStep.asStateFlow()
@@ -241,8 +244,8 @@ class CenterSignUpViewModel @Inject constructor(
             managerName = _centerName.value,
             businessRegistrationNumber = _businessRegistrationNumber.value,
         ).onSuccess {
-            eventHandler.sendEvent(
-                MainEvent.NavigateTo(
+            navigationRouter.navigateTo(
+                NavigationEvent.NavigateTo(
                     DeepLinkDestination.CenterSignIn("회원가입을 성공하였습니다.|SUCCESS"),
                     R.id.centerSignUpFragment
                 )

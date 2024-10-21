@@ -6,11 +6,11 @@ import com.idle.binding.DeepLinkDestination.CenterHome
 import com.idle.binding.DeepLinkDestination.CenterPending
 import com.idle.binding.DeepLinkDestination.CenterRegister
 import com.idle.binding.DeepLinkDestination.WorkerHome
+import com.idle.binding.EventHandler
+import com.idle.binding.MainEvent.ShowSnackBar
+import com.idle.binding.NavigationEvent
+import com.idle.binding.NavigationRouter
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.base.EventHandler
-import com.idle.binding.base.MainEvent
-import com.idle.binding.base.MainEvent.NavigateTo
-import com.idle.binding.base.MainEvent.ShowSnackBar
 import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.config.ForceUpdate
 import com.idle.domain.model.error.ApiErrorCode
@@ -45,6 +45,7 @@ class MainViewModel @Inject constructor(
     private val getCenterStatusUseCase: GetCenterStatusUseCase,
     private val errorHandler: ErrorHandler,
     private val eventHandler: EventHandler,
+    val navigationRouter: NavigationRouter,
 ) : BaseViewModel() {
     private val _navigationMenuType = MutableStateFlow(NavigationMenuType.HIDE)
     val navigationMenuType = _navigationMenuType.asStateFlow()
@@ -100,11 +101,8 @@ class MainViewModel @Inject constructor(
 
     private suspend fun navigateToDestination(userRole: String) {
         when (userRole) {
-            UserType.WORKER.apiValue -> eventHandler.sendEvent(
-                NavigateTo(
-                    WorkerHome,
-                    R.id.authFragment
-                )
+            UserType.WORKER.apiValue -> navigationRouter.navigateTo(
+                NavigationEvent.NavigateTo(WorkerHome, R.id.authFragment)
             )
 
             UserType.CENTER.apiValue -> getCenterStatus()
@@ -120,19 +118,23 @@ class MainViewModel @Inject constructor(
     private fun handleCenterStatus(status: CenterManagerAccountStatus) {
         when (status) {
             CenterManagerAccountStatus.APPROVED -> handleApprovedCenterStatus()
-            else -> eventHandler.sendEvent(
-                NavigateTo(CenterPending(status.name), R.id.authFragment)
+            else -> navigationRouter.navigateTo(
+                NavigationEvent.NavigateTo(CenterPending(status.name), R.id.authFragment)
             )
         }
     }
 
     private fun handleApprovedCenterStatus() = viewModelScope.launch {
         getMyCenterProfileUseCase().onSuccess {
-            eventHandler.sendEvent(NavigateTo(CenterHome, R.id.authFragment))
+            navigationRouter.navigateTo(
+                NavigationEvent.NavigateTo(CenterHome, R.id.authFragment)
+            )
         }.onFailure {
             val error = it as HttpResponseException
             if (error.apiErrorCode == ApiErrorCode.CenterNotFound) {
-                eventHandler.sendEvent(NavigateTo(CenterRegister, R.id.authFragment))
+                navigationRouter.navigateTo(
+                    NavigationEvent.NavigateTo(CenterRegister, R.id.authFragment)
+                )
             }
         }
     }
@@ -147,8 +149,8 @@ class MainViewModel @Inject constructor(
                         ApiErrorCode.TokenExpiredException,
                         ApiErrorCode.TokenNotFound,
                         ApiErrorCode.NotSupportUserTokenType ->
-                            eventHandler.sendEvent(
-                                MainEvent.NavigateToAuthWithClearBackStack(
+                            navigationRouter.navigateTo(
+                                NavigationEvent.NavigateToAuthWithClearBackStack(
                                     exception.print()
                                 )
                             )

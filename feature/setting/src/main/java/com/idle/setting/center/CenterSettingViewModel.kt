@@ -2,9 +2,9 @@ package com.idle.setting.center
 
 import androidx.lifecycle.viewModelScope
 import com.idle.analytics.helper.AnalyticsHelper
+import com.idle.binding.NavigationEvent
+import com.idle.binding.NavigationRouter
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.base.EventHandler
-import com.idle.binding.base.MainEvent
 import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.usecase.auth.LogoutCenterUseCase
@@ -24,7 +24,7 @@ class CenterSettingViewModel @Inject constructor(
     private val logoutCenterUseCase: LogoutCenterUseCase,
     private val analyticsHelper: AnalyticsHelper,
     private val errorHandler: ErrorHandler,
-    val eventHandler: EventHandler,
+    val navigationRouter: NavigationRouter,
 ) : BaseViewModel() {
     private val _centerProfile =
         MutableStateFlow<CenterProfile>(CenterProfile("", "", "", "", "", 0.0, 0.0, "", ""))
@@ -46,7 +46,9 @@ class CenterSettingViewModel @Inject constructor(
     fun logout() = viewModelScope.launch {
         logoutCenterUseCase().onSuccess {
             analyticsHelper.setUserId(null)
-            eventHandler.sendEvent(MainEvent.NavigateToAuthWithClearBackStack("로그아웃이 완료되었습니다.|SUCCESS"))
+            navigationRouter.navigateTo(
+                NavigationEvent.NavigateToAuthWithClearBackStack("로그아웃이 완료되었습니다.|SUCCESS")
+            )
         }.onFailure { errorHandler.sendError(it) }
     }
 

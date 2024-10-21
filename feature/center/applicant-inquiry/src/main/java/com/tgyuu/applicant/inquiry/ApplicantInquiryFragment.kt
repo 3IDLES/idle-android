@@ -36,8 +36,7 @@ import androidx.navigation.fragment.navArgs
 import coil.compose.AsyncImage
 import com.idle.analytics.helper.TrackScreenViewEvent
 import com.idle.binding.DeepLinkDestination
-import com.idle.binding.base.EventHandler
-import com.idle.binding.base.MainEvent
+import com.idle.binding.NavigationEvent
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonCardMedium
@@ -50,15 +49,11 @@ import com.idle.domain.model.profile.JobSearchStatus.NO
 import com.idle.domain.model.profile.JobSearchStatus.UNKNOWN
 import com.idle.domain.model.profile.JobSearchStatus.YES
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 internal class ApplicantInquiryFragment : BaseComposeFragment() {
     private val args: ApplicantInquiryFragmentArgs by navArgs()
     override val fragmentViewModel: ApplicantInquiryViewModel by viewModels()
-
-    @Inject
-    lateinit var eventHandler: EventHandler
 
     @Composable
     override fun ComposeLayout() {
@@ -74,7 +69,8 @@ internal class ApplicantInquiryFragment : BaseComposeFragment() {
                 ApplicantInquiryScreen(
                     jobPostingSummary = jobPostingSummary!!,
                     applicants = applicants,
-                    navigateTo = { eventHandler.sendEvent(MainEvent.NavigateTo(it)) })
+                    navigateTo = { navigationRouter.navigateTo(NavigationEvent.NavigateTo(it)) },
+                )
             }
         }
     }

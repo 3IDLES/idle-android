@@ -3,9 +3,9 @@ package com.idle.center.profile
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.base.EventHandler
-import com.idle.binding.base.MainEvent
-import com.idle.binding.base.SnackBarType.SUCCESS
+import com.idle.binding.EventHandler
+import com.idle.binding.MainEvent
+import com.idle.binding.SnackBarType.SUCCESS
 import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.usecase.profile.GetCenterProfileUseCase
