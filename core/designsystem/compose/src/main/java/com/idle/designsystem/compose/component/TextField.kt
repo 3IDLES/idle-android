@@ -234,13 +234,11 @@ fun CareTextField(
             leftComponent()
         }
 
-        if (isError) {
-            Text(
-                text = errorMsg,
-                style = CareTheme.typography.caption1,
-                color = CareTheme.colors.red,
-            )
-        }
+        Text(
+            text = if (isError) errorMsg else "",
+            style = CareTheme.typography.caption1,
+            color = CareTheme.colors.red,
+        )
     }
 }
 

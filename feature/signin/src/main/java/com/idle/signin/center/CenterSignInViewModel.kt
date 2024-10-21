@@ -1,5 +1,6 @@
 package com.idle.signin.center
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.idle.analytics.AnalyticsEvent
 import com.idle.analytics.AnalyticsEvent.PropertiesKeys.ACTION_NAME
@@ -9,7 +10,7 @@ import com.idle.binding.DeepLinkDestination.CenterHome
 import com.idle.binding.DeepLinkDestination.CenterPending
 import com.idle.binding.DeepLinkDestination.CenterRegister
 import com.idle.binding.EventHandlerHelper
-import com.idle.binding.NavigationEvent
+import com.idle.binding.NavigationEvent.NavigateTo
 import com.idle.binding.NavigationHelper
 import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.error.ApiErrorCode
@@ -42,12 +43,17 @@ class CenterSignInViewModel @Inject constructor(
     private val _centerPassword = MutableStateFlow("")
     internal val centerPassword = _centerPassword.asStateFlow()
 
+    private val _isLoginError = MutableStateFlow(false)
+    val isLoginError = _isLoginError.asStateFlow()
+
     internal fun setCenterId(id: String) {
         _centerId.value = id
+        _isLoginError.value = false
     }
 
     internal fun setCenterPassword(password: String) {
         _centerPassword.value = password
+        _isLoginError.value = false
     }
 
     internal fun signInCenter() = viewModelScope.launch {
@@ -56,8 +62,26 @@ class CenterSignInViewModel @Inject constructor(
                 analyticsHelper.setUserId(_centerId.value)
                 handleCenterLoginSuccess()
             }
-            .onFailure { exception ->
-                handleLoginFailure(exception as HttpResponseException)
+            .onFailure {
+                Log.d("test 외부", it.toString())
+
+                if (it is HttpResponseException && it.apiErrorCode == ApiErrorCode.InvalidLoginRequest) {
+                    Log.d("test", it.toString())
+                    _isLoginError.value = true
+                    return@launch
+                }
+
+                errorHandlerHelper.sendError(it)
+
+                analyticsHelper.logEvent(
+                    AnalyticsEvent(
+                        type = AnalyticsEvent.Types.ACTION,
+                        properties = mutableMapOf(
+                            ACTION_NAME to "center_login",
+                            ACTION_RESULT to false,
+                        )
+                    )
+                )
             }
     }
 
@@ -71,7 +95,10 @@ class CenterSignInViewModel @Inject constructor(
         when (status) {
             CenterManagerAccountStatus.APPROVED -> fetchAndNavigateToProfile()
             else -> navigationHelper.navigateTo(
-                NavigationEvent.NavigateTo(CenterPending(status.name), R.id.centerSignInFragment)
+                NavigateTo(
+                    CenterPending(status.name),
+                    R.id.centerSignInFragment
+                )
             )
         }
     }
@@ -79,30 +106,17 @@ class CenterSignInViewModel @Inject constructor(
     private fun fetchAndNavigateToProfile() = viewModelScope.launch {
         getMyCenterProfileUseCase().onSuccess {
             navigationHelper.navigateTo(
-                NavigationEvent.NavigateTo(CenterHome, R.id.centerSignInFragment)
+                NavigateTo(CenterHome, R.id.centerSignInFragment)
             )
         }.onFailure {
             val error = it as HttpResponseException
             if (error.apiErrorCode == ApiErrorCode.CenterNotFound) {
                 navigationHelper.navigateTo(
-                    NavigationEvent.NavigateTo(CenterRegister, R.id.centerSignInFragment)
+                    NavigateTo(CenterRegister, R.id.centerSignInFragment)
                 )
             } else {
                 errorHandlerHelper.sendError(it)
             }
         }
-    }
-
-    private fun handleLoginFailure(error: HttpResponseException) {
-        errorHandlerHelper.sendError(error)
-        analyticsHelper.logEvent(
-            AnalyticsEvent(
-                type = AnalyticsEvent.Types.ACTION,
-                properties = mutableMapOf(
-                    ACTION_NAME to "center_login",
-                    ACTION_RESULT to false,
-                )
-            )
-        )
     }
 }

@@ -19,6 +19,7 @@
     <string name="id_hint">아이디를 입력해주세요.</string>
     <string name="password">비밀번호</string>
     <string name="password_hint">비밀번호를 입력해주세요.</string>
+    <string name="login_error_description">* 비밀번호를 다시 확인해주세요.</string>
     <string name="confirm_password">비밀번호 확인</string>
     <string name="confirm_password_hint">비밀번호를 한번 더 입력해주세요.</string>
     <string name="forget_password">비밀번호가 기억나지 않나요?</string>

@@ -65,7 +65,7 @@ internal class AuthFragment : BaseComposeFragment() {
                 }
             }
 
-            navigationHelper.navigateTo(NavigationEvent.NavigateTo(DeepLinkDestination.CenterJobPostingPost))
+//            navigationHelper.navigateTo(NavigationEvent.NavigateTo(DeepLinkDestination.CenterJobPostingPost))
 
             AuthScreen(
                 userType = userRole,
