@@ -153,6 +153,7 @@ fun CareTextField(
     readOnly: Boolean = false,
     enabled: Boolean = true,
     isError: Boolean = false,
+    errorMsg: String = "",
     onDone: () -> Unit = {},
     textStyle: TextStyle = CareTheme.typography.body3.copy(
         color = if (readOnly) {
@@ -178,7 +179,7 @@ fun CareTextField(
     )
 
     Column(
-        verticalArrangement = Arrangement.spacedBy(4.dp),
+        verticalArrangement = Arrangement.spacedBy(2.dp),
         modifier = modifier
     ) {
         Row(
@@ -231,6 +232,14 @@ fun CareTextField(
             )
 
             leftComponent()
+        }
+
+        if (isError) {
+            Text(
+                text = errorMsg,
+                style = CareTheme.typography.caption1,
+                color = CareTheme.colors.red,
+            )
         }
     }
 }

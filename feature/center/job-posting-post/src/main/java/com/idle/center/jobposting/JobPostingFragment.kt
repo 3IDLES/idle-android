@@ -117,6 +117,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
             val jobPostingBottomSheetType by bottomSheetType.collectAsStateWithLifecycle()
             val calendarDate by calendarDate.collectAsStateWithLifecycle()
             val profile by profile.collectAsStateWithLifecycle()
+            val isMinimumWageError by isMinimumWageError.collectAsStateWithLifecycle()
 
             val postCodeDialog: PostCodeFragment? by lazy {
                 PostCodeFragment().apply {
@@ -232,6 +233,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
                         calendarDate = calendarDate,
                         jobPostingStep = jobPostingStep,
                         bottomSheetType = jobPostingBottomSheetType,
+                        isMinimumWageError = isMinimumWageError,
                         setWeekDays = ::setWeekDays,
                         onWorkStartTimeChanged = ::setWorkStartTime,
                         onWorkEndTimeChanged = ::setWorkEndTime,
@@ -312,6 +314,7 @@ internal fun JobPostingScreen(
     calendarDate: LocalDate,
     jobPostingStep: JobPostingStep,
     bottomSheetType: JobPostingBottomSheetType?,
+    isMinimumWageError: Boolean,
     setWeekDays: (DayOfWeek) -> Unit,
     onWorkStartTimeChanged: (String) -> Unit,
     onWorkEndTimeChanged: (String) -> Unit,
@@ -731,6 +734,7 @@ internal fun JobPostingScreen(
                                         payType = payType,
                                         payAmount = payAmount,
                                         setWeekDays = setWeekDays,
+                                        isMinimumWageError = isMinimumWageError,
                                         onPayTypeChanged = onPayTypeChanged,
                                         onPayAmountChanged = onPayAmountChanged,
                                         setJobPostingStep = setJobPostingStep,
