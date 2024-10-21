@@ -38,6 +38,7 @@ internal fun TimePaymentScreen(
     workEndTime: String,
     payType: PayType?,
     payAmount: String,
+    isMinimumWageError: Boolean,
     setWeekDays: (DayOfWeek) -> Unit,
     onPayTypeChanged: (PayType) -> Unit,
     onPayAmountChanged: (String) -> Unit,
@@ -150,6 +151,8 @@ internal fun TimePaymentScreen(
                     textStyle = CareTheme.typography.body2,
                     onValueChanged = onPayAmountChanged,
                     keyboardType = KeyboardType.Number,
+                    isError = isMinimumWageError,
+                    errorMsg = stringResource(R.string.minimum_wage_description),
                     leftComponent = {
                         Text(
                             text = stringResource(id = R.string.currency_unit),

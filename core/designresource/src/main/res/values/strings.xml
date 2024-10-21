@@ -72,6 +72,7 @@
 
     <!-- Job Posting & Recruitment -->
     <string name="post_job_posting">공고 등록</string>
+    <string name="minimum_wage_description">* 최저시급 이상의 금액으로 수정해주세요.\n(2024 최저시급: 9,860원)</string>
     <string name="edit_job_posting_button">공고 수정하기</string>
     <string name="edit_job_posting">공고 수정</string>
     <string name="manage_job_posting">공고 관리</string>

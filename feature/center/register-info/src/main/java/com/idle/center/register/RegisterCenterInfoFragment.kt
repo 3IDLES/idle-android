@@ -19,7 +19,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.idle.binding.DeepLinkDestination
-import com.idle.binding.EventHandlerHelper
 import com.idle.binding.NavigationEvent
 import com.idle.center.register.step.CenterAddressScreen
 import com.idle.center.register.step.CenterInfoScreen
@@ -34,15 +33,10 @@ import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.post.code.PostCodeFragment
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 internal class RegisterCenterInfoFragment : BaseComposeFragment() {
-
     override val fragmentViewModel: RegisterCenterInfoViewModel by viewModels()
-
-    @Inject
-    lateinit var eventHandlerHelper: EventHandlerHelper
 
     private val postCodeDialog: PostCodeFragment? by lazy {
         PostCodeFragment().apply {
