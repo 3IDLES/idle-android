@@ -2,20 +2,24 @@
 <resources>
     <string name="auth_deeplink_url">care://auth</string>
     <string name="postcode_deeplink_url">care://postcode</string>
+    <string name="notification_deeplink_url">care://notification</string>
     <string name="withdrawal_deeplink_url">care://withdrawal/{userType}</string>
     <string name="signup_complete_deeplink_url">care://signup/complete</string>
+    <string name="new_password_deeplink_url">care://newPassword</string>
+    <string name="chatting_detail_deeplink_url">care://chatting/detail/{chattingRoomId}/{userId}</string>
 
     <string name="worker_signup_deeplink_url">care://signup/worker</string>
     <string name="worker_home_deeplink_url">care://worker/home</string>
     <string name="worker_job_posting_deeplink_url">care://worker/jobposting</string>
     <string name="worker_profile_deeplink_url">care://worker/profile/{workerId}</string>
     <string name="worker_jobposting_detail_deeplink_url">care://worker/jobposting/detail/{jobPostingId}/{jobPostingType}</string>
+    <string name="worker_chatting_deeplink_url">care://worker/chatting</string>
     <string name="worker_setting_deeplink_url">care://worker/setting</string>
 
     <string name="center_signin_deeplink_url">care://center/signIn/{snackBarMsg}</string>
     <string name="center_signup_deeplink_url">care://center/signUp</string>
-    <string name="new_password_deeplink_url">care://newPassword</string>
     <string name="center_home_deeplink_url">care://center/home</string>
+    <string name="center_chatting_deeplink_url">care://cener/chatting</string>
     <string name="center_pending_deeplink_url">care://center/pending/{status}}</string>
     <string name="center_profile_deeplink_url">care://center/profile/{centerId}</string>
     <string name="center_setting_deeplink_url">care://center/setting</string>
@@ -25,6 +29,4 @@
     <string name="center_job_posting_post_complete_deeplink_url">care://center/jobposting/post/complete</string>
     <string name="center_jobposting_detail_deeplink_url">care://center/jobposting/detail/{jobPostingId}/{isEditState}</string>
     <string name="center_applicant_inquiry_deeplink_url">care://center/applicant/inquiry/{jobPostingId}</string>
-
-    <string name="notification_deeplink_url">care://notification</string>
 </resources>

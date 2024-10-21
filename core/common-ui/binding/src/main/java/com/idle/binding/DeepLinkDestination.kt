@@ -44,6 +44,17 @@ sealed class DeepLinkDestination(
         addressRes = R.string.notification_deeplink_url,
     )
 
+    data class ChattingDetail(
+        val chattingRoomId: String,
+        val userId: String
+    ) : DeepLinkDestination(
+        addressRes = R.string.chatting_detail_deeplink_url,
+        params = mapOf(
+            "chattingRoomId" to chattingRoomId,
+            "userId" to userId,
+        )
+    )
+
     data class CenterSignIn(val snackBarMsg: String = "default") : DeepLinkDestination(
         addressRes = R.string.center_signin_deeplink_url,
         params = mapOf("snackBarMsg" to snackBarMsg)
@@ -60,6 +71,10 @@ sealed class DeepLinkDestination(
     data class CenterPending(val status: String) : DeepLinkDestination(
         addressRes = R.string.center_pending_deeplink_url,
         params = mapOf("status" to status)
+    )
+
+    data object CenterChatting : DeepLinkDestination(
+        addressRes = R.string.center_chatting_deeplink_url,
     )
 
     data class CenterProfile(val centerId: String = "default") : DeepLinkDestination(
@@ -106,6 +121,10 @@ sealed class DeepLinkDestination(
 
     data object WorkerHome : DeepLinkDestination(
         addressRes = R.string.worker_home_deeplink_url,
+    )
+
+    data object WorkerChatting : DeepLinkDestination(
+        addressRes = R.string.worker_chatting_deeplink_url,
     )
 
     data class WorkerProfile(val workerId: String = "default") : DeepLinkDestination(

@@ -2,12 +2,14 @@
 <resources>
     <array name="centerNavDestinationIds">
         <item>@id/centerHomeFragment</item>
+        <item>@id/centerChattingFragment</item>
         <item>@id/centerSettingFragment</item>
     </array>
 
     <array name="workerNavDestinationIds">
         <item>@id/workerHomeFragment</item>
         <item>@id/workerJobPostingFragment</item>
+        <item>@id/workerChattingFragment</item>
         <item>@id/workerSettingFragment</item>
     </array>
 </resources>

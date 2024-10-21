@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_worker_chatting"
+    app:startDestination="@id/workerChattingFragment">
+
+    <fragment
+        android:id="@+id/workerChattingFragment"
+        android:name="com.idle.worker.chatting.WorkerChattingFragment"
+        android:label="WorkerChattingFragment" >
+        <deepLink app:uri="@string/worker_chatting_deeplink_url"/>
+    </fragment>
+</navigation>

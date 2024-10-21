@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_chatting_detail"
+    app:startDestination="@id/chattingDetailFragment">
+
+    <fragment
+        android:id="@+id/chattingDetailFragment"
+        android:name="com.idle.chatting_detail.ChattingDetailFragment"
+        android:label="ChattingDetailFragment">
+        <deepLink app:uri="@string/chatting_detail_deeplink_url" />
+        <argument
+            android:name="chattingRoomId"
+            app:argType="string" />
+        <argument
+            android:name="userId"
+            app:argType="string" />
+    </fragment>
+</navigation>
