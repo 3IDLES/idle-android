@@ -4,9 +4,9 @@ import android.net.Uri
 import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.base.EventHandler
-import com.idle.binding.base.MainEvent
-import com.idle.binding.base.SnackBarType
+import com.idle.binding.EventHandler
+import com.idle.binding.MainEvent
+import com.idle.binding.SnackBarType
 import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.profile.JobSearchStatus
 import com.idle.domain.model.profile.WorkerProfile

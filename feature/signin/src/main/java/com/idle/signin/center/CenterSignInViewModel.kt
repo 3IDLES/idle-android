@@ -8,9 +8,10 @@ import com.idle.analytics.helper.AnalyticsHelper
 import com.idle.binding.DeepLinkDestination.CenterHome
 import com.idle.binding.DeepLinkDestination.CenterPending
 import com.idle.binding.DeepLinkDestination.CenterRegister
+import com.idle.binding.EventHandler
+import com.idle.binding.NavigationEvent
+import com.idle.binding.NavigationRouter
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.base.EventHandler
-import com.idle.binding.base.MainEvent
 import com.idle.domain.model.error.ApiErrorCode
 import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.error.HttpResponseException
@@ -33,6 +34,7 @@ class CenterSignInViewModel @Inject constructor(
     private val analyticsHelper: AnalyticsHelper,
     private val errorHandler: ErrorHandler,
     val eventHandler: EventHandler,
+    val navigationRouter: NavigationRouter,
 ) : BaseViewModel() {
     private val _centerId = MutableStateFlow("")
     internal val centerId = _centerId.asStateFlow()
@@ -68,20 +70,22 @@ class CenterSignInViewModel @Inject constructor(
     private fun navigateBasedOnCenterStatus(status: CenterManagerAccountStatus) {
         when (status) {
             CenterManagerAccountStatus.APPROVED -> fetchAndNavigateToProfile()
-            else -> eventHandler.sendEvent(
-                MainEvent.NavigateTo(CenterPending(status.name), R.id.centerSignInFragment)
+            else -> navigationRouter.navigateTo(
+                NavigationEvent.NavigateTo(CenterPending(status.name), R.id.centerSignInFragment)
             )
         }
     }
 
     private fun fetchAndNavigateToProfile() = viewModelScope.launch {
         getMyCenterProfileUseCase().onSuccess {
-            eventHandler.sendEvent(MainEvent.NavigateTo(CenterHome, R.id.centerSignInFragment))
+            navigationRouter.navigateTo(
+                NavigationEvent.NavigateTo(CenterHome, R.id.centerSignInFragment)
+            )
         }.onFailure {
             val error = it as HttpResponseException
             if (error.apiErrorCode == ApiErrorCode.CenterNotFound) {
-                eventHandler.sendEvent(
-                    MainEvent.NavigateTo(CenterRegister, R.id.centerSignInFragment)
+                navigationRouter.navigateTo(
+                    NavigationEvent.NavigateTo(CenterRegister, R.id.centerSignInFragment)
                 )
             } else {
                 errorHandler.sendError(it)

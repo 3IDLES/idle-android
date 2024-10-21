@@ -3,9 +3,11 @@ package com.idle.worker.job.posting.detail.center
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.DeepLinkDestination
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.base.EventHandler
-import com.idle.binding.base.MainEvent
-import com.idle.binding.base.SnackBarType
+import com.idle.binding.EventHandler
+import com.idle.binding.MainEvent
+import com.idle.binding.NavigationEvent
+import com.idle.binding.NavigationRouter
+import com.idle.binding.SnackBarType
 import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.jobposting.CenterJobPostingDetail
 import com.idle.domain.model.jobposting.EditJobPostingDetail
@@ -35,6 +37,7 @@ class CenterJobPostingDetailViewModel @Inject constructor(
     private val deleteJobPostingUseCase: DeleteJobPostingUseCase,
     private val errorHandler: ErrorHandler,
     val eventHandler: EventHandler,
+    val navigationRouter: NavigationRouter,
 ) : BaseViewModel() {
     private val _profile = MutableStateFlow<CenterProfile?>(null)
     val profile = _profile.asStateFlow()
@@ -134,8 +137,8 @@ class CenterJobPostingDetailViewModel @Inject constructor(
 
     internal fun deleteJobPosting(jobPostingId: String) = viewModelScope.launch {
         deleteJobPostingUseCase(jobPostingId).onSuccess {
-            eventHandler.sendEvent(
-                MainEvent.NavigateTo(
+            navigationRouter.navigateTo(
+                NavigationEvent.NavigateTo(
                     DeepLinkDestination.CenterHome,
                     R.id.centerJobPostingDetailFragment
                 )

@@ -6,10 +6,11 @@ import com.idle.analytics.AnalyticsEvent.PropertiesKeys.ACTION_NAME
 import com.idle.analytics.AnalyticsEvent.PropertiesKeys.SCREEN_NAME
 import com.idle.analytics.AnalyticsEvent.Types.ACTION
 import com.idle.analytics.helper.AnalyticsHelper
+import com.idle.binding.EventHandler
+import com.idle.binding.MainEvent
+import com.idle.binding.NavigationRouter
+import com.idle.binding.SnackBarType.SUCCESS
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.base.EventHandler
-import com.idle.binding.base.MainEvent
-import com.idle.binding.base.SnackBarType.SUCCESS
 import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.jobposting.ApplyMethod
 import com.idle.domain.model.jobposting.CrawlingJobPostingDetail
@@ -41,6 +42,7 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
     private val analyticsHelper: AnalyticsHelper,
     private val errorHandler: ErrorHandler,
     val eventHandler: EventHandler,
+    val navigationRouter: NavigationRouter,
 ) : BaseViewModel() {
     private val _profile = MutableStateFlow<WorkerProfile?>(null)
     val profile = _profile.asStateFlow()

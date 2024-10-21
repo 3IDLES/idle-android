@@ -20,17 +20,12 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.idle.auth.AuthFragmentDirections
-import com.idle.binding.DeepLinkDestination.CenterApplicantInquiry
-import com.idle.binding.DeepLinkDestination.CenterHome
-import com.idle.binding.DeepLinkDestination.CenterJobDetail
-import com.idle.binding.DeepLinkDestination.WorkerHome
-import com.idle.binding.DeepLinkDestination.WorkerJobDetail
-import com.idle.binding.base.MainEvent
+import com.idle.binding.MainEvent
+import com.idle.binding.NavigationEvent
 import com.idle.binding.deepLinkNavigateTo
 import com.idle.binding.repeatOnStarted
 import com.idle.designsystem.binding.component.dismissSnackBar
 import com.idle.designsystem.binding.component.showSnackBar
-import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.presentation.databinding.ActivityMainBinding
 import com.idle.presentation.forceupdate.ForceUpdateFragment
 import com.idle.presentation.network.NetworkObserver
@@ -104,84 +99,97 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        repeatOnStarted {
-            networkObserver.networkState.collect { state ->
-                if (state == NetworkState.NOT_CONNECTED) {
-                    showNetworkDialog()
-                } else {
-                    dismissNetworkDialog()
-                    viewModel.getForceUpdateInfo()
-                }
-            }
-        }
-
-        repeatOnStarted {
-            viewModel.forceUpdate.collect {
-                it?.let { info ->
-                    val nowVersion = packageManager.getPackageInfo(packageName, 0).versionName
-                    val minAppVersion = info.minVersion
-                    val shouldUpdate = checkShouldUpdate(nowVersion, minAppVersion)
-
-                    if (shouldUpdate) {
-                        forceUpdateFragment = ForceUpdateFragment(info).apply {
-                            isCancelable = false
-                        }
-                        forceUpdateFragment.show(supportFragmentManager, forceUpdateFragment.tag)
+        viewModel.apply {
+            repeatOnStarted {
+                networkObserver.networkState.collect { state ->
+                    if (state == NetworkState.NOT_CONNECTED) {
+                        showNetworkDialog()
+                    } else {
+                        dismissNetworkDialog()
+                        getForceUpdateInfo()
                     }
                 }
             }
-        }
 
-        askNotificationPermission()
+            repeatOnStarted {
+                forceUpdate.collect {
+                    it?.let { info ->
+                        val nowVersion = packageManager.getPackageInfo(packageName, 0).versionName
+                        val minAppVersion = info.minVersion
+                        val shouldUpdate = checkShouldUpdate(nowVersion, minAppVersion)
 
-        repeatOnStarted {
-            viewModel.navigationMenuType.collect { menuType -> setNavigationMenuType(menuType) }
-        }
-
-        repeatOnStarted {
-            viewModel.eventFlow.collect {
-                when (it) {
-                    is MainEvent.NavigateTo -> navController.deepLinkNavigateTo(
-                        context = this@MainActivity,
-                        deepLinkDestination = it.destination,
-                        popUpTo = it.popUpTo,
-                    )
-
-                    is MainEvent.ShowSnackBar -> showSnackBar(
-                        rootView = binding.root,
-                        msg = it.msg,
-                        snackBarType = it.snackBarType,
-                        paddingBottom = calculateSnackBarBottomPadding(),
-                    )
-
-                    is MainEvent.DismissSnackBar -> dismissSnackBar()
-
-                    is MainEvent.NavigateToAuthWithClearBackStack -> navController.navigate(
-                        AuthFragmentDirections.actionGlobalNavAuth(it.snackBarMsg)
-                    )
+                        if (shouldUpdate) {
+                            forceUpdateFragment = ForceUpdateFragment(info).apply {
+                                isCancelable = false
+                            }
+                            forceUpdateFragment.show(
+                                supportFragmentManager,
+                                forceUpdateFragment.tag
+                            )
+                        }
+                    }
                 }
             }
+
+            askNotificationPermission()
+
+            repeatOnStarted {
+                navigationMenuType.collect { menuType ->
+                    this@MainActivity.setNavigationMenuType(menuType)
+                }
+            }
+
+            repeatOnStarted {
+                eventFlow.collect {
+                    when (it) {
+                        is MainEvent.ShowSnackBar -> showSnackBar(
+                            rootView = binding.root,
+                            msg = it.msg,
+                            snackBarType = it.snackBarType,
+                            paddingBottom = calculateSnackBarBottomPadding(),
+                        )
+
+                        is MainEvent.DismissSnackBar -> dismissSnackBar()
+                    }
+                }
+            }
+
+            repeatOnStarted {
+                navigationRouter.navigationFlow.collect { navigationEvent ->
+                    when (navigationEvent) {
+                        is NavigationEvent.NavigateTo -> navController.deepLinkNavigateTo(
+                            context = this@MainActivity,
+                            deepLinkDestination = navigationEvent.destination,
+                            popUpTo = navigationEvent.popUpTo,
+                        )
+
+                        is NavigationEvent.NavigateToAuthWithClearBackStack -> navController.navigate(
+                            AuthFragmentDirections.actionGlobalNavAuth(navigationEvent.snackBarMsg)
+                        )
+                    }
+                }
+            }
+
+            binding.apply {
+                val navHostFragment =
+                    supportFragmentManager.findFragmentById(R.id.main_FCV) as NavHostFragment
+                navController = navHostFragment.navController
+
+                mainBNVCenter.itemIconTintList = null
+                mainBNVWorker.itemIconTintList = null
+            }
+
+            setDestinationListener()
+
+            navigationRouter.handleNotificationNavigate(
+                isColdStart = true,
+                extras = intent?.extras ?: return,
+                onInit = ::initializeUserSession,
+            )
         }
-
-        binding.apply {
-            val navHostFragment =
-                supportFragmentManager.findFragmentById(R.id.main_FCV) as NavHostFragment
-            navController = navHostFragment.navController
-
-            mainBNVCenter.itemIconTintList = null
-            mainBNVWorker.itemIconTintList = null
-        }
-
-        setDestinationListener()
-
-        handleNotificationNavigate(
-            isColdStart = true,
-            extras = intent?.extras,
-        )
     }
 
     override fun onResume() {
@@ -197,72 +205,11 @@ class MainActivity : AppCompatActivity() {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
 
-        handleNotificationNavigate(
+        viewModel.navigationRouter.handleNotificationNavigate(
             isColdStart = false,
             extras = intent?.extras ?: return,
+            onInit = viewModel::initializeUserSession,
         )
-    }
-
-    private fun handleNotificationNavigate(
-        isColdStart: Boolean,
-        extras: Bundle?,
-    ) {
-        val notificationType = extras?.getString("notificationType") ?: run {
-            if (isColdStart) viewModel.initializeUserSession()
-            return
-        }
-
-        when (notificationType) {
-            "APPLICANT" -> {
-                val jobPostingId = extras.getString("jobPostingId") ?: run {
-                    if (isColdStart) viewModel.initializeUserSession()
-                    return
-                }
-
-                val screenDepth = if (isColdStart) {
-                    listOf(
-                        CenterHome,
-                        CenterJobDetail(jobPostingId),
-                        CenterApplicantInquiry(jobPostingId)
-                    )
-                } else {
-                    listOf(
-                        CenterJobDetail(jobPostingId),
-                        CenterApplicantInquiry(jobPostingId)
-                    )
-                }
-
-                screenDepth.forEach {
-                    navController.deepLinkNavigateTo(
-                        context = this,
-                        deepLinkDestination = it,
-                    )
-                }
-            }
-
-            "JOB_POSTING_DETAIL" -> {
-                val jobPostingId = extras.getString("jobPostingId") ?: run {
-                    if (isColdStart) viewModel.initializeUserSession()
-                    return
-                }
-
-                val screenDepth = listOf(
-                    WorkerHome,
-                    WorkerJobDetail(
-                        jobPostingId = jobPostingId,
-                        jobPostingType = JobPostingType.CAREMEET.name
-                    ),
-                )
-
-                screenDepth.forEach {
-                    navController.deepLinkNavigateTo(
-                        context = this,
-                        deepLinkDestination = it,
-                        popUpTo = if (it == WorkerHome) com.idle.auth.R.id.nav_auth else null
-                    )
-                }
-            }
-        }
     }
 
     private fun showNetworkDialog() {

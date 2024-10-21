@@ -24,7 +24,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.navArgs
 import com.idle.binding.DeepLinkDestination.CenterSetting
 import com.idle.binding.DeepLinkDestination.WorkerSetting
-import com.idle.binding.base.MainEvent
+import com.idle.binding.NavigationEvent
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
@@ -103,8 +103,8 @@ internal class WithdrawalFragment : BaseComposeFragment() {
                 confirmAuthCode = ::confirmAuthCode,
                 withdrawal = { showDialog = true },
                 navigateToSetting = {
-                    eventHandler.sendEvent(
-                        MainEvent.NavigateTo(
+                    navigationRouter.navigateTo(
+                        NavigationEvent.NavigateTo(
                             destination = if (userType == UserType.CENTER) CenterSetting
                             else WorkerSetting,
                             popUpTo = com.idle.withdrawal.R.id.withdrawalFragment,

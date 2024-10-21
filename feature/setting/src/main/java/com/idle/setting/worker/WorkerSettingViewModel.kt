@@ -2,9 +2,9 @@ package com.idle.setting.worker
 
 import androidx.lifecycle.viewModelScope
 import com.idle.analytics.helper.AnalyticsHelper
+import com.idle.binding.NavigationEvent
+import com.idle.binding.NavigationRouter
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.base.EventHandler
-import com.idle.binding.base.MainEvent
 import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.usecase.auth.LogoutWorkerUseCase
@@ -14,7 +14,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,10 +23,9 @@ class WorkerSettingViewModel @Inject constructor(
     private val logoutWorkerUseCase: LogoutWorkerUseCase,
     private val analyticsHelper: AnalyticsHelper,
     private val errorHandler: ErrorHandler,
-    val eventHandler: EventHandler,
+    val navigationRouter: NavigationRouter,
 ) : BaseViewModel() {
     private val _workerProfile = MutableStateFlow<WorkerProfile?>(null)
-    val workerProfile = _workerProfile.asStateFlow()
 
     private val _workerSettingEvent = MutableSharedFlow<SettingEvent>()
     val workerSettingEvent = _workerSettingEvent.asSharedFlow()
@@ -45,7 +43,9 @@ class WorkerSettingViewModel @Inject constructor(
     fun logout() = viewModelScope.launch {
         logoutWorkerUseCase().onSuccess {
             analyticsHelper.setUserId(null)
-            eventHandler.sendEvent(MainEvent.NavigateToAuthWithClearBackStack("로그아웃이 완료되었습니다.|SUCCESS"))
+            navigationRouter.navigateTo(
+                NavigationEvent.NavigateToAuthWithClearBackStack("로그아웃이 완료되었습니다.|SUCCESS")
+            )
         }.onFailure { errorHandler.sendError(it) }
     }
 

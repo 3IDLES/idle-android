@@ -9,8 +9,8 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.snackbar.Snackbar.SnackbarLayout
-import com.idle.binding.base.SnackBarType
-import com.idle.binding.base.dpToPx
+import com.idle.binding.SnackBarType
+import com.idle.binding.dpToPx
 import com.idle.designsystem.binding.R
 
 private var currentSnackbar: Snackbar? = null

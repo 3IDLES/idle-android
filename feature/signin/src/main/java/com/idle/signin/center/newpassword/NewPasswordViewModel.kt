@@ -3,9 +3,11 @@ package com.idle.signin.center.newpassword
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.DeepLinkDestination
+import com.idle.binding.EventHandler
+import com.idle.binding.MainEvent
+import com.idle.binding.NavigationEvent
+import com.idle.binding.NavigationRouter
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.base.EventHandler
-import com.idle.binding.base.MainEvent
 import com.idle.domain.model.CountDownTimer
 import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
@@ -31,6 +33,7 @@ class NewPasswordViewModel @Inject constructor(
     private val countDownTimer: CountDownTimer,
     private val errorHandler: ErrorHandler,
     private val eventHandler: EventHandler,
+    private val navigationRouter: NavigationRouter,
 ) : BaseViewModel() {
     private val _phoneNumber = MutableStateFlow("")
     internal val phoneNumber = _phoneNumber.asStateFlow()
@@ -137,8 +140,8 @@ class NewPasswordViewModel @Inject constructor(
             newPassword = _newPassword.value,
             phoneNumber = _phoneNumber.value
         ).onSuccess {
-            eventHandler.sendEvent(
-                MainEvent.NavigateTo(
+            navigationRouter.navigateTo(
+                NavigationEvent.NavigateTo(
                     destination = DeepLinkDestination.CenterSignIn("새 비밀번호를 발급하였습니다.|SUCCESS"),
                     popUpTo = R.id.newPasswordFragment,
                 )

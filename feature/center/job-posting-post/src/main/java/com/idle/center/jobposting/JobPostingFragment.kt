@@ -43,7 +43,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.idle.analytics.helper.LocalAnalyticsHelper
 import com.idle.binding.DeepLinkDestination
-import com.idle.binding.base.MainEvent
+import com.idle.binding.MainEvent
+import com.idle.binding.NavigationEvent
 import com.idle.center.job.edit.JobEditScreen
 import com.idle.center.jobposting.JobPostingStep.ADDRESS
 import com.idle.center.jobposting.JobPostingStep.SUMMARY
@@ -267,8 +268,8 @@ internal class JobPostingFragment : BaseComposeFragment() {
                         setBottomSheetType = ::setBottomSheetType,
                         showSnackBar = { eventHandler.sendEvent(MainEvent.ShowSnackBar(it)) },
                         navigateToHome = {
-                            eventHandler.sendEvent(
-                                MainEvent.NavigateTo(
+                            navigationRouter.navigateTo(
+                                NavigationEvent.NavigateTo(
                                     DeepLinkDestination.CenterHome,
                                     com.idle.center.job.posting.post.R.id.jobPostingPostFragment
                                 )

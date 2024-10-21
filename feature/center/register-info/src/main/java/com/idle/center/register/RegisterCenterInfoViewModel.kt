@@ -4,9 +4,9 @@ import android.net.Uri
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.DeepLinkDestination.CenterRegisterComplete
+import com.idle.binding.NavigationEvent
+import com.idle.binding.NavigationRouter
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.base.EventHandler
-import com.idle.binding.base.MainEvent
 import com.idle.center.register.info.R
 import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.usecase.profile.RegisterCenterProfileUseCase
@@ -20,7 +20,7 @@ import javax.inject.Inject
 class RegisterCenterInfoViewModel @Inject constructor(
     private val registerCenterProfileUseCase: RegisterCenterProfileUseCase,
     private val errorHandler: ErrorHandler,
-    val eventHandler: EventHandler,
+    val navigationRouter: NavigationRouter,
 ) : BaseViewModel() {
 
     private val _registrationStep = MutableStateFlow(RegistrationStep.INFO)
@@ -55,8 +55,8 @@ class RegisterCenterInfoViewModel @Inject constructor(
             officeNumber = _centerNumber.value,
             roadNameAddress = _roadNameAddress.value
         ).onSuccess {
-            eventHandler.sendEvent(
-                MainEvent.NavigateTo(
+            navigationRouter.navigateTo(
+                NavigationEvent.NavigateTo(
                     CenterRegisterComplete,
                     R.id.registerCenterInfoFragment
                 )

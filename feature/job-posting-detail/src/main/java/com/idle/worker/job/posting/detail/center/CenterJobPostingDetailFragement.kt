@@ -31,7 +31,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.navArgs
 import com.idle.analytics.helper.TrackScreenViewEvent
 import com.idle.binding.DeepLinkDestination
-import com.idle.binding.base.MainEvent
+import com.idle.binding.MainEvent
+import com.idle.binding.NavigationEvent
 import com.idle.center.job.edit.JobEditScreen
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
@@ -147,9 +148,7 @@ internal class CenterJobPostingDetailFragment : BaseComposeFragment() {
                                 endJobPosting = ::endJobPosting,
                                 deleteJobPosting = ::deleteJobPosting,
                                 navigateTo = {
-                                    eventHandler.sendEvent(
-                                        MainEvent.NavigateTo(it)
-                                    )
+                                    navigationRouter.navigateTo(NavigationEvent.NavigateTo(it))
                                 },
                                 setJobPostingDetailState = ::setJobPostingState,
                             )

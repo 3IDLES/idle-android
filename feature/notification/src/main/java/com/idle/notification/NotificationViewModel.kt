@@ -3,9 +3,9 @@ package com.idle.notification
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.DeepLinkDestination.CenterApplicantInquiry
 import com.idle.binding.DeepLinkDestination.CenterJobDetail
+import com.idle.binding.NavigationEvent
+import com.idle.binding.NavigationRouter
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.base.EventHandler
-import com.idle.binding.base.MainEvent
 import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.notification.Notification
 import com.idle.domain.model.notification.NotificationContent
@@ -25,7 +25,7 @@ class NotificationViewModel @Inject constructor(
     private val getMyNotificationUseCase: GetMyNotificationUseCase,
     private val readNotificationUseCase: ReadNotificationUseCase,
     private val errorHandler: ErrorHandler,
-    private val eventHandler: EventHandler,
+    private val navigationRouter: NavigationRouter,
 ) : BaseViewModel() {
     private val next = MutableStateFlow<String?>(null)
 
@@ -100,7 +100,9 @@ class NotificationViewModel @Inject constructor(
             else -> listOf()
         }
 
-        screenDepth.onEach { screen -> eventHandler.sendEvent(MainEvent.NavigateTo(screen)) }
+        screenDepth.onEach { screen ->
+            navigationRouter.navigateTo(NavigationEvent.NavigateTo(screen))
+        }
     }
 }
 

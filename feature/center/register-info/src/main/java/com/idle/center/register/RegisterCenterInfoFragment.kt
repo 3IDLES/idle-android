@@ -19,8 +19,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.idle.binding.DeepLinkDestination
-import com.idle.binding.base.EventHandler
-import com.idle.binding.base.MainEvent
+import com.idle.binding.EventHandler
+import com.idle.binding.NavigationEvent
 import com.idle.center.register.step.CenterAddressScreen
 import com.idle.center.register.step.CenterInfoScreen
 import com.idle.center.register.step.CenterIntroduceScreen
@@ -104,8 +104,8 @@ internal class RegisterCenterInfoFragment : BaseComposeFragment() {
                         onCenterDetailAddressChanged = ::setCenterDetailAddress,
                         onProfileImageUriChanged = ::setProfileImageUri,
                         navigateToHome = {
-                            eventHandler.sendEvent(
-                                MainEvent.NavigateTo(
+                            navigationRouter.navigateTo(
+                                NavigationEvent.NavigateTo(
                                     DeepLinkDestination.CenterHome,
                                     com.idle.center.register.info.R.id.registerCenterInfoCompleteFragment
                                 )

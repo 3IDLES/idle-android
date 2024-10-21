@@ -5,9 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.idle.analytics.helper.AnalyticsHelper
 import com.idle.binding.DeepLinkDestination.SignUpComplete
 import com.idle.binding.DeepLinkDestination.WorkerHome
+import com.idle.binding.EventHandler
+import com.idle.binding.NavigationEvent
+import com.idle.binding.NavigationRouter
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.base.EventHandler
-import com.idle.binding.base.MainEvent
 import com.idle.domain.model.CountDownTimer
 import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
@@ -38,6 +39,7 @@ class WorkerSignUpViewModel @Inject constructor(
     private val analyticsHelper: AnalyticsHelper,
     private val errorHandler: ErrorHandler,
     val eventHandler: EventHandler,
+    val navigationRouter: NavigationRouter,
 ) : BaseViewModel() {
 
     private val _signUpStep = MutableStateFlow<WorkerSignUpStep>(PHONE_NUMBER)
@@ -149,7 +151,12 @@ class WorkerSignUpViewModel @Inject constructor(
             authCode = _workerAuthCode.value,
         ).onSuccess {
             getWorkerIdUseCase().onSuccess { analyticsHelper.setUserId(it) }
-            eventHandler.sendEvent(MainEvent.NavigateTo(WorkerHome, R.id.workerSignUpFragment))
+            navigationRouter.navigateTo(
+                NavigationEvent.NavigateTo(
+                    WorkerHome,
+                    R.id.workerSignUpFragment
+                )
+            )
         }.onFailure {
             confirmAuthCodeUseCase(_workerPhoneNumber.value, _workerAuthCode.value).onSuccess {
                 cancelTimer()
@@ -169,7 +176,9 @@ class WorkerSignUpViewModel @Inject constructor(
             lotNumberAddress = _lotNumberAddress.value,
         ).onSuccess {
             getWorkerIdUseCase().onSuccess { analyticsHelper.setUserId(it) }
-            eventHandler.sendEvent(MainEvent.NavigateTo(SignUpComplete, R.id.workerSignUpFragment))
+            navigationRouter.navigateTo(
+                NavigationEvent.NavigateTo(SignUpComplete, R.id.workerSignUpFragment)
+            )
         }.onFailure { errorHandler.sendError(it) }
     }
 }
