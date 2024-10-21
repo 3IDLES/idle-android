@@ -28,8 +28,8 @@ import androidx.navigation.fragment.navArgs
 import com.idle.analytics.helper.TrackScreenViewEvent
 import com.idle.binding.DeepLinkDestination.Auth
 import com.idle.binding.DeepLinkDestination.NewPassword
-import com.idle.binding.base.CareBaseEvent
-import com.idle.binding.base.CareBaseEvent.NavigateTo
+import com.idle.binding.base.EventHandler
+import com.idle.binding.base.MainEvent
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
@@ -41,6 +41,7 @@ import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 internal class CenterSignInFragment : BaseComposeFragment() {
@@ -55,7 +56,7 @@ internal class CenterSignInFragment : BaseComposeFragment() {
 
             LaunchedEffect(Unit) {
                 if (args.snackBarMsg != "default") {
-                    baseEvent(CareBaseEvent.ShowSnackBar(args.snackBarMsg))
+                    eventHandler.sendEvent(MainEvent.ShowSnackBar(args.snackBarMsg))
                 }
             }
 
@@ -67,14 +68,14 @@ internal class CenterSignInFragment : BaseComposeFragment() {
                 onCenterPasswordChanged = ::setCenterPassword,
                 signInCenter = ::signInCenter,
                 navigateToAuth = {
-                    baseEvent(
-                        NavigateTo(
+                    eventHandler.sendEvent(
+                        MainEvent.NavigateTo(
                             destination = Auth,
                             popUpTo = com.idle.signin.R.id.centerSignInFragment
                         )
                     )
                 },
-                navigateToNewPassword = { baseEvent(NavigateTo(NewPassword)) }
+                navigateToNewPassword = { eventHandler.sendEvent(MainEvent.NavigateTo(NewPassword)) }
             )
         }
     }

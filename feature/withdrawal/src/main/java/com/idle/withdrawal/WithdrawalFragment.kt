@@ -26,7 +26,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.navArgs
 import com.idle.binding.DeepLinkDestination.CenterSetting
 import com.idle.binding.DeepLinkDestination.WorkerSetting
-import com.idle.binding.base.CareBaseEvent
+import com.idle.binding.base.EventHandler
+import com.idle.binding.base.MainEvent
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
@@ -40,6 +41,7 @@ import com.idle.withdrawal.step.PasswordScreen
 import com.idle.withdrawal.step.PhoneNumberScreen
 import com.idle.withdrawal.step.ReasonScreen
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 internal class WithdrawalFragment : BaseComposeFragment() {
@@ -107,8 +109,8 @@ internal class WithdrawalFragment : BaseComposeFragment() {
                 confirmAuthCode = ::confirmAuthCode,
                 withdrawal = { showDialog = true },
                 navigateToSetting = {
-                    baseEvent(
-                        CareBaseEvent.NavigateTo(
+                    eventHandler.sendEvent(
+                        MainEvent.NavigateTo(
                             destination = if (userType == UserType.CENTER) CenterSetting
                             else WorkerSetting,
                             popUpTo = com.idle.withdrawal.R.id.withdrawalFragment,

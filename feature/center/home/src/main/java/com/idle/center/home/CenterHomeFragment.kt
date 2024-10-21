@@ -46,7 +46,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.idle.analytics.helper.TrackScreenViewEvent
 import com.idle.binding.DeepLinkDestination
 import com.idle.binding.DeepLinkDestination.CenterApplicantInquiry
-import com.idle.binding.base.CareBaseEvent.NavigateTo
+import com.idle.binding.base.EventHandler
+import com.idle.binding.base.MainEvent
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designresource.R
@@ -62,6 +63,7 @@ import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.jobposting.CenterJobPosting
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 internal class CenterHomeFragment : BaseComposeFragment() {
@@ -97,7 +99,7 @@ internal class CenterHomeFragment : BaseComposeFragment() {
                 unreadNotificationCount = unreadNotificationCount,
                 setRecruitmentPostStatus = ::setRecruitmentPostStatus,
                 endJobPosting = ::endJobPosting,
-                navigateTo = { baseEvent(NavigateTo(destination = it)) }
+                navigateTo = { eventHandler.sendEvent(MainEvent.NavigateTo(destination = it)) }
             )
         }
     }

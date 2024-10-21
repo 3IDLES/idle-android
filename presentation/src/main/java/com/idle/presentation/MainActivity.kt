@@ -19,13 +19,16 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.idle.auth.AuthFragmentDirections
 import com.idle.binding.DeepLinkDestination.CenterApplicantInquiry
 import com.idle.binding.DeepLinkDestination.CenterHome
 import com.idle.binding.DeepLinkDestination.CenterJobDetail
 import com.idle.binding.DeepLinkDestination.WorkerHome
 import com.idle.binding.DeepLinkDestination.WorkerJobDetail
+import com.idle.binding.base.MainEvent
 import com.idle.binding.deepLinkNavigateTo
 import com.idle.binding.repeatOnStarted
+import com.idle.designsystem.binding.component.showSnackBar
 import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.presentation.databinding.ActivityMainBinding
 import com.idle.presentation.forceupdate.ForceUpdateFragment
@@ -145,6 +148,17 @@ class MainActivity : AppCompatActivity() {
                         deepLinkDestination = it.destination,
                         popUpTo = it.popUpTo,
                     )
+
+                    is MainEvent.ShowSnackBar -> showSnackBar(
+                        rootView = binding.root,
+                        msg = it.msg,
+                        snackBarType = it.snackBarType,
+                        paddingBottom = 20,
+                    )
+
+                    is MainEvent.NavigateToAuthWithClearBackStack -> navController.navigate(
+                        AuthFragmentDirections.actionGlobalNavAuth(it.snackBarMsg)
+                    )
                 }
             }
         }
@@ -195,7 +209,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         when (notificationType) {
-            "APPLICANTS" -> {
+            "APPLICANT" -> {
                 val jobPostingId = extras.getString("jobPostingId") ?: run {
                     if (isColdStart) viewModel.initializeUserSession()
                     return

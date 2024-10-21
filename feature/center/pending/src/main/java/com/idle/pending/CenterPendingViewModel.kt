@@ -2,8 +2,10 @@ package com.idle.pending
 
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.base.CareBaseEvent
-import com.idle.domain.model.error.HttpResponseException
+import com.idle.binding.base.EventHandler
+import com.idle.binding.base.MainEvent
+import com.idle.binding.base.SnackBarType.SUCCESS
+import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.profile.CenterManagerAccountStatus
 import com.idle.domain.usecase.auth.LogoutCenterUseCase
 import com.idle.domain.usecase.auth.SendCenterVerificationRequestUseCase
@@ -17,6 +19,8 @@ import javax.inject.Inject
 class CenterPendingViewModel @Inject constructor(
     private val logoutCenterUseCase: LogoutCenterUseCase,
     private val sendCenterVerificationRequestUseCase: SendCenterVerificationRequestUseCase,
+    private val errorHandler: ErrorHandler,
+    private val eventHandler: EventHandler,
 ) : BaseViewModel() {
     private val _status = MutableStateFlow(CenterManagerAccountStatus.UNKNOWN)
     val status = _status.asStateFlow()
@@ -27,16 +31,14 @@ class CenterPendingViewModel @Inject constructor(
 
     internal fun logout() = viewModelScope.launch {
         logoutCenterUseCase().onSuccess {
-            baseEvent(CareBaseEvent.NavigateToAuthWithClearBackStack("로그아웃이 완료되었습니다.|SUCCESS"))
-        }.onFailure { handleFailure(it as HttpResponseException) }
+            eventHandler.sendEvent(MainEvent.NavigateToAuthWithClearBackStack("로그아웃이 완료되었습니다.|SUCCESS"))
+        }.onFailure { errorHandler.sendError(it) }
     }
 
     internal fun sendVerificationRequest() = viewModelScope.launch {
         sendCenterVerificationRequestUseCase().onSuccess {
             _status.value = CenterManagerAccountStatus.PENDING
-            baseEvent(CareBaseEvent.ShowSnackBar("센터 인증 요청이 완료되었습니다.|SUCCESS"))
-        }.onFailure {
-            handleFailure(it as HttpResponseException)
-        }
+            eventHandler.sendEvent(MainEvent.ShowSnackBar("센터 인증 요청이 완료되었습니다.", SUCCESS))
+        }.onFailure { errorHandler.sendError(it) }
     }
 }

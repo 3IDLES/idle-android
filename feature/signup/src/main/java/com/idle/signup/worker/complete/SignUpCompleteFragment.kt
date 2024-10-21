@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import com.idle.analytics.helper.TrackScreenViewEvent
 import com.idle.binding.DeepLinkDestination
-import com.idle.binding.base.CareBaseEvent
+import com.idle.binding.base.MainEvent
 import com.idle.center.jobposting.complete.SignUpCompleteViewModel
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
@@ -35,8 +35,8 @@ class SignUpCompleteFragment : BaseComposeFragment() {
         fragmentViewModel.apply {
             SignUpCompleteScreen(
                 navigateTo = {
-                    baseEvent(
-                        CareBaseEvent.NavigateTo(
+                    eventHandler.sendEvent(
+                        MainEvent.NavigateTo(
                             destination = it,
                             popUpTo = com.idle.signup.R.id.signUpCompleteFragment,
                         )

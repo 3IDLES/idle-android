@@ -4,12 +4,12 @@ import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.DeepLinkDestination
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.base.CareBaseEvent
-import com.idle.binding.base.CareBaseEvent.NavigateTo
+import com.idle.binding.base.EventHandler
+import com.idle.binding.base.MainEvent
 import com.idle.domain.model.CountDownTimer
 import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
-import com.idle.domain.model.error.HttpResponseException
+import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
 import com.idle.domain.usecase.auth.GenerateNewPasswordUseCase
 import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
@@ -29,12 +29,14 @@ class NewPasswordViewModel @Inject constructor(
     private val confirmAuthCodeUseCase: ConfirmAuthCodeUseCase,
     private val generateNewPasswordUseCase: GenerateNewPasswordUseCase,
     private val countDownTimer: CountDownTimer,
+    private val errorHandler: ErrorHandler,
+    private val eventHandler: EventHandler,
 ) : BaseViewModel() {
     private val _phoneNumber = MutableStateFlow("")
     internal val phoneNumber = _phoneNumber.asStateFlow()
 
     private val _authCode = MutableStateFlow("")
-    internal val authCode = this._authCode.asStateFlow()
+    internal val authCode = _authCode.asStateFlow()
 
     private var timerJob: Job? = null
 
@@ -81,7 +83,7 @@ class NewPasswordViewModel @Inject constructor(
     internal fun sendPhoneNumber() = viewModelScope.launch {
         sendPhoneNumberUseCase(_phoneNumber.value)
             .onSuccess { startTimer() }
-            .onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
+            .onFailure { eventHandler.sendEvent(MainEvent.ShowSnackBar(it.message.toString())) }
     }
 
     private fun startTimer() {
@@ -119,7 +121,7 @@ class NewPasswordViewModel @Inject constructor(
             cancelTimer()
             _isConfirmAuthCode.value = true
             _newPasswordProcess.value = GENERATE_NEW_PASSWORD
-        }.onFailure { handleFailure(it as HttpResponseException) }
+        }.onFailure { errorHandler.sendError(it) }
     }
 
 
@@ -127,7 +129,7 @@ class NewPasswordViewModel @Inject constructor(
         val passwordPattern = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d!@#\$%^&*()_+=-]{8,20}$".toRegex()
 
         if (!_newPassword.value.matches(passwordPattern)) {
-            baseEvent(CareBaseEvent.ShowSnackBar("비밀번호가 형식에 맞지 않습니다.|ERROR"))
+            eventHandler.sendEvent(MainEvent.ShowSnackBar("비밀번호가 형식에 맞지 않습니다."))
             return@launch
         }
 
@@ -135,13 +137,13 @@ class NewPasswordViewModel @Inject constructor(
             newPassword = _newPassword.value,
             phoneNumber = _phoneNumber.value
         ).onSuccess {
-            baseEvent(
-                NavigateTo(
+            eventHandler.sendEvent(
+                MainEvent.NavigateTo(
                     destination = DeepLinkDestination.CenterSignIn("새 비밀번호를 발급하였습니다.|SUCCESS"),
                     popUpTo = R.id.newPasswordFragment,
                 )
             )
-        }.onFailure { handleFailure(it as HttpResponseException) }
+        }.onFailure { errorHandler.sendError(it) }
     }
 }
 

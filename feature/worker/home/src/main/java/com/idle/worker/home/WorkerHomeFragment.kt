@@ -48,7 +48,7 @@ import com.idle.analytics.helper.LocalAnalyticsHelper
 import com.idle.analytics.helper.TrackScreenViewEvent
 import com.idle.binding.DeepLinkDestination
 import com.idle.binding.DeepLinkDestination.WorkerJobDetail
-import com.idle.binding.base.CareBaseEvent.NavigateTo
+import com.idle.binding.base.MainEvent
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designresource.R
@@ -98,7 +98,7 @@ internal class WorkerHomeFragment : BaseComposeFragment() {
                 applyJobPosting = ::applyJobPosting,
                 addFavoriteJobPosting = ::addFavoriteJobPosting,
                 removeFavoriteJobPosting = ::removeFavoriteJobPosting,
-                navigateTo = { baseEvent(NavigateTo(it)) },
+                navigateTo = {  eventHandler.sendEvent(MainEvent.NavigateTo(it)) },
             )
         }
     }

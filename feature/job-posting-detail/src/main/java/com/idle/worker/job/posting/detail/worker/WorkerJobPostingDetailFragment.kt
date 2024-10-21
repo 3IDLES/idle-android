@@ -13,15 +13,15 @@ import androidx.compose.ui.Modifier
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.navArgs
-import com.idle.binding.base.CareBaseEvent
+import com.idle.binding.base.MainEvent
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.domain.model.jobposting.CrawlingJobPostingDetail
 import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.WorkerJobPostingDetail
+import com.idle.worker.job.posting.detail.LoadingJobPostingDetailScreen
 import com.idle.worker.job.posting.detail.worker.map.PlaceDetailScreen
 import com.idle.worker.job.posting.detail.worker.screen.CrawlingJobPostingDetailScreen
-import com.idle.worker.job.posting.detail.LoadingJobPostingDetailScreen
 import com.idle.worker.job.posting.detail.worker.screen.WorkerJobPostingDetailScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -85,7 +85,11 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
                                 addFavoriteJobPosting = ::addFavoriteJobPosting,
                                 removeFavoriteJobPosting = ::removeFavoriteJobPosting,
                                 applyJobPosting = ::applyJobPosting,
-                                navigateTo = { baseEvent(CareBaseEvent.NavigateTo(it)) }
+                                navigateTo = {
+                                    eventHandler.sendEvent(
+                                        MainEvent.NavigateTo(it)
+                                    )
+                                }
 
                             )
                         } else {

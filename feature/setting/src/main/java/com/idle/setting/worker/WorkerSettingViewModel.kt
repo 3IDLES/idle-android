@@ -3,8 +3,9 @@ package com.idle.setting.worker
 import androidx.lifecycle.viewModelScope
 import com.idle.analytics.helper.AnalyticsHelper
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.base.CareBaseEvent
-import com.idle.domain.model.error.HttpResponseException
+import com.idle.binding.base.EventHandler
+import com.idle.binding.base.MainEvent
+import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.usecase.auth.LogoutWorkerUseCase
 import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
@@ -22,6 +23,8 @@ class WorkerSettingViewModel @Inject constructor(
     private val getLocalMyWorkerProfileUseCase: GetLocalMyWorkerProfileUseCase,
     private val logoutWorkerUseCase: LogoutWorkerUseCase,
     private val analyticsHelper: AnalyticsHelper,
+    private val errorHandler: ErrorHandler,
+    val eventHandler: EventHandler,
 ) : BaseViewModel() {
     private val _workerProfile = MutableStateFlow<WorkerProfile?>(null)
     val workerProfile = _workerProfile.asStateFlow()
@@ -36,14 +39,14 @@ class WorkerSettingViewModel @Inject constructor(
     private fun getMyProfile() = viewModelScope.launch {
         getLocalMyWorkerProfileUseCase().onSuccess {
             _workerProfile.value = it
-        }.onFailure { handleFailure(it as HttpResponseException) }
+        }.onFailure { errorHandler.sendError(it) }
     }
 
     fun logout() = viewModelScope.launch {
         logoutWorkerUseCase().onSuccess {
             analyticsHelper.setUserId(null)
-            baseEvent(CareBaseEvent.NavigateToAuthWithClearBackStack("로그아웃이 완료되었습니다.|SUCCESS"))
-        }.onFailure { handleFailure(it as HttpResponseException) }
+            eventHandler.sendEvent(MainEvent.NavigateToAuthWithClearBackStack("로그아웃이 완료되었습니다.|SUCCESS"))
+        }.onFailure { errorHandler.sendError(it) }
     }
 
     fun clickLogout() = workerSettingEvent(SettingEvent.Logout)

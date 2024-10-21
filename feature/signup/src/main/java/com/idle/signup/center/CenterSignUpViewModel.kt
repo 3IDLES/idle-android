@@ -4,19 +4,20 @@ import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.DeepLinkDestination
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.base.CareBaseEvent
+import com.idle.binding.base.EventHandler
+import com.idle.binding.base.MainEvent
 import com.idle.domain.model.CountDownTimer
 import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
 import com.idle.domain.model.auth.BusinessRegistrationInfo
-import com.idle.domain.model.error.HttpResponseException
+import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
 import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
 import com.idle.domain.usecase.auth.SignUpCenterUseCase
 import com.idle.domain.usecase.auth.ValidateBusinessRegistrationNumberUseCase
 import com.idle.domain.usecase.auth.ValidateIdentifierUseCase
-import com.idle.signup.center.CenterSignUpStep.NAME
 import com.idle.signup.R
+import com.idle.signup.center.CenterSignUpStep.NAME
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,8 +33,10 @@ class CenterSignUpViewModel @Inject constructor(
     private val validateIdentifierUseCase: ValidateIdentifierUseCase,
     private val validateBusinessRegistrationNumberUseCase: ValidateBusinessRegistrationNumberUseCase,
     private val countDownTimer: CountDownTimer,
+    private val errorHandler: ErrorHandler,
+    val eventHandler: EventHandler,
 ) : BaseViewModel() {
-    private val _signUpStep = MutableStateFlow<CenterSignUpStep>(NAME)
+    private val _signUpStep = MutableStateFlow(NAME)
     val signUpStep = _signUpStep.asStateFlow()
 
     private val _centerName = MutableStateFlow("")
@@ -124,7 +127,7 @@ class CenterSignUpViewModel @Inject constructor(
     internal fun sendPhoneNumber() = viewModelScope.launch {
         sendPhoneNumberUseCase(_centerPhoneNumber.value)
             .onSuccess { startTimer() }
-            .onFailure { handleFailure(it as HttpResponseException) }
+            .onFailure { errorHandler.sendError(it) }
     }
 
     private fun startTimer() {
@@ -162,7 +165,7 @@ class CenterSignUpViewModel @Inject constructor(
 
                 _signUpStep.value = CenterSignUpStep.BUSINESS_REGISTRATION
             }
-            .onFailure { handleFailure(it as HttpResponseException) }
+            .onFailure { errorHandler.sendError(it) }
     }
 
     private fun validateId(id: String) {
@@ -227,7 +230,7 @@ class CenterSignUpViewModel @Inject constructor(
         val passwordPattern = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d!@#\$%^&*()_+=-]{8,20}$".toRegex()
 
         if (!_centerPassword.value.matches(passwordPattern)) {
-            baseEvent(CareBaseEvent.ShowSnackBar("비밀번호가 형식에 맞지 않습니다.|ERROR"))
+            eventHandler.sendEvent(MainEvent.ShowSnackBar("비밀번호가 형식에 맞지 않습니다."))
             return@launch
         }
 
@@ -237,28 +240,27 @@ class CenterSignUpViewModel @Inject constructor(
             phoneNumber = _centerPhoneNumber.value,
             managerName = _centerName.value,
             businessRegistrationNumber = _businessRegistrationNumber.value,
-        )
-            .onSuccess {
-                baseEvent(
-                    CareBaseEvent.NavigateTo(
-                        DeepLinkDestination.CenterSignIn("회원가입을 성공하였습니다.|SUCCESS"),
-                        R.id.centerSignUpFragment
-                    )
+        ).onSuccess {
+            eventHandler.sendEvent(
+                MainEvent.NavigateTo(
+                    DeepLinkDestination.CenterSignIn("회원가입을 성공하였습니다.|SUCCESS"),
+                    R.id.centerSignUpFragment
                 )
-            }
-            .onFailure { handleFailure(it as HttpResponseException) }
+            )
+        }
+            .onFailure { errorHandler.sendError(it) }
     }
 
     internal fun validateIdentifier() = viewModelScope.launch {
         validateIdentifierUseCase(_centerId.value)
             .onSuccess { _centerIdResult.value = true }
-            .onFailure { handleFailure(it as HttpResponseException) }
+            .onFailure { errorHandler.sendError(it) }
     }
 
     internal fun validateBusinessRegistrationNumber() = viewModelScope.launch {
         validateBusinessRegistrationNumberUseCase(_businessRegistrationNumber.value)
             .onSuccess { _businessRegistrationInfo.value = it }
-            .onFailure { handleFailure(it as HttpResponseException) }
+            .onFailure { errorHandler.sendError(it) }
     }
 }
 

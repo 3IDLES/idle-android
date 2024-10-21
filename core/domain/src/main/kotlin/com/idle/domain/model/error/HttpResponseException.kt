@@ -166,8 +166,6 @@ enum class ApiErrorCode(val serverCode: String, val description: String, val dis
     ),
 
     UnknownError("UNKNOWN", "알 수 없는 오류가 발생했습니다.", "알 수 없는 오류가 발생하였습니다."),
-
-    NetworkError("NETWORK", "네트워크가 연결되어있지 않습니다.", "인터넷이 연결되어 있지 않아요."),
     ;
 
     companion object {

@@ -41,8 +41,8 @@ import com.idle.binding.DeepLinkDestination
 import com.idle.binding.DeepLinkDestination.CenterSignIn
 import com.idle.binding.DeepLinkDestination.CenterSignUp
 import com.idle.binding.DeepLinkDestination.WorkerSignUp
-import com.idle.binding.base.CareBaseEvent
-import com.idle.binding.base.CareBaseEvent.NavigateTo
+import com.idle.binding.base.EventHandler
+import com.idle.binding.base.MainEvent
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designresource.R.string
@@ -51,11 +51,15 @@ import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.UserType
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 internal class AuthFragment : BaseComposeFragment() {
     override val fragmentViewModel: AuthViewModel by viewModels()
     private val args: AuthFragmentArgs by navArgs()
+
+    @Inject
+    lateinit var eventHandler: EventHandler
 
     @Composable
     override fun ComposeLayout() {
@@ -64,7 +68,7 @@ internal class AuthFragment : BaseComposeFragment() {
 
             LaunchedEffect(true) {
                 if (args.snackBarMsg != "default") {
-                    baseEvent(CareBaseEvent.ShowSnackBar(args.snackBarMsg))
+                    eventHandler.sendEvent(MainEvent.ShowSnackBar(args.snackBarMsg))
                 }
             }
 
@@ -72,7 +76,14 @@ internal class AuthFragment : BaseComposeFragment() {
                 snackbarHostState = snackbarHostState,
                 userType = userRole,
                 onUserRoleChanged = ::setUserRole,
-                navigateTo = { baseEvent(NavigateTo(it, popUpTo = R.id.nav_auth)) },
+                navigateTo = {
+                    eventHandler.sendEvent(
+                        MainEvent.NavigateTo(
+                            destination = it,
+                            popUpTo = R.id.nav_auth
+                        )
+                    )
+                },
             )
         }
     }

@@ -3,12 +3,14 @@ package com.idle.withdrawal
 import androidx.lifecycle.viewModelScope
 import com.idle.analytics.helper.AnalyticsHelper
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.base.CareBaseEvent
+import com.idle.binding.base.EventHandler
+import com.idle.binding.base.MainEvent
 import com.idle.domain.model.CountDownTimer
 import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
 import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.error.ApiErrorCode
+import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
 import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
@@ -29,6 +31,8 @@ class WithdrawalViewModel @Inject constructor(
     private val withdrawalWorkerUseCase: WithdrawalWorkerUseCase,
     private val countDownTimer: CountDownTimer,
     private val analyticsHelper: AnalyticsHelper,
+    private val errorHandler: ErrorHandler,
+    val eventHandler: EventHandler,
 ) : BaseViewModel() {
     private val _withdrawalStep = MutableStateFlow<WithdrawalStep>(WithdrawalStep.REASON)
     internal val withdrawalStep = _withdrawalStep.asStateFlow()
@@ -85,7 +89,7 @@ class WithdrawalViewModel @Inject constructor(
     internal fun sendPhoneNumber() = viewModelScope.launch {
         sendPhoneNumberUseCase(_phoneNumber.value)
             .onSuccess { startTimer() }
-            .onFailure { handleFailure(it as HttpResponseException) }
+            .onFailure { errorHandler.sendError(it) }
     }
 
     internal fun setInconvenientReason(reason: String) {
@@ -135,7 +139,7 @@ class WithdrawalViewModel @Inject constructor(
                 cancelTimer()
                 _isConfirmAuthCode.value = true
             }
-            .onFailure { handleFailure(it as HttpResponseException) }
+            .onFailure { errorHandler.sendError(it) }
     }
 
     internal fun withdrawal(userType: UserType) = viewModelScope.launch {
@@ -161,13 +165,13 @@ class WithdrawalViewModel @Inject constructor(
             password = password.value
         ).onSuccess {
             analyticsHelper.setUserId(null)
-            baseEvent(CareBaseEvent.NavigateToAuthWithClearBackStack("회원탈퇴가 완료되었어요.|ERROR"))
+            eventHandler.sendEvent(MainEvent.NavigateToAuthWithClearBackStack("회원탈퇴가 완료되었어요.|ERROR"))
         }.onFailure {
             val exception = it as HttpResponseException
             if (exception.apiErrorCode == ApiErrorCode.InvalidParameter) {
-                baseEvent(CareBaseEvent.ShowSnackBar("비밀번호가 맞지 않습니다.|ERROR"))
+                eventHandler.sendEvent(MainEvent.ShowSnackBar("비밀번호가 맞지 않습니다."))
             } else {
-                handleFailure(exception)
+                errorHandler.sendError(it)
             }
         }
     }
@@ -179,8 +183,8 @@ class WithdrawalViewModel @Inject constructor(
                 .joinToString("|"),
         ).onSuccess {
             analyticsHelper.setUserId(null)
-            baseEvent(CareBaseEvent.NavigateToAuthWithClearBackStack("회원탈퇴가 완료되었어요.|ERROR"))
-        }.onFailure { handleFailure(it as HttpResponseException) }
+            eventHandler.sendEvent(MainEvent.ShowSnackBar("회원탈퇴가 완료되었어요."))
+        }.onFailure { errorHandler.sendError(it) }
     }
 }
 

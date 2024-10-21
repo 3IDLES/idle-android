@@ -22,7 +22,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.idle.analytics.helper.TrackScreenViewEvent
 import com.idle.binding.DeepLinkDestination.CenterHome
-import com.idle.binding.base.CareBaseEvent.NavigateTo
+import com.idle.binding.base.MainEvent
 import com.idle.center.register.info.R
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.component.CareButtonLarge
@@ -41,7 +41,12 @@ internal class CenterRegisterCompleteFragment : BaseComposeFragment() {
             centerProfile?.let {
                 CenterRegisterCompleteScreen(
                     navigateToCenterHome = {
-                        baseEvent(NavigateTo(CenterHome, R.id.registerCenterInfoCompleteFragment))
+                        eventHandler.sendEvent(
+                            MainEvent.NavigateTo(
+                                CenterHome,
+                                R.id.registerCenterInfoCompleteFragment
+                            )
+                        )
                     }
                 )
             }

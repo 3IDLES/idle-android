@@ -2,8 +2,10 @@ package com.idle.center.home
 
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.base.CareBaseEvent
-import com.idle.domain.model.error.HttpResponseException
+import com.idle.binding.base.EventHandler
+import com.idle.binding.base.MainEvent
+import com.idle.binding.base.SnackBarType.SUCCESS
+import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.jobposting.CenterJobPosting
 import com.idle.domain.usecase.config.ShowNotificationCenterUseCase
 import com.idle.domain.usecase.jobposting.EndJobPostingUseCase
@@ -23,6 +25,8 @@ class CenterHomeViewModel @Inject constructor(
     private val endJobPostingUseCase: EndJobPostingUseCase,
     private val showNotificationCenterUseCase: ShowNotificationCenterUseCase,
     private val getUnreadNotificationCountUseCase: GetUnreadNotificationCountUseCase,
+    private val errorHandler: ErrorHandler,
+    val eventHandler: EventHandler,
 ) : BaseViewModel() {
     private val _recruitmentPostStatus = MutableStateFlow(RecruitmentPostStatus.IN_PROGRESS)
     val recruitmentPostStatus = _recruitmentPostStatus.asStateFlow()
@@ -39,7 +43,7 @@ class CenterHomeViewModel @Inject constructor(
     private val _showNotificationCenter = MutableStateFlow(false)
     val showNotificationCenter = _showNotificationCenter.asStateFlow()
 
-    init{
+    init {
         showNotificationCenter()
     }
 
@@ -52,9 +56,7 @@ class CenterHomeViewModel @Inject constructor(
     internal fun getUnreadNotificationCount() = viewModelScope.launch {
         getUnreadNotificationCountUseCase().onSuccess {
             _unreadNotificationCount.value = it
-        }.onFailure {
-            handleFailure(it as HttpResponseException)
-        }
+        }.onFailure { errorHandler.sendError(it) }
     }
 
     internal fun setRecruitmentPostStatus(recruitmentPostStatus: RecruitmentPostStatus) {
@@ -69,15 +71,13 @@ class CenterHomeViewModel @Inject constructor(
     internal fun getJobPostingsInProgress() = viewModelScope.launch {
         getJobPostingsInProgressUseCase().onSuccess {
             _jobPostingsInProgress.value = it
-        }.onFailure {
-            handleFailure(it as HttpResponseException)
-        }
+        }.onFailure { errorHandler.sendError(it) }
     }
 
     internal fun getJobPostingsCompleted() = viewModelScope.launch {
         getJobPostingsCompletedUseCase().onSuccess {
             _jobPostingsCompleted.value = it
-        }.onFailure { handleFailure(it as HttpResponseException) }
+        }.onFailure { errorHandler.sendError(it) }
     }
 
     internal fun endJobPosting(jobPostingId: String) = viewModelScope.launch {
@@ -94,13 +94,11 @@ class CenterHomeViewModel @Inject constructor(
                     it.id != jobPostingId
                 }
 
-                baseEvent(CareBaseEvent.ShowSnackBar("채용을 종료했어요.|SUCCESS"))
+                eventHandler.sendEvent(MainEvent.ShowSnackBar("채용을 종료했어요.", SUCCESS))
             } else {
-                baseEvent(CareBaseEvent.ShowSnackBar("채용 종료에 실패했어요.|ERROR"))
+                eventHandler.sendEvent(MainEvent.ShowSnackBar("채용 종료에 실패했어요."))
             }
-        }.onFailure {
-            handleFailure(it as HttpResponseException)
-        }
+        }.onFailure { errorHandler.sendError(it) }
     }
 }
 
