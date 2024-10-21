@@ -23,6 +23,7 @@ import com.idle.domain.usecase.config.GetForceUpdateInfoUseCase
 import com.idle.domain.usecase.profile.GetCenterStatusUseCase
 import com.idle.domain.usecase.profile.GetMyCenterProfileUseCase
 import com.idle.domain.usecase.profile.GetMyWorkerProfileUseCase
+import com.idle.presentation.MainEvent.NavigateTo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -98,7 +99,7 @@ class MainViewModel @Inject constructor(
         accessTokenDeferred.await() to userRoleDeferred.await()
     }
 
-    private fun navigateToDestination(userRole: String) {
+    private suspend fun navigateToDestination(userRole: String) {
         when (userRole) {
             UserType.WORKER.apiValue -> eventHandler.sendEvent(
                 NavigateTo(
@@ -112,11 +113,10 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun getCenterStatus() = viewModelScope.launch {
+    private suspend fun getCenterStatus() =
         getCenterStatusUseCase().onSuccess { centerStatusResponse ->
             handleCenterStatus(centerStatusResponse.centerManagerAccountStatus)
         }
-    }
 
     private fun handleCenterStatus(status: CenterManagerAccountStatus) {
         when (status) {

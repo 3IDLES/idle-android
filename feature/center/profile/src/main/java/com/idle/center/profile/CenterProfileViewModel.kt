@@ -40,6 +40,9 @@ class CenterProfileViewModel @Inject constructor(
     private val _profileImageUri = MutableStateFlow<Uri?>(null)
     val profileImageUri = _profileImageUri.asStateFlow()
 
+    private val _isUpdateLoading = MutableStateFlow(false)
+    val isUpdateLoading = _isUpdateLoading.asStateFlow()
+
     internal fun getMyCenterProfile() = viewModelScope.launch {
         getLocalMyCenterProfileUseCase().onSuccess {
             _centerProfile.value = it
@@ -66,6 +69,8 @@ class CenterProfileViewModel @Inject constructor(
             return@launch
         }
 
+        _isUpdateLoading.value = true
+
         updateCenterProfileUseCase(
             officeNumber = _centerOfficeNumber.value,
             introduce = _centerIntroduce.value.ifBlank { null },
@@ -74,6 +79,7 @@ class CenterProfileViewModel @Inject constructor(
             eventHandler.sendEvent(MainEvent.ShowSnackBar("정보 수정이 완료되었어요.", SUCCESS))
             setEditState(false)
         }.onFailure { errorHandler.sendError(it) }
+        }.also { _isUpdateLoading.value = false }
     }
 
     private fun isCenterProfileUnchanged(): Boolean {

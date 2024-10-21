@@ -26,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -285,10 +286,11 @@ private fun NotificationItem(
                 model = notification.imageUrl,
                 error = painterResource(R.drawable.ic_notification_placeholder),
                 placeholder = painterResource(R.drawable.ic_notification_placeholder),
+                contentScale = ContentScale.Crop,
                 contentDescription = "",
                 modifier = Modifier
-                    .size(48.dp)
                     .clip(CircleShape)
+                    .size(48.dp)
             )
 
             Column(modifier = Modifier.fillMaxWidth()) {

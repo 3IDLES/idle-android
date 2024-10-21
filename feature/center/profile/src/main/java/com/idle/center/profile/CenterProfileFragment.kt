@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -49,6 +50,7 @@ import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.CareTextFieldLong
 import com.idle.designsystem.compose.component.LabeledContent
+import com.idle.designsystem.compose.component.LoadingCircle
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.profile.CenterProfile
 import dagger.hilt.android.AndroidEntryPoint
@@ -68,6 +70,7 @@ internal class CenterProfileFragment : BaseComposeFragment() {
             val centerIntroduce by centerIntroduce.collectAsStateWithLifecycle()
             val isEditState by isEditState.collectAsStateWithLifecycle()
             val profileImageUri by profileImageUri.collectAsStateWithLifecycle()
+            val isUpdateLoading by isUpdateLoading.collectAsStateWithLifecycle()
 
             LaunchedEffect(true) {
                 if (args.centerId == "default") {
@@ -89,6 +92,7 @@ internal class CenterProfileFragment : BaseComposeFragment() {
                         centerIntroduce = centerIntroduce,
                         profileImageUri = profileImageUri,
                         isEditState = isEditState,
+                        isUpdateLoading = isUpdateLoading,
                         onCenterOfficeNumberChanged = ::setCenterOfficeNumber,
                         onCenterIntroduceChanged = ::setCenterIntroduce,
                         onProfileImageUriChanged = ::setProfileImageUrl,
@@ -110,6 +114,7 @@ internal fun CenterProfileScreen(
     centerIntroduce: String,
     profileImageUri: Uri?,
     isEditState: Boolean,
+    isUpdateLoading: Boolean,
     setEditState: (Boolean) -> Unit,
     onCenterOfficeNumberChanged: (String) -> Unit,
     onCenterIntroduceChanged: (String) -> Unit,
@@ -121,35 +126,61 @@ internal fun CenterProfileScreen(
     val scrollState = rememberScrollState()
     val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
-        onResult = { uri -> onProfileImageUriChanged(uri) }
+        onResult = { uri ->
+            onProfileImageUriChanged(uri ?: return@rememberLauncherForActivityResult)
+        }
     )
 
-    Scaffold(
-        topBar = {
-            CareSubtitleTopBar(
-                title = if (isMyProfile) stringResource(id = R.string.my_center_info)
-                else stringResource(id = R.string.center_info),
-                onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
-                leftComponent = {
-                    if (isMyProfile) {
-                        if (isEditState) {
-                            Text(
-                                text = stringResource(id = R.string.save),
-                                style = CareTheme.typography.subtitle2,
-                                color = CareTheme.colors.orange500,
-                                modifier = Modifier.clickable {
-                                    updateCenterProfile()
-                                }
-                            )
-                        } else {
-                            CareButtonRound(
-                                text = stringResource(id = R.string.edit),
-                                onClick = { setEditState(true) }
-                            )
+    Box(modifier = Modifier.fillMaxSize()) {
+        Scaffold(
+            topBar = {
+                CareSubtitleTopBar(
+                    title = if (isMyProfile) stringResource(id = R.string.my_center_info)
+                    else stringResource(id = R.string.center_info),
+                    onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
+                    leftComponent = {
+                        if (isMyProfile) {
+                            if (isEditState) {
+                                Text(
+                                    text = stringResource(id = R.string.save),
+                                    style = CareTheme.typography.subtitle2,
+                                    color = CareTheme.colors.orange500,
+                                    modifier = Modifier.clickable {
+                                        updateCenterProfile()
+                                    }
+                                )
+                            } else {
+                                CareButtonRound(
+                                    text = stringResource(id = R.string.edit),
+                                    onClick = { setEditState(true) }
+                                )
+                            }
                         }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 12.dp, top = 48.dp, end = 20.dp, bottom = 12.dp),
+                )
+            },
+            snackbarHost = {
+                SnackbarHost(
+                    hostState = snackbarHostState,
+                    snackbar = { data ->
+                        CareSnackBar(
+                            data = data,
+                            modifier = Modifier.padding(bottom = 20.dp)
+                        )
                     }
-                },
+                )
+            },
+            containerColor = CareTheme.colors.white000,
+            modifier = Modifier.addFocusCleaner(focusManager),
+        ) { paddingValues ->
+            Column(
+                verticalArrangement = Arrangement.spacedBy(20.dp),
                 modifier = Modifier
+                    .padding(paddingValues)
+                    .padding(top = 24.dp)
                     .fillMaxWidth()
                     .padding(start = 12.dp, top = 48.dp, end = 20.dp, bottom = 12.dp),
             )
@@ -167,160 +198,175 @@ internal fun CenterProfileScreen(
         ) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.padding(horizontal = 20.dp)
+                modifier = Modifier.padding(horizontal = 20.dp),
             ) {
-                Text(
-                    text = centerProfile.centerName,
-                    style = CareTheme.typography.heading1,
-                    color = CareTheme.colors.black,
-                )
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(2.dp)
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.padding(horizontal = 20.dp)
                 ) {
-                    Image(
-                        painter = painterResource(R.drawable.ic_address_pin),
-                        contentDescription = "위치를 알려주는 핀 이미지 입니다.",
-                    )
-
                     Text(
-                        text = centerProfile.lotNumberAddress,
-                        style = CareTheme.typography.body2,
+                        text = centerProfile.centerName,
+                        style = CareTheme.typography.heading1,
                         color = CareTheme.colors.black,
                     )
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(2.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(R.drawable.ic_address_pin),
+                            contentDescription = "위치를 알려주는 핀 이미지 입니다.",
+                        )
+
+                        Text(
+                            text = centerProfile.lotNumberAddress,
+                            style = CareTheme.typography.body2,
+                            color = CareTheme.colors.black,
+                        )
+                    }
                 }
-            }
 
-            HorizontalDivider(
-                color = CareTheme.colors.gray050,
-                thickness = 8.dp,
-                modifier = Modifier.padding(vertical = 4.dp)
-            )
-
-            Column(
-                verticalArrangement = Arrangement.spacedBy(20.dp),
-                modifier = Modifier.padding(start = 20.dp, end = 20.dp),
-            ) {
-                Text(
-                    text = stringResource(id = R.string.center_detail_info),
-                    style = CareTheme.typography.subtitle1,
-                    color = CareTheme.colors.black,
+                HorizontalDivider(
+                    color = CareTheme.colors.gray050,
+                    thickness = 8.dp,
+                    modifier = Modifier.padding(vertical = 4.dp)
                 )
 
-                LabeledContent(
-                    subtitle = stringResource(id = R.string.phone_number),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 8.dp),
-                ) {
-                    if (!isEditState) {
-                        Text(
-                            text = centerOfficeNumber,
-                            style = CareTheme.typography.body3,
-                            color = CareTheme.colors.black,
-                        )
-                    } else {
-                        CareTextField(
-                            value = centerOfficeNumber,
-                            keyboardType = KeyboardType.Number,
-                            onValueChanged = onCenterOfficeNumberChanged,
-                            modifier = Modifier.fillMaxWidth(),
-                        )
-                    }
-                }
-
-                LabeledContent(
-                    subtitle = stringResource(id = R.string.center_introduce),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 8.dp),
-                ) {
-                    if (!isEditState) {
-                        Text(
-                            text = centerIntroduce,
-                            style = CareTheme.typography.body3,
-                            color = CareTheme.colors.black,
-                        )
-                    } else {
-                        CareTextFieldLong(
-                            value = centerIntroduce.ifEmpty { "-" },
-                            onValueChanged = onCenterIntroduceChanged,
-                            modifier = Modifier.fillMaxWidth(),
-                        )
-                    }
-                }
-
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(6.dp),
-                    modifier = Modifier.padding(bottom = 52.dp),
+                    verticalArrangement = Arrangement.spacedBy(20.dp),
+                    modifier = Modifier.padding(start = 20.dp, end = 20.dp),
                 ) {
                     Text(
-                        text = stringResource(id = R.string.center_image),
-                        style = CareTheme.typography.subtitle4,
-                        color = CareTheme.colors.gray500,
+                        text = stringResource(id = R.string.center_detail_info),
+                        style = CareTheme.typography.subtitle1,
+                        color = CareTheme.colors.black,
                     )
 
-                    Box(
+                    LabeledContent(
+                        subtitle = stringResource(id = R.string.phone_number),
                         modifier = Modifier
-                            .padding(bottom = 60.dp)
-                            .clickable {
-                                if (isEditState) singlePhotoPickerLauncher.launch(
-                                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                                )
-                            },
+                            .fillMaxWidth()
+                            .padding(bottom = 8.dp),
                     ) {
-                        if (centerProfile.profileImageUrl == null && profileImageUri == null) {
-                            if (!isEditState) {
-                                Image(
-                                    painter = painterResource(R.drawable.ic_profile_empty),
-                                    contentDescription = null,
-                                    contentScale = ContentScale.FillWidth,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .clip(RoundedCornerShape(6.dp))
-                                )
-                            } else {
-                                Image(
-                                    painter = painterResource(R.drawable.ic_profile_empty_edit),
-                                    contentDescription = null,
-                                    contentScale = ContentScale.FillWidth,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .clip(RoundedCornerShape(6.dp))
-                                )
-                            }
-                        } else {
-                            AsyncImage(
-                                model = profileImageUri ?: centerProfile.profileImageUrl,
-                                contentDescription = "",
-                                placeholder = painterResource(R.drawable.ic_profile_empty),
-                                contentScale = ContentScale.FillWidth,
-                                modifier = Modifier
-                                    .height(243.dp)
-                                    .fillMaxWidth()
-                                    .clip(RoundedCornerShape(6.dp))
+                        if (!isEditState) {
+                            Text(
+                                text = centerOfficeNumber,
+                                style = CareTheme.typography.body3,
+                                color = CareTheme.colors.black,
                             )
+                        } else {
+                            CareTextField(
+                                value = centerOfficeNumber,
+                                keyboardType = KeyboardType.Number,
+                                onValueChanged = onCenterOfficeNumberChanged,
+                                modifier = Modifier.fillMaxWidth(),
+                            )
+                        }
+                    }
 
-                            if (isEditState) {
-                                Spacer(
-                                    modifier = Modifier
-                                        .matchParentSize()
-                                        .clip(RoundedCornerShape(6.dp))
-                                        .background(Color.Black.copy(alpha = 0.4f))
-                                )
+                    LabeledContent(
+                        subtitle = stringResource(id = R.string.center_introduce),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 8.dp),
+                    ) {
+                        if (!isEditState) {
+                            Text(
+                                text = centerIntroduce,
+                                style = CareTheme.typography.body3,
+                                color = CareTheme.colors.black,
+                            )
+                        } else {
+                            CareTextFieldLong(
+                                value = centerIntroduce.ifEmpty { "-" },
+                                onValueChanged = onCenterIntroduceChanged,
+                                modifier = Modifier.fillMaxWidth(),
+                            )
+                        }
+                    }
 
-                                Image(
-                                    painter = painterResource(R.drawable.ic_edit_pencil),
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(6.dp),
+                        modifier = Modifier.padding(bottom = 52.dp),
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.center_image),
+                            style = CareTheme.typography.subtitle4,
+                            color = CareTheme.colors.gray500,
+                        )
+
+                        Box(
+                            modifier = Modifier
+                                .padding(bottom = 60.dp)
+                                .clickable {
+                                    if (isEditState) singlePhotoPickerLauncher.launch(
+                                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                                    )
+                                },
+                        ) {
+                            if (centerProfile.profileImageUrl == null && profileImageUri == null) {
+                                if (!isEditState) {
+                                    Image(
+                                        painter = painterResource(R.drawable.ic_profile_empty),
+                                        contentDescription = null,
+                                        contentScale = ContentScale.FillWidth,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .clip(RoundedCornerShape(6.dp))
+                                    )
+                                } else {
+                                    Image(
+                                        painter = painterResource(R.drawable.ic_profile_empty_edit),
+                                        contentDescription = null,
+                                        contentScale = ContentScale.FillWidth,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .clip(RoundedCornerShape(6.dp))
+                                    )
+                                }
+                            } else {
+                                AsyncImage(
+                                    model = profileImageUri ?: centerProfile.profileImageUrl,
                                     contentDescription = "",
+                                    placeholder = painterResource(R.drawable.ic_profile_empty),
+                                    contentScale = ContentScale.FillWidth,
                                     modifier = Modifier
-                                        .align(Alignment.BottomEnd)
-                                        .padding(16.dp)
+                                        .height(243.dp)
+                                        .fillMaxWidth()
+                                        .clip(RoundedCornerShape(6.dp))
                                 )
+
+                                if (isEditState) {
+                                    Spacer(
+                                        modifier = Modifier
+                                            .matchParentSize()
+                                            .clip(RoundedCornerShape(6.dp))
+                                            .background(Color.Black.copy(alpha = 0.4f))
+                                    )
+
+                                    Image(
+                                        painter = painterResource(R.drawable.ic_edit_pencil),
+                                        contentDescription = "",
+                                        modifier = Modifier
+                                            .align(Alignment.BottomEnd)
+                                            .padding(16.dp)
+                                    )
+                                }
                             }
                         }
                     }
                 }
+            }
+        }
+
+        if (isUpdateLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(CareTheme.colors.black.copy(alpha = 0.1f))
+            ) {
+                LoadingCircle(modifier = Modifier.align(Alignment.Center))
             }
         }
     }

@@ -104,6 +104,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -240,11 +241,10 @@ class MainActivity : AppCompatActivity() {
             }
 
             "JOB_POSTING_DETAIL" -> {
-                val jobPostingId =
-                    extras.getString("jobPostingId") ?: run {
-                        if (isColdStart) viewModel.initializeUserSession()
-                        return
-                    }
+                val jobPostingId = extras.getString("jobPostingId") ?: run {
+                    if (isColdStart) viewModel.initializeUserSession()
+                    return
+                }
 
                 val screenDepth = listOf(
                     WorkerHome,
@@ -287,14 +287,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setDestinationListener() {
-        navController.addOnDestinationChangedListener { _, destination, arguments ->
+        navController.addOnDestinationChangedListener { _, destination, _ ->
             binding.apply {
-                val navMenuType = if (destination.id in centerBottomNavDestinationIds) {
-                    NavigationMenuType.CENTER
-                } else if (destination.id in workerBottomNavDestinationIds) {
-                    NavigationMenuType.WORKER
-                } else {
-                    NavigationMenuType.HIDE
+                val navMenuType = when (destination.id) {
+                    in centerBottomNavDestinationIds -> NavigationMenuType.CENTER
+                    in workerBottomNavDestinationIds -> NavigationMenuType.WORKER
+                    else -> NavigationMenuType.HIDE
                 }
 
                 viewModel.setNavigationMenuType(navMenuType)
@@ -347,14 +345,15 @@ class MainActivity : AppCompatActivity() {
         return false
     }
 
-    private fun normalizeVersion(version: String): List<Int> {
-        return version.split('.').map { it.toIntOrNull() ?: 0 }.let {
-            when (it.size) {
-                2 -> it + listOf(0) // 1.0 -> 1.0.0 형태로 변환
-                else -> it
+    private fun normalizeVersion(version: String): List<Int> =
+        version.split('.')
+            .map { it.toIntOrNull() ?: 0 }
+            .let {
+                when (it.size) {
+                    2 -> it + listOf(0) // 1.0 -> 1.0.0 형태로 변환
+                    else -> it
+                }
             }
-        }
-    }
 
     private fun slideUp(view: View) {
         view.measure(
