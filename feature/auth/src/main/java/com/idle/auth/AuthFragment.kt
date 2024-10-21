@@ -41,6 +41,7 @@ import com.idle.binding.DeepLinkDestination.CenterSignUp
 import com.idle.binding.DeepLinkDestination.WorkerSignUp
 import com.idle.binding.base.EventHandler
 import com.idle.binding.base.MainEvent
+import com.idle.binding.base.SnackBarType
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designresource.R.string
@@ -67,6 +68,8 @@ internal class AuthFragment : BaseComposeFragment() {
                 if (args.snackBarMsg != "default") {
                     eventHandler.sendEvent(MainEvent.ShowSnackBar(args.snackBarMsg))
                 }
+
+                eventHandler.sendEvent(MainEvent.ShowSnackBar("할룽"))
             }
 
             AuthScreen(
