@@ -4,8 +4,6 @@ import com.idle.domain.model.jobposting.CrawlingJobPosting
 import com.idle.domain.model.jobposting.JobPostingType
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 @Serializable
 data class GetCrawlingJobPostingsResponse(

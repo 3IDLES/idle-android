@@ -2,7 +2,6 @@ package com.tgyuu.applicant.inquiry
 
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.base.EventHandler
 import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.jobposting.Applicant
 import com.idle.domain.model.jobposting.JobPostingSummary

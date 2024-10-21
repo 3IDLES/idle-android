@@ -4,7 +4,6 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.idle.network.api.AuthApi
 import com.idle.network.model.auth.BusinessRegistrationResponse
 import com.idle.network.model.auth.ConfirmAuthCodeRequest
-import com.idle.network.model.auth.FCMTokenRequest
 import com.idle.network.model.auth.GenerateNewPasswordRequest
 import com.idle.network.model.auth.SendPhoneRequest
 import com.idle.network.model.auth.SignInCenterRequest

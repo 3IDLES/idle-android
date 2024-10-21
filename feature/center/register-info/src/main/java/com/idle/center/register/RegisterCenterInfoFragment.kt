@@ -40,6 +40,7 @@ import javax.inject.Inject
 internal class RegisterCenterInfoFragment : BaseComposeFragment() {
 
     override val fragmentViewModel: RegisterCenterInfoViewModel by viewModels()
+
     @Inject
     lateinit var eventHandler: EventHandler
 

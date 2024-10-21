@@ -13,7 +13,8 @@ class GetJobPostingsInProgressUseCase @Inject constructor(
         jobPosting.mapCatching { jobPostings ->
             val deferredResults = jobPostings.map { jobPosting ->
                 async {
-                    val applicantCount = jobPostingRepository.getApplicantsCount(jobPosting.id).getOrThrow()
+                    val applicantCount =
+                        jobPostingRepository.getApplicantsCount(jobPosting.id).getOrThrow()
                     jobPosting.copy(applicantCount = applicantCount)
                 }
             }

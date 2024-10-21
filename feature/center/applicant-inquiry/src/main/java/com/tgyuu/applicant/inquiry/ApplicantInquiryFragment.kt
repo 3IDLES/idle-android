@@ -55,6 +55,7 @@ import javax.inject.Inject
 internal class ApplicantInquiryFragment : BaseComposeFragment() {
     private val args: ApplicantInquiryFragmentArgs by navArgs()
     override val fragmentViewModel: ApplicantInquiryViewModel by viewModels()
+
     @Inject
     lateinit var eventHandler: EventHandler
 

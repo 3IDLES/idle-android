@@ -43,8 +43,8 @@ class AuthRepositoryImplTest {
         coEvery { userInfoDataSource.clearUserType() } just Runs
         coEvery { userInfoDataSource.clearUserInfo() } just Runs
         coEvery { authDataSource.getDeviceToken() } returns "testToken"
-        coEvery { tokenRepository.postDeviceToken(any())} returns Result.success(Unit)
-        coEvery { tokenRepository.deleteDeviceToken()} returns Result.success(Unit)
+        coEvery { tokenRepository.postDeviceToken(any()) } returns Result.success(Unit)
+        coEvery { tokenRepository.deleteDeviceToken() } returns Result.success(Unit)
     }
 
     @Test

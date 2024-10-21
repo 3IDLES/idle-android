@@ -39,30 +39,31 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/dialog_left_BTN"
-            style="@style/Heading4"
-            android:layout_width="0dp"
-            android:layout_height="52dp"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-            android:background="@drawable/shape_button_white"
-            android:onClick="@{()->viewModel.dismiss()}"
-            android:text="@string/end_short"
-            android:textColor="@color/gray_300" />
+            <Button
+                android:id="@+id/dialog_left_BTN"
+                style="@style/Heading4"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_button_white"
+                android:onClick="@{()->viewModel.dismiss()}"
+                android:text="@string/end_short"
+                android:textColor="@color/gray_300" />
 
-        <Button
-            android:id="@+id/dialog_right_BTN"
-            style="@style/Heading4"
-            android:layout_width="0dp"
-            android:layout_height="52dp"
-            android:layout_weight="1"
-            android:background="@drawable/shape_button_red"
-            android:backgroundTint="@color/orange_500"
-            android:onClick="@{()->viewModel.update()}"
-            android:text="@string/app_update"
-            android:textColor="@color/white" />
+            <Button
+                android:id="@+id/dialog_right_BTN"
+                style="@style/Heading4"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_button_red"
+                android:backgroundTint="@color/orange_500"
+                android:onClick="@{()->viewModel.update()}"
+                android:text="@string/app_update"
+                android:textColor="@color/white" />
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout></layout>
+</layout>

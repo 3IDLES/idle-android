@@ -69,9 +69,10 @@ internal fun WorkerInformationScreen(
 
         LabeledContent(
             subtitle = stringResource(id = R.string.name),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(bottom = 32.dp),
-            ) {
+        ) {
             CareTextField(
                 value = workerName,
                 hint = stringResource(id = R.string.worker_name_hint),
@@ -85,9 +86,10 @@ internal fun WorkerInformationScreen(
 
         LabeledContent(
             subtitle = stringResource(id = R.string.birth_year),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(bottom = 32.dp),
-            ) {
+        ) {
             CareTextField(
                 value = birthYear,
                 hint = stringResource(id = R.string.worker_birth_year_hint),
@@ -105,9 +107,10 @@ internal fun WorkerInformationScreen(
 
         LabeledContent(
             subtitle = stringResource(id = R.string.gender),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(bottom = 32.dp),
-            ) {
+        ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(4.dp),

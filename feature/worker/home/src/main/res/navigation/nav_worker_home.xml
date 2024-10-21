@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/workerHomeFragment"
         android:name="com.idle.worker.home.WorkerHomeFragment"
-        android:label="WorkerHomeFragment" >
-        <deepLink app:uri="@string/worker_home_deeplink_url"/>
+        android:label="WorkerHomeFragment">
+        <deepLink app:uri="@string/worker_home_deeplink_url" />
     </fragment>
 </navigation>

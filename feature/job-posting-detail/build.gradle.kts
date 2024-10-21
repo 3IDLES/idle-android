@@ -9,6 +9,6 @@ android {
 
 dependencies {
     implementation(projects.feature.center.jobPostingEdit)
-    
+
     implementation(libs.coil.compose)
 }

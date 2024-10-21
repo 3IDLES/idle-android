@@ -18,6 +18,7 @@ interface AuthRepository {
         roadNameAddress: String,
         lotNumberAddress: String,
     ): Result<Unit>
+
     suspend fun signUpCenter(
         identifier: String,
         password: String,

@@ -15,6 +15,6 @@
         android:id="@+id/jobPostingPostCompleteFragment"
         android:name="com.idle.center.jobposting.complete.JobPostingCompleteFragment"
         android:label="JobPostingCompleteFragment">
-        <deepLink app:uri="@string/center_job_posting_post_complete_deeplink_url"/>
+        <deepLink app:uri="@string/center_job_posting_post_complete_deeplink_url" />
     </fragment>
 </navigation>

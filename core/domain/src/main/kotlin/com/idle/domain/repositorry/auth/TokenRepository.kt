@@ -1,7 +1,5 @@
 package com.idle.domain.repositorry.auth
 
-import com.idle.domain.model.auth.UserType
-
 interface TokenRepository {
     suspend fun getAccessToken(): String
 
