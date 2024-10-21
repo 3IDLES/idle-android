@@ -1,6 +1,5 @@
 package com.idle.signin.center
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.idle.analytics.AnalyticsEvent
 import com.idle.analytics.AnalyticsEvent.PropertiesKeys.ACTION_NAME
@@ -16,6 +15,7 @@ import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.error.ApiErrorCode
 import com.idle.domain.model.error.ErrorHandlerHelper
 import com.idle.domain.model.error.HttpResponseException
+import com.idle.domain.model.error.HttpResponseStatus
 import com.idle.domain.model.profile.CenterManagerAccountStatus
 import com.idle.domain.usecase.auth.SignInCenterUseCase
 import com.idle.domain.usecase.profile.GetCenterStatusUseCase
@@ -63,10 +63,7 @@ class CenterSignInViewModel @Inject constructor(
                 handleCenterLoginSuccess()
             }
             .onFailure {
-                Log.d("test 외부", it.toString())
-
-                if (it is HttpResponseException && it.apiErrorCode == ApiErrorCode.InvalidLoginRequest) {
-                    Log.d("test", it.toString())
+                if (it is HttpResponseException && it.status == HttpResponseStatus.Unauthorized) {
                     _isLoginError.value = true
                     return@launch
                 }

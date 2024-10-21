@@ -1,7 +1,10 @@
 package com.idle.signin.center.newpassword.step
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,13 +19,10 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareTextField
@@ -35,6 +35,10 @@ import com.idle.signin.center.newpassword.NewPasswordStep.PHONE_NUMBER
 internal fun GenerateNewPasswordScreen(
     newPassword: String,
     newPasswordForConfirm: String,
+    isPasswordLengthValid: Boolean,
+    isPasswordContainsLetterAndDigit: Boolean,
+    isPasswordNoWhitespace: Boolean,
+    isPasswordNoSequentialChars: Boolean,
     onNewPasswordChanged: (String) -> Unit,
     onNewPasswordForConfirmChanged: (String) -> Unit,
     setNewPasswordProcess: (NewPasswordStep) -> Unit,
@@ -61,24 +65,10 @@ internal fun GenerateNewPasswordScreen(
         )
 
         LabeledContent(
-            subtitle = buildAnnotatedString {
-                withStyle(
-                    style = SpanStyle(color = CareTheme.colors.gray500)
-                ) {
-                    append("비밀번호 설정 ")
-                }
-                withStyle(
-                    style = SpanStyle(
-                        color = CareTheme.colors.gray300,
-                        fontSize = 12.sp,
-                    )
-                ) {
-                    append(stringResource(id = R.string.password_conditions))
-                }
-            },
+            subtitle = stringResource(R.string.set_password),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 32.dp),
+                .padding(bottom = 12.dp),
         ) {
             CareTextField(
                 value = newPassword,
@@ -92,31 +82,130 @@ internal fun GenerateNewPasswordScreen(
             )
         }
 
+        Text(
+            text = stringResource(id = R.string.password_description),
+            style = CareTheme.typography.body3,
+            color = CareTheme.colors.gray500,
+            modifier = Modifier.padding(bottom = 6.dp),
+        )
+
+        Column(
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 24.dp),
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                val imageResource =
+                    if (isPasswordContainsLetterAndDigit) R.drawable.ic_right_condition
+                    else R.drawable.ic_not_right_condition
+
+                Image(
+                    painter = painterResource(imageResource),
+                    contentDescription = "",
+                )
+
+                val textColor = if (isPasswordContainsLetterAndDigit) CareTheme.colors.green
+                else CareTheme.colors.red
+
+                Text(
+                    text = "영문자와 숫자 반드시 하나씩 포함",
+                    style = CareTheme.typography.body3,
+                    color = textColor,
+                )
+            }
+
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                val imageResource = if (isPasswordNoWhitespace) R.drawable.ic_right_condition
+                else R.drawable.ic_not_right_condition
+
+                Image(
+                    painter = painterResource(imageResource),
+                    contentDescription = "",
+                )
+
+                val textColor = if (isPasswordNoWhitespace) CareTheme.colors.green
+                else CareTheme.colors.red
+
+                Text(
+                    text = "공백 문자 사용 금지",
+                    style = CareTheme.typography.body3,
+                    color = textColor,
+                )
+            }
+
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                val imageResource = if (isPasswordNoSequentialChars) R.drawable.ic_right_condition
+                else R.drawable.ic_not_right_condition
+
+                Image(
+                    painter = painterResource(imageResource),
+                    contentDescription = "",
+                )
+
+                val textColor = if (isPasswordNoSequentialChars) CareTheme.colors.green
+                else CareTheme.colors.red
+
+                Text(
+                    text = "연속된 문자 3개 이상 사용 금지",
+                    style = CareTheme.typography.body3,
+                    color = textColor,
+                )
+            }
+        }
+
         LabeledContent(
             subtitle = stringResource(id = R.string.confirm_password),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 2.dp),
         ) {
             CareTextField(
                 value = newPasswordForConfirm,
                 hint = stringResource(id = R.string.confirm_password_hint),
                 onValueChanged = onNewPasswordForConfirmChanged,
                 visualTransformation = PasswordVisualTransformation(),
+                isError = newPasswordForConfirm.isNotBlank() && newPassword != newPasswordForConfirm,
                 onDone = {
-                    if (newPasswordForConfirm.isNotBlank() && newPassword == newPasswordForConfirm) {
+                    if (isPasswordLengthValid &&
+                        isPasswordContainsLetterAndDigit &&
+                        isPasswordNoWhitespace &&
+                        isPasswordNoSequentialChars &&
+                        newPasswordForConfirm.isNotBlank() && newPassword == newPasswordForConfirm
+                    ) {
                         generateNewPassword()
                     }
                 },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 32.dp),
+                modifier = Modifier.fillMaxWidth()
             )
         }
+
+
+        Text(
+            text = if (newPasswordForConfirm.isNotBlank() && newPassword != newPasswordForConfirm)
+                stringResource(R.string.login_error_description) else "",
+            style = CareTheme.typography.caption1,
+            color = CareTheme.colors.red,
+        )
 
         Spacer(modifier = Modifier.weight(1f))
 
         CareButtonLarge(
             text = stringResource(id = R.string.change_password),
-            enable = newPasswordForConfirm.isNotBlank() && newPassword == newPasswordForConfirm,
+            enable = isPasswordLengthValid &&
+                    isPasswordContainsLetterAndDigit &&
+                    isPasswordNoWhitespace &&
+                    isPasswordNoSequentialChars &&
+                    (newPasswordForConfirm.isNotBlank() && newPassword == newPasswordForConfirm),
             onClick = generateNewPassword,
             modifier = Modifier
                 .fillMaxWidth()

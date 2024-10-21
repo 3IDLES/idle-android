@@ -144,6 +144,13 @@ enum class ApiErrorCode(val serverCode: String, val description: String, val dis
         "지원하지 않는 유저 토큰 타입입니다."
     ),
 
+    // PERSISTENCE
+    ResourceNotFound(
+        "PERSISTENCE-001",
+        "조회 요청 시, 해당 리소스가 DB 내에 존재하지 않는 경우 발생합니다.",
+        "아직 등록되지 않은 정보 입니다."
+    ),
+
     // SMS Errors
     ClientException(
         "SMS-001",

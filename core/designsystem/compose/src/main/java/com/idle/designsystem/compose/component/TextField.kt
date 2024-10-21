@@ -153,7 +153,6 @@ fun CareTextField(
     readOnly: Boolean = false,
     enabled: Boolean = true,
     isError: Boolean = false,
-    errorMsg: String = "",
     onDone: () -> Unit = {},
     textStyle: TextStyle = CareTheme.typography.body3.copy(
         color = if (readOnly) {
@@ -178,67 +177,56 @@ fun CareTextField(
         },
     )
 
-    Column(
-        verticalArrangement = Arrangement.spacedBy(2.dp),
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .height(48.dp)
-                .background(
-                    color = if (readOnly) {
-                        CareTheme.colors.gray050
-                    } else {
-                        CareTheme.colors.white000
-                    }, shape = RoundedCornerShape(6.dp)
-                )
-                .border(
-                    border = boarderStroke,
-                    shape = RoundedCornerShape(6.dp)
-                )
-                .padding(horizontal = 16.dp),
-        ) {
-            BasicTextField(
-                value = value,
-                onValueChange = onValueChanged,
-                textStyle = textStyle,
-                singleLine = true,
-                readOnly = readOnly,
-                enabled = enabled,
-                interactionSource = interactionSource,
-                visualTransformation = visualTransformation,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = keyboardType,
-                    imeAction = ImeAction.Done
-                ),
-                keyboardActions = KeyboardActions(onDone = {
-                    keyboardController?.hide()
-                    onDone()
-                }),
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(top = 10.dp, bottom = 10.dp, end = 8.dp),
-                decorationBox = { innerTextField ->
-                    if (value.isEmpty()) {
-                        Text(
-                            text = hint,
-                            style = CareTheme.typography.body3,
-                            color = CareTheme.colors.gray200,
-                        )
-                    }
-                    innerTextField()
-                }
+            .height(48.dp)
+            .background(
+                color = if (readOnly) {
+                    CareTheme.colors.gray050
+                } else {
+                    CareTheme.colors.white000
+                }, shape = RoundedCornerShape(6.dp)
             )
-
-            leftComponent()
-        }
-
-        Text(
-            text = if (isError) errorMsg else "",
-            style = CareTheme.typography.caption1,
-            color = CareTheme.colors.red,
+            .border(
+                border = boarderStroke,
+                shape = RoundedCornerShape(6.dp)
+            )
+            .padding(horizontal = 16.dp),
+    ) {
+        BasicTextField(
+            value = value,
+            onValueChange = onValueChanged,
+            textStyle = textStyle,
+            singleLine = true,
+            readOnly = readOnly,
+            enabled = enabled,
+            interactionSource = interactionSource,
+            visualTransformation = visualTransformation,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = keyboardType,
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(onDone = {
+                keyboardController?.hide()
+                onDone()
+            }),
+            modifier = Modifier
+                .weight(1f)
+                .padding(top = 10.dp, bottom = 10.dp, end = 8.dp),
+            decorationBox = { innerTextField ->
+                if (value.isEmpty()) {
+                    Text(
+                        text = hint,
+                        style = CareTheme.typography.body3,
+                        color = CareTheme.colors.gray200,
+                    )
+                }
+                innerTextField()
+            }
         )
+
+        leftComponent()
     }
 }
 
