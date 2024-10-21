@@ -6,15 +6,15 @@ import com.idle.binding.DeepLinkDestination.CenterHome
 import com.idle.binding.DeepLinkDestination.CenterPending
 import com.idle.binding.DeepLinkDestination.CenterRegister
 import com.idle.binding.DeepLinkDestination.WorkerHome
-import com.idle.binding.EventHandler
+import com.idle.binding.EventHandlerHelper
 import com.idle.binding.MainEvent.ShowSnackBar
 import com.idle.binding.NavigationEvent
-import com.idle.binding.NavigationRouter
+import com.idle.binding.NavigationHelper
 import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.config.ForceUpdate
 import com.idle.domain.model.error.ApiErrorCode
-import com.idle.domain.model.error.ErrorHandler
+import com.idle.domain.model.error.ErrorHandlerHelper
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.profile.CenterManagerAccountStatus
 import com.idle.domain.usecase.auth.GetAccessTokenUseCase
@@ -43,9 +43,9 @@ class MainViewModel @Inject constructor(
     private val getMyCenterProfileUseCase: GetMyCenterProfileUseCase,
     private val getMyWorkerProfileUseCase: GetMyWorkerProfileUseCase,
     private val getCenterStatusUseCase: GetCenterStatusUseCase,
-    private val errorHandler: ErrorHandler,
-    private val eventHandler: EventHandler,
-    val navigationRouter: NavigationRouter,
+    private val errorHandlerHelper: ErrorHandlerHelper,
+    private val eventHandlerHelper: EventHandlerHelper,
+    val navigationHelper: NavigationHelper,
 ) : BaseViewModel() {
     private val _navigationMenuType = MutableStateFlow(NavigationMenuType.HIDE)
     val navigationMenuType = _navigationMenuType.asStateFlow()
@@ -53,7 +53,7 @@ class MainViewModel @Inject constructor(
     private val _forceUpdate = MutableStateFlow<ForceUpdate?>(null)
     val forceUpdate = _forceUpdate.asStateFlow()
 
-    val eventFlow = eventHandler.eventFlow
+    val eventFlow = eventHandlerHelper.eventFlow
         .shareIn(
             scope = viewModelScope,
             started = SharingStarted.Lazily,
@@ -70,7 +70,7 @@ class MainViewModel @Inject constructor(
     internal fun getForceUpdateInfo() = viewModelScope.launch {
         getForceUpdateInfoUseCase().onSuccess {
             _forceUpdate.value = it
-        }.onFailure { errorHandler.sendError(it) }
+        }.onFailure { errorHandlerHelper.sendError(it) }
     }
 
     internal fun initializeUserSession() = viewModelScope.launch {
@@ -101,7 +101,7 @@ class MainViewModel @Inject constructor(
 
     private suspend fun navigateToDestination(userRole: String) {
         when (userRole) {
-            UserType.WORKER.apiValue -> navigationRouter.navigateTo(
+            UserType.WORKER.apiValue -> navigationHelper.navigateTo(
                 NavigationEvent.NavigateTo(WorkerHome, R.id.authFragment)
             )
 
@@ -118,7 +118,7 @@ class MainViewModel @Inject constructor(
     private fun handleCenterStatus(status: CenterManagerAccountStatus) {
         when (status) {
             CenterManagerAccountStatus.APPROVED -> handleApprovedCenterStatus()
-            else -> navigationRouter.navigateTo(
+            else -> navigationHelper.navigateTo(
                 NavigationEvent.NavigateTo(CenterPending(status.name), R.id.authFragment)
             )
         }
@@ -126,13 +126,13 @@ class MainViewModel @Inject constructor(
 
     private fun handleApprovedCenterStatus() = viewModelScope.launch {
         getMyCenterProfileUseCase().onSuccess {
-            navigationRouter.navigateTo(
+            navigationHelper.navigateTo(
                 NavigationEvent.NavigateTo(CenterHome, R.id.authFragment)
             )
         }.onFailure {
             val error = it as HttpResponseException
             if (error.apiErrorCode == ApiErrorCode.CenterNotFound) {
-                navigationRouter.navigateTo(
+                navigationHelper.navigateTo(
                     NavigationEvent.NavigateTo(CenterRegister, R.id.authFragment)
                 )
             }
@@ -140,7 +140,7 @@ class MainViewModel @Inject constructor(
     }
 
     private fun handleError() = viewModelScope.launch {
-        errorHandler.errorEvent.collect { exception ->
+        errorHandlerHelper.errorEvent.collect { exception ->
             when (exception) {
                 is HttpResponseException -> {
                     when (exception.apiErrorCode) {
@@ -149,18 +149,18 @@ class MainViewModel @Inject constructor(
                         ApiErrorCode.TokenExpiredException,
                         ApiErrorCode.TokenNotFound,
                         ApiErrorCode.NotSupportUserTokenType ->
-                            navigationRouter.navigateTo(
+                            navigationHelper.navigateTo(
                                 NavigationEvent.NavigateToAuthWithClearBackStack(
                                     exception.print()
                                 )
                             )
 
-                        else -> eventHandler.sendEvent(ShowSnackBar(exception.print()))
+                        else -> eventHandlerHelper.sendEvent(ShowSnackBar(exception.print()))
                     }
                 }
 
-                is SocketTimeoutException -> eventHandler.sendEvent(ShowSnackBar("서버 응답 시간이 초과되었습니다. 잠시 후 다시 시도해 주세요."))
-                is IOException -> eventHandler.sendEvent(ShowSnackBar("인터넷 연결이 불안정합니다. 네트워크 상태를 확인해 주세요."))
+                is SocketTimeoutException -> eventHandlerHelper.sendEvent(ShowSnackBar("서버 응답 시간이 초과되었습니다. 잠시 후 다시 시도해 주세요."))
+                is IOException -> eventHandlerHelper.sendEvent(ShowSnackBar("인터넷 연결이 불안정합니다. 네트워크 상태를 확인해 주세요."))
                 else -> {}
             }
         }

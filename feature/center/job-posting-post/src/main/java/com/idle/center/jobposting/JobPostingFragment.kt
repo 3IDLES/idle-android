@@ -201,7 +201,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
                             setEditState(false)
                         },
                         setEditState = ::setEditState,
-                        showSnackBar = { eventHandler.sendEvent(MainEvent.ShowSnackBar(it)) },
+                        showSnackBar = { eventHandlerHelper.sendEvent(MainEvent.ShowSnackBar(it)) },
                     )
                 } else {
                     JobPostingScreen(
@@ -261,14 +261,14 @@ internal class JobPostingFragment : BaseComposeFragment() {
                         onCalendarMonthChanged = ::setCalendarMonth,
                         postJobPosting = ::postJobPosting,
                         setJobPostingStep = { step ->
-                            eventHandler.sendEvent(MainEvent.DismissSnackBar)
+                            eventHandlerHelper.sendEvent(MainEvent.DismissSnackBar)
                             setJobPostingStep(step)
                         },
                         setEditState = ::setEditState,
                         setBottomSheetType = ::setBottomSheetType,
-                        showSnackBar = { eventHandler.sendEvent(MainEvent.ShowSnackBar(it)) },
+                        showSnackBar = { eventHandlerHelper.sendEvent(MainEvent.ShowSnackBar(it)) },
                         navigateToHome = {
-                            navigationRouter.navigateTo(
+                            navigationHelper.navigateTo(
                                 NavigationEvent.NavigateTo(
                                     DeepLinkDestination.CenterHome,
                                     com.idle.center.job.posting.post.R.id.jobPostingPostFragment

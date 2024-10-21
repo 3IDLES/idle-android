@@ -8,12 +8,12 @@ import com.idle.analytics.helper.AnalyticsHelper
 import com.idle.binding.DeepLinkDestination.CenterHome
 import com.idle.binding.DeepLinkDestination.CenterPending
 import com.idle.binding.DeepLinkDestination.CenterRegister
-import com.idle.binding.EventHandler
+import com.idle.binding.EventHandlerHelper
 import com.idle.binding.NavigationEvent
-import com.idle.binding.NavigationRouter
+import com.idle.binding.NavigationHelper
 import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.error.ApiErrorCode
-import com.idle.domain.model.error.ErrorHandler
+import com.idle.domain.model.error.ErrorHandlerHelper
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.profile.CenterManagerAccountStatus
 import com.idle.domain.usecase.auth.SignInCenterUseCase
@@ -32,9 +32,9 @@ class CenterSignInViewModel @Inject constructor(
     private val getCenterStatusUseCase: GetCenterStatusUseCase,
     private val getMyCenterProfileUseCase: GetMyCenterProfileUseCase,
     private val analyticsHelper: AnalyticsHelper,
-    private val errorHandler: ErrorHandler,
-    val eventHandler: EventHandler,
-    val navigationRouter: NavigationRouter,
+    private val errorHandlerHelper: ErrorHandlerHelper,
+    val eventHandlerHelper: EventHandlerHelper,
+    val navigationHelper: NavigationHelper,
 ) : BaseViewModel() {
     private val _centerId = MutableStateFlow("")
     internal val centerId = _centerId.asStateFlow()
@@ -64,13 +64,13 @@ class CenterSignInViewModel @Inject constructor(
     private fun handleCenterLoginSuccess() = viewModelScope.launch {
         getCenterStatusUseCase().onSuccess { centerStatusResponse ->
             navigateBasedOnCenterStatus(centerStatusResponse.centerManagerAccountStatus)
-        }.onFailure { errorHandler.sendError(it) }
+        }.onFailure { errorHandlerHelper.sendError(it) }
     }
 
     private fun navigateBasedOnCenterStatus(status: CenterManagerAccountStatus) {
         when (status) {
             CenterManagerAccountStatus.APPROVED -> fetchAndNavigateToProfile()
-            else -> navigationRouter.navigateTo(
+            else -> navigationHelper.navigateTo(
                 NavigationEvent.NavigateTo(CenterPending(status.name), R.id.centerSignInFragment)
             )
         }
@@ -78,23 +78,23 @@ class CenterSignInViewModel @Inject constructor(
 
     private fun fetchAndNavigateToProfile() = viewModelScope.launch {
         getMyCenterProfileUseCase().onSuccess {
-            navigationRouter.navigateTo(
+            navigationHelper.navigateTo(
                 NavigationEvent.NavigateTo(CenterHome, R.id.centerSignInFragment)
             )
         }.onFailure {
             val error = it as HttpResponseException
             if (error.apiErrorCode == ApiErrorCode.CenterNotFound) {
-                navigationRouter.navigateTo(
+                navigationHelper.navigateTo(
                     NavigationEvent.NavigateTo(CenterRegister, R.id.centerSignInFragment)
                 )
             } else {
-                errorHandler.sendError(it)
+                errorHandlerHelper.sendError(it)
             }
         }
     }
 
     private fun handleLoginFailure(error: HttpResponseException) {
-        errorHandler.sendError(error)
+        errorHandlerHelper.sendError(error)
         analyticsHelper.logEvent(
             AnalyticsEvent(
                 type = AnalyticsEvent.Types.ACTION,

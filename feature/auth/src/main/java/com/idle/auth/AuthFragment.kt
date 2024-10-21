@@ -61,7 +61,7 @@ internal class AuthFragment : BaseComposeFragment() {
 
             LaunchedEffect(true) {
                 if (args.snackBarMsg != "default") {
-                    eventHandler.sendEvent(MainEvent.ShowSnackBar(args.snackBarMsg))
+                    eventHandlerHelper.sendEvent(MainEvent.ShowSnackBar(args.snackBarMsg))
                 }
             }
 
@@ -69,7 +69,7 @@ internal class AuthFragment : BaseComposeFragment() {
                 userType = userRole,
                 onUserRoleChanged = ::setUserRole,
                 navigateTo = {
-                    navigationRouter.navigateTo(
+                    navigationHelper.navigateTo(
                         NavigationEvent.NavigateTo(
                             destination = it,
                             popUpTo = R.id.nav_auth

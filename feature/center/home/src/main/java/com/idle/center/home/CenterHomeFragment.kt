@@ -93,7 +93,7 @@ internal class CenterHomeFragment : BaseComposeFragment() {
                 unreadNotificationCount = unreadNotificationCount,
                 setRecruitmentPostStatus = ::setRecruitmentPostStatus,
                 endJobPosting = ::endJobPosting,
-                navigateTo = { navigationRouter.navigateTo(NavigationEvent.NavigateTo(it)) },
+                navigateTo = { navigationHelper.navigateTo(NavigationEvent.NavigateTo(it)) },
             )
         }
     }

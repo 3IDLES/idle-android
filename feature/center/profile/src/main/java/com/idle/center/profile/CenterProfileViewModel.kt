@@ -3,10 +3,10 @@ package com.idle.center.profile
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.EventHandler
+import com.idle.binding.EventHandlerHelper
 import com.idle.binding.MainEvent
 import com.idle.binding.SnackBarType.SUCCESS
-import com.idle.domain.model.error.ErrorHandler
+import com.idle.domain.model.error.ErrorHandlerHelper
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.usecase.profile.GetCenterProfileUseCase
 import com.idle.domain.usecase.profile.GetLocalMyCenterProfileUseCase
@@ -22,8 +22,8 @@ class CenterProfileViewModel @Inject constructor(
     private val getLocalMyCenterProfileUseCase: GetLocalMyCenterProfileUseCase,
     private val getCenterProfileUseCase: GetCenterProfileUseCase,
     private val updateCenterProfileUseCase: UpdateCenterProfileUseCase,
-    private val errorHandler: ErrorHandler,
-    private val eventHandler: EventHandler,
+    private val errorHandlerHelper: ErrorHandlerHelper,
+    private val eventHandlerHelper: EventHandlerHelper,
 ) : BaseViewModel() {
     private val _centerProfile = MutableStateFlow<CenterProfile?>(null)
     val centerProfile = _centerProfile.asStateFlow()
@@ -67,7 +67,7 @@ class CenterProfileViewModel @Inject constructor(
             _centerProfile.value = it
             _centerIntroduce.value = it.introduce ?: ""
             _centerOfficeNumber.value = it.officeNumber
-        }.onFailure { errorHandler.sendError(it) }
+        }.onFailure { errorHandlerHelper.sendError(it) }
     }
 
     internal fun getCenterProfile(centerId: String) = viewModelScope.launch {
@@ -75,7 +75,7 @@ class CenterProfileViewModel @Inject constructor(
             _centerProfile.value = it
             _centerIntroduce.value = it.introduce ?: ""
             _centerOfficeNumber.value = it.officeNumber
-        }.onFailure { errorHandler.sendError(it) }
+        }.onFailure { errorHandlerHelper.sendError(it) }
     }
 
     internal fun updateCenterProfile() = viewModelScope.launch {
@@ -95,9 +95,9 @@ class CenterProfileViewModel @Inject constructor(
             introduce = _centerIntroduce.value.ifBlank { null },
             imageFileUri = _profileImageUri.value?.toString(),
         ).onSuccess {
-            eventHandler.sendEvent(MainEvent.ShowSnackBar("정보 수정이 완료되었어요.", SUCCESS))
+            eventHandlerHelper.sendEvent(MainEvent.ShowSnackBar("정보 수정이 완료되었어요.", SUCCESS))
             setEditState(false)
-        }.onFailure { errorHandler.sendError(it) }
+        }.onFailure { errorHandlerHelper.sendError(it) }
         }.also { _isUpdateLoading.value = false }
 
     private fun isCenterProfileUnchanged(): Boolean {
