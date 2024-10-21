@@ -2,6 +2,7 @@ package com.idle.signin.center
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -49,6 +50,7 @@ internal class CenterSignInFragment : BaseComposeFragment() {
         fragmentViewModel.apply {
             val centerId by centerId.collectAsStateWithLifecycle()
             val centerPassword by centerPassword.collectAsStateWithLifecycle()
+            val isLoginError by isLoginError.collectAsStateWithLifecycle()
 
             LaunchedEffect(Unit) {
                 if (args.snackBarMsg != "default") {
@@ -59,6 +61,7 @@ internal class CenterSignInFragment : BaseComposeFragment() {
             CenterSignInScreen(
                 centerId = centerId,
                 centerPassword = centerPassword,
+                isLoginError = isLoginError,
                 onCenterIdChanged = ::setCenterId,
                 onCenterPasswordChanged = ::setCenterPassword,
                 signInCenter = ::signInCenter,
@@ -85,6 +88,7 @@ internal class CenterSignInFragment : BaseComposeFragment() {
 internal fun CenterSignInScreen(
     centerId: String,
     centerPassword: String,
+    isLoginError: Boolean,
     onCenterIdChanged: (String) -> Unit,
     onCenterPasswordChanged: (String) -> Unit,
     signInCenter: () -> Unit,
@@ -109,19 +113,20 @@ internal fun CenterSignInScreen(
     ) { paddingValue ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top,
             modifier = Modifier
                 .fillMaxSize()
                 .background(CareTheme.colors.white000)
                 .padding(paddingValue)
                 .padding(start = 20.dp, end = 20.dp, top = 24.dp),
         ) {
-            Spacer(modifier = Modifier.weight(2f))
+            Spacer(modifier = Modifier.weight(3f))
 
             LabeledContent(
                 subtitle = stringResource(id = R.string.id),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 12.dp),
+                    .padding(bottom = 8.dp),
             ) {
                 CareTextField(
                     value = centerId,
@@ -140,6 +145,8 @@ internal fun CenterSignInScreen(
                     value = centerPassword,
                     hint = stringResource(id = R.string.password_hint),
                     onValueChanged = onCenterPasswordChanged,
+                    isError = isLoginError,
+                    errorMsg = stringResource(R.string.login_error_description),
                     visualTransformation = PasswordVisualTransformation(),
                     onDone = { if (centerPassword.isNotBlank()) signInCenter() },
                     modifier = Modifier.fillMaxWidth(),
