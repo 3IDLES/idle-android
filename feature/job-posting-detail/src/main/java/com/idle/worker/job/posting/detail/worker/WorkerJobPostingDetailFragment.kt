@@ -1,9 +1,6 @@
-@file:OptIn(ExperimentalMaterialApi::class)
-
 package com.idle.worker.job.posting.detail.worker
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -78,7 +75,6 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
                     } else {
                         if (jobPosting.jobPostingType == JobPostingType.CAREMEET) {
                             WorkerJobPostingDetailScreen(
-                                snackbarHostState = snackbarHostState,
                                 profile = profile,
                                 jobPostingDetail = jobPosting as WorkerJobPostingDetail,
                                 showPlaceDetail = setShowPlaceDetail,
@@ -94,7 +90,6 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
                             )
                         } else {
                             CrawlingJobPostingDetailScreen(
-                                snackbarHostState = snackbarHostState,
                                 profile = profile,
                                 jobPostingDetail = jobPosting as CrawlingJobPostingDetail,
                                 showPlaceDetail = setShowPlaceDetail,
@@ -104,7 +99,7 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
                         }
                     }
                 }
-            } ?: LoadingJobPostingDetailScreen(snackbarHostState = snackbarHostState)
+            } ?: LoadingJobPostingDetailScreen()
         }
     }
 }

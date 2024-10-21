@@ -24,6 +24,7 @@ sealed class MainEvent {
     data class ShowSnackBar(val msg: String, val snackBarType: SnackBarType = SnackBarType.ERROR) :
         MainEvent()
 
+    data object DismissSnackBar : MainEvent()
     data class NavigateToAuthWithClearBackStack(val snackBarMsg: String) : MainEvent()
 }
 

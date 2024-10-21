@@ -20,8 +20,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -47,7 +45,6 @@ import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designresource.R.string
 import com.idle.designsystem.compose.component.CareButtonLarge
-import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.UserType
 import dagger.hilt.android.AndroidEntryPoint
@@ -73,7 +70,6 @@ internal class AuthFragment : BaseComposeFragment() {
             }
 
             AuthScreen(
-                snackbarHostState = snackbarHostState,
                 userType = userRole,
                 onUserRoleChanged = ::setUserRole,
                 navigateTo = {
@@ -91,7 +87,6 @@ internal class AuthFragment : BaseComposeFragment() {
 
 @Composable
 internal fun AuthScreen(
-    snackbarHostState: SnackbarHostState,
     userType: UserType?,
     onUserRoleChanged: (UserType) -> Unit,
     navigateTo: (DeepLinkDestination) -> Unit,
@@ -101,20 +96,7 @@ internal fun AuthScreen(
         else CareTheme.colors.white000
     )
 
-    Scaffold(
-        snackbarHost = {
-            SnackbarHost(
-                hostState = snackbarHostState,
-                snackbar = { data ->
-                    CareSnackBar(
-                        data = data,
-                        modifier = Modifier.padding(bottom = 20.dp)
-                    )
-                }
-            )
-        },
-        containerColor = CareTheme.colors.white000,
-    ) { paddingValue ->
+    Scaffold(containerColor = CareTheme.colors.white000) { paddingValue ->
         Box(
             modifier = Modifier
                 .fillMaxSize()

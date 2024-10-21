@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -28,20 +26,17 @@ import androidx.navigation.fragment.navArgs
 import com.idle.analytics.helper.TrackScreenViewEvent
 import com.idle.binding.DeepLinkDestination.Auth
 import com.idle.binding.DeepLinkDestination.NewPassword
-import com.idle.binding.base.EventHandler
 import com.idle.binding.base.MainEvent
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
-import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 internal class CenterSignInFragment : BaseComposeFragment() {
@@ -61,7 +56,6 @@ internal class CenterSignInFragment : BaseComposeFragment() {
             }
 
             CenterSignInScreen(
-                snackbarHostState = snackbarHostState,
                 centerId = centerId,
                 centerPassword = centerPassword,
                 onCenterIdChanged = ::setCenterId,
@@ -84,7 +78,6 @@ internal class CenterSignInFragment : BaseComposeFragment() {
 
 @Composable
 internal fun CenterSignInScreen(
-    snackbarHostState: SnackbarHostState,
     centerId: String,
     centerPassword: String,
     onCenterIdChanged: (String) -> Unit,
@@ -105,17 +98,6 @@ internal fun CenterSignInScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 12.dp, top = 48.dp, end = 20.dp, bottom = 12.dp),
-            )
-        },
-        snackbarHost = {
-            SnackbarHost(
-                hostState = snackbarHostState,
-                snackbar = { data ->
-                    CareSnackBar(
-                        data = data,
-                        modifier = Modifier.padding(bottom = 138.dp)
-                    )
-                }
             )
         },
         modifier = Modifier.addFocusCleaner(focusManager),

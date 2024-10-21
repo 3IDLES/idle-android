@@ -24,8 +24,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -35,12 +33,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.idle.analytics.helper.TrackScreenViewEvent
 import com.idle.designresource.R
-import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.foundation.CareTheme
 
 @Composable
-internal fun LoadingJobPostingDetailScreen(snackbarHostState: SnackbarHostState) {
+internal fun LoadingJobPostingDetailScreen() {
     val transition = rememberInfiniteTransition()
     val skeletonColor by transition.animateColor(
         initialValue = CareTheme.colors.gray100,
@@ -67,17 +64,6 @@ internal fun LoadingJobPostingDetailScreen(snackbarHostState: SnackbarHostState)
                     bottom = 12.dp
                 ),
                 onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
-            )
-        },
-        snackbarHost = {
-            SnackbarHost(
-                hostState = snackbarHostState,
-                snackbar = { data ->
-                    CareSnackBar(
-                        data = data,
-                        modifier = Modifier.padding(bottom = 116.dp)
-                    )
-                }
             )
         },
     ) { paddingValue ->

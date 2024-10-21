@@ -69,7 +69,6 @@ internal class WorkerSignUpFragment : BaseComposeFragment() {
             val roadNameAddress by roadNameAddress.collectAsStateWithLifecycle()
 
             WorkerSignUpScreen(
-                snackbarHostState = snackbarHostState,
                 signUpStep = signUpStep,
                 workerPhoneNumber = workerPhoneNumber,
                 workerAuthCodeTimerMinute = workerAuthCodeTimerMinute,
@@ -111,7 +110,6 @@ internal class WorkerSignUpFragment : BaseComposeFragment() {
 
 @Composable
 internal fun WorkerSignUpScreen(
-    snackbarHostState: SnackbarHostState,
     signUpStep: WorkerSignUpStep,
     workerPhoneNumber: String,
     workerAuthCodeTimerMinute: String,
@@ -154,17 +152,6 @@ internal fun WorkerSignUpScreen(
                         .padding(start = 8.dp, top = 8.dp, bottom = 8.dp),
                 )
             }
-        },
-        snackbarHost = {
-            SnackbarHost(
-                hostState = snackbarHostState,
-                snackbar = { data ->
-                    CareSnackBar(
-                        data = data,
-                        modifier = Modifier.padding(bottom = 104.dp),
-                    )
-                }
-            )
         },
         modifier = Modifier.addFocusCleaner(focusManager),
     ) { paddingValue ->

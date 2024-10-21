@@ -19,7 +19,6 @@ import javax.inject.Inject
 abstract class BaseComposeFragment : Fragment() {
 
     protected abstract val fragmentViewModel: BaseViewModel
-    protected var snackbarHostState = SnackbarHostState()
     private lateinit var composeView: ComposeView
 
     @Inject

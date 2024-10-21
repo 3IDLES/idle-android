@@ -24,8 +24,6 @@ import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -63,7 +61,6 @@ import com.idle.designsystem.compose.component.CareBottomSheetLayout
 import com.idle.designsystem.compose.component.CareButtonMedium
 import com.idle.designsystem.compose.component.CareCalendar
 import com.idle.designsystem.compose.component.CareProgressBar
-import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.component.CareWheelPicker
@@ -144,7 +141,6 @@ internal class JobPostingFragment : BaseComposeFragment() {
             ) { state ->
                 if (state) {
                     JobEditScreen(
-                        snackbarHostState = snackbarHostState,
                         weekDays = weekDays,
                         workStartTime = workStartTime,
                         workEndTime = workEndTime,
@@ -208,7 +204,6 @@ internal class JobPostingFragment : BaseComposeFragment() {
                     )
                 } else {
                     JobPostingScreen(
-                        snackbarHostState = snackbarHostState,
                         profile = profile,
                         weekDays = weekDays,
                         workStartTime = workStartTime,
@@ -265,7 +260,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
                         onCalendarMonthChanged = ::setCalendarMonth,
                         postJobPosting = ::postJobPosting,
                         setJobPostingStep = { step ->
-                            snackbarHostState.currentSnackbarData?.dismiss()
+                            eventHandler.sendEvent(MainEvent.DismissSnackBar)
                             setJobPostingStep(step)
                         },
                         setEditState = ::setEditState,
@@ -289,7 +284,6 @@ internal class JobPostingFragment : BaseComposeFragment() {
 @ExperimentalMaterial3Api
 @Composable
 internal fun JobPostingScreen(
-    snackbarHostState: SnackbarHostState,
     profile: CenterProfile?,
     weekDays: Set<DayOfWeek>,
     workStartTime: String,
@@ -710,17 +704,6 @@ internal fun JobPostingScreen(
                                         .padding(start = 8.dp, top = 8.dp, bottom = 8.dp),
                                 )
                             }
-                        },
-                        snackbarHost = {
-                            SnackbarHost(
-                                hostState = snackbarHostState,
-                                snackbar = { data ->
-                                    CareSnackBar(
-                                        data = data,
-                                        modifier = Modifier.padding(bottom = 116.dp)
-                                    )
-                                }
-                            )
                         },
                         containerColor = CareTheme.colors.white000,
                         modifier = Modifier.addFocusCleaner(focusManager),

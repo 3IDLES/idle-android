@@ -60,7 +60,6 @@ internal class CenterSignUpFragment : BaseComposeFragment() {
             val isValidPassword by isValidPassword.collectAsStateWithLifecycle()
 
             CenterSignUpScreen(
-                snackbarHostState = snackbarHostState,
                 signUpStep = signUpStep,
                 centerName = centerName,
                 centerPhoneNumber = centerPhoneNumber,
@@ -105,7 +104,6 @@ internal class CenterSignUpFragment : BaseComposeFragment() {
 
 @Composable
 internal fun CenterSignUpScreen(
-    snackbarHostState: SnackbarHostState,
     signUpStep: CenterSignUpStep,
     centerName: String,
     centerPhoneNumber: String,
@@ -157,17 +155,6 @@ internal fun CenterSignUpScreen(
                         .padding(start = 8.dp, top = 8.dp, bottom = 8.dp),
                 )
             }
-        },
-        snackbarHost = {
-            SnackbarHost(
-                hostState = snackbarHostState,
-                snackbar = { data ->
-                    CareSnackBar(
-                        data = data,
-                        modifier = Modifier.padding(bottom = 104.dp),
-                    )
-                }
-            )
         },
         modifier = Modifier.addFocusCleaner(focusManager),
     ) { paddingValue ->

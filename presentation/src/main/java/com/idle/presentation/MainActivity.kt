@@ -28,6 +28,7 @@ import com.idle.binding.DeepLinkDestination.WorkerJobDetail
 import com.idle.binding.base.MainEvent
 import com.idle.binding.deepLinkNavigateTo
 import com.idle.binding.repeatOnStarted
+import com.idle.designsystem.binding.component.dismissSnackBar
 import com.idle.designsystem.binding.component.showSnackBar
 import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.presentation.databinding.ActivityMainBinding
@@ -155,6 +156,8 @@ class MainActivity : AppCompatActivity() {
                         snackBarType = it.snackBarType,
                         paddingBottom = 20,
                     )
+
+                    is MainEvent.DismissSnackBar -> dismissSnackBar()
 
                     is MainEvent.NavigateToAuthWithClearBackStack -> navController.navigate(
                         AuthFragmentDirections.actionGlobalNavAuth(it.snackBarMsg)

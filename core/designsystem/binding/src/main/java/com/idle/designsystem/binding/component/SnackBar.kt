@@ -13,8 +13,18 @@ import com.idle.binding.base.SnackBarType
 import com.idle.binding.base.dpToPx
 import com.idle.designsystem.binding.R
 
+private var currentSnackbar: Snackbar? = null
+
 @SuppressLint("RestrictedApi")
-fun showSnackBar(rootView: View, msg: String, snackBarType: SnackBarType, paddingBottom: Int) {
+fun showSnackBar(
+    rootView: View,
+    msg: String,
+    snackBarType: SnackBarType,
+    paddingBottom: Int
+) {
+    // 현재 표시 중인 스낵바가 있으면 닫기
+    currentSnackbar?.dismiss()
+
     val inflater = LayoutInflater.from(rootView.context)
     val careSnackbarView = inflater.inflate(R.layout.view_care_snackbar, null)
     val messageTextView = careSnackbarView.findViewById<TextView>(R.id.snackbar_text)
@@ -54,5 +64,11 @@ fun showSnackBar(rootView: View, msg: String, snackBarType: SnackBarType, paddin
     }
 
     snackbar.show()
+    currentSnackbar = snackbar // 현재 스낵바 저장
 }
 
+// 스낵바 바로 닫기
+fun dismissSnackBar() {
+    currentSnackbar?.dismiss()
+    currentSnackbar = null
+}

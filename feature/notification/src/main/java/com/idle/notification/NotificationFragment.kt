@@ -61,7 +61,6 @@ internal class NotificationFragment : BaseComposeFragment() {
             }
 
             NotificationScreen(
-                snackbarHostState = snackbarHostState,
                 todayNotification = todayNotification,
                 weeklyNotification = weeklyNotification,
                 monthlyNotification = monthlyNotification,
@@ -75,7 +74,6 @@ internal class NotificationFragment : BaseComposeFragment() {
 
 @Composable
 private fun NotificationScreen(
-    snackbarHostState: SnackbarHostState,
     todayNotification: List<Notification>?,
     weeklyNotification: List<Notification>?,
     monthlyNotification: List<Notification>?,
@@ -114,17 +112,6 @@ private fun NotificationScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 12.dp, top = 48.dp, end = 20.dp, bottom = 12.dp),
-            )
-        },
-        snackbarHost = {
-            SnackbarHost(
-                hostState = snackbarHostState,
-                snackbar = { data ->
-                    CareSnackBar(
-                        data = data,
-                        modifier = Modifier.padding(bottom = 20.dp)
-                    )
-                }
             )
         },
     ) { paddingValue ->

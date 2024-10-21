@@ -22,8 +22,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -56,7 +54,6 @@ import com.idle.designsystem.compose.component.CareButtonCardLarge
 import com.idle.designsystem.compose.component.CareButtonMedium
 import com.idle.designsystem.compose.component.CareDialog
 import com.idle.designsystem.compose.component.CareHeadingTopBar
-import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.component.LoadingCircle
 import com.idle.designsystem.compose.foundation.CareTheme
@@ -88,7 +85,6 @@ internal class WorkerHomeFragment : BaseComposeFragment() {
             }
 
             WorkerHomeScreen(
-                snackbarHostState = snackbarHostState,
                 profile = profile,
                 workerJobPostings = jobPostings,
                 unreadNotificationCount = unreadNotificationCount,
@@ -98,7 +94,7 @@ internal class WorkerHomeFragment : BaseComposeFragment() {
                 applyJobPosting = ::applyJobPosting,
                 addFavoriteJobPosting = ::addFavoriteJobPosting,
                 removeFavoriteJobPosting = ::removeFavoriteJobPosting,
-                navigateTo = {  eventHandler.sendEvent(MainEvent.NavigateTo(it)) },
+                navigateTo = { eventHandler.sendEvent(MainEvent.NavigateTo(it)) },
             )
         }
     }
@@ -106,7 +102,6 @@ internal class WorkerHomeFragment : BaseComposeFragment() {
 
 @Composable
 internal fun WorkerHomeScreen(
-    snackbarHostState: SnackbarHostState,
     profile: WorkerProfile?,
     workerJobPostings: List<JobPosting>?,
     unreadNotificationCount: Int,
@@ -219,17 +214,6 @@ internal fun WorkerHomeScreen(
                     top = 48.dp,
                     bottom = 8.dp
                 ),
-            )
-        },
-        snackbarHost = {
-            SnackbarHost(
-                hostState = snackbarHostState,
-                snackbar = { data ->
-                    CareSnackBar(
-                        data = data,
-                        modifier = Modifier.padding(bottom = 84.dp)
-                    )
-                }
             )
         },
     ) { paddingValue ->

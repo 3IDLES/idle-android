@@ -21,13 +21,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -55,7 +52,6 @@ import com.idle.designsystem.compose.component.CareButtonMedium
 import com.idle.designsystem.compose.component.CareCard
 import com.idle.designsystem.compose.component.CareDialog
 import com.idle.designsystem.compose.component.CareMap
-import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.component.CareTextFieldLong
@@ -66,10 +62,8 @@ import com.idle.domain.model.jobposting.WorkerJobPostingDetail
 import com.idle.domain.model.profile.WorkerProfile
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun WorkerJobPostingDetailScreen(
-    snackbarHostState: SnackbarHostState,
     profile: WorkerProfile?,
     jobPostingDetail: WorkerJobPostingDetail,
     showPlaceDetail: (Boolean) -> Unit,
@@ -168,17 +162,6 @@ internal fun WorkerJobPostingDetailScreen(
                         bottom = 12.dp
                     ),
                     onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
-                )
-            },
-            snackbarHost = {
-                SnackbarHost(
-                    hostState = snackbarHostState,
-                    snackbar = { data ->
-                        CareSnackBar(
-                            data = data,
-                            modifier = Modifier.padding(bottom = 116.dp)
-                        )
-                    }
                 )
             },
         ) { paddingValue ->

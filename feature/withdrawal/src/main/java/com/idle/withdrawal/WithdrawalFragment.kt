@@ -87,7 +87,6 @@ internal class WithdrawalFragment : BaseComposeFragment() {
             }
 
             WithdrawalScreen(
-                snackbarHostState = snackbarHostState,
                 userType = userType,
                 withdrawalStep = withdrawalStep,
                 timerMinute = authCodeTimerMinute,
@@ -125,7 +124,6 @@ internal class WithdrawalFragment : BaseComposeFragment() {
 @ExperimentalMaterial3Api
 @Composable
 internal fun WithdrawalScreen(
-    snackbarHostState: SnackbarHostState,
     userType: UserType,
     withdrawalStep: WithdrawalStep,
     timerMinute: String,
@@ -163,17 +161,6 @@ internal fun WithdrawalScreen(
                         end = 20.dp,
                         bottom = 12.dp
                     ),
-            )
-        },
-        snackbarHost = {
-            SnackbarHost(
-                hostState = snackbarHostState,
-                snackbar = { data ->
-                    CareSnackBar(
-                        data = data,
-                        modifier = Modifier.padding(bottom = 118.dp)
-                    )
-                }
             )
         },
         containerColor = CareTheme.colors.white000,

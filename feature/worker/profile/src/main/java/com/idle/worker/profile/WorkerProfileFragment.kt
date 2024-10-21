@@ -136,7 +136,6 @@ internal class WorkerProfileFragment : BaseComposeFragment() {
                     modifier = Modifier.fillMaxSize()
                 ) {
                     WorkerProfileScreen(
-                        snackbarHostState = snackbarHostState,
                         isMyProfile = isMyProfile,
                         isEditState = isEditState,
                         workerProfile = profile,
@@ -167,7 +166,6 @@ internal class WorkerProfileFragment : BaseComposeFragment() {
 
 @Composable
 internal fun WorkerProfileScreen(
-    snackbarHostState: SnackbarHostState,
     isMyProfile: Boolean,
     workerProfile: WorkerProfile,
     workerIntroduce: String,
@@ -300,17 +298,6 @@ internal fun WorkerProfileScreen(
                             .padding(start = 12.dp, top = 48.dp, end = 20.dp, bottom = 12.dp),
                     )
                 }
-            },
-            snackbarHost = {
-                SnackbarHost(
-                    hostState = snackbarHostState,
-                    snackbar = { data ->
-                        CareSnackBar(
-                            data = data,
-                            modifier = Modifier.padding(bottom = 20.dp)
-                        )
-                    }
-                )
             },
             containerColor = CareTheme.colors.white000,
             modifier = Modifier.addFocusCleaner(focusManager),

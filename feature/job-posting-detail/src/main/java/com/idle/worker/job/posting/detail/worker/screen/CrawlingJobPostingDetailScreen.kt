@@ -53,7 +53,6 @@ import com.idle.domain.model.profile.WorkerProfile
 
 @Composable
 internal fun CrawlingJobPostingDetailScreen(
-    snackbarHostState: SnackbarHostState,
     profile: WorkerProfile?,
     jobPostingDetail: CrawlingJobPostingDetail,
     showPlaceDetail: (Boolean) -> Unit,
@@ -77,17 +76,6 @@ internal fun CrawlingJobPostingDetailScreen(
                     bottom = 12.dp
                 ),
                 onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
-            )
-        },
-        snackbarHost = {
-            SnackbarHost(
-                hostState = snackbarHostState,
-                snackbar = { data ->
-                    CareSnackBar(
-                        data = data,
-                        modifier = Modifier.padding(bottom = 20.dp)
-                    )
-                }
             )
         },
     ) { paddingValue ->

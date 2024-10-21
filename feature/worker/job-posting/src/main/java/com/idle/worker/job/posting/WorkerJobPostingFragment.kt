@@ -84,7 +84,6 @@ internal class WorkerJobPostingFragment : BaseComposeFragment() {
             }
 
             WorkerJobPostingScreen(
-                snackbarHostState = snackbarHostState,
                 profile = profile,
                 recruitmentPostStatus = recruitmentPostStatus,
                 appliedJobPostings = appliedJobPostings,
@@ -102,7 +101,6 @@ internal class WorkerJobPostingFragment : BaseComposeFragment() {
 
 @Composable
 internal fun WorkerJobPostingScreen(
-    snackbarHostState: SnackbarHostState,
     profile: WorkerProfile?,
     recruitmentPostStatus: RecruitmentPostStatus,
     appliedJobPostings: List<JobPosting>?,
@@ -176,17 +174,6 @@ internal fun WorkerJobPostingScreen(
                     top = 48.dp,
                     bottom = 8.dp
                 ),
-            )
-        },
-        snackbarHost = {
-            SnackbarHost(
-                hostState = snackbarHostState,
-                snackbar = { data ->
-                    CareSnackBar(
-                        data = data,
-                        modifier = Modifier.padding(bottom = 84.dp)
-                    )
-                }
             )
         },
     ) { paddingValue ->

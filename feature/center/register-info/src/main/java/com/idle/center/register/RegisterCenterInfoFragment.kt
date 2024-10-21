@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -31,7 +29,6 @@ import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareProgressBar
-import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.foundation.CareTheme
@@ -77,7 +74,6 @@ internal class RegisterCenterInfoFragment : BaseComposeFragment() {
             ) { isSummary ->
                 if (isSummary) {
                     CenterRegisterSummaryScreen(
-                        snackbarHostState = snackbarHostState,
                         centerName = centerName,
                         centerNumber = centerNumber,
                         centerIntroduce = centerIntroduce,
@@ -88,7 +84,6 @@ internal class RegisterCenterInfoFragment : BaseComposeFragment() {
                     )
                 } else {
                     CenterRegisterScreen(
-                        snackbarHostState = snackbarHostState,
                         registrationStep = registrationStep,
                         centerName = centerName,
                         centerNumber = centerNumber,
@@ -124,7 +119,6 @@ internal class RegisterCenterInfoFragment : BaseComposeFragment() {
 
 @Composable
 internal fun CenterRegisterScreen(
-    snackbarHostState: SnackbarHostState,
     registrationStep: RegistrationStep,
     centerName: String,
     centerNumber: String,
@@ -160,17 +154,6 @@ internal fun CenterRegisterScreen(
                         .padding(start = 8.dp, top = 8.dp, bottom = 8.dp),
                 )
             }
-        },
-        snackbarHost = {
-            SnackbarHost(
-                hostState = snackbarHostState,
-                snackbar = { data ->
-                    CareSnackBar(
-                        data = data,
-                        modifier = Modifier.padding(bottom = 138.dp)
-                    )
-                }
-            )
         },
         containerColor = CareTheme.colors.white000,
         modifier = Modifier.addFocusCleaner(focusManager),

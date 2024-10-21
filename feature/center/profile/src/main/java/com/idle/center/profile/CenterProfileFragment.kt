@@ -87,7 +87,6 @@ internal class CenterProfileFragment : BaseComposeFragment() {
                 ) {
                     CenterProfileScreen(
                         isMyProfile = isMyProfile,
-                        snackbarHostState = snackbarHostState,
                         centerProfile = profile,
                         centerOfficeNumber = centerOfficeNumber,
                         centerIntroduce = centerIntroduce,
@@ -109,7 +108,6 @@ internal class CenterProfileFragment : BaseComposeFragment() {
 @Composable
 internal fun CenterProfileScreen(
     isMyProfile: Boolean,
-    snackbarHostState: SnackbarHostState,
     centerProfile: CenterProfile,
     centerOfficeNumber: String,
     centerIntroduce: String,
@@ -157,17 +155,6 @@ internal fun CenterProfileScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 12.dp, top = 48.dp, end = 20.dp, bottom = 12.dp),
-            )
-        },
-        snackbarHost = {
-            SnackbarHost(
-                hostState = snackbarHostState,
-                snackbar = { data ->
-                    CareSnackBar(
-                        data = data,
-                        modifier = Modifier.padding(bottom = 20.dp)
-                    )
-                }
             )
         },
         containerColor = CareTheme.colors.white000,
