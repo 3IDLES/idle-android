@@ -195,9 +195,8 @@ internal fun IdPasswordScreen(
                 value = centerPasswordForConfirm,
                 hint = stringResource(id = R.string.confirm_password_hint),
                 visualTransformation = PasswordVisualTransformation(),
-                supportingText = if (centerPassword != centerPasswordForConfirm) stringResource(
-                    id = R.string.password_mismatch
-                ) else "",
+                supportingText = if (centerPasswordForConfirm.isNotBlank() && centerPassword != centerPasswordForConfirm)
+                    stringResource(id = R.string.password_mismatch) else "",
                 isError = centerPasswordForConfirm.isNotBlank() && centerPassword != centerPasswordForConfirm,
                 onValueChanged = onCenterPasswordForConfirmChanged,
                 onDone = { if (isIdValid && isPasswordValid) signUpCenter() },
