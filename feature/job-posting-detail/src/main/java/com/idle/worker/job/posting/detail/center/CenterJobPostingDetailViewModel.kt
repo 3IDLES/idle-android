@@ -7,7 +7,7 @@ import com.idle.binding.EventHandlerHelper
 import com.idle.binding.MainEvent
 import com.idle.binding.NavigationEvent
 import com.idle.binding.NavigationHelper
-import com.idle.binding.SnackBarType
+import com.idle.binding.ToastType
 import com.idle.domain.model.error.ErrorHandlerHelper
 import com.idle.domain.model.jobposting.CenterJobPostingDetail
 import com.idle.domain.model.jobposting.EditJobPostingDetail
@@ -81,7 +81,7 @@ class CenterJobPostingDetailViewModel @Inject constructor(
         viewModelScope.launch {
             if (editJobPostingDetail.applyMethod.isEmpty()) {
                 eventHandlerHelper.sendEvent(
-                    MainEvent.ShowSnackBar("반드시 1개 이상의 지원 방법을 선택해야합니다.")
+                    MainEvent.ShowToast("반드시 1개 이상의 지원 방법을 선택해야합니다.")
                 )
                 return@launch
             }
@@ -119,7 +119,7 @@ class CenterJobPostingDetailViewModel @Inject constructor(
             ).onSuccess {
                 getCenterJobPostingDetail(_jobPostingDetail.value?.id ?: return@launch)
                 eventHandlerHelper.sendEvent(
-                    MainEvent.ShowSnackBar("수정이 완료되었어요.", SnackBarType.SUCCESS)
+                    MainEvent.ShowToast("수정이 완료되었어요.", ToastType.SUCCESS)
                 )
                 _jobPostingState.value = JobPostingDetailState.SUMMARY
             }.onFailure { errorHandlerHelper.sendError(it) }
@@ -130,7 +130,7 @@ class CenterJobPostingDetailViewModel @Inject constructor(
             _jobPostingDetail.value =
                 _jobPostingDetail.value?.copy(jobPostingStatus = JobPostingStatus.COMPLETED)
             eventHandlerHelper.sendEvent(
-                MainEvent.ShowSnackBar("채용을 종료했어요.", SnackBarType.SUCCESS)
+                MainEvent.ShowToast("채용을 종료했어요.", ToastType.SUCCESS)
             )
         }.onFailure { errorHandlerHelper.sendError(it) }
     }

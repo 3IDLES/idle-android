@@ -172,7 +172,7 @@ class WithdrawalViewModel @Inject constructor(
         }.onFailure {
             val exception = it as HttpResponseException
             if (exception.apiErrorCode == ApiErrorCode.InvalidParameter) {
-                eventHandlerHelper.sendEvent(MainEvent.ShowSnackBar("비밀번호가 맞지 않습니다."))
+                eventHandlerHelper.sendEvent(MainEvent.ShowToast("비밀번호가 맞지 않습니다."))
             } else {
                 errorHandlerHelper.sendError(it)
             }
@@ -186,7 +186,7 @@ class WithdrawalViewModel @Inject constructor(
                 .joinToString("|"),
         ).onSuccess {
             analyticsHelper.setUserId(null)
-            eventHandlerHelper.sendEvent(MainEvent.ShowSnackBar("회원탈퇴가 완료되었어요."))
+            eventHandlerHelper.sendEvent(MainEvent.ShowToast("회원탈퇴가 완료되었어요."))
         }.onFailure { errorHandlerHelper.sendError(it) }
     }
 }

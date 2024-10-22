@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.idle.binding.EventHandlerHelper
 import com.idle.binding.MainEvent
 import com.idle.binding.NavigationHelper
-import com.idle.binding.SnackBarType.SUCCESS
+import com.idle.binding.ToastType.SUCCESS
 import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.error.ErrorHandlerHelper
 import com.idle.domain.model.jobposting.CenterJobPosting
@@ -96,9 +96,9 @@ class CenterHomeViewModel @Inject constructor(
                     it.id != jobPostingId
                 }
 
-                eventHandlerHelper.sendEvent(MainEvent.ShowSnackBar("채용을 종료했어요.", SUCCESS))
+                eventHandlerHelper.sendEvent(MainEvent.ShowToast("채용을 종료했어요.", SUCCESS))
             } else {
-                eventHandlerHelper.sendEvent(MainEvent.ShowSnackBar("채용 종료에 실패했어요."))
+                eventHandlerHelper.sendEvent(MainEvent.ShowToast("채용 종료에 실패했어요."))
             }
         }.onFailure { errorHandlerHelper.sendError(it) }
     }

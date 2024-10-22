@@ -99,7 +99,7 @@ internal class WorkerSignUpFragment : BaseComposeFragment() {
                         )
                     )
                 },
-                showSnackBar = { eventHandlerHelper.sendEvent(MainEvent.ShowSnackBar(it)) }
+                showSnackBar = { eventHandlerHelper.sendEvent(MainEvent.ShowToast(it)) }
             )
         }
     }

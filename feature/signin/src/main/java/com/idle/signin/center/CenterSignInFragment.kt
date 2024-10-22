@@ -54,7 +54,7 @@ internal class CenterSignInFragment : BaseComposeFragment() {
 
             LaunchedEffect(Unit) {
                 if (args.snackBarMsg != "default") {
-                    eventHandlerHelper.sendEvent(MainEvent.ShowSnackBar(args.snackBarMsg))
+                    eventHandlerHelper.sendEvent(MainEvent.ShowToast(args.snackBarMsg))
                 }
             }
 

@@ -5,7 +5,7 @@ import com.idle.binding.EventHandlerHelper
 import com.idle.binding.MainEvent
 import com.idle.binding.NavigationEvent
 import com.idle.binding.NavigationHelper
-import com.idle.binding.SnackBarType.SUCCESS
+import com.idle.binding.ToastType.SUCCESS
 import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.error.ErrorHandlerHelper
 import com.idle.domain.model.profile.CenterManagerAccountStatus
@@ -43,7 +43,7 @@ class CenterPendingViewModel @Inject constructor(
     internal fun sendVerificationRequest() = viewModelScope.launch {
         sendCenterVerificationRequestUseCase().onSuccess {
             _status.value = CenterManagerAccountStatus.PENDING
-            eventHandlerHelper.sendEvent(MainEvent.ShowSnackBar("센터 인증 요청이 완료되었습니다.", SUCCESS))
+            eventHandlerHelper.sendEvent(MainEvent.ShowToast("센터 인증 요청이 완료되었습니다.", SUCCESS))
         }.onFailure { errorHandlerHelper.sendError(it) }
     }
 }
