@@ -10,6 +10,7 @@ import com.idle.domain.usecase.notification.ReadNotificationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -26,31 +27,8 @@ class NotificationViewModel @Inject constructor(
 
     private val _callType = MutableStateFlow(NotificationCallType.NOTIFICATION)
 
-    private val myNotifications = MutableStateFlow<List<Notification>?>(null)
-
-    val todayNotification = myNotifications.map { list ->
-        list?.filter { it.daysSinceCreation() < 1 }
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.Lazily,
-        initialValue = null,
-    )
-
-    val weeklyNotification = myNotifications.map { list ->
-        list?.filter { it.daysSinceCreation() in 1 until 7 }
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.Lazily,
-        initialValue = null,
-    )
-
-    val monthlyNotification = myNotifications.map { list ->
-        list?.filter { it.daysSinceCreation() in 7 until 30 }
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.Lazily,
-        initialValue = null,
-    )
+    private val _myNotifications = MutableStateFlow<List<Notification>?>(null)
+    val myNotification = _myNotifications.asStateFlow()
 
     internal fun getMyNotifications() = viewModelScope.launch {
         if (_callType.value == NotificationCallType.END) {
@@ -58,7 +36,7 @@ class NotificationViewModel @Inject constructor(
         }
 
         getMyNotificationUseCase(next.value).onSuccess { (nextId, notifications) ->
-            myNotifications.value = myNotifications.value?.plus(notifications) ?: notifications
+            _myNotifications.value = _myNotifications.value?.plus(notifications) ?: notifications
             next.value = nextId
 
             if (nextId == null) {
@@ -70,7 +48,7 @@ class NotificationViewModel @Inject constructor(
     internal fun onNotificationClick(notification: Notification) = viewModelScope.launch {
         launch {
             readNotificationUseCase(notification.id).onSuccess {
-                myNotifications.value = myNotifications.value?.map {
+                _myNotifications.value = _myNotifications.value?.map {
                     if (it.id == notification.id) {
                         notification.copy(isRead = true)
                     } else {

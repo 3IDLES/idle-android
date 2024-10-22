@@ -387,7 +387,7 @@ internal fun WorkerProfileScreen(
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(4.dp),
-                                modifier = Modifier.padding(bottom = 2.dp),
+                                modifier = Modifier.padding(bottom = 4.dp),
                             ) {
                                 Text(
                                     text = workerProfile.workerName,
@@ -482,7 +482,7 @@ internal fun WorkerProfileScreen(
                                 verticalAlignment = Alignment.CenterVertically,
                                 modifier = Modifier
                                     .height(IntrinsicSize.Min)
-                                    .padding(bottom = 4.dp),
+                                    .padding(bottom = 8.dp),
                             ) {
                                 Text(
                                     text = stringResource(id = R.string.age),
@@ -655,6 +655,7 @@ internal fun WorkerProfileScreen(
 
                         if (isEditState) {
                             Row(
+                                verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(6.dp),
                                 modifier = Modifier
                                     .fillMaxWidth()
