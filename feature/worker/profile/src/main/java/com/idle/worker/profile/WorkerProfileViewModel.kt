@@ -107,6 +107,13 @@ class WorkerProfileViewModel @Inject constructor(
     internal fun getWorkerProfile(workerId: String) = viewModelScope.launch {
         getWorkerProfileUseCase(workerId).onSuccess {
             _workerProfile.value = it
+            _workerIntroduce.value = it.introduce ?: ""
+            _specialty.value = it.speciality ?: ""
+            _profileImageUri.value = it.profileImageUrl?.toUri()
+            _experienceYear.value = it.experienceYear
+            _roadNameAddress.value = it.roadNameAddress
+            _lotNumberAddress.value = it.lotNumberAddress
+            _jobSearchStatus.value = it.jobSearchStatus
         }.onFailure { errorHandlerHelper.sendError(it) }
     }
 
