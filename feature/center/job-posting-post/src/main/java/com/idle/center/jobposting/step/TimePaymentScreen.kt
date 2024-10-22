@@ -162,7 +162,6 @@ internal fun TimePaymentScreen(
                     onDone = {
                         if (weekDays.isNotEmpty() && workStartTime.isNotBlank() && workEndTime.isNotBlank() && payType != null && payAmount.isNotBlank()) {
                             if ((payAmount.toIntOrNull() ?: return@CareTextField) < 9860) {
-                                showSnackBar("급여는 최저 시급인 9860원보다 많아야 합니다.")
                                 return@CareTextField
                             }
 
@@ -184,10 +183,14 @@ internal fun TimePaymentScreen(
 
         CareButtonLarge(
             text = stringResource(id = R.string.next),
-            enable = weekDays.isNotEmpty() && workStartTime.isNotBlank() && workEndTime.isNotBlank() && payType != null && payAmount.isNotBlank(),
+            enable = weekDays.isNotEmpty() &&
+                    workStartTime.isNotBlank() &&
+                    workEndTime.isNotBlank() &&
+                    payType != null &&
+                    payAmount.isNotBlank()
+                    && !isMinimumWageError,
             onClick = {
                 if ((payAmount.toIntOrNull() ?: return@CareButtonLarge) < 9860) {
-                    showSnackBar("급여는 최저 시급인 9860원보다 많아야 합니다.")
                     return@CareButtonLarge
                 }
 

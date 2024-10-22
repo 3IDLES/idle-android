@@ -22,11 +22,9 @@ import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.usecase.jobposting.PostJobPostingUseCase
 import com.idle.domain.usecase.profile.GetLocalMyCenterProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -132,21 +130,17 @@ class JobPostingViewModel @Inject constructor(
     private val _bottomSheetType = MutableStateFlow<JobPostingBottomSheetType?>(null)
     val bottomSheetType = _bottomSheetType.asStateFlow()
 
-    @OptIn(FlowPreview::class)
-    val isMinimumWageError = _payAmount
-        .debounce(500L)
-        .map {
-            if (it.isNotBlank() && it.isDigitsOnly()) {
-                it.toInt() < MINIMUM_WAGE
-            } else {
-                false
-            }
+    val isMinimumWageError = _payAmount.map {
+        if (it.isNotBlank() && it.isDigitsOnly()) {
+            it.toInt() < MINIMUM_WAGE
+        } else {
+            false
         }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.Lazily,
-            initialValue = false
-        )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Lazily,
+        initialValue = false
+    )
 
     init {
         getMyCenterProfile()
