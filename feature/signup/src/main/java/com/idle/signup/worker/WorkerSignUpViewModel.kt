@@ -14,6 +14,8 @@ import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
 import com.idle.domain.model.auth.Gender
 import com.idle.domain.model.error.ErrorHandlerHelper
+import com.idle.domain.model.error.HttpResponseException
+import com.idle.domain.model.error.HttpResponseStatus
 import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
 import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
 import com.idle.domain.usecase.auth.SignInWorkerUseCase
@@ -62,6 +64,9 @@ class WorkerSignUpViewModel @Inject constructor(
     private val _isConfirmAuthCode = MutableStateFlow(false)
     val isConfirmAuthCode = _isConfirmAuthCode.asStateFlow()
 
+    private val _isAuthCodeError = MutableStateFlow(false)
+    val isAuthCodeError = _isAuthCodeError.asStateFlow()
+
     private val _workerName = MutableStateFlow("")
     internal val workerName = _workerName.asStateFlow()
 
@@ -88,6 +93,7 @@ class WorkerSignUpViewModel @Inject constructor(
 
     internal fun setWorkerAuthCode(certificateNumber: String) {
         _workerAuthCode.value = certificateNumber
+        _isAuthCodeError.value = false
     }
 
     internal fun setWorkerName(name: String) {
@@ -162,7 +168,14 @@ class WorkerSignUpViewModel @Inject constructor(
                 cancelTimer()
                 _isConfirmAuthCode.value = true
                 _signUpStep.value = WorkerSignUpStep.findStep(PHONE_NUMBER.step + 1)
-            }.onFailure { errorHandlerHelper.sendError(it) }
+            }.onFailure {
+                if (it is HttpResponseException && it.status == HttpResponseStatus.BadRequest) {
+                    _isAuthCodeError.value = true
+                    return@launch
+                }
+
+                errorHandlerHelper.sendError(it)
+            }
         }
     }
 

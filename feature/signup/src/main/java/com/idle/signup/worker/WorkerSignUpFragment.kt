@@ -60,6 +60,7 @@ internal class WorkerSignUpFragment : BaseComposeFragment() {
             val workerAuthCodeTimerMinute by workerAuthCodeTimerMinute.collectAsStateWithLifecycle()
             val workerAuthCodeTimerSeconds by workerAuthCodeTimerSeconds.collectAsStateWithLifecycle()
             val workerAuthCode by workerAuthCode.collectAsStateWithLifecycle()
+            val isAuthCodeError by isAuthCodeError.collectAsStateWithLifecycle()
             val isConfirmAuthCode by isConfirmAuthCode.collectAsStateWithLifecycle()
             val workerName by workerName.collectAsStateWithLifecycle()
             val birthYear by birthYear.collectAsStateWithLifecycle()
@@ -73,6 +74,7 @@ internal class WorkerSignUpFragment : BaseComposeFragment() {
                 workerAuthCodeTimerSeconds = workerAuthCodeTimerSeconds,
                 workerAuthCode = workerAuthCode,
                 isConfirmAuthCode = isConfirmAuthCode,
+                isAuthCodeError = isAuthCodeError,
                 workerName = workerName,
                 birthYear = birthYear,
                 gender = gender,
@@ -114,6 +116,7 @@ internal fun WorkerSignUpScreen(
     workerAuthCodeTimerSeconds: String,
     workerAuthCode: String,
     isConfirmAuthCode: Boolean,
+    isAuthCodeError: Boolean,
     workerName: String,
     birthYear: String,
     gender: Gender,
@@ -173,6 +176,7 @@ internal fun WorkerSignUpScreen(
                         workerAuthCodeTimerSeconds = workerAuthCodeTimerSeconds,
                         workerAuthCode = workerAuthCode,
                         isConfirmAuthCode = isConfirmAuthCode,
+                        isAuthCodeError = isAuthCodeError,
                         onWorkerPhoneNumberChanged = onWorkerPhoneNumberChanged,
                         onWorkerAuthCodeChanged = onWorkerAuthCodeChanged,
                         setSignUpStep = setSignUpStep,
