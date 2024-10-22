@@ -36,6 +36,7 @@ internal fun WorkerPhoneNumberScreen(
     workerAuthCodeTimerSeconds: String,
     workerAuthCode: String,
     isConfirmAuthCode: Boolean,
+    isAuthCodeError: Boolean,
     onWorkerPhoneNumberChanged: (String) -> Unit,
     onWorkerAuthCodeChanged: (String) -> Unit,
     setSignUpStep: (WorkerSignUpStep) -> Unit,
@@ -113,8 +114,10 @@ internal fun WorkerPhoneNumberScreen(
                         value = workerAuthCode,
                         hint = "",
                         onValueChanged = onWorkerAuthCodeChanged,
-                        onDone = { confirmAuthCode() },
-                        supportingText = if (isConfirmAuthCode) "인증이 완료되었습니다." else "",
+                        onDone = { if (workerAuthCode.isNotBlank() && !isConfirmAuthCode) confirmAuthCode() },
+                        isError = isAuthCodeError,
+                        supportingText = if (isAuthCodeError) stringResource(R.string.confirm_code_error_description)
+                        else if (isConfirmAuthCode) "* 인증이 완료되었습니다." else "",
                         readOnly = !(workerAuthCodeTimerMinute != "" && workerAuthCodeTimerSeconds != "") || isConfirmAuthCode,
                         leftComponent = {
                             if (workerAuthCodeTimerMinute != "" && workerAuthCodeTimerSeconds != "") {
