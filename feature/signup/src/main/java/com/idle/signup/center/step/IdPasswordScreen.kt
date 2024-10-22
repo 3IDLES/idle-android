@@ -1,6 +1,7 @@
 package com.idle.signup.center.step
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,17 +15,23 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import com.idle.binding.dpToPx
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonMedium
 import com.idle.designsystem.compose.component.CareButtonSmall
@@ -59,6 +66,13 @@ internal fun IdPasswordScreen(
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
     val scrollState = rememberScrollState()
+    var isPasswordFieldFocused by remember { mutableStateOf(false) }
+    var isPasswordConfirmFieldFocused by remember { mutableStateOf(false) }
+    val offsetY by animateIntAsState(
+        targetValue = if (isPasswordFieldFocused) -170
+        else if (isPasswordConfirmFieldFocused) -258
+        else 0
+    )
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
@@ -76,6 +90,7 @@ internal fun IdPasswordScreen(
         horizontalAlignment = Alignment.Start,
         modifier = Modifier
             .fillMaxSize()
+            .graphicsLayer(translationY = dpToPx(offsetY).toFloat())
             .verticalScroll(scrollState),
     ) {
         Text(
@@ -148,7 +163,11 @@ internal fun IdPasswordScreen(
                 visualTransformation = PasswordVisualTransformation(),
                 onValueChanged = onCenterPasswordChanged,
                 onDone = { if (centerPassword.length >= 8) focusManager.moveFocus(FocusDirection.Down) },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .onFocusChanged { focusState ->
+                        isPasswordFieldFocused = focusState.isFocused
+                    },
             )
         }
 
@@ -199,8 +218,17 @@ internal fun IdPasswordScreen(
                     stringResource(id = R.string.password_mismatch) else "",
                 isError = centerPasswordForConfirm.isNotBlank() && centerPassword != centerPasswordForConfirm,
                 onValueChanged = onCenterPasswordForConfirmChanged,
-                onDone = { if (isIdValid && isPasswordValid) signUpCenter() },
-                modifier = Modifier.fillMaxWidth(),
+                onDone = {
+                    if (isIdValid && isPasswordValid) {
+                        signUpCenter()
+                        isPasswordConfirmFieldFocused = false
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .onFocusChanged { focusState ->
+                        isPasswordConfirmFieldFocused = focusState.isFocused
+                    },
             )
         }
 
@@ -224,7 +252,11 @@ internal fun IdPasswordScreen(
             CareButtonMedium(
                 text = stringResource(id = R.string.complete),
                 enable = isIdValid && isPasswordValid,
-                onClick = signUpCenter,
+                onClick = {
+                    signUpCenter()
+                    isPasswordConfirmFieldFocused = false
+                    keyboardController?.hide()
+                },
                 modifier = Modifier.weight(1f),
             )
         }

@@ -25,6 +25,7 @@ import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareProgressBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
+import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.BusinessRegistrationInfo
 import com.idle.signup.center.step.BusinessRegistrationScreen
 import com.idle.signup.center.step.CenterNameScreen
@@ -150,13 +151,17 @@ internal fun CenterSignUpScreen(
 
     Scaffold(
         topBar = {
-            Column(modifier = Modifier.padding(start = 12.dp, top = 48.dp, end = 20.dp)) {
+            Column(
+                modifier = Modifier
+                    .padding(start = 12.dp, end = 20.dp)
+                    .background(CareTheme.colors.white000),
+            ) {
                 CareSubtitleTopBar(
                     title = stringResource(id = R.string.center_signup),
                     onNavigationClick = navigateToAuth,
                     modifier = Modifier
                         .fillMaxWidth()
-
+                        .padding(top = 48.dp),
                 )
 
                 CareProgressBar(
