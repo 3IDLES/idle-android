@@ -33,6 +33,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.idle.analytics.helper.TrackScreenViewEvent
 import com.idle.designresource.R
+import com.idle.designsystem.compose.component.CareButtonLine
+import com.idle.designsystem.compose.component.CareButtonMedium
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.foundation.CareTheme
 
@@ -592,6 +594,30 @@ internal fun LoadingJobPostingDetailScreen() {
                         }
                     }
                 }
+            }
+
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(CareTheme.colors.white000)
+                    .padding(top = 12.dp, bottom = 28.dp, start = 20.dp, end = 20.dp),
+            ) {
+                CareButtonLine(
+                    text = "",
+                    onClick = {},
+                    enable = false,
+                    borderColor = CareTheme.colors.orange400,
+                    textColor = CareTheme.colors.orange500,
+                    modifier = Modifier.weight(1f),
+                )
+
+                CareButtonMedium(
+                    text = "",
+                    onClick = {},
+                    enable = false,
+                    modifier = Modifier.weight(1f),
+                )
             }
         }
     }
