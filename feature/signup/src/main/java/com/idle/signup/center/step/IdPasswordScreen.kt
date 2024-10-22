@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -21,16 +23,13 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonMedium
 import com.idle.designsystem.compose.component.CareButtonSmall
 import com.idle.designsystem.compose.component.CareTextField
+import com.idle.designsystem.compose.component.ConditionRow
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.signup.LogCenterSignUpStep
@@ -40,11 +39,15 @@ import com.idle.signup.center.CenterSignUpStep.ID_PASSWORD
 @Composable
 internal fun IdPasswordScreen(
     centerId: String,
-    centerIdResult: Boolean,
+    centerIdResult: Boolean?,
     centerPassword: String,
     centerPasswordForConfirm: String,
-    isValidId: Boolean,
-    isValidPassword: Boolean,
+    isIdValid: Boolean,
+    isPasswordLengthValid: Boolean,
+    isPasswordContainsLetterAndDigit: Boolean,
+    isPasswordNoWhitespace: Boolean,
+    isPasswordNoSequentialChars: Boolean,
+    isPasswordValid: Boolean,
     onCenterIdChanged: (String) -> Unit,
     onCenterPasswordChanged: (String) -> Unit,
     onCenterPasswordForConfirmChanged: (String) -> Unit,
@@ -55,13 +58,14 @@ internal fun IdPasswordScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
+    val scrollState = rememberScrollState()
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
 
     LaunchedEffect(centerIdResult) {
-        if (centerIdResult) {
+        if (centerIdResult == true) {
             focusManager.moveFocus(FocusDirection.Down)
         }
     }
@@ -70,7 +74,9 @@ internal fun IdPasswordScreen(
 
     Column(
         horizontalAlignment = Alignment.Start,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(scrollState),
     ) {
         Text(
             text = stringResource(id = R.string.set_id_and_password),
@@ -80,24 +86,10 @@ internal fun IdPasswordScreen(
         )
 
         LabeledContent(
-            subtitle = buildAnnotatedString {
-                withStyle(
-                    style = SpanStyle(color = CareTheme.colors.gray500)
-                ) {
-                    append(stringResource(id = R.string.set_id_label))
-                }
-                withStyle(
-                    style = SpanStyle(
-                        color = CareTheme.colors.gray300,
-                        fontSize = 12.sp,
-                    )
-                ) {
-                    append(stringResource(id = R.string.id_conditions))
-                }
-            },
+            subtitle = stringResource(id = R.string.set_id_label),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 32.dp),
+                .padding(bottom = 12.dp),
         ) {
             Row(
                 verticalAlignment = Alignment.Top,
@@ -108,8 +100,13 @@ internal fun IdPasswordScreen(
                     value = centerId,
                     hint = stringResource(id = R.string.id_hint),
                     onValueChanged = onCenterIdChanged,
-                    supportingText = if (centerIdResult) stringResource(id = R.string.id_available) else "",
-                    onDone = { if (isValidId) validateIdentifier() },
+                    isError = centerIdResult == false,
+                    supportingText = when (centerIdResult) {
+                        false -> stringResource(R.string.id_disavailable)
+                        true -> stringResource(id = R.string.id_available)
+                        else -> ""
+                    },
+                    onDone = { if (isIdValid) validateIdentifier() },
                     modifier = Modifier
                         .weight(1f)
                         .focusRequester(focusRequester),
@@ -121,41 +118,74 @@ internal fun IdPasswordScreen(
                         validateIdentifier()
                         keyboardController?.hide()
                     },
-                    enable = centerId.length >= 6,
+                    enable = isIdValid && centerIdResult != false,
                 )
             }
         }
 
+        Text(
+            text = stringResource(id = R.string.id_description),
+            style = CareTheme.typography.body3,
+            color = CareTheme.colors.gray500,
+            modifier = Modifier.padding(bottom = 6.dp),
+        )
+
+        ConditionRow(
+            isValid = isIdValid,
+            conditionText = stringResource(R.string.condition_id_length),
+            modifier = Modifier.padding(bottom = 24.dp),
+        )
+
         LabeledContent(
-            subtitle = buildAnnotatedString {
-                withStyle(
-                    style = SpanStyle(color = CareTheme.colors.gray500)
-                ) {
-                    append(stringResource(id = R.string.set_password_label))
-                }
-                withStyle(
-                    style = SpanStyle(
-                        color = CareTheme.colors.gray300,
-                        fontSize = 12.sp,
-                    )
-                ) {
-                    append(stringResource(id = R.string.password_conditions))
-                }
-            },
+            subtitle = stringResource(id = R.string.set_password_label),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 32.dp),
+                .padding(bottom = 12.dp),
         ) {
             CareTextField(
                 value = centerPassword,
                 hint = stringResource(id = R.string.password_hint),
                 visualTransformation = PasswordVisualTransformation(),
-                supportingText = if (isValidPassword) stringResource(id = R.string.password_available) else "",
                 onValueChanged = onCenterPasswordChanged,
                 onDone = { if (centerPassword.length >= 8) focusManager.moveFocus(FocusDirection.Down) },
                 modifier = Modifier.fillMaxWidth(),
             )
         }
+
+        Text(
+            text = stringResource(id = R.string.password_description),
+            style = CareTheme.typography.body3,
+            color = CareTheme.colors.gray500,
+            modifier = Modifier.padding(bottom = 6.dp),
+        )
+
+        Column(
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 24.dp),
+        ) {
+            ConditionRow(
+                isValid = isPasswordLengthValid,
+                conditionText = stringResource(R.string.condition_password_length),
+            )
+
+            ConditionRow(
+                isValid = isPasswordContainsLetterAndDigit,
+                conditionText = stringResource(R.string.condition_letter_and_digit),
+            )
+
+            ConditionRow(
+                isValid = isPasswordNoWhitespace,
+                conditionText = stringResource(R.string.condition_no_whitespace),
+            )
+
+            ConditionRow(
+                isValid = isPasswordNoSequentialChars,
+                conditionText = stringResource(R.string.condition_no_sequential_chars),
+            )
+        }
+
 
         LabeledContent(
             subtitle = stringResource(id = R.string.confirm_password),
@@ -168,13 +198,9 @@ internal fun IdPasswordScreen(
                 supportingText = if (centerPassword != centerPasswordForConfirm) stringResource(
                     id = R.string.password_mismatch
                 ) else "",
+                isError = centerPasswordForConfirm.isNotBlank() && centerPassword != centerPasswordForConfirm,
                 onValueChanged = onCenterPasswordForConfirmChanged,
-                onDone = {
-                    if (isValidId && isValidPassword && (centerPassword == centerPasswordForConfirm)
-                    ) {
-                        signUpCenter()
-                    }
-                },
+                onDone = { if (isIdValid && isPasswordValid) signUpCenter() },
                 modifier = Modifier.fillMaxWidth(),
             )
         }
@@ -198,7 +224,7 @@ internal fun IdPasswordScreen(
 
             CareButtonMedium(
                 text = stringResource(id = R.string.complete),
-                enable = isValidId && isValidPassword && (centerPassword == centerPasswordForConfirm),
+                enable = isIdValid && isPasswordValid,
                 onClick = signUpCenter,
                 modifier = Modifier.weight(1f),
             )

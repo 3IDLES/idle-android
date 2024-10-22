@@ -168,7 +168,7 @@ class WithdrawalViewModel @Inject constructor(
             password = password.value
         ).onSuccess {
             analyticsHelper.setUserId(null)
-            navigationHelper.navigateTo(NavigationEvent.NavigateToAuthWithClearBackStack("회원탈퇴가 완료되었어요.|ERROR"))
+            navigationHelper.navigateTo(NavigationEvent.NavigateToAuthWithClearBackStack("회원탈퇴가 완료되었어요."))
         }.onFailure {
             val exception = it as HttpResponseException
             if (exception.apiErrorCode == ApiErrorCode.InvalidParameter) {

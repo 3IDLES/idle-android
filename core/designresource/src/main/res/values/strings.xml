@@ -27,10 +27,12 @@
     <string name="change_password">비밀번호 변경</string>
     <string name="new_password_title">새로운 비밀번호를 입력해주세요</string>
     <string name="generate_new_password">신규 비밀번호 발급</string>
+    <string name="condition_id_length">6자~20자 사이</string>
     <string name="condition_password_length">8자~20자 사이</string>
     <string name="condition_letter_and_digit">영문자와 숫자 반드시 하나씩 포함</string>
     <string name="condition_no_whitespace">공백 문자 사용 금지</string>
     <string name="condition_no_sequential_chars">연속된 문자 3개 이상 사용 금지</string>
+    <string name="id_description">* 아이디는 아래의 조건에 맞추어주세요.</string>
     <string name="password_description">* 비밀번호는 아래의 조건에 맞추어주세요.</string>
     <string name="phone_number">휴대폰 번호</string>
     <string name="office_number">전화번호</string>
@@ -58,7 +60,8 @@
     <string name="set_id_and_password">아이디와 비밀번호를 설정해주세요</string>
     <string name="set_id_label">아이디 설정</string>
     <string name="id_conditions">(최소 6자 ~ 최대 20자까지 허용)</string>
-    <string name="id_available">사용 가능한 아이디 입니다</string>
+    <string name="id_available">* 사용 가능한 아이디 입니다.</string>
+    <string name="id_disavailable">* 이미 존재하는 아이디 입니다.</string>
     <string name="check_duplicate">중복 확인</string>
     <string name="set_password_label">비밀번호 설정</string>
     <string name="password_conditions">(최소 8자 이상 ~ 최대 20자까지 허용)</string>
@@ -217,7 +220,7 @@
     <string name="apply_deadline_hint">날짜를 선택해주세요.</string>
 
     <!-- Business Registration -->
-    <string name="enter_business_registration_number">사업자 등록번호입력해주세요</string>
+    <string name="enter_business_registration_number">사업자 등록번호 입력해주세요</string>
     <string name="business_registration_number_hint">사업자 등록번호를 입력해주세요.</string>
     <string name="is_this_the_right_facility">아래의 시설이 맞나요?</string>
 

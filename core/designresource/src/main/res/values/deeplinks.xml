@@ -12,7 +12,7 @@
     <string name="worker_jobposting_detail_deeplink_url">care://worker/jobposting/detail/{jobPostingId}/{jobPostingType}</string>
     <string name="worker_setting_deeplink_url">care://worker/setting</string>
 
-    <string name="center_signin_deeplink_url">care://center/signIn/{snackBarMsg}</string>
+    <string name="center_signin_deeplink_url">care://center/signIn/{toastMsg}</string>
     <string name="center_signup_deeplink_url">care://center/signUp</string>
     <string name="new_password_deeplink_url">care://newPassword</string>
     <string name="center_home_deeplink_url">care://center/home</string>

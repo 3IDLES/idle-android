@@ -10,7 +10,7 @@
         android:label="CenterSignInFragment">
         <deepLink app:uri="@string/center_signin_deeplink_url" />
         <argument
-            android:name="snackBarMsg"
+            android:name="toastMsg"
             app:argType="string" />
     </fragment>
 

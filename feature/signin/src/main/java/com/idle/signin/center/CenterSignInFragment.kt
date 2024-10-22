@@ -29,6 +29,7 @@ import com.idle.binding.DeepLinkDestination.Auth
 import com.idle.binding.DeepLinkDestination.NewPassword
 import com.idle.binding.MainEvent
 import com.idle.binding.NavigationEvent
+import com.idle.binding.ToastType
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
@@ -53,8 +54,13 @@ internal class CenterSignInFragment : BaseComposeFragment() {
             val isLoginError by isLoginError.collectAsStateWithLifecycle()
 
             LaunchedEffect(Unit) {
-                if (args.snackBarMsg != "default") {
-                    eventHandlerHelper.sendEvent(MainEvent.ShowToast(args.snackBarMsg))
+                if (args.toastMsg != "default") {
+                    eventHandlerHelper.sendEvent(
+                        MainEvent.ShowToast(
+                            args.toastMsg,
+                            ToastType.SUCCESS
+                        )
+                    )
                 }
             }
 
