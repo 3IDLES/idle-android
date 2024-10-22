@@ -44,7 +44,10 @@ class WorkerSettingViewModel @Inject constructor(
         logoutWorkerUseCase().onSuccess {
             analyticsHelper.setUserId(null)
             navigationHelper.navigateTo(
-                NavigationEvent.NavigateToAuthWithClearBackStack("로그아웃이 완료되었습니다.|SUCCESS")
+                NavigationEvent.NavigateToAuthWithClearBackStack(
+                    toastMsg = "로그아웃이 완료되었습니다.",
+                    toastType = "SUCCESS",
+                )
             )
         }.onFailure { errorHandlerHelper.sendError(it) }
     }

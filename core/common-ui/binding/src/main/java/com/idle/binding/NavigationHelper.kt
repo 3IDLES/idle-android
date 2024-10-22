@@ -93,7 +93,10 @@ sealed class NavigationEvent {
     data class NavigateTo(val destination: DeepLinkDestination, val popUpTo: Int? = null) :
         NavigationEvent()
 
-    data class NavigateToAuthWithClearBackStack(val snackBarMsg: String) : NavigationEvent()
+    data class NavigateToAuthWithClearBackStack(
+        val toastMsg: String,
+        val toastType: String = "ERROR",
+    ) : NavigationEvent()
 }
 
 enum class NotificationType {

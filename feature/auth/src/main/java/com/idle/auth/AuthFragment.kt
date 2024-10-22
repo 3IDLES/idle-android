@@ -41,6 +41,7 @@ import com.idle.binding.DeepLinkDestination.CenterSignUp
 import com.idle.binding.DeepLinkDestination.WorkerSignUp
 import com.idle.binding.MainEvent
 import com.idle.binding.NavigationEvent
+import com.idle.binding.ToastType
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designresource.R.string
@@ -60,8 +61,13 @@ internal class AuthFragment : BaseComposeFragment() {
             val userRole by userRole.collectAsStateWithLifecycle()
 
             LaunchedEffect(true) {
-                if (args.snackBarMsg != "default") {
-                    eventHandlerHelper.sendEvent(MainEvent.ShowToast(args.snackBarMsg))
+                if (args.toastMsg != "default") {
+                    eventHandlerHelper.sendEvent(
+                        MainEvent.ShowToast(
+                            msg = args.toastMsg,
+                            toastType = ToastType.create(args.toastType)
+                        )
+                    )
                 }
             }
 

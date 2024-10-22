@@ -46,6 +46,7 @@ internal class CenterSignUpFragment : BaseComposeFragment() {
             val centerAuthCodeTimerSeconds by centerAuthCodeTimerSeconds.collectAsStateWithLifecycle()
             val centerAuthCode by centerAuthCode.collectAsStateWithLifecycle()
             val isConfirmAuthCode by isConfirmAuthCode.collectAsStateWithLifecycle()
+            val isAuthCodeError by isAuthCodeError.collectAsStateWithLifecycle()
             val businessRegistrationNumber
                     by businessRegistrationNumber.collectAsStateWithLifecycle()
             val businessRegistrationInfo by businessRegistrationInfo.collectAsStateWithLifecycle()
@@ -53,8 +54,12 @@ internal class CenterSignUpFragment : BaseComposeFragment() {
             val centerIdResult by centerIdResult.collectAsStateWithLifecycle()
             val centerPassword by centerPassword.collectAsStateWithLifecycle()
             val centerPasswordForConfirm by centerPasswordForConfirm.collectAsStateWithLifecycle()
-            val isValidId by isValidId.collectAsStateWithLifecycle()
-            val isValidPassword by isValidPassword.collectAsStateWithLifecycle()
+            val isIdValid by isIdValid.collectAsStateWithLifecycle()
+            val isPasswordLengthValid by isPasswordLengthValid.collectAsStateWithLifecycle()
+            val isPasswordContainsLetterAndDigit by isPasswordContainsLetterAndDigit.collectAsStateWithLifecycle()
+            val isPasswordNoWhitespace by isPasswordNoWhitespace.collectAsStateWithLifecycle()
+            val isPasswordNoSequentialChars by isPasswordNoSequentialChars.collectAsStateWithLifecycle()
+            val isPasswordValid by isPasswordValid.collectAsStateWithLifecycle()
 
             CenterSignUpScreen(
                 signUpStep = signUpStep,
@@ -64,14 +69,19 @@ internal class CenterSignUpFragment : BaseComposeFragment() {
                 centerAuthCodeTimerSeconds = centerAuthCodeTimerSeconds,
                 centerAuthCode = centerAuthCode,
                 isConfirmAuthCode = isConfirmAuthCode,
+                isAuthCodeError = isAuthCodeError,
                 businessRegistrationNumber = businessRegistrationNumber,
                 businessRegistrationInfo = businessRegistrationInfo,
                 centerId = centerId,
                 centerIdResult = centerIdResult,
                 centerPassword = centerPassword,
                 centerPasswordForConfirm = centerPasswordForConfirm,
-                isValidId = isValidId,
-                isValidPassword = isValidPassword,
+                isIdValid = isIdValid,
+                isPasswordLengthValid = isPasswordLengthValid,
+                isPasswordContainsLetterAndDigit = isPasswordContainsLetterAndDigit,
+                isPasswordNoWhitespace = isPasswordNoWhitespace,
+                isPasswordNoSequentialChars = isPasswordNoSequentialChars,
+                isPasswordValid = isPasswordValid,
                 setSignUpStep = ::setCenterSignUpStep,
                 onCenterNameChanged = ::setCenterName,
                 onCenterPhoneNumberChanged = ::setCenterPhoneNumber,
@@ -108,14 +118,19 @@ internal fun CenterSignUpScreen(
     centerAuthCodeTimerSeconds: String,
     centerAuthCode: String,
     isConfirmAuthCode: Boolean,
+    isAuthCodeError: Boolean,
     businessRegistrationNumber: String,
     businessRegistrationInfo: BusinessRegistrationInfo?,
     centerId: String,
-    centerIdResult: Boolean,
+    centerIdResult: Boolean?,
     centerPassword: String,
     centerPasswordForConfirm: String,
-    isValidId: Boolean,
-    isValidPassword: Boolean,
+    isIdValid: Boolean,
+    isPasswordLengthValid: Boolean,
+    isPasswordContainsLetterAndDigit: Boolean,
+    isPasswordNoWhitespace: Boolean,
+    isPasswordNoSequentialChars: Boolean,
+    isPasswordValid: Boolean,
     setSignUpStep: (CenterSignUpStep) -> Unit,
     onCenterNameChanged: (String) -> Unit,
     onCenterPhoneNumberChanged: (String) -> Unit,
@@ -188,6 +203,7 @@ internal fun CenterSignUpScreen(
                             setSignUpStep = setSignUpStep,
                             sendPhoneNumber = sendPhoneNumber,
                             confirmAuthCode = confirmAuthCode,
+                            isAuthCodeError = isAuthCodeError,
                         )
 
                     CenterSignUpStep.BUSINESS_REGISTRATION ->
@@ -205,8 +221,12 @@ internal fun CenterSignUpScreen(
                             centerIdResult = centerIdResult,
                             centerPassword = centerPassword,
                             centerPasswordForConfirm = centerPasswordForConfirm,
-                            isValidId = isValidId,
-                            isValidPassword = isValidPassword,
+                            isIdValid = isIdValid,
+                            isPasswordLengthValid = isPasswordLengthValid,
+                            isPasswordContainsLetterAndDigit = isPasswordContainsLetterAndDigit,
+                            isPasswordNoWhitespace = isPasswordNoWhitespace,
+                            isPasswordNoSequentialChars = isPasswordNoSequentialChars,
+                            isPasswordValid = isPasswordValid,
                             onCenterIdChanged = onCenterIdChanged,
                             onCenterPasswordChanged = onCenterPasswordChanged,
                             onCenterPasswordForConfirmChanged = onCenterPasswordForConfirmChanged,

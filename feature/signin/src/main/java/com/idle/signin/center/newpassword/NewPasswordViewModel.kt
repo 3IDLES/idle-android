@@ -1,5 +1,3 @@
-@file:OptIn(FlowPreview::class)
-
 package com.idle.signin.center.newpassword
 
 import androidx.core.text.isDigitsOnly
@@ -30,7 +28,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -75,41 +72,37 @@ class NewPasswordViewModel @Inject constructor(
     private val _isAuthCodeError = MutableStateFlow(false)
     val isAuthCodeError = _isAuthCodeError.asStateFlow()
 
-    val isPasswordLengthValid = _newPassword.debounce(DEBOUNCE_TIME_MILLIS)
-        .map { password ->
-            if (password.isBlank()) false else password.length in PASSWORD_MIN_LENGTH..PASSWORD_MAX_LENGTH
-        }.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.Lazily,
-            initialValue = false,
-        )
+    val isPasswordLengthValid = _newPassword.map { password ->
+        if (password.isBlank()) false else password.length in PASSWORD_MIN_LENGTH..PASSWORD_MAX_LENGTH
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Lazily,
+        initialValue = false,
+    )
 
-    val isPasswordContainsLetterAndDigit = _newPassword.debounce(DEBOUNCE_TIME_MILLIS)
-        .map { password ->
-            if (password.isBlank()) false else password.any { it.isLetter() } && password.any { it.isDigit() }
-        }.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.Lazily,
-            initialValue = false,
-        )
+    val isPasswordContainsLetterAndDigit = _newPassword.map { password ->
+        if (password.isBlank()) false else password.any { it.isLetter() } && password.any { it.isDigit() }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Lazily,
+        initialValue = false,
+    )
 
-    val isPasswordNoWhitespace = _newPassword.debounce(DEBOUNCE_TIME_MILLIS)
-        .map { password ->
-            if (password.isBlank()) false else !password.contains(" ")
-        }.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.Lazily,
-            initialValue = false,
-        )
+    val isPasswordNoWhitespace = _newPassword.map { password ->
+        if (password.isBlank()) false else !password.contains(" ")
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Lazily,
+        initialValue = false,
+    )
 
-    val isPasswordNoSequentialChars = _newPassword.debounce(DEBOUNCE_TIME_MILLIS)
-        .map { password ->
-            if (password.isBlank()) false else !hasSequentialChars(password)
-        }.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.Lazily,
-            initialValue = false,
-        )
+    val isPasswordNoSequentialChars = _newPassword.map { password ->
+        if (password.isBlank()) false else !hasSequentialChars(password)
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Lazily,
+        initialValue = false,
+    )
 
     val isPasswordValid: StateFlow<Boolean> = combine(
         _newPassword,
@@ -188,7 +181,7 @@ class NewPasswordViewModel @Inject constructor(
         ).onSuccess {
             navigationHelper.navigateTo(
                 NavigationEvent.NavigateTo(
-                    destination = DeepLinkDestination.CenterSignIn("새 비밀번호를 발급하였습니다.|SUCCESS"),
+                    destination = DeepLinkDestination.CenterSignIn("새 비밀번호를 발급하였습니다."),
                     popUpTo = R.id.newPasswordFragment,
                 )
             )
@@ -234,7 +227,6 @@ class NewPasswordViewModel @Inject constructor(
     }
 
     companion object {
-        private const val DEBOUNCE_TIME_MILLIS = 200L
         private const val PASSWORD_MIN_LENGTH = 8
         private const val PASSWORD_MAX_LENGTH = 20
     }

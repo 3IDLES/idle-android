@@ -8,7 +8,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings.ACTION_WIFI_SETTINGS
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
@@ -168,7 +167,10 @@ class MainActivity : AppCompatActivity() {
                         )
 
                         is NavigationEvent.NavigateToAuthWithClearBackStack -> navController.navigate(
-                            AuthFragmentDirections.actionGlobalNavAuth(navigationEvent.snackBarMsg)
+                            AuthFragmentDirections.actionGlobalNavAuth(
+                                navigationEvent.toastMsg,
+                                navigationEvent.toastType
+                            )
                         )
                     }
 
