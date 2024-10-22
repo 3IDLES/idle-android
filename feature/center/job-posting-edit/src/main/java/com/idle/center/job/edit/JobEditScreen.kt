@@ -494,7 +494,7 @@ fun JobEditScreen(
             ) {
                 Column(
                     horizontalAlignment = Alignment.Start,
-                    verticalArrangement = Arrangement.spacedBy(20.dp),
+                    verticalArrangement = Arrangement.spacedBy(28.dp),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp),
@@ -525,7 +525,6 @@ fun JobEditScreen(
                             }
                         }
                     }
-
 
                     LabeledContent(
                         subtitle = stringResource(id = R.string.work_hours),
@@ -641,7 +640,6 @@ fun JobEditScreen(
                 HorizontalDivider(thickness = 8.dp, color = CareTheme.colors.gray050)
 
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(20.dp),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp)
@@ -650,11 +648,14 @@ fun JobEditScreen(
                         text = stringResource(id = R.string.customer_info),
                         style = CareTheme.typography.subtitle1,
                         color = CareTheme.colors.black,
+                        modifier = Modifier.padding(bottom = 28.dp),
                     )
 
                     LabeledContent(
                         subtitle = stringResource(id = R.string.customer_name),
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 28.dp),
                     ) {
                         CareTextField(
                             value = localClientName,
@@ -666,7 +667,9 @@ fun JobEditScreen(
 
                     LabeledContent(
                         subtitle = stringResource(id = R.string.gender),
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 28.dp),
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
@@ -691,7 +694,9 @@ fun JobEditScreen(
 
                     LabeledContent(
                         subtitle = stringResource(id = R.string.birth_year),
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 28.dp),
                     ) {
                         CareTextField(
                             value = localBirthYear,
@@ -722,9 +727,17 @@ fun JobEditScreen(
                         )
                     }
 
+                    HorizontalDivider(
+                        thickness = 1.dp,
+                        color = CareTheme.colors.gray100,
+                        modifier = Modifier.padding(vertical = 20.dp),
+                    )
+
                     LabeledContent(
                         subtitle = stringResource(id = R.string.care_level),
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 28.dp),
                     ) {
                         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                             IntRange(1, 5).forEach { level ->
@@ -739,7 +752,9 @@ fun JobEditScreen(
 
                     LabeledContent(
                         subtitle = stringResource(id = R.string.mental_status),
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 28.dp),
                     ) {
                         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                             MentalStatus.entries.forEach { status ->
@@ -770,7 +785,7 @@ fun JobEditScreen(
                                 append("(선택)")
                             }
                         },
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth()
                     ) {
                         CareTextField(
                             value = localDisease,
@@ -780,9 +795,16 @@ fun JobEditScreen(
                         )
                     }
 
-                    HorizontalDivider(thickness = 1.dp, color = CareTheme.colors.gray100)
+                    HorizontalDivider(
+                        thickness = 1.dp,
+                        color = CareTheme.colors.gray100,
+                        modifier = Modifier.padding(vertical = 20.dp),
+                    )
 
-                    LabeledContent(subtitle = stringResource(id = R.string.meal_assistance)) {
+                    LabeledContent(
+                        subtitle = stringResource(id = R.string.meal_assistance),
+                        modifier = Modifier.padding(bottom = 28.dp),
+                    ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -804,7 +826,10 @@ fun JobEditScreen(
                         }
                     }
 
-                    LabeledContent(subtitle = stringResource(id = R.string.bowel_assistance)) {
+                    LabeledContent(
+                        subtitle = stringResource(id = R.string.bowel_assistance),
+                        modifier = Modifier.padding(bottom = 28.dp),
+                    ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -826,7 +851,10 @@ fun JobEditScreen(
                         }
                     }
 
-                    LabeledContent(subtitle = stringResource(id = R.string.walking_assistance)) {
+                    LabeledContent(
+                        subtitle = stringResource(id = R.string.walking_assistance),
+                        modifier = Modifier.padding(bottom = 28.dp),
+                    ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -861,6 +889,7 @@ fun JobEditScreen(
                                 append("(선택)")
                             }
                         },
+                        modifier = Modifier.padding(bottom = 28.dp),
                     ) {
                         FlowRow(
                             horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -916,18 +945,21 @@ fun JobEditScreen(
                 HorizontalDivider(thickness = 8.dp, color = CareTheme.colors.gray050)
 
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(20.dp),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 20.dp, end = 20.dp, bottom = 28.dp)
+                        .padding(start = 20.dp, end = 20.dp),
                 ) {
                     Text(
                         text = stringResource(id = R.string.additional_info),
                         style = CareTheme.typography.subtitle1,
                         color = CareTheme.colors.black,
+                        modifier = Modifier.padding(bottom = 28.dp),
                     )
 
-                    LabeledContent(subtitle = stringResource(id = R.string.experience_preference)) {
+                    LabeledContent(
+                        subtitle = stringResource(id = R.string.experience_preference),
+                        modifier = Modifier.padding(bottom = 28.dp),
+                    ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -962,6 +994,7 @@ fun JobEditScreen(
                                 append("(다중 선택 가능)")
                             }
                         },
+                        modifier = Modifier.padding(bottom = 28.dp),
                     ) {
                         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                             ApplyMethod.entries.forEach { method ->
