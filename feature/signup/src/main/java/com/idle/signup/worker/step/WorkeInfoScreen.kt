@@ -174,7 +174,7 @@ internal fun WorkerInformationScreen(
                 enable = workerName.isNotBlank() && gender != Gender.NONE && birthYear.length == 4,
                 onClick = {
                     if ((birthYear.toIntOrNull() ?: return@CareButtonMedium) < 1900) {
-                        showSnackBar("출생년도가 잘못되었습니다.|Error")
+                        showSnackBar("출생년도는 1900년 보다 커야합니다.")
                         return@CareButtonMedium
                     }
 
