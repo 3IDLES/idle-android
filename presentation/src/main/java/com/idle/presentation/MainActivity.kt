@@ -189,7 +189,7 @@ class MainActivity : AppCompatActivity() {
 
             setDestinationListener()
 
-            navigationHelper.handleNotificationNavigate(
+            navigationHelper.handleFCMNavigate(
                 isColdStart = true,
                 extras = intent?.extras ?: run {
                     initializeUserSession()
@@ -213,7 +213,7 @@ class MainActivity : AppCompatActivity() {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
 
-        viewModel.navigationHelper.handleNotificationNavigate(
+        viewModel.navigationHelper.handleFCMNavigate(
             isColdStart = false,
             extras = intent?.extras ?: return,
             onInit = viewModel::initializeUserSession,

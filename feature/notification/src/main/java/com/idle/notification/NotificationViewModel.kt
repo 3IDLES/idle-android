@@ -1,15 +1,10 @@
 package com.idle.notification
 
 import androidx.lifecycle.viewModelScope
-import com.idle.binding.DeepLinkDestination.CenterApplicantInquiry
-import com.idle.binding.DeepLinkDestination.CenterJobDetail
-import com.idle.binding.NavigationEvent
 import com.idle.binding.NavigationHelper
 import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.error.ErrorHandlerHelper
 import com.idle.domain.model.notification.Notification
-import com.idle.domain.model.notification.NotificationContent
-import com.idle.domain.model.notification.NotificationType
 import com.idle.domain.usecase.notification.GetMyNotificationUseCase
 import com.idle.domain.usecase.notification.ReadNotificationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,8 +24,7 @@ class NotificationViewModel @Inject constructor(
 ) : BaseViewModel() {
     private val next = MutableStateFlow<String?>(null)
 
-    private val _callType =
-        MutableStateFlow<NotificationCallType>(NotificationCallType.NOTIFICATION)
+    private val _callType = MutableStateFlow(NotificationCallType.NOTIFICATION)
 
     private val myNotifications = MutableStateFlow<List<Notification>?>(null)
 
@@ -88,29 +82,7 @@ class NotificationViewModel @Inject constructor(
             }
         }
 
-        handleNotificationDestination(notification)
-    }
-
-    private fun handleNotificationDestination(notification: Notification) {
-        val screenDepth = when (notification.notificationType) {
-            NotificationType.APPLICANT -> {
-                val notificationContent =
-                    notification.notificationDetails as? NotificationContent.ApplicantNotification
-
-                notificationContent?.let { content ->
-                    listOf(
-                        CenterJobDetail(content.jobPostingId),
-                        CenterApplicantInquiry(content.jobPostingId)
-                    )
-                } ?: listOf()
-            }
-
-            else -> listOf()
-        }
-
-        screenDepth.onEach { screen ->
-            navigationHelper.navigateTo(NavigationEvent.NavigateTo(screen))
-        }
+        navigationHelper.handleNotificationNavigate(notification)
     }
 }
 

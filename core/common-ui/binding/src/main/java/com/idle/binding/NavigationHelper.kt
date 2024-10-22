@@ -6,6 +6,9 @@ import com.idle.binding.DeepLinkDestination.CenterHome
 import com.idle.binding.DeepLinkDestination.CenterJobDetail
 import com.idle.binding.DeepLinkDestination.WorkerJobDetail
 import com.idle.domain.model.jobposting.JobPostingType
+import com.idle.domain.model.notification.Notification
+import com.idle.domain.model.notification.NotificationContent
+import com.idle.domain.model.notification.NotificationType.APPLICANT
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -21,7 +24,7 @@ class NavigationHelper @Inject constructor() {
         _navigationFlow.trySend(navigationEvent)
     }
 
-    fun handleNotificationNavigate(
+    fun handleFCMNavigate(
         isColdStart: Boolean,
         extras: Bundle?,
         onInit: () -> Unit
@@ -86,6 +89,26 @@ class NavigationHelper @Inject constructor() {
 
             NotificationType.UNKNOWN -> return
         }
+    }
+
+    fun handleNotificationNavigate(notification: Notification) {
+        val destinations = when (notification.notificationType) {
+            APPLICANT -> {
+                val notificationContent =
+                    notification.notificationDetails as? NotificationContent.ApplicantNotification
+
+                notificationContent?.let { content ->
+                    listOf(
+                        NavigationEvent.NavigateTo(CenterJobDetail(content.jobPostingId)),
+                        NavigationEvent.NavigateTo(CenterApplicantInquiry(content.jobPostingId)),
+                    )
+                } ?: listOf()
+            }
+
+            else -> listOf()
+        }
+
+        destinations.onEach { destination -> _navigationFlow.trySend(destination) }
     }
 }
 
