@@ -27,7 +27,9 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -108,6 +110,22 @@ class NewPasswordViewModel @Inject constructor(
             started = SharingStarted.Lazily,
             initialValue = false,
         )
+
+    val isPasswordValid: StateFlow<Boolean> = combine(
+        _newPassword,
+        _newPasswordForConfirm
+    ) { password, confirmPassword ->
+        isPasswordLengthValid.value &&
+                isPasswordContainsLetterAndDigit.value &&
+                isPasswordNoWhitespace.value &&
+                isPasswordNoSequentialChars.value &&
+                confirmPassword.isNotBlank() &&
+                password == confirmPassword
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = false,
+    )
 
     internal fun setPhoneNumber(phoneNumber: String) {
         if (phoneNumber.isDigitsOnly() && phoneNumber.length <= 11) {
