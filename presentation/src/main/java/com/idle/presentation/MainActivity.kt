@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings.ACTION_WIFI_SETTINGS
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
@@ -188,7 +189,10 @@ class MainActivity : AppCompatActivity() {
 
             navigationHelper.handleNotificationNavigate(
                 isColdStart = true,
-                extras = intent?.extras ?: return,
+                extras = intent?.extras ?: run {
+                    initializeUserSession()
+                    return
+                },
                 onInit = ::initializeUserSession,
             )
         }

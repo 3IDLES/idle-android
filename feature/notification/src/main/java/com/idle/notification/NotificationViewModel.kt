@@ -75,7 +75,15 @@ class NotificationViewModel @Inject constructor(
 
     internal fun onNotificationClick(notification: Notification) = viewModelScope.launch {
         launch {
-            readNotificationUseCase(notification.id).onFailure {
+            readNotificationUseCase(notification.id).onSuccess {
+                myNotifications.value = myNotifications.value?.map {
+                    if (it.id == notification.id) {
+                        notification.copy(isRead = true)
+                    } else {
+                        it
+                    }
+                }
+            }.onFailure {
                 errorHandlerHelper.sendError(it)
             }
         }
