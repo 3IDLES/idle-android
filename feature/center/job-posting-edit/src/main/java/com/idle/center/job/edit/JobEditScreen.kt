@@ -257,10 +257,10 @@ fun JobEditScreen(
                                                 if (startTime.isBefore(endTime)) {
                                                     localWorkStartTime = startDateTime
                                                 } else {
-                                                    showSnackBar("근무 시작 시간은 근무 종료 시간보다 빨라야 합니다.|ERROR")
+                                                    showSnackBar("근무 시작 시간은 근무 종료 시간보다 빨라야 합니다.")
                                                 }
                                             } catch (e: DateTimeParseException) {
-                                                showSnackBar("근무 시작 시간은 근무 종료 시간보다 빨라야 합니다.|ERROR")
+                                                showSnackBar("근무 시작 시간은 근무 종료 시간보다 빨라야 합니다.")
                                             }
                                         }
 
@@ -362,10 +362,10 @@ fun JobEditScreen(
                                                 if (endTime.isAfter(startTime)) {
                                                     localWorkEndTime = endDateTime
                                                 } else {
-                                                    showSnackBar("근무 종료 시간은 근무 시작 시간보다 빨라야 합니다.|ERROR")
+                                                    showSnackBar("근무 종료 시간은 근무 시작 시간보다 빨라야 합니다.")
                                                 }
                                             } catch (e: DateTimeParseException) {
-                                                showSnackBar("근무 종료 시간은 근무 시작 시간보다 빨라야 합니다.|ERROR")
+                                                showSnackBar("근무 종료 시간은 근무 시작 시간보다 빨라야 합니다.")
                                             }
                                         }
                                         sheetState.hide()
