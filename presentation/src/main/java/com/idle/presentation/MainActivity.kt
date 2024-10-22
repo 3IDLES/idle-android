@@ -24,8 +24,8 @@ import com.idle.binding.MainEvent
 import com.idle.binding.NavigationEvent
 import com.idle.binding.deepLinkNavigateTo
 import com.idle.binding.repeatOnStarted
-import com.idle.designsystem.binding.component.dismissSnackBar
-import com.idle.designsystem.binding.component.showSnackBar
+import com.idle.designsystem.binding.component.dismissToast
+import com.idle.designsystem.binding.component.showToast
 import com.idle.presentation.databinding.ActivityMainBinding
 import com.idle.presentation.forceupdate.ForceUpdateFragment
 import com.idle.presentation.network.NetworkObserver
@@ -145,14 +145,14 @@ class MainActivity : AppCompatActivity() {
             repeatOnStarted {
                 eventFlow.collect {
                     when (it) {
-                        is MainEvent.ShowSnackBar -> showSnackBar(
-                            rootView = binding.root,
+                        is MainEvent.ShowToast -> showToast(
+                            context = this@MainActivity,
                             msg = it.msg,
-                            snackBarType = it.snackBarType,
+                            toastType = it.toastType,
                             paddingBottom = calculateSnackBarBottomPadding(),
                         )
 
-                        is MainEvent.DismissSnackBar -> dismissSnackBar()
+                        is MainEvent.DismissToast -> dismissToast()
                     }
                 }
             }
@@ -171,7 +171,7 @@ class MainActivity : AppCompatActivity() {
                         )
                     }
 
-                    dismissSnackBar()
+                    dismissToast()
                 }
             }
 

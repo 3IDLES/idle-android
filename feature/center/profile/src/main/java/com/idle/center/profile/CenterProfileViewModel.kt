@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.EventHandlerHelper
 import com.idle.binding.MainEvent
-import com.idle.binding.SnackBarType.SUCCESS
+import com.idle.binding.ToastType.SUCCESS
 import com.idle.domain.model.error.ErrorHandlerHelper
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.usecase.profile.GetCenterProfileUseCase
@@ -95,7 +95,7 @@ class CenterProfileViewModel @Inject constructor(
             introduce = _centerIntroduce.value.ifBlank { null },
             imageFileUri = _profileImageUri.value?.toString(),
         ).onSuccess {
-            eventHandlerHelper.sendEvent(MainEvent.ShowSnackBar("정보 수정이 완료되었어요.", SUCCESS))
+            eventHandlerHelper.sendEvent(MainEvent.ShowToast("정보 수정이 완료되었어요.", SUCCESS))
             setEditState(false)
         }.onFailure { errorHandlerHelper.sendError(it) }
         }.also { _isUpdateLoading.value = false }

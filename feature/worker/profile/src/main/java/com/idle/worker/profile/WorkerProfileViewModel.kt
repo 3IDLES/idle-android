@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
 import com.idle.binding.EventHandlerHelper
 import com.idle.binding.MainEvent
-import com.idle.binding.SnackBarType
+import com.idle.binding.ToastType
 import com.idle.domain.model.error.ErrorHandlerHelper
 import com.idle.domain.model.profile.JobSearchStatus
 import com.idle.domain.model.profile.WorkerProfile
@@ -113,7 +113,7 @@ class WorkerProfileViewModel @Inject constructor(
     internal fun updateWorkerProfile() = viewModelScope.launch {
         val workerProfile = _workerProfile.value
         if (workerProfile == null) {
-            eventHandlerHelper.sendEvent(MainEvent.ShowSnackBar("로딩중입니다."))
+            eventHandlerHelper.sendEvent(MainEvent.ShowToast("로딩중입니다."))
             return@launch
         }
 
@@ -130,9 +130,9 @@ class WorkerProfileViewModel @Inject constructor(
         ).onSuccess {
             getMyWorkerProfile()
             eventHandlerHelper.sendEvent(
-                MainEvent.ShowSnackBar(
+                MainEvent.ShowToast(
                     "정보 수정이 완료되었어요.",
-                    snackBarType = SnackBarType.SUCCESS
+                    toastType = ToastType.SUCCESS
                 )
             )
             setEditState(false)

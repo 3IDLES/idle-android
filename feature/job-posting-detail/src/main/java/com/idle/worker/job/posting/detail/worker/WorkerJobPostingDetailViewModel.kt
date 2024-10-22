@@ -9,7 +9,7 @@ import com.idle.analytics.helper.AnalyticsHelper
 import com.idle.binding.EventHandlerHelper
 import com.idle.binding.MainEvent
 import com.idle.binding.NavigationHelper
-import com.idle.binding.SnackBarType.SUCCESS
+import com.idle.binding.ToastType.SUCCESS
 import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.error.ErrorHandlerHelper
 import com.idle.domain.model.jobposting.ApplyMethod
@@ -77,7 +77,7 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
                 jobPostingId = jobPostingId,
                 applyMethod = applyMethod,
             ).onSuccess {
-                eventHandlerHelper.sendEvent(MainEvent.ShowSnackBar("지원이 완료되었어요.", SUCCESS))
+                eventHandlerHelper.sendEvent(MainEvent.ShowToast("지원이 완료되었어요.", SUCCESS))
 
                 if (_workerJobPostingDetail.value?.jobPostingType == JobPostingType.CAREMEET) {
                     _workerJobPostingDetail.value =
@@ -106,7 +106,7 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
             jobPostingType = jobPostingType,
         ).onSuccess {
             eventHandlerHelper.sendEvent(
-                MainEvent.ShowSnackBar("즐겨찾기에 추가되었어요.", SUCCESS)
+                MainEvent.ShowToast("즐겨찾기에 추가되었어요.", SUCCESS)
             )
 
             when (jobPostingType) {
@@ -129,7 +129,7 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
     ) = viewModelScope.launch {
         removeFavoriteJobPostingUseCase(jobPostingId = jobPostingId).onSuccess {
             eventHandlerHelper.sendEvent(
-                MainEvent.ShowSnackBar("즐겨찾기에서 제거되었어요.", SUCCESS)
+                MainEvent.ShowToast("즐겨찾기에서 제거되었어요.", SUCCESS)
             )
 
             when (jobPostingType) {

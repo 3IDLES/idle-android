@@ -233,7 +233,7 @@ class CenterSignUpViewModel @Inject constructor(
         val passwordPattern = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d!@#\$%^&*()_+=-]{8,20}$".toRegex()
 
         if (!_centerPassword.value.matches(passwordPattern)) {
-            eventHandlerHelper.sendEvent(MainEvent.ShowSnackBar("비밀번호가 형식에 맞지 않습니다."))
+            eventHandlerHelper.sendEvent(MainEvent.ShowToast("비밀번호가 형식에 맞지 않습니다."))
             return@launch
         }
 

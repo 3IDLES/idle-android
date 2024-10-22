@@ -27,7 +27,7 @@ class RegisterCenterInfoCompleteViewModel @Inject constructor(
             getLocalMyCenterProfileUseCase()
                 .onSuccess { _centerProfile.value = it }
                 .onFailure {
-                    eventHandlerHelper.sendEvent(MainEvent.ShowSnackBar(it.toString()))
+                    eventHandlerHelper.sendEvent(MainEvent.ShowToast(it.toString()))
                 }
         }
     }

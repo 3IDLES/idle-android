@@ -5,7 +5,7 @@ import com.idle.binding.base.BaseViewModel
 import com.idle.binding.EventHandlerHelper
 import com.idle.binding.MainEvent
 import com.idle.binding.NavigationHelper
-import com.idle.binding.SnackBarType
+import com.idle.binding.ToastType
 import com.idle.domain.model.error.ErrorHandlerHelper
 import com.idle.domain.model.jobposting.ApplyMethod
 import com.idle.domain.model.jobposting.CrawlingJobPosting
@@ -86,7 +86,7 @@ class WorkerHomeViewModel @Inject constructor(
             jobPostingId = jobPostingId,
             applyMethod = ApplyMethod.APP
         ).onSuccess {
-            eventHandlerHelper.sendEvent(MainEvent.ShowSnackBar("지원이 완료되었어요.", SnackBarType.SUCCESS))
+            eventHandlerHelper.sendEvent(MainEvent.ShowToast("지원이 완료되었어요.", ToastType.SUCCESS))
 
             _jobPostings.value = _jobPostings.value?.map {
                 if (it.jobPostingType == JobPostingType.CAREMEET && it.id == jobPostingId) {
@@ -105,7 +105,7 @@ class WorkerHomeViewModel @Inject constructor(
             jobPostingId = jobPostingId,
             jobPostingType = jobPostingType,
         ).onSuccess {
-            eventHandlerHelper.sendEvent(MainEvent.ShowSnackBar("즐겨찾기에 추가되었어요.", SnackBarType.SUCCESS))
+            eventHandlerHelper.sendEvent(MainEvent.ShowToast("즐겨찾기에 추가되었어요.", ToastType.SUCCESS))
 
             _jobPostings.value = _jobPostings.value?.map {
                 when (it.jobPostingType) {
@@ -125,7 +125,7 @@ class WorkerHomeViewModel @Inject constructor(
 
     internal fun removeFavoriteJobPosting(jobPostingId: String) = viewModelScope.launch {
         removeFavoriteJobPostingUseCase(jobPostingId = jobPostingId).onSuccess {
-            eventHandlerHelper.sendEvent(MainEvent.ShowSnackBar("즐겨찾기에서 제거되었어요", SnackBarType.SUCCESS))
+            eventHandlerHelper.sendEvent(MainEvent.ShowToast("즐겨찾기에서 제거되었어요", ToastType.SUCCESS))
 
             _jobPostings.value = _jobPostings.value?.map {
                 when (it.jobPostingType) {
@@ -155,7 +155,7 @@ class WorkerHomeViewModel @Inject constructor(
         getLocalMyWorkerProfileUseCase().onSuccess {
             _profile.value = it
         }.onFailure {
-            eventHandlerHelper.sendEvent(MainEvent.ShowSnackBar(it.message.toString()))
+            eventHandlerHelper.sendEvent(MainEvent.ShowToast(it.message.toString()))
         }
     }
 

@@ -110,7 +110,7 @@ internal class CenterJobPostingDetailFragment : BaseComposeFragment() {
                             },
                             showSnackBar = {
                                 eventHandlerHelper.sendEvent(
-                                    MainEvent.ShowSnackBar(it)
+                                    MainEvent.ShowToast(it)
                                 )
                             }
                         )

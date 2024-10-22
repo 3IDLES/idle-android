@@ -7,7 +7,7 @@ import com.idle.binding.DeepLinkDestination.CenterPending
 import com.idle.binding.DeepLinkDestination.CenterRegister
 import com.idle.binding.DeepLinkDestination.WorkerHome
 import com.idle.binding.EventHandlerHelper
-import com.idle.binding.MainEvent.ShowSnackBar
+import com.idle.binding.MainEvent.ShowToast
 import com.idle.binding.NavigationEvent
 import com.idle.binding.NavigationHelper
 import com.idle.binding.base.BaseViewModel
@@ -155,12 +155,12 @@ class MainViewModel @Inject constructor(
                                 )
                             )
 
-                        else -> eventHandlerHelper.sendEvent(ShowSnackBar(exception.print()))
+                        else -> eventHandlerHelper.sendEvent(ShowToast(exception.print()))
                     }
                 }
 
-                is SocketTimeoutException -> eventHandlerHelper.sendEvent(ShowSnackBar("서버 응답 시간이 초과되었습니다. 잠시 후 다시 시도해 주세요."))
-                is IOException -> eventHandlerHelper.sendEvent(ShowSnackBar("인터넷 연결이 불안정합니다. 네트워크 상태를 확인해 주세요."))
+                is SocketTimeoutException -> eventHandlerHelper.sendEvent(ShowToast("서버 응답 시간이 초과되었습니다. 잠시 후 다시 시도해 주세요."))
+                is IOException -> eventHandlerHelper.sendEvent(ShowToast("인터넷 연결이 불안정합니다. 네트워크 상태를 확인해 주세요."))
                 else -> {}
             }
         }

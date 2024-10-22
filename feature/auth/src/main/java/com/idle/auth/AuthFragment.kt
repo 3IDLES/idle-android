@@ -61,7 +61,7 @@ internal class AuthFragment : BaseComposeFragment() {
 
             LaunchedEffect(true) {
                 if (args.snackBarMsg != "default") {
-                    eventHandlerHelper.sendEvent(MainEvent.ShowSnackBar(args.snackBarMsg))
+                    eventHandlerHelper.sendEvent(MainEvent.ShowToast(args.snackBarMsg))
                 }
             }
 

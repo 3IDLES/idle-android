@@ -202,7 +202,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
                             setEditState(false)
                         },
                         setEditState = ::setEditState,
-                        showSnackBar = { eventHandlerHelper.sendEvent(MainEvent.ShowSnackBar(it)) },
+                        showSnackBar = { eventHandlerHelper.sendEvent(MainEvent.ShowToast(it)) },
                     )
                 } else {
                     JobPostingScreen(
@@ -263,12 +263,12 @@ internal class JobPostingFragment : BaseComposeFragment() {
                         onCalendarMonthChanged = ::setCalendarMonth,
                         postJobPosting = ::postJobPosting,
                         setJobPostingStep = { step ->
-                            eventHandlerHelper.sendEvent(MainEvent.DismissSnackBar)
+                            eventHandlerHelper.sendEvent(MainEvent.DismissToast)
                             setJobPostingStep(step)
                         },
                         setEditState = ::setEditState,
                         setBottomSheetType = ::setBottomSheetType,
-                        showSnackBar = { eventHandlerHelper.sendEvent(MainEvent.ShowSnackBar(it)) },
+                        showSnackBar = { eventHandlerHelper.sendEvent(MainEvent.ShowToast(it)) },
                         navigateToHome = {
                             navigationHelper.navigateTo(
                                 NavigationEvent.NavigateTo(

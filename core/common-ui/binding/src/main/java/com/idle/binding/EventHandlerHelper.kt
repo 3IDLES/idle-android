@@ -17,18 +17,18 @@ class EventHandlerHelper @Inject constructor() {
 }
 
 sealed class MainEvent {
-    data class ShowSnackBar(val msg: String, val snackBarType: SnackBarType = SnackBarType.ERROR) :
+    data class ShowToast(val msg: String, val toastType: ToastType = ToastType.ERROR) :
         MainEvent()
 
-    data object DismissSnackBar : MainEvent()
+    data object DismissToast : MainEvent()
 }
 
-enum class SnackBarType {
+enum class ToastType {
     ERROR, SUCCESS;
 
     companion object {
-        fun create(type: String): SnackBarType {
-            return SnackBarType.entries.firstOrNull { it.name == type } ?: ERROR
+        fun create(type: String): ToastType {
+            return ToastType.entries.firstOrNull { it.name == type } ?: ERROR
         }
     }
 }
