@@ -422,27 +422,27 @@ fun JobEditScreen(
                             color = CareTheme.colors.orange500,
                             modifier = Modifier.clickable {
                                 if (localWeekDays.isEmpty()) {
-                                    showSnackBar("근무 요일은 최소한 하나 이상을 선택해야 합니다.|ERROR")
+                                    showSnackBar("근무 요일은 최소한 하나 이상을 선택해야 합니다.")
                                     return@clickable
                                 }
 
                                 if (localApplyMethod.isEmpty()) {
-                                    showSnackBar("지원 방법은 최소한 하나 이상을 선택해야 합니다.|ERROR")
+                                    showSnackBar("지원 방법은 최소한 하나 이상을 선택해야 합니다.")
                                     return@clickable
                                 }
 
                                 if (localClientName.isBlank()) {
-                                    showSnackBar("고객의 이름은 비어있을 수 없습니다.|ERROR")
+                                    showSnackBar("고객의 이름은 비어있을 수 없습니다.")
                                     return@clickable
                                 }
 
                                 if ((localPayAmount.toIntOrNull() ?: return@clickable) < 9860) {
-                                    showSnackBar("급여는 최저 시급인 9860원보다 많아야 합니다.|ERROR")
+                                    showSnackBar("급여는 최저 시급인 9860원보다 많아야 합니다.")
                                     return@clickable
                                 }
 
                                 if ((localBirthYear.toIntOrNull() ?: return@clickable) < 1900) {
-                                    showSnackBar("출생년도는 1900년 이후로 입력 가능합니다.|Error")
+                                    showSnackBar("출생년도는 1900년 이후로 입력 가능합니다.")
                                     return@clickable
                                 }
 
@@ -791,14 +791,14 @@ fun JobEditScreen(
                             CareChipBasic(
                                 text = stringResource(R.string.necessary),
                                 onClick = { localIsMealAssistance = true },
-                                enable = localIsMealAssistance == true,
+                                enable = localIsMealAssistance,
                                 modifier = Modifier.width(104.dp),
                             )
 
                             CareChipBasic(
                                 text = stringResource(R.string.unnecessary),
                                 onClick = { localIsMealAssistance = false },
-                                enable = localIsMealAssistance == false,
+                                enable = !localIsMealAssistance,
                                 modifier = Modifier.width(104.dp),
                             )
                         }
@@ -813,14 +813,14 @@ fun JobEditScreen(
                             CareChipBasic(
                                 text = stringResource(R.string.necessary),
                                 onClick = { localIsBowelAssistance = true },
-                                enable = localIsBowelAssistance == true,
+                                enable = localIsBowelAssistance,
                                 modifier = Modifier.width(104.dp),
                             )
 
                             CareChipBasic(
                                 text = stringResource(R.string.unnecessary),
                                 onClick = { localIsBowelAssistance = false },
-                                enable = localIsBowelAssistance == false,
+                                enable = !localIsBowelAssistance,
                                 modifier = Modifier.width(104.dp),
                             )
                         }
@@ -835,14 +835,14 @@ fun JobEditScreen(
                             CareChipBasic(
                                 text = stringResource(R.string.necessary),
                                 onClick = { localIsWalkingAssistance = true },
-                                enable = localIsWalkingAssistance == true,
+                                enable = localIsWalkingAssistance,
                                 modifier = Modifier.width(104.dp),
                             )
 
                             CareChipBasic(
                                 text = stringResource(R.string.unnecessary),
                                 onClick = { localIsWalkingAssistance = false },
-                                enable = localIsWalkingAssistance == false,
+                                enable = !localIsWalkingAssistance,
                                 modifier = Modifier.width(104.dp),
                             )
                         }
@@ -936,14 +936,14 @@ fun JobEditScreen(
                             CareChipBasic(
                                 text = stringResource(id = R.string.beginner_possible),
                                 onClick = { localIsExperiencePreferred = false },
-                                enable = localIsExperiencePreferred == false,
+                                enable = !localIsExperiencePreferred,
                                 modifier = Modifier.width(104.dp),
                             )
 
                             CareChipBasic(
                                 text = stringResource(id = R.string.experience_preferred),
                                 onClick = { localIsExperiencePreferred = true },
-                                enable = localIsExperiencePreferred == true,
+                                enable = localIsExperiencePreferred,
                                 modifier = Modifier.width(104.dp),
                             )
                         }
@@ -1017,7 +1017,7 @@ fun JobEditScreen(
                                     hint = stringResource(id = R.string.apply_deadline_hint),
                                     leftComponent = {
                                         Image(
-                                            painter = painterResource(com.idle.designresource.R.drawable.ic_calendar),
+                                            painter = painterResource(R.drawable.ic_calendar),
                                             contentDescription = null,
                                         )
                                     },
