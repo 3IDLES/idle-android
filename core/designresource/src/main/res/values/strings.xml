@@ -27,6 +27,10 @@
     <string name="change_password">비밀번호 변경</string>
     <string name="new_password_title">새로운 비밀번호를 입력해주세요</string>
     <string name="generate_new_password">신규 비밀번호 발급</string>
+    <string name="condition_password_length">8자~20자 사이</string>
+    <string name="condition_letter_and_digit">영문자와 숫자 반드시 하나씩 포함</string>
+    <string name="condition_no_whitespace">공백 문자 사용 금지</string>
+    <string name="condition_no_sequential_chars">연속된 문자 3개 이상 사용 금지</string>
     <string name="password_description">* 비밀번호는 아래의 조건에 맞추어주세요.</string>
     <string name="phone_number">휴대폰 번호</string>
     <string name="office_number">전화번호</string>

@@ -1,10 +1,8 @@
 package com.idle.signin.center.newpassword.step
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,13 +17,13 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareTextField
+import com.idle.designsystem.compose.component.ConditionRow
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.signin.center.newpassword.NewPasswordStep
@@ -39,6 +37,7 @@ internal fun GenerateNewPasswordScreen(
     isPasswordContainsLetterAndDigit: Boolean,
     isPasswordNoWhitespace: Boolean,
     isPasswordNoSequentialChars: Boolean,
+    isPasswordValid: Boolean,
     onNewPasswordChanged: (String) -> Unit,
     onNewPasswordForConfirmChanged: (String) -> Unit,
     setNewPasswordProcess: (NewPasswordStep) -> Unit,
@@ -95,72 +94,25 @@ internal fun GenerateNewPasswordScreen(
                 .fillMaxWidth()
                 .padding(bottom = 24.dp),
         ) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                val imageResource =
-                    if (isPasswordContainsLetterAndDigit) R.drawable.ic_right_condition
-                    else R.drawable.ic_not_right_condition
+            ConditionRow(
+                isValid = isPasswordLengthValid,
+                conditionText = stringResource(R.string.condition_password_length),
+            )
 
-                Image(
-                    painter = painterResource(imageResource),
-                    contentDescription = "",
-                )
+            ConditionRow(
+                isValid = isPasswordContainsLetterAndDigit,
+                conditionText = stringResource(R.string.condition_letter_and_digit),
+            )
 
-                val textColor = if (isPasswordContainsLetterAndDigit) CareTheme.colors.green
-                else CareTheme.colors.red
+            ConditionRow(
+                isValid = isPasswordNoWhitespace,
+                conditionText = stringResource(R.string.condition_no_whitespace),
+            )
 
-                Text(
-                    text = "영문자와 숫자 반드시 하나씩 포함",
-                    style = CareTheme.typography.body3,
-                    color = textColor,
-                )
-            }
-
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                val imageResource = if (isPasswordNoWhitespace) R.drawable.ic_right_condition
-                else R.drawable.ic_not_right_condition
-
-                Image(
-                    painter = painterResource(imageResource),
-                    contentDescription = "",
-                )
-
-                val textColor = if (isPasswordNoWhitespace) CareTheme.colors.green
-                else CareTheme.colors.red
-
-                Text(
-                    text = "공백 문자 사용 금지",
-                    style = CareTheme.typography.body3,
-                    color = textColor,
-                )
-            }
-
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                val imageResource = if (isPasswordNoSequentialChars) R.drawable.ic_right_condition
-                else R.drawable.ic_not_right_condition
-
-                Image(
-                    painter = painterResource(imageResource),
-                    contentDescription = "",
-                )
-
-                val textColor = if (isPasswordNoSequentialChars) CareTheme.colors.green
-                else CareTheme.colors.red
-
-                Text(
-                    text = "연속된 문자 3개 이상 사용 금지",
-                    style = CareTheme.typography.body3,
-                    color = textColor,
-                )
-            }
+            ConditionRow(
+                isValid = isPasswordNoSequentialChars,
+                conditionText = stringResource(R.string.condition_no_sequential_chars),
+            )
         }
 
         LabeledContent(
@@ -175,16 +127,7 @@ internal fun GenerateNewPasswordScreen(
                 onValueChanged = onNewPasswordForConfirmChanged,
                 visualTransformation = PasswordVisualTransformation(),
                 isError = newPasswordForConfirm.isNotBlank() && newPassword != newPasswordForConfirm,
-                onDone = {
-                    if (isPasswordLengthValid &&
-                        isPasswordContainsLetterAndDigit &&
-                        isPasswordNoWhitespace &&
-                        isPasswordNoSequentialChars &&
-                        newPasswordForConfirm.isNotBlank() && newPassword == newPasswordForConfirm
-                    ) {
-                        generateNewPassword()
-                    }
-                },
+                onDone = { if (isPasswordValid) generateNewPassword() },
                 modifier = Modifier.fillMaxWidth()
             )
         }
@@ -201,11 +144,7 @@ internal fun GenerateNewPasswordScreen(
 
         CareButtonLarge(
             text = stringResource(id = R.string.change_password),
-            enable = isPasswordLengthValid &&
-                    isPasswordContainsLetterAndDigit &&
-                    isPasswordNoWhitespace &&
-                    isPasswordNoSequentialChars &&
-                    (newPasswordForConfirm.isNotBlank() && newPassword == newPasswordForConfirm),
+            enable = isPasswordValid,
             onClick = generateNewPassword,
             modifier = Modifier
                 .fillMaxWidth()

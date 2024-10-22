@@ -47,6 +47,7 @@ class NewPasswordFragment : BaseComposeFragment() {
             val isPasswordContainsLetterAndDigit by isPasswordContainsLetterAndDigit.collectAsStateWithLifecycle()
             val isPasswordNoWhitespace by isPasswordNoWhitespace.collectAsStateWithLifecycle()
             val isPasswordNoSequentialChars by isPasswordNoSequentialChars.collectAsStateWithLifecycle()
+            val isPasswordValid by isPasswordValid.collectAsStateWithLifecycle()
 
             NewPasswordScreen(
                 newPasswordStep = newPasswordProcess,
@@ -62,6 +63,7 @@ class NewPasswordFragment : BaseComposeFragment() {
                 isPasswordContainsLetterAndDigit = isPasswordContainsLetterAndDigit,
                 isPasswordNoWhitespace = isPasswordNoWhitespace,
                 isPasswordNoSequentialChars = isPasswordNoSequentialChars,
+                isPasswordValid = isPasswordValid,
                 setNewPasswordProcess = ::setNewPasswordProcess,
                 onPhoneNumberChanged = ::setPhoneNumber,
                 onAuthCodeChanged = ::setAuthCode,
@@ -90,6 +92,7 @@ internal fun NewPasswordScreen(
     isPasswordContainsLetterAndDigit: Boolean,
     isPasswordNoWhitespace: Boolean,
     isPasswordNoSequentialChars: Boolean,
+    isPasswordValid: Boolean,
     onPhoneNumberChanged: (String) -> Unit,
     onAuthCodeChanged: (String) -> Unit,
     sendPhoneNumber: () -> Unit,
@@ -149,6 +152,7 @@ internal fun NewPasswordScreen(
                         isPasswordContainsLetterAndDigit = isPasswordContainsLetterAndDigit,
                         isPasswordNoWhitespace = isPasswordNoWhitespace,
                         isPasswordNoSequentialChars = isPasswordNoSequentialChars,
+                        isPasswordValid = isPasswordValid,
                         onNewPasswordChanged = onNewPasswordChanged,
                         onNewPasswordForConfirmChanged = onNewPasswordForConfirmChanged,
                         setNewPasswordProcess = setNewPasswordProcess,
