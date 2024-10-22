@@ -142,7 +142,7 @@ internal fun CenterHomeScreen(
     Scaffold(
         topBar = {
             CareHeadingTopBar(
-                title = stringResource(id = R.string.manage_job_posting),
+                title = stringResource(id = R.string.my_job_posting),
                 modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 48.dp, bottom = 8.dp),
                 rightComponent = {
                     if (showNotificationCenter) {
