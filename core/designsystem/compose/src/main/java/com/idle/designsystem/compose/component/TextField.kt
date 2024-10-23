@@ -30,6 +30,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -120,6 +121,8 @@ fun CareTextField(
                         Text(
                             text = hint,
                             style = CareTheme.typography.body3,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
                             color = CareTheme.colors.gray200,
                         )
                     }
@@ -219,6 +222,8 @@ fun CareTextField(
                     Text(
                         text = hint,
                         style = CareTheme.typography.body3,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                         color = CareTheme.colors.gray200,
                     )
                 }
@@ -331,6 +336,8 @@ fun CareClickableTextField(
         Text(
             text = value,
             style = CareTheme.typography.body3,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
             color = CareTheme.colors.black,
         )
 
@@ -338,6 +345,8 @@ fun CareClickableTextField(
             Text(
                 text = hint,
                 style = CareTheme.typography.body3,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
                 color = CareTheme.colors.gray300,
             )
         }
