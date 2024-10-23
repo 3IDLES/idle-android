@@ -190,7 +190,7 @@ class WithdrawalViewModel @Inject constructor(
                 .joinToString("|"),
         ).onSuccess {
             analyticsHelper.setUserId(null)
-            eventHandlerHelper.sendEvent(MainEvent.ShowToast("회원탈퇴가 완료되었어요."))
+            navigationHelper.navigateTo(NavigationEvent.NavigateToAuthWithClearBackStack("회원탈퇴가 완료되었어요."))
         }.onFailure { errorHandlerHelper.sendError(it) }
     }
 }
