@@ -480,10 +480,7 @@ fun JobPostingPreviewScreen(
                             .fillMaxWidth()
                             .padding(vertical = 16.dp),
                     ) {
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(8.dp),
-                            modifier = Modifier.width(60.dp),
-                        ) {
+                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             Text(
                                 text = stringResource(id = R.string.meal_assistance),
                                 style = CareTheme.typography.body2,

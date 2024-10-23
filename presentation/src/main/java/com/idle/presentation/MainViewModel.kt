@@ -1,6 +1,5 @@
 package com.idle.presentation
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.idle.auth.R
 import com.idle.binding.DeepLinkDestination.CenterHome
@@ -75,8 +74,6 @@ class MainViewModel @Inject constructor(
     }
 
     internal fun initializeUserSession() = viewModelScope.launch {
-        Log.d("test", "initilizer 호출")
-
         val (accessToken, userRole) = getAccessTokenAndUserRole()
 
         if (accessToken.isBlank() || userRole.isBlank()) {

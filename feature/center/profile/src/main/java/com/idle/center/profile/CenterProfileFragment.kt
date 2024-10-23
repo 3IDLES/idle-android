@@ -100,7 +100,6 @@ internal class CenterProfileFragment : BaseComposeFragment() {
                         setEditState = ::setEditState,
                     )
                 }
-
             }
         }
     }

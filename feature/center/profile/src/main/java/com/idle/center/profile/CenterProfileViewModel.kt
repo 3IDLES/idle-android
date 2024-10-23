@@ -2,10 +2,10 @@ package com.idle.center.profile
 
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
-import com.idle.binding.base.BaseViewModel
 import com.idle.binding.EventHandlerHelper
 import com.idle.binding.MainEvent
 import com.idle.binding.ToastType.SUCCESS
+import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.error.ErrorHandlerHelper
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.usecase.profile.GetCenterProfileUseCase
@@ -97,8 +97,10 @@ class CenterProfileViewModel @Inject constructor(
         ).onSuccess {
             eventHandlerHelper.sendEvent(MainEvent.ShowToast("정보 수정이 완료되었어요.", SUCCESS))
             setEditState(false)
-        }.onFailure { errorHandlerHelper.sendError(it) }
+        }.onFailure {
+            errorHandlerHelper.sendError(it)
         }.also { _isUpdateLoading.value = false }
+    }
 
     private fun isCenterProfileUnchanged(): Boolean {
         return _centerOfficeNumber.value == _centerProfile.value?.officeNumber &&
