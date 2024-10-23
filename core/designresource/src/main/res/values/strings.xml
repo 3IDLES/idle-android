@@ -187,7 +187,7 @@
     <string name="care_level">요양등급</string>
     <string name="mental_status">인지 상태</string>
     <string name="disease">질병</string>
-    <string name="disease_hint">고객이 현재 앓고 있는 질병 또는 병력을 입력해주세요.</string>
+    <string name="disease_hint">그 외에도 현재 질병 또는 병력을 입력해주세요.</string>
     <string name="meal_assistance">식사보조</string>
     <string name="bowel_assistance">배변보조</string>
     <string name="walking_assistance">이동보조</string>
