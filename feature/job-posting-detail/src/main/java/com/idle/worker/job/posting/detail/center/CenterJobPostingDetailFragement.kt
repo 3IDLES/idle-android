@@ -217,11 +217,11 @@ internal fun CenterJobPostingDetailScreen(
             leftButtonBorder = BorderStroke(1.dp, CareTheme.colors.gray100),
             rightButtonTextColor = CareTheme.colors.white000,
             rightButtonColor = CareTheme.colors.red,
-            onDismissRequest = { showEndJobPostingDialog = false },
-            onLeftButtonClick = { showEndJobPostingDialog = false },
+            onDismissRequest = { showDeleteJobPostingDialog = false },
+            onLeftButtonClick = { showDeleteJobPostingDialog = false },
             onRightButtonClick = {
                 coroutineScope.launch {
-                    showEndJobPostingDialog = false
+                    showDeleteJobPostingDialog = false
                     sheetState.hide()
                     deleteJobPosting(jobPostingId)
                 }
