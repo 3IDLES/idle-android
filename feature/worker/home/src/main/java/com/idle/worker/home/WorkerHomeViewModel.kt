@@ -1,11 +1,11 @@
 package com.idle.worker.home
 
 import androidx.lifecycle.viewModelScope
-import com.idle.binding.base.BaseViewModel
 import com.idle.binding.EventHandlerHelper
 import com.idle.binding.MainEvent
 import com.idle.binding.NavigationHelper
 import com.idle.binding.ToastType
+import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.error.ErrorHandlerHelper
 import com.idle.domain.model.jobposting.ApplyMethod
 import com.idle.domain.model.jobposting.CrawlingJobPosting
@@ -61,8 +61,6 @@ class WorkerHomeViewModel @Inject constructor(
 
     init {
         getJobPostings()
-        showNotificationCenter()
-        getMyWorkerProfile()
     }
 
     internal fun getJobPostings() = viewModelScope.launch {
@@ -143,7 +141,7 @@ class WorkerHomeViewModel @Inject constructor(
         }.onFailure { errorHandlerHelper.sendError(it) }
     }
 
-    private fun showNotificationCenter() = viewModelScope.launch {
+    internal fun showNotificationCenter() = viewModelScope.launch {
         launch {
             showNotificationCenterUseCase().onSuccess {
                 _showNotificationCenter.value = it
@@ -151,7 +149,7 @@ class WorkerHomeViewModel @Inject constructor(
         }
     }
 
-    private fun getMyWorkerProfile() = viewModelScope.launch {
+    internal fun getMyWorkerProfile() = viewModelScope.launch {
         getLocalMyWorkerProfileUseCase().onSuccess {
             _profile.value = it
         }.onFailure {

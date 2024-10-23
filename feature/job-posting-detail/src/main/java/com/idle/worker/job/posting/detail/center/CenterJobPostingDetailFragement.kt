@@ -89,7 +89,7 @@ internal class CenterJobPostingDetailFragment : BaseComposeFragment() {
                             lotNumberAddress = it.lotNumberAddress,
                             clientName = it.clientName,
                             gender = it.gender,
-                            birthYear = (LocalDate.now(ZoneId.of("Asia/Seoul")).year - it.age).toString(),
+                            birthYear = (LocalDate.now(ZoneId.of("Asia/Seoul")).year - it.age +1).toString(),
                             weight = it.weight.toString(),
                             careLevel = it.careLevel.toString(),
                             mentalStatus = it.mentalStatus,

@@ -41,6 +41,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.idle.analytics.helper.LocalAnalyticsHelper
 import com.idle.analytics.helper.TrackScreenViewEvent
@@ -82,6 +84,11 @@ internal class WorkerHomeFragment : BaseComposeFragment() {
                 if (showNotificationCenter) {
                     getUnreadNotificationCount()
                 }
+            }
+
+            LifecycleEventEffect(Lifecycle.Event.ON_CREATE) {
+                showNotificationCenter()
+                getMyWorkerProfile()
             }
 
             WorkerHomeScreen(

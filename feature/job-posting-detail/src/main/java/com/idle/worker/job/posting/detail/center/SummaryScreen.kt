@@ -373,7 +373,7 @@ fun SummaryScreen(
                         )
 
                         Text(
-                            text = "${age}세",
+                            text = "${(LocalDate.now(ZoneId.of("Asia/Seoul")).year - age.toInt() + 1)}세",
                             style = CareTheme.typography.body2,
                             color = CareTheme.colors.black,
                         )
@@ -539,9 +539,7 @@ fun SummaryScreen(
 
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(28.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 20.dp),
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Text(

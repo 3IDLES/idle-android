@@ -35,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -79,6 +80,7 @@ import com.idle.worker.job.posting.detail.center.JobPostingPreviewScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.ZoneId
 
 @OptIn(ExperimentalMaterial3Api::class)
 @AndroidEntryPoint
@@ -126,8 +128,8 @@ internal class JobPostingFragment : BaseComposeFragment() {
                             val roadName = it.get<String>("roadNameAddress")
                             val lotNumber = it.get<String>("lotNumberAddress")
 
-                            fragmentViewModel.setRoadNameAddress(roadName ?: "")
-                            fragmentViewModel.setLotNumberAddress(lotNumber ?: "")
+                            fragmentViewModel.setRoadNameAddress(roadName ?: return@let)
+                            fragmentViewModel.setLotNumberAddress(lotNumber ?: return@let)
 
                             if (jobPostingStep == ADDRESS) {
                                 setJobPostingStep(JobPostingStep.findStep(ADDRESS.step + 1))
@@ -345,6 +347,7 @@ internal fun JobPostingScreen(
     showSnackBar: (String) -> Unit,
     navigateToHome: () -> Unit,
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
     val coroutineScope = rememberCoroutineScope()
     val startDateTime by rememberSaveable { mutableStateOf(calendarDate) }
@@ -377,7 +380,7 @@ internal fun JobPostingScreen(
                 lotNumberAddress = lotNumberAddress,
                 clientName = clientName,
                 gender = gender,
-                birthYear = birthYear,
+                birthYear = (LocalDate.now(ZoneId.of("Asia/Seoul")).year - birthYear.toInt() + 1).toString(),
                 weight = weight,
                 careLevel = careLevel,
                 mentalStatus = mentalStatus,
@@ -740,6 +743,7 @@ internal fun JobPostingScreen(
                                         setJobPostingStep = setJobPostingStep,
                                         showBottomSheet = { sheetType ->
                                             coroutineScope.launch {
+                                                keyboardController?.hide()
                                                 setBottomSheetType(sheetType)
                                                 sheetState.show()
                                             }
@@ -797,6 +801,7 @@ internal fun JobPostingScreen(
                                         setJobPostingStep = setJobPostingStep,
                                         showBottomSheet = { sheetType ->
                                             coroutineScope.launch {
+                                                keyboardController?.hide()
                                                 setBottomSheetType(sheetType)
                                                 sheetState.show()
                                             }
