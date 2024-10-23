@@ -217,7 +217,7 @@ internal fun CenterProfileScreen(
                     )
 
                     LabeledContent(
-                        subtitle = stringResource(id = R.string.phone_number),
+                        subtitle = stringResource(id = R.string.office_number),
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = 8.dp),
