@@ -299,7 +299,8 @@ class MainActivity : AppCompatActivity() {
         com.idle.center.register.info.R.id.registerCenterInfoCompleteFragment,
         com.idle.center.job.posting.post.R.id.jobPostingPostFragment,
         com.idle.center.job.posting.post.R.id.jobPostingPostCompleteFragment,
-        com.idle.job.posting.detail.R.id.centerJobPostingDetailFragment -> 104
+        com.idle.job.posting.detail.R.id.centerJobPostingDetailFragment,
+        com.idle.job.posting.detail.R.id.workerJobPostingDetailFragment -> 104
 
         // Padding 84dp
         com.idle.center.home.R.id.centerHomeFragment,
@@ -312,8 +313,7 @@ class MainActivity : AppCompatActivity() {
         com.idle.center.applicant.inquiry.R.id.applicantInquiryFragment,
         com.idle.center.profile.R.id.centerProfileFragment,
         com.idle.worker.profile.R.id.workerProfileFragment,
-        com.idle.notification.R.id.notificationFragment,
-        com.idle.job.posting.detail.R.id.workerJobPostingDetailFragment -> 20
+        com.idle.notification.R.id.notificationFragment -> 20
 
         // Padding 140dp
         com.idle.signin.R.id.centerSignInFragment,
