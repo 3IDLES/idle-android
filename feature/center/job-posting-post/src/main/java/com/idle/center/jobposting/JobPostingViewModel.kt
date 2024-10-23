@@ -162,6 +162,10 @@ class JobPostingViewModel @Inject constructor(
     }
 
     internal fun setPayAmount(payAmount: String) {
+        if(payAmount.length > 9){
+            return
+        }
+
         _payAmount.value = payAmount
     }
 

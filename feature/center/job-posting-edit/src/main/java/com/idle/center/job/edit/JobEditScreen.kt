@@ -607,7 +607,11 @@ fun JobEditScreen(
                                 value = localPayAmount,
                                 hint = stringResource(id = R.string.pay_amount_hint),
                                 textStyle = CareTheme.typography.body2,
-                                onValueChanged = { localPayAmount = it },
+                                onValueChanged = {
+                                    if (it.length <= 9) {
+                                        localPayAmount = it
+                                    }
+                                },
                                 keyboardType = KeyboardType.Number,
                                 leftComponent = {
                                     Text(
@@ -700,7 +704,11 @@ fun JobEditScreen(
                     ) {
                         CareTextField(
                             value = localBirthYear,
-                            onValueChanged = { localBirthYear = it },
+                            onValueChanged = {
+                                if (it.length <= 4) {
+                                    localBirthYear = it
+                                }
+                            },
                             keyboardType = KeyboardType.Number,
                             hint = stringResource(id = R.string.birth_year_hint),
                             modifier = Modifier.fillMaxWidth(),
