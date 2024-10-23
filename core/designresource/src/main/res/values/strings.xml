@@ -195,9 +195,11 @@
     <string name="speciality">특이사항</string>
     <string name="worker">요양보호사</string>
     <string name="specialty">특기</string>
+    <string name="specialty_hint">업무 시 자신 있는 일인 ‘특기’를 작성해보세요. </string>
     <string name="specialty_description_header">특기에 이런 내용을 적으면 좋아요</string>
     <string name="specialty_description">청소, 말동무, 요리 등 보호사님이 자신 있는 업무를\n작성해보세요. 보호사님의 특기에 맞는 업무가 있는 공고를\n제안받을 가능성이 높아져요.</string>
     <string name="worker_introduce">한줄 소개</string>
+    <string name="worker_introduce_hint">센터에 자신을 소개하는 말을 작성해보세요.</string>
 
     <!-- Notification -->
     <string name="notification">알림</string>

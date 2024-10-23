@@ -626,6 +626,7 @@ internal fun WorkerProfileScreen(
                             } else {
                                 CareTextField(
                                     value = workerIntroduce,
+                                    hint = stringResource(R.string.worker_introduce_hint),
                                     onValueChanged = onWorkerIntroduceChanged,
                                     modifier = Modifier.fillMaxWidth(),
                                 )
@@ -647,6 +648,7 @@ internal fun WorkerProfileScreen(
                             } else {
                                 CareTextFieldLong(
                                     value = specialty,
+                                    hint = stringResource(R.string.specialty_hint),
                                     onValueChanged = onSpecialtyChanged,
                                     modifier = Modifier.fillMaxWidth(),
                                 )
