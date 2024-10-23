@@ -544,7 +544,7 @@ internal fun WorkerJobPostingDetailScreen(
                                 )
 
                                 Text(
-                                    text = jobPostingDetail.disease ?: "-",
+                                    text = jobPostingDetail.disease?.ifEmpty { "-" } ?: "-",
                                     style = CareTheme.typography.body2,
                                     color = CareTheme.colors.black,
                                 )
@@ -633,7 +633,7 @@ internal fun WorkerJobPostingDetailScreen(
                         )
 
                         CareTextFieldLong(
-                            value = jobPostingDetail.extraRequirement ?: "-",
+                            value = jobPostingDetail.extraRequirement?.ifEmpty { "-" } ?: "-",
                             enabled = false,
                             onValueChanged = {},
                         )
@@ -679,9 +679,8 @@ internal fun WorkerJobPostingDetailScreen(
 
                             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                 Text(
-                                    text = if (jobPostingDetail.isExperiencePreferred) stringResource(
-                                        id = R.string.experience_preferred
-                                    )
+                                    text = if (jobPostingDetail.isExperiencePreferred)
+                                        stringResource(id = R.string.experience_preferred)
                                     else stringResource(id = R.string.beginner_possible),
                                     style = CareTheme.typography.body2,
                                     color = CareTheme.colors.black,
