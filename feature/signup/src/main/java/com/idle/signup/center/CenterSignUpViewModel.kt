@@ -168,6 +168,10 @@ class CenterSignUpViewModel @Inject constructor(
     }
 
     internal fun setCenterAuthCode(authCode: String) {
+        if(authCode.length > 6){
+            return
+        }
+
         _centerAuthCode.value = authCode
         _isAuthCodeError.value = false
     }
@@ -180,15 +184,27 @@ class CenterSignUpViewModel @Inject constructor(
     }
 
     internal fun setCenterId(id: String) {
+        if(id.length > 20){
+            return
+        }
+
         _centerId.value = id
         _centerIdResult.value = null
     }
 
     internal fun setCenterPassword(password: String) {
+        if(password.length > 20){
+            return
+        }
+
         _centerPassword.value = password
     }
 
     internal fun setCenterPasswordForConfirm(passwordForConfirm: String) {
+        if(passwordForConfirm.length > 20){
+            return
+        }
+
         _centerPasswordForConfirm.value = passwordForConfirm
     }
 

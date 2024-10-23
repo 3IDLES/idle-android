@@ -86,6 +86,10 @@ class WithdrawalViewModel @Inject constructor(
     }
 
     internal fun setAuthCode(authCode: String) {
+        if(authCode.length > 6){
+            return
+        }
+
         _authCode.value = authCode
     }
 

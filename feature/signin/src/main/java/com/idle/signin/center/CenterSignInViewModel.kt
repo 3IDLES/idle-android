@@ -47,11 +47,19 @@ class CenterSignInViewModel @Inject constructor(
     val isLoginError = _isLoginError.asStateFlow()
 
     internal fun setCenterId(id: String) {
+        if(id.length > 20){
+            return
+        }
+
         _centerId.value = id
         _isLoginError.value = false
     }
 
     internal fun setCenterPassword(password: String) {
+        if(password.length > 20){
+            return
+        }
+
         _centerPassword.value = password
         _isLoginError.value = false
     }

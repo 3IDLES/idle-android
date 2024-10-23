@@ -127,6 +127,10 @@ class NewPasswordViewModel @Inject constructor(
     }
 
     internal fun setAuthCode(certificateNumber: String) {
+        if(certificateNumber.length > 6){
+            return
+        }
+
         _authCode.value = certificateNumber
         _isAuthCodeError.value = false
     }
@@ -136,10 +140,18 @@ class NewPasswordViewModel @Inject constructor(
     }
 
     internal fun setNewPassword(password: String) {
+        if(password.length > 20){
+            return
+        }
+
         _newPassword.value = password
     }
 
     internal fun setNewPasswordForConfirm(passwordForConfirm: String) {
+        if(passwordForConfirm.length > 20){
+            return
+        }
+
         _newPasswordForConfirm.value = passwordForConfirm
     }
 
