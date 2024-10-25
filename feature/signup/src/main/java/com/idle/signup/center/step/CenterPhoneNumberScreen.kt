@@ -17,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.idle.designresource.R
@@ -45,7 +44,6 @@ internal fun CenterPhoneNumberScreen(
     confirmAuthCode: () -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
-    val focusManager = LocalFocusManager.current
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
@@ -78,12 +76,7 @@ internal fun CenterPhoneNumberScreen(
                 CareTextField(
                     value = centerPhoneNumber,
                     hint = stringResource(id = R.string.phone_number_hint),
-                    onValueChanged = {
-                        onCenterPhoneNumberChanged(it)
-                        if (it.length == 11) {
-                            sendPhoneNumber()
-                        }
-                    },
+                    onValueChanged = { onCenterPhoneNumberChanged(it) },
                     readOnly = (centerAuthCodeTimerMinute != "" && centerAuthCodeTimerSeconds != ""),
                     onDone = {
                         if (centerPhoneNumber.length == 11) sendPhoneNumber()
