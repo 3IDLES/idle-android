@@ -4,6 +4,7 @@ plugins {
     id("care.android.application")
     id("care.android.binding")
     id("com.google.firebase.crashlytics")
+    alias(libs.plugins.androidx.navigation.safeargs)
 }
 
 android {
@@ -16,23 +17,27 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        val properties = Properties()
-        properties.load(project.rootProject.file("local.properties").bufferedReader())
-        manifestPlaceholders["NAVER_CLIENT_ID"] = properties["NAVER_CLIENT_ID"] as String
+        val localProperties = Properties()
+        localProperties.load(project.rootProject.file("local.properties").bufferedReader())
+        manifestPlaceholders["NAVER_CLIENT_ID"] = localProperties["NAVER_CLIENT_ID"] as String
 
         buildConfigField(
             "String",
             "AMPLITUDE_API_KEY",
-            "\"${properties["AMPLITUDE_API_KEY"]}\"",
+            "\"${localProperties["AMPLITUDE_API_KEY"]}\"",
         )
     }
 
     signingConfigs {
         create("release") {
-            storeFile = file(project.findProperty("STORE_FILE_PATH") as String)
-            storePassword = project.findProperty("STORE_PASSWORD") as String
-            keyAlias = project.findProperty("KEY_ALIAS") as String
-            keyPassword = project.findProperty("KEY_PASSWORD") as String
+            val keystoreProperties = Properties()
+            keystoreProperties.load(project.rootProject.file("keystore.properties").bufferedReader()
+            )
+
+            storeFile = file(keystoreProperties["STORE_FILE_PATH"] as String)
+            storePassword = keystoreProperties["STORE_PASSWORD"] as String
+            keyAlias = keystoreProperties["KEY_ALIAS"] as String
+            keyPassword = keystoreProperties["KEY_PASSWORD"] as String
         }
     }
 

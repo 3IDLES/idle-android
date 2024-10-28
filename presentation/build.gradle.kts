@@ -1,6 +1,5 @@
 plugins {
     id("care.android.feature-binding")
-    alias(libs.plugins.androidx.navigation.safeargs)
 }
 
 android {

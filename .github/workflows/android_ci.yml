@@ -2,9 +2,9 @@ name: Android CI
 
 on:
   push:
-    branches: [ "develop", "main" ]
+    branches: [ "develop" ]
   pull_request:
-    branches: [ "develop", "main" ]
+    branches: [ "develop" ]
 
 jobs:
   build:
@@ -13,7 +13,17 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - name: set up JDK 17
+    - name: Gradle cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+
+    - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
         java-version: '17'
@@ -22,12 +32,34 @@ jobs:
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
-      
+
+    - name: Set up local.properties
+      run: |
+        echo "CARE_DEV_BASE_URL=${{ secrets.CARE_DEV_BASE_URL }}" >> local.properties
+        echo "CARE_PROD_BASE_URL=${{ secrets.CARE_PROD_BASE_URL }}" >> local.properties
+        echo "NAVER_BASE_URL=${{ secrets.NAVER_BASE_URL }}" >> local.properties
+        echo "NAVER_CLIENT_ID=${{ secrets.NAVER_CLIENT_ID }}" >> local.properties
+        echo "NAVER_CLIENT_SECRET=${{ secrets.NAVER_CLIENT_SECRET }}" >> local.properties
+        echo "AMPLITUDE_API_KEY=${{ secrets.AMPLITUDE_API_KEY }}" >> local.properties
+
+    - name: Set up keystore.properties
+      run: |
+        echo "STORE_FILE_PATH=./app/upload-keystore.jks" >> keystore.properties
+        echo "STORE_PASSWORD=${{ secrets.STORE_PASSWORD }}" >> keystore.properties
+        echo "KEY_ALIAS=${{ secrets.KEY_ALIAS }}" >> keystore.properties
+        echo "KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}" >> keystore.properties    
+
+    - name: Decode keystore file
+      run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > ./app/upload-keystore.jks
+
+    - name: Create google-services.json
+      run: echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > ./app/google-services.json
+
     - name: Build with Gradle
-      run: ./gradlew build
+      run: ./gradlew assembleDebug --build-cache --stacktrace
 
     - name: KtlintCheck
       run: ./gradlew ktlintcheck
 
-    - name: UnitTest
-      run: ./gradlew test
+    - name: Test
+      run: ./gradlew test --stacktrace
