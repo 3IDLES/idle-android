@@ -14,6 +14,8 @@ android {
         versionName = "1.0.5"
         targetSdk = 34
 
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
         val properties = Properties()
         properties.load(project.rootProject.file("local.properties").bufferedReader())
         manifestPlaceholders["NAVER_CLIENT_ID"] = properties["NAVER_CLIENT_ID"] as String
@@ -34,11 +36,7 @@ android {
         }
     }
 
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
+    packaging { resources { excludes += "/META-INF/*" } }
 
     buildTypes {
         release {

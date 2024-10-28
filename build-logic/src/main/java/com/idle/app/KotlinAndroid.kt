@@ -37,20 +37,15 @@ internal fun Project.configureKotlinAndroid() {
             targetCompatibility = JavaVersion.VERSION_17
         }
 
-        testOptions {
-            unitTests {
-                isIncludeAndroidResources = true
-            }
-        }
-
         val libs = extensions.libs
-
         dependencies {
             val bom = libs.findLibrary("firebase-bom").get()
             add("implementation", platform(bom))
             add("implementation", libs.findLibrary("firebase-analytics").get())
             add("implementation", libs.findLibrary("firebase-crashlytics").get())
         }
+
+        packaging { resources.excludes.add("META-INF/*") }
     }
 
     configureKotlin()

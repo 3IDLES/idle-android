@@ -8,15 +8,20 @@ import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
 import com.idle.domain.usecase.auth.GenerateNewPasswordUseCase
 import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
 import io.mockk.mockk
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.TestDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class NewPasswordViewModelTest {
-
     private lateinit var sendPhoneNumberUseCase: SendPhoneNumberUseCase
     private lateinit var confirmAuthCodeUseCase: ConfirmAuthCodeUseCase
     private lateinit var generateNewPasswordUseCase: GenerateNewPasswordUseCase
@@ -24,11 +29,14 @@ class NewPasswordViewModelTest {
     private lateinit var errorHandlerHelper: ErrorHandlerHelper
     private lateinit var eventHandlerHelper: EventHandlerHelper
     private lateinit var navigationHelper: NavigationHelper
-
     private lateinit var viewModel: NewPasswordViewModel
+    private lateinit var testDispatcher: TestDispatcher
 
     @BeforeEach
     fun setup() {
+        testDispatcher = UnconfinedTestDispatcher()
+        Dispatchers.setMain(testDispatcher)
+
         sendPhoneNumberUseCase = mockk(relaxed = true)
         confirmAuthCodeUseCase = mockk(relaxed = true)
         generateNewPasswordUseCase = mockk(relaxed = true)
@@ -48,51 +56,44 @@ class NewPasswordViewModelTest {
         )
     }
 
+    @AfterEach
+    fun tearDown() {
+        Dispatchers.resetMain()
+    }
+
     @Test
-    fun `비밀번호가 8자 이상 20자 이하일 때 유효성 검증을 통과한다`() = runTest {
-        // Given
+    fun `비밀번호가 8자 이상 20자 이하일 때 유효성 검증을 통과하지 못한다`() = runTest {
         viewModel.setNewPassword("Test1234")
+        testDispatcher.scheduler.runCurrent()
 
-        // When
         val isPasswordLengthValid = viewModel.isPasswordLengthValid.first()
-
-        // Then
         assertTrue(isPasswordLengthValid)
     }
 
     @Test
     fun `비밀번호에 영문자와 숫자가 포함되지 않으면 유효성 검증을 통과하지 못한다`() = runTest {
-        // Given
         viewModel.setNewPassword("Password")
+        testDispatcher.scheduler.runCurrent()
 
-        // When
         val isPasswordContainsLetterAndDigit = viewModel.isPasswordContainsLetterAndDigit.first()
-
-        // Then
         assertFalse(isPasswordContainsLetterAndDigit)
     }
 
     @Test
     fun `비밀번호에 공백이 포함되어 있으면 유효성 검증을 통과하지 못한다`() = runTest {
-        // Given
         viewModel.setNewPassword("Test 1234")
+        testDispatcher.scheduler.runCurrent()
 
-        // When
         val isPasswordNoWhitespace = viewModel.isPasswordNoWhitespace.first()
-
-        // Then
         assertFalse(isPasswordNoWhitespace)
     }
 
     @Test
     fun `비밀번호에 3개 이상의 연속된 문자가 포함되어 있으면 유효성 검증을 통과하지 못한다`() = runTest {
-        // Given
         viewModel.setNewPassword("111Test1234")
+        testDispatcher.scheduler.runCurrent()
 
-        // When
         val isPasswordNoSequentialChars = viewModel.isPasswordNoSequentialChars.first()
-
-        // Then
         assertFalse(isPasswordNoSequentialChars)
     }
 }
