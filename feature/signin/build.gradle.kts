@@ -6,3 +6,8 @@ plugins {
 android {
     namespace = "com.idle.signin"
 }
+
+dependencies{
+    testImplementation(libs.junit.jupiter)
+    androidTestImplementation(libs.androidx.junit)
+}
