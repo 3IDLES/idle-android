@@ -10,3 +10,4 @@
 local.properties
 gradle.properties
 /.kotlin/
+/app/upload-keystore.jks
