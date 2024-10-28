@@ -32,14 +32,34 @@ jobs:
 
       - name: Set up local.properties
         run: |
-          echo "sdk.dir=${{ secrets.SDK_DIR }}" >> local.properties
+          echo "CARE_DEV_BASE_URL=${{ secrets.CARE_DEV_BASE_URL }}" >> local.properties
           echo "CARE_PROD_BASE_URL=${{ secrets.CARE_PROD_BASE_URL }}" >> local.properties
+          echo "NAVER_BASE_URL=${{ secrets.NAVER_BASE_URL }}" >> local.properties
+          echo "NAVER_CLIENT_ID=${{ secrets.NAVER_CLIENT_ID }}" >> local.properties
+          echo "NAVER_CLIENT_SECRET=${{ secrets.NAVER_CLIENT_SECRET }}" >> local.properties
+          echo "AMPLITUDE_API_KEY=${{ secrets.AMPLITUDE_API_KEY }}" >> local.properties
+
+      - name: Set up keystore.properties
+        run: |
+          echo "STORE_FILE_PATH=./upload-keystore.jks" >> keystore.properties
+          echo "STORE_PASSWORD=${{ secrets.STORE_PASSWORD }}" >> keystore.properties
+          echo "KEY_ALIAS=${{ secrets.KEY_ALIAS }}" >> keystore.properties
+          echo "KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}" >> keystore.properties    
 
       - name: Decode keystore file
         run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > ./app/upload-keystore.jks
 
       - name: Create google-services.json
         run: echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > ./app/google-services.json
+
+      - name: Build with Gradle
+        run: ./gradlew assembleDebug --build-cache --stacktrace
+
+      - name: KtlintCheck
+        run: ./gradlew ktlintcheck
+
+      - name: Test
+        run: ./gradlew test --stacktrace
 
       - name: Build AAB for Firebase
         run: ./gradlew bundleRelease --stacktrace
