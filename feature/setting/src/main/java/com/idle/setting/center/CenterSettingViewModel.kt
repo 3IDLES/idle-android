@@ -2,9 +2,10 @@ package com.idle.setting.center
 
 import androidx.lifecycle.viewModelScope
 import com.idle.analytics.helper.AnalyticsHelper
+import com.idle.binding.NavigationEvent
+import com.idle.binding.NavigationHelper
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.base.CareBaseEvent
-import com.idle.domain.model.error.HttpResponseException
+import com.idle.domain.model.error.ErrorHandlerHelper
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.usecase.auth.LogoutCenterUseCase
 import com.idle.domain.usecase.profile.GetLocalMyCenterProfileUseCase
@@ -22,6 +23,8 @@ class CenterSettingViewModel @Inject constructor(
     private val getLocalMyCenterProfileUseCase: GetLocalMyCenterProfileUseCase,
     private val logoutCenterUseCase: LogoutCenterUseCase,
     private val analyticsHelper: AnalyticsHelper,
+    private val errorHandlerHelper: ErrorHandlerHelper,
+    val navigationHelper: NavigationHelper,
 ) : BaseViewModel() {
     private val _centerProfile =
         MutableStateFlow<CenterProfile>(CenterProfile("", "", "", "", "", 0.0, 0.0, "", ""))
@@ -37,14 +40,19 @@ class CenterSettingViewModel @Inject constructor(
     private fun getMyProfile() = viewModelScope.launch {
         getLocalMyCenterProfileUseCase().onSuccess {
             _centerProfile.value = it
-        }.onFailure { handleFailure(it as HttpResponseException) }
+        }.onFailure { errorHandlerHelper.sendError(it) }
     }
 
     fun logout() = viewModelScope.launch {
         logoutCenterUseCase().onSuccess {
             analyticsHelper.setUserId(null)
-            baseEvent(CareBaseEvent.NavigateToAuthWithClearBackStack("로그아웃이 완료되었습니다.|SUCCESS"))
-        }.onFailure { handleFailure(it as HttpResponseException) }
+            navigationHelper.navigateTo(
+                NavigationEvent.NavigateToAuthWithClearBackStack(
+                    toastMsg = "로그아웃이 완료되었습니다.",
+                    toastType = "SUCCESS"
+                )
+            )
+        }.onFailure { errorHandlerHelper.sendError(it) }
     }
 
     fun clickLogout() = centerSettingEvent(SettingEvent.Logout)

@@ -14,7 +14,6 @@ import com.idle.network.model.jobposting.GetJobPostingsCenterResponse
 import com.idle.network.model.jobposting.GetJobPostingsResponse
 import com.idle.network.model.jobposting.GetWorkerJobPostingDetailResponse
 import com.idle.network.model.jobposting.JobPostingRequest
-import com.idle.network.util.onResponse
 import com.idle.network.util.safeApiCall
 import javax.inject.Inject
 

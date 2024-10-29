@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -20,14 +18,14 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.idle.binding.DeepLinkDestination.Auth
-import com.idle.binding.base.CareBaseEvent.NavigateTo
+import com.idle.binding.NavigationEvent
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareProgressBar
-import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
+import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.BusinessRegistrationInfo
 import com.idle.signup.center.step.BusinessRegistrationScreen
 import com.idle.signup.center.step.CenterNameScreen
@@ -49,6 +47,7 @@ internal class CenterSignUpFragment : BaseComposeFragment() {
             val centerAuthCodeTimerSeconds by centerAuthCodeTimerSeconds.collectAsStateWithLifecycle()
             val centerAuthCode by centerAuthCode.collectAsStateWithLifecycle()
             val isConfirmAuthCode by isConfirmAuthCode.collectAsStateWithLifecycle()
+            val isAuthCodeError by isAuthCodeError.collectAsStateWithLifecycle()
             val businessRegistrationNumber
                     by businessRegistrationNumber.collectAsStateWithLifecycle()
             val businessRegistrationInfo by businessRegistrationInfo.collectAsStateWithLifecycle()
@@ -56,11 +55,14 @@ internal class CenterSignUpFragment : BaseComposeFragment() {
             val centerIdResult by centerIdResult.collectAsStateWithLifecycle()
             val centerPassword by centerPassword.collectAsStateWithLifecycle()
             val centerPasswordForConfirm by centerPasswordForConfirm.collectAsStateWithLifecycle()
-            val isValidId by isValidId.collectAsStateWithLifecycle()
-            val isValidPassword by isValidPassword.collectAsStateWithLifecycle()
+            val isIdValid by isIdValid.collectAsStateWithLifecycle()
+            val isPasswordLengthValid by isPasswordLengthValid.collectAsStateWithLifecycle()
+            val isPasswordContainsLetterAndDigit by isPasswordContainsLetterAndDigit.collectAsStateWithLifecycle()
+            val isPasswordNoWhitespace by isPasswordNoWhitespace.collectAsStateWithLifecycle()
+            val isPasswordNoSequentialChars by isPasswordNoSequentialChars.collectAsStateWithLifecycle()
+            val isPasswordValid by isPasswordValid.collectAsStateWithLifecycle()
 
             CenterSignUpScreen(
-                snackbarHostState = snackbarHostState,
                 signUpStep = signUpStep,
                 centerName = centerName,
                 centerPhoneNumber = centerPhoneNumber,
@@ -68,14 +70,19 @@ internal class CenterSignUpFragment : BaseComposeFragment() {
                 centerAuthCodeTimerSeconds = centerAuthCodeTimerSeconds,
                 centerAuthCode = centerAuthCode,
                 isConfirmAuthCode = isConfirmAuthCode,
+                isAuthCodeError = isAuthCodeError,
                 businessRegistrationNumber = businessRegistrationNumber,
                 businessRegistrationInfo = businessRegistrationInfo,
                 centerId = centerId,
                 centerIdResult = centerIdResult,
                 centerPassword = centerPassword,
                 centerPasswordForConfirm = centerPasswordForConfirm,
-                isValidId = isValidId,
-                isValidPassword = isValidPassword,
+                isIdValid = isIdValid,
+                isPasswordLengthValid = isPasswordLengthValid,
+                isPasswordContainsLetterAndDigit = isPasswordContainsLetterAndDigit,
+                isPasswordNoWhitespace = isPasswordNoWhitespace,
+                isPasswordNoSequentialChars = isPasswordNoSequentialChars,
+                isPasswordValid = isPasswordValid,
                 setSignUpStep = ::setCenterSignUpStep,
                 onCenterNameChanged = ::setCenterName,
                 onCenterPhoneNumberChanged = ::setCenterPhoneNumber,
@@ -90,8 +97,8 @@ internal class CenterSignUpFragment : BaseComposeFragment() {
                 validateIdentifier = ::validateIdentifier,
                 validateBusinessRegistrationNumber = ::validateBusinessRegistrationNumber,
                 navigateToAuth = {
-                    baseEvent(
-                        NavigateTo(
+                    navigationHelper.navigateTo(
+                        NavigationEvent.NavigateTo(
                             destination = Auth,
                             popUpTo = com.idle.signup.R.id.centerSignUpFragment,
                         )
@@ -105,7 +112,6 @@ internal class CenterSignUpFragment : BaseComposeFragment() {
 
 @Composable
 internal fun CenterSignUpScreen(
-    snackbarHostState: SnackbarHostState,
     signUpStep: CenterSignUpStep,
     centerName: String,
     centerPhoneNumber: String,
@@ -113,14 +119,19 @@ internal fun CenterSignUpScreen(
     centerAuthCodeTimerSeconds: String,
     centerAuthCode: String,
     isConfirmAuthCode: Boolean,
+    isAuthCodeError: Boolean,
     businessRegistrationNumber: String,
     businessRegistrationInfo: BusinessRegistrationInfo?,
     centerId: String,
-    centerIdResult: Boolean,
+    centerIdResult: Boolean?,
     centerPassword: String,
     centerPasswordForConfirm: String,
-    isValidId: Boolean,
-    isValidPassword: Boolean,
+    isIdValid: Boolean,
+    isPasswordLengthValid: Boolean,
+    isPasswordContainsLetterAndDigit: Boolean,
+    isPasswordNoWhitespace: Boolean,
+    isPasswordNoSequentialChars: Boolean,
+    isPasswordValid: Boolean,
     setSignUpStep: (CenterSignUpStep) -> Unit,
     onCenterNameChanged: (String) -> Unit,
     onCenterPhoneNumberChanged: (String) -> Unit,
@@ -140,13 +151,17 @@ internal fun CenterSignUpScreen(
 
     Scaffold(
         topBar = {
-            Column(modifier = Modifier.padding(start = 12.dp, top = 48.dp, end = 20.dp)) {
+            Column(
+                modifier = Modifier
+                    .padding(start = 12.dp, end = 20.dp)
+                    .background(CareTheme.colors.white000),
+            ) {
                 CareSubtitleTopBar(
                     title = stringResource(id = R.string.center_signup),
                     onNavigationClick = navigateToAuth,
                     modifier = Modifier
                         .fillMaxWidth()
-
+                        .padding(top = 48.dp),
                 )
 
                 CareProgressBar(
@@ -157,17 +172,6 @@ internal fun CenterSignUpScreen(
                         .padding(start = 8.dp, top = 8.dp, bottom = 8.dp),
                 )
             }
-        },
-        snackbarHost = {
-            SnackbarHost(
-                hostState = snackbarHostState,
-                snackbar = { data ->
-                    CareSnackBar(
-                        data = data,
-                        modifier = Modifier.padding(bottom = 104.dp),
-                    )
-                }
-            )
         },
         modifier = Modifier.addFocusCleaner(focusManager),
     ) { paddingValue ->
@@ -204,6 +208,7 @@ internal fun CenterSignUpScreen(
                             setSignUpStep = setSignUpStep,
                             sendPhoneNumber = sendPhoneNumber,
                             confirmAuthCode = confirmAuthCode,
+                            isAuthCodeError = isAuthCodeError,
                         )
 
                     CenterSignUpStep.BUSINESS_REGISTRATION ->
@@ -221,8 +226,12 @@ internal fun CenterSignUpScreen(
                             centerIdResult = centerIdResult,
                             centerPassword = centerPassword,
                             centerPasswordForConfirm = centerPasswordForConfirm,
-                            isValidId = isValidId,
-                            isValidPassword = isValidPassword,
+                            isIdValid = isIdValid,
+                            isPasswordLengthValid = isPasswordLengthValid,
+                            isPasswordContainsLetterAndDigit = isPasswordContainsLetterAndDigit,
+                            isPasswordNoWhitespace = isPasswordNoWhitespace,
+                            isPasswordNoSequentialChars = isPasswordNoSequentialChars,
+                            isPasswordValid = isPasswordValid,
                             onCenterIdChanged = onCenterIdChanged,
                             onCenterPasswordChanged = onCenterPasswordChanged,
                             onCenterPasswordForConfirmChanged = onCenterPasswordForConfirmChanged,

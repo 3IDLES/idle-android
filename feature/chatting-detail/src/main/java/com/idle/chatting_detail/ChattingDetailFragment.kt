@@ -19,8 +19,6 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,7 +38,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
-import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.foundation.CareTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -58,7 +55,6 @@ internal class ChattingDetailFragment : BaseComposeFragment() {
             val writingText by writingText.collectAsStateWithLifecycle()
 
             ChattingDetailScreen(
-                snackbarHostState = snackbarHostState,
                 writingText = writingText,
                 onWritingTextChange = ::setWritingText,
                 navigateUp = { findNavController().navigateUp() },
@@ -69,7 +65,6 @@ internal class ChattingDetailFragment : BaseComposeFragment() {
 
 @Composable
 internal fun ChattingDetailScreen(
-    snackbarHostState: SnackbarHostState,
     writingText: String,
     onWritingTextChange: (String) -> Unit,
     navigateUp: () -> Unit,
@@ -84,17 +79,6 @@ internal fun ChattingDetailScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 12.dp, top = 48.dp, end = 20.dp, bottom = 12.dp),
-            )
-        },
-        snackbarHost = {
-            SnackbarHost(
-                hostState = snackbarHostState,
-                snackbar = { data ->
-                    CareSnackBar(
-                        data = data,
-                        modifier = Modifier.padding(bottom = 84.dp)
-                    )
-                }
             )
         },
         containerColor = CareTheme.colors.white000,

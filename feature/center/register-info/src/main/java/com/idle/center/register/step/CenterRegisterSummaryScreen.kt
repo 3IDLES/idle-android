@@ -16,8 +16,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -35,14 +33,12 @@ import com.idle.center.register.RegistrationStep.SUMMARY
 import com.idle.compose.addFocusCleaner
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonMedium
-import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 
 @Composable
 internal fun CenterRegisterSummaryScreen(
-    snackbarHostState: SnackbarHostState,
     centerName: String,
     centerNumber: String,
     centerIntroduce: String,
@@ -66,17 +62,6 @@ internal fun CenterRegisterSummaryScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 12.dp, top = 48.dp, end = 20.dp, bottom = 12.dp),
-            )
-        },
-        snackbarHost = {
-            SnackbarHost(
-                hostState = snackbarHostState,
-                snackbar = { data ->
-                    CareSnackBar(
-                        data = data,
-                        modifier = Modifier.padding(bottom = 116.dp)
-                    )
-                }
             )
         },
         containerColor = CareTheme.colors.white000,

@@ -29,12 +29,14 @@ fun formatBusinessRegistrationNumber(businessRegistrationNumber: String): String
             Regex("(\\d{3})(\\d{2})(\\d{5})"),
             "$1-$2-$3"
         )
+
         12 -> {
             require(Regex("\\d{3}-\\d{2}-\\d{5}").matches(businessRegistrationNumber)) {
                 "사업자 등록번호 형식이 맞지 않습니다. {3}-{2}-{5} 형식이어야 합니다."
             }
             businessRegistrationNumber
         }
+
         else -> throw IllegalArgumentException("사업자 등록번호 형식이 맞지 않습니다.")
     }
 }

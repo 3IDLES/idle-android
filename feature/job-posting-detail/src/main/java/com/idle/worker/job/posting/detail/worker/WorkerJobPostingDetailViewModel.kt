@@ -6,9 +6,12 @@ import com.idle.analytics.AnalyticsEvent.PropertiesKeys.ACTION_NAME
 import com.idle.analytics.AnalyticsEvent.PropertiesKeys.SCREEN_NAME
 import com.idle.analytics.AnalyticsEvent.Types.ACTION
 import com.idle.analytics.helper.AnalyticsHelper
+import com.idle.binding.EventHandlerHelper
+import com.idle.binding.MainEvent
+import com.idle.binding.NavigationHelper
+import com.idle.binding.ToastType.SUCCESS
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.base.CareBaseEvent
-import com.idle.domain.model.error.HttpResponseException
+import com.idle.domain.model.error.ErrorHandlerHelper
 import com.idle.domain.model.jobposting.ApplyMethod
 import com.idle.domain.model.jobposting.CrawlingJobPostingDetail
 import com.idle.domain.model.jobposting.JobPosting
@@ -37,6 +40,9 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
     private val addFavoriteJobPostingUseCase: AddFavoriteJobPostingUseCase,
     private val removeFavoriteJobPostingUseCase: RemoveFavoriteJobPostingUseCase,
     private val analyticsHelper: AnalyticsHelper,
+    private val errorHandlerHelper: ErrorHandlerHelper,
+    val eventHandlerHelper: EventHandlerHelper,
+    val navigationHelper: NavigationHelper,
 ) : BaseViewModel() {
     private val _profile = MutableStateFlow<WorkerProfile?>(null)
     val profile = _profile.asStateFlow()
@@ -47,7 +53,7 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
     internal fun getMyProfile() = viewModelScope.launch {
         getLocalMyWorkerProfileUseCase().onSuccess {
             _profile.value = it
-        }.onFailure { handleFailure(it as HttpResponseException) }
+        }.onFailure { errorHandlerHelper.sendError(it) }
     }
 
     internal fun getJobPostingDetail(
@@ -57,11 +63,11 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
         when (jobPostingType) {
             JobPostingType.CAREMEET.name -> getWorkerJobPostingDetailUseCase(jobPostingId).onSuccess {
                 _workerJobPostingDetail.value = it
-            }.onFailure { handleFailure(it as HttpResponseException) }
+            }.onFailure { errorHandlerHelper.sendError(it) }
 
             JobPostingType.WORKNET.name -> getCrawlingJobPostingsDetailUseCase(jobPostingId).onSuccess {
                 _workerJobPostingDetail.value = it
-            }.onFailure { handleFailure(it as HttpResponseException) }
+            }.onFailure { errorHandlerHelper.sendError(it) }
         }
     }
 
@@ -71,7 +77,7 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
                 jobPostingId = jobPostingId,
                 applyMethod = applyMethod,
             ).onSuccess {
-                baseEvent(CareBaseEvent.ShowSnackBar("지원이 완료되었어요.|SUCCESS"))
+                eventHandlerHelper.sendEvent(MainEvent.ShowToast("지원이 완료되었어요.", SUCCESS))
 
                 if (_workerJobPostingDetail.value?.jobPostingType == JobPostingType.CAREMEET) {
                     _workerJobPostingDetail.value =
@@ -88,7 +94,7 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
                         )
                     )
                 )
-            }.onFailure { handleFailure(it as HttpResponseException) }
+            }.onFailure { errorHandlerHelper.sendError(it) }
         }
 
     internal fun addFavoriteJobPosting(
@@ -99,7 +105,9 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
             jobPostingId = jobPostingId,
             jobPostingType = jobPostingType,
         ).onSuccess {
-            baseEvent(CareBaseEvent.ShowSnackBar("즐겨찾기에 추가되었어요.|SUCCESS"))
+            eventHandlerHelper.sendEvent(
+                MainEvent.ShowToast("즐겨찾기에 추가되었어요.", SUCCESS)
+            )
 
             when (jobPostingType) {
                 JobPostingType.CAREMEET -> {
@@ -112,7 +120,7 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
                         (_workerJobPostingDetail.value as CrawlingJobPostingDetail).copy(isFavorite = true)
                 }
             }
-        }.onFailure { handleFailure(it as HttpResponseException) }
+        }.onFailure { errorHandlerHelper.sendError(it) }
     }
 
     internal fun removeFavoriteJobPosting(
@@ -120,7 +128,9 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
         jobPostingType: JobPostingType,
     ) = viewModelScope.launch {
         removeFavoriteJobPostingUseCase(jobPostingId = jobPostingId).onSuccess {
-            baseEvent(CareBaseEvent.ShowSnackBar("즐겨찾기에서 제거되었어요.|SUCCESS"))
+            eventHandlerHelper.sendEvent(
+                MainEvent.ShowToast("즐겨찾기에서 제거되었어요.", SUCCESS)
+            )
 
             when (jobPostingType) {
                 JobPostingType.CAREMEET -> {
@@ -133,6 +143,6 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
                         (_workerJobPostingDetail.value as CrawlingJobPostingDetail).copy(isFavorite = false)
                 }
             }
-        }.onFailure { handleFailure(it as HttpResponseException) }
+        }.onFailure { errorHandlerHelper.sendError(it) }
     }
 }

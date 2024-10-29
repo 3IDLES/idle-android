@@ -19,8 +19,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -43,14 +41,13 @@ import com.idle.analytics.helper.LocalAnalyticsHelper
 import com.idle.analytics.helper.TrackScreenViewEvent
 import com.idle.binding.DeepLinkDestination
 import com.idle.binding.DeepLinkDestination.WorkerJobDetail
-import com.idle.binding.base.CareBaseEvent.NavigateTo
+import com.idle.binding.NavigationEvent
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonCardLarge
 import com.idle.designsystem.compose.component.CareDialog
 import com.idle.designsystem.compose.component.CareHeadingTopBar
-import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareTabBar
 import com.idle.designsystem.compose.component.CareTag
@@ -84,7 +81,6 @@ internal class WorkerJobPostingFragment : BaseComposeFragment() {
             }
 
             WorkerJobPostingScreen(
-                snackbarHostState = snackbarHostState,
                 profile = profile,
                 recruitmentPostStatus = recruitmentPostStatus,
                 appliedJobPostings = appliedJobPostings,
@@ -94,7 +90,7 @@ internal class WorkerJobPostingFragment : BaseComposeFragment() {
                 applyJobPosting = ::applyJobPosting,
                 addFavoriteJobPosting = ::addFavoriteJobPosting,
                 removeFavoriteJobPosting = ::removeFavoriteJobPosting,
-                navigateTo = { baseEvent(NavigateTo(it)) },
+                navigateTo = { navigationHelper.navigateTo(NavigationEvent.NavigateTo(it)) },
             )
         }
     }
@@ -102,7 +98,6 @@ internal class WorkerJobPostingFragment : BaseComposeFragment() {
 
 @Composable
 internal fun WorkerJobPostingScreen(
-    snackbarHostState: SnackbarHostState,
     profile: WorkerProfile?,
     recruitmentPostStatus: RecruitmentPostStatus,
     appliedJobPostings: List<JobPosting>?,
@@ -176,17 +171,6 @@ internal fun WorkerJobPostingScreen(
                     top = 48.dp,
                     bottom = 8.dp
                 ),
-            )
-        },
-        snackbarHost = {
-            SnackbarHost(
-                hostState = snackbarHostState,
-                snackbar = { data ->
-                    CareSnackBar(
-                        data = data,
-                        modifier = Modifier.padding(bottom = 84.dp)
-                    )
-                }
             )
         },
     ) { paddingValue ->

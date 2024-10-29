@@ -24,8 +24,6 @@ import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -37,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -45,7 +44,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.idle.analytics.helper.LocalAnalyticsHelper
 import com.idle.binding.DeepLinkDestination
-import com.idle.binding.base.CareBaseEvent
+import com.idle.binding.MainEvent
+import com.idle.binding.NavigationEvent
 import com.idle.center.job.edit.JobEditScreen
 import com.idle.center.jobposting.JobPostingStep.ADDRESS
 import com.idle.center.jobposting.JobPostingStep.SUMMARY
@@ -63,7 +63,6 @@ import com.idle.designsystem.compose.component.CareBottomSheetLayout
 import com.idle.designsystem.compose.component.CareButtonMedium
 import com.idle.designsystem.compose.component.CareCalendar
 import com.idle.designsystem.compose.component.CareProgressBar
-import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.component.CareWheelPicker
@@ -81,6 +80,7 @@ import com.idle.worker.job.posting.detail.center.JobPostingPreviewScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.ZoneId
 
 @OptIn(ExperimentalMaterial3Api::class)
 @AndroidEntryPoint
@@ -119,6 +119,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
             val jobPostingBottomSheetType by bottomSheetType.collectAsStateWithLifecycle()
             val calendarDate by calendarDate.collectAsStateWithLifecycle()
             val profile by profile.collectAsStateWithLifecycle()
+            val isMinimumWageError by isMinimumWageError.collectAsStateWithLifecycle()
 
             val postCodeDialog: PostCodeFragment? by lazy {
                 PostCodeFragment().apply {
@@ -127,8 +128,8 @@ internal class JobPostingFragment : BaseComposeFragment() {
                             val roadName = it.get<String>("roadNameAddress")
                             val lotNumber = it.get<String>("lotNumberAddress")
 
-                            fragmentViewModel.setRoadNameAddress(roadName ?: "")
-                            fragmentViewModel.setLotNumberAddress(lotNumber ?: "")
+                            fragmentViewModel.setRoadNameAddress(roadName ?: return@let)
+                            fragmentViewModel.setLotNumberAddress(lotNumber ?: return@let)
 
                             if (jobPostingStep == ADDRESS) {
                                 setJobPostingStep(JobPostingStep.findStep(ADDRESS.step + 1))
@@ -144,7 +145,6 @@ internal class JobPostingFragment : BaseComposeFragment() {
             ) { state ->
                 if (state) {
                     JobEditScreen(
-                        snackbarHostState = snackbarHostState,
                         weekDays = weekDays,
                         workStartTime = workStartTime,
                         workEndTime = workEndTime,
@@ -204,11 +204,10 @@ internal class JobPostingFragment : BaseComposeFragment() {
                             setEditState(false)
                         },
                         setEditState = ::setEditState,
-                        showSnackBar = { baseEvent(CareBaseEvent.ShowSnackBar(it)) },
+                        showSnackBar = { eventHandlerHelper.sendEvent(MainEvent.ShowToast(it)) },
                     )
                 } else {
                     JobPostingScreen(
-                        snackbarHostState = snackbarHostState,
                         profile = profile,
                         weekDays = weekDays,
                         workStartTime = workStartTime,
@@ -236,6 +235,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
                         calendarDate = calendarDate,
                         jobPostingStep = jobPostingStep,
                         bottomSheetType = jobPostingBottomSheetType,
+                        isMinimumWageError = isMinimumWageError,
                         setWeekDays = ::setWeekDays,
                         onWorkStartTimeChanged = ::setWorkStartTime,
                         onWorkEndTimeChanged = ::setWorkEndTime,
@@ -265,15 +265,15 @@ internal class JobPostingFragment : BaseComposeFragment() {
                         onCalendarMonthChanged = ::setCalendarMonth,
                         postJobPosting = ::postJobPosting,
                         setJobPostingStep = { step ->
-                            snackbarHostState.currentSnackbarData?.dismiss()
+                            eventHandlerHelper.sendEvent(MainEvent.DismissToast)
                             setJobPostingStep(step)
                         },
                         setEditState = ::setEditState,
                         setBottomSheetType = ::setBottomSheetType,
-                        showSnackBar = { baseEvent(CareBaseEvent.ShowSnackBar(it)) },
+                        showSnackBar = { eventHandlerHelper.sendEvent(MainEvent.ShowToast(it)) },
                         navigateToHome = {
-                            baseEvent(
-                                CareBaseEvent.NavigateTo(
+                            navigationHelper.navigateTo(
+                                NavigationEvent.NavigateTo(
                                     DeepLinkDestination.CenterHome,
                                     com.idle.center.job.posting.post.R.id.jobPostingPostFragment
                                 )
@@ -289,7 +289,6 @@ internal class JobPostingFragment : BaseComposeFragment() {
 @ExperimentalMaterial3Api
 @Composable
 internal fun JobPostingScreen(
-    snackbarHostState: SnackbarHostState,
     profile: CenterProfile?,
     weekDays: Set<DayOfWeek>,
     workStartTime: String,
@@ -317,6 +316,7 @@ internal fun JobPostingScreen(
     calendarDate: LocalDate,
     jobPostingStep: JobPostingStep,
     bottomSheetType: JobPostingBottomSheetType?,
+    isMinimumWageError: Boolean,
     setWeekDays: (DayOfWeek) -> Unit,
     onWorkStartTimeChanged: (String) -> Unit,
     onWorkEndTimeChanged: (String) -> Unit,
@@ -347,6 +347,7 @@ internal fun JobPostingScreen(
     showSnackBar: (String) -> Unit,
     navigateToHome: () -> Unit,
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
     val coroutineScope = rememberCoroutineScope()
     val startDateTime by rememberSaveable { mutableStateOf(calendarDate) }
@@ -379,7 +380,7 @@ internal fun JobPostingScreen(
                 lotNumberAddress = lotNumberAddress,
                 clientName = clientName,
                 gender = gender,
-                birthYear = birthYear,
+                birthYear = (LocalDate.now(ZoneId.of("Asia/Seoul")).year - birthYear.toInt() + 1).toString(),
                 weight = weight,
                 careLevel = careLevel,
                 mentalStatus = mentalStatus,
@@ -711,17 +712,6 @@ internal fun JobPostingScreen(
                                 )
                             }
                         },
-                        snackbarHost = {
-                            SnackbarHost(
-                                hostState = snackbarHostState,
-                                snackbar = { data ->
-                                    CareSnackBar(
-                                        data = data,
-                                        modifier = Modifier.padding(bottom = 116.dp)
-                                    )
-                                }
-                            )
-                        },
                         containerColor = CareTheme.colors.white000,
                         modifier = Modifier.addFocusCleaner(focusManager),
                     ) { paddingValue ->
@@ -747,11 +737,13 @@ internal fun JobPostingScreen(
                                         payType = payType,
                                         payAmount = payAmount,
                                         setWeekDays = setWeekDays,
+                                        isMinimumWageError = isMinimumWageError,
                                         onPayTypeChanged = onPayTypeChanged,
                                         onPayAmountChanged = onPayAmountChanged,
                                         setJobPostingStep = setJobPostingStep,
                                         showBottomSheet = { sheetType ->
                                             coroutineScope.launch {
+                                                keyboardController?.hide()
                                                 setBottomSheetType(sheetType)
                                                 sheetState.show()
                                             }
@@ -809,6 +801,7 @@ internal fun JobPostingScreen(
                                         setJobPostingStep = setJobPostingStep,
                                         showBottomSheet = { sheetType ->
                                             coroutineScope.launch {
+                                                keyboardController?.hide()
                                                 setBottomSheetType(sheetType)
                                                 sheetState.show()
                                             }

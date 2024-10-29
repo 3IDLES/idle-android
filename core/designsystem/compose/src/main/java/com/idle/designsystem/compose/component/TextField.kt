@@ -30,6 +30,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -120,6 +121,8 @@ fun CareTextField(
                         Text(
                             text = hint,
                             style = CareTheme.typography.body3,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
                             color = CareTheme.colors.gray200,
                         )
                     }
@@ -177,61 +180,58 @@ fun CareTextField(
         },
     )
 
-    Column(
-        verticalArrangement = Arrangement.spacedBy(4.dp),
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .height(48.dp)
-                .background(
-                    color = if (readOnly) {
-                        CareTheme.colors.gray050
-                    } else {
-                        CareTheme.colors.white000
-                    }, shape = RoundedCornerShape(6.dp)
-                )
-                .border(
-                    border = boarderStroke,
-                    shape = RoundedCornerShape(6.dp)
-                )
-                .padding(horizontal = 16.dp),
-        ) {
-            BasicTextField(
-                value = value,
-                onValueChange = onValueChanged,
-                textStyle = textStyle,
-                singleLine = true,
-                readOnly = readOnly,
-                enabled = enabled,
-                interactionSource = interactionSource,
-                visualTransformation = visualTransformation,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = keyboardType,
-                    imeAction = ImeAction.Done
-                ),
-                keyboardActions = KeyboardActions(onDone = {
-                    keyboardController?.hide()
-                    onDone()
-                }),
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(top = 10.dp, bottom = 10.dp, end = 8.dp),
-                decorationBox = { innerTextField ->
-                    if (value.isEmpty()) {
-                        Text(
-                            text = hint,
-                            style = CareTheme.typography.body3,
-                            color = CareTheme.colors.gray200,
-                        )
-                    }
-                    innerTextField()
-                }
+            .height(48.dp)
+            .background(
+                color = if (readOnly) {
+                    CareTheme.colors.gray050
+                } else {
+                    CareTheme.colors.white000
+                }, shape = RoundedCornerShape(6.dp)
             )
+            .border(
+                border = boarderStroke,
+                shape = RoundedCornerShape(6.dp)
+            )
+            .padding(horizontal = 16.dp),
+    ) {
+        BasicTextField(
+            value = value,
+            onValueChange = onValueChanged,
+            textStyle = textStyle,
+            singleLine = true,
+            readOnly = readOnly,
+            enabled = enabled,
+            interactionSource = interactionSource,
+            visualTransformation = visualTransformation,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = keyboardType,
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(onDone = {
+                keyboardController?.hide()
+                onDone()
+            }),
+            modifier = Modifier
+                .weight(1f)
+                .padding(top = 10.dp, bottom = 10.dp, end = 8.dp),
+            decorationBox = { innerTextField ->
+                if (value.isEmpty()) {
+                    Text(
+                        text = hint,
+                        style = CareTheme.typography.body3,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        color = CareTheme.colors.gray200,
+                    )
+                }
+                innerTextField()
+            }
+        )
 
-            leftComponent()
-        }
+        leftComponent()
     }
 }
 
@@ -336,6 +336,8 @@ fun CareClickableTextField(
         Text(
             text = value,
             style = CareTheme.typography.body3,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
             color = CareTheme.colors.black,
         )
 
@@ -343,6 +345,8 @@ fun CareClickableTextField(
             Text(
                 text = hint,
                 style = CareTheme.typography.body3,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
                 color = CareTheme.colors.gray300,
             )
         }

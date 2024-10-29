@@ -14,8 +14,12 @@
         android:label="AuthFragment">
         <deepLink app:uri="@string/auth_deeplink_url" />
         <argument
-            android:name="snackBarMsg"
+            android:name="toastMsg"
             android:defaultValue="default"
+            app:argType="string" />
+        <argument
+            android:name="toastType"
+            android:defaultValue="ERROR"
             app:argType="string" />
     </fragment>
 </navigation>

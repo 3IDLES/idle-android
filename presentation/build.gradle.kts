@@ -1,6 +1,5 @@
 plugins {
     id("care.android.feature-binding")
-    alias(libs.plugins.androidx.navigation.safeargs)
 }
 
 android {
@@ -9,6 +8,7 @@ android {
 
 dependencies {
     implementation(projects.core.analytics)
+    implementation(projects.core.designsystem.binding)
     implementation(projects.core.commonUi.compose)
     implementation(projects.feature.auth)
     implementation(projects.feature.postcode)

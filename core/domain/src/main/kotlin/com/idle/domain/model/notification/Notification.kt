@@ -15,9 +15,24 @@ data class Notification(
     val createdAt: LocalDateTime,
     val notificationDetails: NotificationContent,
 ) {
-    fun daysSinceCreation(): Long {
-        val now = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
-        return ChronoUnit.DAYS.between(createdAt, now)
+    fun getNotificationTime(): String {
+        val currentTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
+
+        if (createdAt.isAfter(currentTime)) {
+            return "곧 시작될 알림"
+        }
+
+        val minutesDifference = ChronoUnit.MINUTES.between(createdAt, currentTime)
+        val hoursDifference = ChronoUnit.HOURS.between(createdAt, currentTime)
+        val daysDifference = ChronoUnit.DAYS.between(createdAt, currentTime)
+
+        return when {
+            minutesDifference <= 1 -> "방금 전"
+            minutesDifference < 60 -> "${minutesDifference}분 전"
+            hoursDifference < 24 -> "${hoursDifference}시간 전"
+            daysDifference < 7 -> "${daysDifference}일 전"
+            else -> "${daysDifference / 7}주 전"
+        }
     }
 }
 
@@ -28,10 +43,6 @@ enum class NotificationType(private val notificationTypeClass: Type) {
     companion object {
         fun create(notificationType: String?): NotificationType {
             return NotificationType.entries.firstOrNull { it.name == notificationType } ?: UNKNOWN
-        }
-
-        fun findNotificationClassByType(notificationType: NotificationType): Type {
-            return notificationType.notificationTypeClass
         }
     }
 }

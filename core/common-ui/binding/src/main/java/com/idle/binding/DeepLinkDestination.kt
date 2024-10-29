@@ -55,9 +55,9 @@ sealed class DeepLinkDestination(
         )
     )
 
-    data class CenterSignIn(val snackBarMsg: String = "default") : DeepLinkDestination(
+    data class CenterSignIn(val toastMsg: String = "default") : DeepLinkDestination(
         addressRes = R.string.center_signin_deeplink_url,
-        params = mapOf("snackBarMsg" to snackBarMsg)
+        params = mapOf("toastMsg" to toastMsg)
     )
 
     data object CenterSignUp : DeepLinkDestination(

@@ -22,8 +22,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -43,12 +41,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.idle.analytics.helper.LocalAnalyticsHelper
 import com.idle.analytics.helper.TrackScreenViewEvent
 import com.idle.binding.DeepLinkDestination
 import com.idle.binding.DeepLinkDestination.WorkerJobDetail
-import com.idle.binding.base.CareBaseEvent.NavigateTo
+import com.idle.binding.NavigationEvent
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designresource.R
@@ -56,7 +56,6 @@ import com.idle.designsystem.compose.component.CareButtonCardLarge
 import com.idle.designsystem.compose.component.CareButtonMedium
 import com.idle.designsystem.compose.component.CareDialog
 import com.idle.designsystem.compose.component.CareHeadingTopBar
-import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.component.LoadingCircle
 import com.idle.designsystem.compose.foundation.CareTheme
@@ -87,8 +86,12 @@ internal class WorkerHomeFragment : BaseComposeFragment() {
                 }
             }
 
+            LifecycleEventEffect(Lifecycle.Event.ON_CREATE) {
+                showNotificationCenter()
+                getMyWorkerProfile()
+            }
+
             WorkerHomeScreen(
-                snackbarHostState = snackbarHostState,
                 profile = profile,
                 workerJobPostings = jobPostings,
                 unreadNotificationCount = unreadNotificationCount,
@@ -98,7 +101,7 @@ internal class WorkerHomeFragment : BaseComposeFragment() {
                 applyJobPosting = ::applyJobPosting,
                 addFavoriteJobPosting = ::addFavoriteJobPosting,
                 removeFavoriteJobPosting = ::removeFavoriteJobPosting,
-                navigateTo = { baseEvent(NavigateTo(it)) },
+                navigateTo = { navigationHelper.navigateTo(NavigationEvent.NavigateTo(it)) },
             )
         }
     }
@@ -106,7 +109,6 @@ internal class WorkerHomeFragment : BaseComposeFragment() {
 
 @Composable
 internal fun WorkerHomeScreen(
-    snackbarHostState: SnackbarHostState,
     profile: WorkerProfile?,
     workerJobPostings: List<JobPosting>?,
     unreadNotificationCount: Int,
@@ -219,17 +221,6 @@ internal fun WorkerHomeScreen(
                     top = 48.dp,
                     bottom = 8.dp
                 ),
-            )
-        },
-        snackbarHost = {
-            SnackbarHost(
-                hostState = snackbarHostState,
-                snackbar = { data ->
-                    CareSnackBar(
-                        data = data,
-                        modifier = Modifier.padding(bottom = 84.dp)
-                    )
-                }
             )
         },
     ) { paddingValue ->

@@ -27,6 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
@@ -35,7 +36,7 @@ import androidx.navigation.fragment.navArgs
 import coil.compose.AsyncImage
 import com.idle.analytics.helper.TrackScreenViewEvent
 import com.idle.binding.DeepLinkDestination
-import com.idle.binding.base.CareBaseEvent
+import com.idle.binding.NavigationEvent
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonCardMedium
@@ -68,9 +69,8 @@ internal class ApplicantInquiryFragment : BaseComposeFragment() {
                 ApplicantInquiryScreen(
                     jobPostingSummary = jobPostingSummary!!,
                     applicants = applicants,
-                    navigateTo = {
-                        baseEvent(CareBaseEvent.NavigateTo(it))
-                    })
+                    navigateTo = { navigationHelper.navigateTo(NavigationEvent.NavigateTo(it)) },
+                )
             }
         }
     }
@@ -229,10 +229,11 @@ private fun WorkerProfileCard(
                 AsyncImage(
                     model = applicant.profileImageUrl ?: R.drawable.ic_worker_profile_default,
                     contentDescription = null,
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
-                        .size(72.dp)
+                        .padding(end = 16.dp, bottom = 4.dp)
                         .clip(CircleShape)
-                        .padding(end = 16.dp, bottom = 4.dp),
+                        .size(72.dp),
                 )
 
                 Column(
@@ -317,7 +318,7 @@ private fun WorkerProfileCard(
                 containerColor = CareTheme.colors.white000,
                 textColor = CareTheme.colors.gray300,
                 border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.fillMaxWidth(),
             )
         }
     }

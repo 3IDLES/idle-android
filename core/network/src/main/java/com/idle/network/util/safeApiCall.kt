@@ -1,6 +1,5 @@
 package com.idle.network.util
 
-import android.util.Log
 import com.idle.domain.model.error.ApiErrorCode
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.error.HttpResponseStatus
@@ -13,14 +12,7 @@ internal inline fun <T> safeApiCall(apiCall: () -> Response<T>): Result<T> {
         val response = apiCall()
         response.onResponse()
     } catch (e: Exception) {
-        Log.d("test", e.stackTraceToString())
-
-        Result.failure(
-            HttpResponseException(
-                status = HttpResponseStatus.create(-1),
-                apiErrorCode = ApiErrorCode.NetworkError
-            )
-        )
+        Result.failure(e)
     }
 }
 
@@ -44,7 +36,8 @@ internal fun <T> Response<T>.onResponse(): Result<T> {
         } ?: return Result.failure(
             HttpResponseException(
                 status = HttpResponseStatus.create(-1),
-                apiErrorCode = ApiErrorCode.UnknownError
+                apiErrorCode = ApiErrorCode.UnknownError,
+                msg = "알 수 없는 에러입니다."
             )
         )
     }

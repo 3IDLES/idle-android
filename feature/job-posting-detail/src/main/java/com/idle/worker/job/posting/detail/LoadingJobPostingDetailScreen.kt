@@ -24,8 +24,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -35,12 +33,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.idle.analytics.helper.TrackScreenViewEvent
 import com.idle.designresource.R
-import com.idle.designsystem.compose.component.CareSnackBar
+import com.idle.designsystem.compose.component.CareButtonLine
+import com.idle.designsystem.compose.component.CareButtonMedium
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.foundation.CareTheme
 
 @Composable
-internal fun LoadingJobPostingDetailScreen(snackbarHostState: SnackbarHostState) {
+internal fun LoadingJobPostingDetailScreen() {
     val transition = rememberInfiniteTransition()
     val skeletonColor by transition.animateColor(
         initialValue = CareTheme.colors.gray100,
@@ -67,17 +66,6 @@ internal fun LoadingJobPostingDetailScreen(snackbarHostState: SnackbarHostState)
                     bottom = 12.dp
                 ),
                 onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
-            )
-        },
-        snackbarHost = {
-            SnackbarHost(
-                hostState = snackbarHostState,
-                snackbar = { data ->
-                    CareSnackBar(
-                        data = data,
-                        modifier = Modifier.padding(bottom = 116.dp)
-                    )
-                }
             )
         },
     ) { paddingValue ->
@@ -606,6 +594,30 @@ internal fun LoadingJobPostingDetailScreen(snackbarHostState: SnackbarHostState)
                         }
                     }
                 }
+            }
+
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(CareTheme.colors.white000)
+                    .padding(top = 12.dp, bottom = 28.dp, start = 20.dp, end = 20.dp),
+            ) {
+                CareButtonLine(
+                    text = "",
+                    onClick = {},
+                    enable = false,
+                    borderColor = CareTheme.colors.orange400,
+                    textColor = CareTheme.colors.orange500,
+                    modifier = Modifier.weight(1f),
+                )
+
+                CareButtonMedium(
+                    text = "",
+                    onClick = {},
+                    enable = false,
+                    modifier = Modifier.weight(1f),
+                )
             }
         }
     }

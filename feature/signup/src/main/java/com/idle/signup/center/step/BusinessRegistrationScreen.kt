@@ -103,9 +103,7 @@ internal fun BusinessRegistrationScreen(
         if (businessRegistrationInfo != null) {
             LabeledContent(
                 subtitle = stringResource(id = R.string.is_this_the_right_facility),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 32.dp),
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 Box(
                     modifier = Modifier.border(
@@ -117,7 +115,7 @@ internal fun BusinessRegistrationScreen(
                     Column(
                         horizontalAlignment = Alignment.Start,
                         verticalArrangement = Arrangement.spacedBy(
-                            space = 4.dp,
+                            space = 6.dp,
                             alignment = Alignment.CenterVertically
                         ),
                         modifier = Modifier

@@ -1,9 +1,6 @@
-@file:OptIn(ExperimentalMaterialApi::class)
-
 package com.idle.worker.job.posting.detail.worker
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -13,15 +10,15 @@ import androidx.compose.ui.Modifier
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.navArgs
-import com.idle.binding.base.CareBaseEvent
+import com.idle.binding.NavigationEvent
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.domain.model.jobposting.CrawlingJobPostingDetail
 import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.WorkerJobPostingDetail
+import com.idle.worker.job.posting.detail.LoadingJobPostingDetailScreen
 import com.idle.worker.job.posting.detail.worker.map.PlaceDetailScreen
 import com.idle.worker.job.posting.detail.worker.screen.CrawlingJobPostingDetailScreen
-import com.idle.worker.job.posting.detail.LoadingJobPostingDetailScreen
 import com.idle.worker.job.posting.detail.worker.screen.WorkerJobPostingDetailScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -78,19 +75,21 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
                     } else {
                         if (jobPosting.jobPostingType == JobPostingType.CAREMEET) {
                             WorkerJobPostingDetailScreen(
-                                snackbarHostState = snackbarHostState,
                                 profile = profile,
                                 jobPostingDetail = jobPosting as WorkerJobPostingDetail,
                                 showPlaceDetail = setShowPlaceDetail,
                                 addFavoriteJobPosting = ::addFavoriteJobPosting,
                                 removeFavoriteJobPosting = ::removeFavoriteJobPosting,
                                 applyJobPosting = ::applyJobPosting,
-                                navigateTo = { baseEvent(CareBaseEvent.NavigateTo(it)) }
+                                navigateTo = {
+                                    navigationHelper.navigateTo(
+                                        NavigationEvent.NavigateTo(it)
+                                    )
+                                }
 
                             )
                         } else {
                             CrawlingJobPostingDetailScreen(
-                                snackbarHostState = snackbarHostState,
                                 profile = profile,
                                 jobPostingDetail = jobPosting as CrawlingJobPostingDetail,
                                 showPlaceDetail = setShowPlaceDetail,
@@ -100,7 +99,7 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
                         }
                     }
                 }
-            } ?: LoadingJobPostingDetailScreen(snackbarHostState = snackbarHostState)
+            } ?: LoadingJobPostingDetailScreen()
         }
     }
 }

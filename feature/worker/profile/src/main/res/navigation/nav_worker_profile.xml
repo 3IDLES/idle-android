@@ -7,8 +7,8 @@
     <fragment
         android:id="@+id/workerProfileFragment"
         android:name="com.idle.worker.profile.WorkerProfileFragment"
-        android:label="WorkerProfileFragment" >
-        <deepLink app:uri="@string/worker_profile_deeplink_url"/>
+        android:label="WorkerProfileFragment">
+        <deepLink app:uri="@string/worker_profile_deeplink_url" />
         <argument
             android:name="workerId"
             app:argType="string" />

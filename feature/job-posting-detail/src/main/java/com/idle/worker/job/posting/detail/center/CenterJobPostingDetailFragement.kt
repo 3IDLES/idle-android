@@ -8,12 +8,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -34,7 +31,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.navArgs
 import com.idle.analytics.helper.TrackScreenViewEvent
 import com.idle.binding.DeepLinkDestination
-import com.idle.binding.base.CareBaseEvent
+import com.idle.binding.MainEvent
+import com.idle.binding.NavigationEvent
 import com.idle.center.job.edit.JobEditScreen
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
@@ -43,7 +41,6 @@ import com.idle.designsystem.compose.component.CareBottomSheetLayout
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareCard
 import com.idle.designsystem.compose.component.CareDialog
-import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.foundation.CareTheme
@@ -82,7 +79,6 @@ internal class CenterJobPostingDetailFragment : BaseComposeFragment() {
                 ) { state ->
                     when (state) {
                         JobPostingDetailState.EDIT -> JobEditScreen(
-                            snackbarHostState = snackbarHostState,
                             fragmentManager = parentFragmentManager,
                             weekDays = it.weekdays,
                             workStartTime = it.startTime,
@@ -93,7 +89,7 @@ internal class CenterJobPostingDetailFragment : BaseComposeFragment() {
                             lotNumberAddress = it.lotNumberAddress,
                             clientName = it.clientName,
                             gender = it.gender,
-                            birthYear = (LocalDate.now(ZoneId.of("Asia/Seoul")).year - it.age).toString(),
+                            birthYear = (LocalDate.now(ZoneId.of("Asia/Seoul")).year - it.age +1).toString(),
                             weight = it.weight.toString(),
                             careLevel = it.careLevel.toString(),
                             mentalStatus = it.mentalStatus,
@@ -112,7 +108,11 @@ internal class CenterJobPostingDetailFragment : BaseComposeFragment() {
                                 if (it) setJobPostingState(JobPostingDetailState.EDIT)
                                 else setJobPostingState(JobPostingDetailState.SUMMARY)
                             },
-                            showSnackBar = { baseEvent(CareBaseEvent.ShowSnackBar(it)) }
+                            showSnackBar = {
+                                eventHandlerHelper.sendEvent(
+                                    MainEvent.ShowToast(it)
+                                )
+                            }
                         )
 
                         JobPostingDetailState.PREVIEW -> JobPostingPreviewScreen(
@@ -142,27 +142,26 @@ internal class CenterJobPostingDetailFragment : BaseComposeFragment() {
 
                         else -> {
                             CenterJobPostingDetailScreen(
-                                snackbarHostState = snackbarHostState,
                                 jobPostingId = jobPostingId,
                                 jobPostingDetail = jobPostingDetail,
                                 applicantsCount = applicantsCount,
                                 endJobPosting = ::endJobPosting,
                                 deleteJobPosting = ::deleteJobPosting,
-                                navigateTo = { baseEvent(CareBaseEvent.NavigateTo(it)) },
+                                navigateTo = {
+                                    navigationHelper.navigateTo(NavigationEvent.NavigateTo(it))
+                                },
                                 setJobPostingDetailState = ::setJobPostingState,
                             )
                         }
                     }
                 }
-            } ?: LoadingJobPostingDetailScreen(snackbarHostState = snackbarHostState)
+            } ?: LoadingJobPostingDetailScreen()
         }
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun CenterJobPostingDetailScreen(
-    snackbarHostState: SnackbarHostState,
     jobPostingId: String,
     jobPostingDetail: CenterJobPostingDetail?,
     applicantsCount: Int,
@@ -218,11 +217,11 @@ internal fun CenterJobPostingDetailScreen(
             leftButtonBorder = BorderStroke(1.dp, CareTheme.colors.gray100),
             rightButtonTextColor = CareTheme.colors.white000,
             rightButtonColor = CareTheme.colors.red,
-            onDismissRequest = { showEndJobPostingDialog = false },
-            onLeftButtonClick = { showEndJobPostingDialog = false },
+            onDismissRequest = { showDeleteJobPostingDialog = false },
+            onLeftButtonClick = { showDeleteJobPostingDialog = false },
             onRightButtonClick = {
                 coroutineScope.launch {
-                    showEndJobPostingDialog = false
+                    showDeleteJobPostingDialog = false
                     sheetState.hide()
                     deleteJobPosting(jobPostingId)
                 }
@@ -325,17 +324,6 @@ internal fun CenterJobPostingDetailScreen(
                             ),
                     )
                 },
-                snackbarHost = {
-                    SnackbarHost(
-                        hostState = snackbarHostState,
-                        snackbar = { data ->
-                            CareSnackBar(
-                                data = data,
-                                modifier = Modifier.padding(bottom = 117.dp)
-                            )
-                        }
-                    )
-                },
                 containerColor = CareTheme.colors.white000,
             ) { paddingValue ->
                 SummaryScreen(
@@ -348,7 +336,7 @@ internal fun CenterJobPostingDetailScreen(
                     lotNumberAddress = it.lotNumberAddress,
                     clientName = it.clientName,
                     gender = it.gender,
-                    age = it.age.toString(),
+                    age = (LocalDate.now().year - it.age + 1).toString(),
                     weight = it.weight.toString(),
                     careLevel = it.careLevel.toString(),
                     mentalStatus = it.mentalStatus,

@@ -18,8 +18,6 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -42,7 +40,6 @@ import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareDialog
-import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.profile.CenterManagerAccountStatus
 import dagger.hilt.android.AndroidEntryPoint
@@ -62,7 +59,6 @@ internal class CenterPendingFragment : BaseComposeFragment() {
             }
 
             CenterPendingScreen(
-                snackbarHostState = snackbarHostState,
                 status = status,
                 logout = ::logout,
                 sendVerificationRequest = ::sendVerificationRequest,
@@ -73,25 +69,11 @@ internal class CenterPendingFragment : BaseComposeFragment() {
 
 @Composable
 private fun CenterPendingScreen(
-    snackbarHostState: SnackbarHostState,
     status: CenterManagerAccountStatus,
     logout: () -> Unit,
     sendVerificationRequest: () -> Unit,
 ) {
-    Scaffold(
-        containerColor = CareTheme.colors.white000,
-        snackbarHost = {
-            SnackbarHost(
-                hostState = snackbarHostState,
-                snackbar = { data ->
-                    CareSnackBar(
-                        data = data,
-                        modifier = Modifier.padding(bottom = 106.dp),
-                    )
-                }
-            )
-        },
-    ) { paddingValue ->
+    Scaffold(containerColor = CareTheme.colors.white000) { paddingValue ->
         val actualPageCount = 3
         val pageCount = 600
         val maxNumOfRounds = 600 / actualPageCount

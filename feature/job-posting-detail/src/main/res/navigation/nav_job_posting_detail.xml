@@ -2,12 +2,12 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_worker_recruitment_detail"
-    app:startDestination="@id/workerRecruitmentDetailFragment">
+    app:startDestination="@id/workerJobPostingDetailFragment">
 
     <fragment
-        android:id="@+id/workerRecruitmentDetailFragment"
+        android:id="@+id/workerJobPostingDetailFragment"
         android:name="com.idle.worker.job.posting.detail.worker.WorkerJobPostingDetailFragment"
-        android:label="WorkerRecruitmentDetailFragment">
+        android:label="WorkerJobPostingDetailFragment">
         <argument
             android:name="jobPostingId"
             app:argType="string" />

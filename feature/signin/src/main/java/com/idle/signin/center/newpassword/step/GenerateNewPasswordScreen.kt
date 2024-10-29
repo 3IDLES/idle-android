@@ -1,6 +1,7 @@
 package com.idle.signin.center.newpassword.step
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,15 +18,12 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareTextField
+import com.idle.designsystem.compose.component.ConditionRow
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.signin.center.newpassword.NewPasswordStep
@@ -35,6 +33,11 @@ import com.idle.signin.center.newpassword.NewPasswordStep.PHONE_NUMBER
 internal fun GenerateNewPasswordScreen(
     newPassword: String,
     newPasswordForConfirm: String,
+    isPasswordLengthValid: Boolean,
+    isPasswordContainsLetterAndDigit: Boolean,
+    isPasswordNoWhitespace: Boolean,
+    isPasswordNoSequentialChars: Boolean,
+    isPasswordValid: Boolean,
     onNewPasswordChanged: (String) -> Unit,
     onNewPasswordForConfirmChanged: (String) -> Unit,
     setNewPasswordProcess: (NewPasswordStep) -> Unit,
@@ -61,24 +64,10 @@ internal fun GenerateNewPasswordScreen(
         )
 
         LabeledContent(
-            subtitle = buildAnnotatedString {
-                withStyle(
-                    style = SpanStyle(color = CareTheme.colors.gray500)
-                ) {
-                    append("비밀번호 설정 ")
-                }
-                withStyle(
-                    style = SpanStyle(
-                        color = CareTheme.colors.gray300,
-                        fontSize = 12.sp,
-                    )
-                ) {
-                    append(stringResource(id = R.string.password_conditions))
-                }
-            },
+            subtitle = stringResource(R.string.set_password),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 32.dp),
+                .padding(bottom = 12.dp),
         ) {
             CareTextField(
                 value = newPassword,
@@ -92,31 +81,70 @@ internal fun GenerateNewPasswordScreen(
             )
         }
 
+        Text(
+            text = stringResource(id = R.string.password_description),
+            style = CareTheme.typography.body3,
+            color = CareTheme.colors.gray500,
+            modifier = Modifier.padding(bottom = 6.dp),
+        )
+
+        Column(
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 24.dp),
+        ) {
+            ConditionRow(
+                isValid = isPasswordLengthValid,
+                conditionText = stringResource(R.string.condition_password_length),
+            )
+
+            ConditionRow(
+                isValid = isPasswordContainsLetterAndDigit,
+                conditionText = stringResource(R.string.condition_letter_and_digit),
+            )
+
+            ConditionRow(
+                isValid = isPasswordNoWhitespace,
+                conditionText = stringResource(R.string.condition_no_whitespace),
+            )
+
+            ConditionRow(
+                isValid = isPasswordNoSequentialChars,
+                conditionText = stringResource(R.string.condition_no_sequential_chars),
+            )
+        }
+
         LabeledContent(
             subtitle = stringResource(id = R.string.confirm_password),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 2.dp),
         ) {
             CareTextField(
                 value = newPasswordForConfirm,
                 hint = stringResource(id = R.string.confirm_password_hint),
                 onValueChanged = onNewPasswordForConfirmChanged,
                 visualTransformation = PasswordVisualTransformation(),
-                onDone = {
-                    if (newPasswordForConfirm.isNotBlank() && newPassword == newPasswordForConfirm) {
-                        generateNewPassword()
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 32.dp),
+                isError = newPasswordForConfirm.isNotBlank() && newPassword != newPasswordForConfirm,
+                onDone = { if (isPasswordValid) generateNewPassword() },
+                modifier = Modifier.fillMaxWidth()
             )
         }
+
+
+        Text(
+            text = if (newPasswordForConfirm.isNotBlank() && newPassword != newPasswordForConfirm)
+                stringResource(R.string.login_error_description) else "",
+            style = CareTheme.typography.caption1,
+            color = CareTheme.colors.red,
+        )
 
         Spacer(modifier = Modifier.weight(1f))
 
         CareButtonLarge(
             text = stringResource(id = R.string.change_password),
-            enable = newPasswordForConfirm.isNotBlank() && newPassword == newPasswordForConfirm,
+            enable = isPasswordValid,
             onClick = generateNewPassword,
             modifier = Modifier
                 .fillMaxWidth()

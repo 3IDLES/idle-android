@@ -13,10 +13,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.idle.designresource.R
@@ -36,6 +34,7 @@ internal fun WorkerPhoneNumberScreen(
     workerAuthCodeTimerSeconds: String,
     workerAuthCode: String,
     isConfirmAuthCode: Boolean,
+    isAuthCodeError: Boolean,
     onWorkerPhoneNumberChanged: (String) -> Unit,
     onWorkerAuthCodeChanged: (String) -> Unit,
     setSignUpStep: (WorkerSignUpStep) -> Unit,
@@ -43,7 +42,6 @@ internal fun WorkerPhoneNumberScreen(
     confirmAuthCode: () -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
-    val focusManager = LocalFocusManager.current
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
@@ -62,9 +60,10 @@ internal fun WorkerPhoneNumberScreen(
 
         LabeledContent(
             subtitle = stringResource(id = R.string.phone_number),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(bottom = 32.dp),
-            ) {
+        ) {
             Row(
                 verticalAlignment = Alignment.Top,
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -73,13 +72,7 @@ internal fun WorkerPhoneNumberScreen(
                 CareTextField(
                     value = workerPhoneNumber,
                     hint = stringResource(id = R.string.phone_number_hint),
-                    onValueChanged = {
-                        onWorkerPhoneNumberChanged(it)
-                        if (it.length == 11) {
-                            sendPhoneNumber()
-                            focusManager.moveFocus(FocusDirection.Down)
-                        }
-                    },
+                    onValueChanged = { onWorkerPhoneNumberChanged(it) },
                     readOnly = (workerAuthCodeTimerMinute != "" && workerAuthCodeTimerSeconds != ""),
                     onDone = { if (workerPhoneNumber.length == 11) sendPhoneNumber() },
                     modifier = Modifier
@@ -99,9 +92,10 @@ internal fun WorkerPhoneNumberScreen(
         if (workerAuthCodeTimerMinute.isNotBlank()) {
             LabeledContent(
                 subtitle = stringResource(id = R.string.confirm_code),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(bottom = 32.dp),
-                ) {
+            ) {
                 Row(
                     verticalAlignment = Alignment.Top,
                     horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -111,8 +105,10 @@ internal fun WorkerPhoneNumberScreen(
                         value = workerAuthCode,
                         hint = "",
                         onValueChanged = onWorkerAuthCodeChanged,
-                        onDone = { confirmAuthCode() },
-                        supportingText = if (isConfirmAuthCode) "인증이 완료되었습니다." else "",
+                        onDone = { if (workerAuthCode.isNotBlank() && !isConfirmAuthCode) confirmAuthCode() },
+                        isError = isAuthCodeError,
+                        supportingText = if (isAuthCodeError) stringResource(R.string.confirm_code_error_description)
+                        else if (isConfirmAuthCode) "* 인증이 완료되었습니다." else "",
                         readOnly = !(workerAuthCodeTimerMinute != "" && workerAuthCodeTimerSeconds != "") || isConfirmAuthCode,
                         leftComponent = {
                             if (workerAuthCodeTimerMinute != "" && workerAuthCodeTimerSeconds != "") {

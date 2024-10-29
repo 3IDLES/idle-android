@@ -144,6 +144,13 @@ enum class ApiErrorCode(val serverCode: String, val description: String, val dis
         "지원하지 않는 유저 토큰 타입입니다."
     ),
 
+    // PERSISTENCE
+    ResourceNotFound(
+        "PERSISTENCE-001",
+        "조회 요청 시, 해당 리소스가 DB 내에 존재하지 않는 경우 발생합니다.",
+        "아직 등록되지 않은 정보 입니다."
+    ),
+
     // SMS Errors
     ClientException(
         "SMS-001",
@@ -166,8 +173,6 @@ enum class ApiErrorCode(val serverCode: String, val description: String, val dis
     ),
 
     UnknownError("UNKNOWN", "알 수 없는 오류가 발생했습니다.", "알 수 없는 오류가 발생하였습니다."),
-
-    NetworkError("NETWORK", "네트워크가 연결되어있지 않습니다.", "인터넷이 연결되어 있지 않아요."),
     ;
 
     companion object {

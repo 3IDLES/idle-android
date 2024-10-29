@@ -16,7 +16,7 @@
     <string name="worker_chatting_deeplink_url">care://worker/chatting</string>
     <string name="worker_setting_deeplink_url">care://worker/setting</string>
 
-    <string name="center_signin_deeplink_url">care://center/signIn/{snackBarMsg}</string>
+    <string name="center_signin_deeplink_url">care://center/signIn/{toastMsg}</string>
     <string name="center_signup_deeplink_url">care://center/signUp</string>
     <string name="center_home_deeplink_url">care://center/home</string>
     <string name="center_chatting_deeplink_url">care://cener/chatting</string>

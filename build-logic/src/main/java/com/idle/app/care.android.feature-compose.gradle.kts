@@ -7,11 +7,6 @@ plugins {
 }
 
 android {
-    packaging {
-        resources {
-            excludes.add("META-INF/**")
-        }
-    }
     defaultConfig {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -30,7 +25,6 @@ dependencies {
 
     val libs = project.extensions.libs
     implementation(libs.findLibrary("androidx.compose.navigation").get())
-    implementation(libs.findLibrary("androidx.appcompat").get())
     implementation(libs.findLibrary("androidx.fragment").get())
     implementation(libs.findLibrary("androidx-navigation-fragment").get())
     implementation(libs.findLibrary("androidx.lifecycle.viewModelCompose").get())

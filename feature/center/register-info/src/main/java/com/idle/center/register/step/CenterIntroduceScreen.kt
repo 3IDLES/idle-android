@@ -59,7 +59,9 @@ internal fun CenterIntroduceScreen(
 
     val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
-        onResult = { uri -> onProfileImageUriChanged(uri) }
+        onResult = { uri ->
+            onProfileImageUriChanged(uri ?: return@rememberLauncherForActivityResult)
+        }
     )
 
     LaunchedEffect(Unit) {

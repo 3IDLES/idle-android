@@ -38,6 +38,7 @@ internal fun TimePaymentScreen(
     workEndTime: String,
     payType: PayType?,
     payAmount: String,
+    isMinimumWageError: Boolean,
     setWeekDays: (DayOfWeek) -> Unit,
     onPayTypeChanged: (PayType) -> Unit,
     onPayAmountChanged: (String) -> Unit,
@@ -117,11 +118,11 @@ internal fun TimePaymentScreen(
                 .fillMaxWidth()
                 .padding(bottom = 32.dp),
         ) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            Column(modifier = Modifier.fillMaxWidth()) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    modifier = Modifier.padding(bottom = 12.dp),
+                ) {
                     CareChipBasic(
                         text = stringResource(id = R.string.hourly),
                         onClick = { onPayTypeChanged(PayType.HOURLY) },
@@ -150,6 +151,7 @@ internal fun TimePaymentScreen(
                     textStyle = CareTheme.typography.body2,
                     onValueChanged = onPayAmountChanged,
                     keyboardType = KeyboardType.Number,
+                    isError = isMinimumWageError,
                     leftComponent = {
                         Text(
                             text = stringResource(id = R.string.currency_unit),
@@ -160,13 +162,19 @@ internal fun TimePaymentScreen(
                     onDone = {
                         if (weekDays.isNotEmpty() && workStartTime.isNotBlank() && workEndTime.isNotBlank() && payType != null && payAmount.isNotBlank()) {
                             if ((payAmount.toIntOrNull() ?: return@CareTextField) < 9860) {
-                                showSnackBar("급여는 최저 시급인 9860원보다 많아야 합니다.")
                                 return@CareTextField
                             }
 
                             setJobPostingStep(JobPostingStep.findStep(TIME_PAYMENT.step + 1))
                         }
                     },
+                    modifier = Modifier.padding(bottom = 2.dp),
+                )
+
+                Text(
+                    text = if (isMinimumWageError) stringResource(R.string.minimum_wage_description) else "",
+                    style = CareTheme.typography.caption1,
+                    color = CareTheme.colors.red,
                 )
             }
         }
@@ -175,10 +183,14 @@ internal fun TimePaymentScreen(
 
         CareButtonLarge(
             text = stringResource(id = R.string.next),
-            enable = weekDays.isNotEmpty() && workStartTime.isNotBlank() && workEndTime.isNotBlank() && payType != null && payAmount.isNotBlank(),
+            enable = weekDays.isNotEmpty() &&
+                    workStartTime.isNotBlank() &&
+                    workEndTime.isNotBlank() &&
+                    payType != null &&
+                    payAmount.isNotBlank()
+                    && !isMinimumWageError,
             onClick = {
                 if ((payAmount.toIntOrNull() ?: return@CareButtonLarge) < 9860) {
-                    showSnackBar("급여는 최저 시급인 9860원보다 많아야 합니다.")
                     return@CareButtonLarge
                 }
 

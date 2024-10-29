@@ -3,13 +3,17 @@ package com.idle.signin.center.newpassword
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.DeepLinkDestination
+import com.idle.binding.EventHandlerHelper
+import com.idle.binding.MainEvent
+import com.idle.binding.NavigationEvent
+import com.idle.binding.NavigationHelper
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.base.CareBaseEvent
-import com.idle.binding.base.CareBaseEvent.NavigateTo
 import com.idle.domain.model.CountDownTimer
 import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
+import com.idle.domain.model.error.ErrorHandlerHelper
 import com.idle.domain.model.error.HttpResponseException
+import com.idle.domain.model.error.HttpResponseStatus
 import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
 import com.idle.domain.usecase.auth.GenerateNewPasswordUseCase
 import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
@@ -17,9 +21,15 @@ import com.idle.signin.R
 import com.idle.signin.center.newpassword.NewPasswordStep.GENERATE_NEW_PASSWORD
 import com.idle.signin.center.newpassword.NewPasswordStep.PHONE_NUMBER
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,12 +39,15 @@ class NewPasswordViewModel @Inject constructor(
     private val confirmAuthCodeUseCase: ConfirmAuthCodeUseCase,
     private val generateNewPasswordUseCase: GenerateNewPasswordUseCase,
     private val countDownTimer: CountDownTimer,
+    private val errorHandlerHelper: ErrorHandlerHelper,
+    private val eventHandlerHelper: EventHandlerHelper,
+    private val navigationHelper: NavigationHelper,
 ) : BaseViewModel() {
     private val _phoneNumber = MutableStateFlow("")
     internal val phoneNumber = _phoneNumber.asStateFlow()
 
     private val _authCode = MutableStateFlow("")
-    internal val authCode = this._authCode.asStateFlow()
+    internal val authCode = _authCode.asStateFlow()
 
     private var timerJob: Job? = null
 
@@ -56,6 +69,57 @@ class NewPasswordViewModel @Inject constructor(
     private val _newPasswordForConfirm = MutableStateFlow("")
     internal val newPasswordForConfirm = _newPasswordForConfirm.asStateFlow()
 
+    private val _isAuthCodeError = MutableStateFlow(false)
+    val isAuthCodeError = _isAuthCodeError.asStateFlow()
+
+    val isPasswordLengthValid = _newPassword.map { password ->
+        if (password.isBlank()) false else password.length in PASSWORD_MIN_LENGTH..PASSWORD_MAX_LENGTH
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Lazily,
+        initialValue = false,
+    )
+
+    val isPasswordContainsLetterAndDigit = _newPassword.map { password ->
+        if (password.isBlank()) false else password.any { it.isLetter() } && password.any { it.isDigit() }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Lazily,
+        initialValue = false,
+    )
+
+    val isPasswordNoWhitespace = _newPassword.map { password ->
+        if (password.isBlank()) false else !password.contains(" ")
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Lazily,
+        initialValue = false,
+    )
+
+    val isPasswordNoSequentialChars = _newPassword.map { password ->
+        if (password.isBlank()) false else !hasSequentialChars(password)
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Lazily,
+        initialValue = false,
+    )
+
+    val isPasswordValid: StateFlow<Boolean> = combine(
+        _newPassword,
+        _newPasswordForConfirm
+    ) { password, confirmPassword ->
+        isPasswordLengthValid.value &&
+                isPasswordContainsLetterAndDigit.value &&
+                isPasswordNoWhitespace.value &&
+                isPasswordNoSequentialChars.value &&
+                confirmPassword.isNotBlank() &&
+                password == confirmPassword
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = false,
+    )
+
     internal fun setPhoneNumber(phoneNumber: String) {
         if (phoneNumber.isDigitsOnly() && phoneNumber.length <= 11) {
             _phoneNumber.value = phoneNumber
@@ -63,7 +127,12 @@ class NewPasswordViewModel @Inject constructor(
     }
 
     internal fun setAuthCode(certificateNumber: String) {
-        this._authCode.value = certificateNumber
+        if(certificateNumber.length > 6){
+            return
+        }
+
+        _authCode.value = certificateNumber
+        _isAuthCodeError.value = false
     }
 
     internal fun setNewPasswordProcess(process: NewPasswordStep) {
@@ -71,17 +140,64 @@ class NewPasswordViewModel @Inject constructor(
     }
 
     internal fun setNewPassword(password: String) {
+        if(password.length > 20){
+            return
+        }
+
         _newPassword.value = password
     }
 
     internal fun setNewPasswordForConfirm(passwordForConfirm: String) {
+        if(passwordForConfirm.length > 20){
+            return
+        }
+
         _newPasswordForConfirm.value = passwordForConfirm
     }
 
     internal fun sendPhoneNumber() = viewModelScope.launch {
         sendPhoneNumberUseCase(_phoneNumber.value)
             .onSuccess { startTimer() }
-            .onFailure { baseEvent(CareBaseEvent.ShowSnackBar(it.message.toString())) }
+            .onFailure { eventHandlerHelper.sendEvent(MainEvent.ShowToast(it.message.toString())) }
+    }
+
+    internal fun confirmAuthCode() = viewModelScope.launch {
+        confirmAuthCodeUseCase(
+            _phoneNumber.value,
+            this@NewPasswordViewModel._authCode.value
+        ).onSuccess {
+            cancelTimer()
+            _isConfirmAuthCode.value = true
+            _newPasswordProcess.value = GENERATE_NEW_PASSWORD
+        }.onFailure {
+            if (it is HttpResponseException && it.status == HttpResponseStatus.BadRequest) {
+                _isAuthCodeError.value = true
+                return@launch
+            }
+
+            errorHandlerHelper.sendError(it)
+        }
+    }
+
+    internal fun generateNewPassword() = viewModelScope.launch {
+        val passwordPattern = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d!@#\$%^&*()_+=-]{8,20}$".toRegex()
+
+        if (!_newPassword.value.matches(passwordPattern)) {
+            eventHandlerHelper.sendEvent(MainEvent.ShowToast("비밀번호가 형식에 맞지 않습니다."))
+            return@launch
+        }
+
+        generateNewPasswordUseCase(
+            newPassword = _newPassword.value,
+            phoneNumber = _phoneNumber.value
+        ).onSuccess {
+            navigationHelper.navigateTo(
+                NavigationEvent.NavigateTo(
+                    destination = DeepLinkDestination.CenterSignIn("새 비밀번호를 발급하였습니다."),
+                    popUpTo = R.id.newPasswordFragment,
+                )
+            )
+        }.onFailure { errorHandlerHelper.sendError(it) }
     }
 
     private fun startTimer() {
@@ -111,37 +227,20 @@ class NewPasswordViewModel @Inject constructor(
         timerJob = null
     }
 
-    internal fun confirmAuthCode() = viewModelScope.launch {
-        confirmAuthCodeUseCase(
-            _phoneNumber.value,
-            this@NewPasswordViewModel._authCode.value
-        ).onSuccess {
-            cancelTimer()
-            _isConfirmAuthCode.value = true
-            _newPasswordProcess.value = GENERATE_NEW_PASSWORD
-        }.onFailure { handleFailure(it as HttpResponseException) }
+    private fun hasSequentialChars(password: String): Boolean {
+        if (password.length < 3) return false
+
+        for (i in 0 until password.length - 2) {
+            if (password[i] == password[i + 1] && password[i + 1] == password[i + 2]) {
+                return true
+            }
+        }
+        return false
     }
 
-
-    internal fun generateNewPassword() = viewModelScope.launch {
-        val passwordPattern = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d!@#\$%^&*()_+=-]{8,20}$".toRegex()
-
-        if (!_newPassword.value.matches(passwordPattern)) {
-            baseEvent(CareBaseEvent.ShowSnackBar("비밀번호가 형식에 맞지 않습니다.|ERROR"))
-            return@launch
-        }
-
-        generateNewPasswordUseCase(
-            newPassword = _newPassword.value,
-            phoneNumber = _phoneNumber.value
-        ).onSuccess {
-            baseEvent(
-                NavigateTo(
-                    destination = DeepLinkDestination.CenterSignIn("새 비밀번호를 발급하였습니다.|SUCCESS"),
-                    popUpTo = R.id.newPasswordFragment,
-                )
-            )
-        }.onFailure { handleFailure(it as HttpResponseException) }
+    companion object {
+        private const val PASSWORD_MIN_LENGTH = 8
+        private const val PASSWORD_MAX_LENGTH = 20
     }
 }
 

@@ -6,7 +6,7 @@ interface NotificationRepository {
     suspend fun getMyNotifications(
         next: String?,
         limit: Int
-    ):  Result<Pair<String?, List<Notification>>>
+    ): Result<Pair<String?, List<Notification>>>
 
     suspend fun readNotification(notificationId: String): Result<Unit>
     suspend fun getUnreadNotificationCount(): Result<Int>

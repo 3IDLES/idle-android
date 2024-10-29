@@ -69,9 +69,10 @@ internal fun WorkerInformationScreen(
 
         LabeledContent(
             subtitle = stringResource(id = R.string.name),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(bottom = 32.dp),
-            ) {
+        ) {
             CareTextField(
                 value = workerName,
                 hint = stringResource(id = R.string.worker_name_hint),
@@ -85,9 +86,10 @@ internal fun WorkerInformationScreen(
 
         LabeledContent(
             subtitle = stringResource(id = R.string.birth_year),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(bottom = 32.dp),
-            ) {
+        ) {
             CareTextField(
                 value = birthYear,
                 hint = stringResource(id = R.string.worker_birth_year_hint),
@@ -105,9 +107,10 @@ internal fun WorkerInformationScreen(
 
         LabeledContent(
             subtitle = stringResource(id = R.string.gender),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(bottom = 32.dp),
-            ) {
+        ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -171,7 +174,7 @@ internal fun WorkerInformationScreen(
                 enable = workerName.isNotBlank() && gender != Gender.NONE && birthYear.length == 4,
                 onClick = {
                     if ((birthYear.toIntOrNull() ?: return@CareButtonMedium) < 1900) {
-                        showSnackBar("출생년도가 잘못되었습니다.|Error")
+                        showSnackBar("출생년도는 1900년 보다 커야합니다.")
                         return@CareButtonMedium
                     }
 

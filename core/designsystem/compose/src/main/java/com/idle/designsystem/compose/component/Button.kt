@@ -38,7 +38,7 @@ fun CareButtonSmall(
             disabledContentColor = CareTheme.colors.gray200,
             disabledContainerColor = CareTheme.colors.gray200,
         ),
-        modifier = modifier.size(width = 72.dp, height = 44.dp),
+        modifier = modifier.size(width = 72.dp, height = 48.dp),
     ) {
         Text(
             text = text,

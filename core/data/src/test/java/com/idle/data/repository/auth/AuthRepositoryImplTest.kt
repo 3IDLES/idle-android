@@ -43,8 +43,8 @@ class AuthRepositoryImplTest {
         coEvery { userInfoDataSource.clearUserType() } just Runs
         coEvery { userInfoDataSource.clearUserInfo() } just Runs
         coEvery { authDataSource.getDeviceToken() } returns "testToken"
-        coEvery { tokenRepository.postDeviceToken(any())} returns Result.success(Unit)
-        coEvery { tokenRepository.deleteDeviceToken()} returns Result.success(Unit)
+        coEvery { tokenRepository.postDeviceToken(any(), any()) } returns Result.success(Unit)
+        coEvery { tokenRepository.deleteDeviceToken() } returns Result.success(Unit)
     }
 
     @Test
@@ -61,7 +61,7 @@ class AuthRepositoryImplTest {
         coVerify { tokenDataSource.setAccessToken("accessToken") }
         coVerify { tokenDataSource.setRefreshToken("refreshToken") }
         coVerify { userInfoDataSource.setUserType(UserType.CENTER.apiValue) }
-        coVerify { tokenRepository.postDeviceToken("testToken") }
+        coVerify { tokenRepository.postDeviceToken("testToken", "CENTER") }
     }
 
     @Test
@@ -78,7 +78,7 @@ class AuthRepositoryImplTest {
         coVerify { tokenDataSource.setAccessToken("accessToken") }
         coVerify { tokenDataSource.setRefreshToken("refreshToken") }
         coVerify { userInfoDataSource.setUserType(UserType.WORKER.apiValue) }
-        coVerify { tokenRepository.postDeviceToken("testToken") }
+        coVerify { tokenRepository.postDeviceToken("testToken", "CARER") }
     }
 
     @Test
@@ -95,7 +95,7 @@ class AuthRepositoryImplTest {
         coVerify { tokenDataSource.setAccessToken("accessToken") }
         coVerify { tokenDataSource.setRefreshToken("refreshToken") }
         coVerify { userInfoDataSource.setUserType(UserType.WORKER.apiValue) }
-        coVerify { tokenRepository.postDeviceToken("testToken") }
+        coVerify { tokenRepository.postDeviceToken("testToken", "CARER") }
     }
 
     @Test

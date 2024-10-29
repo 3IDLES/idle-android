@@ -4,8 +4,10 @@ import android.net.Uri
 import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.base.CareBaseEvent
-import com.idle.domain.model.error.HttpResponseException
+import com.idle.binding.EventHandlerHelper
+import com.idle.binding.MainEvent
+import com.idle.binding.ToastType
+import com.idle.domain.model.error.ErrorHandlerHelper
 import com.idle.domain.model.profile.JobSearchStatus
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
@@ -22,6 +24,8 @@ class WorkerProfileViewModel @Inject constructor(
     private val getLocalMyWorkerProfileUseCase: GetLocalMyWorkerProfileUseCase,
     private val getWorkerProfileUseCase: GetWorkerProfileUseCase,
     private val updateWorkerProfileUseCase: UpdateWorkerProfileUseCase,
+    private val errorHandlerHelper: ErrorHandlerHelper,
+    private val eventHandlerHelper: EventHandlerHelper,
 ) : BaseViewModel() {
     private val _workerProfile = MutableStateFlow<WorkerProfile?>(null)
     val workerProfile = _workerProfile.asStateFlow()
@@ -49,49 +53,9 @@ class WorkerProfileViewModel @Inject constructor(
     private val _jobSearchStatus = MutableStateFlow(JobSearchStatus.UNKNOWN)
     val jobSearchStatus = _jobSearchStatus.asStateFlow()
 
-    internal fun getMyWorkerProfile() = viewModelScope.launch {
-        getLocalMyWorkerProfileUseCase().onSuccess {
-            _workerProfile.value = it
-            _workerIntroduce.value = it.introduce ?: ""
-            _specialty.value = it.speciality ?: ""
-            _profileImageUri.value = it.profileImageUrl?.toUri()
-            _experienceYear.value = it.experienceYear
-            _roadNameAddress.value = it.roadNameAddress
-            _lotNumberAddress.value = it.lotNumberAddress
-            _jobSearchStatus.value = it.jobSearchStatus
-        }.onFailure { handleFailure(it as HttpResponseException) }
-    }
-
-    internal fun getWorkerProfile(workerId: String) = viewModelScope.launch {
-        getWorkerProfileUseCase(workerId).onSuccess {
-            _workerProfile.value = it
-        }.onFailure { handleFailure(it as HttpResponseException) }
-    }
-
-    internal fun updateWorkerProfile() = viewModelScope.launch {
-        val workerProfile = _workerProfile.value
-        if (workerProfile == null) {
-            baseEvent(CareBaseEvent.ShowSnackBar("로딩중입니다."))
-            return@launch
-        }
-
-        updateWorkerProfileUseCase(
-            experienceYear = _experienceYear.value,
-            roadNameAddress = _roadNameAddress.value,
-            lotNumberAddress = _lotNumberAddress.value,
-            speciality = _specialty.value,
-            introduce = _workerIntroduce.value.ifBlank { null },
-            imageFileUri = _profileImageUri.value?.toString(),
-            jobSearchStatus = _jobSearchStatus.value,
-        ).onSuccess {
-            getMyWorkerProfile()
-            baseEvent(CareBaseEvent.ShowSnackBar("정보 수정이 완료되었어요.|SUCCESS"))
-            setEditState(false)
-        }.onFailure {
-            handleFailure(it as HttpResponseException)
-        }
-    }
-
+    private val _isUpdateLoading = MutableStateFlow(false)
+    val isUpdateLoading = _isUpdateLoading.asStateFlow()
+    
     internal fun setSpecialty(number: String) {
         _specialty.value = number
     }
@@ -125,5 +89,61 @@ class WorkerProfileViewModel @Inject constructor(
 
     internal fun setJobSearchStatus(jobSearchStatus: JobSearchStatus) {
         _jobSearchStatus.value = jobSearchStatus
+    }
+
+    internal fun getMyWorkerProfile() = viewModelScope.launch {
+        getLocalMyWorkerProfileUseCase().onSuccess {
+            _workerProfile.value = it
+            _workerIntroduce.value = it.introduce ?: ""
+            _specialty.value = it.speciality ?: ""
+            _profileImageUri.value = it.profileImageUrl?.toUri()
+            _experienceYear.value = it.experienceYear
+            _roadNameAddress.value = it.roadNameAddress
+            _lotNumberAddress.value = it.lotNumberAddress
+            _jobSearchStatus.value = it.jobSearchStatus
+        }.onFailure { errorHandlerHelper.sendError(it) }
+    }
+
+    internal fun getWorkerProfile(workerId: String) = viewModelScope.launch {
+        getWorkerProfileUseCase(workerId).onSuccess {
+            _workerProfile.value = it
+            _workerIntroduce.value = it.introduce ?: ""
+            _specialty.value = it.speciality ?: ""
+            _profileImageUri.value = it.profileImageUrl?.toUri()
+            _experienceYear.value = it.experienceYear
+            _roadNameAddress.value = it.roadNameAddress
+            _lotNumberAddress.value = it.lotNumberAddress
+            _jobSearchStatus.value = it.jobSearchStatus
+        }.onFailure { errorHandlerHelper.sendError(it) }
+    }
+
+    internal fun updateWorkerProfile() = viewModelScope.launch {
+        val workerProfile = _workerProfile.value
+        if (workerProfile == null) {
+            eventHandlerHelper.sendEvent(MainEvent.ShowToast("로딩중입니다."))
+            return@launch
+        }
+
+        _isUpdateLoading.value = true
+
+        updateWorkerProfileUseCase(
+            experienceYear = _experienceYear.value,
+            roadNameAddress = _roadNameAddress.value,
+            lotNumberAddress = _lotNumberAddress.value,
+            speciality = _specialty.value,
+            introduce = _workerIntroduce.value.ifBlank { null },
+            imageFileUri = _profileImageUri.value?.toString(),
+            jobSearchStatus = _jobSearchStatus.value,
+        ).onSuccess {
+            getMyWorkerProfile()
+            eventHandlerHelper.sendEvent(
+                MainEvent.ShowToast(
+                    "정보 수정이 완료되었어요.",
+                    toastType = ToastType.SUCCESS
+                )
+            )
+            setEditState(false)
+        }.onFailure { errorHandlerHelper.sendError(it) }
+        .also { _isUpdateLoading.value = false }
     }
 }

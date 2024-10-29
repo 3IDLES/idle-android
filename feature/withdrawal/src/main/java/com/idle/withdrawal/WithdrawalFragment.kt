@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,12 +24,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.navArgs
 import com.idle.binding.DeepLinkDestination.CenterSetting
 import com.idle.binding.DeepLinkDestination.WorkerSetting
-import com.idle.binding.base.CareBaseEvent
+import com.idle.binding.NavigationEvent
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareDialog
-import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.foundation.CareTheme
@@ -85,7 +82,6 @@ internal class WithdrawalFragment : BaseComposeFragment() {
             }
 
             WithdrawalScreen(
-                snackbarHostState = snackbarHostState,
                 userType = userType,
                 withdrawalStep = withdrawalStep,
                 timerMinute = authCodeTimerMinute,
@@ -107,8 +103,8 @@ internal class WithdrawalFragment : BaseComposeFragment() {
                 confirmAuthCode = ::confirmAuthCode,
                 withdrawal = { showDialog = true },
                 navigateToSetting = {
-                    baseEvent(
-                        CareBaseEvent.NavigateTo(
+                    navigationHelper.navigateTo(
+                        NavigationEvent.NavigateTo(
                             destination = if (userType == UserType.CENTER) CenterSetting
                             else WorkerSetting,
                             popUpTo = com.idle.withdrawal.R.id.withdrawalFragment,
@@ -123,7 +119,6 @@ internal class WithdrawalFragment : BaseComposeFragment() {
 @ExperimentalMaterial3Api
 @Composable
 internal fun WithdrawalScreen(
-    snackbarHostState: SnackbarHostState,
     userType: UserType,
     withdrawalStep: WithdrawalStep,
     timerMinute: String,
@@ -161,17 +156,6 @@ internal fun WithdrawalScreen(
                         end = 20.dp,
                         bottom = 12.dp
                     ),
-            )
-        },
-        snackbarHost = {
-            SnackbarHost(
-                hostState = snackbarHostState,
-                snackbar = { data ->
-                    CareSnackBar(
-                        data = data,
-                        modifier = Modifier.padding(bottom = 118.dp)
-                    )
-                }
             )
         },
         containerColor = CareTheme.colors.white000,

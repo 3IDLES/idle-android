@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -21,13 +19,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.idle.binding.DeepLinkDestination.Auth
-import com.idle.binding.base.CareBaseEvent
-import com.idle.binding.base.CareBaseEvent.NavigateTo
+import com.idle.binding.MainEvent
+import com.idle.binding.NavigationEvent
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareProgressBar
-import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.domain.model.auth.Gender
@@ -63,6 +60,7 @@ internal class WorkerSignUpFragment : BaseComposeFragment() {
             val workerAuthCodeTimerMinute by workerAuthCodeTimerMinute.collectAsStateWithLifecycle()
             val workerAuthCodeTimerSeconds by workerAuthCodeTimerSeconds.collectAsStateWithLifecycle()
             val workerAuthCode by workerAuthCode.collectAsStateWithLifecycle()
+            val isAuthCodeError by isAuthCodeError.collectAsStateWithLifecycle()
             val isConfirmAuthCode by isConfirmAuthCode.collectAsStateWithLifecycle()
             val workerName by workerName.collectAsStateWithLifecycle()
             val birthYear by birthYear.collectAsStateWithLifecycle()
@@ -70,13 +68,13 @@ internal class WorkerSignUpFragment : BaseComposeFragment() {
             val roadNameAddress by roadNameAddress.collectAsStateWithLifecycle()
 
             WorkerSignUpScreen(
-                snackbarHostState = snackbarHostState,
                 signUpStep = signUpStep,
                 workerPhoneNumber = workerPhoneNumber,
                 workerAuthCodeTimerMinute = workerAuthCodeTimerMinute,
                 workerAuthCodeTimerSeconds = workerAuthCodeTimerSeconds,
                 workerAuthCode = workerAuthCode,
                 isConfirmAuthCode = isConfirmAuthCode,
+                isAuthCodeError = isAuthCodeError,
                 workerName = workerName,
                 birthYear = birthYear,
                 gender = gender,
@@ -96,14 +94,14 @@ internal class WorkerSignUpFragment : BaseComposeFragment() {
                 confirmAuthCode = ::confirmAuthCode,
                 signUpWorker = ::signUpWorker,
                 navigateToAuth = {
-                    baseEvent(
-                        NavigateTo(
+                    navigationHelper.navigateTo(
+                        NavigationEvent.NavigateTo(
                             destination = Auth,
                             popUpTo = com.idle.signup.R.id.workerSignUpFragment,
                         )
                     )
                 },
-                showSnackBar = { baseEvent(CareBaseEvent.ShowSnackBar(it)) }
+                showSnackBar = { eventHandlerHelper.sendEvent(MainEvent.ShowToast(it)) }
             )
         }
     }
@@ -112,13 +110,13 @@ internal class WorkerSignUpFragment : BaseComposeFragment() {
 
 @Composable
 internal fun WorkerSignUpScreen(
-    snackbarHostState: SnackbarHostState,
     signUpStep: WorkerSignUpStep,
     workerPhoneNumber: String,
     workerAuthCodeTimerMinute: String,
     workerAuthCodeTimerSeconds: String,
     workerAuthCode: String,
     isConfirmAuthCode: Boolean,
+    isAuthCodeError: Boolean,
     workerName: String,
     birthYear: String,
     gender: Gender,
@@ -156,17 +154,6 @@ internal fun WorkerSignUpScreen(
                 )
             }
         },
-        snackbarHost = {
-            SnackbarHost(
-                hostState = snackbarHostState,
-                snackbar = { data ->
-                    CareSnackBar(
-                        data = data,
-                        modifier = Modifier.padding(bottom = 104.dp),
-                    )
-                }
-            )
-        },
         modifier = Modifier.addFocusCleaner(focusManager),
     ) { paddingValue ->
         Column(
@@ -189,6 +176,7 @@ internal fun WorkerSignUpScreen(
                         workerAuthCodeTimerSeconds = workerAuthCodeTimerSeconds,
                         workerAuthCode = workerAuthCode,
                         isConfirmAuthCode = isConfirmAuthCode,
+                        isAuthCodeError = isAuthCodeError,
                         onWorkerPhoneNumberChanged = onWorkerPhoneNumberChanged,
                         onWorkerAuthCodeChanged = onWorkerAuthCodeChanged,
                         setSignUpStep = setSignUpStep,

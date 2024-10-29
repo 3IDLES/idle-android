@@ -8,5 +8,7 @@
 .externalNativeBuild
 .cxx
 local.properties
-gradle.properties
+keystore.properties
 /.kotlin/
+/app/upload-keystore.jks
+/keystore.properties

@@ -1,13 +1,17 @@
 package com.idle.center.jobposting
 
+import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.DeepLinkDestination.CenterJobPostingPostComplete
+import com.idle.binding.EventHandlerHelper
+import com.idle.binding.MainEvent
+import com.idle.binding.NavigationEvent
+import com.idle.binding.NavigationHelper
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.base.CareBaseEvent
 import com.idle.center.job.posting.post.R
 import com.idle.compose.JobPostingBottomSheetType
 import com.idle.domain.model.auth.Gender
-import com.idle.domain.model.error.HttpResponseException
+import com.idle.domain.model.error.ErrorHandlerHelper
 import com.idle.domain.model.jobposting.ApplyDeadlineType
 import com.idle.domain.model.jobposting.ApplyMethod
 import com.idle.domain.model.jobposting.DayOfWeek
@@ -19,7 +23,10 @@ import com.idle.domain.usecase.jobposting.PostJobPostingUseCase
 import com.idle.domain.usecase.profile.GetLocalMyCenterProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalTime
@@ -32,6 +39,9 @@ import javax.inject.Inject
 class JobPostingViewModel @Inject constructor(
     private val getLocalMyCenterProfileUseCase: GetLocalMyCenterProfileUseCase,
     private val postJobPostingUseCase: PostJobPostingUseCase,
+    private val errorHandlerHelper: ErrorHandlerHelper,
+    val eventHandlerHelper: EventHandlerHelper,
+    val navigationHelper: NavigationHelper,
 ) : BaseViewModel() {
     private val _profile = MutableStateFlow<CenterProfile?>(null)
     val profile = _profile.asStateFlow()
@@ -120,14 +130,20 @@ class JobPostingViewModel @Inject constructor(
     private val _bottomSheetType = MutableStateFlow<JobPostingBottomSheetType?>(null)
     val bottomSheetType = _bottomSheetType.asStateFlow()
 
+    val isMinimumWageError = _payAmount.map {
+        if (it.isNotBlank() && it.isDigitsOnly()) {
+            it.toInt() < MINIMUM_WAGE
+        } else {
+            false
+        }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Lazily,
+        initialValue = false
+    )
+
     init {
         getMyCenterProfile()
-    }
-
-    private fun getMyCenterProfile() = viewModelScope.launch {
-        getLocalMyCenterProfileUseCase().onSuccess {
-            _profile.value = it
-        }.onFailure { handleFailure(it as HttpResponseException) }
     }
 
     internal fun setWeekDays(dayOfWeek: DayOfWeek) {
@@ -146,6 +162,10 @@ class JobPostingViewModel @Inject constructor(
     }
 
     internal fun setPayAmount(payAmount: String) {
+        if(payAmount.length > 9){
+            return
+        }
+
         _payAmount.value = payAmount
     }
 
@@ -157,10 +177,10 @@ class JobPostingViewModel @Inject constructor(
                 if (startTime.isBefore(endTime)) {
                     _workStartTime.value = time
                 } else {
-                    baseEvent(CareBaseEvent.ShowSnackBar("근무 시작 시간은 근무 종료 시간보다 빨라야 합니다."))
+                    eventHandlerHelper.sendEvent(MainEvent.ShowToast("근무 시작 시간은 근무 종료 시간보다 빨라야 합니다."))
                 }
             } catch (e: DateTimeParseException) {
-                baseEvent(CareBaseEvent.ShowSnackBar("근무 시작 시간은 근무 종료 시간보다 빨라야 합니다."))
+                eventHandlerHelper.sendEvent(MainEvent.ShowToast("근무 시작 시간은 근무 종료 시간보다 빨라야 합니다."))
             }
 
             return
@@ -177,10 +197,10 @@ class JobPostingViewModel @Inject constructor(
                 if (endTime.isAfter(startTime)) {
                     _workEndTime.value = time
                 } else {
-                    baseEvent(CareBaseEvent.ShowSnackBar("근무 종료 시간은 근무 시작 시간보다 빨라야 합니다."))
+                    eventHandlerHelper.sendEvent(MainEvent.ShowToast("근무 종료 시간은 근무 시작 시간보다 빨라야 합니다."))
                 }
             } catch (e: DateTimeParseException) {
-                baseEvent(CareBaseEvent.ShowSnackBar("근무 종료 시간은 근무 시작 시간보다 빨라야 합니다."))
+                eventHandlerHelper.sendEvent(MainEvent.ShowToast("근무 종료 시간은 근무 시작 시간보다 빨라야 합니다."))
             }
             return
         }
@@ -299,7 +319,7 @@ class JobPostingViewModel @Inject constructor(
                 endTime = _workEndTime.value,
                 payType = _payType.value ?: PayType.UNKNOWN,
                 payAmount = _payAmount.value.toIntOrNull() ?: let {
-                    baseEvent(CareBaseEvent.ShowSnackBar("급여가 잘못되었습니다."))
+                    eventHandlerHelper.sendEvent(MainEvent.ShowToast("급여 형식이 잘못되었습니다. 숫자로 입력해주세요."))
                     return@launch
                 },
                 roadNameAddress = _roadNameAddress.value,
@@ -307,34 +327,33 @@ class JobPostingViewModel @Inject constructor(
                 clientName = _clientName.value,
                 gender = _gender.value,
                 birthYear = _birthYear.value.toIntOrNull() ?: let {
-                    baseEvent(CareBaseEvent.ShowSnackBar("출생년도가 잘못되었습니다."))
+                    eventHandlerHelper.sendEvent(MainEvent.ShowToast("올바른 출생년도를 입력해주세요."))
                     return@launch
                 },
                 weight = _weight.value.toIntOrNull(),
                 careLevel = _careLevel.value.toIntOrNull() ?: let {
-                    baseEvent(CareBaseEvent.ShowSnackBar("요양등급이 잘못되었습니다."))
+                    eventHandlerHelper.sendEvent(MainEvent.ShowToast("올바른 요양 등급을 입력해주세요."))
                     return@launch
                 },
                 mentalStatus = _mentalStatus.value,
                 disease = _disease.value.ifBlank { null },
                 isMealAssistance = _isMealAssistance.value ?: let {
-                    baseEvent(CareBaseEvent.ShowSnackBar("식사보조가 잘못되었습니다."))
+                    eventHandlerHelper.sendEvent(MainEvent.ShowToast("식사 보조 여부를 선택해주세요."))
                     return@launch
                 },
                 isBowelAssistance = _isBowelAssistance.value ?: let {
-                    baseEvent(CareBaseEvent.ShowSnackBar("배변보조가 잘못되었습니다."))
+                    eventHandlerHelper.sendEvent(MainEvent.ShowToast("배변 보조 여부를 선택해주세요."))
                     return@launch
                 },
                 isWalkingAssistance = _isWalkingAssistance.value ?: let {
-                    baseEvent(CareBaseEvent.ShowSnackBar("이동보조가 잘못되었습니다."))
+                    eventHandlerHelper.sendEvent(MainEvent.ShowToast("이동 보조 여부를 선택해주세요."))
                     return@launch
                 },
-                lifeAssistance = _lifeAssistance.value.toList()
-                    .sortedBy { it.ordinal }
+                lifeAssistance = _lifeAssistance.value.toList().sortedBy { it.ordinal }
                     .takeIf { it.isNotEmpty() } ?: listOf(LifeAssistance.NONE),
                 extraRequirement = _extraRequirement.value.ifBlank { null },
                 isExperiencePreferred = _isExperiencePreferred.value ?: let {
-                    baseEvent(CareBaseEvent.ShowSnackBar("경력 우대 여부가 잘못되었습니다."))
+                    eventHandlerHelper.sendEvent(MainEvent.ShowToast("경력 우대 여부를 선택해주세요."))
                     return@launch
                 },
                 applyMethod = _applyMethod.value.toList()
@@ -342,14 +361,24 @@ class JobPostingViewModel @Inject constructor(
                 applyDeadLineType = _applyDeadlineType.value ?: ApplyDeadlineType.UNLIMITED,
                 applyDeadline = _applyDeadline.value?.toString(),
             ).onSuccess {
-                baseEvent(
-                    CareBaseEvent.NavigateTo(
+                navigationHelper.navigateTo(
+                    NavigationEvent.NavigateTo(
                         destination = CenterJobPostingPostComplete,
                         popUpTo = R.id.jobPostingPostFragment
                     )
                 )
-            }.onFailure { handleFailure(it as HttpResponseException) }
+            }.onFailure { errorHandlerHelper.sendError(it) }
         }
+    }
+
+    private fun getMyCenterProfile() = viewModelScope.launch {
+        getLocalMyCenterProfileUseCase().onSuccess {
+            _profile.value = it
+        }.onFailure { errorHandlerHelper.sendError(it) }
+    }
+
+    companion object {
+        private const val MINIMUM_WAGE = 9860
     }
 }
 

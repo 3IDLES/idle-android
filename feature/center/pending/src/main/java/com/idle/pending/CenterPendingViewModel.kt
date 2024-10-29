@@ -1,9 +1,13 @@
 package com.idle.pending
 
 import androidx.lifecycle.viewModelScope
+import com.idle.binding.EventHandlerHelper
+import com.idle.binding.MainEvent
+import com.idle.binding.NavigationEvent
+import com.idle.binding.NavigationHelper
+import com.idle.binding.ToastType.SUCCESS
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.base.CareBaseEvent
-import com.idle.domain.model.error.HttpResponseException
+import com.idle.domain.model.error.ErrorHandlerHelper
 import com.idle.domain.model.profile.CenterManagerAccountStatus
 import com.idle.domain.usecase.auth.LogoutCenterUseCase
 import com.idle.domain.usecase.auth.SendCenterVerificationRequestUseCase
@@ -17,6 +21,9 @@ import javax.inject.Inject
 class CenterPendingViewModel @Inject constructor(
     private val logoutCenterUseCase: LogoutCenterUseCase,
     private val sendCenterVerificationRequestUseCase: SendCenterVerificationRequestUseCase,
+    private val errorHandlerHelper: ErrorHandlerHelper,
+    private val eventHandlerHelper: EventHandlerHelper,
+    private val navigationHelper: NavigationHelper,
 ) : BaseViewModel() {
     private val _status = MutableStateFlow(CenterManagerAccountStatus.UNKNOWN)
     val status = _status.asStateFlow()
@@ -27,16 +34,19 @@ class CenterPendingViewModel @Inject constructor(
 
     internal fun logout() = viewModelScope.launch {
         logoutCenterUseCase().onSuccess {
-            baseEvent(CareBaseEvent.NavigateToAuthWithClearBackStack("로그아웃이 완료되었습니다.|SUCCESS"))
-        }.onFailure { handleFailure(it as HttpResponseException) }
+            navigationHelper.navigateTo(
+                NavigationEvent.NavigateToAuthWithClearBackStack(
+                    toastMsg = "로그아웃이 완료되었습니다.",
+                    toastType = "SUCCESS"
+                )
+            )
+        }.onFailure { errorHandlerHelper.sendError(it) }
     }
 
     internal fun sendVerificationRequest() = viewModelScope.launch {
         sendCenterVerificationRequestUseCase().onSuccess {
             _status.value = CenterManagerAccountStatus.PENDING
-            baseEvent(CareBaseEvent.ShowSnackBar("센터 인증 요청이 완료되었습니다.|SUCCESS"))
-        }.onFailure {
-            handleFailure(it as HttpResponseException)
-        }
+            eventHandlerHelper.sendEvent(MainEvent.ShowToast("센터 인증 요청이 완료되었습니다.", SUCCESS))
+        }.onFailure { errorHandlerHelper.sendError(it) }
     }
 }

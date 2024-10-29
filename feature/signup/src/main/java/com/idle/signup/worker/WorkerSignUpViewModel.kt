@@ -3,15 +3,19 @@ package com.idle.signin.worker
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.viewModelScope
 import com.idle.analytics.helper.AnalyticsHelper
-import com.idle.binding.DeepLinkDestination
+import com.idle.binding.DeepLinkDestination.SignUpComplete
 import com.idle.binding.DeepLinkDestination.WorkerHome
+import com.idle.binding.EventHandlerHelper
+import com.idle.binding.NavigationEvent
+import com.idle.binding.NavigationHelper
 import com.idle.binding.base.BaseViewModel
-import com.idle.binding.base.CareBaseEvent
 import com.idle.domain.model.CountDownTimer
 import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
 import com.idle.domain.model.auth.Gender
+import com.idle.domain.model.error.ErrorHandlerHelper
 import com.idle.domain.model.error.HttpResponseException
+import com.idle.domain.model.error.HttpResponseStatus
 import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
 import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
 import com.idle.domain.usecase.auth.SignInWorkerUseCase
@@ -35,6 +39,9 @@ class WorkerSignUpViewModel @Inject constructor(
     private val confirmAuthCodeUseCase: ConfirmAuthCodeUseCase,
     private val countDownTimer: CountDownTimer,
     private val analyticsHelper: AnalyticsHelper,
+    private val errorHandlerHelper: ErrorHandlerHelper,
+    val eventHandlerHelper: EventHandlerHelper,
+    val navigationHelper: NavigationHelper,
 ) : BaseViewModel() {
 
     private val _signUpStep = MutableStateFlow<WorkerSignUpStep>(PHONE_NUMBER)
@@ -56,6 +63,9 @@ class WorkerSignUpViewModel @Inject constructor(
 
     private val _isConfirmAuthCode = MutableStateFlow(false)
     val isConfirmAuthCode = _isConfirmAuthCode.asStateFlow()
+
+    private val _isAuthCodeError = MutableStateFlow(false)
+    val isAuthCodeError = _isAuthCodeError.asStateFlow()
 
     private val _workerName = MutableStateFlow("")
     internal val workerName = _workerName.asStateFlow()
@@ -83,6 +93,7 @@ class WorkerSignUpViewModel @Inject constructor(
 
     internal fun setWorkerAuthCode(certificateNumber: String) {
         _workerAuthCode.value = certificateNumber
+        _isAuthCodeError.value = false
     }
 
     internal fun setWorkerName(name: String) {
@@ -110,7 +121,7 @@ class WorkerSignUpViewModel @Inject constructor(
     internal fun sendPhoneNumber() = viewModelScope.launch {
         sendPhoneNumberUseCase(_workerPhoneNumber.value)
             .onSuccess { startTimer() }
-            .onFailure { handleFailure(it as HttpResponseException) }
+            .onFailure { errorHandlerHelper.sendError(it) }
     }
 
     private fun startTimer() {
@@ -146,13 +157,25 @@ class WorkerSignUpViewModel @Inject constructor(
             authCode = _workerAuthCode.value,
         ).onSuccess {
             getWorkerIdUseCase().onSuccess { analyticsHelper.setUserId(it) }
-            baseEvent(CareBaseEvent.NavigateTo(WorkerHome, R.id.workerSignUpFragment))
+            navigationHelper.navigateTo(
+                NavigationEvent.NavigateTo(
+                    WorkerHome,
+                    R.id.workerSignUpFragment
+                )
+            )
         }.onFailure {
             confirmAuthCodeUseCase(_workerPhoneNumber.value, _workerAuthCode.value).onSuccess {
                 cancelTimer()
                 _isConfirmAuthCode.value = true
                 _signUpStep.value = WorkerSignUpStep.findStep(PHONE_NUMBER.step + 1)
-            }.onFailure { handleFailure(it as HttpResponseException) }
+            }.onFailure {
+                if (it is HttpResponseException && it.status == HttpResponseStatus.BadRequest) {
+                    _isAuthCodeError.value = true
+                    return@launch
+                }
+
+                errorHandlerHelper.sendError(it)
+            }
         }
     }
 
@@ -166,13 +189,10 @@ class WorkerSignUpViewModel @Inject constructor(
             lotNumberAddress = _lotNumberAddress.value,
         ).onSuccess {
             getWorkerIdUseCase().onSuccess { analyticsHelper.setUserId(it) }
-            baseEvent(
-                CareBaseEvent.NavigateTo(
-                    DeepLinkDestination.SignUpComplete,
-                    R.id.workerSignUpFragment
-                )
+            navigationHelper.navigateTo(
+                NavigationEvent.NavigateTo(SignUpComplete, R.id.workerSignUpFragment)
             )
-        }.onFailure { handleFailure(it as HttpResponseException) }
+        }.onFailure { errorHandlerHelper.sendError(it) }
     }
 }
 

@@ -13,7 +13,7 @@ import java.io.IOException
 internal fun <T> DataStore<Preferences>.getValue(
     key: Preferences.Key<T>,
     defaultValue: T
-): Flow<T> = 
+): Flow<T> =
     data.handleException()
         .map { preferences ->
             preferences[key] ?: defaultValue

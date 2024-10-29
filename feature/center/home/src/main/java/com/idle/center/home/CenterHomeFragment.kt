@@ -24,8 +24,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -46,7 +44,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.idle.analytics.helper.TrackScreenViewEvent
 import com.idle.binding.DeepLinkDestination
 import com.idle.binding.DeepLinkDestination.CenterApplicantInquiry
-import com.idle.binding.base.CareBaseEvent.NavigateTo
+import com.idle.binding.NavigationEvent
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designresource.R
@@ -54,7 +52,6 @@ import com.idle.designsystem.compose.component.CareButtonCardMedium
 import com.idle.designsystem.compose.component.CareDialog
 import com.idle.designsystem.compose.component.CareFloatingButton
 import com.idle.designsystem.compose.component.CareHeadingTopBar
-import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareTabBar
 import com.idle.designsystem.compose.component.LoadingCircle
@@ -89,7 +86,6 @@ internal class CenterHomeFragment : BaseComposeFragment() {
             }
 
             CenterHomeScreen(
-                snackbarHostState = snackbarHostState,
                 recruitmentPostStatus = recruitmentPostStatus,
                 jobPostingsInProgresses = jobPostingsInProgress,
                 jobPostingsCompleted = jobPostingsCompleted,
@@ -97,7 +93,7 @@ internal class CenterHomeFragment : BaseComposeFragment() {
                 unreadNotificationCount = unreadNotificationCount,
                 setRecruitmentPostStatus = ::setRecruitmentPostStatus,
                 endJobPosting = ::endJobPosting,
-                navigateTo = { baseEvent(NavigateTo(destination = it)) }
+                navigateTo = { navigationHelper.navigateTo(NavigationEvent.NavigateTo(it)) },
             )
         }
     }
@@ -105,7 +101,6 @@ internal class CenterHomeFragment : BaseComposeFragment() {
 
 @Composable
 internal fun CenterHomeScreen(
-    snackbarHostState: SnackbarHostState,
     recruitmentPostStatus: RecruitmentPostStatus,
     jobPostingsInProgresses: List<CenterJobPosting>?,
     jobPostingsCompleted: List<CenterJobPosting>?,
@@ -147,7 +142,7 @@ internal fun CenterHomeScreen(
     Scaffold(
         topBar = {
             CareHeadingTopBar(
-                title = stringResource(id = R.string.manage_job_posting),
+                title = stringResource(id = R.string.my_job_posting),
                 modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 48.dp, bottom = 8.dp),
                 rightComponent = {
                     if (showNotificationCenter) {
@@ -174,17 +169,6 @@ internal fun CenterHomeScreen(
                         }
                     }
                 },
-            )
-        },
-        snackbarHost = {
-            SnackbarHost(
-                hostState = snackbarHostState,
-                snackbar = { data ->
-                    CareSnackBar(
-                        data = data,
-                        modifier = Modifier.padding(bottom = 84.dp)
-                    )
-                }
             )
         },
         containerColor = CareTheme.colors.white000,

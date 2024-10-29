@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterialApi::class)
-
 package com.idle.center.job.edit
 
 import androidx.activity.compose.BackHandler
@@ -18,13 +16,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -60,7 +55,6 @@ import com.idle.designsystem.compose.component.CareCalendar
 import com.idle.designsystem.compose.component.CareChipBasic
 import com.idle.designsystem.compose.component.CareChipShort
 import com.idle.designsystem.compose.component.CareClickableTextField
-import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.CareTextFieldLong
@@ -83,10 +77,9 @@ import java.time.LocalTime
 import java.time.ZoneId
 import java.time.format.DateTimeParseException
 
-@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun JobEditScreen(
-    snackbarHostState: SnackbarHostState,
     weekDays: Set<DayOfWeek>,
     workStartTime: String,
     workEndTime: String,
@@ -264,10 +257,10 @@ fun JobEditScreen(
                                                 if (startTime.isBefore(endTime)) {
                                                     localWorkStartTime = startDateTime
                                                 } else {
-                                                    showSnackBar("근무 시작 시간은 근무 종료 시간보다 빨라야 합니다.|ERROR")
+                                                    showSnackBar("근무 시작 시간은 근무 종료 시간보다 빨라야 합니다.")
                                                 }
                                             } catch (e: DateTimeParseException) {
-                                                showSnackBar("근무 시작 시간은 근무 종료 시간보다 빨라야 합니다.|ERROR")
+                                                showSnackBar("근무 시작 시간은 근무 종료 시간보다 빨라야 합니다.")
                                             }
                                         }
 
@@ -369,10 +362,10 @@ fun JobEditScreen(
                                                 if (endTime.isAfter(startTime)) {
                                                     localWorkEndTime = endDateTime
                                                 } else {
-                                                    showSnackBar("근무 종료 시간은 근무 시작 시간보다 빨라야 합니다.|ERROR")
+                                                    showSnackBar("근무 종료 시간은 근무 시작 시간보다 빨라야 합니다.")
                                                 }
                                             } catch (e: DateTimeParseException) {
-                                                showSnackBar("근무 종료 시간은 근무 시작 시간보다 빨라야 합니다.|ERROR")
+                                                showSnackBar("근무 종료 시간은 근무 시작 시간보다 빨라야 합니다.")
                                             }
                                         }
                                         sheetState.hide()
@@ -429,27 +422,27 @@ fun JobEditScreen(
                             color = CareTheme.colors.orange500,
                             modifier = Modifier.clickable {
                                 if (localWeekDays.isEmpty()) {
-                                    showSnackBar("근무 요일은 최소한 하나 이상을 선택해야 합니다.|ERROR")
+                                    showSnackBar("근무 요일은 최소한 하나 이상을 선택해야 합니다.")
                                     return@clickable
                                 }
 
                                 if (localApplyMethod.isEmpty()) {
-                                    showSnackBar("지원 방법은 최소한 하나 이상을 선택해야 합니다.|ERROR")
+                                    showSnackBar("지원 방법은 최소한 하나 이상을 선택해야 합니다.")
                                     return@clickable
                                 }
 
                                 if (localClientName.isBlank()) {
-                                    showSnackBar("고객의 이름은 비어있을 수 없습니다.|ERROR")
+                                    showSnackBar("고객의 이름은 비어있을 수 없습니다.")
                                     return@clickable
                                 }
 
                                 if ((localPayAmount.toIntOrNull() ?: return@clickable) < 9860) {
-                                    showSnackBar("급여는 최저 시급인 9860원보다 많아야 합니다.|ERROR")
+                                    showSnackBar("급여는 최저 시급인 9860원보다 많아야 합니다.")
                                     return@clickable
                                 }
 
                                 if ((localBirthYear.toIntOrNull() ?: return@clickable) < 1900) {
-                                    showSnackBar("출생년도는 1900년 이후로 입력 가능합니다.|Error")
+                                    showSnackBar("출생년도는 1900년 이후로 입력 가능합니다.")
                                     return@clickable
                                 }
 
@@ -488,17 +481,6 @@ fun JobEditScreen(
                         .padding(start = 12.dp, top = 48.dp, end = 20.dp, bottom = 12.dp),
                 )
             },
-            snackbarHost = {
-                SnackbarHost(
-                    hostState = snackbarHostState,
-                    snackbar = { data ->
-                        CareSnackBar(
-                            data = data,
-                            modifier = Modifier.padding(bottom = 20.dp)
-                        )
-                    }
-                )
-            },
             containerColor = CareTheme.colors.white000,
             modifier = Modifier.addFocusCleaner(focusManager),
         ) { paddingValue ->
@@ -512,7 +494,7 @@ fun JobEditScreen(
             ) {
                 Column(
                     horizontalAlignment = Alignment.Start,
-                    verticalArrangement = Arrangement.spacedBy(20.dp),
+                    verticalArrangement = Arrangement.spacedBy(28.dp),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp),
@@ -543,7 +525,6 @@ fun JobEditScreen(
                             }
                         }
                     }
-
 
                     LabeledContent(
                         subtitle = stringResource(id = R.string.work_hours),
@@ -626,7 +607,11 @@ fun JobEditScreen(
                                 value = localPayAmount,
                                 hint = stringResource(id = R.string.pay_amount_hint),
                                 textStyle = CareTheme.typography.body2,
-                                onValueChanged = { localPayAmount = it },
+                                onValueChanged = {
+                                    if (it.length <= 9) {
+                                        localPayAmount = it
+                                    }
+                                },
                                 keyboardType = KeyboardType.Number,
                                 leftComponent = {
                                     Text(
@@ -659,7 +644,6 @@ fun JobEditScreen(
                 HorizontalDivider(thickness = 8.dp, color = CareTheme.colors.gray050)
 
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(20.dp),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp)
@@ -668,11 +652,14 @@ fun JobEditScreen(
                         text = stringResource(id = R.string.customer_info),
                         style = CareTheme.typography.subtitle1,
                         color = CareTheme.colors.black,
+                        modifier = Modifier.padding(bottom = 28.dp),
                     )
 
                     LabeledContent(
                         subtitle = stringResource(id = R.string.customer_name),
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 28.dp),
                     ) {
                         CareTextField(
                             value = localClientName,
@@ -684,7 +671,9 @@ fun JobEditScreen(
 
                     LabeledContent(
                         subtitle = stringResource(id = R.string.gender),
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 28.dp),
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
@@ -709,11 +698,17 @@ fun JobEditScreen(
 
                     LabeledContent(
                         subtitle = stringResource(id = R.string.birth_year),
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 28.dp),
                     ) {
                         CareTextField(
                             value = localBirthYear,
-                            onValueChanged = { localBirthYear = it },
+                            onValueChanged = {
+                                if (it.length <= 4) {
+                                    localBirthYear = it
+                                }
+                            },
                             keyboardType = KeyboardType.Number,
                             hint = stringResource(id = R.string.birth_year_hint),
                             modifier = Modifier.fillMaxWidth(),
@@ -740,9 +735,17 @@ fun JobEditScreen(
                         )
                     }
 
+                    HorizontalDivider(
+                        thickness = 1.dp,
+                        color = CareTheme.colors.gray100,
+                        modifier = Modifier.padding(vertical = 20.dp),
+                    )
+
                     LabeledContent(
                         subtitle = stringResource(id = R.string.care_level),
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 28.dp),
                     ) {
                         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                             IntRange(1, 5).forEach { level ->
@@ -757,7 +760,9 @@ fun JobEditScreen(
 
                     LabeledContent(
                         subtitle = stringResource(id = R.string.mental_status),
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 28.dp),
                     ) {
                         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                             MentalStatus.entries.forEach { status ->
@@ -788,7 +793,7 @@ fun JobEditScreen(
                                 append("(선택)")
                             }
                         },
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth()
                     ) {
                         CareTextField(
                             value = localDisease,
@@ -798,9 +803,16 @@ fun JobEditScreen(
                         )
                     }
 
-                    HorizontalDivider(thickness = 1.dp, color = CareTheme.colors.gray100)
+                    HorizontalDivider(
+                        thickness = 1.dp,
+                        color = CareTheme.colors.gray100,
+                        modifier = Modifier.padding(vertical = 20.dp),
+                    )
 
-                    LabeledContent(subtitle = stringResource(id = R.string.meal_assistance)) {
+                    LabeledContent(
+                        subtitle = stringResource(id = R.string.meal_assistance),
+                        modifier = Modifier.padding(bottom = 28.dp),
+                    ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -809,20 +821,23 @@ fun JobEditScreen(
                             CareChipBasic(
                                 text = stringResource(R.string.necessary),
                                 onClick = { localIsMealAssistance = true },
-                                enable = localIsMealAssistance == true,
+                                enable = localIsMealAssistance,
                                 modifier = Modifier.width(104.dp),
                             )
 
                             CareChipBasic(
                                 text = stringResource(R.string.unnecessary),
                                 onClick = { localIsMealAssistance = false },
-                                enable = localIsMealAssistance == false,
+                                enable = !localIsMealAssistance,
                                 modifier = Modifier.width(104.dp),
                             )
                         }
                     }
 
-                    LabeledContent(subtitle = stringResource(id = R.string.bowel_assistance)) {
+                    LabeledContent(
+                        subtitle = stringResource(id = R.string.bowel_assistance),
+                        modifier = Modifier.padding(bottom = 28.dp),
+                    ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -831,20 +846,23 @@ fun JobEditScreen(
                             CareChipBasic(
                                 text = stringResource(R.string.necessary),
                                 onClick = { localIsBowelAssistance = true },
-                                enable = localIsBowelAssistance == true,
+                                enable = localIsBowelAssistance,
                                 modifier = Modifier.width(104.dp),
                             )
 
                             CareChipBasic(
                                 text = stringResource(R.string.unnecessary),
                                 onClick = { localIsBowelAssistance = false },
-                                enable = localIsBowelAssistance == false,
+                                enable = !localIsBowelAssistance,
                                 modifier = Modifier.width(104.dp),
                             )
                         }
                     }
 
-                    LabeledContent(subtitle = stringResource(id = R.string.walking_assistance)) {
+                    LabeledContent(
+                        subtitle = stringResource(id = R.string.walking_assistance),
+                        modifier = Modifier.padding(bottom = 28.dp),
+                    ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -853,14 +871,14 @@ fun JobEditScreen(
                             CareChipBasic(
                                 text = stringResource(R.string.necessary),
                                 onClick = { localIsWalkingAssistance = true },
-                                enable = localIsWalkingAssistance == true,
+                                enable = localIsWalkingAssistance,
                                 modifier = Modifier.width(104.dp),
                             )
 
                             CareChipBasic(
                                 text = stringResource(R.string.unnecessary),
                                 onClick = { localIsWalkingAssistance = false },
-                                enable = localIsWalkingAssistance == false,
+                                enable = !localIsWalkingAssistance,
                                 modifier = Modifier.width(104.dp),
                             )
                         }
@@ -879,6 +897,7 @@ fun JobEditScreen(
                                 append("(선택)")
                             }
                         },
+                        modifier = Modifier.padding(bottom = 28.dp),
                     ) {
                         FlowRow(
                             horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -934,18 +953,21 @@ fun JobEditScreen(
                 HorizontalDivider(thickness = 8.dp, color = CareTheme.colors.gray050)
 
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(20.dp),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 20.dp, end = 20.dp, bottom = 28.dp)
+                        .padding(start = 20.dp, end = 20.dp),
                 ) {
                     Text(
                         text = stringResource(id = R.string.additional_info),
                         style = CareTheme.typography.subtitle1,
                         color = CareTheme.colors.black,
+                        modifier = Modifier.padding(bottom = 28.dp),
                     )
 
-                    LabeledContent(subtitle = stringResource(id = R.string.experience_preference)) {
+                    LabeledContent(
+                        subtitle = stringResource(id = R.string.experience_preference),
+                        modifier = Modifier.padding(bottom = 28.dp),
+                    ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -954,14 +976,14 @@ fun JobEditScreen(
                             CareChipBasic(
                                 text = stringResource(id = R.string.beginner_possible),
                                 onClick = { localIsExperiencePreferred = false },
-                                enable = localIsExperiencePreferred == false,
+                                enable = !localIsExperiencePreferred,
                                 modifier = Modifier.width(104.dp),
                             )
 
                             CareChipBasic(
                                 text = stringResource(id = R.string.experience_preferred),
                                 onClick = { localIsExperiencePreferred = true },
-                                enable = localIsExperiencePreferred == true,
+                                enable = localIsExperiencePreferred,
                                 modifier = Modifier.width(104.dp),
                             )
                         }
@@ -980,6 +1002,7 @@ fun JobEditScreen(
                                 append("(다중 선택 가능)")
                             }
                         },
+                        modifier = Modifier.padding(bottom = 28.dp),
                     ) {
                         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                             ApplyMethod.entries.forEach { method ->
@@ -1035,7 +1058,7 @@ fun JobEditScreen(
                                     hint = stringResource(id = R.string.apply_deadline_hint),
                                     leftComponent = {
                                         Image(
-                                            painter = painterResource(com.idle.designresource.R.drawable.ic_calendar),
+                                            painter = painterResource(R.drawable.ic_calendar),
                                             contentDescription = null,
                                         )
                                     },

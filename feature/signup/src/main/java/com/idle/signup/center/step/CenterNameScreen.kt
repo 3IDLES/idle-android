@@ -44,7 +44,7 @@ internal fun CenterNameScreen(
             style = CareTheme.typography.heading2,
             color = CareTheme.colors.black,
             modifier = Modifier.padding(bottom = 28.dp),
-            )
+        )
 
         CareTextField(
             value = centerName,

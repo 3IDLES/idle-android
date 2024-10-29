@@ -19,14 +19,13 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import com.idle.binding.DeepLinkDestination.CenterApplicantInquiry
-import com.idle.binding.DeepLinkDestination.CenterHome
-import com.idle.binding.DeepLinkDestination.CenterJobDetail
-import com.idle.binding.DeepLinkDestination.WorkerHome
-import com.idle.binding.DeepLinkDestination.WorkerJobDetail
+import com.idle.auth.AuthFragmentDirections
+import com.idle.binding.MainEvent
+import com.idle.binding.NavigationEvent
 import com.idle.binding.deepLinkNavigateTo
 import com.idle.binding.repeatOnStarted
-import com.idle.domain.model.jobposting.JobPostingType
+import com.idle.designsystem.binding.component.dismissToast
+import com.idle.designsystem.binding.component.showToast
 import com.idle.presentation.databinding.ActivityMainBinding
 import com.idle.presentation.forceupdate.ForceUpdateFragment
 import com.idle.presentation.network.NetworkObserver
@@ -103,67 +102,102 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        repeatOnStarted {
-            networkObserver.networkState.collect { state ->
-                if (state == NetworkState.NOT_CONNECTED) {
-                    showNetworkDialog()
-                } else {
-                    dismissNetworkDialog()
-                    viewModel.getForceUpdateInfo()
-                }
-            }
-        }
-
-        repeatOnStarted {
-            viewModel.forceUpdate.collect {
-                it?.let { info ->
-                    val nowVersion = packageManager.getPackageInfo(packageName, 0).versionName
-                    val minAppVersion = info.minVersion
-                    val shouldUpdate = checkShouldUpdate(nowVersion, minAppVersion)
-
-                    if (shouldUpdate) {
-                        forceUpdateFragment = ForceUpdateFragment(info).apply {
-                            isCancelable = false
-                        }
-                        forceUpdateFragment.show(supportFragmentManager, forceUpdateFragment.tag)
+        viewModel.apply {
+            repeatOnStarted {
+                networkObserver.networkState.collect { state ->
+                    if (state == NetworkState.NOT_CONNECTED) {
+                        showNetworkDialog()
+                    } else {
+                        dismissNetworkDialog()
+                        getForceUpdateInfo()
                     }
                 }
             }
-        }
 
-        askNotificationPermission()
+            repeatOnStarted {
+                forceUpdate.collect {
+                    it?.let { info ->
+                        val nowVersion = packageManager.getPackageInfo(packageName, 0).versionName
+                        val minAppVersion = info.minVersion
+                        val shouldUpdate = checkShouldUpdate(nowVersion, minAppVersion)
 
-        repeatOnStarted {
-            viewModel.navigationMenuType.collect { menuType -> setNavigationMenuType(menuType) }
-        }
-
-        repeatOnStarted {
-            viewModel.eventFlow.collect {
-                when (it) {
-                    is MainEvent.NavigateTo -> navController.deepLinkNavigateTo(
-                        context = this@MainActivity,
-                        deepLinkDestination = it.destination,
-                        popUpTo = it.popUpTo,
-                    )
+                        if (shouldUpdate) {
+                            forceUpdateFragment = ForceUpdateFragment(info).apply {
+                                isCancelable = false
+                            }
+                            forceUpdateFragment.show(
+                                supportFragmentManager,
+                                forceUpdateFragment.tag
+                            )
+                        }
+                    }
                 }
             }
+
+            askNotificationPermission()
+
+            repeatOnStarted {
+                navigationMenuType.collect { menuType ->
+                    this@MainActivity.setNavigationMenuType(menuType)
+                }
+            }
+
+            repeatOnStarted {
+                eventFlow.collect {
+                    when (it) {
+                        is MainEvent.ShowToast -> showToast(
+                            context = this@MainActivity,
+                            msg = it.msg,
+                            toastType = it.toastType,
+                            paddingBottom = calculateSnackBarBottomPadding(),
+                        )
+
+                        is MainEvent.DismissToast -> dismissToast()
+                    }
+                }
+            }
+
+            repeatOnStarted {
+                navigationHelper.navigationFlow.collect { navigationEvent ->
+                    when (navigationEvent) {
+                        is NavigationEvent.NavigateTo -> navController.deepLinkNavigateTo(
+                            context = this@MainActivity,
+                            deepLinkDestination = navigationEvent.destination,
+                            popUpTo = navigationEvent.popUpTo,
+                        )
+
+                        is NavigationEvent.NavigateToAuthWithClearBackStack -> navController.navigate(
+                            AuthFragmentDirections.actionGlobalNavAuth(
+                                navigationEvent.toastMsg,
+                                navigationEvent.toastType
+                            )
+                        )
+                    }
+
+                    dismissToast()
+                }
+            }
+
+            binding.apply {
+                val navHostFragment =
+                    supportFragmentManager.findFragmentById(R.id.main_FCV) as NavHostFragment
+                navController = navHostFragment.navController
+
+                mainBNVCenter.itemIconTintList = null
+                mainBNVWorker.itemIconTintList = null
+            }
+
+            setDestinationListener()
+
+            navigationHelper.handleFCMNavigate(
+                isColdStart = true,
+                extras = intent?.extras ?: run {
+                    initializeUserSession()
+                    return
+                },
+                onInit = ::initializeUserSession,
+            )
         }
-
-        binding.apply {
-            val navHostFragment =
-                supportFragmentManager.findFragmentById(R.id.main_FCV) as NavHostFragment
-            navController = navHostFragment.navController
-
-            mainBNVCenter.itemIconTintList = null
-            mainBNVWorker.itemIconTintList = null
-        }
-
-        setDestinationListener()
-
-        handleNotificationNavigate(
-            isColdStart = true,
-            extras = intent?.extras,
-        )
     }
 
     override fun onResume() {
@@ -179,73 +213,11 @@ class MainActivity : AppCompatActivity() {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
 
-        handleNotificationNavigate(
+        viewModel.navigationHelper.handleFCMNavigate(
             isColdStart = false,
             extras = intent?.extras ?: return,
+            onInit = viewModel::initializeUserSession,
         )
-    }
-
-    private fun handleNotificationNavigate(
-        isColdStart: Boolean,
-        extras: Bundle?,
-    ) {
-        val notificationType = extras?.getString("notificationType") ?: run {
-            if (isColdStart) viewModel.initializeUserSession()
-            return
-        }
-
-        when (notificationType) {
-            "APPLICANTS" -> {
-                val jobPostingId = extras.getString("jobPostingId") ?: run {
-                    if (isColdStart) viewModel.initializeUserSession()
-                    return
-                }
-
-                val screenDepth = if (isColdStart) {
-                    listOf(
-                        CenterHome,
-                        CenterJobDetail(jobPostingId),
-                        CenterApplicantInquiry(jobPostingId)
-                    )
-                } else {
-                    listOf(
-                        CenterJobDetail(jobPostingId),
-                        CenterApplicantInquiry(jobPostingId)
-                    )
-                }
-
-                screenDepth.forEach {
-                    navController.deepLinkNavigateTo(
-                        context = this,
-                        deepLinkDestination = it,
-                    )
-                }
-            }
-
-            "JOB_POSTING_DETAIL" -> {
-                val jobPostingId =
-                    extras.getString("jobPostingId") ?: run {
-                        if (isColdStart) viewModel.initializeUserSession()
-                        return
-                    }
-
-                val screenDepth = listOf(
-                    WorkerHome,
-                    WorkerJobDetail(
-                        jobPostingId = jobPostingId,
-                        jobPostingType = JobPostingType.CAREMEET.name
-                    ),
-                )
-
-                screenDepth.forEach {
-                    navController.deepLinkNavigateTo(
-                        context = this,
-                        deepLinkDestination = it,
-                        popUpTo = if (it == WorkerHome) com.idle.auth.R.id.nav_auth else null
-                    )
-                }
-            }
-        }
     }
 
     private fun showNetworkDialog() {
@@ -270,14 +242,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setDestinationListener() {
-        navController.addOnDestinationChangedListener { _, destination, arguments ->
+        navController.addOnDestinationChangedListener { _, destination, _ ->
             binding.apply {
-                val navMenuType = if (destination.id in centerBottomNavDestinationIds) {
-                    NavigationMenuType.CENTER
-                } else if (destination.id in workerBottomNavDestinationIds) {
-                    NavigationMenuType.WORKER
-                } else {
-                    NavigationMenuType.HIDE
+                val navMenuType = when (destination.id) {
+                    in centerBottomNavDestinationIds -> NavigationMenuType.CENTER
+                    in workerBottomNavDestinationIds -> NavigationMenuType.WORKER
+                    else -> NavigationMenuType.HIDE
                 }
 
                 viewModel.setNavigationMenuType(navMenuType)
@@ -318,6 +288,41 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun calculateSnackBarBottomPadding() = when (navController.currentDestination?.id) {
+        // Padding 104dp
+        com.idle.auth.R.id.authFragment,
+        com.idle.signup.R.id.centerSignUpFragment,
+        com.idle.signup.R.id.workerSignUpFragment,
+        com.idle.signin.R.id.newPasswordFragment,
+        com.idle.center.pending.R.id.centerPendingFragment,
+        com.idle.center.register.info.R.id.registerCenterInfoFragment,
+        com.idle.center.register.info.R.id.registerCenterInfoCompleteFragment,
+        com.idle.center.job.posting.post.R.id.jobPostingPostFragment,
+        com.idle.center.job.posting.post.R.id.jobPostingPostCompleteFragment,
+        com.idle.job.posting.detail.R.id.centerJobPostingDetailFragment,
+        com.idle.job.posting.detail.R.id.workerJobPostingDetailFragment -> 104
+
+        // Padding 84dp
+        com.idle.center.home.R.id.centerHomeFragment,
+        com.idle.setting.R.id.centerSettingFragment,
+        com.idle.worker.home.R.id.workerHomeFragment,
+        com.idle.setting.R.id.workerSettingFragment,
+        com.idle.worker.job.posting.R.id.workerJobPostingFragment -> 84
+
+        // Padding 20dp
+        com.idle.center.applicant.inquiry.R.id.applicantInquiryFragment,
+        com.idle.center.profile.R.id.centerProfileFragment,
+        com.idle.worker.profile.R.id.workerProfileFragment,
+        com.idle.notification.R.id.notificationFragment -> 20
+
+        // Padding 140dp
+        com.idle.signin.R.id.centerSignInFragment,
+        com.idle.withdrawal.R.id.withdrawalFragment -> 140
+
+        // Default padding
+        else -> 20
+    }
+
     private fun checkShouldUpdate(currentVersion: String, minVersion: String): Boolean {
         val current = normalizeVersion(currentVersion)
         val min = normalizeVersion(minVersion)
@@ -330,14 +335,15 @@ class MainActivity : AppCompatActivity() {
         return false
     }
 
-    private fun normalizeVersion(version: String): List<Int> {
-        return version.split('.').map { it.toIntOrNull() ?: 0 }.let {
-            when (it.size) {
-                2 -> it + listOf(0) // 1.0 -> 1.0.0 형태로 변환
-                else -> it
+    private fun normalizeVersion(version: String): List<Int> =
+        version.split('.')
+            .map { it.toIntOrNull() ?: 0 }
+            .let {
+                when (it.size) {
+                    2 -> it + listOf(0) // 1.0 -> 1.0.0 형태로 변환
+                    else -> it
+                }
             }
-        }
-    }
 
     private fun slideUp(view: View) {
         view.measure(

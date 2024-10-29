@@ -17,11 +17,12 @@ internal fun Project.configureJUnitAndroid() {
 
         val libs = extensions.libs
         dependencies {
-            add("androidTestImplementation", libs.findLibrary("androidx.test.ext").get())
-            add("androidTestImplementation", libs.findLibrary("junit4").get())
-            add("androidTestImplementation", libs.findLibrary("junit-jupiter").get())
-            add("androidTestImplementation", libs.findLibrary("coroutines-test").get())
-            add("androidTestImplementation", libs.findLibrary("mockk").get())
+            "androidTestImplementation"(libs.findLibrary("androidx.test.ext").get())
+            "androidTestImplementation"(libs.findLibrary("androidx.runner").get())
+            "androidTestImplementation"(libs.findLibrary("androidx.junit").get())
+            "androidTestImplementation"(libs.findLibrary("mockk-android").get())
+            "androidTestImplementation"(libs.findLibrary("mockk-agent").get())
+            "androidTestImplementation"(libs.findLibrary("coroutines-test").get())
         }
     }
 }

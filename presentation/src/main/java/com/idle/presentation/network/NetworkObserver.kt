@@ -9,7 +9,9 @@ import android.net.NetworkRequest
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class NetworkObserver @Inject constructor(context: Context) {
     private val _networkState = MutableStateFlow<NetworkState>(NetworkState.NONE)
     val networkState = _networkState.asStateFlow()

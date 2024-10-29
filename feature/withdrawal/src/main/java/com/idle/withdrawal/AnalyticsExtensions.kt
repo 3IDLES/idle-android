@@ -19,7 +19,7 @@ internal fun LogWithdrawalStep(
             type = SCREEN_VIEW,
             properties = mutableMapOf(
                 ACTION_NAME to "withdrawal",
-                SCREEN_NAME to "withdrawal_"+step.name.lowercase(),
+                SCREEN_NAME to "withdrawal_" + step.name.lowercase(),
                 "step" to step.step,
             )
         )

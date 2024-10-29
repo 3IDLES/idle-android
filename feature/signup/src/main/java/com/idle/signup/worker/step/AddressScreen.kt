@@ -46,9 +46,10 @@ internal fun AddressScreen(
 
         LabeledContent(
             subtitle = stringResource(id = R.string.road_name_address),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(bottom = 32.dp),
-            ) {
+        ) {
             CareClickableTextField(
                 value = roadNameAddress,
                 hint = stringResource(id = R.string.road_name_address_hint),

@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -19,13 +17,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.idle.binding.DeepLinkDestination
-import com.idle.binding.base.CareBaseEvent.NavigateTo
-import com.idle.binding.repeatOnStarted
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
-import com.idle.designsystem.compose.component.CareSnackBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.foundation.CareTheme
@@ -48,9 +42,14 @@ class NewPasswordFragment : BaseComposeFragment() {
             val newPasswordProcess by newPasswordProcess.collectAsStateWithLifecycle()
             val newPassword by newPassword.collectAsStateWithLifecycle()
             val newPasswordForConfirm by newPasswordForConfirm.collectAsStateWithLifecycle()
+            val isAuthCodeError by isAuthCodeError.collectAsStateWithLifecycle()
+            val isPasswordLengthValid by isPasswordLengthValid.collectAsStateWithLifecycle()
+            val isPasswordContainsLetterAndDigit by isPasswordContainsLetterAndDigit.collectAsStateWithLifecycle()
+            val isPasswordNoWhitespace by isPasswordNoWhitespace.collectAsStateWithLifecycle()
+            val isPasswordNoSequentialChars by isPasswordNoSequentialChars.collectAsStateWithLifecycle()
+            val isPasswordValid by isPasswordValid.collectAsStateWithLifecycle()
 
             NewPasswordScreen(
-                snackbarHostState = snackbarHostState,
                 newPasswordStep = newPasswordProcess,
                 phoneNumber = phoneNumber,
                 authCode = authCode,
@@ -59,6 +58,12 @@ class NewPasswordFragment : BaseComposeFragment() {
                 isConfirmAuthCode = isConfirmAuthCode,
                 newPassword = newPassword,
                 newPasswordForConfirm = newPasswordForConfirm,
+                isAuthCodeError = isAuthCodeError,
+                isPasswordLengthValid = isPasswordLengthValid,
+                isPasswordContainsLetterAndDigit = isPasswordContainsLetterAndDigit,
+                isPasswordNoWhitespace = isPasswordNoWhitespace,
+                isPasswordNoSequentialChars = isPasswordNoSequentialChars,
+                isPasswordValid = isPasswordValid,
                 setNewPasswordProcess = ::setNewPasswordProcess,
                 onPhoneNumberChanged = ::setPhoneNumber,
                 onAuthCodeChanged = ::setAuthCode,
@@ -74,7 +79,6 @@ class NewPasswordFragment : BaseComposeFragment() {
 
 @Composable
 internal fun NewPasswordScreen(
-    snackbarHostState: SnackbarHostState,
     phoneNumber: String,
     authCode: String,
     timerMinute: String,
@@ -83,6 +87,12 @@ internal fun NewPasswordScreen(
     newPassword: String,
     newPasswordForConfirm: String,
     newPasswordStep: NewPasswordStep,
+    isAuthCodeError: Boolean,
+    isPasswordLengthValid: Boolean,
+    isPasswordContainsLetterAndDigit: Boolean,
+    isPasswordNoWhitespace: Boolean,
+    isPasswordNoSequentialChars: Boolean,
+    isPasswordValid: Boolean,
     onPhoneNumberChanged: (String) -> Unit,
     onAuthCodeChanged: (String) -> Unit,
     sendPhoneNumber: () -> Unit,
@@ -104,14 +114,6 @@ internal fun NewPasswordScreen(
                     .fillMaxWidth()
                     .padding(start = 12.dp, top = 48.dp, end = 20.dp, bottom = 12.dp),
             )
-        },
-        snackbarHost = {
-            SnackbarHost(snackbarHostState) { data ->
-                CareSnackBar(
-                    data = data,
-                    modifier = Modifier.padding(bottom = 116.dp)
-                )
-            }
         },
         modifier = Modifier.addFocusCleaner(focusManager),
     ) { paddingValue ->
@@ -135,6 +137,7 @@ internal fun NewPasswordScreen(
                         timerMinute = timerMinute,
                         timerSeconds = timerSeconds,
                         isConfirmAuthCode = isConfirmAuthCode,
+                        isAuthCodeError = isAuthCodeError,
                         onPhoneNumberChanged = onPhoneNumberChanged,
                         onAuthCodeChanged = onAuthCodeChanged,
                         sendPhoneNumber = sendPhoneNumber,
@@ -145,6 +148,11 @@ internal fun NewPasswordScreen(
                     NewPasswordStep.GENERATE_NEW_PASSWORD -> GenerateNewPasswordScreen(
                         newPassword = newPassword,
                         newPasswordForConfirm = newPasswordForConfirm,
+                        isPasswordLengthValid = isPasswordLengthValid,
+                        isPasswordContainsLetterAndDigit = isPasswordContainsLetterAndDigit,
+                        isPasswordNoWhitespace = isPasswordNoWhitespace,
+                        isPasswordNoSequentialChars = isPasswordNoSequentialChars,
+                        isPasswordValid = isPasswordValid,
                         onNewPasswordChanged = onNewPasswordChanged,
                         onNewPasswordForConfirmChanged = onNewPasswordForConfirmChanged,
                         setNewPasswordProcess = setNewPasswordProcess,
