@@ -60,9 +60,10 @@ internal fun CenterChattingScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValue),
+                .padding(paddingValue)
+                .padding(bottom = 36.dp),
         ) {
-            items(items = listOf(1, 2, 3, 4, 5)) {
+            items(items = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)) {
                 ChattingItem(navigateTo = navigateTo)
             }
         }

@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -20,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.idle.binding.DeepLinkDestination
 import com.idle.binding.NavigationEvent
@@ -27,6 +29,7 @@ import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designsystem.compose.component.CareHeadingTopBar
 import com.idle.designsystem.compose.foundation.CareTheme
+import com.idle.domain.model.chatting.ChatRoom
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,8 +39,10 @@ internal class WorkerChattingFragment : BaseComposeFragment() {
     @Composable
     override fun ComposeLayout() {
         fragmentViewModel.apply {
+            val chatRoomList by chatRoomList.collectAsStateWithLifecycle()
 
             WorkerChattingScreen(
+                chatRoomList = chatRoomList,
                 navigateTo = { navigationHelper.navigateTo(NavigationEvent.NavigateTo(it)) },
             )
         }
@@ -46,6 +51,7 @@ internal class WorkerChattingFragment : BaseComposeFragment() {
 
 @Composable
 internal fun WorkerChattingScreen(
+    chatRoomList: List<ChatRoom>?,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
     Scaffold(
@@ -60,17 +66,25 @@ internal fun WorkerChattingScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValue),
+                .padding(paddingValue)
+                .padding(bottom = 36.dp),
         ) {
-            items(items = listOf(1, 2, 3, 4, 5)) {
-                ChattingItem(navigateTo = navigateTo)
+            items(
+                items = chatRoomList ?: emptyList(),
+                key = { it.id },
+            ) { chatRoom ->
+                ChatRoomItem(
+                    chatRoom = chatRoom,
+                    navigateTo = navigateTo,
+                )
             }
         }
     }
 }
 
 @Composable
-internal fun ChattingItem(
+internal fun ChatRoomItem(
+    chatRoom: ChatRoom,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
     Box(
@@ -108,7 +122,7 @@ internal fun ChattingItem(
                     .padding(end = 2.dp),
             ) {
                 Text(
-                    text = "세얼간이요양센터",
+                    text = chatRoom.sender,
                     style = CareTheme.typography.subtitle3,
                     color = CareTheme.colors.black,
                     maxLines = 1,

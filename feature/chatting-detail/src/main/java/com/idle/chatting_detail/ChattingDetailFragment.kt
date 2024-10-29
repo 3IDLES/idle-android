@@ -100,10 +100,10 @@ internal fun ChattingDetailScreen(
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(20.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 20.dp, end = 28.dp, top = 20.dp, bottom = 50.dp)
+                    .padding(start = 20.dp, end = 20.dp, top = 8.dp, bottom = 16.dp)
             ) {
                 CareChatTextField(
                     value = writingText,
