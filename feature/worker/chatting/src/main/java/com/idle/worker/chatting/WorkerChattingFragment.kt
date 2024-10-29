@@ -30,6 +30,7 @@ import com.idle.compose.clickable
 import com.idle.designsystem.compose.component.CareHeadingTopBar
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.chatting.ChatRoom
+import com.idle.domain.util.formatRelativeTimeDescription
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -131,7 +132,7 @@ internal fun ChatRoomItem(
                 )
 
                 Text(
-                    text = "안녕하세요 문의드리고 싶어서 연락드렸어요.",
+                    text = chatRoom.lastMessage,
                     style = CareTheme.typography.caption1,
                     color = CareTheme.colors.gray300,
                     maxLines = 1,
@@ -141,7 +142,7 @@ internal fun ChatRoomItem(
             }
 
             Text(
-                text = "10월 29일",
+                text = chatRoom.lastSentAt.formatRelativeTimeDescription(),
                 style = CareTheme.typography.caption1,
                 color = CareTheme.colors.gray500,
             )

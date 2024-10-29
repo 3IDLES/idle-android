@@ -7,4 +7,6 @@ data class ChatRoom(
     val sender: String,
     val receiver: String,
     val createdAt: LocalDateTime,
+    val lastMessage: String,
+    val lastSentAt: LocalDateTime,
 )

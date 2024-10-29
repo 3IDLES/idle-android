@@ -38,6 +38,7 @@ import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.component.LoadingCircle
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.notification.Notification
+import com.idle.domain.util.formatRelativeTimeDescription
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -194,7 +195,7 @@ private fun NotificationItem(
 
             Column(modifier = Modifier.fillMaxWidth()) {
                 Text(
-                    text = notification.getNotificationTime(),
+                    text = notification.createdAt.formatRelativeTimeDescription(),
                     style = CareTheme.typography.caption1,
                     color = CareTheme.colors.gray500,
                 )

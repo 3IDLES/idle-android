@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-class NumberUtilKtTest {
+class NumberUtilTest {
     @Test
     fun `전화번호가 11자리 숫자일 경우 포맷이 적용된다`() {
         // Given: 11자리 숫자 전화번호
