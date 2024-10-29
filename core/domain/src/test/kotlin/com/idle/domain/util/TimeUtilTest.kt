@@ -32,7 +32,7 @@ class TimeUtilTest {
 
         // Then
         // 오후/오전 표기는 테스트 시스템의 현지 시간에 따라 변경될 수 있음
-        val expectedTime = pastDateTime.format(DateTimeFormatter.ofPattern("a hh시 mm분"))
+        val expectedTime = pastDateTime.format(DateTimeFormatter.ofPattern("a hh:mm"))
             .replace("AM", "오전")
             .replace("PM", "오후")
         assertEquals(expectedTime, result)

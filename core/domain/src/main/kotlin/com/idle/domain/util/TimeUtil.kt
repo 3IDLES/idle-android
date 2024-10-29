@@ -15,7 +15,7 @@ fun LocalDateTime.formatRelativeDateTime(): String {
 
         ChronoUnit.DAYS.between(this.toLocalDate(), nowInSeoul.toLocalDate()) < 1 -> {
             // 하루 이내일 경우: "오후 XX시 XX분"
-            val formatter = DateTimeFormatter.ofPattern("a hh시 mm분").withZone(seoulZone)
+            val formatter = DateTimeFormatter.ofPattern("a hh:mm").withZone(seoulZone)
 
             this.format(formatter)
                 .replace("AM", "오전")

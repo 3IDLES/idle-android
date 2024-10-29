@@ -1,5 +1,7 @@
 package com.idle.center.chatting
 
+import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,17 +12,24 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.idle.binding.DeepLinkDestination
@@ -28,9 +37,10 @@ import com.idle.binding.NavigationEvent
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designsystem.compose.component.CareHeadingTopBar
+import com.idle.designsystem.compose.component.LoadingCircle
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.chatting.ChatRoom
-import com.idle.domain.util.formatRelativeTimeDescription
+import com.idle.domain.util.formatRelativeDateTime
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -41,6 +51,10 @@ internal class CenterChattingFragment : BaseComposeFragment() {
     override fun ComposeLayout() {
         fragmentViewModel.apply {
             val chatRoomList by chatRoomList.collectAsStateWithLifecycle()
+
+            LifecycleEventEffect(Lifecycle.Event.ON_CREATE) {
+                getChatRoomList()
+            }
 
             CenterChattingScreen(
                 chatRoomList = chatRoomList,
@@ -64,21 +78,28 @@ internal fun CenterChattingScreen(
         },
         containerColor = CareTheme.colors.white000,
     ) { paddingValue ->
-        LazyColumn(
+        Box(
             modifier = Modifier
-                .fillMaxSize()
                 .padding(paddingValue)
-                .padding(bottom = 36.dp),
+                .fillMaxSize()
         ) {
-            items(
-                items = chatRoomList ?: emptyList(),
-                key = { it.id },
-            ) { chatRoom ->
-                ChatRoomItem(
-                    chatRoom = chatRoom,
-                    navigateTo = navigateTo
-                )
-            }
+            chatRoomList?.let {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = 20.dp, bottom = 36.dp),
+                ) {
+                    items(
+                        items = chatRoomList,
+                        key = { it.id },
+                    ) { chatRoom ->
+                        ChatRoomItem(
+                            chatRoom = chatRoom,
+                            navigateTo = navigateTo,
+                        )
+                    }
+                }
+            } ?: LoadingCircle(modifier = Modifier.align(Alignment.Center))
         }
     }
 }
@@ -87,16 +108,24 @@ internal fun CenterChattingScreen(
 internal fun ChatRoomItem(
     chatRoom: ChatRoom,
     navigateTo: (DeepLinkDestination) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
+    val backgroundColor = if (chatRoom.unReadMessageCount > 0) {
+        CareTheme.colors.orange050
+    } else {
+        CareTheme.colors.white000
+    }
+
     Box(
         contentAlignment = Alignment.Center,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
+            .background(backgroundColor)
             .clickable {
                 navigateTo(
                     DeepLinkDestination.ChattingDetail(
-                        chattingRoomId = "",
-                        userId = ""
+                        chattingRoomId = chatRoom.id,
+                        userId = chatRoom.receiver,
                     )
                 )
             },
@@ -108,8 +137,10 @@ internal fun ChatRoomItem(
                 .padding(horizontal = 20.dp, vertical = 12.dp)
         ) {
             AsyncImage(
-                model = com.idle.designresource.R.drawable.ic_notification_placeholder,
+                model = chatRoom.profileImageUrl,
                 placeholder = painterResource(com.idle.designresource.R.drawable.ic_notification_placeholder),
+                error = painterResource(com.idle.designresource.R.drawable.ic_notification_placeholder),
+                onError = { Log.d("test", chatRoom.profileImageUrl) },
                 contentDescription = "",
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
@@ -117,35 +148,67 @@ internal fun ChatRoomItem(
                     .size(48.dp),
             )
 
-            Column(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .padding(end = 2.dp),
-            ) {
-                Text(
-                    text = chatRoom.sender,
-                    style = CareTheme.typography.subtitle3,
-                    color = CareTheme.colors.black,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(bottom = 1.dp),
-                )
+            Column(modifier = Modifier.fillMaxHeight()) {
+                Row(
+                    verticalAlignment = Alignment.Top,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = chatRoom.sender,
+                        style = CareTheme.typography.subtitle3,
+                        color = CareTheme.colors.black,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(end = 15.dp),
+                    )
 
-                Text(
-                    text = chatRoom.lastMessage,
-                    style = CareTheme.typography.caption1,
-                    color = CareTheme.colors.gray300,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(bottom = 1.dp),
-                )
+                    Text(
+                        text = chatRoom.lastSentAt.formatRelativeDateTime(),
+                        style = CareTheme.typography.caption1,
+                        color = CareTheme.colors.gray500,
+                    )
+                }
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = chatRoom.lastMessage,
+                        style = CareTheme.typography.caption1,
+                        color = CareTheme.colors.gray300,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(end = 15.dp),
+                    )
+
+                    val unReadMessageColor = if (chatRoom.unReadMessageCount > 0) {
+                        CareTheme.colors.orange500
+                    } else {
+                        Color.Transparent
+                    }
+
+                    Box(
+                        modifier = Modifier
+                            .size(22.dp)
+                            .clip(RoundedCornerShape(300.dp))
+                            .background(unReadMessageColor),
+                    ) {
+                        Text(
+                            text = if (chatRoom.unReadMessageCount != 0)
+                                chatRoom.unReadMessageCount.toString() else "",
+                            style = CareTheme.typography.caption1.copy(fontWeight = FontWeight.Bold),
+                            color = CareTheme.colors.white000,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.align(Alignment.Center),
+                        )
+                    }
+                }
             }
-
-            Text(
-                text = chatRoom.lastSentAt.formatRelativeTimeDescription(),
-                style = CareTheme.typography.caption1,
-                color = CareTheme.colors.gray500,
-            )
         }
     }
 }
