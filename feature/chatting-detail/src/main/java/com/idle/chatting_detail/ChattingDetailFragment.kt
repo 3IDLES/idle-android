@@ -27,7 +27,6 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.idle.chatting_detail.component.CareChatTextBubble
 import com.idle.chatting_detail.component.CareChatTextField
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
@@ -114,10 +113,7 @@ internal fun ChattingDetailScreen(
                     items = chatMessages,
                     key = { it.id },
                 ) { chatMessage ->
-                    CareChatTextBubble(
-                        chatMessage = chatMessage,
-                        isMyChat = chatMessage.senderId == receiverId,
-                    )
+                    
                 }
             }
 

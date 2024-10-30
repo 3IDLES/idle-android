@@ -50,3 +50,8 @@ fun LocalDateTime.formatRelativeTimeDescription(): String {
         else -> "${daysDifference / 7}주 전"
     }
 }
+
+fun LocalDateTime.formatTimeToHourMinute24(): String {
+    val formatter = DateTimeFormatter.ofPattern("HH:mm").withZone(seoulZone)
+    return this.format(formatter)
+}
