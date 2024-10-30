@@ -52,6 +52,11 @@ fun LocalDateTime.formatRelativeTimeDescription(): String {
 }
 
 fun LocalDateTime.formatTimeToHourMinute24(): String {
-    val formatter = DateTimeFormatter.ofPattern("HH:mm").withZone(seoulZone)
+    val formatter = DateTimeFormatter.ofPattern("HH:mm")
+    return this.format(formatter)
+}
+
+fun LocalDateTime.formatYearMonthDate(): String {
+    val formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일")
     return this.format(formatter)
 }
