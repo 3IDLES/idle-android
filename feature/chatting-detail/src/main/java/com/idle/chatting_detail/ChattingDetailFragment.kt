@@ -17,7 +17,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -52,10 +51,10 @@ internal class ChattingDetailFragment : BaseComposeFragment() {
 
     @Composable
     override fun ComposeLayout() {
-        val chattingRoomId = rememberSaveable { args.chattingRoomId }
-        val receiverUserType = rememberSaveable { UserType.create(args.receiverUserType) }
-        val receiverId = rememberSaveable { args.receiverId }
-        val senderId = rememberSaveable { args.senderId }
+        val chattingRoomId = args.chattingRoomId
+        val receiverUserType = UserType.create(args.receiverUserType)
+        val receiverId = args.receiverId
+        val senderId = args.senderId
 
         fragmentViewModel.apply {
             val writingText by writingText.collectAsStateWithLifecycle()
