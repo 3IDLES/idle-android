@@ -308,7 +308,7 @@ internal fun WorkerHomeScreen(
                             Spacer(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(28.dp)
+                                    .height(80.dp)
                             )
                         }
                     }

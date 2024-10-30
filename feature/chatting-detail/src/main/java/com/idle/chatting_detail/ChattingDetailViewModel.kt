@@ -7,6 +7,7 @@ import com.idle.domain.model.chatting.ChatMessage
 import com.idle.domain.model.error.ErrorHandlerHelper
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.model.profile.WorkerProfile
+import com.idle.domain.usecase.chatting.GetChatMessagesUseCase
 import com.idle.domain.usecase.profile.GetCenterProfileUseCase
 import com.idle.domain.usecase.profile.GetLocalMyCenterProfileUseCase
 import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
@@ -23,12 +24,13 @@ class ChattingDetailViewModel @Inject constructor(
     private val getLocalMyWorkerProfileUseCase: GetLocalMyWorkerProfileUseCase,
     private val getCenterProfileUseCase: GetCenterProfileUseCase,
     private val getWorkerProfileUseCase: GetWorkerProfileUseCase,
+    private val getChatMessagesUseCase: GetChatMessagesUseCase,
     private val errorHandlerHelper: ErrorHandlerHelper,
 ) : BaseViewModel() {
     private val _writingText = MutableStateFlow<String>("")
     val writingText = _writingText.asStateFlow()
 
-    private val _chatMessages = MutableStateFlow<List<ChatMessage>?>(emptyList())
+    private val _chatMessages = MutableStateFlow<List<ChatMessage>?>(null)
     val chatMessages = _chatMessages.asStateFlow()
 
     private val _workerProfile = MutableStateFlow<WorkerProfile?>(null)
@@ -36,6 +38,10 @@ class ChattingDetailViewModel @Inject constructor(
 
     private val _centerProfile = MutableStateFlow<CenterProfile?>(null)
     val centerProfile = _centerProfile.asStateFlow()
+
+    internal fun setWritingText(text: String) {
+        _writingText.value = text
+    }
 
     internal fun getUserProfile(
         receiverUserType: UserType,
@@ -76,7 +82,9 @@ class ChattingDetailViewModel @Inject constructor(
         }
     }
 
-    internal fun setWritingText(text: String) {
-        _writingText.value = text
+    internal fun getChatMessages(roomId: String) = viewModelScope.launch {
+        getChatMessagesUseCase(roomId).onSuccess {
+            _chatMessages.value = it
+        }
     }
 }

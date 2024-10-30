@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -21,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -145,9 +147,11 @@ internal fun ChatRoomItem(
                 error = painterResource(com.idle.designresource.R.drawable.ic_notification_placeholder),
                 onError = { Log.d("test", chatRoom.profileImageUrl) },
                 contentDescription = "",
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .align(Alignment.CenterVertically)
                     .padding(end = 12.dp)
+                    .align(Alignment.CenterVertically)
+                    .clip(CircleShape)
                     .size(48.dp),
             )
 

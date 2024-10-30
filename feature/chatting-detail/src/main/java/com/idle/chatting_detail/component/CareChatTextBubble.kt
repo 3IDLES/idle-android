@@ -1,6 +1,7 @@
 package com.idle.chatting_detail.component
 
 import android.graphics.Color
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -33,7 +35,7 @@ import java.time.LocalDateTime
 
 @Composable
 fun CareChatSenderTextBubbleWithImage(
-    imageUrl: String,
+    imageUrl: String?,
     senderName: String,
     chatMessage: ChatMessage,
     isLast: Boolean,
@@ -45,20 +47,24 @@ fun CareChatSenderTextBubbleWithImage(
         modifier = modifier.fillMaxWidth()
     ) {
         AsyncImage(
-            model = imageUrl,
-            placeholder = painterResource(com.idle.designresource.R.drawable.ic_notification_placeholder),
+            model = imageUrl
+                ?: painterResource(com.idle.designresource.R.drawable.ic_notification_placeholder),
+            placeholder =
+            painterResource(com.idle.designresource.R.drawable.ic_notification_placeholder),
+            error = painterResource(com.idle.designresource.R.drawable.ic_notification_placeholder),
+            onError = { Log.d("test", imageUrl.toString()) },
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .padding(end = 8.dp)
-                .clip(CircleShape)
-                .size(40.dp),
+                .size(40.dp)
+                .clip(CircleShape),
         )
 
         Column(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start,
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.weight(1f, false)
         ) {
             Text(
                 text = senderName,
@@ -81,9 +87,7 @@ fun CareChatSenderTextBubbleWithImage(
                     .background(CareTheme.colors.white000)
             ) {
                 Text(
-                    text = chatMessage.contents
-                        .map { it.value }
-                        .joinToString(),
+                    text = chatMessage.contents.joinToString { it.value },
                     style = CareTheme.typography.body3,
                     color = CareTheme.colors.black,
                     modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp),
@@ -93,11 +97,11 @@ fun CareChatSenderTextBubbleWithImage(
 
         if (isLast) {
             Column(
-                verticalArrangement = Arrangement.Bottom,
                 horizontalAlignment = Alignment.Start,
                 modifier = Modifier
-                    .align(Alignment.Bottom)
-                    .padding(start = 4.dp),
+                    .padding(start = 4.dp)
+                    .width(35.dp)
+                    .align(Alignment.Bottom),
             ) {
                 if (isRead) {
                     Text(
@@ -131,32 +135,25 @@ fun CareChatSenderTextBubble(
                 .size(40.dp),
         )
 
-        Column(
-            horizontalAlignment = Alignment.Start,
-            modifier = Modifier.weight(1f),
-        ) {
-            Box(
-                modifier = Modifier
-                    .wrapContentSize()
-                    .clip(
-                        RoundedCornerShape(
-                            topStart = 0.dp,
-                            topEnd = 12.dp,
-                            bottomStart = 12.dp,
-                            bottomEnd = 12.dp
-                        )
+        Box(
+            modifier = Modifier
+                .weight(1f, false)
+                .clip(
+                    RoundedCornerShape(
+                        topStart = 0.dp,
+                        topEnd = 12.dp,
+                        bottomStart = 12.dp,
+                        bottomEnd = 12.dp
                     )
-                    .background(CareTheme.colors.white000)
-            ) {
-                Text(
-                    text = chatMessage.contents
-                        .map { it.value }
-                        .joinToString(),
-                    style = CareTheme.typography.body3,
-                    color = CareTheme.colors.black,
-                    modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp),
                 )
-            }
+                .background(CareTheme.colors.white000)
+        ) {
+            Text(
+                text = chatMessage.contents.joinToString { it.value },
+                style = CareTheme.typography.body3,
+                color = CareTheme.colors.black,
+                modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp),
+            )
         }
 
         if (isLast) {
@@ -234,9 +231,7 @@ fun CareChatReceiverTextBubble(
                 .background(CareTheme.colors.orange500),
         ) {
             Text(
-                text = chatMessage.contents
-                    .map { it.value }
-                    .joinToString(),
+                text = chatMessage.contents.joinToString { it.value },
                 style = CareTheme.typography.body3,
                 color = CareTheme.colors.white000,
                 modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp),
@@ -279,7 +274,7 @@ fun PreviewCareChatTextBubble() {
         senderId = "user1",
         senderType = SenderType.USER,
         contents = listOf(
-            Content(type = ContentType.TEXT, value = "안녕하세요! 문의드리고 싶어서 연락드렸습니다.")
+            Content(type = ContentType.TEXT, value = "안녕하세요!안녕하세요!안녕하세요!안녕하세요!안녕하세요!안녕하세요!안녕하세요!")
         ),
         createdAt = LocalDateTime.now().minusMinutes(5)
     )
