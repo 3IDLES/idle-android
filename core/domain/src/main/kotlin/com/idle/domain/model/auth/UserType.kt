@@ -5,7 +5,7 @@ enum class UserType(val apiValue: String) {
 
     companion object {
         fun create(value: String?): UserType {
-            return UserType.entries.firstOrNull { it.name == value } ?: CENTER
+            return UserType.entries.firstOrNull { it.apiValue == value } ?: CENTER
         }
     }
 }

@@ -5,6 +5,7 @@ import java.time.LocalDateTime
 data class ChatMessage(
     val id: String,
     val roomId: String,
+    val senderId: String,
     val senderType: SenderType,
     val contents: List<Content>,
     val createdAt: LocalDateTime,
