@@ -39,6 +39,7 @@ import com.idle.compose.clickable
 import com.idle.designsystem.compose.component.CareHeadingTopBar
 import com.idle.designsystem.compose.component.LoadingCircle
 import com.idle.designsystem.compose.foundation.CareTheme
+import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.chatting.ChatRoom
 import com.idle.domain.util.formatRelativeDateTime
 import dagger.hilt.android.AndroidEntryPoint
@@ -125,7 +126,9 @@ internal fun ChatRoomItem(
                 navigateTo(
                     DeepLinkDestination.ChattingDetail(
                         chattingRoomId = chatRoom.id,
-                        userId = chatRoom.receiver,
+                        receiverId = chatRoom.receiver,
+                        receiverUserType = UserType.CENTER.apiValue,
+                        senderId = chatRoom.sender,
                     )
                 )
             },

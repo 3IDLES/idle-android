@@ -13,7 +13,13 @@
             android:name="chattingRoomId"
             app:argType="string" />
         <argument
-            android:name="userId"
+            android:name="receiverId"
+            app:argType="string" />
+        <argument
+            android:name="receiverUserType"
+            app:argType="string" />
+        <argument
+            android:name="senderId"
             app:argType="string" />
     </fragment>
 </navigation>
