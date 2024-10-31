@@ -16,9 +16,11 @@ import com.idle.network.model.token.TokenResponse
 import com.idle.network.util.safeApiCall
 import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
+@Singleton
 class AuthDataSource @Inject constructor(
     private val authApi: AuthApi,
     private val firebaseMessaging: FirebaseMessaging,

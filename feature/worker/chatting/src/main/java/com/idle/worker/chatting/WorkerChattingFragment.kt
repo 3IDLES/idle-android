@@ -87,19 +87,46 @@ internal fun WorkerChattingScreen(
                 .fillMaxSize()
         ) {
             chatRoomList?.let {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(top = 20.dp, bottom = 36.dp),
-                ) {
-                    items(
-                        items = chatRoomList,
-                        key = { it.id },
-                    ) { chatRoom ->
-                        ChatRoomItem(
-                            chatRoom = chatRoom,
-                            navigateTo = navigateTo,
+                if (chatRoomList.isEmpty()) {
+                    Column(
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .padding(bottom = 60.dp),
+                    ) {
+                        Text(
+                            text = "아직 채팅 내역이 없어요",
+                            style = CareTheme.typography.heading2,
+                            color = CareTheme.colors.black,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 8.dp),
                         )
+
+                        Text(
+                            text = "센터에 궁금한 점이 있다면 해당 공고에서\n" +
+                                    "‘채팅하기’ 버튼을 눌러 채팅을 시작할 수 있어요.",
+                            style = CareTheme.typography.body3,
+                            textAlign = TextAlign.Center,
+                            color = CareTheme.colors.gray300,
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                    }
+                } else {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(top = 20.dp, bottom = 36.dp),
+                    ) {
+                        items(
+                            items = chatRoomList,
+                            key = { it.id },
+                        ) { chatRoom ->
+                            ChatRoomItem(
+                                chatRoom = chatRoom,
+                                navigateTo = navigateTo,
+                            )
+                        }
                     }
                 }
             } ?: LoadingCircle(modifier = Modifier.align(Alignment.Center))

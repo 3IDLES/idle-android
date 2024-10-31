@@ -566,7 +566,7 @@ private fun WorkerWorkNetCard(
             )
 
             Row(
-                verticalAlignment = Alignment.Top,
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 2.dp)
@@ -580,12 +580,11 @@ private fun WorkerWorkNetCard(
                     text = "${jobPosting.workingSchedule} | ${jobPosting.workingTime}",
                     style = CareTheme.typography.body3,
                     color = CareTheme.colors.gray500,
-                    modifier = Modifier.padding(top = 1.dp),
                 )
             }
 
             Row(
-                verticalAlignment = Alignment.Top,
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Image(
@@ -597,7 +596,6 @@ private fun WorkerWorkNetCard(
                     text = jobPosting.payInfo,
                     style = CareTheme.typography.body3,
                     color = CareTheme.colors.gray500,
-                    modifier = Modifier.padding(top = 1.dp),
                 )
             }
         }

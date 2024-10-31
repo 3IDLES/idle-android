@@ -15,7 +15,9 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.InputStream
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class ProfileDataSource @Inject constructor(
     private val userApi: UserApi,
 ) {
