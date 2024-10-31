@@ -31,6 +31,7 @@ import com.idle.presentation.forceupdate.ForceUpdateFragment
 import com.idle.presentation.network.NetworkObserver
 import com.idle.presentation.network.NetworkState
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -139,6 +140,7 @@ class MainActivity : AppCompatActivity() {
             repeatOnStarted {
                 navigationMenuType.collect { menuType ->
                     this@MainActivity.setNavigationMenuType(menuType)
+                    delay(310L)
                 }
             }
 
