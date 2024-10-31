@@ -16,7 +16,9 @@ import com.idle.network.model.jobposting.GetWorkerJobPostingDetailResponse
 import com.idle.network.model.jobposting.JobPostingRequest
 import com.idle.network.util.safeApiCall
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class JobPostingDataSource @Inject constructor(
     private val jobPostingApi: JobPostingApi
 ) {

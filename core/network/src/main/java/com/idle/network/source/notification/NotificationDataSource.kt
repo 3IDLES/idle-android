@@ -6,7 +6,9 @@ import com.idle.network.model.notification.GetMyNotificationResponse
 import com.idle.network.model.notification.GetUnreadNotificationCountResponse
 import com.idle.network.util.safeApiCall
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class NotificationDataSource @Inject constructor(
     private val notificationApi: NotificationApi
 ) {

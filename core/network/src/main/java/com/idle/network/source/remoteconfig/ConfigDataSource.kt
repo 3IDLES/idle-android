@@ -6,9 +6,11 @@ import com.google.firebase.remoteconfig.get
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
+@Singleton
 class ConfigDataSource @Inject constructor(
     private val remoteConfig: FirebaseRemoteConfig,
 ) {
