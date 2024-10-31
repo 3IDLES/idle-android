@@ -40,3 +40,11 @@ fun formatBusinessRegistrationNumber(businessRegistrationNumber: String): String
         else -> throw IllegalArgumentException("사업자 등록번호 형식이 맞지 않습니다.")
     }
 }
+
+fun Int.formatUnReadNumber(): String {
+    return when {
+        this < 0 -> "0"
+        this >= 100 -> "99+"
+        else -> this.toString()
+    }
+}

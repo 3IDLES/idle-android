@@ -118,4 +118,40 @@ class NumberUtilTest {
             formatBusinessRegistrationNumber(businessRegistrationNumber)
         }
     }
+
+    @Test
+    fun `음수일 경우 0으로 반환된다`() {
+        // Given
+        val number = -5
+
+        // When
+        val result = number.formatUnReadNumber()
+
+        // Then
+        assertEquals("0", result)
+    }
+
+    @Test
+    fun `99 이하의 숫자는 그대로 문자열로 반환된다`() {
+        // Given
+        val number = 99
+
+        // When
+        val result = number.formatUnReadNumber()
+
+        // Then
+        assertEquals("99", result)
+    }
+
+    @Test
+    fun `100 이상의 숫자는 '99+'로 반환된다`() {
+        // Given
+        val number = 100
+
+        // When
+        val result = number.formatUnReadNumber()
+
+        // Then
+        assertEquals("99+", result)
+    }
 }
