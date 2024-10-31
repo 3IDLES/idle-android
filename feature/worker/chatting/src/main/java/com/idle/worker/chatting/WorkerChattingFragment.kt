@@ -8,8 +8,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -228,7 +231,9 @@ internal fun ChatRoomItem(
 
                     Box(
                         modifier = Modifier
-                            .size(22.dp)
+                            .height(22.dp)
+                            .wrapContentWidth()
+                            .widthIn(min = 22.dp)
                             .clip(RoundedCornerShape(300.dp))
                             .background(unReadMessageColor),
                     ) {
@@ -238,7 +243,9 @@ internal fun ChatRoomItem(
                             style = CareTheme.typography.caption1.copy(fontWeight = FontWeight.Bold),
                             color = CareTheme.colors.white000,
                             textAlign = TextAlign.Center,
-                            modifier = Modifier.align(Alignment.Center),
+                            modifier = Modifier
+                                .padding(horizontal = 6.dp)
+                                .align(Alignment.Center),
                         )
                     }
                 }
