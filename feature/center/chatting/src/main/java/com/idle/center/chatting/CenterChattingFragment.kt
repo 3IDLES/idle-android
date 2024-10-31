@@ -44,6 +44,7 @@ import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.chatting.ChatRoom
 import com.idle.domain.util.formatRelativeDateTime
+import com.idle.domain.util.formatUnReadNumber
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -234,7 +235,7 @@ internal fun ChatRoomItem(
                     ) {
                         Text(
                             text = if (chatRoom.unReadMessageCount != 0)
-                                chatRoom.unReadMessageCount.toString() else "",
+                                chatRoom.unReadMessageCount.formatUnReadNumber() else "",
                             style = CareTheme.typography.caption1.copy(fontWeight = FontWeight.Bold),
                             color = CareTheme.colors.white000,
                             textAlign = TextAlign.Center,

@@ -15,7 +15,7 @@ class GetChatRoomListUseCase @Inject constructor(
                 createdAt = LocalDateTime.now().minusDays(1),
                 lastMessage = "안녕하세요!안녕하세요!안녕하세요!안녕하세요!안녕하세요!안녕하세요!",
                 lastSentAt = LocalDateTime.now().minusHours(1),
-                unReadMessageCount = 3,
+                unReadMessageCount = 99,
                 profileImageUrl = "",
             ),
             ChatRoom(
@@ -25,7 +25,7 @@ class GetChatRoomListUseCase @Inject constructor(
                 createdAt = LocalDateTime.now().minusDays(3),
                 lastMessage = "오늘 만날 수 있을까요?",
                 lastSentAt = LocalDateTime.now().minusHours(5),
-                unReadMessageCount = 99,
+                unReadMessageCount = 100,
                 profileImageUrl = "",
             ),
             ChatRoom(
