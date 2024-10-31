@@ -1,5 +1,6 @@
 package com.idle.presentation
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.idle.auth.R
 import com.idle.binding.DeepLinkDestination.CenterHome
@@ -19,6 +20,8 @@ import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.profile.CenterManagerAccountStatus
 import com.idle.domain.usecase.auth.GetAccessTokenUseCase
 import com.idle.domain.usecase.auth.GetUserTypeUseCase
+import com.idle.domain.usecase.chatting.ConnectWebSocketUseCase
+import com.idle.domain.usecase.chatting.DisconnectWebSocketUseCase
 import com.idle.domain.usecase.config.GetForceUpdateInfoUseCase
 import com.idle.domain.usecase.profile.GetCenterStatusUseCase
 import com.idle.domain.usecase.profile.GetMyCenterProfileUseCase
@@ -43,6 +46,8 @@ class MainViewModel @Inject constructor(
     private val getMyCenterProfileUseCase: GetMyCenterProfileUseCase,
     private val getMyWorkerProfileUseCase: GetMyWorkerProfileUseCase,
     private val getCenterStatusUseCase: GetCenterStatusUseCase,
+    private val connectWebSocketUseCase: ConnectWebSocketUseCase,
+    private val disconnectWebSocketUseCase: DisconnectWebSocketUseCase,
     private val errorHandlerHelper: ErrorHandlerHelper,
     private val eventHandlerHelper: EventHandlerHelper,
     val navigationHelper: NavigationHelper,
@@ -61,6 +66,18 @@ class MainViewModel @Inject constructor(
 
     init {
         handleError()
+    }
+
+    internal fun connectWebSocket() = viewModelScope.launch {
+        Log.d("test", "웹소켓 연결")
+        connectWebSocketUseCase().onSuccess { }
+            .onFailure { }
+    }
+
+    internal fun disconnectWebSocket() = viewModelScope.launch {
+        Log.d("test", "웹소켓 연결해제")
+        disconnectWebSocketUseCase().onSuccess { }
+            .onFailure { }
     }
 
     internal fun setNavigationMenuType(navigationMenuType: NavigationMenuType) {

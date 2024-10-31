@@ -20,6 +20,8 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
+import java.util.concurrent.TimeUnit
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Module
@@ -39,6 +41,7 @@ object RetrofitModule {
 
     @Singleton
     @Provides
+    @AuthOkHttpClient
     fun provideOkHttpClient(
         authInterceptor: AuthInterceptor,
         careAuthenticator: CareAuthenticator,
@@ -58,9 +61,17 @@ object RetrofitModule {
 
     @Singleton
     @Provides
+    @WebSocketOkHttpClient
+    fun provideWebSocketOkHttpClient(): OkHttpClient = OkHttpClient.Builder()
+        .connectTimeout(10, TimeUnit.SECONDS)
+        .readTimeout(0, TimeUnit.MILLISECONDS)
+        .build()
+
+    @Singleton
+    @Provides
     fun providesAuthApi(
         json: Json,
-        okHttpClient: OkHttpClient,
+        @AuthOkHttpClient okHttpClient: OkHttpClient,
     ): AuthApi = Retrofit.Builder()
         .client(okHttpClient)
         .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
@@ -72,7 +83,7 @@ object RetrofitModule {
     @Provides
     fun providesJobPostingApi(
         json: Json,
-        okHttpClient: OkHttpClient,
+        @AuthOkHttpClient okHttpClient: OkHttpClient,
     ): JobPostingApi = Retrofit.Builder()
         .client(okHttpClient)
         .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
@@ -84,7 +95,7 @@ object RetrofitModule {
     @Provides
     fun providesUserApi(
         json: Json,
-        okHttpClient: OkHttpClient,
+        @AuthOkHttpClient okHttpClient: OkHttpClient,
     ): UserApi = Retrofit.Builder()
         .client(okHttpClient)
         .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
@@ -96,7 +107,7 @@ object RetrofitModule {
     @Provides
     fun providesNotificationApi(
         json: Json,
-        okHttpClient: OkHttpClient,
+        @AuthOkHttpClient okHttpClient: OkHttpClient,
     ): NotificationApi = Retrofit.Builder()
         .client(okHttpClient)
         .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
@@ -104,3 +115,11 @@ object RetrofitModule {
         .build()
         .create(NotificationApi::class.java)
 }
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class AuthOkHttpClient
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class WebSocketOkHttpClient

@@ -17,9 +17,21 @@ data class Content(
 )
 
 enum class SenderType {
-    USER,
+    USER, UNKNOWN;
+
+    companion object {
+        fun create(value: String?): SenderType {
+            return SenderType.entries.firstOrNull { it.name == value } ?: UNKNOWN
+        }
+    }
 }
 
 enum class ContentType {
-    TEXT, IMAGE;
+    TEXT, IMAGE, UNKNOWN;
+
+    companion object {
+        fun create(value: String?): ContentType {
+            return ContentType.entries.firstOrNull { it.name == value } ?: UNKNOWN
+        }
+    }
 }
