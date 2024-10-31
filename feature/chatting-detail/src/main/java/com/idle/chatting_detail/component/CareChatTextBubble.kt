@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -100,7 +101,7 @@ fun CareChatSenderTextBubbleWithImage(
                 horizontalAlignment = Alignment.Start,
                 modifier = Modifier
                     .padding(start = 4.dp)
-                    .width(35.dp)
+                    .wrapContentWidth()
                     .align(Alignment.Bottom),
             ) {
                 if (isRead) {
