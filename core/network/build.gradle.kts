@@ -19,6 +19,11 @@ android {
                 "CARE_BASE_URL",
                 "\"${properties["CARE_DEV_BASE_URL"]}\"",
             )
+            buildConfigField(
+                "String",
+                "CARE_WEBSOCKET_URL",
+                "\"${properties["CARE_DEV_WEBSOCKET_URL"]}\"",
+            )
         }
         release {
             buildConfigField(
@@ -26,7 +31,11 @@ android {
                 "CARE_BASE_URL",
                 "\"${properties["CARE_PROD_BASE_URL"]}\"",
             )
-
+            buildConfigField(
+                "String",
+                "CARE_WEBSOCKET_URL",
+                "\"${properties["CARE_PROD_WEBSOCKET_URL"]}\"",
+            )
         }
     }
 

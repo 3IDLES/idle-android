@@ -205,21 +205,26 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         networkObserver.checkNetworkState()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        networkObserver.unsubscribeNetworkCallback()
+        if (networkObserver.networkState.value == NetworkState.CONNECTED) {
+            viewModel.connectWebSocket()
+        }
     }
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-
         viewModel.navigationHelper.handleFCMNavigate(
             isColdStart = false,
             extras = intent?.extras ?: return,
             onInit = viewModel::initializeUserSession,
         )
+    }
+
+    override fun onPause() {
+        super.onPause()
+        networkObserver.unsubscribeNetworkCallback()
+        if (networkObserver.networkState.value == NetworkState.CONNECTED) {
+            viewModel.disconnectWebSocket()
+        }
     }
 
     private fun showNetworkDialog() {
