@@ -3,7 +3,7 @@ package com.idle.signin.center.newpassword
 import com.idle.binding.EventHandlerHelper
 import com.idle.binding.NavigationHelper
 import com.idle.domain.model.CountDownTimer
-import com.idle.domain.model.error.ErrorHandlerHelper
+import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
 import com.idle.domain.usecase.auth.GenerateNewPasswordUseCase
 import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
@@ -26,7 +26,7 @@ class NewPasswordViewModelTest {
     private lateinit var confirmAuthCodeUseCase: ConfirmAuthCodeUseCase
     private lateinit var generateNewPasswordUseCase: GenerateNewPasswordUseCase
     private lateinit var countDownTimer: CountDownTimer
-    private lateinit var errorHandlerHelper: ErrorHandlerHelper
+    private lateinit var errorHandlerHelper: ErrorHandler
     private lateinit var eventHandlerHelper: EventHandlerHelper
     private lateinit var navigationHelper: NavigationHelper
     private lateinit var viewModel: NewPasswordViewModel

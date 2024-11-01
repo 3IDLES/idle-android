@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
@@ -257,7 +256,7 @@ fun PreviewCareChatTextBubbleWithImage() {
     )
 
     CareChatSenderTextBubbleWithImage(
-        imageUrl = "https://via.placeholder.com/40", // Placeholder 이미지 URL
+        imageUrl = "https://via.placeholder.com/40",
         senderName = "요양센터",
         chatMessage = chatMessage,
         isLast = true,

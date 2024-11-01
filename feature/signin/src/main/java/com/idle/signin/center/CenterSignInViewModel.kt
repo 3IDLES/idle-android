@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.idle.analytics.AnalyticsEvent
 import com.idle.analytics.AnalyticsEvent.PropertiesKeys.ACTION_NAME
 import com.idle.analytics.AnalyticsEvent.PropertiesKeys.ACTION_RESULT
-import com.idle.analytics.helper.AnalyticsHelper
+import com.idle.analytics.businessmetric.AnalyticsHelper
 import com.idle.binding.DeepLinkDestination.CenterHome
 import com.idle.binding.DeepLinkDestination.CenterPending
 import com.idle.binding.DeepLinkDestination.CenterRegister
@@ -13,7 +13,7 @@ import com.idle.binding.NavigationEvent.NavigateTo
 import com.idle.binding.NavigationHelper
 import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.error.ApiErrorCode
-import com.idle.domain.model.error.ErrorHandlerHelper
+import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.error.HttpResponseStatus
 import com.idle.domain.model.profile.CenterManagerAccountStatus
@@ -33,7 +33,7 @@ class CenterSignInViewModel @Inject constructor(
     private val getCenterStatusUseCase: GetCenterStatusUseCase,
     private val getMyCenterProfileUseCase: GetMyCenterProfileUseCase,
     private val analyticsHelper: AnalyticsHelper,
-    private val errorHandlerHelper: ErrorHandlerHelper,
+    private val errorHandlerHelper: ErrorHandler,
     val eventHandlerHelper: EventHandlerHelper,
     val navigationHelper: NavigationHelper,
 ) : BaseViewModel() {

@@ -1,6 +1,5 @@
 package com.idle.center.chatting
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -173,7 +172,6 @@ internal fun ChatRoomItem(
                 model = chatRoom.profileImageUrl,
                 placeholder = painterResource(com.idle.designresource.R.drawable.ic_notification_placeholder),
                 error = painterResource(com.idle.designresource.R.drawable.ic_notification_placeholder),
-                onError = { Log.d("test", chatRoom.profileImageUrl) },
                 contentDescription = "",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier

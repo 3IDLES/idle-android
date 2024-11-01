@@ -6,7 +6,7 @@ import com.idle.binding.EventHandlerHelper
 import com.idle.binding.MainEvent
 import com.idle.binding.ToastType.SUCCESS
 import com.idle.binding.base.BaseViewModel
-import com.idle.domain.model.error.ErrorHandlerHelper
+import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.usecase.profile.GetCenterProfileUseCase
 import com.idle.domain.usecase.profile.GetLocalMyCenterProfileUseCase
@@ -22,7 +22,7 @@ class CenterProfileViewModel @Inject constructor(
     private val getLocalMyCenterProfileUseCase: GetLocalMyCenterProfileUseCase,
     private val getCenterProfileUseCase: GetCenterProfileUseCase,
     private val updateCenterProfileUseCase: UpdateCenterProfileUseCase,
-    private val errorHandlerHelper: ErrorHandlerHelper,
+    private val errorHandlerHelper: ErrorHandler,
     private val eventHandlerHelper: EventHandlerHelper,
 ) : BaseViewModel() {
     private val _centerProfile = MutableStateFlow<CenterProfile?>(null)

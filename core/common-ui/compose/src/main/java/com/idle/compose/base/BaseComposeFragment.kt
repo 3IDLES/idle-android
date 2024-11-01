@@ -10,8 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
-import com.idle.analytics.helper.AnalyticsHelper
-import com.idle.analytics.helper.LocalAnalyticsHelper
+import com.idle.analytics.businessmetric.AnalyticsHelper
+import com.idle.analytics.businessmetric.LocalAnalyticsHelper
 import com.idle.binding.base.BaseViewModel
 import javax.inject.Inject
 

@@ -6,8 +6,8 @@ import com.idle.analytics.AnalyticsEvent
 import com.idle.analytics.AnalyticsEvent.PropertiesKeys.ACTION_NAME
 import com.idle.analytics.AnalyticsEvent.PropertiesKeys.SCREEN_NAME
 import com.idle.analytics.AnalyticsEvent.Types.SCREEN_VIEW
-import com.idle.analytics.helper.AnalyticsHelper
-import com.idle.analytics.helper.LocalAnalyticsHelper
+import com.idle.analytics.businessmetric.AnalyticsHelper
+import com.idle.analytics.businessmetric.LocalAnalyticsHelper
 
 @Composable
 internal fun LogRegistrationStep(

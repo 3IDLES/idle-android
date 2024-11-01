@@ -8,7 +8,7 @@ import com.idle.binding.NavigationEvent
 import com.idle.binding.NavigationHelper
 import com.idle.binding.base.BaseViewModel
 import com.idle.center.register.info.R
-import com.idle.domain.model.error.ErrorHandlerHelper
+import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.usecase.profile.RegisterCenterProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class RegisterCenterInfoViewModel @Inject constructor(
     private val registerCenterProfileUseCase: RegisterCenterProfileUseCase,
-    private val errorHandlerHelper: ErrorHandlerHelper,
+    private val errorHandlerHelper: ErrorHandler,
     val navigationHelper: NavigationHelper,
 ) : BaseViewModel() {
 

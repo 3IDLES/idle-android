@@ -13,7 +13,7 @@ import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
 import com.idle.domain.model.auth.BusinessRegistrationInfo
 import com.idle.domain.model.error.ApiErrorCode
-import com.idle.domain.model.error.ErrorHandlerHelper
+import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.error.HttpResponseStatus
 import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
@@ -43,7 +43,7 @@ class CenterSignUpViewModel @Inject constructor(
     private val validateIdentifierUseCase: ValidateIdentifierUseCase,
     private val validateBusinessRegistrationNumberUseCase: ValidateBusinessRegistrationNumberUseCase,
     private val countDownTimer: CountDownTimer,
-    private val errorHandlerHelper: ErrorHandlerHelper,
+    private val errorHandlerHelper: ErrorHandler,
     private val eventHandlerHelper: EventHandlerHelper,
     val navigationHelper: NavigationHelper,
 ) : BaseViewModel() {
