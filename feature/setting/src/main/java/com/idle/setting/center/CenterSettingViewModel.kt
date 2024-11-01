@@ -1,11 +1,11 @@
 package com.idle.setting.center
 
 import androidx.lifecycle.viewModelScope
-import com.idle.analytics.helper.AnalyticsHelper
+import com.idle.analytics.businessmetric.AnalyticsHelper
 import com.idle.binding.NavigationEvent
 import com.idle.binding.NavigationHelper
 import com.idle.binding.base.BaseViewModel
-import com.idle.domain.model.error.ErrorHandlerHelper
+import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.usecase.auth.LogoutCenterUseCase
 import com.idle.domain.usecase.profile.GetLocalMyCenterProfileUseCase
@@ -23,7 +23,7 @@ class CenterSettingViewModel @Inject constructor(
     private val getLocalMyCenterProfileUseCase: GetLocalMyCenterProfileUseCase,
     private val logoutCenterUseCase: LogoutCenterUseCase,
     private val analyticsHelper: AnalyticsHelper,
-    private val errorHandlerHelper: ErrorHandlerHelper,
+    private val errorHandlerHelper: ErrorHandler,
     val navigationHelper: NavigationHelper,
 ) : BaseViewModel() {
     private val _centerProfile =

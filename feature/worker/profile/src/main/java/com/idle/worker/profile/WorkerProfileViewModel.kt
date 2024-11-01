@@ -7,7 +7,7 @@ import com.idle.binding.base.BaseViewModel
 import com.idle.binding.EventHandlerHelper
 import com.idle.binding.MainEvent
 import com.idle.binding.ToastType
-import com.idle.domain.model.error.ErrorHandlerHelper
+import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.profile.JobSearchStatus
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
@@ -24,7 +24,7 @@ class WorkerProfileViewModel @Inject constructor(
     private val getLocalMyWorkerProfileUseCase: GetLocalMyWorkerProfileUseCase,
     private val getWorkerProfileUseCase: GetWorkerProfileUseCase,
     private val updateWorkerProfileUseCase: UpdateWorkerProfileUseCase,
-    private val errorHandlerHelper: ErrorHandlerHelper,
+    private val errorHandlerHelper: ErrorHandler,
     private val eventHandlerHelper: EventHandlerHelper,
 ) : BaseViewModel() {
     private val _workerProfile = MutableStateFlow<WorkerProfile?>(null)

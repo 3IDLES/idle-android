@@ -1,7 +1,7 @@
 package com.idle.withdrawal
 
 import androidx.lifecycle.viewModelScope
-import com.idle.analytics.helper.AnalyticsHelper
+import com.idle.analytics.businessmetric.AnalyticsHelper
 import com.idle.binding.EventHandlerHelper
 import com.idle.binding.MainEvent
 import com.idle.binding.NavigationEvent
@@ -12,7 +12,7 @@ import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
 import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.error.ApiErrorCode
-import com.idle.domain.model.error.ErrorHandlerHelper
+import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
 import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
@@ -33,7 +33,7 @@ class WithdrawalViewModel @Inject constructor(
     private val withdrawalWorkerUseCase: WithdrawalWorkerUseCase,
     private val countDownTimer: CountDownTimer,
     private val analyticsHelper: AnalyticsHelper,
-    private val errorHandlerHelper: ErrorHandlerHelper,
+    private val errorHandlerHelper: ErrorHandler,
     private val eventHandlerHelper: EventHandlerHelper,
     val navigationHelper: NavigationHelper,
 ) : BaseViewModel() {

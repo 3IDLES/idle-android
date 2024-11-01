@@ -16,7 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
-import com.idle.analytics.helper.TrackScreenViewEvent
+import com.idle.analytics.businessmetric.TrackScreenViewEvent
 import com.idle.binding.DeepLinkDestination
 import com.idle.binding.NavigationEvent
 import com.idle.center.jobposting.complete.SignUpCompleteViewModel

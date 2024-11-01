@@ -7,7 +7,7 @@ import com.idle.binding.NavigationEvent
 import com.idle.binding.NavigationHelper
 import com.idle.binding.ToastType.SUCCESS
 import com.idle.binding.base.BaseViewModel
-import com.idle.domain.model.error.ErrorHandlerHelper
+import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.profile.CenterManagerAccountStatus
 import com.idle.domain.usecase.auth.LogoutCenterUseCase
 import com.idle.domain.usecase.auth.SendCenterVerificationRequestUseCase
@@ -21,7 +21,7 @@ import javax.inject.Inject
 class CenterPendingViewModel @Inject constructor(
     private val logoutCenterUseCase: LogoutCenterUseCase,
     private val sendCenterVerificationRequestUseCase: SendCenterVerificationRequestUseCase,
-    private val errorHandlerHelper: ErrorHandlerHelper,
+    private val errorHandlerHelper: ErrorHandler,
     private val eventHandlerHelper: EventHandlerHelper,
     private val navigationHelper: NavigationHelper,
 ) : BaseViewModel() {

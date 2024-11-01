@@ -3,16 +3,13 @@ package com.idle.notification
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.NavigationHelper
 import com.idle.binding.base.BaseViewModel
-import com.idle.domain.model.error.ErrorHandlerHelper
+import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.notification.Notification
 import com.idle.domain.usecase.notification.GetMyNotificationUseCase
 import com.idle.domain.usecase.notification.ReadNotificationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,7 +17,7 @@ import javax.inject.Inject
 class NotificationViewModel @Inject constructor(
     private val getMyNotificationUseCase: GetMyNotificationUseCase,
     private val readNotificationUseCase: ReadNotificationUseCase,
-    private val errorHandlerHelper: ErrorHandlerHelper,
+    private val errorHandlerHelper: ErrorHandler,
     private val navigationHelper: NavigationHelper,
 ) : BaseViewModel() {
     private val next = MutableStateFlow<String?>(null)

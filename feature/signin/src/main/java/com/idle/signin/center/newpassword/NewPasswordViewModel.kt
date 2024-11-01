@@ -11,7 +11,7 @@ import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.CountDownTimer
 import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
-import com.idle.domain.model.error.ErrorHandlerHelper
+import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.error.HttpResponseStatus
 import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
@@ -21,7 +21,6 @@ import com.idle.signin.R
 import com.idle.signin.center.newpassword.NewPasswordStep.GENERATE_NEW_PASSWORD
 import com.idle.signin.center.newpassword.NewPasswordStep.PHONE_NUMBER
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -39,7 +38,7 @@ class NewPasswordViewModel @Inject constructor(
     private val confirmAuthCodeUseCase: ConfirmAuthCodeUseCase,
     private val generateNewPasswordUseCase: GenerateNewPasswordUseCase,
     private val countDownTimer: CountDownTimer,
-    private val errorHandlerHelper: ErrorHandlerHelper,
+    private val errorHandlerHelper: ErrorHandler,
     private val eventHandlerHelper: EventHandlerHelper,
     private val navigationHelper: NavigationHelper,
 ) : BaseViewModel() {

@@ -2,6 +2,7 @@ package com.idle.presentation
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
+import com.idle.analytics.error.ErrorLoggingHelper
 import com.idle.auth.R
 import com.idle.binding.DeepLinkDestination.CenterHome
 import com.idle.binding.DeepLinkDestination.CenterPending
@@ -15,7 +16,7 @@ import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.config.ForceUpdate
 import com.idle.domain.model.error.ApiErrorCode
-import com.idle.domain.model.error.ErrorHandlerHelper
+import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.profile.CenterManagerAccountStatus
 import com.idle.domain.usecase.auth.GetAccessTokenUseCase
@@ -48,8 +49,9 @@ class MainViewModel @Inject constructor(
     private val getCenterStatusUseCase: GetCenterStatusUseCase,
     private val connectWebSocketUseCase: ConnectWebSocketUseCase,
     private val disconnectWebSocketUseCase: DisconnectWebSocketUseCase,
-    private val errorHandlerHelper: ErrorHandlerHelper,
+    private val errorHandlerHelper: ErrorHandler,
     private val eventHandlerHelper: EventHandlerHelper,
+    val errorLoggingHelper: ErrorLoggingHelper,
     val navigationHelper: NavigationHelper,
 ) : BaseViewModel() {
     private val _navigationMenuType = MutableStateFlow(NavigationMenuType.HIDE)
@@ -158,6 +160,8 @@ class MainViewModel @Inject constructor(
 
     private fun handleError() = viewModelScope.launch {
         errorHandlerHelper.errorEvent.collect { exception ->
+            errorLoggingHelper.logError(exception)
+
             when (exception) {
                 is HttpResponseException -> {
                     when (exception.apiErrorCode) {
@@ -167,13 +171,12 @@ class MainViewModel @Inject constructor(
                         ApiErrorCode.TokenNotFound,
                         ApiErrorCode.NotSupportUserTokenType ->
                             navigationHelper.navigateTo(
-                                NavigationEvent.NavigateToAuthWithClearBackStack(
-                                    exception.print()
-                                )
+                                NavigationEvent.NavigateToAuthWithClearBackStack(exception.print())
                             )
 
                         else -> eventHandlerHelper.sendEvent(ShowToast(exception.print()))
                     }
+                    return@collect
                 }
 
                 is SocketTimeoutException -> eventHandlerHelper.sendEvent(ShowToast("서버 응답 시간이 초과되었습니다. 잠시 후 다시 시도해 주세요."))

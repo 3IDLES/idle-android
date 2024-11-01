@@ -1,4 +1,4 @@
-package com.idle.analytics.helper
+package com.idle.analytics.businessmetric
 
 import android.util.Log
 import com.idle.analytics.AnalyticsEvent

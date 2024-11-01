@@ -6,7 +6,7 @@ import com.idle.binding.MainEvent
 import com.idle.binding.NavigationHelper
 import com.idle.binding.ToastType
 import com.idle.binding.base.BaseViewModel
-import com.idle.domain.model.error.ErrorHandlerHelper
+import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.jobposting.ApplyMethod
 import com.idle.domain.model.jobposting.CrawlingJobPosting
 import com.idle.domain.model.jobposting.JobPosting
@@ -38,7 +38,7 @@ class WorkerHomeViewModel @Inject constructor(
     private val removeFavoriteJobPostingUseCase: RemoveFavoriteJobPostingUseCase,
     private val showNotificationCenterUseCase: ShowNotificationCenterUseCase,
     private val getUnreadNotificationCountUseCase: GetUnreadNotificationCountUseCase,
-    private val errorHandlerHelper: ErrorHandlerHelper,
+    private val errorHandlerHelper: ErrorHandler,
     private val eventHandlerHelper: EventHandlerHelper,
     val navigationHelper: NavigationHelper,
 ) : BaseViewModel() {

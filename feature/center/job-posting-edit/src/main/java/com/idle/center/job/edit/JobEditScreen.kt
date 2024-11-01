@@ -41,7 +41,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.findNavController
-import com.idle.analytics.helper.TrackScreenViewEvent
+import com.idle.analytics.businessmetric.TrackScreenViewEvent
 import com.idle.compose.JobPostingBottomSheetType
 import com.idle.compose.JobPostingBottomSheetType.POST_DEAD_LINE
 import com.idle.compose.JobPostingBottomSheetType.WORK_END_TIME

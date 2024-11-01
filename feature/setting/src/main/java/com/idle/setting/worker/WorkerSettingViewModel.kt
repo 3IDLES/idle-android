@@ -1,11 +1,11 @@
 package com.idle.setting.worker
 
 import androidx.lifecycle.viewModelScope
-import com.idle.analytics.helper.AnalyticsHelper
+import com.idle.analytics.businessmetric.AnalyticsHelper
 import com.idle.binding.NavigationEvent
 import com.idle.binding.NavigationHelper
 import com.idle.binding.base.BaseViewModel
-import com.idle.domain.model.error.ErrorHandlerHelper
+import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.usecase.auth.LogoutWorkerUseCase
 import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
@@ -22,7 +22,7 @@ class WorkerSettingViewModel @Inject constructor(
     private val getLocalMyWorkerProfileUseCase: GetLocalMyWorkerProfileUseCase,
     private val logoutWorkerUseCase: LogoutWorkerUseCase,
     private val analyticsHelper: AnalyticsHelper,
-    private val errorHandlerHelper: ErrorHandlerHelper,
+    private val errorHandlerHelper: ErrorHandler,
     val navigationHelper: NavigationHelper,
 ) : BaseViewModel() {
     private val _workerProfile = MutableStateFlow<WorkerProfile?>(null)

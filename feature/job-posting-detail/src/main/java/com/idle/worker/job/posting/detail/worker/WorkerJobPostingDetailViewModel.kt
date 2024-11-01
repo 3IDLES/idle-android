@@ -5,13 +5,13 @@ import com.idle.analytics.AnalyticsEvent
 import com.idle.analytics.AnalyticsEvent.PropertiesKeys.ACTION_NAME
 import com.idle.analytics.AnalyticsEvent.PropertiesKeys.SCREEN_NAME
 import com.idle.analytics.AnalyticsEvent.Types.ACTION
-import com.idle.analytics.helper.AnalyticsHelper
+import com.idle.analytics.businessmetric.AnalyticsHelper
 import com.idle.binding.EventHandlerHelper
 import com.idle.binding.MainEvent
 import com.idle.binding.NavigationHelper
 import com.idle.binding.ToastType.SUCCESS
 import com.idle.binding.base.BaseViewModel
-import com.idle.domain.model.error.ErrorHandlerHelper
+import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.jobposting.ApplyMethod
 import com.idle.domain.model.jobposting.CrawlingJobPostingDetail
 import com.idle.domain.model.jobposting.JobPosting
@@ -40,7 +40,7 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
     private val addFavoriteJobPostingUseCase: AddFavoriteJobPostingUseCase,
     private val removeFavoriteJobPostingUseCase: RemoveFavoriteJobPostingUseCase,
     private val analyticsHelper: AnalyticsHelper,
-    private val errorHandlerHelper: ErrorHandlerHelper,
+    private val errorHandlerHelper: ErrorHandler,
     val eventHandlerHelper: EventHandlerHelper,
     val navigationHelper: NavigationHelper,
 ) : BaseViewModel() {

@@ -2,7 +2,7 @@ package com.idle.signin.worker
 
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.viewModelScope
-import com.idle.analytics.helper.AnalyticsHelper
+import com.idle.analytics.businessmetric.AnalyticsHelper
 import com.idle.binding.DeepLinkDestination.SignUpComplete
 import com.idle.binding.DeepLinkDestination.WorkerHome
 import com.idle.binding.EventHandlerHelper
@@ -13,7 +13,7 @@ import com.idle.domain.model.CountDownTimer
 import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
 import com.idle.domain.model.auth.Gender
-import com.idle.domain.model.error.ErrorHandlerHelper
+import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.error.HttpResponseStatus
 import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
@@ -39,7 +39,7 @@ class WorkerSignUpViewModel @Inject constructor(
     private val confirmAuthCodeUseCase: ConfirmAuthCodeUseCase,
     private val countDownTimer: CountDownTimer,
     private val analyticsHelper: AnalyticsHelper,
-    private val errorHandlerHelper: ErrorHandlerHelper,
+    private val errorHandlerHelper: ErrorHandler,
     val eventHandlerHelper: EventHandlerHelper,
     val navigationHelper: NavigationHelper,
 ) : BaseViewModel() {

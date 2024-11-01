@@ -8,7 +8,7 @@ import com.idle.binding.MainEvent
 import com.idle.binding.NavigationEvent
 import com.idle.binding.NavigationHelper
 import com.idle.binding.ToastType
-import com.idle.domain.model.error.ErrorHandlerHelper
+import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.jobposting.CenterJobPostingDetail
 import com.idle.domain.model.jobposting.EditJobPostingDetail
 import com.idle.domain.model.jobposting.JobPostingStatus
@@ -35,7 +35,7 @@ class CenterJobPostingDetailViewModel @Inject constructor(
     private val updateJobPostingUseCase: UpdateJobPostingUseCase,
     private val endJobPostingUseCase: EndJobPostingUseCase,
     private val deleteJobPostingUseCase: DeleteJobPostingUseCase,
-    private val errorHandlerHelper: ErrorHandlerHelper,
+    private val errorHandlerHelper: ErrorHandler,
     val eventHandlerHelper: EventHandlerHelper,
     val navigationHelper: NavigationHelper,
 ) : BaseViewModel() {

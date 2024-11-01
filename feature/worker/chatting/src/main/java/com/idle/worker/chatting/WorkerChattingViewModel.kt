@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.idle.binding.NavigationHelper
 import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.chatting.ChatRoom
-import com.idle.domain.model.error.ErrorHandlerHelper
+import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.usecase.chatting.GetChatRoomListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class WorkerChattingViewModel @Inject constructor(
     private val getChatRoomListUseCase: GetChatRoomListUseCase,
-    private val errorHandlerHelper: ErrorHandlerHelper,
+    private val errorHandlerHelper: ErrorHandler,
     val navigationHelper: NavigationHelper,
 ) : BaseViewModel() {
     private val _chatRoomList = MutableStateFlow<List<ChatRoom>?>(emptyList())

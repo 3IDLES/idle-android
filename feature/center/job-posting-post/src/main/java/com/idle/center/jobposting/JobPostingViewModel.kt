@@ -11,7 +11,7 @@ import com.idle.binding.base.BaseViewModel
 import com.idle.center.job.posting.post.R
 import com.idle.compose.JobPostingBottomSheetType
 import com.idle.domain.model.auth.Gender
-import com.idle.domain.model.error.ErrorHandlerHelper
+import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.jobposting.ApplyDeadlineType
 import com.idle.domain.model.jobposting.ApplyMethod
 import com.idle.domain.model.jobposting.DayOfWeek
@@ -39,7 +39,7 @@ import javax.inject.Inject
 class JobPostingViewModel @Inject constructor(
     private val getLocalMyCenterProfileUseCase: GetLocalMyCenterProfileUseCase,
     private val postJobPostingUseCase: PostJobPostingUseCase,
-    private val errorHandlerHelper: ErrorHandlerHelper,
+    private val errorHandlerHelper: ErrorHandler,
     val eventHandlerHelper: EventHandlerHelper,
     val navigationHelper: NavigationHelper,
 ) : BaseViewModel() {

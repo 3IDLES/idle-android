@@ -6,7 +6,7 @@ import com.idle.binding.MainEvent
 import com.idle.binding.NavigationHelper
 import com.idle.binding.ToastType.SUCCESS
 import com.idle.binding.base.BaseViewModel
-import com.idle.domain.model.error.ErrorHandlerHelper
+import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.jobposting.CenterJobPosting
 import com.idle.domain.usecase.config.ShowNotificationCenterUseCase
 import com.idle.domain.usecase.jobposting.EndJobPostingUseCase
@@ -26,7 +26,7 @@ class CenterHomeViewModel @Inject constructor(
     private val endJobPostingUseCase: EndJobPostingUseCase,
     private val showNotificationCenterUseCase: ShowNotificationCenterUseCase,
     private val getUnreadNotificationCountUseCase: GetUnreadNotificationCountUseCase,
-    private val errorHandlerHelper: ErrorHandlerHelper,
+    private val errorHandlerHelper: ErrorHandler,
     private val eventHandlerHelper: EventHandlerHelper,
     val navigationHelper: NavigationHelper,
 ) : BaseViewModel() {
