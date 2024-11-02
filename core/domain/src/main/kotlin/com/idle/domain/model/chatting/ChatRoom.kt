@@ -10,5 +10,5 @@ data class ChatRoom(
     val lastMessage: String,
     val lastSentAt: LocalDateTime,
     val unReadMessageCount: Int,
-    val profileImageUrl: String,
+    val profileImageUrl: String?,
 )

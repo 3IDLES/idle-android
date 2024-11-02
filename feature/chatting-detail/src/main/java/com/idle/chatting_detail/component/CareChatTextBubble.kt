@@ -99,7 +99,7 @@ fun CareChatSenderTextBubbleWithImage(
             Column(
                 horizontalAlignment = Alignment.Start,
                 modifier = Modifier
-                    .padding(start = 4.dp)
+                    .padding(start = 6.dp)
                     .wrapContentWidth()
                     .align(Alignment.Bottom),
             ) {
@@ -162,7 +162,7 @@ fun CareChatSenderTextBubble(
                 horizontalAlignment = Alignment.Start,
                 modifier = Modifier
                     .align(Alignment.Bottom)
-                    .padding(start = 4.dp),
+                    .padding(start = 6.dp),
             ) {
                 if (isRead) {
                     Text(
@@ -199,7 +199,7 @@ fun CareChatReceiverTextBubble(
                 horizontalAlignment = Alignment.End,
                 modifier = Modifier
                     .align(Alignment.Bottom)
-                    .padding(end = 4.dp),
+                    .padding(end = 6.dp),
             ) {
                 if (isRead) {
                     Text(

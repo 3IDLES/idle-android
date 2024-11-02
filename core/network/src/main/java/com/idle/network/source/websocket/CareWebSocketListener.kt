@@ -3,8 +3,8 @@ package com.idle.network.source.websocket
 import android.util.Log
 import com.idle.network.BuildConfig
 import com.idle.network.model.chatting.ChatMessageResponse
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.serialization.json.Json
 import okhttp3.Response
 import okhttp3.WebSocket
@@ -14,8 +14,8 @@ import javax.inject.Singleton
 
 @Singleton
 class ChatMessageListener @Inject constructor(private val json: Json) : WebSocketListener() {
-    private val _chatMessageChannel = Channel<ChatMessageResponse>(Channel.BUFFERED)
-    val chatMessageFlow = _chatMessageChannel.receiveAsFlow()
+    private val _chatMessageChannel = MutableStateFlow<ChatMessageResponse?>(null)
+    val chatMessageFlow = _chatMessageChannel.asStateFlow()
 
     override fun onMessage(webSocket: WebSocket, text: String) {
         super.onMessage(webSocket, text)
@@ -33,7 +33,7 @@ class ChatMessageListener @Inject constructor(private val json: Json) : WebSocke
             return
         }
 
-        _chatMessageChannel.trySend(chatMessageResponse)
+        _chatMessageChannel.value = chatMessageResponse
     }
 
     override fun onOpen(webSocket: WebSocket, response: Response) {

@@ -41,6 +41,7 @@ class ProfileRepositoryImplTest {
     )
 
     private val workerProfile = WorkerProfile(
+        workerId = "test",
         workerName = "Test Worker",
         age = 30,
         gender = Gender.MAN,

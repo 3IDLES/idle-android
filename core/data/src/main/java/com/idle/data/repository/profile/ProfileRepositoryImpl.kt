@@ -104,6 +104,8 @@ class ProfileRepositoryImpl @Inject constructor(
             }
 
         WorkerProfile(
+            workerId = properties["workerId"]
+                ?: throw IllegalArgumentException("Missing workerId"),
             workerName = properties["workerName"]
                 ?: throw IllegalArgumentException("Missing workerName"),
             age = properties["age"]?.toInt() ?: throw NumberFormatException("Invalid age format"),

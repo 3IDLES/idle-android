@@ -8,6 +8,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GetWorkerProfileResponse(
+    @SerialName("carerId") val workerId: String? = null,
     @SerialName("carerName") val workerName: String? = null,
     val age: Int? = null,
     val gender: String? = null,
@@ -23,6 +24,7 @@ data class GetWorkerProfileResponse(
     val profileImageUrl: String? = null,
 ) {
     fun toVo() = WorkerProfile(
+        workerId = workerId ?: "",
         workerName = workerName ?: "",
         age = age ?: -1,
         gender = Gender.create(gender ?: ""),
