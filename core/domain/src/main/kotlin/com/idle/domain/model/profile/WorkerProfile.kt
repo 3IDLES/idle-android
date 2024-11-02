@@ -3,6 +3,7 @@ package com.idle.domain.model.profile
 import com.idle.domain.model.auth.Gender
 
 data class WorkerProfile(
+    val workerId: String,
     val workerName: String,
     val age: Int,
     val gender: Gender,

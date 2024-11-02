@@ -8,6 +8,7 @@ import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.usecase.chatting.GetChatMessagesUseCase
+import com.idle.domain.usecase.chatting.SubscribeChatMessageUseCase
 import com.idle.domain.usecase.profile.GetCenterProfileUseCase
 import com.idle.domain.usecase.profile.GetLocalMyCenterProfileUseCase
 import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
@@ -25,6 +26,7 @@ class ChattingDetailViewModel @Inject constructor(
     private val getCenterProfileUseCase: GetCenterProfileUseCase,
     private val getWorkerProfileUseCase: GetWorkerProfileUseCase,
     private val getChatMessagesUseCase: GetChatMessagesUseCase,
+    private val subscribeChatMessageUseCase: SubscribeChatMessageUseCase,
     private val errorHandlerHelper: ErrorHandler,
 ) : BaseViewModel() {
     private val _writingText = MutableStateFlow<String>("")
@@ -85,6 +87,12 @@ class ChattingDetailViewModel @Inject constructor(
     internal fun getChatMessages(roomId: String) = viewModelScope.launch {
         getChatMessagesUseCase(roomId).onSuccess {
             _chatMessages.value = it
+        }
+    }
+
+    internal fun subscribeChatMessage() = viewModelScope.launch {
+        subscribeChatMessageUseCase().collect { chatMessage ->
+            _chatMessages.value = (_chatMessages.value ?: emptyList()) + chatMessage
         }
     }
 }

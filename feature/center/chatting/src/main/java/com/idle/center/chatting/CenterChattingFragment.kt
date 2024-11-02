@@ -57,6 +57,7 @@ internal class CenterChattingFragment : BaseComposeFragment() {
 
             LifecycleEventEffect(Lifecycle.Event.ON_CREATE) {
                 getChatRoomList()
+                subscribeChatMessage()
             }
 
             CenterChattingScreen(

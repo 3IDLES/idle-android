@@ -9,7 +9,9 @@ data class ChatMessage(
     val senderType: SenderType,
     val contents: List<Content>,
     val createdAt: LocalDateTime,
-)
+) {
+    fun printPlainContents(): String = contents.joinToString { it.value }
+}
 
 data class Content(
     val type: ContentType,

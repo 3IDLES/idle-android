@@ -65,6 +65,7 @@ internal class ChattingDetailFragment : BaseComposeFragment() {
             LifecycleEventEffect(Lifecycle.Event.ON_CREATE) {
                 getUserProfile(receiverUserType = receiverUserType, senderId = senderId)
                 getChatMessages(chattingRoomId)
+                subscribeChatMessage()
             }
 
             if (chatMessages != null && workerProfile != null && centerProfile != null) {
@@ -124,7 +125,7 @@ internal fun ChattingDetailScreen(
                     .fillMaxWidth()
                     .weight(1f)
                     .background(CareTheme.colors.gray050)
-                    .padding(horizontal = 20.dp),
+                    .padding(horizontal = 18.dp),
             ) {
                 item {
                     Spacer(

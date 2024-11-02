@@ -345,6 +345,8 @@ internal fun WorkerProfileScreen(
                             ) {
                                 AsyncImage(
                                     model = profileImageUri ?: R.drawable.ic_worker_photo_default,
+                                    error = painterResource(R.drawable.ic_worker_photo_default),
+                                    placeholder = painterResource(R.drawable.ic_worker_photo_default),
                                     contentDescription = null,
                                     contentScale = ContentScale.Crop,
                                     modifier = Modifier

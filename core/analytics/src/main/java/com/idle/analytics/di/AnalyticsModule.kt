@@ -74,7 +74,7 @@ object AnalyticsModule {
         @DebugErrorHelper debugErrorHelper: ErrorLoggingHelper,
         @ReleaseErrorHelper releaseErrorHelper: ErrorLoggingHelper,
     ): ErrorLoggingHelper {
-        return if (BuildConfig.BUILD_TYPE == "DEBUG") releaseErrorHelper
+        return if (BuildConfig.BUILD_TYPE == "RELEASE") releaseErrorHelper
         else debugErrorHelper
     }
 }

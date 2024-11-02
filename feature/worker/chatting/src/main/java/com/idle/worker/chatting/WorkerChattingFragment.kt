@@ -60,12 +60,17 @@ internal class WorkerChattingFragment : BaseComposeFragment() {
 
             LifecycleEventEffect(Lifecycle.Event.ON_CREATE) {
                 getChatRoomList()
+                subscribeChatMessage()
             }
 
-            WorkerChattingScreen(
-                chatRoomList = chatRoomList,
-                navigateTo = { navigationHelper.navigateTo(NavigationEvent.NavigateTo(it)) },
-            )
+            if(chatRoomList != null) {
+                WorkerChattingScreen(
+                    chatRoomList = chatRoomList,
+                    navigateTo = { navigationHelper.navigateTo(NavigationEvent.NavigateTo(it)) },
+                )
+            } else {
+                // Todo : 스켈레톤 UI 혹은 스피너 로딩
+            }
         }
     }
 }

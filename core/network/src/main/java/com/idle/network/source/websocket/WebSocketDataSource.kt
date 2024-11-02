@@ -3,6 +3,8 @@ package com.idle.network.source.websocket
 import com.idle.domain.model.error.ErrorHandler
 import com.idle.network.BuildConfig
 import com.idle.network.di.WebSocketOkHttpClient
+import com.idle.network.model.chatting.ChatMessageResponse
+import kotlinx.coroutines.flow.StateFlow
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.WebSocket
@@ -41,5 +43,5 @@ class WebSocketDataSource @Inject constructor(
         }
     }
 
-    fun getChatMessageFlow() = chatMessageListener.chatMessageFlow
+    fun getChatMessageFlow(): StateFlow<ChatMessageResponse?> = chatMessageListener.chatMessageFlow
 }
