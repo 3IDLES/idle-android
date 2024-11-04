@@ -114,7 +114,7 @@ enum class ApiErrorCode(val serverCode: String, val description: String, val dis
     InternalServerError(
         "SYSTEM-001",
         "서버 내 모든 시스템 내부 에러를 포함합니다. 특히 시스템 내에서 처리하지 못한 예외가 존재하는 경우에도 발생할 수 있습니다.",
-        "서버 내부 오류입니다."
+        "서버 내부 오류입니다. 잠시 후 다시 시도해 주세요."
     ),
 
     // JWT Errors
