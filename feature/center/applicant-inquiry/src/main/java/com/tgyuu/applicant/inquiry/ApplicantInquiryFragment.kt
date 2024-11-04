@@ -36,8 +36,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.navArgs
 import coil.compose.AsyncImage
 import com.idle.analytics.businessmetric.TrackScreenViewEvent
-import com.idle.binding.DeepLinkDestination
-import com.idle.binding.NavigationEvent
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonCardMedium
@@ -70,7 +68,13 @@ internal class ApplicantInquiryFragment : BaseComposeFragment() {
                 ApplicantInquiryScreen(
                     jobPostingSummary = jobPostingSummary!!,
                     applicants = applicants,
-                    navigateTo = { navigationHelper.navigateTo(NavigationEvent.NavigateTo(it)) },
+                    navigateTo = {
+                        navigationHelper.navigateTo(
+                            com.idle.navigation.NavigationEvent.NavigateTo(
+                                it
+                            )
+                        )
+                    },
                 )
             }
         }
@@ -81,7 +85,7 @@ internal class ApplicantInquiryFragment : BaseComposeFragment() {
 internal fun ApplicantInquiryScreen(
     jobPostingSummary: JobPostingSummary,
     applicants: List<Applicant>,
-    navigateTo: (DeepLinkDestination) -> Unit
+    navigateTo: (com.idle.navigation.DeepLinkDestination) -> Unit
 ) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
 
@@ -211,7 +215,7 @@ private fun RecruitInfoCard(jobPostingSummary: JobPostingSummary) {
 @Composable
 private fun WorkerProfileCard(
     applicant: Applicant,
-    navigateTo: (DeepLinkDestination) -> Unit,
+    navigateTo: (com.idle.navigation.DeepLinkDestination) -> Unit,
 ) {
     Card(
         shape = RoundedCornerShape(12.dp),
@@ -222,7 +226,7 @@ private fun WorkerProfileCard(
             disabledContentColor = CareTheme.colors.white000,
         ),
         border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
-        onClick = { navigateTo(DeepLinkDestination.WorkerProfile(applicant.carerId)) },
+        onClick = { navigateTo(com.idle.navigation.DeepLinkDestination.WorkerProfile(applicant.carerId)) },
         modifier = Modifier.fillMaxWidth(),
     ) {
         Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
@@ -318,7 +322,13 @@ private fun WorkerProfileCard(
 
             CareButtonCardMedium(
                 text = "프로필 보기",
-                onClick = { navigateTo(DeepLinkDestination.WorkerProfile(applicant.carerId)) },
+                onClick = {
+                    navigateTo(
+                        com.idle.navigation.DeepLinkDestination.WorkerProfile(
+                            applicant.carerId
+                        )
+                    )
+                },
                 containerColor = CareTheme.colors.white000,
                 textColor = CareTheme.colors.gray300,
                 border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),

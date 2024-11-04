@@ -1,19 +1,15 @@
 package com.idle.center.chatting
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.idle.binding.NavigationHelper
-import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.chatting.ChatRoom
 import com.idle.domain.model.error.ErrorHandler
-import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.usecase.chatting.GetChatRoomListUseCase
 import com.idle.domain.usecase.chatting.SubscribeChatMessageUseCase
 import com.idle.domain.usecase.profile.GetCenterProfileUseCase
-import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -25,8 +21,8 @@ class CenterChattingViewModel @Inject constructor(
     private val getChatRoomListUseCase: GetChatRoomListUseCase,
     private val subscribeChatMessageUseCase: SubscribeChatMessageUseCase,
     private val errorHandler: ErrorHandler,
-    val navigationHelper: NavigationHelper,
-) : BaseViewModel() {
+    val navigationHelper: com.idle.navigation.NavigationHelper,
+) : ViewModel() {
     private val _chatRoomMap = MutableStateFlow<LinkedHashMap<String, ChatRoom>>(LinkedHashMap())
     val chatRoomList = _chatRoomMap
         .map { it.values.toList() }

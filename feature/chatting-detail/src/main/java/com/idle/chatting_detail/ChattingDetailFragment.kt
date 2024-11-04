@@ -30,8 +30,6 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.idle.binding.DeepLinkDestination
-import com.idle.binding.NavigationEvent
 import com.idle.chatting_detail.component.CareChatReceiverTextBubble
 import com.idle.chatting_detail.component.CareChatSenderTextBubble
 import com.idle.chatting_detail.component.CareChatSenderTextBubbleWithImage
@@ -80,7 +78,13 @@ internal class ChattingDetailFragment : BaseComposeFragment() {
                     writingText = writingText,
                     chatMessages = chatMessages!!,
                     onWritingTextChange = ::setWritingText,
-                    navigateTo = { navigationHelper.navigateTo(NavigationEvent.NavigateTo(it)) },
+                    navigateTo = {
+                        navigationHelper.navigateTo(
+                            com.idle.navigation.NavigationEvent.NavigateTo(
+                                it
+                            )
+                        )
+                    },
                     navigateUp = { findNavController().navigateUp() }
                 )
             } else {
@@ -101,7 +105,7 @@ internal fun ChattingDetailScreen(
     writingText: String,
     chatMessages: List<ChatMessage>,
     onWritingTextChange: (String) -> Unit,
-    navigateTo: (DeepLinkDestination) -> Unit,
+    navigateTo: (com.idle.navigation.DeepLinkDestination) -> Unit,
     navigateUp: () -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
@@ -178,7 +182,13 @@ internal fun ChattingDetailScreen(
                         CareChatReceiverTextBubble(
                             chatMessage = chatMessage,
                             isLast = isLast,
-                            onSeeAllChatClicked = { navigateTo(DeepLinkDestination.SeeAllChat(it)) },
+                            onSeeAllChatClicked = {
+                                navigateTo(
+                                    com.idle.navigation.DeepLinkDestination.SeeAllChat(
+                                        it
+                                    )
+                                )
+                            },
                             modifier = Modifier.padding(padding),
                         )
                     } else {
@@ -201,7 +211,13 @@ internal fun ChattingDetailScreen(
                                 },
                                 chatMessage = chatMessage,
                                 isLast = isLast,
-                                onSeeAllChatClicked = { navigateTo(DeepLinkDestination.SeeAllChat(it)) },
+                                onSeeAllChatClicked = {
+                                    navigateTo(
+                                        com.idle.navigation.DeepLinkDestination.SeeAllChat(
+                                            it
+                                        )
+                                    )
+                                },
                                 modifier = Modifier.padding(padding),
                             )
                         } else {
@@ -209,7 +225,13 @@ internal fun ChattingDetailScreen(
                                 chatMessage = chatMessage,
                                 isLast = isLast,
                                 isRead = isLast,
-                                onSeeAllChatClicked = { navigateTo(DeepLinkDestination.SeeAllChat(it)) },
+                                onSeeAllChatClicked = {
+                                    navigateTo(
+                                        com.idle.navigation.DeepLinkDestination.SeeAllChat(
+                                            it
+                                        )
+                                    )
+                                },
                                 modifier = Modifier.padding(padding),
                             )
                         }

@@ -38,8 +38,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import com.idle.binding.DeepLinkDestination
-import com.idle.binding.NavigationEvent
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designsystem.compose.component.CareHeadingTopBar
@@ -67,7 +65,13 @@ internal class CenterChattingFragment : BaseComposeFragment() {
 
             CenterChattingScreen(
                 chatRoomList = chatRoomList,
-                navigateTo = { navigationHelper.navigateTo(NavigationEvent.NavigateTo(it)) },
+                navigateTo = {
+                    navigationHelper.navigateTo(
+                        com.idle.navigation.NavigationEvent.NavigateTo(
+                            it
+                        )
+                    )
+                },
             )
         }
     }
@@ -76,7 +80,7 @@ internal class CenterChattingFragment : BaseComposeFragment() {
 @Composable
 internal fun CenterChattingScreen(
     chatRoomList: List<ChatRoom>?,
-    navigateTo: (DeepLinkDestination) -> Unit,
+    navigateTo: (com.idle.navigation.DeepLinkDestination) -> Unit,
 ) {
     val listState = rememberLazyListState()
 
@@ -154,7 +158,7 @@ internal fun CenterChattingScreen(
 @Composable
 internal fun ChatRoomItem(
     chatRoom: ChatRoom,
-    navigateTo: (DeepLinkDestination) -> Unit,
+    navigateTo: (com.idle.navigation.DeepLinkDestination) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val backgroundColor = if (chatRoom.unReadMessageCount > 0) {
@@ -170,7 +174,7 @@ internal fun ChatRoomItem(
             .background(backgroundColor)
             .clickable {
                 navigateTo(
-                    DeepLinkDestination.ChattingDetail(
+                    com.idle.navigation.DeepLinkDestination.ChattingDetail(
                         chattingRoomId = chatRoom.id,
                         receiverId = chatRoom.receiver,
                         receiverUserType = UserType.WORKER.apiValue,

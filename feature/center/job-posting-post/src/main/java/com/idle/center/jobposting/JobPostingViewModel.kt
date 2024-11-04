@@ -1,13 +1,10 @@
 package com.idle.center.jobposting
 
 import androidx.core.text.isDigitsOnly
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.idle.binding.DeepLinkDestination.CenterJobPostingPostComplete
 import com.idle.binding.EventHandlerHelper
 import com.idle.binding.MainEvent
-import com.idle.binding.NavigationEvent
-import com.idle.binding.NavigationHelper
-import com.idle.binding.base.BaseViewModel
 import com.idle.center.job.posting.post.R
 import com.idle.compose.JobPostingBottomSheetType
 import com.idle.domain.model.auth.Gender
@@ -21,6 +18,7 @@ import com.idle.domain.model.jobposting.PayType
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.usecase.jobposting.PostJobPostingUseCase
 import com.idle.domain.usecase.profile.GetLocalMyCenterProfileUseCase
+import com.idle.navigation.DeepLinkDestination.CenterJobPostingPostComplete
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -41,8 +39,8 @@ class JobPostingViewModel @Inject constructor(
     private val postJobPostingUseCase: PostJobPostingUseCase,
     private val errorHandlerHelper: ErrorHandler,
     val eventHandlerHelper: EventHandlerHelper,
-    val navigationHelper: NavigationHelper,
-) : BaseViewModel() {
+    val navigationHelper: com.idle.navigation.NavigationHelper,
+) : ViewModel() {
     private val _profile = MutableStateFlow<CenterProfile?>(null)
     val profile = _profile.asStateFlow()
 
@@ -162,7 +160,7 @@ class JobPostingViewModel @Inject constructor(
     }
 
     internal fun setPayAmount(payAmount: String) {
-        if(payAmount.length > 9){
+        if (payAmount.length > 9) {
             return
         }
 
@@ -362,7 +360,7 @@ class JobPostingViewModel @Inject constructor(
                 applyDeadline = _applyDeadline.value?.toString(),
             ).onSuccess {
                 navigationHelper.navigateTo(
-                    NavigationEvent.NavigateTo(
+                    com.idle.navigation.NavigationEvent.NavigateTo(
                         destination = CenterJobPostingPostComplete,
                         popUpTo = R.id.jobPostingPostFragment
                     )

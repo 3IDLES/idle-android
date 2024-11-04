@@ -1,13 +1,10 @@
 package com.idle.signin.center.newpassword
 
 import androidx.core.text.isDigitsOnly
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.idle.binding.DeepLinkDestination
 import com.idle.binding.EventHandlerHelper
 import com.idle.binding.MainEvent
-import com.idle.binding.NavigationEvent
-import com.idle.binding.NavigationHelper
-import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.CountDownTimer
 import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
@@ -40,8 +37,8 @@ class NewPasswordViewModel @Inject constructor(
     private val countDownTimer: CountDownTimer,
     private val errorHandlerHelper: ErrorHandler,
     private val eventHandlerHelper: EventHandlerHelper,
-    private val navigationHelper: NavigationHelper,
-) : BaseViewModel() {
+    private val navigationHelper: com.idle.navigation.NavigationHelper,
+) : ViewModel() {
     private val _phoneNumber = MutableStateFlow("")
     internal val phoneNumber = _phoneNumber.asStateFlow()
 
@@ -126,7 +123,7 @@ class NewPasswordViewModel @Inject constructor(
     }
 
     internal fun setAuthCode(certificateNumber: String) {
-        if(certificateNumber.length > 6){
+        if (certificateNumber.length > 6) {
             return
         }
 
@@ -139,7 +136,7 @@ class NewPasswordViewModel @Inject constructor(
     }
 
     internal fun setNewPassword(password: String) {
-        if(password.length > 20){
+        if (password.length > 20) {
             return
         }
 
@@ -147,7 +144,7 @@ class NewPasswordViewModel @Inject constructor(
     }
 
     internal fun setNewPasswordForConfirm(passwordForConfirm: String) {
-        if(passwordForConfirm.length > 20){
+        if (passwordForConfirm.length > 20) {
             return
         }
 
@@ -191,8 +188,8 @@ class NewPasswordViewModel @Inject constructor(
             phoneNumber = _phoneNumber.value
         ).onSuccess {
             navigationHelper.navigateTo(
-                NavigationEvent.NavigateTo(
-                    destination = DeepLinkDestination.CenterSignIn("새 비밀번호를 발급하였습니다."),
+                com.idle.navigation.NavigationEvent.NavigateTo(
+                    destination = com.idle.navigation.DeepLinkDestination.CenterSignIn("새 비밀번호를 발급하였습니다."),
                     popUpTo = R.id.newPasswordFragment,
                 )
             )

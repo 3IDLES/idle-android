@@ -1,17 +1,12 @@
 package com.idle.signin.center
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.analytics.AnalyticsEvent
 import com.idle.analytics.AnalyticsEvent.PropertiesKeys.ACTION_NAME
 import com.idle.analytics.AnalyticsEvent.PropertiesKeys.ACTION_RESULT
 import com.idle.analytics.businessmetric.AnalyticsHelper
-import com.idle.binding.DeepLinkDestination.CenterHome
-import com.idle.binding.DeepLinkDestination.CenterPending
-import com.idle.binding.DeepLinkDestination.CenterRegister
 import com.idle.binding.EventHandlerHelper
-import com.idle.binding.NavigationEvent.NavigateTo
-import com.idle.binding.NavigationHelper
-import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.error.ApiErrorCode
 import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.error.HttpResponseException
@@ -20,6 +15,10 @@ import com.idle.domain.model.profile.CenterManagerAccountStatus
 import com.idle.domain.usecase.auth.SignInCenterUseCase
 import com.idle.domain.usecase.profile.GetCenterStatusUseCase
 import com.idle.domain.usecase.profile.GetMyCenterProfileUseCase
+import com.idle.navigation.DeepLinkDestination.CenterHome
+import com.idle.navigation.DeepLinkDestination.CenterPending
+import com.idle.navigation.DeepLinkDestination.CenterRegister
+import com.idle.navigation.NavigationEvent.NavigateTo
 import com.idle.signin.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,8 +34,8 @@ class CenterSignInViewModel @Inject constructor(
     private val analyticsHelper: AnalyticsHelper,
     private val errorHandlerHelper: ErrorHandler,
     val eventHandlerHelper: EventHandlerHelper,
-    val navigationHelper: NavigationHelper,
-) : BaseViewModel() {
+    val navigationHelper: com.idle.navigation.NavigationHelper,
+) : ViewModel() {
     private val _centerId = MutableStateFlow("")
     internal val centerId = _centerId.asStateFlow()
 
@@ -47,7 +46,7 @@ class CenterSignInViewModel @Inject constructor(
     val isLoginError = _isLoginError.asStateFlow()
 
     internal fun setCenterId(id: String) {
-        if(id.length > 20){
+        if (id.length > 20) {
             return
         }
 
@@ -56,7 +55,7 @@ class CenterSignInViewModel @Inject constructor(
     }
 
     internal fun setCenterPassword(password: String) {
-        if(password.length > 20){
+        if (password.length > 20) {
             return
         }
 

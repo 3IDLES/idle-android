@@ -1,10 +1,8 @@
 package com.idle.setting.worker
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.analytics.businessmetric.AnalyticsHelper
-import com.idle.binding.NavigationEvent
-import com.idle.binding.NavigationHelper
-import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.usecase.auth.LogoutWorkerUseCase
@@ -23,8 +21,8 @@ class WorkerSettingViewModel @Inject constructor(
     private val logoutWorkerUseCase: LogoutWorkerUseCase,
     private val analyticsHelper: AnalyticsHelper,
     private val errorHandlerHelper: ErrorHandler,
-    val navigationHelper: NavigationHelper,
-) : BaseViewModel() {
+    val navigationHelper: com.idle.navigation.NavigationHelper,
+) : ViewModel() {
     private val _workerProfile = MutableStateFlow<WorkerProfile?>(null)
 
     private val _workerSettingEvent = MutableSharedFlow<SettingEvent>()
@@ -44,7 +42,7 @@ class WorkerSettingViewModel @Inject constructor(
         logoutWorkerUseCase().onSuccess {
             analyticsHelper.setUserId(null)
             navigationHelper.navigateTo(
-                NavigationEvent.NavigateToAuthWithClearBackStack(
+                com.idle.navigation.NavigationEvent.NavigateToAuthWithClearBackStack(
                     toastMsg = "로그아웃이 완료되었습니다.",
                     toastType = "SUCCESS",
                 )

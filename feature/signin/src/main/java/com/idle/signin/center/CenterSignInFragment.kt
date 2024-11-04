@@ -25,10 +25,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.navArgs
 import com.idle.analytics.businessmetric.TrackScreenViewEvent
-import com.idle.binding.DeepLinkDestination.Auth
-import com.idle.binding.DeepLinkDestination.NewPassword
 import com.idle.binding.MainEvent
-import com.idle.binding.NavigationEvent
 import com.idle.binding.ToastType
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
@@ -39,6 +36,8 @@ import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
+import com.idle.navigation.DeepLinkDestination.Auth
+import com.idle.navigation.DeepLinkDestination.NewPassword
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -73,7 +72,7 @@ internal class CenterSignInFragment : BaseComposeFragment() {
                 signInCenter = ::signInCenter,
                 navigateToAuth = {
                     navigationHelper.navigateTo(
-                        NavigationEvent.NavigateTo(
+                        com.idle.navigation.NavigationEvent.NavigateTo(
                             destination = Auth,
                             popUpTo = com.idle.signin.R.id.centerSignInFragment
                         )
@@ -81,7 +80,7 @@ internal class CenterSignInFragment : BaseComposeFragment() {
                 },
                 navigateToNewPassword = {
                     navigationHelper.navigateTo(
-                        NavigationEvent.NavigateTo(NewPassword)
+                        com.idle.navigation.NavigationEvent.NavigateTo(NewPassword)
                     )
                 }
             )

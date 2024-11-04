@@ -7,12 +7,11 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.idle.binding.DeepLinkDestination.CenterProfile
-import com.idle.binding.DeepLinkDestination.Withdrawal
-import com.idle.binding.NavigationEvent
 import com.idle.binding.base.BaseBindingFragment
 import com.idle.binding.repeatOnStarted
 import com.idle.domain.model.auth.UserType
+import com.idle.navigation.DeepLinkDestination.CenterProfile
+import com.idle.navigation.DeepLinkDestination.Withdrawal
 import com.idle.setting.FAQ_URL
 import com.idle.setting.INQUIRY
 import com.idle.setting.PRIVACY_POLICY_URL
@@ -79,7 +78,7 @@ internal class CenterSettingFragment :
     private fun handleSettingEvent(event: SettingEvent) {
         when (event) {
             SettingEvent.Profile -> fragmentViewModel.navigationHelper.navigateTo(
-                NavigationEvent.NavigateTo(CenterProfile("default"))
+                com.idle.navigation.NavigationEvent.NavigateTo(CenterProfile("default"))
             )
 
             SettingEvent.FAQ -> navigateToUri(FAQ_URL)
@@ -87,7 +86,7 @@ internal class CenterSettingFragment :
             SettingEvent.TermsAndPolicies -> navigateToUri(TERMS_AND_POLICES_URL)
             SettingEvent.Inquiry -> navigateToUri(INQUIRY)
             SettingEvent.Withdrawal -> fragmentViewModel.navigationHelper.navigateTo(
-                NavigationEvent.NavigateTo(
+                com.idle.navigation.NavigationEvent.NavigateTo(
                     destination = Withdrawal(UserType.CENTER),
                     popUpTo = R.id.centerSettingFragment
                 )

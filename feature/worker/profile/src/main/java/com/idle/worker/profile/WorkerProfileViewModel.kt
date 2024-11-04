@@ -2,11 +2,11 @@ package com.idle.worker.profile
 
 import android.net.Uri
 import androidx.core.net.toUri
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.EventHandlerHelper
 import com.idle.binding.MainEvent
 import com.idle.binding.ToastType
-import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.profile.JobSearchStatus
 import com.idle.domain.model.profile.WorkerProfile
@@ -26,7 +26,7 @@ class WorkerProfileViewModel @Inject constructor(
     private val updateWorkerProfileUseCase: UpdateWorkerProfileUseCase,
     private val errorHandlerHelper: ErrorHandler,
     private val eventHandlerHelper: EventHandlerHelper,
-) : BaseViewModel() {
+) : ViewModel() {
     private val _workerProfile = MutableStateFlow<WorkerProfile?>(null)
     val workerProfile = _workerProfile.asStateFlow()
 

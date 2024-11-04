@@ -17,8 +17,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.idle.binding.DeepLinkDestination.Auth
-import com.idle.binding.NavigationEvent
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
@@ -27,6 +25,7 @@ import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.BusinessRegistrationInfo
+import com.idle.navigation.DeepLinkDestination.Auth
 import com.idle.signup.center.step.BusinessRegistrationScreen
 import com.idle.signup.center.step.CenterNameScreen
 import com.idle.signup.center.step.CenterPhoneNumberScreen
@@ -98,7 +97,7 @@ internal class CenterSignUpFragment : BaseComposeFragment() {
                 validateBusinessRegistrationNumber = ::validateBusinessRegistrationNumber,
                 navigateToAuth = {
                     navigationHelper.navigateTo(
-                        NavigationEvent.NavigateTo(
+                        com.idle.navigation.NavigationEvent.NavigateTo(
                             destination = Auth,
                             popUpTo = com.idle.signup.R.id.centerSignUpFragment,
                         )

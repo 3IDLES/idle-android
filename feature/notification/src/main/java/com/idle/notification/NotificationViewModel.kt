@@ -1,8 +1,7 @@
 package com.idle.notification
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.idle.binding.NavigationHelper
-import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.notification.Notification
 import com.idle.domain.usecase.notification.GetMyNotificationUseCase
@@ -18,8 +17,8 @@ class NotificationViewModel @Inject constructor(
     private val getMyNotificationUseCase: GetMyNotificationUseCase,
     private val readNotificationUseCase: ReadNotificationUseCase,
     private val errorHandlerHelper: ErrorHandler,
-    private val navigationHelper: NavigationHelper,
-) : BaseViewModel() {
+    private val navigationHelper: com.idle.navigation.NavigationHelper,
+) : ViewModel() {
     private val next = MutableStateFlow<String?>(null)
 
     private val _callType = MutableStateFlow(NotificationCallType.NOTIFICATION)

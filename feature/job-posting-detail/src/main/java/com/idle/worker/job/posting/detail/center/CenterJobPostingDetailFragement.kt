@@ -30,9 +30,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.navArgs
 import com.idle.analytics.businessmetric.TrackScreenViewEvent
-import com.idle.binding.DeepLinkDestination
 import com.idle.binding.MainEvent
-import com.idle.binding.NavigationEvent
 import com.idle.center.job.edit.JobEditScreen
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
@@ -89,7 +87,7 @@ internal class CenterJobPostingDetailFragment : BaseComposeFragment() {
                             lotNumberAddress = it.lotNumberAddress,
                             clientName = it.clientName,
                             gender = it.gender,
-                            birthYear = (LocalDate.now(ZoneId.of("Asia/Seoul")).year - it.age +1).toString(),
+                            birthYear = (LocalDate.now(ZoneId.of("Asia/Seoul")).year - it.age + 1).toString(),
                             weight = it.weight.toString(),
                             careLevel = it.careLevel.toString(),
                             mentalStatus = it.mentalStatus,
@@ -148,7 +146,11 @@ internal class CenterJobPostingDetailFragment : BaseComposeFragment() {
                                 endJobPosting = ::endJobPosting,
                                 deleteJobPosting = ::deleteJobPosting,
                                 navigateTo = {
-                                    navigationHelper.navigateTo(NavigationEvent.NavigateTo(it))
+                                    navigationHelper.navigateTo(
+                                        com.idle.navigation.NavigationEvent.NavigateTo(
+                                            it
+                                        )
+                                    )
                                 },
                                 setJobPostingDetailState = ::setJobPostingState,
                             )
@@ -167,7 +169,7 @@ internal fun CenterJobPostingDetailScreen(
     applicantsCount: Int,
     endJobPosting: (String) -> Unit,
     deleteJobPosting: (String) -> Unit,
-    navigateTo: (DeepLinkDestination) -> Unit,
+    navigateTo: (com.idle.navigation.DeepLinkDestination) -> Unit,
     setJobPostingDetailState: (JobPostingDetailState) -> Unit,
 ) {
     val onBackPressedDispatcher =
@@ -356,7 +358,9 @@ internal fun CenterJobPostingDetailScreen(
                             enable = applicantsCount != 0 && it.jobPostingStatus == JobPostingStatus.IN_PROGRESS,
                             onClick = {
                                 navigateTo(
-                                    DeepLinkDestination.CenterApplicantInquiry(jobPostingId)
+                                    com.idle.navigation.DeepLinkDestination.CenterApplicantInquiry(
+                                        jobPostingId
+                                    )
                                 )
                             },
                             disabledContainerColor = if (it.jobPostingStatus == JobPostingStatus.IN_PROGRESS) CareTheme.colors.gray200

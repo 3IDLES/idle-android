@@ -1,12 +1,10 @@
 package com.idle.pending
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.EventHandlerHelper
 import com.idle.binding.MainEvent
-import com.idle.binding.NavigationEvent
-import com.idle.binding.NavigationHelper
 import com.idle.binding.ToastType.SUCCESS
-import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.profile.CenterManagerAccountStatus
 import com.idle.domain.usecase.auth.LogoutCenterUseCase
@@ -23,8 +21,8 @@ class CenterPendingViewModel @Inject constructor(
     private val sendCenterVerificationRequestUseCase: SendCenterVerificationRequestUseCase,
     private val errorHandlerHelper: ErrorHandler,
     private val eventHandlerHelper: EventHandlerHelper,
-    private val navigationHelper: NavigationHelper,
-) : BaseViewModel() {
+    private val navigationHelper: com.idle.navigation.NavigationHelper,
+) : ViewModel() {
     private val _status = MutableStateFlow(CenterManagerAccountStatus.UNKNOWN)
     val status = _status.asStateFlow()
 
@@ -35,7 +33,7 @@ class CenterPendingViewModel @Inject constructor(
     internal fun logout() = viewModelScope.launch {
         logoutCenterUseCase().onSuccess {
             navigationHelper.navigateTo(
-                NavigationEvent.NavigateToAuthWithClearBackStack(
+                com.idle.navigation.NavigationEvent.NavigateToAuthWithClearBackStack(
                     toastMsg = "로그아웃이 완료되었습니다.",
                     toastType = "SUCCESS"
                 )

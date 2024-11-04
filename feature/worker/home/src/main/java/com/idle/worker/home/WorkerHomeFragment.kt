@@ -46,9 +46,6 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.idle.analytics.businessmetric.LocalAnalyticsHelper
 import com.idle.analytics.businessmetric.TrackScreenViewEvent
-import com.idle.binding.DeepLinkDestination
-import com.idle.binding.DeepLinkDestination.WorkerJobDetail
-import com.idle.binding.NavigationEvent
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designresource.R
@@ -64,6 +61,7 @@ import com.idle.domain.model.jobposting.JobPosting
 import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.WorkerJobPosting
 import com.idle.domain.model.profile.WorkerProfile
+import com.idle.navigation.DeepLinkDestination.WorkerJobDetail
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.format.DateTimeFormatter
 
@@ -101,7 +99,13 @@ internal class WorkerHomeFragment : BaseComposeFragment() {
                 applyJobPosting = ::applyJobPosting,
                 addFavoriteJobPosting = ::addFavoriteJobPosting,
                 removeFavoriteJobPosting = ::removeFavoriteJobPosting,
-                navigateTo = { navigationHelper.navigateTo(NavigationEvent.NavigateTo(it)) },
+                navigateTo = {
+                    navigationHelper.navigateTo(
+                        com.idle.navigation.NavigationEvent.NavigateTo(
+                            it
+                        )
+                    )
+                },
             )
         }
     }
@@ -118,7 +122,7 @@ internal fun WorkerHomeScreen(
     applyJobPosting: (String) -> Unit,
     addFavoriteJobPosting: (String, JobPostingType) -> Unit,
     removeFavoriteJobPosting: (String) -> Unit,
-    navigateTo: (DeepLinkDestination) -> Unit,
+    navigateTo: (com.idle.navigation.DeepLinkDestination) -> Unit,
 ) {
     val listState = rememberLazyListState()
     val lastVisibleIndex by remember {
@@ -195,7 +199,7 @@ internal fun WorkerHomeScreen(
                     if (showNotificationCenter) {
                         Box(modifier = Modifier
                             .size(32.dp)
-                            .clickable { navigateTo(DeepLinkDestination.Notification) }
+                            .clickable { navigateTo(com.idle.navigation.DeepLinkDestination.Notification) }
                         ) {
                             Image(
                                 painter = painterResource(id = R.drawable.ic_notification),
@@ -266,7 +270,7 @@ internal fun WorkerHomeScreen(
                             textColor = CareTheme.colors.gray300,
                             containerColor = CareTheme.colors.white000,
                             border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray200),
-                            onClick = { navigateTo(DeepLinkDestination.WorkerProfile()) },
+                            onClick = { navigateTo(com.idle.navigation.DeepLinkDestination.WorkerProfile()) },
                         )
                     }
                 } else {
@@ -328,7 +332,7 @@ private fun WorkerRecruitmentCard(
     showDialog: (WorkerJobPosting) -> Unit,
     addFavoriteJobPosting: (String, JobPostingType) -> Unit,
     removeFavoriteJobPosting: (String) -> Unit,
-    navigateTo: (DeepLinkDestination) -> Unit,
+    navigateTo: (com.idle.navigation.DeepLinkDestination) -> Unit,
 ) {
     val analyticsHelper = LocalAnalyticsHelper.current
 
@@ -489,7 +493,7 @@ private fun WorkerWorkNetCard(
     profile: WorkerProfile?,
     addFavoriteJobPosting: (String, JobPostingType) -> Unit,
     removeFavoriteJobPosting: (String) -> Unit,
-    navigateTo: (DeepLinkDestination) -> Unit,
+    navigateTo: (com.idle.navigation.DeepLinkDestination) -> Unit,
 ) {
     val analyticsHelper = LocalAnalyticsHelper.current
     val starTintColor by animateColorAsState(

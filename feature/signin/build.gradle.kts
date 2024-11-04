@@ -7,7 +7,7 @@ android {
     namespace = "com.idle.signin"
 }
 
-dependencies{
+dependencies {
     testImplementation(libs.junit.jupiter)
     androidTestImplementation(libs.androidx.junit)
 }

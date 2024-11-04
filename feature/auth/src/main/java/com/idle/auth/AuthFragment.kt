@@ -35,12 +35,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.navArgs
 import com.idle.analytics.businessmetric.TrackScreenViewEvent
-import com.idle.binding.DeepLinkDestination
-import com.idle.binding.DeepLinkDestination.CenterSignIn
-import com.idle.binding.DeepLinkDestination.CenterSignUp
-import com.idle.binding.DeepLinkDestination.WorkerSignUp
 import com.idle.binding.MainEvent
-import com.idle.binding.NavigationEvent
 import com.idle.binding.ToastType
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
@@ -48,6 +43,9 @@ import com.idle.designresource.R.string
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.UserType
+import com.idle.navigation.DeepLinkDestination.CenterSignIn
+import com.idle.navigation.DeepLinkDestination.CenterSignUp
+import com.idle.navigation.DeepLinkDestination.WorkerSignUp
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -76,7 +74,7 @@ internal class AuthFragment : BaseComposeFragment() {
                 onUserRoleChanged = ::setUserRole,
                 navigateTo = {
                     navigationHelper.navigateTo(
-                        NavigationEvent.NavigateTo(
+                        com.idle.navigation.NavigationEvent.NavigateTo(
                             destination = it,
                             popUpTo = R.id.nav_auth
                         )
@@ -91,7 +89,7 @@ internal class AuthFragment : BaseComposeFragment() {
 internal fun AuthScreen(
     userType: UserType?,
     onUserRoleChanged: (UserType) -> Unit,
-    navigateTo: (DeepLinkDestination) -> Unit,
+    navigateTo: (com.idle.navigation.DeepLinkDestination) -> Unit,
 ) {
     val cardColor by animateColorAsState(
         if (userType == UserType.WORKER) CareTheme.colors.orange100

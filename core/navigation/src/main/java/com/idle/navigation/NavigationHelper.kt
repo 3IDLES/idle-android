@@ -1,10 +1,10 @@
-package com.idle.binding
+package com.idle.navigation
 
 import android.os.Bundle
-import com.idle.binding.DeepLinkDestination.CenterApplicantInquiry
-import com.idle.binding.DeepLinkDestination.CenterHome
-import com.idle.binding.DeepLinkDestination.CenterJobDetail
-import com.idle.binding.DeepLinkDestination.WorkerJobDetail
+import com.idle.navigation.DeepLinkDestination.CenterApplicantInquiry
+import com.idle.navigation.DeepLinkDestination.CenterHome
+import com.idle.navigation.DeepLinkDestination.CenterJobDetail
+import com.idle.navigation.DeepLinkDestination.WorkerJobDetail
 import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.notification.Notification
 import com.idle.domain.model.notification.NotificationContent

@@ -18,9 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
-import com.idle.binding.DeepLinkDestination.Auth
 import com.idle.binding.MainEvent
-import com.idle.binding.NavigationEvent
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
@@ -28,6 +26,7 @@ import com.idle.designsystem.compose.component.CareProgressBar
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.domain.model.auth.Gender
+import com.idle.navigation.DeepLinkDestination.Auth
 import com.idle.post.code.PostCodeFragment
 import com.idle.signup.worker.step.AddressScreen
 import com.idle.signup.worker.step.WorkerInformationScreen
@@ -95,7 +94,7 @@ internal class WorkerSignUpFragment : BaseComposeFragment() {
                 signUpWorker = ::signUpWorker,
                 navigateToAuth = {
                     navigationHelper.navigateTo(
-                        NavigationEvent.NavigateTo(
+                        com.idle.navigation.NavigationEvent.NavigateTo(
                             destination = Auth,
                             popUpTo = com.idle.signup.R.id.workerSignUpFragment,
                         )

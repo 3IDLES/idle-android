@@ -2,14 +2,12 @@ package com.idle.center.register
 
 import android.net.Uri
 import androidx.core.text.isDigitsOnly
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.idle.binding.DeepLinkDestination.CenterRegisterComplete
-import com.idle.binding.NavigationEvent
-import com.idle.binding.NavigationHelper
-import com.idle.binding.base.BaseViewModel
 import com.idle.center.register.info.R
 import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.usecase.profile.RegisterCenterProfileUseCase
+import com.idle.navigation.DeepLinkDestination.CenterRegisterComplete
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,8 +18,8 @@ import javax.inject.Inject
 class RegisterCenterInfoViewModel @Inject constructor(
     private val registerCenterProfileUseCase: RegisterCenterProfileUseCase,
     private val errorHandlerHelper: ErrorHandler,
-    val navigationHelper: NavigationHelper,
-) : BaseViewModel() {
+    val navigationHelper: com.idle.navigation.NavigationHelper,
+) : ViewModel() {
 
     private val _registrationStep = MutableStateFlow(RegistrationStep.INFO)
     val registrationStep = _registrationStep.asStateFlow()
@@ -56,7 +54,7 @@ class RegisterCenterInfoViewModel @Inject constructor(
             roadNameAddress = _roadNameAddress.value
         ).onSuccess {
             navigationHelper.navigateTo(
-                NavigationEvent.NavigateTo(
+                com.idle.navigation.NavigationEvent.NavigateTo(
                     CenterRegisterComplete,
                     R.id.registerCenterInfoFragment
                 )
