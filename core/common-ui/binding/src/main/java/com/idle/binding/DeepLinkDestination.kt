@@ -29,7 +29,7 @@ sealed class DeepLinkDestination(
 
     data class Withdrawal(val userType: UserType) : DeepLinkDestination(
         addressRes = R.string.withdrawal_deeplink_url,
-        params = mapOf("userType" to userType.name),
+        params = mapOf("userType" to userType.apiValue),
     )
 
     data object NewPassword : DeepLinkDestination(

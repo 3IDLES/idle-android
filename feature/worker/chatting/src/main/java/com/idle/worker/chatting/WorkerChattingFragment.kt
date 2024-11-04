@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -63,7 +64,7 @@ internal class WorkerChattingFragment : BaseComposeFragment() {
                 subscribeChatMessage()
             }
 
-            if(chatRoomList != null) {
+            if (chatRoomList != null) {
                 WorkerChattingScreen(
                     chatRoomList = chatRoomList,
                     navigateTo = { navigationHelper.navigateTo(NavigationEvent.NavigateTo(it)) },
@@ -124,7 +125,7 @@ internal fun WorkerChattingScreen(
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(top = 20.dp, bottom = 36.dp),
+                            .padding(top = 20.dp),
                     ) {
                         items(
                             items = chatRoomList,
@@ -133,6 +134,14 @@ internal fun WorkerChattingScreen(
                             ChatRoomItem(
                                 chatRoom = chatRoom,
                                 navigateTo = navigateTo,
+                            )
+                        }
+
+                        item {
+                            Spacer(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(80.dp),
                             )
                         }
                     }
