@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -96,6 +97,8 @@ internal fun ApplicantInquiryScreen(
         },
         containerColor = CareTheme.colors.white000,
     ) { paddingValues ->
+        val listState = rememberLazyListState()
+
         Column(
             modifier = Modifier
                 .padding(paddingValues)
@@ -110,6 +113,7 @@ internal fun ApplicantInquiryScreen(
             )
 
             LazyColumn(
+                state = listState,
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.spacedBy(space = 8.dp),
                 modifier = Modifier.padding(horizontal = 20.dp),

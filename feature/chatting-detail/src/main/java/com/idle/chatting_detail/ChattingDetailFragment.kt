@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -104,6 +105,7 @@ internal fun ChattingDetailScreen(
     navigateUp: () -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
+    val listState = rememberLazyListState()
     var lastDate: String? = null
 
     Scaffold(
@@ -125,6 +127,7 @@ internal fun ChattingDetailScreen(
                 .padding(paddingValue),
         ) {
             LazyColumn(
+                state = listState,
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
