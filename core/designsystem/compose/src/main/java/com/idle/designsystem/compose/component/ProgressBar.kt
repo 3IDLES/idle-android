@@ -1,6 +1,7 @@
 package com.idle.designsystem.compose.component
 
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -50,7 +51,8 @@ fun CareProgressBar(
             modifier = Modifier
                 .padding(vertical = 10.dp)
                 .height(4.dp)
-                .weight(1f),
+                .weight(1f)
+                .background(CareTheme.colors.gray100),
         )
 
         Text(
