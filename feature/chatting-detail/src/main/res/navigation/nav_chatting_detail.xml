@@ -22,4 +22,13 @@
             android:name="senderId"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/seeAllChatFragment"
+        android:name="com.idle.chatting_detail.seeallchat.SeeAllChatFragment"
+        android:label="SeeAllChatFragment">
+        <deepLink app:uri="@string/chatting_see_all_chat_deeplink_url" />
+        <argument
+            android:name="allChatContents"
+            app:argType="string" />
+    </fragment>
 </navigation>

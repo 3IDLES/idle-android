@@ -1,6 +1,7 @@
 package com.idle.chatting_detail
 
 import androidx.lifecycle.viewModelScope
+import com.idle.binding.NavigationHelper
 import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.chatting.ChatMessage
@@ -28,6 +29,7 @@ class ChattingDetailViewModel @Inject constructor(
     private val getChatMessagesUseCase: GetChatMessagesUseCase,
     private val subscribeChatMessageUseCase: SubscribeChatMessageUseCase,
     private val errorHandlerHelper: ErrorHandler,
+    val navigationHelper: NavigationHelper,
 ) : BaseViewModel() {
     private val _writingText = MutableStateFlow<String>("")
     val writingText = _writingText.asStateFlow()
