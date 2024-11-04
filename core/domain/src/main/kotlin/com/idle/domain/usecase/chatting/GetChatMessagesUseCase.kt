@@ -52,7 +52,12 @@ class GetChatMessagesUseCase @Inject constructor() {
                 roomId = "room1",
                 senderId = "user1",
                 senderType = SenderType.USER,
-                contents = listOf(Content(type = ContentType.TEXT, value = "감사합니다! 친절한 답변 감사합니다.")),
+                contents = listOf(
+                    Content(
+                        type = ContentType.TEXT,
+                        value = "감사합니다! 친절한 답변 감사합니다. 감사합니다! 친절한 답변 감사합니다.감사합니다! 친절한 답변 감사합니다.감사합니다! 친절한 답변 감사합니다.감사합니다! 친절한 답변 감사합니다.감사합니다! 친절한 답변 감사합니다.감사합니다! 친절한 답변 감사합니다.감사합니다! 친절한 답변 감사합니다.감사합니다! 친절한 답변 감사합니다.감사합니다! 친절한 답변 감사합니다.감사합니다! 친절한 답변 감사합니다.감사합니다! 친절한 답변 감사합니다."
+                    )
+                ),
                 createdAt = LocalDateTime.now().minusMinutes(1)
             )
         )

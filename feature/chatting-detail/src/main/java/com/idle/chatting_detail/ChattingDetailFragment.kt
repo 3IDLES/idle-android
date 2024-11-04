@@ -145,9 +145,7 @@ internal fun ChattingDetailScreen(
                     } else {
                         true
                     }
-
                     val padding = PaddingValues(bottom = if (isLast) 16.dp else 6.dp)
-
 
                     val messageDate = chatMessage.createdAt.formatYearMonthDate()
                     val showDate = lastDate != messageDate
