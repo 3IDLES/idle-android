@@ -11,8 +11,8 @@ android {
     namespace = "com.idle.care"
 
     defaultConfig {
-        versionCode = 6
-        versionName = "1.0.5"
+        versionCode = 8
+        versionName = "1.1.1"
         targetSdk = 34
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

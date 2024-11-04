@@ -1,6 +1,5 @@
 package com.idle.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.analytics.error.ErrorLoggingHelper
@@ -45,8 +44,8 @@ class MainViewModel @Inject constructor(
     private val getMyCenterProfileUseCase: GetMyCenterProfileUseCase,
     private val getMyWorkerProfileUseCase: GetMyWorkerProfileUseCase,
     private val getCenterStatusUseCase: GetCenterStatusUseCase,
-    private val connectWebSocketUseCase: ConnectWebSocketUseCase,
-    private val disconnectWebSocketUseCase: DisconnectWebSocketUseCase,
+//    private val connectWebSocketUseCase: ConnectWebSocketUseCase,
+//    private val disconnectWebSocketUseCase: DisconnectWebSocketUseCase,
     private val errorHandlerHelper: ErrorHandler,
     private val eventHandlerHelper: EventHandlerHelper,
     private val errorLoggingHelper: ErrorLoggingHelper,
@@ -69,15 +68,15 @@ class MainViewModel @Inject constructor(
     }
 
     internal fun connectWebSocket() = viewModelScope.launch {
-        Log.d("test", "웹소켓 연결")
-        connectWebSocketUseCase().onSuccess { }
-            .onFailure { }
+//        Log.d("test", "웹소켓 연결")
+//        connectWebSocketUseCase().onSuccess { }
+//            .onFailure { }
     }
 
     internal fun disconnectWebSocket() = viewModelScope.launch {
-        Log.d("test", "웹소켓 연결해제")
-        disconnectWebSocketUseCase().onSuccess { }
-            .onFailure { }
+//        Log.d("test", "웹소켓 연결해제")
+//        disconnectWebSocketUseCase().onSuccess { }
+//            .onFailure { }
     }
 
     internal fun setNavigationMenuType(navigationMenuType: NavigationMenuType) {
