@@ -59,6 +59,11 @@ sealed class DeepLinkDestination(
         )
     )
 
+    data class SeeAllChat(val allChatContents: String) : DeepLinkDestination(
+        addressRes = R.string.chatting_see_all_chat_deeplink_url,
+        params = mapOf("allChatContents" to allChatContents)
+    )
+
     data class CenterSignIn(val toastMsg: String = "default") : DeepLinkDestination(
         addressRes = R.string.center_signin_deeplink_url,
         params = mapOf("toastMsg" to toastMsg)
