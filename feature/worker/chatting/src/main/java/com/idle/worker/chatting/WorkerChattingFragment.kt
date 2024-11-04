@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
@@ -81,6 +82,8 @@ internal fun WorkerChattingScreen(
     chatRoomList: List<ChatRoom>?,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
+    val listState = rememberLazyListState()
+
     Scaffold(
         topBar = {
             CareHeadingTopBar(
@@ -123,6 +126,7 @@ internal fun WorkerChattingScreen(
                     }
                 } else {
                     LazyColumn(
+                        state = listState,
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(top = 20.dp),
