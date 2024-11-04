@@ -9,7 +9,6 @@ android {
 
 dependencies {
     implementation(projects.core.designresource)
-    implementation(projects.core.commonUi.binding)
     implementation(projects.core.analytics)
 
     implementation(libs.androidx.navigation.fragment)

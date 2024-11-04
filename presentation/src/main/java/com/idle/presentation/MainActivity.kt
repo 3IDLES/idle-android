@@ -21,11 +21,10 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.idle.auth.AuthFragmentDirections
 import com.idle.binding.MainEvent
-import com.idle.binding.NavigationEvent
-import com.idle.binding.deepLinkNavigateTo
 import com.idle.binding.repeatOnStarted
 import com.idle.designsystem.binding.component.dismissToast
 import com.idle.designsystem.binding.component.showToast
+import com.idle.navigation.deepLinkNavigateTo
 import com.idle.presentation.databinding.ActivityMainBinding
 import com.idle.presentation.forceupdate.ForceUpdateFragment
 import com.idle.presentation.network.NetworkObserver
@@ -162,13 +161,13 @@ class MainActivity : AppCompatActivity() {
             repeatOnStarted {
                 navigationHelper.navigationFlow.collect { navigationEvent ->
                     when (navigationEvent) {
-                        is NavigationEvent.NavigateTo -> navController.deepLinkNavigateTo(
+                        is com.idle.navigation.NavigationEvent.NavigateTo -> navController.deepLinkNavigateTo(
                             context = this@MainActivity,
                             deepLinkDestination = navigationEvent.destination,
                             popUpTo = navigationEvent.popUpTo,
                         )
 
-                        is NavigationEvent.NavigateToAuthWithClearBackStack -> navController.navigate(
+                        is com.idle.navigation.NavigationEvent.NavigateToAuthWithClearBackStack -> navController.navigate(
                             AuthFragmentDirections.actionGlobalNavAuth(
                                 navigationEvent.toastMsg,
                                 navigationEvent.toastType

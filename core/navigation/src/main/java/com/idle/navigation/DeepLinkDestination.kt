@@ -1,4 +1,4 @@
-package com.idle.binding
+package com.idle.navigation
 
 import android.content.Context
 import androidx.annotation.IdRes
@@ -6,10 +6,9 @@ import androidx.core.net.toUri
 import androidx.navigation.NavController
 import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.NavOptions
-import com.idle.binding.DeepLinkDestination.Auth
-import com.idle.binding.DeepLinkDestination.CenterSetting
-import com.idle.binding.DeepLinkDestination.WorkerSetting
-import com.idle.designresource.R
+import com.idle.navigation.DeepLinkDestination.Auth
+import com.idle.navigation.DeepLinkDestination.CenterSetting
+import com.idle.navigation.DeepLinkDestination.WorkerSetting
 import com.idle.domain.model.auth.UserType
 
 sealed class DeepLinkDestination(

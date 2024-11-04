@@ -1,8 +1,7 @@
 package com.idle.worker.chatting
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.idle.binding.NavigationHelper
-import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.chatting.ChatRoom
 import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.profile.WorkerProfile
@@ -25,8 +24,8 @@ class WorkerChattingViewModel @Inject constructor(
     private val getChatRoomListUseCase: GetChatRoomListUseCase,
     private val subscribeChatMessageUseCase: SubscribeChatMessageUseCase,
     private val errorHandler: ErrorHandler,
-    val navigationHelper: NavigationHelper,
-) : BaseViewModel() {
+    val navigationHelper: com.idle.navigation.NavigationHelper,
+) : ViewModel() {
     private var myProfile: WorkerProfile? = null
 
     private val _chatRoomMap = MutableStateFlow<LinkedHashMap<String, ChatRoom>>(LinkedHashMap())

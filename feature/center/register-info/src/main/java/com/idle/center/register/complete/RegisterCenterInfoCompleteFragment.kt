@@ -21,12 +21,11 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.idle.analytics.businessmetric.TrackScreenViewEvent
-import com.idle.binding.DeepLinkDestination.CenterHome
-import com.idle.binding.NavigationEvent
 import com.idle.center.register.info.R
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.foundation.CareTheme
+import com.idle.navigation.DeepLinkDestination.CenterHome
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -42,7 +41,7 @@ internal class CenterRegisterCompleteFragment : BaseComposeFragment() {
                 CenterRegisterCompleteScreen(
                     navigateToCenterHome = {
                         navigationHelper.navigateTo(
-                            NavigationEvent.NavigateTo(
+                            com.idle.navigation.NavigationEvent.NavigateTo(
                                 CenterHome,
                                 R.id.registerCenterInfoCompleteFragment
                             )

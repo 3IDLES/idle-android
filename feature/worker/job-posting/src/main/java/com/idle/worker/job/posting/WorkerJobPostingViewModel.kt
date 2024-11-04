@@ -1,11 +1,10 @@
 package com.idle.worker.job.posting
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.EventHandlerHelper
 import com.idle.binding.MainEvent
-import com.idle.binding.NavigationHelper
 import com.idle.binding.ToastType
-import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.jobposting.ApplyMethod
 import com.idle.domain.model.jobposting.CrawlingJobPosting
@@ -38,8 +37,8 @@ class WorkerJobPostingViewModel @Inject constructor(
     private val removeFavoriteJobPostingUseCase: RemoveFavoriteJobPostingUseCase,
     private val errorHandlerHelper: ErrorHandler,
     private val eventHandlerHelper: EventHandlerHelper,
-    val navigationHelper: NavigationHelper,
-) : BaseViewModel() {
+    val navigationHelper: com.idle.navigation.NavigationHelper,
+) : ViewModel() {
     private val _profile = MutableStateFlow<WorkerProfile?>(null)
     val profile = _profile.asStateFlow()
 

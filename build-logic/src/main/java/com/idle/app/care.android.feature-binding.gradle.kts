@@ -19,6 +19,7 @@ dependencies {
     implementation(project(":core:designsystem:binding"))
     implementation(project(":core:domain"))
     implementation(project(":core:designresource"))
+    implementation(project(":core:navigation"))
     implementation(project(":core:analytics"))
     implementation(project(":core:common-ui:binding"))
 

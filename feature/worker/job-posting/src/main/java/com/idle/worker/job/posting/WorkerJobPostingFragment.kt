@@ -39,9 +39,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.idle.analytics.businessmetric.LocalAnalyticsHelper
 import com.idle.analytics.businessmetric.TrackScreenViewEvent
-import com.idle.binding.DeepLinkDestination
-import com.idle.binding.DeepLinkDestination.WorkerJobDetail
-import com.idle.binding.NavigationEvent
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designresource.R
@@ -58,6 +55,7 @@ import com.idle.domain.model.jobposting.JobPosting
 import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.WorkerJobPosting
 import com.idle.domain.model.profile.WorkerProfile
+import com.idle.navigation.DeepLinkDestination.WorkerJobDetail
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.time.format.DateTimeFormatter
@@ -90,7 +88,13 @@ internal class WorkerJobPostingFragment : BaseComposeFragment() {
                 applyJobPosting = ::applyJobPosting,
                 addFavoriteJobPosting = ::addFavoriteJobPosting,
                 removeFavoriteJobPosting = ::removeFavoriteJobPosting,
-                navigateTo = { navigationHelper.navigateTo(NavigationEvent.NavigateTo(it)) },
+                navigateTo = {
+                    navigationHelper.navigateTo(
+                        com.idle.navigation.NavigationEvent.NavigateTo(
+                            it
+                        )
+                    )
+                },
             )
         }
     }
@@ -107,7 +111,7 @@ internal fun WorkerJobPostingScreen(
     applyJobPosting: (String) -> Unit,
     addFavoriteJobPosting: (String, JobPostingType) -> Unit,
     removeFavoriteJobPosting: (String) -> Unit,
-    navigateTo: (DeepLinkDestination) -> Unit,
+    navigateTo: (com.idle.navigation.DeepLinkDestination) -> Unit,
 ) {
     var showDialog by remember { mutableStateOf(false) }
     var selectedJobPosting by remember { mutableStateOf<WorkerJobPosting?>(null) }
@@ -316,7 +320,7 @@ private fun WorkerRecruitmentCard(
     showDialog: (WorkerJobPosting) -> Unit,
     addFavoriteJobPosting: (String, JobPostingType) -> Unit,
     removeFavoriteJobPosting: (String) -> Unit,
-    navigateTo: (DeepLinkDestination) -> Unit,
+    navigateTo: (com.idle.navigation.DeepLinkDestination) -> Unit,
 ) {
     val starTintColor by animateColorAsState(
         targetValue = if (jobPosting.isFavorite) CareTheme.colors.orange300
@@ -473,7 +477,7 @@ private fun WorkerWorkNetCard(
     jobPosting: CrawlingJobPosting,
     addFavoriteJobPosting: (String, JobPostingType) -> Unit,
     removeFavoriteJobPosting: (String) -> Unit,
-    navigateTo: (DeepLinkDestination) -> Unit,
+    navigateTo: (com.idle.navigation.DeepLinkDestination) -> Unit,
 ) {
     val starTintColor by animateColorAsState(
         targetValue = if (jobPosting.isFavorite) CareTheme.colors.orange300

@@ -38,8 +38,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import com.idle.binding.DeepLinkDestination
-import com.idle.binding.NavigationEvent
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designsystem.compose.component.CareHeadingTopBar
@@ -68,7 +66,13 @@ internal class WorkerChattingFragment : BaseComposeFragment() {
             if (chatRoomList != null) {
                 WorkerChattingScreen(
                     chatRoomList = chatRoomList,
-                    navigateTo = { navigationHelper.navigateTo(NavigationEvent.NavigateTo(it)) },
+                    navigateTo = {
+                        navigationHelper.navigateTo(
+                            com.idle.navigation.NavigationEvent.NavigateTo(
+                                it
+                            )
+                        )
+                    },
                 )
             } else {
                 // Todo : 스켈레톤 UI 혹은 스피너 로딩
@@ -80,7 +84,7 @@ internal class WorkerChattingFragment : BaseComposeFragment() {
 @Composable
 internal fun WorkerChattingScreen(
     chatRoomList: List<ChatRoom>?,
-    navigateTo: (DeepLinkDestination) -> Unit,
+    navigateTo: (com.idle.navigation.DeepLinkDestination) -> Unit,
 ) {
     val listState = rememberLazyListState()
 
@@ -158,7 +162,7 @@ internal fun WorkerChattingScreen(
 @Composable
 internal fun ChatRoomItem(
     chatRoom: ChatRoom,
-    navigateTo: (DeepLinkDestination) -> Unit,
+    navigateTo: (com.idle.navigation.DeepLinkDestination) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val backgroundColor = if (chatRoom.unReadMessageCount > 0) {
@@ -174,7 +178,7 @@ internal fun ChatRoomItem(
             .background(backgroundColor)
             .clickable {
                 navigateTo(
-                    DeepLinkDestination.ChattingDetail(
+                    com.idle.navigation.DeepLinkDestination.ChattingDetail(
                         chattingRoomId = chatRoom.id,
                         receiverId = chatRoom.receiver,
                         receiverUserType = UserType.WORKER.apiValue,

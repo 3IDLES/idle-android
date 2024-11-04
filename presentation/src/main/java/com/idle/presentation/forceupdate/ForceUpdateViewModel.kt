@@ -1,7 +1,7 @@
 package com.idle.presentation.forceupdate
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.config.ForceUpdate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ForceUpdateViewModel @Inject constructor() : BaseViewModel() {
+class ForceUpdateViewModel @Inject constructor() : ViewModel() {
     private val _forceUpdateEvent = MutableSharedFlow<ForceUpdateEvent>()
     val forceUpdateEvent = _forceUpdateEvent.asSharedFlow()
 

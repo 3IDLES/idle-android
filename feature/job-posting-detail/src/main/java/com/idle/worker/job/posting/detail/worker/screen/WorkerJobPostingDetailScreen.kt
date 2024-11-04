@@ -42,8 +42,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.idle.analytics.businessmetric.TrackScreenViewEvent
-import com.idle.binding.DeepLinkDestination
-import com.idle.binding.DeepLinkDestination.CenterProfile
 import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareBottomSheetLayout
@@ -60,6 +58,7 @@ import com.idle.domain.model.jobposting.ApplyMethod
 import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.WorkerJobPostingDetail
 import com.idle.domain.model.profile.WorkerProfile
+import com.idle.navigation.DeepLinkDestination.CenterProfile
 import kotlinx.coroutines.launch
 
 @Composable
@@ -70,7 +69,7 @@ internal fun WorkerJobPostingDetailScreen(
     addFavoriteJobPosting: (String, JobPostingType) -> Unit,
     removeFavoriteJobPosting: (String, JobPostingType) -> Unit,
     applyJobPosting: (String, ApplyMethod) -> Unit,
-    navigateTo: (DeepLinkDestination) -> Unit,
+    navigateTo: (com.idle.navigation.DeepLinkDestination) -> Unit,
 ) {
     val onBackPressedDispatcher =
         LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher

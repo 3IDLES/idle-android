@@ -1,14 +1,10 @@
 package com.idle.signin.worker
 
 import androidx.core.text.isDigitsOnly
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.analytics.businessmetric.AnalyticsHelper
-import com.idle.binding.DeepLinkDestination.SignUpComplete
-import com.idle.binding.DeepLinkDestination.WorkerHome
 import com.idle.binding.EventHandlerHelper
-import com.idle.binding.NavigationEvent
-import com.idle.binding.NavigationHelper
-import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.CountDownTimer
 import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
@@ -21,6 +17,8 @@ import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
 import com.idle.domain.usecase.auth.SignInWorkerUseCase
 import com.idle.domain.usecase.auth.SignUpWorkerUseCase
 import com.idle.domain.usecase.profile.GetWorkerIdUseCase
+import com.idle.navigation.DeepLinkDestination.SignUpComplete
+import com.idle.navigation.DeepLinkDestination.WorkerHome
 import com.idle.signin.worker.WorkerSignUpStep.PHONE_NUMBER
 import com.idle.signup.R
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -41,8 +39,8 @@ class WorkerSignUpViewModel @Inject constructor(
     private val analyticsHelper: AnalyticsHelper,
     private val errorHandlerHelper: ErrorHandler,
     val eventHandlerHelper: EventHandlerHelper,
-    val navigationHelper: NavigationHelper,
-) : BaseViewModel() {
+    val navigationHelper: com.idle.navigation.NavigationHelper,
+) : ViewModel() {
 
     private val _signUpStep = MutableStateFlow<WorkerSignUpStep>(PHONE_NUMBER)
     internal val signUpStep = _signUpStep.asStateFlow()
@@ -158,7 +156,7 @@ class WorkerSignUpViewModel @Inject constructor(
         ).onSuccess {
             getWorkerIdUseCase().onSuccess { analyticsHelper.setUserId(it) }
             navigationHelper.navigateTo(
-                NavigationEvent.NavigateTo(
+                com.idle.navigation.NavigationEvent.NavigateTo(
                     WorkerHome,
                     R.id.workerSignUpFragment
                 )
@@ -190,7 +188,10 @@ class WorkerSignUpViewModel @Inject constructor(
         ).onSuccess {
             getWorkerIdUseCase().onSuccess { analyticsHelper.setUserId(it) }
             navigationHelper.navigateTo(
-                NavigationEvent.NavigateTo(SignUpComplete, R.id.workerSignUpFragment)
+                com.idle.navigation.NavigationEvent.NavigateTo(
+                    SignUpComplete,
+                    R.id.workerSignUpFragment
+                )
             )
         }.onFailure { errorHandlerHelper.sendError(it) }
     }

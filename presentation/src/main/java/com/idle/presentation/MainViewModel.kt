@@ -1,18 +1,12 @@
 package com.idle.presentation
 
 import android.util.Log
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.analytics.error.ErrorLoggingHelper
 import com.idle.auth.R
-import com.idle.binding.DeepLinkDestination.CenterHome
-import com.idle.binding.DeepLinkDestination.CenterPending
-import com.idle.binding.DeepLinkDestination.CenterRegister
-import com.idle.binding.DeepLinkDestination.WorkerHome
 import com.idle.binding.EventHandlerHelper
 import com.idle.binding.MainEvent.ShowToast
-import com.idle.binding.NavigationEvent
-import com.idle.binding.NavigationHelper
-import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.config.ForceUpdate
 import com.idle.domain.model.error.ApiErrorCode
@@ -27,6 +21,10 @@ import com.idle.domain.usecase.config.GetForceUpdateInfoUseCase
 import com.idle.domain.usecase.profile.GetCenterStatusUseCase
 import com.idle.domain.usecase.profile.GetMyCenterProfileUseCase
 import com.idle.domain.usecase.profile.GetMyWorkerProfileUseCase
+import com.idle.navigation.DeepLinkDestination.CenterHome
+import com.idle.navigation.DeepLinkDestination.CenterPending
+import com.idle.navigation.DeepLinkDestination.CenterRegister
+import com.idle.navigation.DeepLinkDestination.WorkerHome
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -51,9 +49,9 @@ class MainViewModel @Inject constructor(
     private val disconnectWebSocketUseCase: DisconnectWebSocketUseCase,
     private val errorHandlerHelper: ErrorHandler,
     private val eventHandlerHelper: EventHandlerHelper,
-    val errorLoggingHelper: ErrorLoggingHelper,
-    val navigationHelper: NavigationHelper,
-) : BaseViewModel() {
+    private val errorLoggingHelper: ErrorLoggingHelper,
+    val navigationHelper: com.idle.navigation.NavigationHelper,
+) : ViewModel() {
     private val _navigationMenuType = MutableStateFlow(NavigationMenuType.HIDE)
     val navigationMenuType = _navigationMenuType.asStateFlow()
 
@@ -121,7 +119,7 @@ class MainViewModel @Inject constructor(
     private suspend fun navigateToDestination(userRole: String) {
         when (userRole) {
             UserType.WORKER.apiValue -> navigationHelper.navigateTo(
-                NavigationEvent.NavigateTo(WorkerHome, R.id.authFragment)
+                com.idle.navigation.NavigationEvent.NavigateTo(WorkerHome, R.id.authFragment)
             )
 
             UserType.CENTER.apiValue -> getCenterStatus()
@@ -138,7 +136,10 @@ class MainViewModel @Inject constructor(
         when (status) {
             CenterManagerAccountStatus.APPROVED -> handleApprovedCenterStatus()
             else -> navigationHelper.navigateTo(
-                NavigationEvent.NavigateTo(CenterPending(status.name), R.id.authFragment)
+                com.idle.navigation.NavigationEvent.NavigateTo(
+                    CenterPending(status.name),
+                    R.id.authFragment
+                )
             )
         }
     }
@@ -146,13 +147,16 @@ class MainViewModel @Inject constructor(
     private fun handleApprovedCenterStatus() = viewModelScope.launch {
         getMyCenterProfileUseCase().onSuccess {
             navigationHelper.navigateTo(
-                NavigationEvent.NavigateTo(CenterHome, R.id.authFragment)
+                com.idle.navigation.NavigationEvent.NavigateTo(CenterHome, R.id.authFragment)
             )
         }.onFailure {
             val error = it as HttpResponseException
             if (error.apiErrorCode == ApiErrorCode.CenterNotFound) {
                 navigationHelper.navigateTo(
-                    NavigationEvent.NavigateTo(CenterRegister, R.id.authFragment)
+                    com.idle.navigation.NavigationEvent.NavigateTo(
+                        CenterRegister,
+                        R.id.authFragment
+                    )
                 )
             }
         }
@@ -171,7 +175,9 @@ class MainViewModel @Inject constructor(
                         ApiErrorCode.TokenNotFound,
                         ApiErrorCode.NotSupportUserTokenType ->
                             navigationHelper.navigateTo(
-                                NavigationEvent.NavigateToAuthWithClearBackStack(exception.print())
+                                com.idle.navigation.NavigationEvent.NavigateToAuthWithClearBackStack(
+                                    exception.print()
+                                )
                             )
 
                         else -> eventHandlerHelper.sendEvent(ShowToast(exception.print()))

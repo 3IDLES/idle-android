@@ -1,10 +1,9 @@
 package com.idle.center.jobposting.complete
 
-import com.idle.binding.NavigationHelper
-import com.idle.binding.base.BaseViewModel
+import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class SignUpCompleteViewModel @Inject constructor(val navigationHelper: NavigationHelper) :
-    BaseViewModel()
+class SignUpCompleteViewModel @Inject constructor(val navigationHelper: com.idle.navigation.NavigationHelper) :
+    ViewModel()

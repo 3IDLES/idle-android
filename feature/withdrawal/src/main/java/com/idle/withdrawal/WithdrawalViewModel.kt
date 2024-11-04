@@ -1,12 +1,10 @@
 package com.idle.withdrawal
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.analytics.businessmetric.AnalyticsHelper
 import com.idle.binding.EventHandlerHelper
 import com.idle.binding.MainEvent
-import com.idle.binding.NavigationEvent
-import com.idle.binding.NavigationHelper
-import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.CountDownTimer
 import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
@@ -35,8 +33,8 @@ class WithdrawalViewModel @Inject constructor(
     private val analyticsHelper: AnalyticsHelper,
     private val errorHandlerHelper: ErrorHandler,
     private val eventHandlerHelper: EventHandlerHelper,
-    val navigationHelper: NavigationHelper,
-) : BaseViewModel() {
+    val navigationHelper: com.idle.navigation.NavigationHelper,
+) : ViewModel() {
     private val _withdrawalStep = MutableStateFlow<WithdrawalStep>(WithdrawalStep.REASON)
     internal val withdrawalStep = _withdrawalStep.asStateFlow()
 
@@ -86,7 +84,7 @@ class WithdrawalViewModel @Inject constructor(
     }
 
     internal fun setAuthCode(authCode: String) {
-        if(authCode.length > 6){
+        if (authCode.length > 6) {
             return
         }
 
@@ -172,7 +170,11 @@ class WithdrawalViewModel @Inject constructor(
             password = password.value
         ).onSuccess {
             analyticsHelper.setUserId(null)
-            navigationHelper.navigateTo(NavigationEvent.NavigateToAuthWithClearBackStack("회원탈퇴가 완료되었어요."))
+            navigationHelper.navigateTo(
+                com.idle.navigation.NavigationEvent.NavigateToAuthWithClearBackStack(
+                    "회원탈퇴가 완료되었어요."
+                )
+            )
         }.onFailure {
             val exception = it as HttpResponseException
             if (exception.apiErrorCode == ApiErrorCode.InvalidParameter) {
@@ -190,7 +192,11 @@ class WithdrawalViewModel @Inject constructor(
                 .joinToString("|"),
         ).onSuccess {
             analyticsHelper.setUserId(null)
-            navigationHelper.navigateTo(NavigationEvent.NavigateToAuthWithClearBackStack("회원탈퇴가 완료되었어요."))
+            navigationHelper.navigateTo(
+                com.idle.navigation.NavigationEvent.NavigateToAuthWithClearBackStack(
+                    "회원탈퇴가 완료되었어요."
+                )
+            )
         }.onFailure { errorHandlerHelper.sendError(it) }
     }
 }

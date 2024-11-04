@@ -17,8 +17,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import com.idle.analytics.businessmetric.TrackScreenViewEvent
-import com.idle.binding.DeepLinkDestination
-import com.idle.binding.NavigationEvent
 import com.idle.center.jobposting.complete.SignUpCompleteViewModel
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
@@ -36,7 +34,7 @@ class SignUpCompleteFragment : BaseComposeFragment() {
             SignUpCompleteScreen(
                 navigateTo = {
                     navigationHelper.navigateTo(
-                        NavigationEvent.NavigateTo(
+                        com.idle.navigation.NavigationEvent.NavigateTo(
                             destination = it,
                             popUpTo = com.idle.signup.R.id.signUpCompleteFragment,
                         )
@@ -49,7 +47,7 @@ class SignUpCompleteFragment : BaseComposeFragment() {
 
 @Composable
 internal fun SignUpCompleteScreen(
-    navigateTo: (DeepLinkDestination) -> Unit,
+    navigateTo: (com.idle.navigation.DeepLinkDestination) -> Unit,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -85,7 +83,7 @@ internal fun SignUpCompleteScreen(
 
         CareButtonLarge(
             text = stringResource(id = R.string.start),
-            onClick = { navigateTo(DeepLinkDestination.WorkerHome) },
+            onClick = { navigateTo(com.idle.navigation.DeepLinkDestination.WorkerHome) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 28.dp),

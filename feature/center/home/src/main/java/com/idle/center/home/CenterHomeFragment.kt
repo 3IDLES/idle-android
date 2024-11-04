@@ -42,9 +42,6 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.idle.analytics.businessmetric.TrackScreenViewEvent
-import com.idle.binding.DeepLinkDestination
-import com.idle.binding.DeepLinkDestination.CenterApplicantInquiry
-import com.idle.binding.NavigationEvent
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designresource.R
@@ -57,6 +54,7 @@ import com.idle.designsystem.compose.component.CareTabBar
 import com.idle.designsystem.compose.component.LoadingCircle
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.jobposting.CenterJobPosting
+import com.idle.navigation.DeepLinkDestination.CenterApplicantInquiry
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -93,7 +91,13 @@ internal class CenterHomeFragment : BaseComposeFragment() {
                 unreadNotificationCount = unreadNotificationCount,
                 setRecruitmentPostStatus = ::setRecruitmentPostStatus,
                 endJobPosting = ::endJobPosting,
-                navigateTo = { navigationHelper.navigateTo(NavigationEvent.NavigateTo(it)) },
+                navigateTo = {
+                    navigationHelper.navigateTo(
+                        com.idle.navigation.NavigationEvent.NavigateTo(
+                            it
+                        )
+                    )
+                },
             )
         }
     }
@@ -108,7 +112,7 @@ internal fun CenterHomeScreen(
     unreadNotificationCount: Int,
     setRecruitmentPostStatus: (RecruitmentPostStatus) -> Unit,
     endJobPosting: (String) -> Unit,
-    navigateTo: (DeepLinkDestination) -> Unit,
+    navigateTo: (com.idle.navigation.DeepLinkDestination) -> Unit,
 ) {
     val inProgressListState = rememberLazyListState()
     val completedListState = rememberLazyListState()
@@ -149,7 +153,7 @@ internal fun CenterHomeScreen(
                         Box(
                             modifier = Modifier
                                 .size(32.dp)
-                                .clickable { navigateTo(DeepLinkDestination.Notification) },
+                                .clickable { navigateTo(com.idle.navigation.DeepLinkDestination.Notification) },
                         ) {
                             Image(
                                 painter = painterResource(id = R.drawable.ic_notification),
@@ -284,7 +288,7 @@ internal fun CenterHomeScreen(
             ) {
                 CareFloatingButton(
                     text = "+ 공고 등록",
-                    onClick = { navigateTo(DeepLinkDestination.CenterJobPostingPost) },
+                    onClick = { navigateTo(com.idle.navigation.DeepLinkDestination.CenterJobPostingPost) },
                 )
             }
         }
@@ -294,7 +298,7 @@ internal fun CenterHomeScreen(
 @Composable
 private fun JobPostingInProgressCard(
     jobPosting: CenterJobPosting,
-    navigateTo: (DeepLinkDestination) -> Unit,
+    navigateTo: (com.idle.navigation.DeepLinkDestination) -> Unit,
     endJobPosting: () -> Unit,
 ) {
     Card(
@@ -306,7 +310,7 @@ private fun JobPostingInProgressCard(
             disabledContentColor = CareTheme.colors.white000,
         ),
         border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
-        onClick = { navigateTo(DeepLinkDestination.CenterJobDetail(jobPosting.id)) },
+        onClick = { navigateTo(com.idle.navigation.DeepLinkDestination.CenterJobDetail(jobPosting.id)) },
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
@@ -365,7 +369,7 @@ private fun JobPostingInProgressCard(
                         .padding(end = 4.dp)
                         .clickable {
                             navigateTo(
-                                DeepLinkDestination.CenterJobDetail(
+                                com.idle.navigation.DeepLinkDestination.CenterJobDetail(
                                     jobPostingId = jobPosting.id,
                                     isEditState = true,
                                 )
@@ -393,7 +397,7 @@ private fun JobPostingInProgressCard(
 @Composable
 private fun JobPostingCompletedCard(
     jobPosting: CenterJobPosting,
-    navigateTo: (DeepLinkDestination) -> Unit,
+    navigateTo: (com.idle.navigation.DeepLinkDestination) -> Unit,
 ) {
     Card(
         shape = RoundedCornerShape(12.dp),
@@ -404,7 +408,7 @@ private fun JobPostingCompletedCard(
             disabledContentColor = CareTheme.colors.white000,
         ),
         border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
-        onClick = { navigateTo(DeepLinkDestination.CenterJobDetail(jobPosting.id)) },
+        onClick = { navigateTo(com.idle.navigation.DeepLinkDestination.CenterJobDetail(jobPosting.id)) },
         modifier = Modifier.fillMaxWidth(),
     ) {
         Column(modifier = Modifier.padding(16.dp)) {

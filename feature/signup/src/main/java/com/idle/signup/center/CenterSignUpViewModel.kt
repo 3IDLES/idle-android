@@ -1,13 +1,10 @@
 package com.idle.signup.center
 
 import androidx.core.text.isDigitsOnly
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.idle.binding.DeepLinkDestination
 import com.idle.binding.EventHandlerHelper
 import com.idle.binding.MainEvent
-import com.idle.binding.NavigationEvent
-import com.idle.binding.NavigationHelper
-import com.idle.binding.base.BaseViewModel
 import com.idle.domain.model.CountDownTimer
 import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
@@ -45,8 +42,8 @@ class CenterSignUpViewModel @Inject constructor(
     private val countDownTimer: CountDownTimer,
     private val errorHandlerHelper: ErrorHandler,
     private val eventHandlerHelper: EventHandlerHelper,
-    val navigationHelper: NavigationHelper,
-) : BaseViewModel() {
+    val navigationHelper: com.idle.navigation.NavigationHelper,
+) : ViewModel() {
     private val _signUpStep = MutableStateFlow(NAME)
     val signUpStep = _signUpStep.asStateFlow()
 
@@ -168,7 +165,7 @@ class CenterSignUpViewModel @Inject constructor(
     }
 
     internal fun setCenterAuthCode(authCode: String) {
-        if(authCode.length > 6){
+        if (authCode.length > 6) {
             return
         }
 
@@ -184,7 +181,7 @@ class CenterSignUpViewModel @Inject constructor(
     }
 
     internal fun setCenterId(id: String) {
-        if(id.length > 20){
+        if (id.length > 20) {
             return
         }
 
@@ -193,7 +190,7 @@ class CenterSignUpViewModel @Inject constructor(
     }
 
     internal fun setCenterPassword(password: String) {
-        if(password.length > 20){
+        if (password.length > 20) {
             return
         }
 
@@ -201,7 +198,7 @@ class CenterSignUpViewModel @Inject constructor(
     }
 
     internal fun setCenterPasswordForConfirm(passwordForConfirm: String) {
-        if(passwordForConfirm.length > 20){
+        if (passwordForConfirm.length > 20) {
             return
         }
 
@@ -247,8 +244,8 @@ class CenterSignUpViewModel @Inject constructor(
             businessRegistrationNumber = _businessRegistrationNumber.value,
         ).onSuccess {
             navigationHelper.navigateTo(
-                NavigationEvent.NavigateTo(
-                    DeepLinkDestination.CenterSignIn("회원가입을 성공하였습니다."),
+                com.idle.navigation.NavigationEvent.NavigateTo(
+                    com.idle.navigation.DeepLinkDestination.CenterSignIn("회원가입을 성공하였습니다."),
                     R.id.centerSignUpFragment
                 )
             )
