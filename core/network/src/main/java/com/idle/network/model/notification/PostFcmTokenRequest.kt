@@ -1,9 +1,9 @@
-package com.idle.network.model.auth
+package com.idle.network.model.notification
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class FCMTokenRequest(
+data class PostFcmTokenRequest(
     val deviceToken: String,
     val userType: String,
 )

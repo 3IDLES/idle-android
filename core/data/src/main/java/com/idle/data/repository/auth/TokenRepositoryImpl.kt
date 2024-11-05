@@ -2,7 +2,8 @@ package com.idle.data.repository.auth
 
 import com.idle.datastore.datasource.TokenDataSource
 import com.idle.domain.repositorry.auth.TokenRepository
-import com.idle.network.model.auth.FCMTokenRequest
+import com.idle.network.model.notification.DeleteFcmTokenRequest
+import com.idle.network.model.notification.PostFcmTokenRequest
 import com.idle.network.source.notification.NotificationDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -19,11 +20,12 @@ class TokenRepositoryImpl @Inject constructor(
 
     override suspend fun postDeviceToken(deviceToken: String, userType: String): Result<Unit> =
         notificationDataSource.postFCMToken(
-            FCMTokenRequest(
+            PostFcmTokenRequest(
                 deviceToken = deviceToken,
                 userType = userType,
             )
         )
 
-    override suspend fun deleteDeviceToken(): Result<Unit> = notificationDataSource.deleteFCMToken()
+    override suspend fun deleteDeviceToken(deviceToken: String): Result<Unit> =
+        notificationDataSource.deleteFCMToken(DeleteFcmTokenRequest(deviceToken))
 }

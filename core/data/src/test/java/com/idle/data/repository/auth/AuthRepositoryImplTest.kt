@@ -44,7 +44,7 @@ class AuthRepositoryImplTest {
         coEvery { userInfoDataSource.clearUserInfo() } just Runs
         coEvery { authDataSource.getDeviceToken() } returns "testToken"
         coEvery { tokenRepository.postDeviceToken(any(), any()) } returns Result.success(Unit)
-        coEvery { tokenRepository.deleteDeviceToken() } returns Result.success(Unit)
+        coEvery { tokenRepository.deleteDeviceToken(any()) } returns Result.success(Unit)
     }
 
     @Test
@@ -109,7 +109,7 @@ class AuthRepositoryImplTest {
         // Then
         assertTrue(result.isSuccess)
         coVerify { tokenDataSource.clearToken() }
-        coVerify { tokenRepository.deleteDeviceToken() }
+        coVerify { tokenRepository.deleteDeviceToken(any()) }
         coVerify { userInfoDataSource.clearUserType() }
         coVerify { userInfoDataSource.clearUserInfo() }
     }
@@ -125,7 +125,7 @@ class AuthRepositoryImplTest {
         // Then
         assertTrue(result.isSuccess)
         coVerify { tokenDataSource.clearToken() }
-        coVerify { tokenRepository.deleteDeviceToken() }
+        coVerify { tokenRepository.deleteDeviceToken(any()) }
         coVerify { userInfoDataSource.clearUserType() }
         coVerify { userInfoDataSource.clearUserInfo() }
     }
@@ -141,7 +141,7 @@ class AuthRepositoryImplTest {
         // Then
         assertTrue(result.isSuccess)
         coVerify { tokenDataSource.clearToken() }
-        coVerify { tokenRepository.deleteDeviceToken() }
+        coVerify { tokenRepository.deleteDeviceToken(any()) }
         coVerify { userInfoDataSource.clearUserType() }
         coVerify { userInfoDataSource.clearUserInfo() }
     }
@@ -157,7 +157,7 @@ class AuthRepositoryImplTest {
         // Then
         assertTrue(result.isSuccess)
         coVerify { tokenDataSource.clearToken() }
-        coVerify { tokenRepository.deleteDeviceToken() }
+        coVerify { tokenRepository.deleteDeviceToken(any()) }
         coVerify { userInfoDataSource.clearUserType() }
         coVerify { userInfoDataSource.clearUserInfo() }
     }

@@ -64,6 +64,12 @@ jobs:
       - name: Build AAB for Firebase
         run: ./gradlew bundleRelease --stacktrace
 
+      - name: Upload AAB artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-release.aab
+          path: app/build/outputs/bundle/release/app-release.aab
+
       - name: Build APK for Testing
         run: ./gradlew assembleRelease --stacktrace
 
