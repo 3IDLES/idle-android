@@ -18,7 +18,6 @@ import com.idle.network.model.auth.WithdrawalWorkerRequest
 import com.idle.network.model.token.TokenResponse
 import com.idle.network.source.auth.AuthDataSource
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -116,21 +115,21 @@ class AuthRepositoryImpl @Inject constructor(
     )
 
     override suspend fun logoutWorker(): Result<Unit> {
-        tokenRepository.deleteDeviceToken()
+        tokenRepository.deleteDeviceToken(getDeviceToken())
 
         return authDataSource.logoutWorker()
             .onSuccess { clearUserData() }
     }
 
     override suspend fun logoutCenter(): Result<Unit> {
-        tokenRepository.deleteDeviceToken()
+        tokenRepository.deleteDeviceToken(getDeviceToken())
 
         return authDataSource.logoutCenter()
             .onSuccess { clearUserData() }
     }
 
     override suspend fun withdrawalCenter(reason: String, password: String): Result<Unit> {
-        tokenRepository.deleteDeviceToken()
+        tokenRepository.deleteDeviceToken(getDeviceToken())
 
         return authDataSource.withdrawalCenter(
             WithdrawalCenterRequest(reason = reason, password = password)
@@ -138,7 +137,7 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun withdrawalWorker(reason: String): Result<Unit> {
-        tokenRepository.deleteDeviceToken()
+        tokenRepository.deleteDeviceToken(getDeviceToken())
 
         return authDataSource.withdrawalWorker(WithdrawalWorkerRequest(reason))
             .onSuccess { clearUserData() }
@@ -163,10 +162,10 @@ class AuthRepositoryImpl @Inject constructor(
     ) = withContext(Dispatchers.IO) {
         launch { tokenDataSource.setRefreshToken(tokenResponse.refreshToken) }
         launch { userInfoDataSource.setUserType(userType) }
-        launch { tokenDataSource.setAccessToken(tokenResponse.accessToken) }
+        launch { tokenDataSource.setAccessToken(tokenResponse.accessToken) }.join()
 
-        val deviceToken = async { getDeviceToken() }
-        tokenRepository.postDeviceToken(deviceToken.await(), userType = userType)
+        val deviceToken = getDeviceToken()
+        tokenRepository.postDeviceToken(deviceToken, userType = userType)
     }
 
     private suspend fun clearUserData() = withContext(Dispatchers.IO) {
