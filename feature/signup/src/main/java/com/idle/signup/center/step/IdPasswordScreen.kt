@@ -257,6 +257,7 @@ internal fun IdPasswordScreen(
                     isPasswordConfirmFieldFocused = false
                     keyboardController?.hide()
                 },
+                throttleTime = 2000L,
                 modifier = Modifier.weight(1f),
             )
         }
