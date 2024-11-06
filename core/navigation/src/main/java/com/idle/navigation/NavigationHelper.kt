@@ -53,12 +53,10 @@ class NavigationHelper @Inject constructor() {
                     listOf(
                         NavigationEvent.NavigateTo(CenterHome),
                         NavigationEvent.NavigateTo(CenterJobDetail(jobPostingId)),
-                        NavigationEvent.NavigateTo(CenterApplicantInquiry(jobPostingId)),
                     )
                 } else {
                     listOf(
                         NavigationEvent.NavigateTo(CenterJobDetail(jobPostingId)),
-                        NavigationEvent.NavigateTo(CenterApplicantInquiry(jobPostingId)),
                     )
                 }
 
@@ -100,7 +98,6 @@ class NavigationHelper @Inject constructor() {
                 notificationContent?.let { content ->
                     listOf(
                         NavigationEvent.NavigateTo(CenterJobDetail(content.jobPostingId)),
-                        NavigationEvent.NavigateTo(CenterApplicantInquiry(content.jobPostingId)),
                     )
                 } ?: listOf()
             }
