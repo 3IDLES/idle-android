@@ -80,6 +80,7 @@ internal fun AddressScreen(
                 enable = roadNameAddress.isNotBlank(),
                 onClick = signUpWorker,
                 modifier = Modifier.weight(1f),
+                throttleTime = 2000L,
             )
         }
     }

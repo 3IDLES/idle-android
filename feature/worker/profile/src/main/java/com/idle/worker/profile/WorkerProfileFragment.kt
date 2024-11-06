@@ -284,7 +284,7 @@ internal fun WorkerProfileScreen(
                                             text = stringResource(id = R.string.save),
                                             style = CareTheme.typography.subtitle2,
                                             color = CareTheme.colors.orange500,
-                                            modifier = Modifier.clickable {
+                                            modifier = Modifier.clickable(throttleTime = 2000L) {
                                                 updateWorkerProfile()
                                             }
                                         )

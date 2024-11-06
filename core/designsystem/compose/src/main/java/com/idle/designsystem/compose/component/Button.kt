@@ -12,6 +12,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Devices
@@ -26,9 +30,18 @@ fun CareButtonSmall(
     onClick: () -> Unit,
     enable: Boolean,
     modifier: Modifier = Modifier,
+    throttleTime: Long = 0L,
 ) {
+    var lastClickTime by remember { mutableStateOf(0L) }
+
     Button(
-        onClick = onClick,
+        onClick = {
+            val currentTime = System.currentTimeMillis()
+            if (currentTime - lastClickTime >= throttleTime) {
+                onClick()
+                lastClickTime = currentTime
+            }
+        },
         enabled = enable,
         shape = RoundedCornerShape(8.dp),
         contentPadding = PaddingValues(0.dp),
@@ -57,9 +70,18 @@ fun CareButtonMedium(
     containerColor: Color = CareTheme.colors.orange500,
     textColor: Color = CareTheme.colors.white000,
     border: BorderStroke? = null,
+    throttleTime: Long = 0L,
 ) {
+    var lastClickTime by remember { mutableStateOf(0L) }
+
     Button(
-        onClick = onClick,
+        onClick = {
+            val currentTime = System.currentTimeMillis()
+            if (currentTime - lastClickTime >= throttleTime) {
+                onClick()
+                lastClickTime = currentTime
+            }
+        },
         enabled = enable,
         shape = RoundedCornerShape(8.dp),
         border = border,
@@ -89,9 +111,18 @@ fun CareButtonLarge(
     disabledContainerColor: Color = CareTheme.colors.gray200,
     textColor: Color = CareTheme.colors.white000,
     border: BorderStroke? = null,
+    throttleTime: Long = 0L,
 ) {
+    var lastClickTime by remember { mutableStateOf(0L) }
+
     Button(
-        onClick = onClick,
+        onClick = {
+            val currentTime = System.currentTimeMillis()
+            if (currentTime - lastClickTime >= throttleTime) {
+                onClick()
+                lastClickTime = currentTime
+            }
+        },
         enabled = enable,
         shape = RoundedCornerShape(8.dp),
         colors = ButtonColors(
@@ -117,9 +148,18 @@ fun CareButtonCardLarge(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enable: Boolean = true,
+    throttleTime: Long = 0L,
 ) {
+    var lastClickTime by remember { mutableStateOf(0L) }
+
     Button(
-        onClick = onClick,
+        onClick = {
+            val currentTime = System.currentTimeMillis()
+            if (currentTime - lastClickTime >= throttleTime) {
+                onClick()
+                lastClickTime = currentTime
+            }
+        },
         enabled = enable,
         shape = RoundedCornerShape(6.dp),
         colors = ButtonColors(
@@ -147,9 +187,18 @@ fun CareButtonCardMedium(
     containerColor: Color = CareTheme.colors.orange500,
     textColor: Color = CareTheme.colors.white000,
     border: BorderStroke? = null,
+    throttleTime: Long = 0L,
 ) {
+    var lastClickTime by remember { mutableStateOf(0L) }
+
     Button(
-        onClick = onClick,
+        onClick = {
+            val currentTime = System.currentTimeMillis()
+            if (currentTime - lastClickTime >= throttleTime) {
+                onClick()
+                lastClickTime = currentTime
+            }
+        },
         enabled = enable,
         border = border,
         shape = RoundedCornerShape(6.dp),
@@ -175,9 +224,18 @@ fun CareButtonRound(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enable: Boolean = true,
+    throttleTime: Long = 0L,
 ) {
+    var lastClickTime by remember { mutableStateOf(0L) }
+
     Button(
-        onClick = onClick,
+        onClick = {
+            val currentTime = System.currentTimeMillis()
+            if (currentTime - lastClickTime >= throttleTime) {
+                onClick()
+                lastClickTime = currentTime
+            }
+        },
         enabled = enable,
         shape = RoundedCornerShape(19.dp),
         border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
@@ -207,9 +265,18 @@ fun CareButtonLine(
     borderColor: Color = CareTheme.colors.orange400,
     containerColor: Color = CareTheme.colors.white000,
     textColor: Color = CareTheme.colors.orange500,
+    throttleTime: Long = 0L,
 ) {
+    var lastClickTime by remember { mutableStateOf(0L) }
+
     Button(
-        onClick = onClick,
+        onClick = {
+            val currentTime = System.currentTimeMillis()
+            if (currentTime - lastClickTime >= throttleTime) {
+                onClick()
+                lastClickTime = currentTime
+            }
+        },
         enabled = enable,
         shape = RoundedCornerShape(6.dp),
         border = BorderStroke(
@@ -241,9 +308,18 @@ fun CareDialogButton(
     modifier: Modifier = Modifier,
     border: BorderStroke? = null,
     enable: Boolean = true,
+    throttleTime: Long = 0L,
 ) {
+    var lastClickTime by remember { mutableStateOf(0L) }
+
     Button(
-        onClick = onClick,
+        onClick = {
+            val currentTime = System.currentTimeMillis()
+            if (currentTime - lastClickTime >= throttleTime) {
+                onClick()
+                lastClickTime = currentTime
+            }
+        },
         enabled = enable,
         shape = RoundedCornerShape(6.dp),
         border = border,
@@ -273,9 +349,18 @@ fun CareFloatingButton(
     modifier: Modifier = Modifier,
     border: BorderStroke? = null,
     enable: Boolean = true,
+    throttleTime: Long = 0L,
 ) {
+    var lastClickTime by remember { mutableStateOf(0L) }
+
     Button(
-        onClick = onClick,
+        onClick = {
+            val currentTime = System.currentTimeMillis()
+            if (currentTime - lastClickTime >= throttleTime) {
+                onClick()
+                lastClickTime = currentTime
+            }
+        },
         enabled = enable,
         shape = RoundedCornerShape(50.dp),
         border = border,
@@ -440,7 +525,11 @@ private fun PreviewButtonPrimaryDefaultFloating() {
 }
 
 // Flip Group Previews
-@Preview(name = "Button_Primary_Flip_Large", showBackground = true, device = FLIP, group = "Flip")
+@Preview(
+    name = "Button_Primary_Flip_Large", showBackground = true,
+    device = FLIP,
+    group = "Flip"
+)
 @Composable
 private fun PreviewButtonPrimaryFlipLarge() {
     PreviewButtonLarge()
