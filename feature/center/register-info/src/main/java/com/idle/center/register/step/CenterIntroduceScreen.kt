@@ -121,7 +121,7 @@ internal fun CenterIntroduceScreen(
                     .height(243.dp)
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(6.dp))
-                    .clickable {
+                    .clickable(throttleTime = 2000L) {
                         singlePhotoPickerLauncher.launch(
                             PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
                         )

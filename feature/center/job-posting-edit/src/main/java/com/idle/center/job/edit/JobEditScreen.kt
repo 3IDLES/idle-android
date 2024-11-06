@@ -420,7 +420,7 @@ fun JobEditScreen(
                             text = stringResource(id = R.string.save),
                             style = CareTheme.typography.subtitle2,
                             color = CareTheme.colors.orange500,
-                            modifier = Modifier.clickable {
+                            modifier = Modifier.clickable(throttleTime = 2000L) {
                                 if (localWeekDays.isEmpty()) {
                                     showSnackBar("근무 요일은 최소한 하나 이상을 선택해야 합니다.")
                                     return@clickable

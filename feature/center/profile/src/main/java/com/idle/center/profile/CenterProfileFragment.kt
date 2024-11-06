@@ -271,7 +271,7 @@ internal fun CenterProfileScreen(
                         Box(
                             modifier = Modifier
                                 .padding(bottom = 60.dp)
-                                .clickable {
+                                .clickable(throttleTime = 2000L) {
                                     if (isEditState) singlePhotoPickerLauncher.launch(
                                         PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
                                     )

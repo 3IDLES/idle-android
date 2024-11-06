@@ -154,6 +154,7 @@ internal fun CenterSignInScreen(
                         isError = isLoginError,
                         visualTransformation = PasswordVisualTransformation(),
                         onDone = { if (centerPassword.isNotBlank()) signInCenter() },
+                        throttleTime = 2000L,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = 2.dp),
@@ -183,6 +184,7 @@ internal fun CenterSignInScreen(
                 text = stringResource(id = R.string.login),
                 enable = centerPassword.isNotBlank(),
                 onClick = signInCenter,
+                throttleTime = 2000L,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 28.dp),

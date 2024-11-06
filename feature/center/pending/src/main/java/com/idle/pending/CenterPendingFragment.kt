@@ -163,6 +163,7 @@ private fun CenterPendingScreen(
                 else "관리자 인증 요청 중이에요",
                 onClick = sendVerificationRequest,
                 enable = status == CenterManagerAccountStatus.NEW,
+                throttleTime = 2000L,
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(CareTheme.colors.white000)

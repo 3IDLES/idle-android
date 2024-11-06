@@ -21,7 +21,10 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -51,6 +54,7 @@ fun CareTextField(
     readOnly: Boolean = false,
     enabled: Boolean = true,
     isError: Boolean = false,
+    throttleTime: Long = 0L,
     onDone: () -> Unit = {},
     textStyle: TextStyle = CareTheme.typography.body3.copy(
         color = if (readOnly) {
@@ -74,6 +78,7 @@ fun CareTextField(
             CareTheme.colors.gray100
         },
     )
+    var lastDoneTime by remember { mutableStateOf(0L) }
 
     Column(
         verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -110,8 +115,12 @@ fun CareTextField(
                     imeAction = ImeAction.Done
                 ),
                 keyboardActions = KeyboardActions(onDone = {
-                    keyboardController?.hide()
-                    onDone()
+                    val currentTime = System.currentTimeMillis()
+                    if (currentTime - lastDoneTime >= throttleTime) {
+                        keyboardController?.hide()
+                        onDone()
+                        lastDoneTime = currentTime
+                    }
                 }),
                 modifier = Modifier
                     .weight(1f)
@@ -156,6 +165,7 @@ fun CareTextField(
     readOnly: Boolean = false,
     enabled: Boolean = true,
     isError: Boolean = false,
+    throttleTime: Long = 0L,
     onDone: () -> Unit = {},
     textStyle: TextStyle = CareTheme.typography.body3.copy(
         color = if (readOnly) {
@@ -179,6 +189,7 @@ fun CareTextField(
             CareTheme.colors.gray100
         },
     )
+    var lastDoneTime by remember { mutableStateOf(0L) }
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -211,8 +222,12 @@ fun CareTextField(
                 imeAction = ImeAction.Done
             ),
             keyboardActions = KeyboardActions(onDone = {
-                keyboardController?.hide()
-                onDone()
+                val currentTime = System.currentTimeMillis()
+                if (currentTime - lastDoneTime >= throttleTime) {
+                    keyboardController?.hide()
+                    onDone()
+                    lastDoneTime = currentTime
+                }
             }),
             modifier = Modifier
                 .weight(1f)
@@ -244,6 +259,7 @@ fun CareTextFieldLong(
     isError: Boolean = false,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     onValueChanged: (String) -> Unit,
+    throttleTime: Long = 0L,
     onDone: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
@@ -260,6 +276,7 @@ fun CareTextFieldLong(
             CareTheme.colors.gray100
         },
     )
+    var lastDoneTime by remember { mutableStateOf(0L) }
 
     Box(
         modifier = modifier
@@ -293,8 +310,12 @@ fun CareTextFieldLong(
             visualTransformation = visualTransformation,
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(onDone = {
-                onDone()
-                keyboardController?.hide()
+                val currentTime = System.currentTimeMillis()
+                if (currentTime - lastDoneTime >= throttleTime) {
+                    keyboardController?.hide()
+                    onDone()
+                    lastDoneTime = currentTime
+                }
             }),
             modifier = Modifier.fillMaxSize(),
             decorationBox = { innerTextField ->
@@ -318,6 +339,7 @@ fun CareClickableTextField(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     hint: String = "",
+    throttleTime: Long = 0L,
     leftComponent: @Composable () -> Unit = {},
 ) {
     Row(
@@ -330,7 +352,10 @@ fun CareClickableTextField(
                 border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
                 shape = RoundedCornerShape(6.dp)
             )
-            .clickable(onClick = onClick)
+            .clickable(
+                onClick = onClick,
+                throttleTime = throttleTime,
+            )
             .padding(horizontal = 16.dp),
     ) {
         Text(
