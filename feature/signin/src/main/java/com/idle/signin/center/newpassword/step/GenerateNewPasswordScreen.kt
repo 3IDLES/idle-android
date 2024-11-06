@@ -128,6 +128,7 @@ internal fun GenerateNewPasswordScreen(
                 visualTransformation = PasswordVisualTransformation(),
                 isError = newPasswordForConfirm.isNotBlank() && newPassword != newPasswordForConfirm,
                 onDone = { if (isPasswordValid) generateNewPassword() },
+                throttleTime = 2000L,
                 modifier = Modifier.fillMaxWidth()
             )
         }
@@ -146,6 +147,7 @@ internal fun GenerateNewPasswordScreen(
             text = stringResource(id = R.string.change_password),
             enable = isPasswordValid,
             onClick = generateNewPassword,
+            throttleTime = 2000L,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 28.dp),

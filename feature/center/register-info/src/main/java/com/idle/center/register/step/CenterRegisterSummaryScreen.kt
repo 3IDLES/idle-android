@@ -193,6 +193,7 @@ internal fun CenterRegisterSummaryScreen(
                 CareButtonMedium(
                     text = stringResource(id = R.string.confirm),
                     onClick = registerCenterProfile,
+                    throttleTime = 2000L,
                     modifier = Modifier.weight(1f),
                 )
             }

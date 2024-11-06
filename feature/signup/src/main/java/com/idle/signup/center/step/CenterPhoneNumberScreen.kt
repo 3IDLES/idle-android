@@ -81,6 +81,7 @@ internal fun CenterPhoneNumberScreen(
                     onDone = {
                         if (centerPhoneNumber.length == 11) sendPhoneNumber()
                     },
+                    throttleTime = 2000L,
                     modifier = Modifier
                         .weight(1f)
                         .focusRequester(focusRequester),
@@ -90,6 +91,7 @@ internal fun CenterPhoneNumberScreen(
                     enable = centerPhoneNumber.length == 11 &&
                             !(centerAuthCodeTimerMinute != "" && centerAuthCodeTimerSeconds != ""),
                     text = stringResource(id = R.string.verification),
+                    throttleTime = 2000L,
                     onClick = sendPhoneNumber,
                 )
             }
@@ -114,6 +116,7 @@ internal fun CenterPhoneNumberScreen(
                         isError = isAuthCodeError,
                         readOnly = !(centerAuthCodeTimerMinute != "" && centerAuthCodeTimerSeconds != "") || isConfirmAuthCode,
                         onDone = { if (centerAuthCode.isNotBlank()) confirmAuthCode() },
+                        throttleTime = 2000L,
                         supportingText = if (isAuthCodeError) stringResource(R.string.confirm_code_error_description)
                         else if (isConfirmAuthCode) "* 인증이 완료되었습니다." else "",
                         leftComponent = {
@@ -131,6 +134,7 @@ internal fun CenterPhoneNumberScreen(
                     CareButtonSmall(
                         enable = centerAuthCode.isNotBlank() && !isConfirmAuthCode,
                         text = stringResource(id = R.string.confirm_short),
+                        throttleTime = 2000L,
                         onClick = confirmAuthCode,
                     )
                 }

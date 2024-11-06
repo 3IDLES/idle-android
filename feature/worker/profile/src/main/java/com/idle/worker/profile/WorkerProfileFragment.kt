@@ -337,7 +337,10 @@ internal fun WorkerProfileScreen(
                         ) {
                             Box(
                                 modifier = Modifier
-                                    .clickable(enabled = isEditState) {
+                                    .clickable(
+                                        enabled = isEditState,
+                                        throttleTime = 2000L,
+                                    ) {
                                         singlePhotoPickerLauncher.launch(
                                             PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
                                         )

@@ -75,6 +75,7 @@ internal fun WorkerPhoneNumberScreen(
                     onValueChanged = { onWorkerPhoneNumberChanged(it) },
                     readOnly = (workerAuthCodeTimerMinute != "" && workerAuthCodeTimerSeconds != ""),
                     onDone = { if (workerPhoneNumber.length == 11) sendPhoneNumber() },
+                    throttleTime = 2000L,
                     modifier = Modifier
                         .weight(1f)
                         .focusRequester(focusRequester),
@@ -84,6 +85,7 @@ internal fun WorkerPhoneNumberScreen(
                     enable = workerPhoneNumber.length == 11 &&
                             !(workerAuthCodeTimerMinute != "" && workerAuthCodeTimerSeconds != ""),
                     text = stringResource(id = R.string.verification),
+                    throttleTime = 2000L,
                     onClick = sendPhoneNumber,
                 )
             }
@@ -106,6 +108,7 @@ internal fun WorkerPhoneNumberScreen(
                         hint = "",
                         onValueChanged = onWorkerAuthCodeChanged,
                         onDone = { if (workerAuthCode.isNotBlank() && !isConfirmAuthCode) confirmAuthCode() },
+                        throttleTime = 2000L,
                         isError = isAuthCodeError,
                         supportingText = if (isAuthCodeError) stringResource(R.string.confirm_code_error_description)
                         else if (isConfirmAuthCode) "* 인증이 완료되었습니다." else "",
@@ -125,6 +128,7 @@ internal fun WorkerPhoneNumberScreen(
                     CareButtonSmall(
                         enable = workerAuthCode.isNotBlank() && !isConfirmAuthCode,
                         text = stringResource(id = R.string.confirm_short),
+                        throttleTime = 2000L,
                         onClick = confirmAuthCode,
                     )
                 }

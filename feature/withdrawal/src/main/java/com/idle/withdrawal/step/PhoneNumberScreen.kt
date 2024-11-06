@@ -86,6 +86,7 @@ internal fun PhoneNumberScreen(
                     },
                     readOnly = (timerMinute != "" && timerSeconds != ""),
                     onDone = { if (phoneNumber.length == 11) sendPhoneNumber() },
+                    throttleTime = 2000L,
                     modifier = Modifier
                         .weight(1f)
                         .focusRequester(focusRequester),
@@ -95,6 +96,7 @@ internal fun PhoneNumberScreen(
                     enable = phoneNumber.length == 11 &&
                             !(timerMinute != "" && timerSeconds != ""),
                     text = stringResource(id = R.string.verification),
+                    throttleTime = 2000L,
                     onClick = sendPhoneNumber,
                 )
             }
@@ -124,6 +126,7 @@ internal fun PhoneNumberScreen(
                             },
                             readOnly = !(timerMinute != "" && timerSeconds != "") || isConfirmAuthCode,
                             onDone = { if (authCode.isNotBlank()) confirmAuthCode() },
+                            throttleTime = 2000L,
                             leftComponent = {
                                 if (timerMinute != "" && timerSeconds != "") {
                                     Text(
@@ -146,6 +149,7 @@ internal fun PhoneNumberScreen(
                     CareButtonSmall(
                         enable = authCode.isNotBlank() && !isConfirmAuthCode,
                         text = stringResource(id = R.string.confirm_short),
+                        throttleTime = 2000L,
                         onClick = confirmAuthCode,
                     )
                 }

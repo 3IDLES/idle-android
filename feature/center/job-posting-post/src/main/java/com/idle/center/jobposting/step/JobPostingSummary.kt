@@ -139,6 +139,7 @@ internal fun JobPostingSummaryScreen(
                     CareButtonLarge(
                         text = stringResource(id = R.string.confirm),
                         onClick = postJobPosting,
+                        throttleTime = 2000L,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(start = 20.dp, end = 20.dp, bottom = 28.dp),

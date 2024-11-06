@@ -179,7 +179,7 @@ private fun NotificationItem(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { onClick(notification) }
+                .clickable(throttleTime = 2000L) { onClick(notification) }
                 .padding(horizontal = 20.dp, vertical = 12.dp)
         ) {
             AsyncImage(
