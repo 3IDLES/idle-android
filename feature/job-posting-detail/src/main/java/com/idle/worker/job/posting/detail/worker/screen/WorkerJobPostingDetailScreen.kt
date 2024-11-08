@@ -70,6 +70,7 @@ internal fun WorkerJobPostingDetailScreen(
     removeFavoriteJobPosting: (String, JobPostingType) -> Unit,
     applyJobPosting: (String, ApplyMethod) -> Unit,
     navigateTo: (com.idle.navigation.DeepLinkDestination) -> Unit,
+    shareJobPosting: () -> Unit,
 ) {
     val onBackPressedDispatcher =
         LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
@@ -724,37 +725,54 @@ internal fun WorkerJobPostingDetailScreen(
                     }
                 }
 
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(CareTheme.colors.white000)
                         .padding(top = 12.dp, bottom = 28.dp, start = 20.dp, end = 20.dp),
                 ) {
                     CareButtonLine(
-                        text = stringResource(id = R.string.inquiry),
-                        onClick = {
-                            coroutineScope.launch {
-                                sheetState.show()
-                            }
-                        },
+                        text = stringResource(id = R.string.share),
+                        onClick = shareJobPosting,
+                        throttleTime = 2000L,
                         borderColor = CareTheme.colors.orange400,
                         textColor = CareTheme.colors.orange500,
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 8.dp),
                     )
 
-                    val applyEnable = jobPostingDetail.applyTime == null
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(CareTheme.colors.white000)
+//                            .padding(top = 12.dp, bottom = 28.dp, start = 20.dp, end = 20.dp),
+                    ) {
+                        CareButtonLine(
+                            text = stringResource(id = R.string.inquiry),
+                            onClick = {
+                                coroutineScope.launch {
+                                    sheetState.show()
+                                }
+                            },
+                            borderColor = CareTheme.colors.orange400,
+                            textColor = CareTheme.colors.orange500,
+                            modifier = Modifier.weight(1f),
+                        )
 
-                    CareButtonMedium(
-                        text = if (applyEnable) stringResource(id = R.string.recruit)
-                        else stringResource(id = R.string.recruit_complete),
-                        onClick = {
-                            applyMethod = ApplyMethod.APP
-                            showDialog = true
-                        },
-                        enable = applyEnable,
-                        modifier = Modifier.weight(1f),
-                    )
+                        val applyEnable = jobPostingDetail.applyTime == null
+
+                        CareButtonMedium(
+                            text = if (applyEnable) stringResource(id = R.string.recruit)
+                            else stringResource(id = R.string.recruit_complete),
+                            onClick = {
+                                applyMethod = ApplyMethod.APP
+                                showDialog = true
+                            },
+                            enable = applyEnable,
+                            modifier = Modifier.weight(1f),
+                        )
+                    }
                 }
             }
         }

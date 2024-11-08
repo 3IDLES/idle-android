@@ -175,6 +175,7 @@ naver-map = { module = "com.naver.maps:map-sdk", version.ref = "naverMap" }
 
 kakao-common = { module = "com.kakao.sdk:v2-common", version.ref = "kakao" }
 kakao-talk = { module = "com.kakao.sdk:v2-talk", version.ref = "kakao" }
+kakao-share = { module = "com.kakao.sdk:v2-share", version.ref = "kakao" }
 
 [bundles]
 

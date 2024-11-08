@@ -21,6 +21,7 @@ sealed class MainEvent {
         MainEvent()
 
     data object DismissToast : MainEvent()
+    data object ShareJobPosting : MainEvent()
 }
 
 enum class ToastType {
