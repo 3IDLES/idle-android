@@ -77,6 +77,7 @@ import com.idle.domain.model.profile.JobSearchStatus.NO
 import com.idle.domain.model.profile.JobSearchStatus.UNKNOWN
 import com.idle.domain.model.profile.JobSearchStatus.YES
 import com.idle.domain.model.profile.WorkerProfile
+import com.idle.domain.model.profile.WorkerProfile.Companion.NEW_CARER
 import com.idle.post.code.PostCodeFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -215,10 +216,14 @@ internal fun WorkerProfileScreen(
                     Spacer(modifier = Modifier.height(72.dp))
 
                     CareWheelPicker(
-                        items = (1..20).map {
-                            it.toString() + "년차"
+                        items = (0..20).map {
+                            if (it == 0) {
+                                "신입"
+                            } else {
+                                it.toString() + "년차"
+                            }
                         }.toList(),
-                        initIndex = experienceYear?.minus(1) ?: 0,
+                        initIndex = experienceYear ?: 0,
                         onItemSelected = { localExperienceYear = it },
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -250,7 +255,11 @@ internal fun WorkerProfileScreen(
                             onClick = {
                                 coroutineScope.launch {
                                     onExperienceYearChanged(
-                                        localExperienceYear.dropLast(2).toIntOrNull() ?: -1
+                                        when (localExperienceYear) {
+                                            NEW_CARER -> 0
+                                            else -> localExperienceYear.dropLast(2).toIntOrNull()
+                                                ?: -1
+                                        }
                                     )
                                     sheetState.hide()
                                 }
@@ -461,7 +470,8 @@ internal fun WorkerProfileScreen(
                                     )
 
                                     Text(
-                                        text = "${workerProfile.experienceYear}년차",
+                                        text = if (workerProfile.isNewCarer()) NEW_CARER
+                                        else "${workerProfile.experienceYear}년차",
                                         style = CareTheme.typography.body3,
                                         color = CareTheme.colors.black,
                                     )
@@ -567,7 +577,8 @@ internal fun WorkerProfileScreen(
                             ) {
                                 CareClickableTextField(
                                     value = experienceYear?.let {
-                                        "${experienceYear}년차"
+                                        if (it == 0) NEW_CARER
+                                        else "${it}년차"
                                     } ?: "-",
                                     hint = stringResource(id = R.string.year),
                                     leftComponent = {

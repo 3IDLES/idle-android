@@ -17,4 +17,15 @@ data class WorkerProfile(
     val introduce: String?,
     val speciality: String?,
     val profileImageUrl: String?,
-)
+) {
+    fun isNewCarer(): Boolean {
+        return when (experienceYear) {
+            0 -> true
+            else -> false
+        }
+    }
+
+    companion object {
+        const val NEW_CARER = "신입"
+    }
+}

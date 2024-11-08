@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import com.idle.care.notification.NotificationHandler.Companion.BACKGROUND_CHANNEL
 import com.idle.care.notification.NotificationHandler.Companion.BACKGROUND_DESCRIPTION
+import com.kakao.sdk.common.KakaoSdk
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
@@ -12,6 +13,11 @@ class CareApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
+        initNotification()
+        initKakao()
+    }
+
+    private fun initNotification() {
         val channel =
             NotificationChannel(
                 BACKGROUND_CHANNEL,
@@ -22,5 +28,9 @@ class CareApplication : Application() {
 
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
+    }
+
+    private fun initKakao() {
+        KakaoSdk.init(this, BuildConfig.KAKAO_APP_KEY)
     }
 }
