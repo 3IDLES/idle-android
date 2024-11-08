@@ -23,6 +23,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.idle.auth.AuthFragmentDirections
 import com.idle.binding.MainEvent
+import com.idle.binding.ShareJobPostingInfo
 import com.idle.binding.repeatOnStarted
 import com.idle.designsystem.binding.component.dismissToast
 import com.idle.designsystem.binding.component.showToast
@@ -40,7 +41,6 @@ import com.kakao.sdk.template.model.FeedTemplate
 import com.kakao.sdk.template.model.ItemContent
 import com.kakao.sdk.template.model.ItemInfo
 import com.kakao.sdk.template.model.Link
-import com.kakao.sdk.template.model.Social
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import javax.inject.Inject
@@ -158,7 +158,7 @@ class MainActivity : AppCompatActivity() {
             repeatOnStarted {
                 eventFlow.collect {
                     when (it) {
-                        is MainEvent.ShareJobPosting -> shareJobPosting()
+                        is MainEvent.ShareJobPosting -> shareJobPosting(it.shareJobPostingInfo)
                         is MainEvent.DismissToast -> dismissToast()
                         is MainEvent.ShowToast -> showToast(
                             context = this@MainActivity,
@@ -419,60 +419,35 @@ class MainActivity : AppCompatActivity() {
         slide.start()
     }
 
-    private fun shareJobPosting() {
-        val defaultFeed = FeedTemplate(
+    private fun shareJobPosting(shareJobPostingInfo: ShareJobPostingInfo) {
+        val jobPostingFeed = FeedTemplate(
             content = Content(
-                title = "오늘의 디저트",
-                description = "#케익 #딸기 #삼평동 #카페 #분위기 #소개팅",
-                imageUrl = "https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png",
+                title = shareJobPostingInfo.centerName,
+                description = shareJobPostingInfo.centerOfficeNumber,
+                imageUrl = "http://k.kakaocdn.net/dn/B1Ebe/btsKDd0uCic/On6NmqLfmzsXzguLigUk40/kakaolink40_original.png",
                 link = Link(
                     webUrl = "https://developers.kakao.com",
                     mobileWebUrl = "https://developers.kakao.com"
                 )
             ),
             itemContent = ItemContent(
-                profileText = "Kakao",
-                profileImageUrl = "https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png",
-                titleImageUrl = "https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png",
-                titleImageText = "Cheese cake",
-                titleImageCategory = "Cake",
+                profileText = "케어밋에서 아래의 일자리에 지원해요!",
+                titleImageText = shareJobPostingInfo.title,
+                titleImageCategory = "요양 일자리",
                 items = listOf(
-                    ItemInfo(item = "cake1", itemOp = "1000원"),
-                    ItemInfo(item = "cake2", itemOp = "2000원"),
-                    ItemInfo(item = "cake3", itemOp = "3000원"),
-                    ItemInfo(item = "cake4", itemOp = "4000원"),
-                    ItemInfo(item = "cake5", itemOp = "5000원")
+                    ItemInfo(item = "근무 요일", itemOp = shareJobPostingInfo.weekdays),
+                    ItemInfo(item = "근무 시간", itemOp = shareJobPostingInfo.workTime),
+                    ItemInfo(item = "급여", itemOp = shareJobPostingInfo.payAmount),
+                    ItemInfo(item = "근무 주소", itemOp = shareJobPostingInfo.roadNameAddress),
+                    ItemInfo(item = "고객 성별", itemOp = shareJobPostingInfo.gender),
+                    ItemInfo(item = "요양등급", itemOp = shareJobPostingInfo.careLevel),
                 ),
-                sum = "Total",
-                sumOp = "15000원"
             ),
-            social = Social(
-                likeCount = 286,
-                commentCount = 45,
-                sharedCount = 845
-            ),
-            buttons = listOf(
-                Button(
-                    "웹으로 보기",
-                    Link(
-                        webUrl = "https://developers.kakao.com",
-                        mobileWebUrl = "https://developers.kakao.com"
-                    )
-                ),
-                Button(
-                    "앱으로 보기",
-                    Link(
-                        androidExecutionParams = mapOf("key1" to "value1", "key2" to "value2"),
-                        iosExecutionParams = mapOf("key1" to "value1", "key2" to "value2")
-                    )
-                )
-            )
+            buttons = listOf(Button(title = "앱에서 확인하기", link = Link(mobileWebUrl = "")))
         )
 
-        // 카카오톡 설치여부 확인
         if (ShareClient.instance.isKakaoTalkSharingAvailable(this)) {
-            // 카카오톡으로 카카오톡 공유 가능
-            ShareClient.instance.shareDefault(this, defaultFeed) { sharingResult, error ->
+            ShareClient.instance.shareDefault(this, jobPostingFeed) { sharingResult, error ->
                 if (error != null) {
                     Log.e("test", "카카오톡 공유 실패", error)
                 } else if (sharingResult != null) {
@@ -487,7 +462,7 @@ class MainActivity : AppCompatActivity() {
         } else {
             // 카카오톡 미설치: 웹 공유 사용 권장
             // 웹 공유 예시 코드
-            val sharerUrl = WebSharerClient.instance.makeDefaultUrl(defaultFeed)
+            val sharerUrl = WebSharerClient.instance.makeDefaultUrl(jobPostingFeed)
 
             // CustomTabs으로 웹 브라우저 열기
 

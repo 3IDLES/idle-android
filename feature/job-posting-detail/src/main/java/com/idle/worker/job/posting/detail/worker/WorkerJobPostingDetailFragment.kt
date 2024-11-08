@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.navArgs
 import com.idle.binding.MainEvent
+import com.idle.binding.ShareJobPostingInfo
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.domain.model.jobposting.CrawlingJobPostingDetail
@@ -86,7 +87,33 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
                                         com.idle.navigation.NavigationEvent.NavigateTo(it)
                                     )
                                 },
-                                shareJobPosting = { eventHandlerHelper.sendEvent(MainEvent.ShareJobPosting) },
+                                shareJobPosting = {
+                                    eventHandlerHelper.sendEvent(
+                                        MainEvent.ShareJobPosting(
+                                            ShareJobPostingInfo(
+                                                id = jobPosting.id,
+                                                title = try {
+                                                    jobPosting.lotNumberAddress.split(" ")
+                                                        .subList(0, 3)
+                                                        .joinToString(" ")
+                                                } catch (e: IndexOutOfBoundsException) {
+                                                    ""
+                                                },
+                                                weekdays = jobPosting.weekdays.toList()
+                                                    .sortedBy { it.ordinal }
+                                                    .joinToString(",") { it.displayName },
+                                                workTime = "${jobPosting.startTime} - ${jobPosting.endTime}",
+                                                payAmount = "${jobPosting.payType.displayName} ${jobPosting.payAmount}원",
+                                                roadNameAddress = jobPosting.roadNameAddress,
+                                                gender = jobPosting.gender.displayName,
+                                                careLevel = jobPosting.careLevel.toString(),
+                                                disease = jobPosting.disease,
+                                                centerName = jobPosting.centerName,
+                                                centerOfficeNumber = jobPosting.centerOfficeNumber,
+                                            )
+                                        )
+                                    )
+                                },
                             )
                         } else {
                             CrawlingJobPostingDetailScreen(
