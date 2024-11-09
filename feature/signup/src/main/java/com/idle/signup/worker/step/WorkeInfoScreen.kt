@@ -31,8 +31,8 @@ import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.Gender
-import com.idle.signin.worker.WorkerSignUpStep
-import com.idle.signin.worker.WorkerSignUpStep.INFO
+import com.idle.signup.worker.WorkerSignUpStep
+import com.idle.signup.worker.WorkerSignUpStep.INFO
 import com.idle.signup.LogWorkerSignUpStep
 
 @Composable
