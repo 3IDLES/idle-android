@@ -1,4 +1,4 @@
-package com.idle.signin.worker
+package com.idle.signup.worker
 
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
@@ -19,8 +19,9 @@ import com.idle.domain.usecase.auth.SignUpWorkerUseCase
 import com.idle.domain.usecase.profile.GetWorkerIdUseCase
 import com.idle.navigation.DeepLinkDestination.SignUpComplete
 import com.idle.navigation.DeepLinkDestination.WorkerHome
-import com.idle.signin.worker.WorkerSignUpStep.PHONE_NUMBER
+import com.idle.navigation.NavigationHelper
 import com.idle.signup.R
+import com.idle.signup.worker.WorkerSignUpStep.PHONE_NUMBER
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,7 +40,7 @@ class WorkerSignUpViewModel @Inject constructor(
     private val analyticsHelper: AnalyticsHelper,
     private val errorHandlerHelper: ErrorHandler,
     val eventHandlerHelper: EventHandlerHelper,
-    val navigationHelper: com.idle.navigation.NavigationHelper,
+    val navigationHelper: NavigationHelper,
 ) : ViewModel() {
 
     private val _signUpStep = MutableStateFlow<WorkerSignUpStep>(PHONE_NUMBER)

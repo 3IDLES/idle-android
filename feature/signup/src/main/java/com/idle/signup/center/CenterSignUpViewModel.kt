@@ -13,11 +13,13 @@ import com.idle.domain.model.error.ApiErrorCode
 import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.error.HttpResponseStatus
+import com.idle.domain.repositorry.logging.LoggingRepository
 import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
 import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
 import com.idle.domain.usecase.auth.SignUpCenterUseCase
 import com.idle.domain.usecase.auth.ValidateBusinessRegistrationNumberUseCase
 import com.idle.domain.usecase.auth.ValidateIdentifierUseCase
+import com.idle.navigation.NavigationHelper
 import com.idle.signup.R
 import com.idle.signup.center.CenterSignUpStep.NAME
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -39,10 +41,11 @@ class CenterSignUpViewModel @Inject constructor(
     private val signUpCenterUseCase: SignUpCenterUseCase,
     private val validateIdentifierUseCase: ValidateIdentifierUseCase,
     private val validateBusinessRegistrationNumberUseCase: ValidateBusinessRegistrationNumberUseCase,
+    private val loggingRepository: LoggingRepository,
     private val countDownTimer: CountDownTimer,
     private val errorHandlerHelper: ErrorHandler,
     private val eventHandlerHelper: EventHandlerHelper,
-    val navigationHelper: com.idle.navigation.NavigationHelper,
+    val navigationHelper: NavigationHelper,
 ) : ViewModel() {
     private val _signUpStep = MutableStateFlow(NAME)
     val signUpStep = _signUpStep.asStateFlow()
@@ -151,6 +154,11 @@ class CenterSignUpViewModel @Inject constructor(
     )
 
     internal fun setCenterSignUpStep(step: CenterSignUpStep) {
+        // for Logging
+        if (step.step > _signUpStep.value.step) {
+            loggingRepository.centerSignUpProcess = step.step
+        }
+
         _signUpStep.value = step
     }
 
@@ -217,7 +225,7 @@ class CenterSignUpViewModel @Inject constructor(
                 cancelTimer()
                 _isConfirmAuthCode.value = true
 
-                _signUpStep.value = CenterSignUpStep.BUSINESS_REGISTRATION
+                setCenterSignUpStep(CenterSignUpStep.BUSINESS_REGISTRATION)
             }.onFailure {
                 if (it is HttpResponseException && it.status == HttpResponseStatus.BadRequest) {
                     _isAuthCodeError.value = true
@@ -309,6 +317,10 @@ class CenterSignUpViewModel @Inject constructor(
             }
         }
         return false
+    }
+
+    private fun setCenterSignUpStep(step: Int) {
+        loggingRepository.centerSignUpProcess = step
     }
 
     companion object {

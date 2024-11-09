@@ -23,8 +23,8 @@ import com.idle.designsystem.compose.component.CareButtonSmall
 import com.idle.designsystem.compose.component.CareTextField
 import com.idle.designsystem.compose.component.LabeledContent
 import com.idle.designsystem.compose.foundation.CareTheme
-import com.idle.signin.worker.WorkerSignUpStep
-import com.idle.signin.worker.WorkerSignUpStep.PHONE_NUMBER
+import com.idle.signup.worker.WorkerSignUpStep
+import com.idle.signup.worker.WorkerSignUpStep.PHONE_NUMBER
 import com.idle.signup.LogWorkerSignUpStep
 
 @Composable

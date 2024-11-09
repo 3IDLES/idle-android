@@ -16,6 +16,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
+import com.idle.analytics.AnalyticsEvent
+import com.idle.analytics.businessmetric.LocalAnalyticsHelper
 import com.idle.analytics.businessmetric.TrackScreenViewEvent
 import com.idle.center.jobposting.complete.SignUpCompleteViewModel
 import com.idle.compose.base.BaseComposeFragment
@@ -31,7 +33,10 @@ class SignUpCompleteFragment : BaseComposeFragment() {
     @Composable
     override fun ComposeLayout() {
         fragmentViewModel.apply {
+            val centerSignUpProcessStep = getCenterSignUpProcessStep()
+
             SignUpCompleteScreen(
+                centerSignUpProcessStep = centerSignUpProcessStep,
                 navigateTo = {
                     navigationHelper.navigateTo(
                         com.idle.navigation.NavigationEvent.NavigateTo(
@@ -47,6 +52,7 @@ class SignUpCompleteFragment : BaseComposeFragment() {
 
 @Composable
 internal fun SignUpCompleteScreen(
+    centerSignUpProcessStep: Int,
     navigateTo: (com.idle.navigation.DeepLinkDestination) -> Unit,
 ) {
     Column(
@@ -90,5 +96,12 @@ internal fun SignUpCompleteScreen(
         )
     }
 
-    TrackScreenViewEvent(screenName = "signup_complete_screen")
+    LocalAnalyticsHelper.current.logEvent(
+        AnalyticsEvent(
+            type = "carer_signup_complete",
+            properties = mutableMapOf("center_signup_step" to centerSignUpProcessStep),
+        )
+    )
+
+    TrackScreenViewEvent(screenName = "carer_signup_complete_screen")
 }
