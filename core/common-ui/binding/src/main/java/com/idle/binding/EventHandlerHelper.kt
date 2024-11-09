@@ -42,8 +42,6 @@ data class ShareJobPostingInfo(
     val payAmount: String,
     val roadNameAddress: String,
     val gender: String,
-    val careLevel: String,
-    val disease: String?,
     val centerName: String,
     val centerOfficeNumber: String,
 )

@@ -106,8 +106,6 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
                                                 payAmount = "${jobPosting.payType.displayName} ${jobPosting.payAmount}원",
                                                 roadNameAddress = jobPosting.roadNameAddress,
                                                 gender = jobPosting.gender.displayName,
-                                                careLevel = jobPosting.careLevel.toString(),
-                                                disease = jobPosting.disease,
                                                 centerName = jobPosting.centerName,
                                                 centerOfficeNumber = jobPosting.centerOfficeNumber,
                                             )
@@ -122,6 +120,23 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
                                 showPlaceDetail = setShowPlaceDetail,
                                 addFavoriteJobPosting = ::addFavoriteJobPosting,
                                 removeFavoriteJobPosting = ::removeFavoriteJobPosting,
+                                shareJobPosting = {
+                                    eventHandlerHelper.sendEvent(
+                                        MainEvent.ShareJobPosting(
+                                            ShareJobPostingInfo(
+                                                id = jobPosting.id,
+                                                title = jobPosting.title,
+                                                weekdays = jobPosting.workingSchedule,
+                                                workTime = jobPosting.workingTime,
+                                                payAmount = jobPosting.payInfo,
+                                                roadNameAddress = jobPosting.clientAddress,
+                                                gender = "-",
+                                                centerName = jobPosting.centerName,
+                                                centerOfficeNumber = jobPosting.centerAddress,
+                                            )
+                                        )
+                                    )
+                                },
                             )
                         }
                     }

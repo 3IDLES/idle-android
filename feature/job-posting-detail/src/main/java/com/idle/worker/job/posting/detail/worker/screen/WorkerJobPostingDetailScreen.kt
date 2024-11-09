@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -161,6 +162,17 @@ internal fun WorkerJobPostingDetailScreen(
                         end = 20.dp,
                         bottom = 12.dp
                     ),
+                    leftComponent = {
+                        Image(
+                            painter = painterResource(R.drawable.ic_share),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(32.dp)
+                                .clickable(throttleTime = 2000L) {
+                                    shareJobPosting()
+                                },
+                        )
+                    },
                     onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
                 )
             },
@@ -725,54 +737,37 @@ internal fun WorkerJobPostingDetailScreen(
                     }
                 }
 
-                Column(
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
                     modifier = Modifier
                         .fillMaxWidth()
+                        .background(CareTheme.colors.white000)
                         .padding(top = 12.dp, bottom = 28.dp, start = 20.dp, end = 20.dp),
                 ) {
                     CareButtonLine(
-                        text = stringResource(id = R.string.share),
-                        onClick = shareJobPosting,
-                        throttleTime = 2000L,
+                        text = stringResource(id = R.string.inquiry),
+                        onClick = {
+                            coroutineScope.launch {
+                                sheetState.show()
+                            }
+                        },
                         borderColor = CareTheme.colors.orange400,
                         textColor = CareTheme.colors.orange500,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 8.dp),
+                        modifier = Modifier.weight(1f),
                     )
 
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(CareTheme.colors.white000)
-//                            .padding(top = 12.dp, bottom = 28.dp, start = 20.dp, end = 20.dp),
-                    ) {
-                        CareButtonLine(
-                            text = stringResource(id = R.string.inquiry),
-                            onClick = {
-                                coroutineScope.launch {
-                                    sheetState.show()
-                                }
-                            },
-                            borderColor = CareTheme.colors.orange400,
-                            textColor = CareTheme.colors.orange500,
-                            modifier = Modifier.weight(1f),
-                        )
+                    val applyEnable = jobPostingDetail.applyTime == null
 
-                        val applyEnable = jobPostingDetail.applyTime == null
-
-                        CareButtonMedium(
-                            text = if (applyEnable) stringResource(id = R.string.recruit)
-                            else stringResource(id = R.string.recruit_complete),
-                            onClick = {
-                                applyMethod = ApplyMethod.APP
-                                showDialog = true
-                            },
-                            enable = applyEnable,
-                            modifier = Modifier.weight(1f),
-                        )
-                    }
+                    CareButtonMedium(
+                        text = if (applyEnable) stringResource(id = R.string.recruit)
+                        else stringResource(id = R.string.recruit_complete),
+                        onClick = {
+                            applyMethod = ApplyMethod.APP
+                            showDialog = true
+                        },
+                        enable = applyEnable,
+                        modifier = Modifier.weight(1f),
+                    )
                 }
             }
         }

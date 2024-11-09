@@ -424,11 +424,8 @@ class MainActivity : AppCompatActivity() {
             content = Content(
                 title = shareJobPostingInfo.centerName,
                 description = shareJobPostingInfo.centerOfficeNumber,
-                imageUrl = "http://k.kakaocdn.net/dn/B1Ebe/btsKDd0uCic/On6NmqLfmzsXzguLigUk40/kakaolink40_original.png",
-                link = Link(
-                    webUrl = "https://developers.kakao.com",
-                    mobileWebUrl = "https://developers.kakao.com"
-                )
+                imageUrl = "https://idle-prod-bucket.s3.ap-northeast-2.amazonaws.com/assets/caremeet-share.png",
+                link = Link()
             ),
             itemContent = ItemContent(
                 profileText = "케어밋에서 아래의 일자리에 지원해요!",
@@ -439,11 +436,9 @@ class MainActivity : AppCompatActivity() {
                     ItemInfo(item = "근무 시간", itemOp = shareJobPostingInfo.workTime),
                     ItemInfo(item = "급여", itemOp = shareJobPostingInfo.payAmount),
                     ItemInfo(item = "근무 주소", itemOp = shareJobPostingInfo.roadNameAddress),
-                    ItemInfo(item = "고객 성별", itemOp = shareJobPostingInfo.gender),
-                    ItemInfo(item = "요양등급", itemOp = shareJobPostingInfo.careLevel),
                 ),
             ),
-            buttons = listOf(Button(title = "앱에서 확인하기", link = Link(mobileWebUrl = "")))
+            buttonTitle = "앱에서 확인하기",
         )
 
         if (ShareClient.instance.isKakaoTalkSharingAvailable(this)) {
