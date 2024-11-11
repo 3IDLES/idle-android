@@ -56,7 +56,7 @@ internal fun CenterPhoneNumberScreen(
         modifier = Modifier.fillMaxSize()
     ) {
         Text(
-            text = stringResource(id = R.string.phone_number_hint),
+            text = stringResource(id = R.string.center_phone_number_hint),
             style = CareTheme.typography.heading2,
             color = CareTheme.colors.black,
             modifier = Modifier.padding(bottom = 28.dp),

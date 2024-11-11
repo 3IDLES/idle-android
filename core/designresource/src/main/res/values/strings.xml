@@ -25,7 +25,7 @@
     <string name="confirm_password_hint">비밀번호를 한번 더 입력해주세요.</string>
     <string name="forget_password">비밀번호가 기억나지 않나요?</string>
     <string name="change_password">비밀번호 변경</string>
-    <string name="new_password_title">새로운 비밀번호를 입력해주세요</string>
+    <string name="new_password_title">새로운 비밀번호를 입력해주세요.</string>
     <string name="generate_new_password">신규 비밀번호 발급</string>
     <string name="condition_id_length">6자~20자 사이</string>
     <string name="condition_password_length">8자~20자 사이</string>
@@ -36,15 +36,16 @@
     <string name="password_description">* 비밀번호는 아래의 조건에 맞추어주세요.</string>
     <string name="phone_number">휴대폰 번호</string>
     <string name="office_number">전화번호</string>
-    <string name="phone_number_hint">휴대폰 번호를 입력해주세요</string>
-    <string name="worker_gender_title">본인의 성별을 선택해주세요</string>
+    <string name="phone_number_hint">휴대폰 번호를 입력해주세요.</string>
+    <string name="center_phone_number_hint">센터 관리자님의\n휴대폰 번호를 입력해주세요.</string>
+    <string name="worker_gender_title">본인의 성별을 선택해주세요.</string>
     <string name="verification">인증</string>
     <string name="confirm_code">인증번호</string>
     <string name="confirm_success">인증이 완료되었습니다.</string>
     <string name="confirm_code_error_description">* 인증번호를 다시 확인해주세요.</string>
     <string name="worker_signup_complete_message">요양보호사 로그인을\n완료했어요!</string>
     <string name="worker_signup_welcome_message">로그인 정보는 마지막 접속일부터\n180일간 유지될 예정이에요.</string>
-    <string name="worker_name_hint">성함을 입력해주세요</string>
+    <string name="worker_name_hint">성함을 입력해주세요.</string>
     <string name="worker_name_title">본인의 인적사항을 입력해주세요.</string>
     <string name="worker_signup">요양보호사 회원가입</string>
     <string name="account_withdrawal">계정 삭제</string>
@@ -57,7 +58,7 @@
     <!-- User Registration -->
     <string name="start_with_phone">휴대폰 번호로 시작하기</string>
     <string name="start_with_signup">회원가입하고 시작하기</string>
-    <string name="set_id_and_password">아이디와 비밀번호를 설정해주세요</string>
+    <string name="set_id_and_password">아이디와 비밀번호를 설정해주세요.</string>
     <string name="set_id_label">아이디 설정</string>
     <string name="id_conditions">(최소 6자 ~ 최대 20자까지 허용)</string>
     <string name="id_available">* 사용 가능한 아이디 입니다.</string>
