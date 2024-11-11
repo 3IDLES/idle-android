@@ -75,7 +75,7 @@ private fun CenterPendingScreen(
     sendVerificationRequest: () -> Unit,
 ) {
     Scaffold(containerColor = CareTheme.colors.white000) { paddingValue ->
-        val actualPageCount = 3
+        val actualPageCount = 4
         val pageCount = 600
         val maxNumOfRounds = 600 / actualPageCount
         val pagerState = rememberPagerState(
@@ -155,6 +155,11 @@ private fun CenterPendingScreen(
                             headerText = "요양보호사를 즐겨찾기하고\n직접 연락해 능동적으로 구인해요",
                             imageResId = R.drawable.ic_pending_screen_3
                         )
+
+                        3 -> PendingPageContent(
+                            headerText = "더욱 안전한 서비스를 만들기 위해\n마지막으로 전화 인증을 받을게요",
+                            imageResId = com.idle.designresource.R.drawable.ic_call
+                        )
                     }
                 }
             }
@@ -211,7 +216,7 @@ private fun PendingPageContent(headerText: String, imageResId: Int) {
             text = "센터 관리자 인증 시",
             style = CareTheme.typography.heading3,
             color = CareTheme.colors.orange500,
-            modifier = Modifier.padding(bottom = 4.dp),
+            modifier = Modifier.padding(bottom = 8.dp),
         )
 
         Text(
