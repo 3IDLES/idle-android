@@ -14,8 +14,6 @@ import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.profile.CenterManagerAccountStatus
 import com.idle.domain.usecase.auth.GetAccessTokenUseCase
 import com.idle.domain.usecase.auth.GetUserTypeUseCase
-import com.idle.domain.usecase.chatting.ConnectWebSocketUseCase
-import com.idle.domain.usecase.chatting.DisconnectWebSocketUseCase
 import com.idle.domain.usecase.config.GetForceUpdateInfoUseCase
 import com.idle.domain.usecase.profile.GetCenterStatusUseCase
 import com.idle.domain.usecase.profile.GetMyCenterProfileUseCase
@@ -96,12 +94,8 @@ class MainViewModel @Inject constructor(
             return@launch
         }
 
-        when (userRole) {
-            UserType.CENTER.apiValue -> getMyCenterProfileUseCase().onFailure {
-                return@launch
-            }
-
-            UserType.WORKER.apiValue -> getMyWorkerProfileUseCase().onFailure {
+        if (userRole == UserType.WORKER.apiValue) {
+            getMyWorkerProfileUseCase().onFailure {
                 return@launch
             }
         }
