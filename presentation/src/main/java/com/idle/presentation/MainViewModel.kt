@@ -11,11 +11,11 @@ import com.idle.domain.model.config.ForceUpdate
 import com.idle.domain.model.error.ApiErrorCode
 import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.error.HttpResponseException
+import com.idle.domain.model.jobposting.SharedJobPostingInfo
 import com.idle.domain.model.profile.CenterManagerAccountStatus
+import com.idle.domain.repositorry.jobposting.JobPostingRepository
 import com.idle.domain.usecase.auth.GetAccessTokenUseCase
 import com.idle.domain.usecase.auth.GetUserTypeUseCase
-import com.idle.domain.usecase.chatting.ConnectWebSocketUseCase
-import com.idle.domain.usecase.chatting.DisconnectWebSocketUseCase
 import com.idle.domain.usecase.config.GetForceUpdateInfoUseCase
 import com.idle.domain.usecase.profile.GetCenterStatusUseCase
 import com.idle.domain.usecase.profile.GetMyCenterProfileUseCase
@@ -44,6 +44,7 @@ class MainViewModel @Inject constructor(
     private val getMyCenterProfileUseCase: GetMyCenterProfileUseCase,
     private val getMyWorkerProfileUseCase: GetMyWorkerProfileUseCase,
     private val getCenterStatusUseCase: GetCenterStatusUseCase,
+    private val jobPostingRepository: JobPostingRepository,
 //    private val connectWebSocketUseCase: ConnectWebSocketUseCase,
 //    private val disconnectWebSocketUseCase: DisconnectWebSocketUseCase,
     private val errorHandlerHelper: ErrorHandler,
@@ -107,6 +108,10 @@ class MainViewModel @Inject constructor(
         }
 
         navigateToDestination(userRole)
+    }
+
+    internal fun setSharedJobPostingInfo(sharedJobPostingInfo: SharedJobPostingInfo) {
+        jobPostingRepository.sharedJobPostingId = sharedJobPostingInfo
     }
 
     private suspend fun getAccessTokenAndUserRole(): Pair<String, String> = coroutineScope {

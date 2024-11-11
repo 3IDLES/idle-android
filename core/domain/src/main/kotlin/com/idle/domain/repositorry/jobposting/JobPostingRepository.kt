@@ -14,10 +14,13 @@ import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.LifeAssistance
 import com.idle.domain.model.jobposting.MentalStatus
 import com.idle.domain.model.jobposting.PayType
+import com.idle.domain.model.jobposting.SharedJobPostingInfo
 import com.idle.domain.model.jobposting.WorkerJobPosting
 import com.idle.domain.model.jobposting.WorkerJobPostingDetail
 
 interface JobPostingRepository {
+    var sharedJobPostingId: SharedJobPostingInfo?
+
     suspend fun postJobPosting(
         weekdays: List<DayOfWeek>,
         startTime: String,

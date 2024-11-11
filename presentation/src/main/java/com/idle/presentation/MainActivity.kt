@@ -27,6 +27,8 @@ import com.idle.binding.ShareJobPostingInfo
 import com.idle.binding.repeatOnStarted
 import com.idle.designsystem.binding.component.dismissToast
 import com.idle.designsystem.binding.component.showToast
+import com.idle.domain.model.jobposting.JobPostingType
+import com.idle.domain.model.jobposting.SharedJobPostingInfo
 import com.idle.navigation.deepLinkNavigateTo
 import com.idle.presentation.databinding.ActivityMainBinding
 import com.idle.presentation.forceupdate.ForceUpdateFragment
@@ -44,6 +46,7 @@ import com.kakao.sdk.template.model.Link
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import javax.inject.Inject
+import android.net.Uri
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -210,7 +213,24 @@ class MainActivity : AppCompatActivity() {
                 },
                 onInit = ::initializeUserSession,
             )
+
+            intent?.extras?.let {
+                val sharedJobPostingId = it.getString("sharedJobPostingId")
+                val sharedJobPostingType = it.getString("sharedJobPostingType")
+                Log.d("test", sharedJobPostingId + sharedJobPostingType)
+                setSharedJobPostingInfo(
+                    SharedJobPostingInfo(
+                        jobPostingId = sharedJobPostingId ?: return@let,
+                        jobPostingType = JobPostingType.create(sharedJobPostingType ?: return@let),
+                    )
+                )
+            }
         }
+
+        // ATTENTION: This was auto-generated to handle app links.
+        val appLinkIntent: Intent = intent
+        val appLinkAction: String? = appLinkIntent.action
+        val appLinkData: Uri? = appLinkIntent.data
     }
 
     override fun onResume() {
@@ -419,30 +439,45 @@ class MainActivity : AppCompatActivity() {
         slide.start()
     }
 
-    private fun shareJobPosting(shareJobPostingInfo: ShareJobPostingInfo) {
+    private fun shareJobPosting(sharedJobPostingInfo: ShareJobPostingInfo) {
         val jobPostingFeed = FeedTemplate(
             content = Content(
-                title = shareJobPostingInfo.centerName,
-                description = shareJobPostingInfo.centerOfficeNumber,
+                title = sharedJobPostingInfo.centerName,
+                description = sharedJobPostingInfo.centerOfficeNumber,
                 imageUrl = "https://idle-prod-bucket.s3.ap-northeast-2.amazonaws.com/assets/caremeet-share.png",
-                link = Link()
+                link = Link(
+                    androidExecutionParams = mapOf("jobPostingId" to sharedJobPostingInfo.id),
+                )
             ),
             itemContent = ItemContent(
                 profileText = "케어밋에서 아래의 일자리에 지원해요!",
-                titleImageText = shareJobPostingInfo.title,
+                titleImageText = sharedJobPostingInfo.title,
                 titleImageCategory = "요양 일자리",
                 items = listOf(
-                    ItemInfo(item = "근무 요일", itemOp = shareJobPostingInfo.weekdays),
-                    ItemInfo(item = "근무 시간", itemOp = shareJobPostingInfo.workTime),
-                    ItemInfo(item = "급여", itemOp = shareJobPostingInfo.payAmount),
-                    ItemInfo(item = "근무 주소", itemOp = shareJobPostingInfo.roadNameAddress),
+                    ItemInfo(item = "근무 요일", itemOp = sharedJobPostingInfo.weekdays),
+                    ItemInfo(item = "근무 시간", itemOp = sharedJobPostingInfo.workTime),
+                    ItemInfo(item = "급여", itemOp = sharedJobPostingInfo.payAmount),
+                    ItemInfo(item = "근무 주소", itemOp = sharedJobPostingInfo.roadNameAddress),
                 ),
             ),
-            buttonTitle = "앱에서 확인하기",
+            buttons = listOf(
+                Button(
+                    title = "앱에서 확인하기",
+                    link = Link(
+                        androidExecutionParams = mapOf(
+                            "sharedJobPostingId" to sharedJobPostingInfo.id,
+                            "sharedJobPostingType" to sharedJobPostingInfo.type
+                        ),
+                    ),
+                )
+            )
         )
 
         if (ShareClient.instance.isKakaoTalkSharingAvailable(this)) {
-            ShareClient.instance.shareDefault(this, jobPostingFeed) { sharingResult, error ->
+            ShareClient.instance.shareDefault(
+                this,
+                jobPostingFeed
+            ) { sharingResult, error ->
                 if (error != null) {
                     Log.e("test", "카카오톡 공유 실패", error)
                 } else if (sharingResult != null) {

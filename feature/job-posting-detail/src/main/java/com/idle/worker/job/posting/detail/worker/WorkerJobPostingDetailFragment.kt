@@ -108,6 +108,7 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
                                                 gender = jobPosting.gender.displayName,
                                                 centerName = jobPosting.centerName,
                                                 centerOfficeNumber = jobPosting.centerOfficeNumber,
+                                                type = jobPosting.jobPostingType.name,
                                             )
                                         )
                                     )
@@ -133,6 +134,7 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
                                                 gender = "-",
                                                 centerName = jobPosting.centerName,
                                                 centerOfficeNumber = jobPosting.centerAddress,
+                                                type = jobPosting.jobPostingType.name,
                                             )
                                         )
                                     )

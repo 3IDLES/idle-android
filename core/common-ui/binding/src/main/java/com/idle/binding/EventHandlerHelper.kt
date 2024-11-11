@@ -44,4 +44,5 @@ data class ShareJobPostingInfo(
     val gender: String,
     val centerName: String,
     val centerOfficeNumber: String,
+    val type: String,
 )
