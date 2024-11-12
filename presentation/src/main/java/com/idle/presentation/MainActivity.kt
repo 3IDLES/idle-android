@@ -24,6 +24,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.idle.auth.AuthFragmentDirections
 import com.idle.binding.MainEvent
 import com.idle.binding.ShareJobPostingInfo
+import com.idle.binding.ToastType
 import com.idle.binding.repeatOnStarted
 import com.idle.designsystem.binding.component.dismissToast
 import com.idle.designsystem.binding.component.showToast
@@ -216,7 +217,18 @@ class MainActivity : AppCompatActivity() {
             intent?.data?.let {
                 val sharedJobPostingId = it.getQueryParameter("sharedJobPostingId")
                 val sharedJobPostingType = it.getQueryParameter("sharedJobPostingType")
-                Log.d("SharedJobPosting", sharedJobPostingId + sharedJobPostingType)
+                showToast(
+                    this@MainActivity,
+                    "sharedJobPostingId : $sharedJobPostingId + sharedJobPostingType : $sharedJobPostingType",
+                    toastType = ToastType.SUCCESS,
+                    paddingBottom = 30,
+                )
+
+                Log.d(
+                    "onCreate",
+                    "sharedJobPostingId : $sharedJobPostingId + sharedJobPostingType : $sharedJobPostingType",
+                )
+
                 setSharedJobPostingInfo(
                     SharedJobPostingInfo(
                         jobPostingId = sharedJobPostingId ?: return@let,
@@ -237,6 +249,22 @@ class MainActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
+
+        intent?.data?.let {
+            val sharedJobPostingId = it.getQueryParameter("sharedJobPostingId")
+            val sharedJobPostingType = it.getQueryParameter("sharedJobPostingType")
+            showToast(
+                this@MainActivity,
+                "sharedJobPostingId : $sharedJobPostingId + sharedJobPostingType : $sharedJobPostingType",
+                toastType = ToastType.ERROR,
+                paddingBottom = 30,
+            )
+
+            Log.d(
+                "onNewIntent",
+                "sharedJobPostingId : $sharedJobPostingId + sharedJobPostingType : $sharedJobPostingType",
+            )
+        }
 
         viewModel.navigationHelper.handleFCMNavigate(
             isColdStart = false,
