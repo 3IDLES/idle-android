@@ -46,7 +46,6 @@ import com.kakao.sdk.template.model.Link
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import javax.inject.Inject
-import android.net.Uri
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -214,10 +213,10 @@ class MainActivity : AppCompatActivity() {
                 onInit = ::initializeUserSession,
             )
 
-            intent?.extras?.let {
-                val sharedJobPostingId = it.getString("sharedJobPostingId")
-                val sharedJobPostingType = it.getString("sharedJobPostingType")
-                Log.d("test", sharedJobPostingId + sharedJobPostingType)
+            intent?.data?.let {
+                val sharedJobPostingId = it.getQueryParameter("sharedJobPostingId")
+                val sharedJobPostingType = it.getQueryParameter("sharedJobPostingType")
+                Log.d("SharedJobPosting", sharedJobPostingId + sharedJobPostingType)
                 setSharedJobPostingInfo(
                     SharedJobPostingInfo(
                         jobPostingId = sharedJobPostingId ?: return@let,
@@ -226,11 +225,6 @@ class MainActivity : AppCompatActivity() {
                 )
             }
         }
-
-        // ATTENTION: This was auto-generated to handle app links.
-        val appLinkIntent: Intent = intent
-        val appLinkAction: String? = appLinkIntent.action
-        val appLinkData: Uri? = appLinkIntent.data
     }
 
     override fun onResume() {
@@ -243,6 +237,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
+
         viewModel.navigationHelper.handleFCMNavigate(
             isColdStart = false,
             extras = intent?.extras ?: return,
@@ -446,8 +441,13 @@ class MainActivity : AppCompatActivity() {
                 description = sharedJobPostingInfo.centerOfficeNumber,
                 imageUrl = "https://idle-prod-bucket.s3.ap-northeast-2.amazonaws.com/assets/caremeet-share.png",
                 link = Link(
-                    androidExecutionParams = mapOf("jobPostingId" to sharedJobPostingInfo.id),
-                )
+                    webUrl = "https://caremeet.kr/",
+                    mobileWebUrl = "https://caremeet.kr/",
+                    androidExecutionParams = mapOf(
+                        "sharedJobPostingId" to sharedJobPostingInfo.id,
+                        "sharedJobPostingType" to sharedJobPostingInfo.type,
+                    ),
+                ),
             ),
             itemContent = ItemContent(
                 profileText = "케어밋에서 아래의 일자리에 지원해요!",
@@ -464,9 +464,11 @@ class MainActivity : AppCompatActivity() {
                 Button(
                     title = "앱에서 확인하기",
                     link = Link(
+                        webUrl = "https://caremeet.kr/",
+                        mobileWebUrl = "https://caremeet.kr/",
                         androidExecutionParams = mapOf(
                             "sharedJobPostingId" to sharedJobPostingInfo.id,
-                            "sharedJobPostingType" to sharedJobPostingInfo.type
+                            "sharedJobPostingType" to sharedJobPostingInfo.type,
                         ),
                     ),
                 )
