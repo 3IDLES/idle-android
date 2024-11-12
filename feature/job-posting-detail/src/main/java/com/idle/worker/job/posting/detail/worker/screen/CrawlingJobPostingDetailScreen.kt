@@ -36,6 +36,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.net.toUri
+import com.idle.analytics.AnalyticsEvent
+import com.idle.analytics.AnalyticsEvent.PropertiesKeys.ACTION_NAME
+import com.idle.analytics.businessmetric.LocalAnalyticsHelper
 import com.idle.analytics.businessmetric.TrackScreenViewEvent
 import com.idle.compose.clickable
 import com.idle.designresource.R
@@ -60,6 +63,7 @@ internal fun CrawlingJobPostingDetailScreen(
         LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val scrollState = rememberScrollState()
     val context = LocalContext.current
+    val analyticsHelper = LocalAnalyticsHelper.current
 
     Scaffold(
         containerColor = CareTheme.colors.white000,
@@ -499,6 +503,13 @@ internal fun CrawlingJobPostingDetailScreen(
                         description = jobPostingDetail.jobPostingUrl,
                         showRightArrow = true,
                         onClick = {
+                            analyticsHelper.logEvent(
+                                AnalyticsEvent(
+                                    type = AnalyticsEvent.Types.ACTION,
+                                    properties = mutableMapOf(ACTION_NAME to "apply_workent"),
+                                )
+                            )
+
                             startActivity(
                                 context,
                                 Intent(Intent.ACTION_VIEW, jobPostingDetail.jobPostingUrl.toUri()),
