@@ -17,6 +17,7 @@ import com.idle.domain.repositorry.jobposting.JobPostingRepository
 import com.idle.domain.usecase.auth.GetAccessTokenUseCase
 import com.idle.domain.usecase.auth.GetUserTypeUseCase
 import com.idle.domain.usecase.config.GetForceUpdateInfoUseCase
+import com.idle.domain.usecase.notification.ReadNotificationUseCase
 import com.idle.domain.usecase.profile.GetCenterStatusUseCase
 import com.idle.domain.usecase.profile.GetMyCenterProfileUseCase
 import com.idle.domain.usecase.profile.GetMyWorkerProfileUseCase
@@ -44,6 +45,7 @@ class MainViewModel @Inject constructor(
     private val getMyCenterProfileUseCase: GetMyCenterProfileUseCase,
     private val getMyWorkerProfileUseCase: GetMyWorkerProfileUseCase,
     private val getCenterStatusUseCase: GetCenterStatusUseCase,
+    private val readNotificationUseCase: ReadNotificationUseCase,
     private val jobPostingRepository: JobPostingRepository,
 //    private val connectWebSocketUseCase: ConnectWebSocketUseCase,
 //    private val disconnectWebSocketUseCase: DisconnectWebSocketUseCase,
@@ -111,7 +113,7 @@ class MainViewModel @Inject constructor(
     }
 
     internal fun setSharedJobPostingInfo(sharedJobPostingInfo: SharedJobPostingInfo) {
-        jobPostingRepository.sharedJobPostingId = sharedJobPostingInfo
+        jobPostingRepository.sharedJobPostingInfo = sharedJobPostingInfo
     }
 
     private suspend fun getAccessTokenAndUserRole(): Pair<String, String> = coroutineScope {

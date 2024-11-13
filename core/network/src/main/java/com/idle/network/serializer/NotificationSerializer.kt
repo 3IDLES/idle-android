@@ -49,6 +49,10 @@ class NotificationSerializer @Inject constructor() : KSerializer<Notification> {
                     jobPostingId = details["jobPostingId"]?.jsonPrimitive?.content ?: ""
                 )
 
+                NotificationType.NEW_JOB_POSTING -> NotificationContent.NewJobPostingNotification(
+                    jobPostingId = details["jobPostingId"]?.jsonPrimitive?.content ?: ""
+                )
+
                 NotificationType.UNKNOWN -> NotificationContent.UnKnownNotification
             }
         } ?: NotificationContent.UnKnownNotification

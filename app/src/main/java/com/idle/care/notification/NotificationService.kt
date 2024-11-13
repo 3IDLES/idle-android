@@ -1,5 +1,6 @@
 package com.idle.care.notification
 
+import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.idle.analytics.error.ErrorLoggingHelper

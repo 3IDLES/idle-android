@@ -26,6 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -196,6 +197,8 @@ private fun NotificationItem(
             Column(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     text = notification.createdAt.formatRelativeTimeDescription(),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                     style = CareTheme.typography.caption1,
                     color = CareTheme.colors.gray500,
                 )
@@ -203,12 +206,16 @@ private fun NotificationItem(
                 Text(
                     text = notification.title,
                     style = CareTheme.typography.subtitle3,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                     color = CareTheme.colors.black,
                 )
 
                 Text(
                     text = notification.body,
                     style = CareTheme.typography.body3,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                     color = CareTheme.colors.gray300,
                 )
             }

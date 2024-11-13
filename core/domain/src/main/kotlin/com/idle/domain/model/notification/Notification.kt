@@ -16,6 +16,7 @@ data class Notification(
 
 enum class NotificationType(private val notificationTypeClass: Type) {
     APPLICANT(NotificationContent.ApplicantNotification::class.java),
+    NEW_JOB_POSTING(NotificationContent.NewJobPostingNotification::class.java),
     UNKNOWN(NotificationContent.UnKnownNotification::class.java);
 
     companion object {
@@ -27,5 +28,6 @@ enum class NotificationType(private val notificationTypeClass: Type) {
 
 sealed class NotificationContent {
     data class ApplicantNotification(val jobPostingId: String) : NotificationContent()
+    data class NewJobPostingNotification(val jobPostingId: String) : NotificationContent()
     data object UnKnownNotification : NotificationContent()
 }

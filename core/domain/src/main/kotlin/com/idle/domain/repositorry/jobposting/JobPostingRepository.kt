@@ -19,7 +19,7 @@ import com.idle.domain.model.jobposting.WorkerJobPosting
 import com.idle.domain.model.jobposting.WorkerJobPostingDetail
 
 interface JobPostingRepository {
-    var sharedJobPostingId: SharedJobPostingInfo?
+    var sharedJobPostingInfo: SharedJobPostingInfo?
 
     suspend fun postJobPosting(
         weekdays: List<DayOfWeek>,

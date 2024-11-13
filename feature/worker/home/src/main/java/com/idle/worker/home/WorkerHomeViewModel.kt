@@ -161,8 +161,8 @@ class WorkerHomeViewModel @Inject constructor(
         }
     }
 
-    internal fun navigateToSharedJobPosting() {
-        val sharedJobPostingInfo = jobPostingRepository.sharedJobPostingId ?: return
+    private fun navigateToSharedJobPosting() {
+        val sharedJobPostingInfo = jobPostingRepository.sharedJobPostingInfo ?: return
 
         navigationHelper.navigateTo(
             NavigationEvent.NavigateTo(

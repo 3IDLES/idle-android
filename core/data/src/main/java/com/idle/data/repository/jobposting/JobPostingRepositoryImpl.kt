@@ -27,7 +27,7 @@ import javax.inject.Inject
 class JobPostingRepositoryImpl @Inject constructor(
     private val jobPostingDataSource: JobPostingDataSource
 ) : JobPostingRepository {
-    override var sharedJobPostingId: SharedJobPostingInfo? = null
+    override var sharedJobPostingInfo: SharedJobPostingInfo? = null
         get() {
             val currentValue = field
             field = null
