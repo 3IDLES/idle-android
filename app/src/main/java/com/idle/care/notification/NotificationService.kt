@@ -1,8 +1,8 @@
 package com.idle.care.notification
 
-import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.idle.analytics.error.ErrorLoggingHelper
 import com.idle.domain.model.auth.UserType
 import com.idle.domain.usecase.auth.GetUserTypeUseCase
 import com.idle.domain.usecase.notification.PostDeviceTokenUseCase
@@ -26,9 +26,12 @@ class NotificationService : FirebaseMessagingService() {
     @Inject
     lateinit var notificationHandler: NotificationHandler
 
+    @Inject
+    lateinit var errorLoggingHelper: ErrorLoggingHelper
+
     private val job = SupervisorJob()
     private val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
-        Log.e("test", throwable.stackTraceToString())
+        errorLoggingHelper.logError(throwable)
     }
     private val scope = CoroutineScope(Dispatchers.IO + job + coroutineExceptionHandler)
 
