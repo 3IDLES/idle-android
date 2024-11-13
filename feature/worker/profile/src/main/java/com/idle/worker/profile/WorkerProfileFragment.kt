@@ -182,7 +182,7 @@ internal fun WorkerProfileScreen(
     setEditState: (Boolean) -> Unit,
     onSpecialtyChanged: (String) -> Unit,
     onWorkerIntroduceChanged: (String) -> Unit,
-    onExperienceYearChanged: (Int) -> Unit,
+    onExperienceYearChanged: (Int?) -> Unit,
     onJobSearchStatusChanged: (JobSearchStatus) -> Unit,
     updateWorkerProfile: () -> Unit,
 ) {
@@ -204,7 +204,15 @@ internal fun WorkerProfileScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    var localExperienceYear by remember { mutableStateOf("1년차") }
+                    var localExperienceYear by remember {
+                        mutableStateOf(
+                            when (experienceYear) {
+                                null -> "-"
+                                0 -> "신입"
+                                else -> "${experienceYear}년차"
+                            }
+                        )
+                    }
 
                     Text(
                         text = stringResource(id = R.string.experience),
@@ -215,10 +223,14 @@ internal fun WorkerProfileScreen(
                     Spacer(modifier = Modifier.height(72.dp))
 
                     CareWheelPicker(
-                        items = (1..20).map {
-                            it.toString() + "년차"
+                        items = (0..20).map {
+                            if (it == 0) {
+                                "신입"
+                            } else {
+                                "${it}년차"
+                            }
                         }.toList(),
-                        initIndex = experienceYear?.minus(1) ?: 0,
+                        initIndex = experienceYear ?: 0,
                         onItemSelected = { localExperienceYear = it },
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -250,7 +262,11 @@ internal fun WorkerProfileScreen(
                             onClick = {
                                 coroutineScope.launch {
                                     onExperienceYearChanged(
-                                        localExperienceYear.dropLast(2).toIntOrNull() ?: -1
+                                        when (localExperienceYear) {
+                                            "-" -> null
+                                            "신입" -> 0
+                                            else -> localExperienceYear.dropLast(2).toIntOrNull()
+                                        }
                                     )
                                     sheetState.hide()
                                 }
@@ -461,7 +477,10 @@ internal fun WorkerProfileScreen(
                                     )
 
                                     Text(
-                                        text = "${workerProfile.experienceYear}년차",
+                                        text = when (workerProfile.experienceYear) {
+                                            0 -> "신입"
+                                            else -> "${experienceYear}년차"
+                                        },
                                         style = CareTheme.typography.body3,
                                         color = CareTheme.colors.black,
                                     )
@@ -566,9 +585,11 @@ internal fun WorkerProfileScreen(
                                     .padding(start = 20.dp, end = 20.dp, bottom = 28.dp),
                             ) {
                                 CareClickableTextField(
-                                    value = experienceYear?.let {
-                                        "${experienceYear}년차"
-                                    } ?: "-",
+                                    value = when (experienceYear) {
+                                        null -> "-"
+                                        0 -> "신입"
+                                        else -> "${experienceYear}년차"
+                                    },
                                     hint = stringResource(id = R.string.year),
                                     leftComponent = {
                                         Image(

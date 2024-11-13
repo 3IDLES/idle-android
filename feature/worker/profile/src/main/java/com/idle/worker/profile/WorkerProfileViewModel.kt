@@ -83,7 +83,7 @@ class WorkerProfileViewModel @Inject constructor(
         _lotNumberAddress.value = lotNumberAddress
     }
 
-    internal fun setExperienceYear(experienceYear: Int) {
+    internal fun setExperienceYear(experienceYear: Int?) {
         _experienceYear.value = experienceYear
     }
 
