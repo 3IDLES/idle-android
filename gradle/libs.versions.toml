@@ -85,7 +85,7 @@ ktlint = "12.1.1"
 
 ## firebase
 googleServices = "4.4.2"
-firebaseBom = "33.5.0"
+firebaseBom = "33.5.1"
 crashlytics = "3.0.2"
 messaging = "24.0.3"
 
@@ -97,6 +97,15 @@ lottie-compose = "6.5.2"
 
 # https://navermaps.github.io/android-map-sdk/guide-ko/1.html
 naverMap = "3.19.1"
+
+# https://developers.kakao.com/docs/latest/ko/android/getting-started#apply-sdk
+kakao = "2.20.6"
+
+# https://mvnrepository.com/artifact/com.appsflyer/af-android-sdk
+appsFlyer = "6.15.2"
+
+# https://developer.android.com/google/play/installreferrer
+installReferrer = "2.2"
 
 [libraries]
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
@@ -169,6 +178,14 @@ coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie-compose" }
 
 naver-map = { module = "com.naver.maps:map-sdk", version.ref = "naverMap" }
+
+kakao-common = { module = "com.kakao.sdk:v2-common", version.ref = "kakao" }
+kakao-talk = { module = "com.kakao.sdk:v2-talk", version.ref = "kakao" }
+kakao-share = { module = "com.kakao.sdk:v2-share", version.ref = "kakao" }
+
+appsFlyer = { module = "com.appsflyer:af-android-sdk", version.ref = "appsFlyer" }
+
+installerReferrer = { module = "com.android.installreferrer:installreferrer", version.ref = "installReferrer" }
 
 [bundles]
 

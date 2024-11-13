@@ -12,6 +12,7 @@ import com.idle.domain.model.jobposting.JobPosting
 import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.WorkerJobPosting
 import com.idle.domain.model.profile.WorkerProfile
+import com.idle.domain.repositorry.jobposting.JobPostingRepository
 import com.idle.domain.usecase.config.ShowNotificationCenterUseCase
 import com.idle.domain.usecase.jobposting.AddFavoriteJobPostingUseCase
 import com.idle.domain.usecase.jobposting.ApplyJobPostingUseCase
@@ -20,6 +21,8 @@ import com.idle.domain.usecase.jobposting.GetJobPostingsUseCase
 import com.idle.domain.usecase.jobposting.RemoveFavoriteJobPostingUseCase
 import com.idle.domain.usecase.notification.GetUnreadNotificationCountUseCase
 import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
+import com.idle.navigation.DeepLinkDestination
+import com.idle.navigation.NavigationEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -37,6 +40,7 @@ class WorkerHomeViewModel @Inject constructor(
     private val removeFavoriteJobPostingUseCase: RemoveFavoriteJobPostingUseCase,
     private val showNotificationCenterUseCase: ShowNotificationCenterUseCase,
     private val getUnreadNotificationCountUseCase: GetUnreadNotificationCountUseCase,
+    private val jobPostingRepository: JobPostingRepository,
     private val errorHandlerHelper: ErrorHandler,
     private val eventHandlerHelper: EventHandlerHelper,
     val navigationHelper: com.idle.navigation.NavigationHelper,
@@ -60,6 +64,7 @@ class WorkerHomeViewModel @Inject constructor(
 
     init {
         getJobPostings()
+        navigateToSharedJobPosting()
     }
 
     internal fun getJobPostings() = viewModelScope.launch {
@@ -154,6 +159,19 @@ class WorkerHomeViewModel @Inject constructor(
         }.onFailure {
             eventHandlerHelper.sendEvent(MainEvent.ShowToast(it.message.toString()))
         }
+    }
+
+    private fun navigateToSharedJobPosting() {
+        val sharedJobPostingInfo = jobPostingRepository.sharedJobPostingInfo ?: return
+
+        navigationHelper.navigateTo(
+            NavigationEvent.NavigateTo(
+                DeepLinkDestination.WorkerJobDetail(
+                    jobPostingId = sharedJobPostingInfo.jobPostingId,
+                    jobPostingType = sharedJobPostingInfo.jobPostingType.name,
+                )
+            )
+        )
     }
 
     private suspend fun fetchInAppJobPostings() {

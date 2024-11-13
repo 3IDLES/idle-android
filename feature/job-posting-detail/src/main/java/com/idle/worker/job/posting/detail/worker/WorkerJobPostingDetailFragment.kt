@@ -10,6 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.navArgs
+import com.idle.binding.MainEvent
+import com.idle.binding.ShareJobPostingInfo
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.component.CareStateAnimator
 import com.idle.domain.model.jobposting.CrawlingJobPostingDetail
@@ -84,8 +86,33 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
                                     navigationHelper.navigateTo(
                                         com.idle.navigation.NavigationEvent.NavigateTo(it)
                                     )
-                                }
-
+                                },
+                                shareJobPosting = {
+                                    eventHandlerHelper.sendEvent(
+                                        MainEvent.ShareJobPosting(
+                                            ShareJobPostingInfo(
+                                                id = jobPosting.id,
+                                                title = try {
+                                                    jobPosting.lotNumberAddress.split(" ")
+                                                        .subList(0, 3)
+                                                        .joinToString(" ")
+                                                } catch (e: IndexOutOfBoundsException) {
+                                                    ""
+                                                },
+                                                weekdays = jobPosting.weekdays.toList()
+                                                    .sortedBy { it.ordinal }
+                                                    .joinToString(",") { it.displayName },
+                                                workTime = "${jobPosting.startTime} - ${jobPosting.endTime}",
+                                                payAmount = "${jobPosting.payType.displayName} ${jobPosting.payAmount}원",
+                                                roadNameAddress = jobPosting.roadNameAddress,
+                                                gender = jobPosting.gender.displayName,
+                                                centerName = jobPosting.centerName,
+                                                centerOfficeNumber = jobPosting.centerOfficeNumber,
+                                                type = jobPosting.jobPostingType.name,
+                                            )
+                                        )
+                                    )
+                                },
                             )
                         } else {
                             CrawlingJobPostingDetailScreen(
@@ -94,6 +121,24 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
                                 showPlaceDetail = setShowPlaceDetail,
                                 addFavoriteJobPosting = ::addFavoriteJobPosting,
                                 removeFavoriteJobPosting = ::removeFavoriteJobPosting,
+                                shareJobPosting = {
+                                    eventHandlerHelper.sendEvent(
+                                        MainEvent.ShareJobPosting(
+                                            ShareJobPostingInfo(
+                                                id = jobPosting.id,
+                                                title = jobPosting.title,
+                                                weekdays = jobPosting.workingSchedule,
+                                                workTime = jobPosting.workingTime,
+                                                payAmount = jobPosting.payInfo,
+                                                roadNameAddress = jobPosting.clientAddress,
+                                                gender = "-",
+                                                centerName = jobPosting.centerName,
+                                                centerOfficeNumber = jobPosting.centerAddress,
+                                                type = jobPosting.jobPostingType.name,
+                                            )
+                                        )
+                                    )
+                                },
                             )
                         }
                     }

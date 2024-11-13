@@ -11,8 +11,8 @@ android {
     namespace = "com.idle.care"
 
     defaultConfig {
-        versionCode = 14
-        versionName = "1.1.5"
+        versionCode = 15
+        versionName = "1.2.0"
         targetSdk = 34
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -20,18 +20,20 @@ android {
         val localProperties = Properties()
         localProperties.load(project.rootProject.file("local.properties").bufferedReader())
         manifestPlaceholders["NAVER_CLIENT_ID"] = localProperties["NAVER_CLIENT_ID"] as String
+        manifestPlaceholders["KAKAO_APP_KEY"] = localProperties["KAKAO_APP_KEY"] as String
 
         buildConfigField(
-            "String",
-            "AMPLITUDE_API_KEY",
-            "\"${localProperties["AMPLITUDE_API_KEY"]}\"",
+            "String", "AMPLITUDE_API_KEY", "\"${localProperties["AMPLITUDE_API_KEY"]}\"",
         )
+        buildConfigField("String", "KAKAO_APP_KEY", "\"${localProperties["KAKAO_APP_KEY"]}\"")
+        buildConfigField("String", "APPSFLYER_API_KEY", "\"${localProperties["APPSFLYER_API_KEY"]}\"")
     }
 
     signingConfigs {
         create("release") {
             val keystoreProperties = Properties()
-            keystoreProperties.load(project.rootProject.file("keystore.properties").bufferedReader()
+            keystoreProperties.load(
+                project.rootProject.file("keystore.properties").bufferedReader()
             )
 
             storeFile = file(keystoreProperties["STORE_FILE_PATH"] as String)
@@ -61,4 +63,7 @@ dependencies {
     implementation(projects.core.analytics)
 
     implementation(libs.firebase.messaging)
+    implementation(libs.kakao.common)
+    implementation(libs.appsFlyer)
+    implementation(libs.installerReferrer)
 }
