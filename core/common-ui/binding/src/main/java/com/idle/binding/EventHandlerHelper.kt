@@ -21,6 +21,7 @@ sealed class MainEvent {
         MainEvent()
 
     data object DismissToast : MainEvent()
+    data class ShareJobPosting(val shareJobPostingInfo: ShareJobPostingInfo) : MainEvent()
 }
 
 enum class ToastType {
@@ -32,3 +33,16 @@ enum class ToastType {
         }
     }
 }
+
+data class ShareJobPostingInfo(
+    val id: String,
+    val title: String,
+    val weekdays: String,
+    val workTime: String,
+    val payAmount: String,
+    val roadNameAddress: String,
+    val gender: String,
+    val centerName: String,
+    val centerOfficeNumber: String,
+    val type: String,
+)

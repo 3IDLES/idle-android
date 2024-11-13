@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -58,6 +59,7 @@ internal fun CrawlingJobPostingDetailScreen(
     showPlaceDetail: (Boolean) -> Unit,
     addFavoriteJobPosting: (String, JobPostingType) -> Unit,
     removeFavoriteJobPosting: (String, JobPostingType) -> Unit,
+    shareJobPosting: () -> Unit,
 ) {
     val onBackPressedDispatcher =
         LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
@@ -76,6 +78,17 @@ internal fun CrawlingJobPostingDetailScreen(
                     end = 20.dp,
                     bottom = 12.dp
                 ),
+                leftComponent = {
+                    Image(
+                        painter = painterResource(R.drawable.ic_share),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(32.dp)
+                            .clickable(throttleTime = 2000L) {
+                                shareJobPosting()
+                            },
+                    )
+                },
                 onNavigationClick = { onBackPressedDispatcher?.onBackPressed() },
             )
         },

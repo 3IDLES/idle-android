@@ -11,10 +11,13 @@ import com.idle.domain.model.config.ForceUpdate
 import com.idle.domain.model.error.ApiErrorCode
 import com.idle.domain.model.error.ErrorHandler
 import com.idle.domain.model.error.HttpResponseException
+import com.idle.domain.model.jobposting.SharedJobPostingInfo
 import com.idle.domain.model.profile.CenterManagerAccountStatus
+import com.idle.domain.repositorry.jobposting.JobPostingRepository
 import com.idle.domain.usecase.auth.GetAccessTokenUseCase
 import com.idle.domain.usecase.auth.GetUserTypeUseCase
 import com.idle.domain.usecase.config.GetForceUpdateInfoUseCase
+import com.idle.domain.usecase.notification.ReadNotificationUseCase
 import com.idle.domain.usecase.profile.GetCenterStatusUseCase
 import com.idle.domain.usecase.profile.GetMyCenterProfileUseCase
 import com.idle.domain.usecase.profile.GetMyWorkerProfileUseCase
@@ -42,11 +45,13 @@ class MainViewModel @Inject constructor(
     private val getMyCenterProfileUseCase: GetMyCenterProfileUseCase,
     private val getMyWorkerProfileUseCase: GetMyWorkerProfileUseCase,
     private val getCenterStatusUseCase: GetCenterStatusUseCase,
+    private val readNotificationUseCase: ReadNotificationUseCase,
+    private val jobPostingRepository: JobPostingRepository,
 //    private val connectWebSocketUseCase: ConnectWebSocketUseCase,
 //    private val disconnectWebSocketUseCase: DisconnectWebSocketUseCase,
     private val errorHandlerHelper: ErrorHandler,
     private val eventHandlerHelper: EventHandlerHelper,
-    private val errorLoggingHelper: ErrorLoggingHelper,
+    val errorLoggingHelper: ErrorLoggingHelper,
     val navigationHelper: com.idle.navigation.NavigationHelper,
 ) : ViewModel() {
     private val _navigationMenuType = MutableStateFlow(NavigationMenuType.HIDE)
@@ -101,6 +106,14 @@ class MainViewModel @Inject constructor(
         }
 
         navigateToDestination(userRole)
+    }
+
+    internal fun setSharedJobPostingInfo(sharedJobPostingInfo: SharedJobPostingInfo) {
+        jobPostingRepository.sharedJobPostingInfo = sharedJobPostingInfo
+    }
+
+    internal fun readNotification(notificationId: String) = viewModelScope.launch {
+        readNotificationUseCase(notificationId).onFailure { errorHandlerHelper.sendError(it) }
     }
 
     private suspend fun getAccessTokenAndUserRole(): Pair<String, String> = coroutineScope {

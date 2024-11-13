@@ -14,6 +14,7 @@ import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.LifeAssistance
 import com.idle.domain.model.jobposting.MentalStatus
 import com.idle.domain.model.jobposting.PayType
+import com.idle.domain.model.jobposting.SharedJobPostingInfo
 import com.idle.domain.model.jobposting.WorkerJobPosting
 import com.idle.domain.model.jobposting.WorkerJobPostingDetail
 import com.idle.domain.repositorry.jobposting.JobPostingRepository
@@ -26,6 +27,13 @@ import javax.inject.Inject
 class JobPostingRepositoryImpl @Inject constructor(
     private val jobPostingDataSource: JobPostingDataSource
 ) : JobPostingRepository {
+    override var sharedJobPostingInfo: SharedJobPostingInfo? = null
+        get() {
+            val currentValue = field
+            field = null
+            return currentValue
+        }
+
     override suspend fun postJobPosting(
         weekdays: List<DayOfWeek>,
         startTime: String,

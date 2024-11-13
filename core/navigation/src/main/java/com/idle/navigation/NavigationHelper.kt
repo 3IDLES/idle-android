@@ -1,14 +1,14 @@
 package com.idle.navigation
 
 import android.os.Bundle
-import com.idle.navigation.DeepLinkDestination.CenterApplicantInquiry
-import com.idle.navigation.DeepLinkDestination.CenterHome
-import com.idle.navigation.DeepLinkDestination.CenterJobDetail
-import com.idle.navigation.DeepLinkDestination.WorkerJobDetail
 import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.notification.Notification
 import com.idle.domain.model.notification.NotificationContent
 import com.idle.domain.model.notification.NotificationType.APPLICANT
+import com.idle.domain.model.notification.NotificationType.NEW_JOB_POSTING
+import com.idle.navigation.DeepLinkDestination.CenterHome
+import com.idle.navigation.DeepLinkDestination.CenterJobDetail
+import com.idle.navigation.DeepLinkDestination.WorkerJobDetail
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -27,16 +27,18 @@ class NavigationHelper @Inject constructor() {
     fun handleFCMNavigate(
         isColdStart: Boolean,
         extras: Bundle?,
-        onInit: () -> Unit
+        onInit: () -> Unit,
+        readNotification: (String) -> Unit,
     ) {
+        val notificationId = extras?.getString(NotificationKeys.NOTIFICATION_ID) ?: run {
+            if (isColdStart) onInit()
+            return
+        }
+
+        readNotification(notificationId)
+
         val notificationType = NotificationType.create(
-            extras?.getString(NotificationKeys.NOTIFICATION_TYPE) ?: run {
-                if (isColdStart) {
-                    onInit()
-                    return
-                }
-                return
-            }
+            extras.getString(NotificationKeys.NOTIFICATION_TYPE) ?: return
         )
 
         when (notificationType) {
@@ -63,7 +65,7 @@ class NavigationHelper @Inject constructor() {
                 destinations.forEach { destination -> _navigationFlow.trySend(destination) }
             }
 
-            NotificationType.JOB_POSTING_DETAIL -> {
+            NotificationType.NEW_JOB_POSTING -> {
                 val jobPostingId = extras.getString(NotificationKeys.JOB_POSTING_ID) ?: run {
                     if (isColdStart) {
                         onInit()
@@ -92,20 +94,27 @@ class NavigationHelper @Inject constructor() {
     fun handleNotificationNavigate(notification: Notification) {
         val destinations = when (notification.notificationType) {
             APPLICANT -> {
-                val notificationContent =
-                    notification.notificationDetails as? NotificationContent.ApplicantNotification
+                (notification.notificationDetails as? NotificationContent.ApplicantNotification)?.let { content ->
+                    listOf(NavigationEvent.NavigateTo(CenterJobDetail(content.jobPostingId)))
+                } ?: listOf()
+            }
 
-                notificationContent?.let { content ->
+            NEW_JOB_POSTING -> {
+                (notification.notificationDetails as? NotificationContent.NewJobPostingNotification)?.let { content ->
                     listOf(
-                        NavigationEvent.NavigateTo(CenterJobDetail(content.jobPostingId)),
+                        NavigationEvent.NavigateTo(
+                            WorkerJobDetail(
+                                content.jobPostingId,
+                                JobPostingType.CAREMEET.name
+                            )
+                        )
                     )
                 } ?: listOf()
             }
 
             else -> listOf()
         }
-
-        destinations.onEach { destination -> _navigationFlow.trySend(destination) }
+        destinations.forEach { _navigationFlow.trySend(it) }
     }
 }
 
@@ -121,7 +130,7 @@ sealed class NavigationEvent {
 
 enum class NotificationType {
     APPLICANT,
-    JOB_POSTING_DETAIL,
+    NEW_JOB_POSTING,
     UNKNOWN;
 
     companion object {
@@ -132,6 +141,7 @@ enum class NotificationType {
 }
 
 private object NotificationKeys {
+    const val NOTIFICATION_ID = "notificationId"
     const val NOTIFICATION_TYPE = "notificationType"
     const val JOB_POSTING_ID = "jobPostingId"
 }
