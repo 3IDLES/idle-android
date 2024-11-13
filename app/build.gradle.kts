@@ -26,6 +26,7 @@ android {
             "String", "AMPLITUDE_API_KEY", "\"${localProperties["AMPLITUDE_API_KEY"]}\"",
         )
         buildConfigField("String", "KAKAO_APP_KEY", "\"${localProperties["KAKAO_APP_KEY"]}\"")
+        buildConfigField("String", "APPSFLYER_API_KEY", "\"${localProperties["APPSFLYER_API_KEY"]}\"")
     }
 
     signingConfigs {
@@ -63,4 +64,6 @@ dependencies {
 
     implementation(libs.firebase.messaging)
     implementation(libs.kakao.common)
+    implementation(libs.appsFlyer)
+    implementation(libs.installerReferrer)
 }

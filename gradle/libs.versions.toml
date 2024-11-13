@@ -101,6 +101,12 @@ naverMap = "3.19.1"
 # https://developers.kakao.com/docs/latest/ko/android/getting-started#apply-sdk
 kakao = "2.20.6"
 
+# https://mvnrepository.com/artifact/com.appsflyer/af-android-sdk
+appsFlyer = "6.15.2"
+
+# https://developer.android.com/google/play/installreferrer
+installReferrer = "2.2"
+
 [libraries]
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -176,6 +182,10 @@ naver-map = { module = "com.naver.maps:map-sdk", version.ref = "naverMap" }
 kakao-common = { module = "com.kakao.sdk:v2-common", version.ref = "kakao" }
 kakao-talk = { module = "com.kakao.sdk:v2-talk", version.ref = "kakao" }
 kakao-share = { module = "com.kakao.sdk:v2-share", version.ref = "kakao" }
+
+appsFlyer = { module = "com.appsflyer:af-android-sdk", version.ref = "appsFlyer" }
+
+installerReferrer = { module = "com.android.installreferrer:installreferrer", version.ref = "installReferrer" }
 
 [bundles]
 

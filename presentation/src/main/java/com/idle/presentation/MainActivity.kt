@@ -6,6 +6,7 @@ import android.animation.ValueAnimator
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings.ACTION_WIFI_SETTINGS
@@ -21,15 +22,20 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.appsflyer.AppsFlyerLib
+import com.appsflyer.deeplink.DeepLink
+import com.appsflyer.deeplink.DeepLinkResult
 import com.idle.auth.AuthFragmentDirections
 import com.idle.binding.MainEvent
 import com.idle.binding.ShareJobPostingInfo
-import com.idle.binding.ToastType
 import com.idle.binding.repeatOnStarted
 import com.idle.designsystem.binding.component.dismissToast
 import com.idle.designsystem.binding.component.showToast
+import com.idle.domain.model.config.ForceUpdate
 import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.SharedJobPostingInfo
+import com.idle.navigation.NavigationEvent.NavigateTo
+import com.idle.navigation.NavigationEvent.NavigateToAuthWithClearBackStack
 import com.idle.navigation.deepLinkNavigateTo
 import com.idle.presentation.databinding.ActivityMainBinding
 import com.idle.presentation.forceupdate.ForceUpdateFragment
@@ -45,7 +51,6 @@ import com.kakao.sdk.template.model.ItemContent
 import com.kakao.sdk.template.model.ItemInfo
 import com.kakao.sdk.template.model.Link
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -89,25 +94,6 @@ class MainActivity : AppCompatActivity() {
     ) { isGranted: Boolean ->
         if (isGranted) {
             // FCM SDK (and your app) can post notifications.
-        } else {
-            // TODO: Inform user that that your app will not show notifications.
-        }
-    }
-
-    private fun askNotificationPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
-                PackageManager.PERMISSION_GRANTED
-            ) {
-                // FCM SDK (and your app) can post notifications.
-            } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
-                // TODO: display an educational UI explaining to the user the features that will be enabled
-                //       by them granting the POST_NOTIFICATION permission. This UI should provide the user
-                //       "OK" and "No thanks" buttons. If the user selects "OK," directly request the permission.
-                //       If the user selects "No thanks," allow the user to continue without notifications.
-            } else {
-                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-            }
         }
     }
 
@@ -117,94 +103,13 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setupNavigationController()
+        askNotificationPermission()
+        setDestinationListener()
+        observeViewModel()
+        handleDeepLinking()
+
         viewModel.apply {
-            repeatOnStarted {
-                networkObserver.networkState.collect { state ->
-                    if (state == NetworkState.NOT_CONNECTED) {
-                        showNetworkDialog()
-                    } else {
-                        dismissNetworkDialog()
-                        getForceUpdateInfo()
-                    }
-                }
-            }
-
-            repeatOnStarted {
-                forceUpdate.collect {
-                    it?.let { info ->
-                        val nowVersion = packageManager.getPackageInfo(packageName, 0).versionName
-                        val minAppVersion = info.minVersion
-                        val shouldUpdate = checkShouldUpdate(nowVersion, minAppVersion)
-
-                        if (shouldUpdate) {
-                            forceUpdateFragment = ForceUpdateFragment(info).apply {
-                                isCancelable = false
-                            }
-                            forceUpdateFragment.show(
-                                supportFragmentManager,
-                                forceUpdateFragment.tag
-                            )
-                        }
-                    }
-                }
-            }
-
-            askNotificationPermission()
-
-            repeatOnStarted {
-                navigationMenuType.collect { menuType ->
-                    this@MainActivity.setNavigationMenuType(menuType)
-                    delay(310L)
-                }
-            }
-
-            repeatOnStarted {
-                eventFlow.collect {
-                    when (it) {
-                        is MainEvent.ShareJobPosting -> shareJobPosting(it.shareJobPostingInfo)
-                        is MainEvent.DismissToast -> dismissToast()
-                        is MainEvent.ShowToast -> showToast(
-                            context = this@MainActivity,
-                            msg = it.msg,
-                            toastType = it.toastType,
-                            paddingBottom = calculateSnackBarBottomPadding(),
-                        )
-                    }
-                }
-            }
-
-            repeatOnStarted {
-                navigationHelper.navigationFlow.collect { navigationEvent ->
-                    when (navigationEvent) {
-                        is com.idle.navigation.NavigationEvent.NavigateTo -> navController.deepLinkNavigateTo(
-                            context = this@MainActivity,
-                            deepLinkDestination = navigationEvent.destination,
-                            popUpTo = navigationEvent.popUpTo,
-                        )
-
-                        is com.idle.navigation.NavigationEvent.NavigateToAuthWithClearBackStack -> navController.navigate(
-                            AuthFragmentDirections.actionGlobalNavAuth(
-                                navigationEvent.toastMsg,
-                                navigationEvent.toastType
-                            )
-                        )
-                    }
-
-                    dismissToast()
-                }
-            }
-
-            binding.apply {
-                val navHostFragment =
-                    supportFragmentManager.findFragmentById(R.id.main_FCV) as NavHostFragment
-                navController = navHostFragment.navController
-
-                mainBNVCenter.itemIconTintList = null
-                mainBNVWorker.itemIconTintList = null
-            }
-
-            setDestinationListener()
-
             navigationHelper.handleFCMNavigate(
                 isColdStart = true,
                 extras = intent?.extras ?: run {
@@ -213,29 +118,6 @@ class MainActivity : AppCompatActivity() {
                 },
                 onInit = ::initializeUserSession,
             )
-
-            intent?.data?.let {
-                val sharedJobPostingId = it.getQueryParameter("sharedJobPostingId")
-                val sharedJobPostingType = it.getQueryParameter("sharedJobPostingType")
-                showToast(
-                    this@MainActivity,
-                    "sharedJobPostingId : $sharedJobPostingId + sharedJobPostingType : $sharedJobPostingType",
-                    toastType = ToastType.SUCCESS,
-                    paddingBottom = 30,
-                )
-
-                Log.d(
-                    "onCreate",
-                    "sharedJobPostingId : $sharedJobPostingId + sharedJobPostingType : $sharedJobPostingType",
-                )
-
-                setSharedJobPostingInfo(
-                    SharedJobPostingInfo(
-                        jobPostingId = sharedJobPostingId ?: return@let,
-                        jobPostingType = JobPostingType.create(sharedJobPostingType ?: return@let),
-                    )
-                )
-            }
         }
     }
 
@@ -249,22 +131,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-
-        intent?.data?.let {
-            val sharedJobPostingId = it.getQueryParameter("sharedJobPostingId")
-            val sharedJobPostingType = it.getQueryParameter("sharedJobPostingType")
-            showToast(
-                this@MainActivity,
-                "sharedJobPostingId : $sharedJobPostingId + sharedJobPostingType : $sharedJobPostingType",
-                toastType = ToastType.ERROR,
-                paddingBottom = 30,
-            )
-
-            Log.d(
-                "onNewIntent",
-                "sharedJobPostingId : $sharedJobPostingId + sharedJobPostingType : $sharedJobPostingType",
-            )
-        }
 
         viewModel.navigationHelper.handleFCMNavigate(
             isColdStart = false,
@@ -281,20 +147,131 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun askNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+    }
+
+    private fun setupNavigationController() {
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.main_FCV) as NavHostFragment
+        navController = navHostFragment.navController
+        binding.mainBNVCenter.itemIconTintList = null
+        binding.mainBNVWorker.itemIconTintList = null
+        setDestinationListener()
+    }
+
+    private fun observeViewModel() {
+        viewModel.apply {
+            repeatOnStarted {
+                networkObserver.networkState.collect { handleNetworkState(it) }
+            }
+            repeatOnStarted {
+                forceUpdate.collect { it?.let { showForceUpdateDialog(it) } }
+            }
+            repeatOnStarted {
+                navigationMenuType.collect { this@MainActivity.setNavigationMenuType(it) }
+            }
+            repeatOnStarted {
+                eventFlow.collect { handleMainEvent(it) }
+            }
+            repeatOnStarted {
+                navigationHelper.navigationFlow.collect { handleNavigationEvent(it) }
+            }
+        }
+    }
+
+    private fun handleNetworkState(state: NetworkState) {
+        if (state == NetworkState.NOT_CONNECTED) {
+            showNetworkDialog()
+        } else {
+            dismissNetworkDialog()
+            viewModel.getForceUpdateInfo()
+        }
+    }
+
+    private fun showForceUpdateDialog(info: ForceUpdate) {
+        val currentVersion = packageManager.getPackageInfo(packageName, 0).versionName
+        if (checkShouldUpdate(currentVersion, info.minVersion)) {
+            forceUpdateFragment = ForceUpdateFragment(info).apply { isCancelable = false }
+            forceUpdateFragment.show(supportFragmentManager, forceUpdateFragment.tag)
+        }
+    }
+
+    private fun handleMainEvent(event: MainEvent) {
+        when (event) {
+            is MainEvent.ShareJobPosting -> shareJobPosting(event.shareJobPostingInfo)
+            is MainEvent.DismissToast -> dismissToast()
+            is MainEvent.ShowToast -> showToast(
+                context = this,
+                msg = event.msg,
+                toastType = event.toastType,
+                paddingBottom = calculateSnackBarBottomPadding()
+            )
+        }
+    }
+
+    private fun handleNavigationEvent(navigationEvent: com.idle.navigation.NavigationEvent) {
+        when (navigationEvent) {
+            is NavigateTo -> navController.deepLinkNavigateTo(
+                context = this,
+                deepLinkDestination = navigationEvent.destination,
+                popUpTo = navigationEvent.popUpTo
+            )
+
+            is NavigateToAuthWithClearBackStack -> navController.navigate(
+                AuthFragmentDirections.actionGlobalNavAuth(
+                    toastMsg = navigationEvent.toastMsg,
+                    toastType = navigationEvent.toastType
+                )
+            )
+        }
+        dismissToast()
+    }
+
+    private fun handleDeepLinking() {
+        AppsFlyerLib.getInstance().subscribeForDeepLink { deepLinkResult ->
+            when (deepLinkResult.status) {
+                DeepLinkResult.Status.FOUND -> handleDeepLink(deepLinkResult.deepLink)
+                DeepLinkResult.Status.NOT_FOUND -> viewModel.errorLoggingHelper.logError(Exception("AppsFlyer User Not Found"))
+                else -> viewModel.errorLoggingHelper.logError(Exception(deepLinkResult.error.toString()))
+            }
+        }
+    }
+
+    private fun handleDeepLink(deepLink: DeepLink) {
+        try {
+            val sharedJobPostingId = deepLink.getStringValue("sharedJobPostingId")
+            val sharedJobPostingType = deepLink.getStringValue("sharedJobPostingType")
+            viewModel.setSharedJobPostingInfo(
+                SharedJobPostingInfo(
+                    jobPostingId = sharedJobPostingId ?: return,
+                    jobPostingType = JobPostingType.create(sharedJobPostingType ?: return)
+                )
+            )
+        } catch (e: Exception) {
+            viewModel.errorLoggingHelper.logError(e)
+        }
+    }
+
     private fun showNetworkDialog() {
-        networkDialog?.show() ?: run {
-            networkDialog = AlertDialog.Builder(this@MainActivity).apply {
+        if (networkDialog == null) {
+            networkDialog = AlertDialog.Builder(this).apply {
                 setTitle("인터넷이 연결되어 있지 않아요")
                 setMessage("Wi-Fi 또는 데이터 연결을 확인한 후 다시 시도해 주세요.")
-                setPositiveButton("설정") { _, _ ->
-                    startActivity(Intent(ACTION_WIFI_SETTINGS))
-                }
-                setNegativeButton("종료") { _, _ ->
-                    finish()
-                }
+                setPositiveButton("설정") { _, _ -> startActivity(Intent(ACTION_WIFI_SETTINGS)) }
+                setNegativeButton("종료") { _, _ -> finish() }
                 setCancelable(false)
-            }.show()
+            }.create()
         }
+        networkDialog?.show()
     }
 
     private fun dismissNetworkDialog() {
@@ -304,46 +281,33 @@ class MainActivity : AppCompatActivity() {
 
     private fun setDestinationListener() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            binding.apply {
-                val navMenuType = when (destination.id) {
-                    in centerBottomNavDestinationIds -> NavigationMenuType.CENTER
-                    in workerBottomNavDestinationIds -> NavigationMenuType.WORKER
-                    else -> NavigationMenuType.HIDE
-                }
-
-                viewModel.setNavigationMenuType(navMenuType)
+            val navMenuType = when (destination.id) {
+                in centerBottomNavDestinationIds -> NavigationMenuType.CENTER
+                in workerBottomNavDestinationIds -> NavigationMenuType.WORKER
+                else -> NavigationMenuType.HIDE
             }
+            viewModel.setNavigationMenuType(navMenuType)
         }
     }
 
     private fun setNavigationMenuType(menuType: NavigationMenuType) {
-        when (menuType) {
-            NavigationMenuType.CENTER -> binding.apply {
-                if (mainBNVWorker.visibility == View.VISIBLE) {
-                    slideDown(mainBNVWorker)
+        binding.apply {
+            when (menuType) {
+                NavigationMenuType.CENTER -> {
+                    if (mainBNVWorker.visibility == View.VISIBLE) slideDown(mainBNVWorker)
+                    if (mainBNVCenter.visibility != View.VISIBLE) slideUp(mainBNVCenter)
+                    mainBNVCenter.setupWithNavController(navController)
                 }
-                if (mainBNVCenter.visibility != View.VISIBLE) {
-                    slideUp(mainBNVCenter)
-                }
-                mainBNVCenter.setupWithNavController(navController)
-            }
 
-            NavigationMenuType.WORKER -> binding.apply {
-                if (mainBNVCenter.visibility == View.VISIBLE) {
-                    slideDown(mainBNVCenter)
+                NavigationMenuType.WORKER -> {
+                    if (mainBNVCenter.visibility == View.VISIBLE) slideDown(mainBNVCenter)
+                    if (mainBNVWorker.visibility != View.VISIBLE) slideUp(mainBNVWorker)
+                    mainBNVWorker.setupWithNavController(navController)
                 }
-                if (mainBNVWorker.visibility != View.VISIBLE) {
-                    slideUp(mainBNVWorker)
-                }
-                mainBNVWorker.setupWithNavController(navController)
-            }
 
-            NavigationMenuType.HIDE -> binding.apply {
-                if (mainBNVCenter.visibility == View.VISIBLE) {
-                    slideDown(mainBNVCenter)
-                }
-                if (mainBNVWorker.visibility == View.VISIBLE) {
-                    slideDown(mainBNVWorker)
+                NavigationMenuType.HIDE -> {
+                    if (mainBNVCenter.visibility == View.VISIBLE) slideDown(mainBNVCenter)
+                    if (mainBNVWorker.visibility == View.VISIBLE) slideDown(mainBNVWorker)
                 }
             }
         }
@@ -387,95 +351,64 @@ class MainActivity : AppCompatActivity() {
     private fun checkShouldUpdate(currentVersion: String, minVersion: String): Boolean {
         val current = normalizeVersion(currentVersion)
         val min = normalizeVersion(minVersion)
-
-        // 버전 비교 (메이저, 마이너, 패치 순으로 비교)
-        for (i in 0..2) {
-            if (current[i] < min[i]) return true
-            if (current[i] > min[i]) return false
-        }
-        return false
+        return (0..2).any { current[it] < min[it] }
     }
 
     private fun normalizeVersion(version: String): List<Int> =
-        version.split('.')
-            .map { it.toIntOrNull() ?: 0 }
-            .let {
-                when (it.size) {
-                    2 -> it + listOf(0) // 1.0 -> 1.0.0 형태로 변환
-                    else -> it
-                }
-            }
+        version.split('.').map { it.toIntOrNull() ?: 0 }.let {
+            if (it.size == 2) it + 0 else it
+        }
+
 
     private fun slideUp(view: View) {
-        view.measure(
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-        val targetHeight = view.measuredHeight
-        view.layoutParams.height = 0
-
-        val slide = ValueAnimator.ofInt(0, targetHeight)
-        slide.addUpdateListener { valueAnimator ->
-            val animatedValue = valueAnimator.animatedValue as Int
-            val layoutParams = view.layoutParams
-            layoutParams.height = animatedValue
-            view.layoutParams = layoutParams
-        }
-        slide.duration = 300
-        slide.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationStart(animation: Animator) {
-                view.visibility = View.VISIBLE
-            }
-
-            override fun onAnimationEnd(animation: Animator) {
-                view.isClickable = true
-            }
-
-            override fun onAnimationCancel(animation: Animator) {}
-            override fun onAnimationRepeat(animation: Animator) {}
-        })
-        slide.start()
+        view.measure(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        animateViewHeight(view, 0, view.measuredHeight)
     }
 
     private fun slideDown(view: View) {
-        val initialHeight = view.measuredHeight
-
-        val slide = ValueAnimator.ofInt(initialHeight, 0)
-        slide.addUpdateListener { valueAnimator ->
-            val animatedValue = valueAnimator.animatedValue as Int
-            val layoutParams = view.layoutParams
-            layoutParams.height = animatedValue
-            view.layoutParams = layoutParams
+        animateViewHeight(view, view.measuredHeight, 0) {
+            view.visibility = View.GONE
+            view.isClickable = false
         }
-        slide.duration = 300
-        slide.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationStart(animation: Animator) {}
+    }
 
-            override fun onAnimationEnd(animation: Animator) {
-                view.visibility = View.GONE
-                view.isClickable = false
+    private fun animateViewHeight(
+        view: View,
+        startHeight: Int,
+        endHeight: Int,
+        onEnd: (() -> Unit)? = null
+    ) {
+        view.layoutParams.height = startHeight
+        ValueAnimator.ofInt(startHeight, endHeight).apply {
+            addUpdateListener {
+                view.layoutParams.height = it.animatedValue as Int
+                view.requestLayout()
             }
+            duration = 300
+            addListener(object : Animator.AnimatorListener {
+                override fun onAnimationStart(animation: Animator) {
+                    if (endHeight > startHeight) view.visibility = View.VISIBLE
+                }
 
-            override fun onAnimationCancel(animation: Animator) {}
-            override fun onAnimationRepeat(animation: Animator) {}
-        })
-        slide.start()
+                override fun onAnimationEnd(animation: Animator) {
+                    onEnd?.invoke()
+                }
+
+                override fun onAnimationCancel(animation: Animator) {}
+                override fun onAnimationRepeat(animation: Animator) {}
+            })
+        }.start()
     }
 
     private fun shareJobPosting(sharedJobPostingInfo: ShareJobPostingInfo) {
+        val oneLinkUrl =
+            "https://caremeet.onelink.me/dXPO/edg5vvwt?sharedJobPostingId=${sharedJobPostingInfo.id}&sharedJobPostingType=${sharedJobPostingInfo.type}"
         val jobPostingFeed = FeedTemplate(
             content = Content(
                 title = sharedJobPostingInfo.centerName,
                 description = sharedJobPostingInfo.centerOfficeNumber,
                 imageUrl = "https://idle-prod-bucket.s3.ap-northeast-2.amazonaws.com/assets/caremeet-share.png",
-                link = Link(
-                    webUrl = "https://caremeet.kr/",
-                    mobileWebUrl = "https://caremeet.kr/",
-                    androidExecutionParams = mapOf(
-                        "sharedJobPostingId" to sharedJobPostingInfo.id,
-                        "sharedJobPostingType" to sharedJobPostingInfo.type,
-                    ),
-                ),
+                link = Link(webUrl = oneLinkUrl, mobileWebUrl = oneLinkUrl)
             ),
             itemContent = ItemContent(
                 profileText = "케어밋에서 아래의 일자리에 지원해요!",
@@ -485,61 +418,35 @@ class MainActivity : AppCompatActivity() {
                     ItemInfo(item = "근무 요일", itemOp = sharedJobPostingInfo.weekdays),
                     ItemInfo(item = "근무 시간", itemOp = sharedJobPostingInfo.workTime),
                     ItemInfo(item = "급여", itemOp = sharedJobPostingInfo.payAmount),
-                    ItemInfo(item = "근무 주소", itemOp = sharedJobPostingInfo.roadNameAddress),
-                ),
+                    ItemInfo(item = "근무 주소", itemOp = sharedJobPostingInfo.roadNameAddress)
+                )
             ),
             buttons = listOf(
                 Button(
                     title = "앱에서 확인하기",
-                    link = Link(
-                        webUrl = "https://caremeet.kr/",
-                        mobileWebUrl = "https://caremeet.kr/",
-                        androidExecutionParams = mapOf(
-                            "sharedJobPostingId" to sharedJobPostingInfo.id,
-                            "sharedJobPostingType" to sharedJobPostingInfo.type,
-                        ),
-                    ),
+                    link = Link(webUrl = oneLinkUrl, mobileWebUrl = oneLinkUrl)
                 )
             )
         )
 
         if (ShareClient.instance.isKakaoTalkSharingAvailable(this)) {
-            ShareClient.instance.shareDefault(
-                this,
-                jobPostingFeed
-            ) { sharingResult, error ->
-                if (error != null) {
-                    Log.e("test", "카카오톡 공유 실패", error)
-                } else if (sharingResult != null) {
-                    Log.d("test", "카카오톡 공유 성공 ${sharingResult.intent}")
-                    startActivity(sharingResult.intent)
-
-                    // 카카오톡 공유에 성공했지만 아래 경고 메시지가 존재할 경우 일부 컨텐츠가 정상 동작하지 않을 수 있습니다.
-                    Log.w("test", "Warning Msg: ${sharingResult.warningMsg}")
-                    Log.w("test", "Argument Msg: ${sharingResult.argumentMsg}")
-                }
+            ShareClient.instance.shareDefault(this, jobPostingFeed) { result, error ->
+                if (error != null) Log.e("test", "카카오톡 공유 실패", error)
+                else result?.let { startActivity(it.intent) }
             }
         } else {
-            // 카카오톡 미설치: 웹 공유 사용 권장
-            // 웹 공유 예시 코드
-            val sharerUrl = WebSharerClient.instance.makeDefaultUrl(jobPostingFeed)
+            openWebSharer(WebSharerClient.instance.makeDefaultUrl(jobPostingFeed))
+        }
+    }
 
-            // CustomTabs으로 웹 브라우저 열기
-
-            // 1. CustomTabsServiceConnection 지원 브라우저 열기
-            // ex) Chrome, 삼성 인터넷, FireFox, 웨일 등
+    private fun openWebSharer(url: Uri) {
+        try {
+            KakaoCustomTabsClient.openWithDefault(this, url)
+        } catch (e: UnsupportedOperationException) {
             try {
-                KakaoCustomTabsClient.openWithDefault(this, sharerUrl)
-            } catch (e: UnsupportedOperationException) {
-                // CustomTabsServiceConnection 지원 브라우저가 없을 때 예외처리
-            }
-
-            // 2. CustomTabsServiceConnection 미지원 브라우저 열기
-            // ex) 다음, 네이버 등
-            try {
-                KakaoCustomTabsClient.open(this, sharerUrl)
+                KakaoCustomTabsClient.open(this, url)
             } catch (e: ActivityNotFoundException) {
-                // 디바이스에 설치된 인터넷 브라우저가 없을 때 예외처리
+                Log.e("WebShare", "No browser found to handle the URL", e)
             }
         }
     }

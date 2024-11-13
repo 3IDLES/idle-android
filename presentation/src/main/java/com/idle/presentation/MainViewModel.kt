@@ -49,7 +49,7 @@ class MainViewModel @Inject constructor(
 //    private val disconnectWebSocketUseCase: DisconnectWebSocketUseCase,
     private val errorHandlerHelper: ErrorHandler,
     private val eventHandlerHelper: EventHandlerHelper,
-    private val errorLoggingHelper: ErrorLoggingHelper,
+    val errorLoggingHelper: ErrorLoggingHelper,
     val navigationHelper: com.idle.navigation.NavigationHelper,
 ) : ViewModel() {
     private val _navigationMenuType = MutableStateFlow(NavigationMenuType.HIDE)

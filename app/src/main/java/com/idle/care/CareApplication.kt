@@ -3,10 +3,14 @@ package com.idle.care
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.util.Log
+import com.appsflyer.AppsFlyerLib
+import com.appsflyer.attribution.AppsFlyerRequestListener
 import com.idle.care.notification.NotificationHandler.Companion.BACKGROUND_CHANNEL
 import com.idle.care.notification.NotificationHandler.Companion.BACKGROUND_DESCRIPTION
 import com.kakao.sdk.common.KakaoSdk
 import dagger.hilt.android.HiltAndroidApp
+
 
 @HiltAndroidApp
 class CareApplication : Application() {
@@ -15,6 +19,7 @@ class CareApplication : Application() {
 
         initNotification()
         initKakao()
+        initAppsFlyer()
     }
 
     private fun initNotification() {
@@ -32,5 +37,21 @@ class CareApplication : Application() {
 
     private fun initKakao() {
         KakaoSdk.init(this, BuildConfig.KAKAO_APP_KEY)
+    }
+
+    private fun initAppsFlyer() {
+        AppsFlyerLib.getInstance().apply {
+            init(BuildConfig.APPSFLYER_API_KEY, null, this@CareApplication)
+            setDebugLog(true)
+            start(this@CareApplication, "", object : AppsFlyerRequestListener {
+                override fun onSuccess() {
+                    Log.d("AppsFlyer", "AppsFlyer 연동 성공")
+                }
+
+                override fun onError(p0: Int, p1: String) {
+                    Log.d("AppsFlyer", "AppsFlyer 연동 실패 $p0 $p1")
+                }
+            })
+        }
     }
 }
