@@ -254,8 +254,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun handleDeepLink(deepLink: DeepLink) {
         try {
-            val sharedJobPostingId = deepLink.getStringValue("sharedJobPostingId")
-            val sharedJobPostingType = deepLink.getStringValue("sharedJobPostingType")
+            val sharedJobPostingId = deepLink.getStringValue("deep_link_value")
+            val sharedJobPostingType = deepLink.getStringValue("deep_link_sub1")
             viewModel.setSharedJobPostingInfo(
                 SharedJobPostingInfo(
                     jobPostingId = sharedJobPostingId ?: return,
@@ -408,7 +408,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun shareJobPosting(sharedJobPostingInfo: ShareJobPostingInfo) {
         val oneLinkUrl =
-            "https://caremeet.onelink.me/dXPO/edg5vvwt?sharedJobPostingId=${sharedJobPostingInfo.id}&sharedJobPostingType=${sharedJobPostingInfo.type}"
+            "https://caremeet.onelink.me/dXPO/edg5vvwt?deep_link_value=${sharedJobPostingInfo.id}&deep_link_sub1=${sharedJobPostingInfo.type}"
+
         val jobPostingFeed = FeedTemplate(
             content = Content(
                 title = sharedJobPostingInfo.centerName,
