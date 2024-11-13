@@ -28,6 +28,8 @@ import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.domain.model.auth.Gender
 import com.idle.navigation.DeepLinkDestination.Auth
 import com.idle.post.code.PostCodeFragment
+import com.idle.signup.worker.WorkerSignUpStep
+import com.idle.signup.worker.WorkerSignUpViewModel
 import com.idle.signup.worker.step.AddressScreen
 import com.idle.signup.worker.step.WorkerInformationScreen
 import com.idle.signup.worker.step.WorkerPhoneNumberScreen

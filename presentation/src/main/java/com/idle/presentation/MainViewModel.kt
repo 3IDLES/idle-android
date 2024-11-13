@@ -99,12 +99,8 @@ class MainViewModel @Inject constructor(
             return@launch
         }
 
-        when (userRole) {
-            UserType.CENTER.apiValue -> getMyCenterProfileUseCase().onFailure {
-                return@launch
-            }
-
-            UserType.WORKER.apiValue -> getMyWorkerProfileUseCase().onFailure {
+        if (userRole == UserType.WORKER.apiValue) {
+            getMyWorkerProfileUseCase().onFailure {
                 return@launch
             }
         }
