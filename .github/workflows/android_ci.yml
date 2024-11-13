@@ -42,6 +42,7 @@ jobs:
         echo "NAVER_CLIENT_SECRET=${{ secrets.NAVER_CLIENT_SECRET }}" >> local.properties
         echo "AMPLITUDE_API_KEY=${{ secrets.AMPLITUDE_API_KEY }}" >> local.properties
         echo "KAKAO_APP_KEY=${{ secrets.KAKAO_APP_KEY }}" >> local.properties
+        echo "APPSFLYER_API_KEY=${{ secrets.APPSFLYER_API_KEY }}" >> local.properties
 
     - name: Set up keystore.properties
       run: |

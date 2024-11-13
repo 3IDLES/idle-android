@@ -117,6 +117,7 @@ class MainActivity : AppCompatActivity() {
                     return
                 },
                 onInit = ::initializeUserSession,
+                readNotification = ::readNotification,
             )
         }
     }
@@ -136,6 +137,7 @@ class MainActivity : AppCompatActivity() {
             isColdStart = false,
             extras = intent?.extras ?: return,
             onInit = viewModel::initializeUserSession,
+            readNotification = viewModel::readNotification,
         )
     }
 

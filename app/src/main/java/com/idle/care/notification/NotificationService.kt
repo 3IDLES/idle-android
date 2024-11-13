@@ -1,10 +1,8 @@
 package com.idle.care.notification
 
-import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.idle.analytics.error.ErrorLoggingHelper
-import com.idle.domain.model.auth.UserType
 import com.idle.domain.usecase.auth.GetUserTypeUseCase
 import com.idle.domain.usecase.notification.PostDeviceTokenUseCase
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,12 +40,10 @@ class NotificationService : FirebaseMessagingService() {
         scope.launch {
             val userType = getUserTypeUseCase()
 
-            when (userType) {
-                UserType.CENTER.apiValue, UserType.WORKER.apiValue -> postDeviceTokenUseCase(
-                    deviceToken = token,
-                    userType = userType,
-                )
-            }
+            postDeviceTokenUseCase(
+                deviceToken = token,
+                userType = userType,
+            )
         }
     }
 

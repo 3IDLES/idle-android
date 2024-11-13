@@ -27,16 +27,18 @@ class NavigationHelper @Inject constructor() {
     fun handleFCMNavigate(
         isColdStart: Boolean,
         extras: Bundle?,
-        onInit: () -> Unit
+        onInit: () -> Unit,
+        readNotification: (String) -> Unit,
     ) {
+        val notificationId = extras?.getString(NotificationKeys.NOTIFICATION_ID) ?: run {
+            if (isColdStart) onInit()
+            return
+        }
+
+        readNotification(notificationId)
+
         val notificationType = NotificationType.create(
-            extras?.getString(NotificationKeys.NOTIFICATION_TYPE) ?: run {
-                if (isColdStart) {
-                    onInit()
-                    return
-                }
-                return
-            }
+            extras.getString(NotificationKeys.NOTIFICATION_TYPE) ?: return
         )
 
         when (notificationType) {
@@ -92,36 +94,27 @@ class NavigationHelper @Inject constructor() {
     fun handleNotificationNavigate(notification: Notification) {
         val destinations = when (notification.notificationType) {
             APPLICANT -> {
-                val notificationContent =
-                    notification.notificationDetails as? NotificationContent.ApplicantNotification
-
-                notificationContent?.let { content ->
-                    listOf(
-                        NavigationEvent.NavigateTo(CenterJobDetail(content.jobPostingId)),
-                    )
+                (notification.notificationDetails as? NotificationContent.ApplicantNotification)?.let { content ->
+                    listOf(NavigationEvent.NavigateTo(CenterJobDetail(content.jobPostingId)))
                 } ?: listOf()
             }
 
             NEW_JOB_POSTING -> {
-                val notificationContent =
-                    notification.notificationDetails as? NotificationContent.NewJobPostingNotification
-
-                notificationContent?.let { content ->
+                (notification.notificationDetails as? NotificationContent.NewJobPostingNotification)?.let { content ->
                     listOf(
                         NavigationEvent.NavigateTo(
                             WorkerJobDetail(
-                                jobPostingId = content.jobPostingId,
-                                jobPostingType = JobPostingType.CAREMEET.name,
+                                content.jobPostingId,
+                                JobPostingType.CAREMEET.name
                             )
-                        ),
+                        )
                     )
                 } ?: listOf()
             }
 
             else -> listOf()
         }
-
-        destinations.onEach { destination -> _navigationFlow.trySend(destination) }
+        destinations.forEach { _navigationFlow.trySend(it) }
     }
 }
 
@@ -148,6 +141,7 @@ enum class NotificationType {
 }
 
 private object NotificationKeys {
+    const val NOTIFICATION_ID = "notificationId"
     const val NOTIFICATION_TYPE = "notificationType"
     const val JOB_POSTING_ID = "jobPostingId"
 }

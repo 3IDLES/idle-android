@@ -116,6 +116,10 @@ class MainViewModel @Inject constructor(
         jobPostingRepository.sharedJobPostingInfo = sharedJobPostingInfo
     }
 
+    internal fun readNotification(notificationId: String) = viewModelScope.launch {
+        readNotificationUseCase(notificationId).onFailure { errorHandlerHelper.sendError(it) }
+    }
+
     private suspend fun getAccessTokenAndUserRole(): Pair<String, String> = coroutineScope {
         val accessTokenDeferred = async { getAccessTokenUseCase() }
         val userRoleDeferred = async { getMyUserRoleUseCase() }
