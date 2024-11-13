@@ -303,7 +303,10 @@ private fun WorkerProfileCard(
 
                         if (applicant.experienceYear != null) {
                             Text(
-                                text = "${applicant.experienceYear}년차",
+                                text = when (applicant.experienceYear) {
+                                    0 -> "신입"
+                                    else -> "${applicant.experienceYear}년차"
+                                },
                                 style = CareTheme.typography.body2,
                                 color = CareTheme.colors.gray500,
                             )
