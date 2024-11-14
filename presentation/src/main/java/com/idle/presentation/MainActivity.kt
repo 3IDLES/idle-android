@@ -29,6 +29,7 @@ import com.idle.analytics.businessmetric.AnalyticsHelper
 import com.idle.auth.AuthFragmentDirections
 import com.idle.binding.MainEvent
 import com.idle.binding.ShareJobPostingInfo
+import com.idle.binding.ToastType
 import com.idle.binding.repeatOnStarted
 import com.idle.designsystem.binding.component.dismissToast
 import com.idle.designsystem.binding.component.showToast
@@ -205,7 +206,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showForceUpdateDialog(info: ForceUpdate) {
         val currentVersion = packageManager.getPackageInfo(packageName, 0).versionName
-        if (checkShouldUpdate(currentVersion, info.minVersion)) {
+        if (!checkShouldUpdate(currentVersion, info.minVersion)) {
             forceUpdateFragment = ForceUpdateFragment(info).apply { isCancelable = false }
             forceUpdateFragment.show(supportFragmentManager, forceUpdateFragment.tag)
         }
@@ -254,8 +255,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun handleDeepLink(deepLink: DeepLink) {
         try {
-            val sharedJobPostingId = deepLink.getStringValue("deep_link_value")
+            val sharedJobPostingId = deepLink.deepLinkValue
             val sharedJobPostingType = deepLink.getStringValue("deep_link_sub1")
+
+            showToast(
+                this,
+                "sharedJobPostingId: $sharedJobPostingId, sharedJobPostingTpye : $sharedJobPostingType",
+                toastType = ToastType.SUCCESS,
+                paddingBottom = 50
+            )
+
             viewModel.setSharedJobPostingInfo(
                 SharedJobPostingInfo(
                     jobPostingId = sharedJobPostingId ?: return,
