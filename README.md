@@ -126,7 +126,6 @@
 - CleanArchitecture
 - Multi-Module
 - MVVM
-- Custom Plugin
 
 ### UI
 
@@ -156,7 +155,9 @@
 ### Etc
 
 - Coroutine + Flow
+- Custom Plugin
 - Firebase (RemoteConfig, Cloud Messaging)
+- Daum Address API - [Github.io 배포를 이용하여 웹뷰 뛰움](https://github.com/tgyuuAn/DaumAddressApi)
 - Kakao Shared
 - AppsFlyer (Onelink)
 
