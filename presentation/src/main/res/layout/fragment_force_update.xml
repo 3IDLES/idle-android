@@ -36,11 +36,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
-                android:text="유저분들의 의견을 반영해 앱을 더 발전시켰어요.\n
-보다 좋은 서비스를 만나기 위해, 업데이트해주세요."
-                android:textAlignment="center"
-                android:maxLines="4"
                 android:ellipsize="end"
+                android:maxLines="3"
+                android:text="@{viewModel.forceUpdate.noticeMsg}"
+                android:textAlignment="center"
                 android:textColor="@color/gray_500" />
 
             <LinearLayout

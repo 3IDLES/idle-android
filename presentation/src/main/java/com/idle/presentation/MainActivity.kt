@@ -22,14 +22,12 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.appsflyer.AppsFlyerLib
-import com.appsflyer.deeplink.DeepLink
 import com.appsflyer.deeplink.DeepLinkResult
 import com.idle.analytics.AnalyticsEvent
 import com.idle.analytics.businessmetric.AnalyticsHelper
 import com.idle.auth.AuthFragmentDirections
 import com.idle.binding.MainEvent
 import com.idle.binding.ShareJobPostingInfo
-import com.idle.binding.ToastType
 import com.idle.binding.repeatOnStarted
 import com.idle.designsystem.binding.component.dismissToast
 import com.idle.designsystem.binding.component.showToast
@@ -206,7 +204,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showForceUpdateDialog(info: ForceUpdate) {
         val currentVersion = packageManager.getPackageInfo(packageName, 0).versionName
-        if (!checkShouldUpdate(currentVersion, info.minVersion)) {
+        if (checkShouldUpdate(currentVersion, info.minVersion)) {
             forceUpdateFragment = ForceUpdateFragment(info).apply { isCancelable = false }
             forceUpdateFragment.show(supportFragmentManager, forceUpdateFragment.tag)
         }
@@ -246,34 +244,28 @@ class MainActivity : AppCompatActivity() {
     private fun handleDeepLinking() {
         AppsFlyerLib.getInstance().subscribeForDeepLink { deepLinkResult ->
             when (deepLinkResult.status) {
-                DeepLinkResult.Status.FOUND -> handleDeepLink(deepLinkResult.deepLink)
+                DeepLinkResult.Status.FOUND -> {
+                    val sharedJobPostingId =
+                        deepLinkResult.deepLink.getStringValue("deep_link_value")
+                    val sharedJobPostingType =
+                        deepLinkResult.deepLink.getStringValue("deep_link_sub1")
+
+                    handleDeepLink(sharedJobPostingId, sharedJobPostingType)
+                }
+
                 DeepLinkResult.Status.NOT_FOUND -> viewModel.errorLoggingHelper.logError(Exception("AppsFlyer User Not Found"))
                 else -> viewModel.errorLoggingHelper.logError(Exception(deepLinkResult.error.toString()))
             }
         }
     }
 
-    private fun handleDeepLink(deepLink: DeepLink) {
-        try {
-            val sharedJobPostingId = deepLink.deepLinkValue
-            val sharedJobPostingType = deepLink.getStringValue("deep_link_sub1")
-
-            showToast(
-                this,
-                "sharedJobPostingId: $sharedJobPostingId, sharedJobPostingTpye : $sharedJobPostingType",
-                toastType = ToastType.SUCCESS,
-                paddingBottom = 50
+    private fun handleDeepLink(sharedJobPostingId: String?, sharedJobPostingType: String?) {
+        viewModel.setSharedJobPostingInfo(
+            SharedJobPostingInfo(
+                jobPostingId = sharedJobPostingId ?: return,
+                jobPostingType = JobPostingType.create(sharedJobPostingType ?: return)
             )
-
-            viewModel.setSharedJobPostingInfo(
-                SharedJobPostingInfo(
-                    jobPostingId = sharedJobPostingId ?: return,
-                    jobPostingType = JobPostingType.create(sharedJobPostingType ?: return)
-                )
-            )
-        } catch (e: Exception) {
-            viewModel.errorLoggingHelper.logError(e)
-        }
+        )
     }
 
     private fun showNetworkDialog() {
