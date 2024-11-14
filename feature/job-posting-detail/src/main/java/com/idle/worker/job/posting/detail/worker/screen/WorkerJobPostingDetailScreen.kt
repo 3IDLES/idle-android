@@ -137,7 +137,7 @@ internal fun WorkerJobPostingDetailScreen(
                     description = "${jobPostingDetail.centerName} | ${jobPostingDetail.centerOfficeNumber}",
                     titleLeftComponent = {
                         Image(
-                            painter = painterResource(R.drawable.ic_call),
+                            painter = painterResource(R.drawable.ic_call_inquiry),
                             contentDescription = null,
                         )
                     },
