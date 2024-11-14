@@ -64,7 +64,8 @@ class ForceUpdateFragment(private val forceUpdate: ForceUpdate) : DialogFragment
 
     override fun onStart() {
         super.onStart()
-        resizeDialog(1f, 0.25f)
+        val fontScale = resources.configuration.fontScale
+        resizeDialog(1f, 0.4f * fontScale)
     }
 
     private fun resizeDialog(width: Float, height: Float) {
