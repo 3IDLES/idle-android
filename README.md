@@ -105,7 +105,7 @@
   </tr>
     <tr>
     <td align="center"><img src="https://github.com/user-attachments/assets/10330ca2-e33c-4957-84c8-03ae8763f63f" width=200/></td>
-    <td align="center"><img src="https://github.com/user-attachments/assets/ca45e7a1-5579-475a-8713-241340a6ef4d" width=200/></td>
+    <td align="center"><img src="https://github.com/user-attachments/assets/4eb5cd91-706d-413c-92ca-3310df2d10e2" width=200/></td>
   </tr>
 </table>
 <table>
@@ -146,11 +146,12 @@
 
 ### CI/CD
 
+- KtLint
 - Firebase (App Distribution, Test Lab)
 
 ### Test
 
-- KtLint, junit, mockk
+- junit, mockk
 
 ### Etc
 
@@ -191,3 +192,10 @@
 <img width="751" alt="image" src="https://github.com/user-attachments/assets/a587e050-5c7a-4b05-9e10-5f9dae8e8895"></a>
 
 [안드로이드 문서 보러가기](https://www.notion.so/Android-Client-2dbd3b9962004d608ea672b65de9e55f)
+
+## 👟 Sprint
+<a href="https://www.notion.so/f5756a8f29e549358f87872802293cda">
+<img width="1066" alt="image" src="https://github.com/user-attachments/assets/51c8e0e2-57dc-4bed-a4c8-f9e41f084f73"></a>
+
+
+[스프린트 회고 보러가기](https://www.notion.so/f5756a8f29e549358f87872802293cda)
