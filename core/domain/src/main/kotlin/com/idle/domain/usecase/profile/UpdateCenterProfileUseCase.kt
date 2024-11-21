@@ -15,7 +15,7 @@ class UpdateCenterProfileUseCase @Inject constructor(
         imageFileUri: String?,
     ): Result<Unit> = runCatching {
         coroutineScope {
-            val updateProfileJon = launch {
+            val updateProfileJob = launch {
                 profileRepository.updateCenterProfile(
                     officeNumber = officeNumber,
                     introduce = introduce,
@@ -35,7 +35,7 @@ class UpdateCenterProfileUseCase @Inject constructor(
                 } else null
             }
 
-            updateProfileJon.join()
+            updateProfileJob.join()
             updateProfileImageJob?.join()
         }
     }
