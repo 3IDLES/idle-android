@@ -51,7 +51,8 @@ class RegisterCenterInfoViewModel @Inject constructor(
             introduce = _centerIntroduce.value,
             lotNumberAddress = _lotNumberAddress.value,
             officeNumber = _centerNumber.value,
-            roadNameAddress = _roadNameAddress.value
+            roadNameAddress = _roadNameAddress.value,
+            imageFileUri = _centerProfileImageUri.value.toString(),
         ).onSuccess {
             navigationHelper.navigateTo(
                 com.idle.navigation.NavigationEvent.NavigateTo(
