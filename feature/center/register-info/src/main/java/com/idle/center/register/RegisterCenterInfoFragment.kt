@@ -95,14 +95,7 @@ internal class RegisterCenterInfoFragment : BaseComposeFragment() {
                         },
                         onCenterDetailAddressChanged = ::setCenterDetailAddress,
                         onProfileImageUriChanged = ::setProfileImageUri,
-                        navigateToHome = {
-                            navigationHelper.navigateTo(
-                                com.idle.navigation.NavigationEvent.NavigateTo(
-                                    com.idle.navigation.DeepLinkDestination.CenterHome,
-                                    com.idle.center.register.info.R.id.registerCenterInfoCompleteFragment
-                                )
-                            )
-                        },
+                        navigateUp = { findNavController().navigateUp() },
                     )
                 }
             }
@@ -126,7 +119,7 @@ internal fun CenterRegisterScreen(
     onCenterDetailAddressChanged: (String) -> Unit,
     onProfileImageUriChanged: (Uri?) -> Unit,
     setRegistrationStep: (RegistrationStep) -> Unit,
-    navigateToHome: () -> Unit,
+    navigateUp: () -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
 
@@ -135,7 +128,7 @@ internal fun CenterRegisterScreen(
             Column(modifier = Modifier.padding(start = 12.dp, top = 48.dp, end = 20.dp)) {
                 CareSubtitleTopBar(
                     title = stringResource(id = R.string.register_center_info),
-                    onNavigationClick = navigateToHome,
+                    onNavigationClick = navigateUp,
                     modifier = Modifier.fillMaxWidth(),
                 )
 
