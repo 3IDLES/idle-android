@@ -6,7 +6,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ErrorHandler @Inject constructor() {
+class ErrorHelper @Inject constructor() {
     private val _errorEvent = MutableSharedFlow<Throwable>(extraBufferCapacity = 1)
     val errorEvent = _errorEvent.asSharedFlow()
 

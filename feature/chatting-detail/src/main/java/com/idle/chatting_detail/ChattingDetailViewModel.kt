@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.chatting.ChatMessage
-import com.idle.domain.model.error.ErrorHandler
+import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.usecase.chatting.GetChatMessagesUseCase
@@ -27,7 +27,7 @@ class ChattingDetailViewModel @Inject constructor(
     private val getWorkerProfileUseCase: GetWorkerProfileUseCase,
     private val getChatMessagesUseCase: GetChatMessagesUseCase,
     private val subscribeChatMessageUseCase: SubscribeChatMessageUseCase,
-    private val errorHandlerHelper: ErrorHandler,
+    private val errorHelper: ErrorHelper,
     val navigationHelper: com.idle.navigation.NavigationHelper,
 ) : ViewModel() {
     private val _writingText = MutableStateFlow<String>("")
@@ -56,14 +56,14 @@ class ChattingDetailViewModel @Inject constructor(
                     getWorkerProfileUseCase(senderId).onSuccess {
                         _workerProfile.value = it
                     }.onFailure {
-                        errorHandlerHelper.sendError(it)
+                        errorHelper.sendError(it)
                     }
                 }
 
                 getLocalMyCenterProfileUseCase().onSuccess {
                     _centerProfile.value = it
                 }.onFailure {
-                    errorHandlerHelper.sendError(it)
+                    errorHelper.sendError(it)
                 }
             }
 
@@ -72,14 +72,14 @@ class ChattingDetailViewModel @Inject constructor(
                     getCenterProfileUseCase(senderId).onSuccess {
                         _centerProfile.value = it
                     }.onFailure {
-                        errorHandlerHelper.sendError(it)
+                        errorHelper.sendError(it)
                     }
                 }
 
                 getLocalMyWorkerProfileUseCase().onSuccess {
                     _workerProfile.value = it
                 }.onFailure {
-                    errorHandlerHelper.sendError(it)
+                    errorHelper.sendError(it)
                 }
             }
         }

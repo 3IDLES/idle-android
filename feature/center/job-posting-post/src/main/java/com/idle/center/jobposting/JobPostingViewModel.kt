@@ -3,12 +3,12 @@ package com.idle.center.jobposting
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.idle.binding.EventHandlerHelper
+import com.idle.binding.EventHelper
 import com.idle.binding.MainEvent
 import com.idle.center.job.posting.post.R
 import com.idle.compose.JobPostingBottomSheetType
 import com.idle.domain.model.auth.Gender
-import com.idle.domain.model.error.ErrorHandler
+import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.jobposting.ApplyDeadlineType
 import com.idle.domain.model.jobposting.ApplyMethod
 import com.idle.domain.model.jobposting.DayOfWeek
@@ -37,8 +37,8 @@ import javax.inject.Inject
 class JobPostingViewModel @Inject constructor(
     private val getLocalMyCenterProfileUseCase: GetLocalMyCenterProfileUseCase,
     private val postJobPostingUseCase: PostJobPostingUseCase,
-    private val errorHandlerHelper: ErrorHandler,
-    val eventHandlerHelper: EventHandlerHelper,
+    private val errorHelper: ErrorHelper,
+    val eventHelper: EventHelper,
     val navigationHelper: com.idle.navigation.NavigationHelper,
 ) : ViewModel() {
     private val _profile = MutableStateFlow<CenterProfile?>(null)
@@ -175,10 +175,10 @@ class JobPostingViewModel @Inject constructor(
                 if (startTime.isBefore(endTime)) {
                     _workStartTime.value = time
                 } else {
-                    eventHandlerHelper.sendEvent(MainEvent.ShowToast("근무 시작 시간은 근무 종료 시간보다 빨라야 합니다."))
+                    eventHelper.sendEvent(MainEvent.ShowToast("근무 시작 시간은 근무 종료 시간보다 빨라야 합니다."))
                 }
             } catch (e: DateTimeParseException) {
-                eventHandlerHelper.sendEvent(MainEvent.ShowToast("근무 시작 시간은 근무 종료 시간보다 빨라야 합니다."))
+                eventHelper.sendEvent(MainEvent.ShowToast("근무 시작 시간은 근무 종료 시간보다 빨라야 합니다."))
             }
 
             return
@@ -195,10 +195,10 @@ class JobPostingViewModel @Inject constructor(
                 if (endTime.isAfter(startTime)) {
                     _workEndTime.value = time
                 } else {
-                    eventHandlerHelper.sendEvent(MainEvent.ShowToast("근무 종료 시간은 근무 시작 시간보다 빨라야 합니다."))
+                    eventHelper.sendEvent(MainEvent.ShowToast("근무 종료 시간은 근무 시작 시간보다 빨라야 합니다."))
                 }
             } catch (e: DateTimeParseException) {
-                eventHandlerHelper.sendEvent(MainEvent.ShowToast("근무 종료 시간은 근무 시작 시간보다 빨라야 합니다."))
+                eventHelper.sendEvent(MainEvent.ShowToast("근무 종료 시간은 근무 시작 시간보다 빨라야 합니다."))
             }
             return
         }
@@ -317,7 +317,7 @@ class JobPostingViewModel @Inject constructor(
                 endTime = _workEndTime.value,
                 payType = _payType.value ?: PayType.UNKNOWN,
                 payAmount = _payAmount.value.toIntOrNull() ?: let {
-                    eventHandlerHelper.sendEvent(MainEvent.ShowToast("급여 형식이 잘못되었습니다. 숫자로 입력해주세요."))
+                    eventHelper.sendEvent(MainEvent.ShowToast("급여 형식이 잘못되었습니다. 숫자로 입력해주세요."))
                     return@launch
                 },
                 roadNameAddress = _roadNameAddress.value,
@@ -325,33 +325,33 @@ class JobPostingViewModel @Inject constructor(
                 clientName = _clientName.value,
                 gender = _gender.value,
                 birthYear = _birthYear.value.toIntOrNull() ?: let {
-                    eventHandlerHelper.sendEvent(MainEvent.ShowToast("올바른 출생년도를 입력해주세요."))
+                    eventHelper.sendEvent(MainEvent.ShowToast("올바른 출생년도를 입력해주세요."))
                     return@launch
                 },
                 weight = _weight.value.toIntOrNull(),
                 careLevel = _careLevel.value.toIntOrNull() ?: let {
-                    eventHandlerHelper.sendEvent(MainEvent.ShowToast("올바른 요양 등급을 입력해주세요."))
+                    eventHelper.sendEvent(MainEvent.ShowToast("올바른 요양 등급을 입력해주세요."))
                     return@launch
                 },
                 mentalStatus = _mentalStatus.value,
                 disease = _disease.value.ifBlank { null },
                 isMealAssistance = _isMealAssistance.value ?: let {
-                    eventHandlerHelper.sendEvent(MainEvent.ShowToast("식사 보조 여부를 선택해주세요."))
+                    eventHelper.sendEvent(MainEvent.ShowToast("식사 보조 여부를 선택해주세요."))
                     return@launch
                 },
                 isBowelAssistance = _isBowelAssistance.value ?: let {
-                    eventHandlerHelper.sendEvent(MainEvent.ShowToast("배변 보조 여부를 선택해주세요."))
+                    eventHelper.sendEvent(MainEvent.ShowToast("배변 보조 여부를 선택해주세요."))
                     return@launch
                 },
                 isWalkingAssistance = _isWalkingAssistance.value ?: let {
-                    eventHandlerHelper.sendEvent(MainEvent.ShowToast("이동 보조 여부를 선택해주세요."))
+                    eventHelper.sendEvent(MainEvent.ShowToast("이동 보조 여부를 선택해주세요."))
                     return@launch
                 },
                 lifeAssistance = _lifeAssistance.value.toList().sortedBy { it.ordinal }
                     .takeIf { it.isNotEmpty() } ?: listOf(LifeAssistance.NONE),
                 extraRequirement = _extraRequirement.value.ifBlank { null },
                 isExperiencePreferred = _isExperiencePreferred.value ?: let {
-                    eventHandlerHelper.sendEvent(MainEvent.ShowToast("경력 우대 여부를 선택해주세요."))
+                    eventHelper.sendEvent(MainEvent.ShowToast("경력 우대 여부를 선택해주세요."))
                     return@launch
                 },
                 applyMethod = _applyMethod.value.toList()
@@ -365,14 +365,14 @@ class JobPostingViewModel @Inject constructor(
                         popUpTo = R.id.jobPostingPostFragment
                     )
                 )
-            }.onFailure { errorHandlerHelper.sendError(it) }
+            }.onFailure { errorHelper.sendError(it) }
         }
     }
 
     private fun getMyCenterProfile() = viewModelScope.launch {
         getLocalMyCenterProfileUseCase().onSuccess {
             _profile.value = it
-        }.onFailure { errorHandlerHelper.sendError(it) }
+        }.onFailure { errorHelper.sendError(it) }
     }
 
     companion object {

@@ -88,7 +88,7 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
                                     )
                                 },
                                 shareJobPosting = {
-                                    eventHandlerHelper.sendEvent(
+                                    eventHelper.sendEvent(
                                         MainEvent.ShareJobPosting(
                                             ShareJobPostingInfo(
                                                 id = jobPosting.id,
@@ -122,7 +122,7 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
                                 addFavoriteJobPosting = ::addFavoriteJobPosting,
                                 removeFavoriteJobPosting = ::removeFavoriteJobPosting,
                                 shareJobPosting = {
-                                    eventHandlerHelper.sendEvent(
+                                    eventHelper.sendEvent(
                                         MainEvent.ShareJobPosting(
                                             ShareJobPostingInfo(
                                                 id = jobPosting.id,

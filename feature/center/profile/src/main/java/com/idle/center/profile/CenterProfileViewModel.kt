@@ -3,10 +3,10 @@ package com.idle.center.profile
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.idle.binding.EventHandlerHelper
+import com.idle.binding.EventHelper
 import com.idle.binding.MainEvent
 import com.idle.binding.ToastType.SUCCESS
-import com.idle.domain.model.error.ErrorHandler
+import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.usecase.profile.GetCenterProfileUseCase
 import com.idle.domain.usecase.profile.GetLocalMyCenterProfileUseCase
@@ -22,8 +22,8 @@ class CenterProfileViewModel @Inject constructor(
     private val getLocalMyCenterProfileUseCase: GetLocalMyCenterProfileUseCase,
     private val getCenterProfileUseCase: GetCenterProfileUseCase,
     private val updateCenterProfileUseCase: UpdateCenterProfileUseCase,
-    private val errorHandlerHelper: ErrorHandler,
-    private val eventHandlerHelper: EventHandlerHelper,
+    private val errorHelper: ErrorHelper,
+    private val eventHelper: EventHelper,
 ) : ViewModel() {
     private val _centerProfile = MutableStateFlow<CenterProfile?>(null)
     val centerProfile = _centerProfile.asStateFlow()
@@ -67,7 +67,7 @@ class CenterProfileViewModel @Inject constructor(
             _centerProfile.value = it
             _centerIntroduce.value = it.introduce ?: ""
             _centerOfficeNumber.value = it.officeNumber
-        }.onFailure { errorHandlerHelper.sendError(it) }
+        }.onFailure { errorHelper.sendError(it) }
     }
 
     internal fun getCenterProfile(centerId: String) = viewModelScope.launch {
@@ -75,7 +75,7 @@ class CenterProfileViewModel @Inject constructor(
             _centerProfile.value = it
             _centerIntroduce.value = it.introduce ?: ""
             _centerOfficeNumber.value = it.officeNumber
-        }.onFailure { errorHandlerHelper.sendError(it) }
+        }.onFailure { errorHelper.sendError(it) }
     }
 
     internal fun updateCenterProfile() = viewModelScope.launch {
@@ -95,10 +95,10 @@ class CenterProfileViewModel @Inject constructor(
             introduce = _centerIntroduce.value.ifBlank { null },
             imageFileUri = _profileImageUri.value?.toString(),
         ).onSuccess {
-            eventHandlerHelper.sendEvent(MainEvent.ShowToast("정보 수정이 완료되었어요.", SUCCESS))
+            eventHelper.sendEvent(MainEvent.ShowToast("정보 수정이 완료되었어요.", SUCCESS))
             setEditState(false)
         }.onFailure {
-            errorHandlerHelper.sendError(it)
+            errorHelper.sendError(it)
         }.also { _isUpdateLoading.value = false }
     }
 

@@ -2,10 +2,10 @@ package com.idle.center.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.idle.binding.EventHandlerHelper
+import com.idle.binding.EventHelper
 import com.idle.binding.MainEvent
 import com.idle.binding.ToastType.SUCCESS
-import com.idle.domain.model.error.ErrorHandler
+import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.jobposting.CenterJobPosting
 import com.idle.domain.usecase.config.ShowNotificationCenterUseCase
 import com.idle.domain.usecase.jobposting.EndJobPostingUseCase
@@ -25,8 +25,8 @@ class CenterHomeViewModel @Inject constructor(
     private val endJobPostingUseCase: EndJobPostingUseCase,
     private val showNotificationCenterUseCase: ShowNotificationCenterUseCase,
     private val getUnreadNotificationCountUseCase: GetUnreadNotificationCountUseCase,
-    private val errorHandlerHelper: ErrorHandler,
-    private val eventHandlerHelper: EventHandlerHelper,
+    private val errorHelper: ErrorHelper,
+    private val eventHelper: EventHelper,
     val navigationHelper: com.idle.navigation.NavigationHelper,
 ) : ViewModel() {
     private val _recruitmentPostStatus = MutableStateFlow(RecruitmentPostStatus.IN_PROGRESS)
@@ -57,7 +57,7 @@ class CenterHomeViewModel @Inject constructor(
     internal fun getUnreadNotificationCount() = viewModelScope.launch {
         getUnreadNotificationCountUseCase().onSuccess {
             _unreadNotificationCount.value = it
-        }.onFailure { errorHandlerHelper.sendError(it) }
+        }.onFailure { errorHelper.sendError(it) }
     }
 
     internal fun setRecruitmentPostStatus(recruitmentPostStatus: RecruitmentPostStatus) {
@@ -72,13 +72,13 @@ class CenterHomeViewModel @Inject constructor(
     internal fun getJobPostingsInProgress() = viewModelScope.launch {
         getJobPostingsInProgressUseCase().onSuccess {
             _jobPostingsInProgress.value = it
-        }.onFailure { errorHandlerHelper.sendError(it) }
+        }.onFailure { errorHelper.sendError(it) }
     }
 
     internal fun getJobPostingsCompleted() = viewModelScope.launch {
         getJobPostingsCompletedUseCase().onSuccess {
             _jobPostingsCompleted.value = it
-        }.onFailure { errorHandlerHelper.sendError(it) }
+        }.onFailure { errorHelper.sendError(it) }
     }
 
     internal fun endJobPosting(jobPostingId: String) = viewModelScope.launch {
@@ -95,11 +95,11 @@ class CenterHomeViewModel @Inject constructor(
                     it.id != jobPostingId
                 }
 
-                eventHandlerHelper.sendEvent(MainEvent.ShowToast("채용을 종료했어요.", SUCCESS))
+                eventHelper.sendEvent(MainEvent.ShowToast("채용을 종료했어요.", SUCCESS))
             } else {
-                eventHandlerHelper.sendEvent(MainEvent.ShowToast("채용 종료에 실패했어요."))
+                eventHelper.sendEvent(MainEvent.ShowToast("채용 종료에 실패했어요."))
             }
-        }.onFailure { errorHandlerHelper.sendError(it) }
+        }.onFailure { errorHelper.sendError(it) }
     }
 }
 

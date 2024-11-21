@@ -2,10 +2,10 @@ package com.idle.worker.job.posting
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.idle.binding.EventHandlerHelper
+import com.idle.binding.EventHelper
 import com.idle.binding.MainEvent
 import com.idle.binding.ToastType
-import com.idle.domain.model.error.ErrorHandler
+import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.jobposting.ApplyMethod
 import com.idle.domain.model.jobposting.CrawlingJobPosting
 import com.idle.domain.model.jobposting.JobPosting
@@ -35,8 +35,8 @@ class WorkerJobPostingViewModel @Inject constructor(
     private val applyJobPostingUseCase: ApplyJobPostingUseCase,
     private val addFavoriteJobPostingUseCase: AddFavoriteJobPostingUseCase,
     private val removeFavoriteJobPostingUseCase: RemoveFavoriteJobPostingUseCase,
-    private val errorHandlerHelper: ErrorHandler,
-    private val eventHandlerHelper: EventHandlerHelper,
+    private val errorHelper: ErrorHelper,
+    private val eventHelper: EventHelper,
     val navigationHelper: com.idle.navigation.NavigationHelper,
 ) : ViewModel() {
     private val _profile = MutableStateFlow<WorkerProfile?>(null)
@@ -94,7 +94,7 @@ class WorkerJobPostingViewModel @Inject constructor(
                 }
 
                 _appliedJobPostings.value = _appliedJobPostings.value?.plus(postings) ?: postings
-            }.onFailure { errorHandlerHelper.sendError(it) }
+            }.onFailure { errorHelper.sendError(it) }
         } finally {
             isLoading = false
         }
@@ -108,13 +108,13 @@ class WorkerJobPostingViewModel @Inject constructor(
     private suspend fun getFavoriteCareMeetJobPostings() {
         getMyFavoritesJobPostingsUseCase().onSuccess { postings ->
             _favoriteJobPostings.value = _favoriteJobPostings.value?.plus(postings) ?: postings
-        }.onFailure { errorHandlerHelper.sendError(it) }
+        }.onFailure { errorHelper.sendError(it) }
     }
 
     private suspend fun getFavoriteCrawlingJobPostings() {
         getMyFavoritesCrawlingJobPostingsUseCase().onSuccess { postings ->
             _favoriteJobPostings.value = _favoriteJobPostings.value?.plus(postings) ?: postings
-        }.onFailure { errorHandlerHelper.sendError(it) }
+        }.onFailure { errorHelper.sendError(it) }
     }
 
     internal fun applyJobPosting(jobPostingId: String) = viewModelScope.launch {
@@ -122,7 +122,7 @@ class WorkerJobPostingViewModel @Inject constructor(
             jobPostingId = jobPostingId,
             applyMethod = ApplyMethod.APP
         ).onSuccess {
-            eventHandlerHelper.sendEvent(MainEvent.ShowToast("지원이 완료되었어요.", ToastType.SUCCESS))
+            eventHelper.sendEvent(MainEvent.ShowToast("지원이 완료되었어요.", ToastType.SUCCESS))
 
             _appliedJobPostings.value = _appliedJobPostings.value?.map {
                 if (it.jobPostingType == JobPostingType.CAREMEET && it.id == jobPostingId) {
@@ -137,7 +137,7 @@ class WorkerJobPostingViewModel @Inject constructor(
                     jobPosting.copy(applyTime = LocalDateTime.now())
                 } else it
             }
-        }.onFailure { errorHandlerHelper.sendError(it) }
+        }.onFailure { errorHelper.sendError(it) }
     }
 
     internal fun addFavoriteJobPosting(
@@ -148,7 +148,7 @@ class WorkerJobPostingViewModel @Inject constructor(
             jobPostingId = jobPostingId,
             jobPostingType = jobPostingType,
         ).onSuccess {
-            eventHandlerHelper.sendEvent(MainEvent.ShowToast("즐겨찾기에 추가되었어요.", ToastType.SUCCESS))
+            eventHelper.sendEvent(MainEvent.ShowToast("즐겨찾기에 추가되었어요.", ToastType.SUCCESS))
 
             _appliedJobPostings.value = _appliedJobPostings.value?.map {
                 when (it.jobPostingType) {
@@ -177,12 +177,12 @@ class WorkerJobPostingViewModel @Inject constructor(
                     }
                 }
             }
-        }.onFailure { errorHandlerHelper.sendError(it) }
+        }.onFailure { errorHelper.sendError(it) }
     }
 
     internal fun removeFavoriteJobPosting(jobPostingId: String) = viewModelScope.launch {
         removeFavoriteJobPostingUseCase(jobPostingId = jobPostingId).onSuccess {
-            eventHandlerHelper.sendEvent(MainEvent.ShowToast("즐겨찾기에서 제거했어요.", ToastType.SUCCESS))
+            eventHelper.sendEvent(MainEvent.ShowToast("즐겨찾기에서 제거했어요.", ToastType.SUCCESS))
 
             _appliedJobPostings.value = _appliedJobPostings.value?.map {
                 when (it.jobPostingType) {
@@ -211,7 +211,7 @@ class WorkerJobPostingViewModel @Inject constructor(
                     }
                 }
             }
-        }.onFailure { errorHandlerHelper.sendError(it) }
+        }.onFailure { errorHelper.sendError(it) }
     }
 }
 

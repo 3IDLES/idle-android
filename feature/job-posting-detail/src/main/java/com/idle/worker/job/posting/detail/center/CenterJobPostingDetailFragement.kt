@@ -107,7 +107,7 @@ internal class CenterJobPostingDetailFragment : BaseComposeFragment() {
                                 else setJobPostingState(JobPostingDetailState.SUMMARY)
                             },
                             showSnackBar = {
-                                eventHandlerHelper.sendEvent(
+                                eventHelper.sendEvent(
                                     MainEvent.ShowToast(it)
                                 )
                             }

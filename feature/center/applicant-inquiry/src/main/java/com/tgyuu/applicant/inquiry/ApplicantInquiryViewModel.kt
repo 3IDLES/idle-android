@@ -2,7 +2,7 @@ package com.tgyuu.applicant.inquiry
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.idle.domain.model.error.ErrorHandler
+import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.jobposting.Applicant
 import com.idle.domain.model.jobposting.JobPostingSummary
 import com.idle.domain.usecase.jobposting.GetApplicantsInfoUseCase
@@ -15,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ApplicantInquiryViewModel @Inject constructor(
     private val getApplicantsInfoUseCase: GetApplicantsInfoUseCase,
-    private val errorHandlerHelper: ErrorHandler,
+    private val errorHelper: ErrorHelper,
     val navigationHelper: com.idle.navigation.NavigationHelper,
 ) : ViewModel() {
     private val _jobPostingSummary = MutableStateFlow<JobPostingSummary?>(null)
@@ -28,6 +28,6 @@ class ApplicantInquiryViewModel @Inject constructor(
         getApplicantsInfoUseCase(jobPostingId).onSuccess { (jobPostingSummary, applicants) ->
             _jobPostingSummary.value = jobPostingSummary
             _applicants.value = applicants
-        }.onFailure { errorHandlerHelper.sendError(it) }
+        }.onFailure { errorHelper.sendError(it) }
     }
 }

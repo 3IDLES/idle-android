@@ -4,12 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.analytics.error.ErrorLoggingHelper
 import com.idle.auth.R
-import com.idle.binding.EventHandlerHelper
+import com.idle.binding.EventHelper
 import com.idle.binding.MainEvent.ShowToast
 import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.config.ForceUpdate
 import com.idle.domain.model.error.ApiErrorCode
-import com.idle.domain.model.error.ErrorHandler
+import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.jobposting.SharedJobPostingInfo
 import com.idle.domain.model.profile.CenterManagerAccountStatus
@@ -49,8 +49,8 @@ class MainViewModel @Inject constructor(
     private val jobPostingRepository: JobPostingRepository,
 //    private val connectWebSocketUseCase: ConnectWebSocketUseCase,
 //    private val disconnectWebSocketUseCase: DisconnectWebSocketUseCase,
-    private val errorHandlerHelper: ErrorHandler,
-    private val eventHandlerHelper: EventHandlerHelper,
+    private val errorHelper: ErrorHelper,
+    private val eventHelper: EventHelper,
     val errorLoggingHelper: ErrorLoggingHelper,
     val navigationHelper: com.idle.navigation.NavigationHelper,
 ) : ViewModel() {
@@ -60,7 +60,7 @@ class MainViewModel @Inject constructor(
     private val _forceUpdate = MutableStateFlow<ForceUpdate?>(null)
     val forceUpdate = _forceUpdate.asStateFlow()
 
-    val eventFlow = eventHandlerHelper.eventFlow
+    val eventFlow = eventHelper.eventFlow
         .shareIn(
             scope = viewModelScope,
             started = SharingStarted.Lazily,
@@ -89,7 +89,7 @@ class MainViewModel @Inject constructor(
     internal fun getForceUpdateInfo() = viewModelScope.launch {
         getForceUpdateInfoUseCase().onSuccess {
             _forceUpdate.value = it
-        }.onFailure { errorHandlerHelper.sendError(it) }
+        }.onFailure { errorHelper.sendError(it) }
     }
 
     internal fun initializeUserSession() = viewModelScope.launch {
@@ -113,7 +113,7 @@ class MainViewModel @Inject constructor(
     }
 
     internal fun readNotification(notificationId: String) = viewModelScope.launch {
-        readNotificationUseCase(notificationId).onFailure { errorHandlerHelper.sendError(it) }
+        readNotificationUseCase(notificationId).onFailure { errorHelper.sendError(it) }
     }
 
     private suspend fun getAccessTokenAndUserRole(): Pair<String, String> = coroutineScope {
@@ -169,7 +169,7 @@ class MainViewModel @Inject constructor(
     }
 
     private fun handleError() = viewModelScope.launch {
-        errorHandlerHelper.errorEvent.collect { exception ->
+        errorHelper.errorEvent.collect { exception ->
             errorLoggingHelper.logError(exception)
 
             when (exception) {
@@ -186,13 +186,13 @@ class MainViewModel @Inject constructor(
                                 )
                             )
 
-                        else -> eventHandlerHelper.sendEvent(ShowToast(exception.print()))
+                        else -> eventHelper.sendEvent(ShowToast(exception.print()))
                     }
                     return@collect
                 }
 
-                is SocketTimeoutException -> eventHandlerHelper.sendEvent(ShowToast("서버 응답 시간이 초과되었습니다. 잠시 후 다시 시도해 주세요."))
-                is IOException -> eventHandlerHelper.sendEvent(ShowToast("인터넷 연결이 불안정합니다. 네트워크 상태를 확인해 주세요."))
+                is SocketTimeoutException -> eventHelper.sendEvent(ShowToast("서버 응답 시간이 초과되었습니다. 잠시 후 다시 시도해 주세요."))
+                is IOException -> eventHelper.sendEvent(ShowToast("인터넷 연결이 불안정합니다. 네트워크 상태를 확인해 주세요."))
                 else -> {}
             }
         }

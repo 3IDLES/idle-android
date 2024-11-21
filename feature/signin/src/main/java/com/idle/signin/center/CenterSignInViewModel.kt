@@ -6,9 +6,9 @@ import com.idle.analytics.AnalyticsEvent
 import com.idle.analytics.AnalyticsEvent.PropertiesKeys.ACTION_NAME
 import com.idle.analytics.AnalyticsEvent.PropertiesKeys.ACTION_RESULT
 import com.idle.analytics.businessmetric.AnalyticsHelper
-import com.idle.binding.EventHandlerHelper
+import com.idle.binding.EventHelper
 import com.idle.domain.model.error.ApiErrorCode
-import com.idle.domain.model.error.ErrorHandler
+import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.error.HttpResponseStatus
 import com.idle.domain.model.profile.CenterManagerAccountStatus
@@ -32,8 +32,8 @@ class CenterSignInViewModel @Inject constructor(
     private val getCenterStatusUseCase: GetCenterStatusUseCase,
     private val getMyCenterProfileUseCase: GetMyCenterProfileUseCase,
     private val analyticsHelper: AnalyticsHelper,
-    private val errorHandlerHelper: ErrorHandler,
-    val eventHandlerHelper: EventHandlerHelper,
+    private val errorHelper: ErrorHelper,
+    val eventHelper: EventHelper,
     val navigationHelper: com.idle.navigation.NavigationHelper,
 ) : ViewModel() {
     private val _centerId = MutableStateFlow("")
@@ -75,7 +75,7 @@ class CenterSignInViewModel @Inject constructor(
                     return@launch
                 }
 
-                errorHandlerHelper.sendError(it)
+                errorHelper.sendError(it)
 
                 analyticsHelper.logEvent(
                     AnalyticsEvent(
@@ -92,7 +92,7 @@ class CenterSignInViewModel @Inject constructor(
     private fun handleCenterLoginSuccess() = viewModelScope.launch {
         getCenterStatusUseCase().onSuccess { centerStatusResponse ->
             navigateBasedOnCenterStatus(centerStatusResponse.centerManagerAccountStatus)
-        }.onFailure { errorHandlerHelper.sendError(it) }
+        }.onFailure { errorHelper.sendError(it) }
     }
 
     private fun navigateBasedOnCenterStatus(status: CenterManagerAccountStatus) {
@@ -119,7 +119,7 @@ class CenterSignInViewModel @Inject constructor(
                     NavigateTo(CenterRegister, R.id.centerSignInFragment)
                 )
             } else {
-                errorHandlerHelper.sendError(it)
+                errorHelper.sendError(it)
             }
         }
     }

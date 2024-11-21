@@ -4,10 +4,10 @@ import android.net.Uri
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.idle.binding.EventHandlerHelper
+import com.idle.binding.EventHelper
 import com.idle.binding.MainEvent
 import com.idle.binding.ToastType
-import com.idle.domain.model.error.ErrorHandler
+import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.profile.JobSearchStatus
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
@@ -24,8 +24,8 @@ class WorkerProfileViewModel @Inject constructor(
     private val getLocalMyWorkerProfileUseCase: GetLocalMyWorkerProfileUseCase,
     private val getWorkerProfileUseCase: GetWorkerProfileUseCase,
     private val updateWorkerProfileUseCase: UpdateWorkerProfileUseCase,
-    private val errorHandlerHelper: ErrorHandler,
-    private val eventHandlerHelper: EventHandlerHelper,
+    private val errorHelper: ErrorHelper,
+    private val eventHelper: EventHelper,
 ) : ViewModel() {
     private val _workerProfile = MutableStateFlow<WorkerProfile?>(null)
     val workerProfile = _workerProfile.asStateFlow()
@@ -101,7 +101,7 @@ class WorkerProfileViewModel @Inject constructor(
             _roadNameAddress.value = it.roadNameAddress
             _lotNumberAddress.value = it.lotNumberAddress
             _jobSearchStatus.value = it.jobSearchStatus
-        }.onFailure { errorHandlerHelper.sendError(it) }
+        }.onFailure { errorHelper.sendError(it) }
     }
 
     internal fun getWorkerProfile(workerId: String) = viewModelScope.launch {
@@ -114,13 +114,13 @@ class WorkerProfileViewModel @Inject constructor(
             _roadNameAddress.value = it.roadNameAddress
             _lotNumberAddress.value = it.lotNumberAddress
             _jobSearchStatus.value = it.jobSearchStatus
-        }.onFailure { errorHandlerHelper.sendError(it) }
+        }.onFailure { errorHelper.sendError(it) }
     }
 
     internal fun updateWorkerProfile() = viewModelScope.launch {
         val workerProfile = _workerProfile.value
         if (workerProfile == null) {
-            eventHandlerHelper.sendEvent(MainEvent.ShowToast("로딩중입니다."))
+            eventHelper.sendEvent(MainEvent.ShowToast("로딩중입니다."))
             return@launch
         }
 
@@ -136,14 +136,14 @@ class WorkerProfileViewModel @Inject constructor(
             jobSearchStatus = _jobSearchStatus.value,
         ).onSuccess {
             getMyWorkerProfile()
-            eventHandlerHelper.sendEvent(
+            eventHelper.sendEvent(
                 MainEvent.ShowToast(
                     "정보 수정이 완료되었어요.",
                     toastType = ToastType.SUCCESS
                 )
             )
             setEditState(false)
-        }.onFailure { errorHandlerHelper.sendError(it) }
+        }.onFailure { errorHelper.sendError(it) }
             .also { _isUpdateLoading.value = false }
     }
 }
