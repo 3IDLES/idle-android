@@ -2,10 +2,10 @@ package com.idle.worker.job.posting.detail.center
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.idle.binding.EventHandlerHelper
+import com.idle.binding.EventHelper
 import com.idle.binding.MainEvent
 import com.idle.binding.ToastType
-import com.idle.domain.model.error.ErrorHandler
+import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.jobposting.CenterJobPostingDetail
 import com.idle.domain.model.jobposting.EditJobPostingDetail
 import com.idle.domain.model.jobposting.JobPostingStatus
@@ -32,8 +32,8 @@ class CenterJobPostingDetailViewModel @Inject constructor(
     private val updateJobPostingUseCase: UpdateJobPostingUseCase,
     private val endJobPostingUseCase: EndJobPostingUseCase,
     private val deleteJobPostingUseCase: DeleteJobPostingUseCase,
-    private val errorHandlerHelper: ErrorHandler,
-    val eventHandlerHelper: EventHandlerHelper,
+    private val errorHelper: ErrorHelper,
+    val eventHelper: EventHelper,
     val navigationHelper: com.idle.navigation.NavigationHelper,
 ) : ViewModel() {
     private val _profile = MutableStateFlow<CenterProfile?>(null)
@@ -55,19 +55,19 @@ class CenterJobPostingDetailViewModel @Inject constructor(
     private fun getMyCenterProfile() = viewModelScope.launch {
         getLocalMyCenterProfileUseCase().onSuccess {
             _profile.value = it
-        }.onFailure { errorHandlerHelper.sendError(it) }
+        }.onFailure { errorHelper.sendError(it) }
     }
 
     internal fun getCenterJobPostingDetail(jobPostingId: String) = viewModelScope.launch {
         getCenterJobPostingDetailUseCase(jobPostingId)
             .onSuccess { _jobPostingDetail.value = it }
-            .onFailure { errorHandlerHelper.sendError(it) }
+            .onFailure { errorHelper.sendError(it) }
     }
 
     internal fun getApplicantsCount(jobPostingId: String) = viewModelScope.launch {
         getApplicantsCountUseCase(jobPostingId).onSuccess {
             _applicantsCount.value = it
-        }.onFailure { errorHandlerHelper.sendError(it) }
+        }.onFailure { errorHelper.sendError(it) }
     }
 
     internal fun setJobPostingState(state: JobPostingDetailState) {
@@ -77,7 +77,7 @@ class CenterJobPostingDetailViewModel @Inject constructor(
     internal fun updateJobPosting(editJobPostingDetail: EditJobPostingDetail) =
         viewModelScope.launch {
             if (editJobPostingDetail.applyMethod.isEmpty()) {
-                eventHandlerHelper.sendEvent(
+                eventHelper.sendEvent(
                     MainEvent.ShowToast("반드시 1개 이상의 지원 방법을 선택해야합니다.")
                 )
                 return@launch
@@ -115,21 +115,21 @@ class CenterJobPostingDetailViewModel @Inject constructor(
                     .ifBlank { null },
             ).onSuccess {
                 getCenterJobPostingDetail(_jobPostingDetail.value?.id ?: return@launch)
-                eventHandlerHelper.sendEvent(
+                eventHelper.sendEvent(
                     MainEvent.ShowToast("수정이 완료되었어요.", ToastType.SUCCESS)
                 )
                 _jobPostingState.value = JobPostingDetailState.SUMMARY
-            }.onFailure { errorHandlerHelper.sendError(it) }
+            }.onFailure { errorHelper.sendError(it) }
         }
 
     internal fun endJobPosting(jobPostingId: String) = viewModelScope.launch {
         endJobPostingUseCase(jobPostingId).onSuccess {
             _jobPostingDetail.value =
                 _jobPostingDetail.value?.copy(jobPostingStatus = JobPostingStatus.COMPLETED)
-            eventHandlerHelper.sendEvent(
+            eventHelper.sendEvent(
                 MainEvent.ShowToast("채용을 종료했어요.", ToastType.SUCCESS)
             )
-        }.onFailure { errorHandlerHelper.sendError(it) }
+        }.onFailure { errorHelper.sendError(it) }
     }
 
     internal fun deleteJobPosting(jobPostingId: String) = viewModelScope.launch {
@@ -140,7 +140,7 @@ class CenterJobPostingDetailViewModel @Inject constructor(
                     R.id.centerJobPostingDetailFragment
                 )
             )
-        }.onFailure { errorHandlerHelper.sendError(it) }
+        }.onFailure { errorHelper.sendError(it) }
     }
 }
 

@@ -3,7 +3,7 @@ package com.idle.center.chatting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.domain.model.chatting.ChatRoom
-import com.idle.domain.model.error.ErrorHandler
+import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.usecase.chatting.GetChatRoomListUseCase
 import com.idle.domain.usecase.chatting.SubscribeChatMessageUseCase
 import com.idle.domain.usecase.profile.GetCenterProfileUseCase
@@ -20,7 +20,7 @@ class CenterChattingViewModel @Inject constructor(
     private val getCenterProfileUseCase: GetCenterProfileUseCase,
     private val getChatRoomListUseCase: GetChatRoomListUseCase,
     private val subscribeChatMessageUseCase: SubscribeChatMessageUseCase,
-    private val errorHandler: ErrorHandler,
+    private val errorHelper: ErrorHelper,
     val navigationHelper: com.idle.navigation.NavigationHelper,
 ) : ViewModel() {
     private val _chatRoomMap = MutableStateFlow<LinkedHashMap<String, ChatRoom>>(LinkedHashMap())
@@ -71,6 +71,6 @@ class CenterChattingViewModel @Inject constructor(
             _chatRoomMap.value = LinkedHashMap<String, ChatRoom>().apply {
                 it.forEach { chatRoom -> put(chatRoom.id, chatRoom) }
             }
-        }.onFailure { errorHandler.sendError(it) }
+        }.onFailure { errorHelper.sendError(it) }
     }
 }

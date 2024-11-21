@@ -4,12 +4,12 @@ import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.analytics.businessmetric.AnalyticsHelper
-import com.idle.binding.EventHandlerHelper
+import com.idle.binding.EventHelper
 import com.idle.domain.model.CountDownTimer
 import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
 import com.idle.domain.model.auth.Gender
-import com.idle.domain.model.error.ErrorHandler
+import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.error.HttpResponseStatus
 import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
@@ -38,8 +38,8 @@ class WorkerSignUpViewModel @Inject constructor(
     private val confirmAuthCodeUseCase: ConfirmAuthCodeUseCase,
     private val countDownTimer: CountDownTimer,
     private val analyticsHelper: AnalyticsHelper,
-    private val errorHandlerHelper: ErrorHandler,
-    val eventHandlerHelper: EventHandlerHelper,
+    private val errorHelper: ErrorHelper,
+    val eventHelper: EventHelper,
     val navigationHelper: NavigationHelper,
 ) : ViewModel() {
 
@@ -120,7 +120,7 @@ class WorkerSignUpViewModel @Inject constructor(
     internal fun sendPhoneNumber() = viewModelScope.launch {
         sendPhoneNumberUseCase(_workerPhoneNumber.value)
             .onSuccess { startTimer() }
-            .onFailure { errorHandlerHelper.sendError(it) }
+            .onFailure { errorHelper.sendError(it) }
     }
 
     private fun startTimer() {
@@ -173,7 +173,7 @@ class WorkerSignUpViewModel @Inject constructor(
                     return@launch
                 }
 
-                errorHandlerHelper.sendError(it)
+                errorHelper.sendError(it)
             }
         }
     }
@@ -194,7 +194,7 @@ class WorkerSignUpViewModel @Inject constructor(
                     R.id.workerSignUpFragment
                 )
             )
-        }.onFailure { errorHandlerHelper.sendError(it) }
+        }.onFailure { errorHelper.sendError(it) }
     }
 }
 

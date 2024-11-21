@@ -1,8 +1,8 @@
 package com.idle.signin.center.newpassword
 
-import com.idle.binding.EventHandlerHelper
+import com.idle.binding.EventHelper
 import com.idle.domain.model.CountDownTimer
-import com.idle.domain.model.error.ErrorHandler
+import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
 import com.idle.domain.usecase.auth.GenerateNewPasswordUseCase
 import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
@@ -25,8 +25,8 @@ class NewPasswordViewModelTest {
     private lateinit var confirmAuthCodeUseCase: ConfirmAuthCodeUseCase
     private lateinit var generateNewPasswordUseCase: GenerateNewPasswordUseCase
     private lateinit var countDownTimer: CountDownTimer
-    private lateinit var errorHandlerHelper: ErrorHandler
-    private lateinit var eventHandlerHelper: EventHandlerHelper
+    private lateinit var errorHelper: ErrorHelper
+    private lateinit var eventHelper: EventHelper
     private lateinit var navigationHelper: com.idle.navigation.NavigationHelper
     private lateinit var viewModel: NewPasswordViewModel
     private lateinit var testDispatcher: TestDispatcher
@@ -40,8 +40,8 @@ class NewPasswordViewModelTest {
         confirmAuthCodeUseCase = mockk(relaxed = true)
         generateNewPasswordUseCase = mockk(relaxed = true)
         countDownTimer = mockk(relaxed = true)
-        errorHandlerHelper = mockk(relaxed = true)
-        eventHandlerHelper = mockk(relaxed = true)
+        errorHelper = mockk(relaxed = true)
+        eventHelper = mockk(relaxed = true)
         navigationHelper = mockk(relaxed = true)
 
         viewModel = NewPasswordViewModel(
@@ -49,8 +49,8 @@ class NewPasswordViewModelTest {
             confirmAuthCodeUseCase = confirmAuthCodeUseCase,
             generateNewPasswordUseCase = generateNewPasswordUseCase,
             countDownTimer = countDownTimer,
-            errorHandlerHelper = errorHandlerHelper,
-            eventHandlerHelper = eventHandlerHelper,
+            errorHelper = errorHelper,
+            eventHelper = eventHelper,
             navigationHelper = navigationHelper
         )
     }

@@ -5,7 +5,7 @@ import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.center.register.info.R
-import com.idle.domain.model.error.ErrorHandler
+import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.usecase.profile.RegisterCenterProfileUseCase
 import com.idle.navigation.DeepLinkDestination.CenterRegisterComplete
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,8 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class RegisterCenterInfoViewModel @Inject constructor(
     private val registerCenterProfileUseCase: RegisterCenterProfileUseCase,
-    private val errorHandlerHelper: ErrorHandler,
-    val navigationHelper: com.idle.navigation.NavigationHelper,
+    private val errorHelper: ErrorHelper,
+    private val navigationHelper: com.idle.navigation.NavigationHelper,
 ) : ViewModel() {
 
     private val _registrationStep = MutableStateFlow(RegistrationStep.INFO)
@@ -60,7 +60,7 @@ class RegisterCenterInfoViewModel @Inject constructor(
                     R.id.registerCenterInfoFragment
                 )
             )
-        }.onFailure { errorHandlerHelper.sendError(it) }
+        }.onFailure { errorHelper.sendError(it) }
     }
 
     internal fun setRegistrationStep(step: RegistrationStep) {

@@ -3,12 +3,12 @@ package com.idle.signin.center.newpassword
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.idle.binding.EventHandlerHelper
+import com.idle.binding.EventHelper
 import com.idle.binding.MainEvent
 import com.idle.domain.model.CountDownTimer
 import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
-import com.idle.domain.model.error.ErrorHandler
+import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.error.HttpResponseStatus
 import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
@@ -35,8 +35,8 @@ class NewPasswordViewModel @Inject constructor(
     private val confirmAuthCodeUseCase: ConfirmAuthCodeUseCase,
     private val generateNewPasswordUseCase: GenerateNewPasswordUseCase,
     private val countDownTimer: CountDownTimer,
-    private val errorHandlerHelper: ErrorHandler,
-    private val eventHandlerHelper: EventHandlerHelper,
+    private val errorHelper: ErrorHelper,
+    private val eventHelper: EventHelper,
     private val navigationHelper: com.idle.navigation.NavigationHelper,
 ) : ViewModel() {
     private val _phoneNumber = MutableStateFlow("")
@@ -154,7 +154,7 @@ class NewPasswordViewModel @Inject constructor(
     internal fun sendPhoneNumber() = viewModelScope.launch {
         sendPhoneNumberUseCase(_phoneNumber.value)
             .onSuccess { startTimer() }
-            .onFailure { eventHandlerHelper.sendEvent(MainEvent.ShowToast(it.message.toString())) }
+            .onFailure { eventHelper.sendEvent(MainEvent.ShowToast(it.message.toString())) }
     }
 
     internal fun confirmAuthCode() = viewModelScope.launch {
@@ -171,7 +171,7 @@ class NewPasswordViewModel @Inject constructor(
                 return@launch
             }
 
-            errorHandlerHelper.sendError(it)
+            errorHelper.sendError(it)
         }
     }
 
@@ -179,7 +179,7 @@ class NewPasswordViewModel @Inject constructor(
         val passwordPattern = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d!@#\$%^&*()_+=-]{8,20}$".toRegex()
 
         if (!_newPassword.value.matches(passwordPattern)) {
-            eventHandlerHelper.sendEvent(MainEvent.ShowToast("비밀번호가 형식에 맞지 않습니다."))
+            eventHelper.sendEvent(MainEvent.ShowToast("비밀번호가 형식에 맞지 않습니다."))
             return@launch
         }
 
@@ -193,7 +193,7 @@ class NewPasswordViewModel @Inject constructor(
                     popUpTo = R.id.newPasswordFragment,
                 )
             )
-        }.onFailure { errorHandlerHelper.sendError(it) }
+        }.onFailure { errorHelper.sendError(it) }
     }
 
     private fun startTimer() {

@@ -60,7 +60,7 @@ internal class AuthFragment : BaseComposeFragment() {
 
             LaunchedEffect(true) {
                 if (args.toastMsg != "default") {
-                    eventHandlerHelper.sendEvent(
+                    eventHelper.sendEvent(
                         MainEvent.ShowToast(
                             msg = args.toastMsg,
                             toastType = ToastType.create(args.toastType)

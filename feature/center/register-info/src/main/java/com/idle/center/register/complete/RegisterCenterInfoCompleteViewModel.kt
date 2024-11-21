@@ -2,7 +2,7 @@ package com.idle.center.register.complete
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.idle.binding.EventHandlerHelper
+import com.idle.binding.EventHelper
 import com.idle.binding.MainEvent
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.usecase.profile.GetLocalMyCenterProfileUseCase
@@ -15,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class RegisterCenterInfoCompleteViewModel @Inject constructor(
     private val getLocalMyCenterProfileUseCase: GetLocalMyCenterProfileUseCase,
-    private val eventHandlerHelper: EventHandlerHelper,
+    private val eventHelper: EventHelper,
     val navigationHelper: com.idle.navigation.NavigationHelper,
 ) : ViewModel() {
     private val _centerProfile = MutableStateFlow<CenterProfile?>(null)
@@ -26,7 +26,7 @@ class RegisterCenterInfoCompleteViewModel @Inject constructor(
             getLocalMyCenterProfileUseCase()
                 .onSuccess { _centerProfile.value = it }
                 .onFailure {
-                    eventHandlerHelper.sendEvent(MainEvent.ShowToast(it.toString()))
+                    eventHelper.sendEvent(MainEvent.ShowToast(it.toString()))
                 }
         }
     }

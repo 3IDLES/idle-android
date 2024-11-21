@@ -7,7 +7,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class EventHandlerHelper @Inject constructor() {
+class EventHelper @Inject constructor() {
     private val _eventFlow = Channel<MainEvent>(BUFFERED)
     val eventFlow = _eventFlow.receiveAsFlow()
 

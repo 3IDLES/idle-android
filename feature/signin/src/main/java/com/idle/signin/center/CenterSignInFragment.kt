@@ -54,7 +54,7 @@ internal class CenterSignInFragment : BaseComposeFragment() {
 
             LaunchedEffect(Unit) {
                 if (args.toastMsg != "default") {
-                    eventHandlerHelper.sendEvent(
+                    eventHelper.sendEvent(
                         MainEvent.ShowToast(
                             args.toastMsg,
                             ToastType.SUCCESS

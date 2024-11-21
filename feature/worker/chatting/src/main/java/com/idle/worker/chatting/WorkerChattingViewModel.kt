@@ -3,7 +3,7 @@ package com.idle.worker.chatting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.domain.model.chatting.ChatRoom
-import com.idle.domain.model.error.ErrorHandler
+import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.usecase.chatting.GetChatRoomListUseCase
 import com.idle.domain.usecase.chatting.SubscribeChatMessageUseCase
@@ -23,7 +23,7 @@ class WorkerChattingViewModel @Inject constructor(
     private val getCenterProfileUseCase: GetCenterProfileUseCase,
     private val getChatRoomListUseCase: GetChatRoomListUseCase,
     private val subscribeChatMessageUseCase: SubscribeChatMessageUseCase,
-    private val errorHandler: ErrorHandler,
+    private val errorHelper: ErrorHelper,
     val navigationHelper: com.idle.navigation.NavigationHelper,
 ) : ViewModel() {
     private var myProfile: WorkerProfile? = null
@@ -41,7 +41,7 @@ class WorkerChattingViewModel @Inject constructor(
         viewModelScope.launch {
             getLocalMyWorkerProfileUseCase().onSuccess {
                 myProfile = it
-            }.onFailure { errorHandler.sendError(it) }
+            }.onFailure { errorHelper.sendError(it) }
         }
     }
 
@@ -83,6 +83,6 @@ class WorkerChattingViewModel @Inject constructor(
             _chatRoomMap.value = LinkedHashMap<String, ChatRoom>().apply {
                 it.forEach { chatRoom -> put(chatRoom.id, chatRoom) }
             }
-        }.onFailure { errorHandler.sendError(it) }
+        }.onFailure { errorHelper.sendError(it) }
     }
 }

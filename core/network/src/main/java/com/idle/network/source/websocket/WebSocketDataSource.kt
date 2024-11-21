@@ -1,6 +1,6 @@
 package com.idle.network.source.websocket
 
-import com.idle.domain.model.error.ErrorHandler
+import com.idle.domain.model.error.ErrorHelper
 import com.idle.network.BuildConfig
 import com.idle.network.di.WebSocketOkHttpClient
 import com.idle.network.model.chatting.ChatMessageResponse
@@ -15,7 +15,7 @@ import javax.inject.Singleton
 class WebSocketDataSource @Inject constructor(
     @WebSocketOkHttpClient private val client: OkHttpClient,
     private val chatMessageListener: ChatMessageListener,
-    private val errorHandlerHelper: ErrorHandler,
+    private val errorHelper: ErrorHelper,
 ) {
     private lateinit var chatMessageWebSocket: WebSocket
 
