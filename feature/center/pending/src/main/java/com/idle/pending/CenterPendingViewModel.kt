@@ -5,11 +5,14 @@ import androidx.lifecycle.viewModelScope
 import com.idle.binding.EventHelper
 import com.idle.binding.MainEvent
 import com.idle.binding.ToastType.SUCCESS
+import com.idle.center.pending.R
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.profile.CenterManagerAccountStatus
 import com.idle.domain.usecase.auth.LogoutCenterUseCase
 import com.idle.domain.usecase.auth.SendCenterVerificationRequestUseCase
 import com.idle.domain.usecase.profile.GetCenterStatusUseCase
+import com.idle.navigation.DeepLinkDestination
+import com.idle.navigation.NavigationEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,7 +35,7 @@ class CenterPendingViewModel @Inject constructor(
 
     private var pollingJob = MutableStateFlow(false)
 
-    init{
+    init {
         subscribeCenterStatus()
     }
 
@@ -43,7 +46,7 @@ class CenterPendingViewModel @Inject constructor(
     internal fun logout() = viewModelScope.launch {
         logoutCenterUseCase().onSuccess {
             navigationHelper.navigateTo(
-                com.idle.navigation.NavigationEvent.NavigateToAuthWithClearBackStack(
+                NavigationEvent.NavigateToAuthWithClearBackStack(
                     toastMsg = "로그아웃이 완료되었습니다.",
                     toastType = "SUCCESS"
                 )
@@ -73,7 +76,14 @@ class CenterPendingViewModel @Inject constructor(
             when (it.centerManagerAccountStatus) {
                 CenterManagerAccountStatus.APPROVED -> {
                     pollingJob.emit(false)
+                    navigationHelper.navigateTo(
+                        NavigationEvent.NavigateTo(
+                            destination = DeepLinkDestination.CenterHome,
+                            popUpTo = R.id.centerPendingFragment,
+                        )
+                    )
 
+                    eventHelper.sendEvent(MainEvent.ShowToast("센터 인증이 완료되었습니다.", SUCCESS))
                 }
 
                 else -> Unit
