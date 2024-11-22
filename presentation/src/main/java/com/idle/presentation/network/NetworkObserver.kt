@@ -55,7 +55,7 @@ class NetworkObserver @Inject constructor(context: Context) {
     internal fun unsubscribeNetworkCallback() =
         connectivityManager.unregisterNetworkCallback(networkCallback)
 
-    private fun subscribeNetworkCallback() {
+    internal fun subscribeNetworkCallback() {
         val networkRequest = NetworkRequest.Builder()
             .addTransportType(TRANSPORT_WIFI)
             .addTransportType(TRANSPORT_CELLULAR)

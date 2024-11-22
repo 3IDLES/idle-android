@@ -127,7 +127,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        networkObserver.checkNetworkState()
+        networkObserver.subscribeNetworkCallback()
         if (networkObserver.networkState.value == NetworkState.CONNECTED) {
             viewModel.connectWebSocket()
         }

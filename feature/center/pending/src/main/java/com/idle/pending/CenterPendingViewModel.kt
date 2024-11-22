@@ -6,12 +6,16 @@ import com.idle.binding.EventHelper
 import com.idle.binding.MainEvent
 import com.idle.binding.ToastType.SUCCESS
 import com.idle.center.pending.R
+import com.idle.domain.model.error.ApiErrorCode
 import com.idle.domain.model.error.ErrorHelper
+import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.profile.CenterManagerAccountStatus
 import com.idle.domain.usecase.auth.LogoutCenterUseCase
 import com.idle.domain.usecase.auth.SendCenterVerificationRequestUseCase
 import com.idle.domain.usecase.profile.GetCenterStatusUseCase
-import com.idle.navigation.DeepLinkDestination
+import com.idle.domain.usecase.profile.GetMyCenterProfileUseCase
+import com.idle.navigation.DeepLinkDestination.CenterHome
+import com.idle.navigation.DeepLinkDestination.CenterRegister
 import com.idle.navigation.NavigationEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -26,6 +30,7 @@ class CenterPendingViewModel @Inject constructor(
     private val logoutCenterUseCase: LogoutCenterUseCase,
     private val sendCenterVerificationRequestUseCase: SendCenterVerificationRequestUseCase,
     private val getCenterStatusUseCase: GetCenterStatusUseCase,
+    private val getMyCenterProfileUseCase: GetMyCenterProfileUseCase,
     private val errorHelper: ErrorHelper,
     private val eventHelper: EventHelper,
     private val navigationHelper: com.idle.navigation.NavigationHelper,
@@ -75,19 +80,30 @@ class CenterPendingViewModel @Inject constructor(
         getCenterStatusUseCase().onSuccess {
             when (it.centerManagerAccountStatus) {
                 CenterManagerAccountStatus.APPROVED -> {
-                    pollingJob.emit(false)
-                    navigationHelper.navigateTo(
-                        NavigationEvent.NavigateTo(
-                            destination = DeepLinkDestination.CenterHome,
-                            popUpTo = R.id.centerPendingFragment,
-                        )
-                    )
-
+                    handleApprovedCenterStatus()
                     eventHelper.sendEvent(MainEvent.ShowToast("센터 인증이 완료되었습니다.", SUCCESS))
                 }
 
                 else -> Unit
             }
         }.onFailure { errorHelper.sendError(it) }
+    }
+
+    private fun handleApprovedCenterStatus() = viewModelScope.launch {
+        getMyCenterProfileUseCase().onSuccess {
+            navigationHelper.navigateTo(
+                NavigationEvent.NavigateTo(CenterHome, R.id.centerPendingFragment)
+            )
+        }.onFailure {
+            val error = it as HttpResponseException
+            if (error.apiErrorCode == ApiErrorCode.CenterNotFound) {
+                navigationHelper.navigateTo(
+                    NavigationEvent.NavigateTo(
+                        CenterRegister,
+                        R.id.centerPendingFragment,
+                    )
+                )
+            }
+        }
     }
 }

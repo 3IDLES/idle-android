@@ -703,7 +703,7 @@ internal fun JobPostingScreen(
 
                                 CareProgressBar(
                                     currentStep = jobPostingStep.step,
-                                    totalSteps = JobPostingStep.entries.size - 1,
+                                    totalSteps = JobPostingStep.entries.size - 2,
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(start = 8.dp, top = 8.dp, bottom = 8.dp),
