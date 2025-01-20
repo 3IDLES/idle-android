@@ -23,6 +23,7 @@ import com.idle.domain.usecase.notification.GetUnreadNotificationCountUseCase
 import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
 import com.idle.navigation.DeepLinkDestination
 import com.idle.navigation.NavigationEvent
+import com.idle.navigation.NavigationHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -43,7 +44,7 @@ class WorkerHomeViewModel @Inject constructor(
     private val jobPostingRepository: JobPostingRepository,
     private val errorHelper: ErrorHelper,
     private val eventHelper: EventHelper,
-    val navigationHelper: com.idle.navigation.NavigationHelper,
+    val navigationHelper: NavigationHelper,
 ) : ViewModel() {
     private val _profile = MutableStateFlow<WorkerProfile?>(null)
     val profile = _profile.asStateFlow()

@@ -17,6 +17,7 @@ import com.idle.domain.usecase.profile.GetMyCenterProfileUseCase
 import com.idle.navigation.DeepLinkDestination.CenterHome
 import com.idle.navigation.DeepLinkDestination.CenterRegister
 import com.idle.navigation.NavigationEvent
+import com.idle.navigation.NavigationHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,7 +34,7 @@ class CenterPendingViewModel @Inject constructor(
     private val getMyCenterProfileUseCase: GetMyCenterProfileUseCase,
     private val errorHelper: ErrorHelper,
     private val eventHelper: EventHelper,
-    private val navigationHelper: com.idle.navigation.NavigationHelper,
+    private val navigationHelper: NavigationHelper,
 ) : ViewModel() {
     private val _status = MutableStateFlow(CenterManagerAccountStatus.UNKNOWN)
     val status = _status.asStateFlow()
