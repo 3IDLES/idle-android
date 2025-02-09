@@ -17,7 +17,7 @@ class ChattingRepositoryImpl @Inject constructor(
         webSocketDataSource.disconnectWebSocket()
 
     override fun subscribeChatMessage(): Flow<ChatMessage> =
-        webSocketDataSource.getChatMessageFlow()
+        webSocketDataSource.chatMessageFlow
             .filterNotNull()
             .map { it.toVO() }
 }
