@@ -1,6 +1,5 @@
 package com.idle.network.source.websocket
 
-import com.idle.domain.model.error.ErrorHelper
 import com.idle.network.BuildConfig
 import com.idle.network.di.WebSocketOkHttpClient
 import com.idle.network.model.chatting.ChatMessageResponse
@@ -15,9 +14,9 @@ import javax.inject.Singleton
 class WebSocketDataSource @Inject constructor(
     @WebSocketOkHttpClient private val client: OkHttpClient,
     private val chatMessageListener: ChatMessageListener,
-    private val errorHelper: ErrorHelper,
 ) {
     private lateinit var chatMessageWebSocket: WebSocket
+    private var connectionAttempts = 0
 
     fun connectWebSocket(): Result<Unit> {
         return try {
@@ -26,9 +25,15 @@ class WebSocketDataSource @Inject constructor(
                 .build()
 
             chatMessageWebSocket = client.newWebSocket(chatMessageRequest, chatMessageListener)
+            connectionAttempts = 0
             Result.success(Unit)
         } catch (e: Exception) {
-            Result.failure(e)
+            if (connectionAttempts < MAX_RETRY_ATTEMPTS) {
+                connectionAttempts++
+                connectWebSocket()
+            } else {
+                Result.failure(e)
+            }
         }
     }
 
@@ -44,4 +49,8 @@ class WebSocketDataSource @Inject constructor(
     }
 
     fun getChatMessageFlow(): StateFlow<ChatMessageResponse?> = chatMessageListener.chatMessageFlow
+
+    companion object {
+        private const val MAX_RETRY_ATTEMPTS = 5
+    }
 }
