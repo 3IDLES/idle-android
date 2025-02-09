@@ -36,10 +36,6 @@ class ChatMessageListener @Inject constructor(private val json: Json) : WebSocke
         _chatMessageChannel.value = chatMessageResponse
     }
 
-    override fun onOpen(webSocket: WebSocket, response: Response) {
-        super.onOpen(webSocket, response)
-    }
-
     override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
         super.onFailure(webSocket, t, response)
     }

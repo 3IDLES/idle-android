@@ -1,5 +1,6 @@
 package com.idle.presentation
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.analytics.error.ErrorLoggingHelper
@@ -16,6 +17,8 @@ import com.idle.domain.model.profile.CenterManagerAccountStatus
 import com.idle.domain.repositorry.jobposting.JobPostingRepository
 import com.idle.domain.usecase.auth.GetAccessTokenUseCase
 import com.idle.domain.usecase.auth.GetUserTypeUseCase
+import com.idle.domain.usecase.chatting.ConnectWebSocketUseCase
+import com.idle.domain.usecase.chatting.DisconnectWebSocketUseCase
 import com.idle.domain.usecase.config.GetForceUpdateInfoUseCase
 import com.idle.domain.usecase.notification.ReadNotificationUseCase
 import com.idle.domain.usecase.profile.GetCenterStatusUseCase
@@ -47,8 +50,8 @@ class MainViewModel @Inject constructor(
     private val getCenterStatusUseCase: GetCenterStatusUseCase,
     private val readNotificationUseCase: ReadNotificationUseCase,
     private val jobPostingRepository: JobPostingRepository,
-//    private val connectWebSocketUseCase: ConnectWebSocketUseCase,
-//    private val disconnectWebSocketUseCase: DisconnectWebSocketUseCase,
+    private val connectWebSocketUseCase: ConnectWebSocketUseCase,
+    private val disconnectWebSocketUseCase: DisconnectWebSocketUseCase,
     private val errorHelper: ErrorHelper,
     private val eventHelper: EventHelper,
     val errorLoggingHelper: ErrorLoggingHelper,
@@ -71,15 +74,16 @@ class MainViewModel @Inject constructor(
     }
 
     internal fun connectWebSocket() = viewModelScope.launch {
-//        Log.d("test", "웹소켓 연결")
-//        connectWebSocketUseCase().onSuccess { }
-//            .onFailure { }
+        Log.d("test", "웹소켓 연결")
+        connectWebSocketUseCase().onFailure {
+            Log.d("test", it.stackTraceToString())
+        }
     }
 
     internal fun disconnectWebSocket() = viewModelScope.launch {
-//        Log.d("test", "웹소켓 연결해제")
-//        disconnectWebSocketUseCase().onSuccess { }
-//            .onFailure { }
+        Log.d("test", "웹소켓 연결해제")
+        disconnectWebSocketUseCase().onSuccess { }
+            .onFailure { }
     }
 
     internal fun setNavigationMenuType(navigationMenuType: NavigationMenuType) {
