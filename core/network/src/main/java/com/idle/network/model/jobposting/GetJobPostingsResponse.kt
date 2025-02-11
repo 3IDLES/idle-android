@@ -32,6 +32,7 @@ data class WorkerJobPostingResponse(
     val endTime: String,
     val gender: String,
     val id: String,
+    val centerId: String,
     val isExperiencePreferred: Boolean,
     val lotNumberAddress: String,
     val payAmount: Int,
