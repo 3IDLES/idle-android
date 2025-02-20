@@ -33,7 +33,7 @@ class AuthInterceptor @Inject constructor(
             return false
         }
 
-        if (request.url.host.contains("idle-bucket.s3.ap-northeast-2.amazonaws.com")) {
+        if (request.url.host.contains("aws-caremeet-upload.s3.ap-northeast-2.amazonaws.com")) {
             return false
         }
 

@@ -44,7 +44,7 @@ import com.idle.designsystem.compose.component.CareHeadingTopBar
 import com.idle.designsystem.compose.component.LoadingCircle
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.UserType
-import com.idle.domain.model.chatting.ChatRoom
+import com.idle.domain.model.chat.ChatRoom
 import com.idle.domain.util.formatRelativeDateTime
 import com.idle.domain.util.formatUnReadNumber
 import dagger.hilt.android.AndroidEntryPoint
@@ -180,9 +180,9 @@ internal fun ChatRoomItem(
                 navigateTo(
                     com.idle.navigation.DeepLinkDestination.ChattingDetail(
                         chattingRoomId = chatRoom.id,
-                        receiverId = chatRoom.receiver,
+                        receiverId = chatRoom.myId,
                         receiverUserType = UserType.WORKER.apiValue,
-                        senderId = chatRoom.sender,
+                        senderId = chatRoom.opponentId,
                     )
                 )
             },
@@ -194,7 +194,7 @@ internal fun ChatRoomItem(
                 .padding(horizontal = 20.dp, vertical = 12.dp)
         ) {
             AsyncImage(
-                model = chatRoom.profileImageUrl,
+                model = chatRoom.opponentProfileImageUrl,
                 placeholder = painterResource(com.idle.designresource.R.drawable.ic_notification_placeholder),
                 error = painterResource(com.idle.designresource.R.drawable.ic_notification_placeholder),
                 contentDescription = "",
@@ -212,7 +212,7 @@ internal fun ChatRoomItem(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        text = chatRoom.sender,
+                        text = chatRoom.opponentName,
                         style = CareTheme.typography.subtitle3,
                         color = CareTheme.colors.black,
                         maxLines = 1,
@@ -223,7 +223,7 @@ internal fun ChatRoomItem(
                     )
 
                     Text(
-                        text = chatRoom.lastSentAt.formatRelativeDateTime(),
+                        text = chatRoom.lastMessageTime.formatRelativeDateTime(),
                         style = CareTheme.typography.caption1,
                         color = CareTheme.colors.gray500,
                     )

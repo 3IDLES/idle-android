@@ -39,7 +39,7 @@ import com.idle.compose.base.BaseComposeFragment
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.UserType
-import com.idle.domain.model.chatting.ChatMessage
+import com.idle.domain.model.chat.ChatMessage
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.util.formatYearMonthDate
@@ -72,7 +72,7 @@ internal class ChattingDetailFragment : BaseComposeFragment() {
             if (chatMessages != null && workerProfile != null && centerProfile != null) {
                 ChattingDetailScreen(
                     receiverId = receiverId,
-                    receiverUserType = receiverUserType,
+                    myUserType = receiverUserType,
                     workerProfile = workerProfile!!,
                     centerProfile = centerProfile!!,
                     writingText = writingText,
@@ -99,7 +99,7 @@ internal class ChattingDetailFragment : BaseComposeFragment() {
 @Composable
 internal fun ChattingDetailScreen(
     receiverId: String,
-    receiverUserType: UserType,
+    myUserType: UserType,
     workerProfile: WorkerProfile,
     centerProfile: CenterProfile,
     writingText: String,
@@ -201,11 +201,11 @@ internal fun ChattingDetailScreen(
 
                         if (showProfile) {
                             CareChatSenderTextBubbleWithImage(
-                                imageUrl = when (receiverUserType) {
+                                imageUrl = when (myUserType) {
                                     UserType.CENTER -> workerProfile.profileImageUrl
                                     UserType.WORKER -> centerProfile.profileImageUrl
                                 },
-                                senderName = when (receiverUserType) {
+                                senderName = when (myUserType) {
                                     UserType.CENTER -> workerProfile.workerName
                                     UserType.WORKER -> centerProfile.centerName
                                 },

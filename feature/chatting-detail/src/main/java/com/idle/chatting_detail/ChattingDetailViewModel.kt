@@ -3,7 +3,7 @@ package com.idle.chatting_detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.domain.model.auth.UserType
-import com.idle.domain.model.chatting.ChatMessage
+import com.idle.domain.model.chat.ChatMessage
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.model.profile.WorkerProfile

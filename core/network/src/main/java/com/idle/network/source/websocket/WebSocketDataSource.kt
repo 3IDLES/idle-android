@@ -2,7 +2,7 @@ package com.idle.network.source.websocket
 
 import com.idle.network.BuildConfig
 import com.idle.network.di.WebSocketOkHttpClient
-import com.idle.network.model.chatting.ChatMessageResponse
+import com.idle.network.model.chat.ChatMessageResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.StateFlow

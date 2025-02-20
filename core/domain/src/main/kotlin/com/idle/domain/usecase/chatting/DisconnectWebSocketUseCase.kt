@@ -1,10 +1,10 @@
 package com.idle.domain.usecase.chatting
 
-import com.idle.domain.repositorry.chatting.ChattingRepository
+import com.idle.domain.repositorry.chatting.ChatRepository
 import javax.inject.Inject
 
 class DisconnectWebSocketUseCase @Inject constructor(
-    private val chattingRepository: ChattingRepository,
+    private val chatRepository: ChatRepository,
 ) {
-    suspend operator fun invoke() = chattingRepository.disconnectWebSocket()
+    suspend operator fun invoke() = chatRepository.disconnectWebSocket()
 }

@@ -4,10 +4,10 @@
         android:id="@id/nav_center_home"
         android:icon="@drawable/selector_menu_home"
         android:title="홈" />
-<!--    <item-->
-<!--        android:id="@id/nav_center_chatting"-->
-<!--        android:icon="@drawable/selector_menu_chat"-->
-<!--        android:title="채팅" />-->
+    <item
+        android:id="@id/nav_center_chatting"
+        android:icon="@drawable/selector_menu_chat"
+        android:title="채팅" />
     <item
         android:id="@id/nav_center_setting"
         android:icon="@drawable/selector_menu_setting"

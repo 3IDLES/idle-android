@@ -23,5 +23,4 @@ data class WorkerJobPosting(
     val weekdays: List<DayOfWeek>,
     val applyDeadline: LocalDate,
     val applyTime: LocalDateTime?,
-    val centerId: String,
 ) : JobPosting(id, distance, jobPostingType, isFavorite)

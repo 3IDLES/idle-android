@@ -1,4 +1,4 @@
-package com.idle.domain.model.chatting
+package com.idle.domain.model.chat
 
 import java.time.LocalDateTime
 
@@ -6,16 +6,10 @@ data class ChatMessage(
     val id: String,
     val roomId: String,
     val senderId: String,
-    val senderType: SenderType,
-    val contents: List<Content>,
+    val receiverId: String,
+    val content: String,
     val createdAt: LocalDateTime,
-) {
-    fun printPlainContents(): String = contents.joinToString { it.value }
-}
-
-data class Content(
-    val type: ContentType,
-    val value: String,
+    val isRead: Boolean,
 )
 
 enum class SenderType {

@@ -2,11 +2,12 @@ package com.idle.center.chatting
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.idle.domain.model.chatting.ChatRoom
+import com.idle.domain.model.auth.UserType
+import com.idle.domain.model.chat.ChatRoom
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.usecase.chatting.GetChatRoomListUseCase
 import com.idle.domain.usecase.chatting.SubscribeChatMessageUseCase
-import com.idle.domain.usecase.profile.GetCenterProfileUseCase
+import com.idle.domain.usecase.profile.GetWorkerProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -17,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CenterChattingViewModel @Inject constructor(
-    private val getCenterProfileUseCase: GetCenterProfileUseCase,
+    private val getWorkerProfileUseCase: GetWorkerProfileUseCase,
     private val getChatRoomListUseCase: GetChatRoomListUseCase,
     private val subscribeChatMessageUseCase: SubscribeChatMessageUseCase,
     private val errorHelper: ErrorHelper,
@@ -42,22 +43,23 @@ class CenterChattingViewModel @Inject constructor(
                 // 기존 방이 있으면 업데이트 후 최상단으로 올리기 위해 제거 후 다시 추가
                 updatedMap.remove(roomId)
                 updatedMap[roomId] = chatRoom.copy(
-                    lastMessage = chatMessage.printPlainContents(),
+                    lastMessage = chatMessage.content,
                     unReadMessageCount = chatRoom.unReadMessageCount + 1,
                 )
             } else {
                 // 새로운 방이면 새로 생성 후 최상단에 추가
+                val opponentProfile = getWorkerProfileUseCase(chatMessage.senderId)
+                    .getOrNull() ?: return@collect
+
                 val newChatRoom = ChatRoom(
                     id = roomId,
-                    lastMessage = chatMessage.printPlainContents(),
-                    sender = chatMessage.senderId,
-                    receiver = "", // Todo 센터 ID를 얻을 방법 서버와 의논
-                    createdAt = chatMessage.createdAt,
-                    lastSentAt = chatMessage.createdAt,
+                    lastMessage = chatMessage.content,
+                    myId = chatMessage.senderId,
+                    opponentId = chatMessage.senderId,
+                    opponentName = opponentProfile.workerName,
+                    lastMessageTime = chatMessage.createdAt,
                     unReadMessageCount = 1,
-                    profileImageUrl = getCenterProfileUseCase(chatMessage.senderId)
-                        .map { it.profileImageUrl }
-                        .getOrNull(),
+                    opponentProfileImageUrl = opponentProfile.profileImageUrl,
                 )
                 updatedMap[roomId] = newChatRoom
             }
@@ -67,7 +69,7 @@ class CenterChattingViewModel @Inject constructor(
     }
 
     internal fun getChatRoomList() = viewModelScope.launch {
-        getChatRoomListUseCase().onSuccess {
+        getChatRoomListUseCase(userType = UserType.CENTER).onSuccess {
             _chatRoomMap.value = LinkedHashMap<String, ChatRoom>().apply {
                 it.forEach { chatRoom -> put(chatRoom.id, chatRoom) }
             }

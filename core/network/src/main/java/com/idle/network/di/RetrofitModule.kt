@@ -3,6 +3,7 @@ package com.idle.network.di
 import com.idle.domain.model.notification.Notification
 import com.idle.network.BuildConfig
 import com.idle.network.api.AuthApi
+import com.idle.network.api.ChatApi
 import com.idle.network.api.JobPostingApi
 import com.idle.network.api.NotificationApi
 import com.idle.network.api.UserApi
@@ -121,6 +122,18 @@ object RetrofitModule {
         .baseUrl(BuildConfig.CARE_BASE_URL)
         .build()
         .create(NotificationApi::class.java)
+
+    @Singleton
+    @Provides
+    fun providesChatApi(
+        json: Json,
+        @AuthOkHttpClient okHttpClient: OkHttpClient,
+    ): ChatApi = Retrofit.Builder()
+        .client(okHttpClient)
+        .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
+        .baseUrl(BuildConfig.CARE_BASE_URL)
+        .build()
+        .create(ChatApi::class.java)
 }
 
 @Qualifier

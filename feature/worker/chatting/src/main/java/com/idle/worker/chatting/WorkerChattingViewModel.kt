@@ -2,7 +2,8 @@ package com.idle.worker.chatting
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.idle.domain.model.chatting.ChatRoom
+import com.idle.domain.model.auth.UserType
+import com.idle.domain.model.chat.ChatRoom
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.usecase.chatting.GetChatRoomListUseCase
@@ -55,20 +56,23 @@ class WorkerChattingViewModel @Inject constructor(
                 // 기존 방이 있으면 업데이트 후 최상단으로 올리기 위해 제거 후 다시 추가
                 updatedMap.remove(roomId)
                 updatedMap[roomId] = chatRoom.copy(
-                    lastMessage = chatMessage.printPlainContents(),
+                    lastMessage = chatMessage.content,
                     unReadMessageCount = chatRoom.unReadMessageCount + 1,
                 )
             } else {
                 // 새로운 방이면 새로 생성 후 최상단에 추가
+                val opponentProfile = getCenterProfileUseCase(chatMessage.senderId)
+                    .getOrNull() ?: return@collect
+
                 val newChatRoom = ChatRoom(
                     id = roomId,
-                    lastMessage = chatMessage.printPlainContents(),
-                    sender = chatMessage.senderId,
-                    receiver = myProfile?.workerId ?: "",
-                    createdAt = chatMessage.createdAt,
-                    lastSentAt = chatMessage.createdAt,
+                    lastMessage = chatMessage.content,
+                    opponentId = chatMessage.senderId,
+                    opponentName = opponentProfile.centerName,
+                    myId = myProfile?.workerId ?: "",
+                    lastMessageTime = chatMessage.createdAt,
                     unReadMessageCount = 1,
-                    profileImageUrl = getCenterProfileUseCase(chatMessage.senderId)
+                    opponentProfileImageUrl = getCenterProfileUseCase(chatMessage.senderId)
                         .map { it.profileImageUrl }
                         .getOrNull(),
                 )
@@ -79,7 +83,7 @@ class WorkerChattingViewModel @Inject constructor(
     }
 
     internal fun getChatRoomList() = viewModelScope.launch {
-        getChatRoomListUseCase().onSuccess {
+        getChatRoomListUseCase(UserType.WORKER).onSuccess {
             _chatRoomMap.value = LinkedHashMap<String, ChatRoom>().apply {
                 it.forEach { chatRoom -> put(chatRoom.id, chatRoom) }
             }

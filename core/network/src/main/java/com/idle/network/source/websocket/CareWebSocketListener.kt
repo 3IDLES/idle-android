@@ -2,7 +2,7 @@ package com.idle.network.source.websocket
 
 import android.util.Log
 import com.idle.network.BuildConfig
-import com.idle.network.model.chatting.ChatMessageResponse
+import com.idle.network.model.chat.ChatMessageResponse
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.serialization.json.Json
