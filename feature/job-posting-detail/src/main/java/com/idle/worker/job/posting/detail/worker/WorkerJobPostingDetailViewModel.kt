@@ -10,6 +10,7 @@ import com.idle.analytics.businessmetric.AnalyticsHelper
 import com.idle.binding.EventHelper
 import com.idle.binding.MainEvent
 import com.idle.binding.ToastType.SUCCESS
+import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.jobposting.ApplyMethod
 import com.idle.domain.model.jobposting.CrawlingJobPostingDetail
@@ -17,12 +18,15 @@ import com.idle.domain.model.jobposting.JobPosting
 import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.WorkerJobPostingDetail
 import com.idle.domain.model.profile.WorkerProfile
+import com.idle.domain.usecase.chat.GenerateChatRoomUseCase
 import com.idle.domain.usecase.jobposting.AddFavoriteJobPostingUseCase
 import com.idle.domain.usecase.jobposting.ApplyJobPostingUseCase
 import com.idle.domain.usecase.jobposting.GetCrawlingJobPostingsDetailUseCase
 import com.idle.domain.usecase.jobposting.GetWorkerJobPostingDetailUseCase
 import com.idle.domain.usecase.jobposting.RemoveFavoriteJobPostingUseCase
 import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
+import com.idle.navigation.DeepLinkDestination
+import com.idle.navigation.NavigationEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -38,6 +42,7 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
     private val applyJobPostingUseCase: ApplyJobPostingUseCase,
     private val addFavoriteJobPostingUseCase: AddFavoriteJobPostingUseCase,
     private val removeFavoriteJobPostingUseCase: RemoveFavoriteJobPostingUseCase,
+    private val generateChatRoomUseCase: GenerateChatRoomUseCase,
     private val analyticsHelper: AnalyticsHelper,
     private val errorHelper: ErrorHelper,
     val eventHelper: EventHelper,
@@ -142,6 +147,24 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
                         (_workerJobPostingDetail.value as CrawlingJobPostingDetail).copy(isFavorite = false)
                 }
             }
+        }.onFailure { errorHelper.sendError(it) }
+    }
+
+    internal fun generateChatRoom(opponentId: String) = viewModelScope.launch {
+        generateChatRoomUseCase(
+            userType = UserType.WORKER,
+            opponentId = opponentId,
+        ).onSuccess {
+            navigationHelper.navigateTo(
+                NavigationEvent.NavigateTo(
+                    DeepLinkDestination.ChattingDetail(
+                        chattingRoomId = "",
+                        receiverId = _profile.value?.workerId ?: return@onSuccess,
+                        receiverUserType = UserType.WORKER.apiValue,
+                        senderId = opponentId,
+                    )
+                )
+            )
         }.onFailure { errorHelper.sendError(it) }
     }
 }

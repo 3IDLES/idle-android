@@ -9,5 +9,6 @@ interface ChatRepository {
     suspend fun connectWebSocket(): Result<Unit>
     suspend fun disconnectWebSocket(): Result<Unit>
     suspend fun getChatRooms(userType: UserType): Result<List<ChatRoom>>
+    suspend fun generateChatRooms(userType: UserType, opponentId: String): Result<Unit>
     fun subscribeChatMessage(): Flow<ChatMessage>
 }

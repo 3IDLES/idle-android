@@ -1,4 +1,4 @@
-package com.idle.domain.usecase.chatting
+package com.idle.domain.usecase.chat
 
 import com.idle.domain.model.chat.ChatMessage
 import javax.inject.Inject

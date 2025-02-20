@@ -113,6 +113,7 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
                                         )
                                     )
                                 },
+                                onChatInquiryClick = ::generateChatRoom,
                             )
                         } else {
                             CrawlingJobPostingDetailScreen(

@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.chat.ChatRoom
 import com.idle.domain.model.error.ErrorHelper
-import com.idle.domain.usecase.chatting.GetChatRoomListUseCase
-import com.idle.domain.usecase.chatting.SubscribeChatMessageUseCase
+import com.idle.domain.usecase.chat.GetChatRoomListUseCase
+import com.idle.domain.usecase.chat.SubscribeChatMessageUseCase
 import com.idle.domain.usecase.profile.GetWorkerProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

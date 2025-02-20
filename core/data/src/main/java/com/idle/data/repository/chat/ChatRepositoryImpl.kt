@@ -30,6 +30,14 @@ class ChatRepositoryImpl @Inject constructor(
             chatRoomsResponse.map { it.toVO() }
         }
 
+    override suspend fun generateChatRooms(userType: UserType, opponentId: String): Result<Unit> =
+        runCatching {
+            when (userType) {
+                UserType.WORKER -> chatDataSource.generateWorkerChatRoom(opponentId)
+                UserType.CENTER -> chatDataSource.generateCenterChatRoom(opponentId)
+            }
+        }
+
     override fun subscribeChatMessage(): Flow<ChatMessage> =
         webSocketDataSource.chatMessageFlow
             .filterNotNull()

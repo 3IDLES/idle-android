@@ -7,8 +7,8 @@ import com.idle.domain.model.chat.ChatMessage
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.model.profile.WorkerProfile
-import com.idle.domain.usecase.chatting.GetChatMessagesUseCase
-import com.idle.domain.usecase.chatting.SubscribeChatMessageUseCase
+import com.idle.domain.usecase.chat.GetChatMessagesUseCase
+import com.idle.domain.usecase.chat.SubscribeChatMessageUseCase
 import com.idle.domain.usecase.profile.GetCenterProfileUseCase
 import com.idle.domain.usecase.profile.GetLocalMyCenterProfileUseCase
 import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase

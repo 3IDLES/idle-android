@@ -13,4 +13,10 @@ class ChatDataSource @Inject constructor(
 
     suspend fun getCenterChatRooms(): Result<List<GetChatRoomResponse>> =
         safeApiCall { chatApi.getCenterChatRooms() }
+
+    suspend fun generateWorkerChatRoom(opponentId: String): Result<Unit> =
+        safeApiCall { chatApi.generateWorkerChatRoom(opponentId) }
+
+    suspend fun generateCenterChatRoom(opponentId: String): Result<Unit> =
+        safeApiCall { chatApi.generateCenterChatRoom(opponentId) }
 }

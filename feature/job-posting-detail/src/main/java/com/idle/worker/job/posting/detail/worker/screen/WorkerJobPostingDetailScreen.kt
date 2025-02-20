@@ -72,6 +72,7 @@ internal fun WorkerJobPostingDetailScreen(
     applyJobPosting: (String, ApplyMethod) -> Unit,
     navigateTo: (com.idle.navigation.DeepLinkDestination) -> Unit,
     shareJobPosting: () -> Unit,
+    onChatInquiryClick: (String) -> Unit,
 ) {
     val onBackPressedDispatcher =
         LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
@@ -131,7 +132,6 @@ internal fun WorkerJobPostingDetailScreen(
                     modifier = Modifier.padding(bottom = 20.dp),
                 )
 
-
                 CareCard(
                     title = stringResource(id = R.string.inquiry_by_call),
                     description = "${jobPostingDetail.centerName} | ${jobPostingDetail.centerOfficeNumber}",
@@ -146,6 +146,21 @@ internal fun WorkerJobPostingDetailScreen(
                         val dialIntent = Intent(Intent.ACTION_DIAL, number.toUri())
                         dialResultLauncher.launch(dialIntent)
                     },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp),
+                )
+
+                CareCard(
+                    title = stringResource(id = R.string.inquiry_by_chat),
+                    description = jobPostingDetail.centerName,
+                    titleLeftComponent = {
+                        Image(
+                            painter = painterResource(R.drawable.ic_chat_inquiry),
+                            contentDescription = null,
+                        )
+                    },
+                    onClick = { onChatInquiryClick(jobPostingDetail.centerId) },
                     modifier = Modifier.fillMaxWidth(),
                 )
             }

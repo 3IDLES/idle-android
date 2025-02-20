@@ -17,8 +17,8 @@ import com.idle.domain.model.profile.CenterManagerAccountStatus
 import com.idle.domain.repositorry.jobposting.JobPostingRepository
 import com.idle.domain.usecase.auth.GetAccessTokenUseCase
 import com.idle.domain.usecase.auth.GetUserTypeUseCase
-import com.idle.domain.usecase.chatting.ConnectWebSocketUseCase
-import com.idle.domain.usecase.chatting.DisconnectWebSocketUseCase
+import com.idle.domain.usecase.chat.ConnectWebSocketUseCase
+import com.idle.domain.usecase.chat.DisconnectWebSocketUseCase
 import com.idle.domain.usecase.config.GetForceUpdateInfoUseCase
 import com.idle.domain.usecase.notification.ReadNotificationUseCase
 import com.idle.domain.usecase.profile.GetCenterStatusUseCase
