@@ -17,7 +17,10 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -64,8 +67,8 @@ internal class ChattingDetailFragment : BaseComposeFragment() {
             val centerProfile by centerProfile.collectAsStateWithLifecycle()
 
             LifecycleEventEffect(Lifecycle.Event.ON_CREATE) {
-                getUserProfile(receiverUserType = receiverUserType, senderId = senderId)
-                getChatMessages(chattingRoomId)
+                getUserProfile(myUserType = receiverUserType, senderId = senderId)
+                getChatMessages(myUserType = receiverUserType, chattingRoomId)
                 subscribeChatMessage()
             }
 
@@ -78,6 +81,12 @@ internal class ChattingDetailFragment : BaseComposeFragment() {
                     writingText = writingText,
                     chatMessages = chatMessages!!,
                     onWritingTextChange = ::setWritingText,
+                    getChatMessages = {
+                        getChatMessages(
+                            myUserType = receiverUserType,
+                            chattingRoomId
+                        )
+                    },
                     navigateTo = {
                         navigationHelper.navigateTo(
                             com.idle.navigation.NavigationEvent.NavigateTo(
@@ -88,9 +97,7 @@ internal class ChattingDetailFragment : BaseComposeFragment() {
                     navigateUp = { findNavController().navigateUp() }
                 )
             } else {
-                ChattingDetailLoadingScreen(
-                    navigateUp = { findNavController().navigateUp() },
-                )
+                ChattingDetailLoadingScreen(navigateUp = { findNavController().navigateUp() })
             }
         }
     }
@@ -105,6 +112,7 @@ internal fun ChattingDetailScreen(
     writingText: String,
     chatMessages: List<ChatMessage>,
     onWritingTextChange: (String) -> Unit,
+    getChatMessages: () -> Unit,
     navigateTo: (com.idle.navigation.DeepLinkDestination) -> Unit,
     navigateUp: () -> Unit,
 ) {
@@ -112,10 +120,29 @@ internal fun ChattingDetailScreen(
     val listState = rememberLazyListState()
     var lastDate: String? = null
 
+    val lastVisibleIndex by remember {
+        derivedStateOf {
+            listState.firstVisibleItemIndex + listState.layoutInfo.visibleItemsInfo.size - 1
+        }
+    }
+
+    val isNearEnd = lastVisibleIndex >= chatMessages.size.minus(3)
+
+    LaunchedEffect(isNearEnd) {
+        if (chatMessages.isNotEmpty() && isNearEnd) {
+            getChatMessages()
+        }
+    }
+
     Scaffold(
         topBar = {
+            val title = when (myUserType) {
+                UserType.WORKER -> centerProfile.centerName
+                UserType.CENTER -> workerProfile.workerName
+            }
+
             CareSubtitleTopBar(
-                title = "세얼간이요양센터",
+                title = title,
                 onNavigationClick = navigateUp,
                 modifier = Modifier
                     .fillMaxWidth()

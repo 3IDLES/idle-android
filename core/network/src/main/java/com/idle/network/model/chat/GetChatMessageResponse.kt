@@ -1,9 +1,11 @@
 package com.idle.network.model.chat
 
 import com.idle.domain.model.chat.ChatMessage
+import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
+@Serializable
 data class ChatMessageResponse(
     val id: String?,
     val chatRoomId: String?,

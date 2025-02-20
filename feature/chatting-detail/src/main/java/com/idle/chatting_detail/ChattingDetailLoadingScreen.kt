@@ -13,13 +13,12 @@ import com.idle.designsystem.compose.foundation.CareTheme
 
 @Composable
 fun ChattingDetailLoadingScreen(
-    title: String = "세얼간이요양보호센터",
     navigateUp: () -> Unit,
 ) {
     Scaffold(
         topBar = {
             CareSubtitleTopBar(
-                title = title,
+                title = "",
                 onNavigationClick = navigateUp,
                 modifier = Modifier
                     .fillMaxWidth()

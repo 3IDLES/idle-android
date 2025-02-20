@@ -1,5 +1,6 @@
 package com.idle.chatting_detail
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.domain.model.auth.UserType
@@ -42,15 +43,18 @@ class ChattingDetailViewModel @Inject constructor(
     private val _centerProfile = MutableStateFlow<CenterProfile?>(null)
     val centerProfile = _centerProfile.asStateFlow()
 
+    private val _callType = MutableStateFlow<MessageCallType>(MessageCallType.PAGING)
+    val callType = _callType.asStateFlow()
+
     internal fun setWritingText(text: String) {
         _writingText.value = text
     }
 
     internal fun getUserProfile(
-        receiverUserType: UserType,
+        myUserType: UserType,
         senderId: String,
     ) = viewModelScope.launch {
-        when (receiverUserType) {
+        when (myUserType) {
             UserType.CENTER -> {
                 launch {
                     getWorkerProfileUseCase(senderId).onSuccess {
@@ -78,17 +82,38 @@ class ChattingDetailViewModel @Inject constructor(
 
                 getLocalMyWorkerProfileUseCase().onSuccess {
                     _workerProfile.value = it
+                    Log.d("test", it.toString())
                 }.onFailure {
                     errorHelper.sendError(it)
                 }
             }
+
+            else -> Unit
         }
     }
 
-    internal fun getChatMessages(roomId: String) = viewModelScope.launch {
-        getChatMessagesUseCase(roomId).onSuccess {
-            _chatMessages.value = it
-        }
+    internal fun getChatMessages(
+        myUserType: UserType,
+        roomId: String,
+    ) = viewModelScope.launch {
+        Log.d("test", "호출")
+        if (_callType.value == MessageCallType.END) return@launch
+
+        Log.d("test", "호출2")
+
+        getChatMessagesUseCase(
+            userType = myUserType,
+            roomId = roomId,
+            messageId = _chatMessages.value?.first()?.id,
+        ).onSuccess { messages ->
+            Log.d("test", messages.toString())
+
+            if (messages.size < 50) {
+                _callType.value = MessageCallType.END
+            }
+
+            _chatMessages.value = messages.plus(_chatMessages.value ?: emptyList())
+        }.onFailure { errorHelper.sendError(it) }
     }
 
     internal fun subscribeChatMessage() = viewModelScope.launch {
@@ -96,4 +121,8 @@ class ChattingDetailViewModel @Inject constructor(
             _chatMessages.value = (_chatMessages.value ?: emptyList()) + chatMessage
         }
     }
+}
+
+enum class MessageCallType {
+    PAGING, END
 }

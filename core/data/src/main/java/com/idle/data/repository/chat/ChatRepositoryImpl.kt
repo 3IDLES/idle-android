@@ -30,12 +30,32 @@ class ChatRepositoryImpl @Inject constructor(
             chatRoomsResponse.map { it.toVO() }
         }
 
-    override suspend fun generateChatRooms(userType: UserType, opponentId: String): Result<Unit> =
+    override suspend fun getChatRoomMessages(
+        userType: UserType,
+        roomId: String,
+        messageId: String?,
+    ): Result<List<ChatMessage>> = runCatching {
+        when (userType) {
+            UserType.WORKER -> chatDataSource.getWorkerChatRoomMessages(
+                roomId = roomId,
+                messageId = messageId,
+            )
+
+            UserType.CENTER -> chatDataSource.getCenterChatRoomMessages(
+                roomId = roomId,
+                messageId = messageId,
+            )
+        }.mapCatching { messages -> messages.map { it.toVO() } }
+            .getOrThrow()
+    }
+
+    override suspend fun generateChatRooms(userType: UserType, opponentId: String): Result<String> =
         runCatching {
             when (userType) {
                 UserType.WORKER -> chatDataSource.generateWorkerChatRoom(opponentId)
                 UserType.CENTER -> chatDataSource.generateCenterChatRoom(opponentId)
-            }
+            }.mapCatching { it.toVO() }
+                .getOrThrow()
         }
 
     override fun subscribeChatMessage(): Flow<ChatMessage> =
