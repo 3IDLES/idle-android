@@ -49,6 +49,7 @@ data class WorkerJobPostingResponse(
         applyDeadline = LocalDate.parse(applyDeadline, DateTimeFormatter.ofPattern("yyyy-MM-dd")),
         applyDeadlineType = ApplyDeadlineType.create(applyDeadlineType),
         careLevel = careLevel,
+        centerId = centerId,
         distance = distance,
         endTime = endTime,
         gender = Gender.create(gender),

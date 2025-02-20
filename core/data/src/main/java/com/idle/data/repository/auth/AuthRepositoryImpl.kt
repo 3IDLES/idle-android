@@ -6,6 +6,7 @@ import com.idle.domain.model.auth.BusinessRegistrationInfo
 import com.idle.domain.model.auth.UserType
 import com.idle.domain.repositorry.auth.AuthRepository
 import com.idle.domain.repositorry.auth.TokenRepository
+import com.idle.domain.repositorry.profile.ProfileRepository
 import com.idle.network.model.auth.ConfirmAuthCodeRequest
 import com.idle.network.model.auth.GenerateNewPasswordRequest
 import com.idle.network.model.auth.SendPhoneRequest
@@ -17,12 +18,12 @@ import com.idle.network.model.auth.WithdrawalCenterRequest
 import com.idle.network.model.auth.WithdrawalWorkerRequest
 import com.idle.network.model.token.TokenResponse
 import com.idle.network.source.auth.AuthDataSource
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
+    private val profileRepository: ProfileRepository,
     private val authDataSource: AuthDataSource,
     private val tokenDataSource: TokenDataSource,
     private val userInfoDataSource: UserInfoDataSource,
@@ -62,8 +63,16 @@ class AuthRepositoryImpl @Inject constructor(
             SignInCenterRequest(identifier = identifier, password = password)
         ).fold(
             onSuccess = { tokenResponse ->
-                handleSignInSuccess(tokenResponse, UserType.CENTER.apiValue)
-                Result.success(Unit)
+                coroutineScope {
+                    handleSignInSuccess(tokenResponse, UserType.CENTER.apiValue)
+
+                    val profile = profileRepository.getMyCenterProfile().getOrNull()
+                    if (profile != null) {
+                        userInfoDataSource.setUserInfo(profile.toString())
+                    }
+
+                    Result.success(Unit)
+                }
             },
             onFailure = { Result.failure(it) }
         )
@@ -95,8 +104,16 @@ class AuthRepositoryImpl @Inject constructor(
         )
     ).fold(
         onSuccess = { tokenResponse ->
-            handleSignInSuccess(tokenResponse, UserType.WORKER.apiValue)
-            Result.success(Unit)
+            coroutineScope {
+                handleSignInSuccess(tokenResponse, UserType.WORKER.apiValue)
+
+                val profile = profileRepository.getMyWorkerProfile().getOrNull()
+                if (profile != null) {
+                    userInfoDataSource.setUserInfo(profile.toString())
+                }
+
+                Result.success(Unit)
+            }
         },
         onFailure = { Result.failure(it) }
     )
@@ -108,8 +125,16 @@ class AuthRepositoryImpl @Inject constructor(
         SignInWorkerRequest(phoneNumber = phoneNumber, authCode = authCode)
     ).fold(
         onSuccess = { tokenResponse ->
-            handleSignInSuccess(tokenResponse, UserType.WORKER.apiValue)
-            Result.success(Unit)
+            coroutineScope {
+                handleSignInSuccess(tokenResponse, UserType.WORKER.apiValue)
+
+                val updatedProfile = profileRepository.getMyWorkerProfile().getOrNull()
+                if (updatedProfile != null) {
+                    userInfoDataSource.setUserInfo(updatedProfile.toString())
+                }
+
+                Result.success(Unit)
+            }
         },
         onFailure = { Result.failure(it) }
     )
@@ -159,7 +184,7 @@ class AuthRepositoryImpl @Inject constructor(
     private suspend fun handleSignInSuccess(
         tokenResponse: TokenResponse,
         userType: String,
-    ) = withContext(Dispatchers.IO) {
+    ) = coroutineScope {
         launch { tokenDataSource.setRefreshToken(tokenResponse.refreshToken) }
         launch { userInfoDataSource.setUserType(userType) }
         launch { tokenDataSource.setAccessToken(tokenResponse.accessToken) }.join()
@@ -168,7 +193,7 @@ class AuthRepositoryImpl @Inject constructor(
         tokenRepository.postDeviceToken(deviceToken, userType = userType)
     }
 
-    private suspend fun clearUserData() = withContext(Dispatchers.IO) {
+    private suspend fun clearUserData() = coroutineScope {
         launch { userInfoDataSource.clearUserType() }
         launch { userInfoDataSource.clearUserInfo() }
         tokenDataSource.clearToken()
