@@ -17,6 +17,7 @@ import com.idle.domain.usecase.profile.GetWorkerProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -82,7 +83,6 @@ class ChattingDetailViewModel @Inject constructor(
 
                 getLocalMyWorkerProfileUseCase().onSuccess {
                     _workerProfile.value = it
-                    Log.d("test", it.toString())
                 }.onFailure {
                     errorHelper.sendError(it)
                 }
@@ -96,10 +96,7 @@ class ChattingDetailViewModel @Inject constructor(
         myUserType: UserType,
         roomId: String,
     ) = viewModelScope.launch {
-        Log.d("test", "호출")
         if (_callType.value == MessageCallType.END) return@launch
-
-        Log.d("test", "호출2")
 
         getChatMessagesUseCase(
             userType = myUserType,
@@ -116,10 +113,12 @@ class ChattingDetailViewModel @Inject constructor(
         }.onFailure { errorHelper.sendError(it) }
     }
 
-    internal fun subscribeChatMessage() = viewModelScope.launch {
-        subscribeChatMessageUseCase().collect { chatMessage ->
-            _chatMessages.value = (_chatMessages.value ?: emptyList()) + chatMessage
-        }
+    internal fun subscribeChatMessage(userId: String) = viewModelScope.launch {
+        subscribeChatMessageUseCase(userId)
+            .catch { errorHelper.sendError(it) }
+            .collect { chatMessage ->
+                _chatMessages.value = (_chatMessages.value ?: emptyList()) + chatMessage
+            }
     }
 }
 

@@ -8,5 +8,7 @@ import javax.inject.Inject
 class SubscribeChatMessageUseCase @Inject constructor(
     private val chatRepository: ChatRepository,
 ) {
-    operator fun invoke(): Flow<ChatMessage> = chatRepository.subscribeChatMessage()
+    suspend operator fun invoke(userId: String): Flow<ChatMessage> {
+        return chatRepository.subscribeChatMessage(userId)
+    }
 }

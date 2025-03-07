@@ -34,7 +34,7 @@ class CenterChattingViewModel @Inject constructor(
         )
 
     internal fun subscribeChatMessage() = viewModelScope.launch {
-        subscribeChatMessageUseCase().collect { chatMessage ->
+        subscribeChatMessageUseCase("").collect { chatMessage ->
             val updatedMap = LinkedHashMap(_chatRoomMap.value) // 기존 맵을 복사
             val roomId = chatMessage.roomId
             val chatRoom = updatedMap[roomId]

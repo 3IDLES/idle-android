@@ -51,11 +51,14 @@ hiltNavigationCompose = "1.2.0"
 
 ## Network
 # okhttp
-# # https://square.github.io/okhttp/
+## https://square.github.io/okhttp/
 okhttp = "4.12.0"
 # Retrofit
-# # https://github.com/square/retrofit
+## https://github.com/square/retrofit
 retrofit = "2.11.0"
+# KrossBBow
+## https://github.com/joffrey-bion/krossbow
+krossbow = "9.0.0"
 
 ## Kotlin
 # https://github.com/JetBrains/kotlin
@@ -149,6 +152,12 @@ retrofit-core = { group = "com.squareup.retrofit2", name = "retrofit", version.r
 retrofit-kotlin-serialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "retrofit" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 
+krossbow-core = { group = "org.hildan.krossbow", name = "krossbow-stomp-core", version.ref = "krossbow" }
+krossbow-kotlin-serialization = { group = "org.hildan.krossbow", name = "krossbow-stomp-kxserialization", version.ref = "krossbow" }
+krossbow-kotlin-serialization-json = { group = "org.hildan.krossbow", name = "krossbow-stomp-kxserialization-json", version.ref = "krossbow" }
+
+krossbow-websocket-okhttp = { group = "org.hildan.krossbow", name = "krossbow-websocket-okhttp", version.ref = "krossbow" }
+
 junit4 = { group = "junit", name = "junit", version.ref = "junit4" }
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiter" }
 
@@ -170,7 +179,7 @@ firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.r
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
 firebase-config = { group = "com.google.firebase", name = "firebase-config-ktx" }
-firebase-messaging = { module = "com.google.firebase:firebase-messaging", version.ref = "messaging" }
+firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging" }
 
 amplitude-analytics = { module = "com.amplitude:analytics-android", version.ref = "amplitudeAnalytics" }
 
@@ -184,7 +193,6 @@ kakao-talk = { module = "com.kakao.sdk:v2-talk", version.ref = "kakao" }
 kakao-share = { module = "com.kakao.sdk:v2-share", version.ref = "kakao" }
 
 appsFlyer = { module = "com.appsflyer:af-android-sdk", version.ref = "appsFlyer" }
-
 installerReferrer = { module = "com.android.installreferrer:installreferrer", version.ref = "installReferrer" }
 
 [bundles]

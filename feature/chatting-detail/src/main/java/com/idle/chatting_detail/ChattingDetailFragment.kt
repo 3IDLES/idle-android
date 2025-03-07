@@ -69,7 +69,7 @@ internal class ChattingDetailFragment : BaseComposeFragment() {
             LifecycleEventEffect(Lifecycle.Event.ON_CREATE) {
                 getUserProfile(myUserType = receiverUserType, senderId = senderId)
                 getChatMessages(myUserType = receiverUserType, chattingRoomId)
-                subscribeChatMessage()
+                subscribeChatMessage(receiverId)
             }
 
             if (chatMessages != null && workerProfile != null && centerProfile != null) {

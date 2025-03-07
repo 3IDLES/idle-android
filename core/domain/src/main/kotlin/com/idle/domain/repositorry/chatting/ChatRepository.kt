@@ -16,5 +16,5 @@ interface ChatRepository {
     ): Result<List<ChatMessage>>
 
     suspend fun generateChatRooms(userType: UserType, opponentId: String): Result<String>
-    fun subscribeChatMessage(): Flow<ChatMessage>
+    suspend fun subscribeChatMessage(userId: String): Flow<ChatMessage>
 }

@@ -38,47 +38,46 @@ class WorkerChattingViewModel @Inject constructor(
             initialValue = null,
         )
 
-    init {
-        viewModelScope.launch {
-            getLocalMyWorkerProfileUseCase().onSuccess {
-                myProfile = it
-            }.onFailure { errorHelper.sendError(it) }
-        }
-    }
-
     internal fun subscribeChatMessage() = viewModelScope.launch {
-        subscribeChatMessageUseCase().collect { chatMessage ->
-            val updatedMap = LinkedHashMap(_chatRoomMap.value) // 기존 맵을 복사
-            val roomId = chatMessage.roomId
-            val chatRoom = updatedMap[roomId]
+        getLocalMyWorkerProfileUseCase().onSuccess { profile ->
+            myProfile = profile
 
-            if (chatRoom != null) {
-                // 기존 방이 있으면 업데이트 후 최상단으로 올리기 위해 제거 후 다시 추가
-                updatedMap.remove(roomId)
-                updatedMap[roomId] = chatRoom.copy(
-                    lastMessage = chatMessage.content,
-                    unReadMessageCount = chatRoom.unReadMessageCount + 1,
-                )
-            } else {
-                // 새로운 방이면 새로 생성 후 최상단에 추가
-                val opponentProfile = getCenterProfileUseCase(chatMessage.senderId)
-                    .getOrNull() ?: return@collect
+            subscribeChatMessageUseCase(profile.workerId).collect { chatMessage ->
+                val updatedMap = LinkedHashMap(_chatRoomMap.value) // 기존 맵을 복사
+                val roomId = chatMessage.roomId
+                val chatRoom = updatedMap[roomId]
 
-                val newChatRoom = ChatRoom(
-                    id = roomId,
-                    lastMessage = chatMessage.content,
-                    opponentId = chatMessage.senderId,
-                    opponentName = opponentProfile.centerName,
-                    myId = myProfile?.workerId ?: "",
-                    lastMessageTime = chatMessage.createdAt,
-                    unReadMessageCount = 1,
-                    opponentProfileImageUrl = getCenterProfileUseCase(chatMessage.senderId)
-                        .map { it.profileImageUrl }
-                        .getOrNull(),
-                )
-                updatedMap[roomId] = newChatRoom
+                if (chatRoom != null) {
+                    // 기존 방이 있으면 업데이트 후 최상단으로 올리기 위해 제거 후 다시 추가
+                    updatedMap.remove(roomId)
+                    updatedMap[roomId] = chatRoom.copy(
+                        lastMessage = chatMessage.content,
+                        unReadMessageCount = chatRoom.unReadMessageCount + 1,
+                    )
+                } else {
+                    // 새로운 방이면 새로 생성 후 최상단에 추가
+                    val opponentProfile = getCenterProfileUseCase(chatMessage.senderId)
+                        .getOrNull() ?: return@collect
+
+                    val newChatRoom = ChatRoom(
+                        id = roomId,
+                        lastMessage = chatMessage.content,
+                        opponentId = chatMessage.senderId,
+                        opponentName = opponentProfile.centerName,
+                        myId = this@WorkerChattingViewModel.myProfile?.workerId ?: "",
+                        lastMessageTime = chatMessage.createdAt,
+                        unReadMessageCount = 1,
+                        opponentProfileImageUrl = getCenterProfileUseCase(chatMessage.senderId)
+                            .map { it.profileImageUrl }
+                            .getOrNull(),
+                    )
+                    updatedMap[roomId] = newChatRoom
+                }
+                _chatRoomMap.value = updatedMap // StateFlow에 갱신된 맵 할당
             }
-            _chatRoomMap.value = updatedMap // StateFlow에 갱신된 맵 할당
+        }.onFailure {
+            errorHelper.sendError(it)
+            return@launch
         }
     }
 

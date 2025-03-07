@@ -1,5 +1,10 @@
 package com.idle.network.di
 
+import com.google.firebase.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
+import com.google.firebase.remoteconfig.remoteConfig
 import com.idle.domain.model.notification.Notification
 import com.idle.network.BuildConfig
 import com.idle.network.api.AuthApi
@@ -19,6 +24,8 @@ import kotlinx.serialization.modules.SerializersModule
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.hildan.krossbow.stomp.StompClient
+import org.hildan.krossbow.websocket.okhttp.OkHttpWebSocketClient
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import java.util.concurrent.TimeUnit
@@ -27,7 +34,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object RetrofitModule {
+object NetworkModule {
 
     @Singleton
     @Provides
@@ -45,11 +52,11 @@ object RetrofitModule {
     @AuthOkHttpClient
     fun provideOkHttpClient(
         authInterceptor: AuthInterceptor,
-        careAuthenticator: CareAuthenticator,
+        authenticator: CareAuthenticator,
     ): OkHttpClient {
         val builder = OkHttpClient.Builder()
             .addInterceptor(authInterceptor)
-            .authenticator(careAuthenticator)
+            .authenticator(authenticator)
 
         if (BuildConfig.DEBUG) {
             val loggingInterceptor = HttpLoggingInterceptor()
@@ -63,17 +70,25 @@ object RetrofitModule {
     @Singleton
     @Provides
     @WebSocketOkHttpClient
-    fun provideWebSocketOkHttpClient(): OkHttpClient = OkHttpClient.Builder()
-        .connectTimeout(10, TimeUnit.SECONDS)
-        .readTimeout(0, TimeUnit.MILLISECONDS)
+    fun provideWebSocketOkHttpClient(
+        authenticator: CareAuthenticator,
+    ): OkHttpClient = OkHttpClient.Builder()
+        .callTimeout(1, TimeUnit.MINUTES)
+        .pingInterval(10, TimeUnit.SECONDS)
+        .authenticator(authenticator)
         .apply {
             if (BuildConfig.DEBUG) {
                 val loggingInterceptor = HttpLoggingInterceptor()
                 loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
                 addInterceptor(loggingInterceptor)
             }
-        }
-        .build()
+        }.build()
+
+    @Singleton
+    @Provides
+    fun providesStompClient(
+        @WebSocketOkHttpClient okHttpClient: OkHttpClient
+    ): StompClient = StompClient(OkHttpWebSocketClient(okHttpClient))
 
     @Singleton
     @Provides
@@ -134,6 +149,19 @@ object RetrofitModule {
         .baseUrl(BuildConfig.CARE_BASE_URL)
         .build()
         .create(ChatApi::class.java)
+
+    @Singleton
+    @Provides
+    fun provideFirebaseRemoteConfig(): FirebaseRemoteConfig = Firebase.remoteConfig.apply {
+        val configSettings = remoteConfigSettings {
+            minimumFetchIntervalInSeconds = 3600
+        }
+        setConfigSettingsAsync(configSettings)
+    }
+
+    @Singleton
+    @Provides
+    fun provideFirebaseMessaging(): FirebaseMessaging = FirebaseMessaging.getInstance()
 }
 
 @Qualifier

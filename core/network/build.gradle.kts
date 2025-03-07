@@ -49,8 +49,14 @@ dependencies {
 
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.kotlin.serialization)
-    implementation(libs.okhttp.logging)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.okhttp.logging)
+
+    implementation(libs.krossbow.core)
+    implementation(libs.krossbow.kotlin.serialization)
+    implementation(libs.krossbow.kotlin.serialization.json)
+    implementation(libs.krossbow.websocket.okhttp)
+
     implementation(libs.firebase.config)
     implementation(libs.firebase.messaging)
 }

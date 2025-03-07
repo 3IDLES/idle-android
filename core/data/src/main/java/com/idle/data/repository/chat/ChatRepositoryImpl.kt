@@ -4,10 +4,9 @@ import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.chat.ChatMessage
 import com.idle.domain.model.chat.ChatRoom
 import com.idle.domain.repositorry.chatting.ChatRepository
+import com.idle.network.api.websocket.WebSocketDataSource
 import com.idle.network.source.chat.ChatDataSource
-import com.idle.network.source.websocket.WebSocketDataSource
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -58,8 +57,7 @@ class ChatRepositoryImpl @Inject constructor(
                 .getOrThrow()
         }
 
-    override fun subscribeChatMessage(): Flow<ChatMessage> =
-        webSocketDataSource.chatMessageFlow
-            .filterNotNull()
+    override suspend fun subscribeChatMessage(userId: String): Flow<ChatMessage> =
+        webSocketDataSource.subscribeChatMessage(userId)
             .map { it.toVO() }
 }

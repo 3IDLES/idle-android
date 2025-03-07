@@ -21,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,8 +35,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.idle.compose.base.BaseComposeFragment
@@ -58,7 +57,7 @@ internal class WorkerChattingFragment : BaseComposeFragment() {
         fragmentViewModel.apply {
             val chatRoomList by chatRoomList.collectAsStateWithLifecycle()
 
-            LifecycleEventEffect(Lifecycle.Event.ON_CREATE) {
+            LaunchedEffect(Unit) {
                 getChatRoomList()
                 subscribeChatMessage()
             }
