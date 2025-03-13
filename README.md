@@ -166,7 +166,7 @@
 
 ## 🏗️ Module Dependency Graph
 
-<img width="552" alt="image" src="https://github.com/user-attachments/assets/983b081e-5c08-4e30-9777-cb2ddc9ec42f">
+<img width="1500" height="400" alt="image" src="https://github.com/user-attachments/assets/4d4cb659-4508-47a6-8903-4c5d1bdbaa17">
 <br><br>
 
 ## 🍎 Contributors
