@@ -63,11 +63,11 @@ dependencies {
     implementation(projects.core.domain)
     implementation(projects.presentation)
     implementation(projects.core.analytics)
+    baselineProfile(projects.baselineprofile)
 
     implementation(libs.firebase.messaging)
     implementation(libs.kakao.common)
     implementation(libs.appsFlyer)
     implementation(libs.installerReferrer)
     implementation(libs.androidx.profileinstaller)
-    "baselineProfile"(project(":baselineprofile"))
 }

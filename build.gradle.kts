@@ -14,3 +14,5 @@ plugins {
     alias(libs.plugins.firebase.crashlytics) apply false
     alias(libs.plugins.baselineprofile) apply false
 }
+
+apply(from = "gradle/dependencyGraph.gradle")
