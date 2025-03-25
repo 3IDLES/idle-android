@@ -1,6 +1,5 @@
 package com.idle.chatting_detail
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.domain.model.auth.UserType
@@ -103,11 +102,7 @@ class ChattingDetailViewModel @Inject constructor(
             roomId = roomId,
             messageId = _chatMessages.value?.first()?.id,
         ).onSuccess { messages ->
-            Log.d("test", messages.toString())
-
-            if (messages.size < 50) {
-                _callType.value = MessageCallType.END
-            }
+            if (messages.size < 50) _callType.value = MessageCallType.END
 
             _chatMessages.value = messages.plus(_chatMessages.value ?: emptyList())
         }.onFailure { errorHelper.sendError(it) }

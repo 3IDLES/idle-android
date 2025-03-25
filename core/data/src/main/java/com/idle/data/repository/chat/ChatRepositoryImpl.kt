@@ -4,10 +4,15 @@ import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.chat.ChatMessage
 import com.idle.domain.model.chat.ChatRoom
 import com.idle.domain.repositorry.chatting.ChatRepository
+import com.idle.network.api.websocket.MAX_RETRY_ATTEMPTS
 import com.idle.network.api.websocket.WebSocketDataSource
+import com.idle.network.api.websocket.calculateBackoffTime
 import com.idle.network.source.chat.ChatDataSource
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.retryWhen
+import java.io.IOException
 import javax.inject.Inject
 
 class ChatRepositoryImpl @Inject constructor(
@@ -60,4 +65,13 @@ class ChatRepositoryImpl @Inject constructor(
     override suspend fun subscribeChatMessage(userId: String): Flow<ChatMessage> =
         webSocketDataSource.subscribeChatMessage(userId)
             .map { it.toVO() }
+            .retryWhen { cause, attempt ->
+                if (cause is IOException && attempt < MAX_RETRY_ATTEMPTS) {
+                    connectWebSocket()
+                    delay(calculateBackoffTime(attempt.toInt()))
+                    true
+                } else {
+                    false
+                }
+            }
 }
