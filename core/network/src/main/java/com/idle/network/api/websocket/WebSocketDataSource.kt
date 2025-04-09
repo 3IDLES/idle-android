@@ -1,6 +1,7 @@
 package com.idle.network.api.websocket
 
 import com.idle.network.BuildConfig
+import com.idle.network.di.TokenManager
 import com.idle.network.model.chat.ChatMessageResponse
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -18,14 +19,19 @@ import javax.inject.Singleton
 @Singleton
 class WebSocketDataSource @Inject constructor(
     private val client: StompClient,
+    private val tokenManager: TokenManager,
     private val json: Json,
 ) {
     private var session: StompSession? = null
     private var connectionAttempts = 0
 
     suspend fun connectWebSocket(): Result<Unit> = try {
-        session = client.connect(BuildConfig.CARE_WEBSOCKET_URL)
-            .withJsonConversions(json)
+        val accessToken = tokenManager.getAccessToken()
+
+        session = client.connect(
+            url = "${BuildConfig.CARE_WEBSOCKET_URL}/ws",
+            customStompConnectHeaders = mapOf("Authorization" to accessToken)
+        ).withJsonConversions(json)
 
         connectionAttempts = 0
         Result.success(Unit)
