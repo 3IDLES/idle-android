@@ -1,10 +1,5 @@
 package com.idle.network.di
 
-import com.google.firebase.Firebase
-import com.google.firebase.messaging.FirebaseMessaging
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig
-import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
-import com.google.firebase.remoteconfig.remoteConfig
 import com.idle.domain.model.notification.Notification
 import com.idle.network.BuildConfig
 import com.idle.network.api.AuthApi
@@ -24,7 +19,6 @@ import kotlinx.serialization.modules.SerializersModule
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.hildan.krossbow.stomp.StompClient
 import org.hildan.krossbow.websocket.WebSocketClient
 import org.hildan.krossbow.websocket.okhttp.OkHttpWebSocketClient
 import retrofit2.Retrofit
@@ -150,19 +144,6 @@ object NetworkModule {
         .baseUrl(BuildConfig.CARE_BASE_URL)
         .build()
         .create(ChatApi::class.java)
-
-    @Singleton
-    @Provides
-    fun provideFirebaseRemoteConfig(): FirebaseRemoteConfig = Firebase.remoteConfig.apply {
-        val configSettings = remoteConfigSettings {
-            minimumFetchIntervalInSeconds = 3600
-        }
-        setConfigSettingsAsync(configSettings)
-    }
-
-    @Singleton
-    @Provides
-    fun provideFirebaseMessaging(): FirebaseMessaging = FirebaseMessaging.getInstance()
 }
 
 @Qualifier

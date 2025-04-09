@@ -3,7 +3,7 @@ package com.idle.signup.worker
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.idle.analytics.businessmetric.AnalyticsHelper
+import com.idle.analytics.AnalyticsHelper
 import com.idle.binding.EventHelper
 import com.idle.domain.model.CountDownTimer
 import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
@@ -12,11 +12,9 @@ import com.idle.domain.model.auth.Gender
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.error.HttpResponseStatus
-import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
-import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
-import com.idle.domain.usecase.auth.SignInWorkerUseCase
-import com.idle.domain.usecase.auth.SignUpWorkerUseCase
-import com.idle.domain.usecase.profile.GetWorkerIdUseCase
+import com.idle.domain.repositorry.AuthRepository
+import com.idle.domain.repositorry.ProfileRepository
+import com.idle.domain.util.formatPhoneNumber
 import com.idle.navigation.DeepLinkDestination.SignUpComplete
 import com.idle.navigation.DeepLinkDestination.WorkerHome
 import com.idle.navigation.NavigationHelper
@@ -31,11 +29,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WorkerSignUpViewModel @Inject constructor(
-    private val getWorkerIdUseCase: GetWorkerIdUseCase,
-    private val signUpWorkerUseCase: SignUpWorkerUseCase,
-    private val signInWorkerUseCase: SignInWorkerUseCase,
-    private val sendPhoneNumberUseCase: SendPhoneNumberUseCase,
-    private val confirmAuthCodeUseCase: ConfirmAuthCodeUseCase,
+    private val profileRepository: ProfileRepository,
+    private val authRepository: AuthRepository,
     private val countDownTimer: CountDownTimer,
     private val analyticsHelper: AnalyticsHelper,
     private val errorHelper: ErrorHelper,
@@ -118,7 +113,7 @@ class WorkerSignUpViewModel @Inject constructor(
     }
 
     internal fun sendPhoneNumber() = viewModelScope.launch {
-        sendPhoneNumberUseCase(_workerPhoneNumber.value)
+        authRepository.sendPhoneNumber(formatPhoneNumber(_workerPhoneNumber.value))
             .onSuccess { startTimer() }
             .onFailure { errorHelper.sendError(it) }
     }
@@ -151,11 +146,11 @@ class WorkerSignUpViewModel @Inject constructor(
     }
 
     internal fun confirmAuthCode() = viewModelScope.launch {
-        signInWorkerUseCase(
-            phoneNumber = _workerPhoneNumber.value,
+        authRepository.signInWorker(
+            phoneNumber = formatPhoneNumber(_workerPhoneNumber.value),
             authCode = _workerAuthCode.value,
         ).onSuccess {
-            getWorkerIdUseCase().onSuccess { analyticsHelper.setUserId(it) }
+            profileRepository.getWorkerId().onSuccess { analyticsHelper.setUserId(it) }
             navigationHelper.navigateTo(
                 com.idle.navigation.NavigationEvent.NavigateTo(
                     WorkerHome,
@@ -163,7 +158,10 @@ class WorkerSignUpViewModel @Inject constructor(
                 )
             )
         }.onFailure {
-            confirmAuthCodeUseCase(_workerPhoneNumber.value, _workerAuthCode.value).onSuccess {
+            authRepository.confirmAuthCode(
+                formatPhoneNumber(_workerPhoneNumber.value),
+                _workerAuthCode.value
+            ).onSuccess {
                 cancelTimer()
                 _isConfirmAuthCode.value = true
                 _signUpStep.value = WorkerSignUpStep.findStep(PHONE_NUMBER.step + 1)
@@ -179,15 +177,15 @@ class WorkerSignUpViewModel @Inject constructor(
     }
 
     internal fun signUpWorker() = viewModelScope.launch {
-        signUpWorkerUseCase(
+        authRepository.signUpWorker(
             name = _workerName.value,
             birthYear = _birthYear.value.toIntOrNull() ?: return@launch,
             genderType = _gender.value.name,
-            phoneNumber = _workerPhoneNumber.value,
+            phoneNumber = formatPhoneNumber(_workerPhoneNumber.value),
             roadNameAddress = _roadNameAddress.value,
             lotNumberAddress = _lotNumberAddress.value,
         ).onSuccess {
-            getWorkerIdUseCase().onSuccess { analyticsHelper.setUserId(it) }
+            profileRepository.getWorkerId().onSuccess { analyticsHelper.setUserId(it) }
             navigationHelper.navigateTo(
                 com.idle.navigation.NavigationEvent.NavigateTo(
                     SignUpComplete,

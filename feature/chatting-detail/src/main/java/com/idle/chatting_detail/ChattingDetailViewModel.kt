@@ -7,13 +7,10 @@ import com.idle.domain.model.chat.ChatMessage
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.model.profile.WorkerProfile
-import com.idle.domain.repositorry.chatting.ChatRepository
-import com.idle.domain.usecase.chat.GetChatMessagesUseCase
-import com.idle.domain.usecase.chat.SubscribeChatMessageUseCase
-import com.idle.domain.usecase.profile.GetCenterProfileUseCase
+import com.idle.domain.repositorry.ChatRepository
+import com.idle.domain.repositorry.ProfileRepository
 import com.idle.domain.usecase.profile.GetLocalMyCenterProfileUseCase
 import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
-import com.idle.domain.usecase.profile.GetWorkerProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -25,12 +22,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ChattingDetailViewModel @Inject constructor(
-    private val getLocalMyCenterProfileUseCase: GetLocalMyCenterProfileUseCase,
+    private val profileRepository: ProfileRepository,
     private val getLocalMyWorkerProfileUseCase: GetLocalMyWorkerProfileUseCase,
-    private val getCenterProfileUseCase: GetCenterProfileUseCase,
-    private val getWorkerProfileUseCase: GetWorkerProfileUseCase,
-    private val getChatMessagesUseCase: GetChatMessagesUseCase,
-    private val subscribeChatMessageUseCase: SubscribeChatMessageUseCase,
+    private val getLocalMyCenterProfileUseCase: GetLocalMyCenterProfileUseCase,
     private val chatRepository: ChatRepository,
     private val errorHelper: ErrorHelper,
     val navigationHelper: com.idle.navigation.NavigationHelper,
@@ -61,7 +55,7 @@ class ChattingDetailViewModel @Inject constructor(
         when (myUserType) {
             UserType.CENTER -> {
                 launch {
-                    getWorkerProfileUseCase(senderId).onSuccess {
+                    profileRepository.getWorkerProfile(senderId).onSuccess {
                         _workerProfile.value = it
                     }.onFailure {
                         errorHelper.sendError(it)
@@ -77,7 +71,7 @@ class ChattingDetailViewModel @Inject constructor(
 
             UserType.WORKER -> {
                 launch {
-                    getCenterProfileUseCase(senderId).onSuccess {
+                    profileRepository.getCenterProfile(senderId).onSuccess {
                         _centerProfile.value = it
                     }.onFailure {
                         errorHelper.sendError(it)
@@ -101,7 +95,7 @@ class ChattingDetailViewModel @Inject constructor(
     ) = viewModelScope.launch {
         if (_callType.value == MessageCallType.END) return@launch
 
-        getChatMessagesUseCase(
+        chatRepository.getChatRoomMessages(
             userType = myUserType,
             roomId = roomId,
             messageId = _chatMessages.value?.first()?.id,
@@ -113,7 +107,7 @@ class ChattingDetailViewModel @Inject constructor(
     }
 
     internal fun subscribeChatMessage(userId: String) = viewModelScope.launch {
-        subscribeChatMessageUseCase(userId)
+        chatRepository.subscribeChatMessage(userId)
             .catch {
                 errorHelper.sendError(it)
             }.collect { chatMessage ->
@@ -148,5 +142,5 @@ class ChattingDetailViewModel @Inject constructor(
 }
 
 enum class MessageCallType {
-    PAGING, END
+    PAGING, END;
 }

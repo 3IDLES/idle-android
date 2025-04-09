@@ -13,12 +13,10 @@ import com.idle.domain.model.error.ApiErrorCode
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.error.HttpResponseStatus
-import com.idle.domain.repositorry.logging.LoggingRepository
-import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
-import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
-import com.idle.domain.usecase.auth.SignUpCenterUseCase
-import com.idle.domain.usecase.auth.ValidateBusinessRegistrationNumberUseCase
-import com.idle.domain.usecase.auth.ValidateIdentifierUseCase
+import com.idle.domain.repositorry.AuthRepository
+import com.idle.domain.repositorry.LoggingRepository
+import com.idle.domain.util.formatBusinessRegistrationNumber
+import com.idle.domain.util.formatPhoneNumber
 import com.idle.navigation.NavigationHelper
 import com.idle.signup.R
 import com.idle.signup.center.CenterSignUpStep.NAME
@@ -36,11 +34,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CenterSignUpViewModel @Inject constructor(
-    private val sendPhoneNumberUseCase: SendPhoneNumberUseCase,
-    private val confirmAuthCodeUseCase: ConfirmAuthCodeUseCase,
-    private val signUpCenterUseCase: SignUpCenterUseCase,
-    private val validateIdentifierUseCase: ValidateIdentifierUseCase,
-    private val validateBusinessRegistrationNumberUseCase: ValidateBusinessRegistrationNumberUseCase,
+    private val authRepository: AuthRepository,
     private val loggingRepository: LoggingRepository,
     private val countDownTimer: CountDownTimer,
     private val errorHelper: ErrorHelper,
@@ -214,13 +208,16 @@ class CenterSignUpViewModel @Inject constructor(
     }
 
     internal fun sendPhoneNumber() = viewModelScope.launch {
-        sendPhoneNumberUseCase(_centerPhoneNumber.value)
+        authRepository.sendPhoneNumber(formatPhoneNumber(_centerPhoneNumber.value))
             .onSuccess { startTimer() }
             .onFailure { errorHelper.sendError(it) }
     }
 
     internal fun confirmAuthCode() = viewModelScope.launch {
-        confirmAuthCodeUseCase(_centerPhoneNumber.value, _centerAuthCode.value)
+        authRepository.confirmAuthCode(
+            formatPhoneNumber(_centerPhoneNumber.value),
+            _centerAuthCode.value
+        )
             .onSuccess {
                 cancelTimer()
                 _isConfirmAuthCode.value = true
@@ -244,12 +241,14 @@ class CenterSignUpViewModel @Inject constructor(
             return@launch
         }
 
-        signUpCenterUseCase(
+        authRepository.signUpCenter(
             identifier = _centerId.value,
             password = _centerPassword.value,
-            phoneNumber = _centerPhoneNumber.value,
+            phoneNumber = formatPhoneNumber(_centerPhoneNumber.value),
             managerName = _centerName.value,
-            businessRegistrationNumber = _businessRegistrationNumber.value,
+            businessRegistrationNumber = formatBusinessRegistrationNumber(
+                _businessRegistrationNumber.value
+            ),
         ).onSuccess {
             navigationHelper.navigateTo(
                 com.idle.navigation.NavigationEvent.NavigateTo(
@@ -263,7 +262,8 @@ class CenterSignUpViewModel @Inject constructor(
 
     internal fun validateIdentifier() = viewModelScope.launch {
         eventHelper.sendEvent(MainEvent.DismissToast)
-        validateIdentifierUseCase(_centerId.value)
+
+        authRepository.validateIdentifier(_centerId.value)
             .onSuccess { _centerIdResult.value = true }
             .onFailure {
                 if (it is HttpResponseException && it.apiErrorCode == ApiErrorCode.DuplicateIdentifier) {
@@ -276,9 +276,11 @@ class CenterSignUpViewModel @Inject constructor(
     }
 
     internal fun validateBusinessRegistrationNumber() = viewModelScope.launch {
-        validateBusinessRegistrationNumberUseCase(_businessRegistrationNumber.value)
-            .onSuccess { _businessRegistrationInfo.value = it }
-            .onFailure { errorHelper.sendError(it) }
+        authRepository.validateBusinessRegistrationNumber(
+            formatBusinessRegistrationNumber(_businessRegistrationNumber.value)
+        ).onSuccess {
+            _businessRegistrationInfo.value = it
+        }.onFailure { errorHelper.sendError(it) }
     }
 
     private fun startTimer() {

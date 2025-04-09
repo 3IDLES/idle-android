@@ -1,20 +1,22 @@
 package com.idle.data.di
 
-import com.idle.data.repository.auth.AuthRepositoryImpl
-import com.idle.data.repository.auth.TokenManagerImpl
-import com.idle.data.repository.auth.TokenRepositoryImpl
-import com.idle.data.repository.chat.ChatRepositoryImpl
-import com.idle.data.repository.config.ConfigRepositoryImpl
-import com.idle.data.repository.jobposting.JobPostingRepositoryImpl
-import com.idle.data.repository.notification.NotificationRepositoryImpl
-import com.idle.data.repository.profile.ProfileRepositoryImpl
-import com.idle.domain.repositorry.auth.AuthRepository
-import com.idle.domain.repositorry.auth.TokenRepository
-import com.idle.domain.repositorry.chatting.ChatRepository
-import com.idle.domain.repositorry.config.ConfigRepository
-import com.idle.domain.repositorry.jobposting.JobPostingRepository
-import com.idle.domain.repositorry.notification.NotificationRepository
-import com.idle.domain.repositorry.profile.ProfileRepository
+import com.idle.data.repository.AuthRepositoryImpl
+import com.idle.data.repository.ConfigRepositoryImpl
+import com.idle.data.repository.ErrorRepositoryImpl
+import com.idle.data.repository.JobPostingRepositoryImpl
+import com.idle.data.repository.NotificationRepositoryImpl
+import com.idle.data.repository.ProfileRepositoryImpl
+import com.idle.data.repository.TokenManagerImpl
+import com.idle.data.repository.TokenRepositoryImpl
+import com.idle.data.repository.ChatRepositoryImpl
+import com.idle.domain.repositorry.AuthRepository
+import com.idle.domain.repositorry.ConfigRepository
+import com.idle.domain.repositorry.ErrorRepository
+import com.idle.domain.repositorry.JobPostingRepository
+import com.idle.domain.repositorry.NotificationRepository
+import com.idle.domain.repositorry.ProfileRepository
+import com.idle.domain.repositorry.TokenRepository
+import com.idle.domain.repositorry.ChatRepository
 import com.idle.network.di.TokenManager
 import dagger.Binds
 import dagger.Module
@@ -63,9 +65,15 @@ abstract class DataModule {
 
     @Binds
     @Singleton
-    abstract fun bindsChattingRepository(
+    abstract fun bindsChatRepository(
         chatRepositoryImpl: ChatRepositoryImpl,
     ): ChatRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindsErrorRepository(
+        errorRepositoryImpl: ErrorRepositoryImpl,
+    ): ErrorRepository
 
     @Binds
     @Singleton

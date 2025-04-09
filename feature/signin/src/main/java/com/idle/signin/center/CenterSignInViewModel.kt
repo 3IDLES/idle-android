@@ -5,16 +5,15 @@ import androidx.lifecycle.viewModelScope
 import com.idle.analytics.AnalyticsEvent
 import com.idle.analytics.AnalyticsEvent.PropertiesKeys.ACTION_NAME
 import com.idle.analytics.AnalyticsEvent.PropertiesKeys.ACTION_RESULT
-import com.idle.analytics.businessmetric.AnalyticsHelper
+import com.idle.analytics.AnalyticsHelper
 import com.idle.binding.EventHelper
 import com.idle.domain.model.error.ApiErrorCode
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.error.HttpResponseStatus
 import com.idle.domain.model.profile.CenterManagerAccountStatus
-import com.idle.domain.usecase.auth.SignInCenterUseCase
-import com.idle.domain.usecase.profile.GetCenterStatusUseCase
-import com.idle.domain.usecase.profile.GetMyCenterProfileUseCase
+import com.idle.domain.repositorry.AuthRepository
+import com.idle.domain.repositorry.ProfileRepository
 import com.idle.navigation.DeepLinkDestination.CenterHome
 import com.idle.navigation.DeepLinkDestination.CenterPending
 import com.idle.navigation.DeepLinkDestination.CenterRegister
@@ -28,9 +27,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CenterSignInViewModel @Inject constructor(
-    private val signInCenterUseCase: SignInCenterUseCase,
-    private val getCenterStatusUseCase: GetCenterStatusUseCase,
-    private val getMyCenterProfileUseCase: GetMyCenterProfileUseCase,
+    private val authRepository: AuthRepository,
+    private val profileRepository: ProfileRepository,
     private val analyticsHelper: AnalyticsHelper,
     private val errorHelper: ErrorHelper,
     val eventHelper: EventHelper,
@@ -64,7 +62,7 @@ class CenterSignInViewModel @Inject constructor(
     }
 
     internal fun signInCenter() = viewModelScope.launch {
-        signInCenterUseCase(identifier = _centerId.value, password = _centerPassword.value)
+        authRepository.signInCenter(identifier = _centerId.value, password = _centerPassword.value)
             .onSuccess {
                 analyticsHelper.setUserId(_centerId.value)
                 handleCenterLoginSuccess()
@@ -90,7 +88,7 @@ class CenterSignInViewModel @Inject constructor(
     }
 
     private fun handleCenterLoginSuccess() = viewModelScope.launch {
-        getCenterStatusUseCase().onSuccess { centerStatusResponse ->
+        profileRepository.getCenterStatus().onSuccess { centerStatusResponse ->
             navigateBasedOnCenterStatus(centerStatusResponse.centerManagerAccountStatus)
         }.onFailure { errorHelper.sendError(it) }
     }
@@ -108,7 +106,7 @@ class CenterSignInViewModel @Inject constructor(
     }
 
     private fun fetchAndNavigateToProfile() = viewModelScope.launch {
-        getMyCenterProfileUseCase().onSuccess {
+        profileRepository.getMyCenterProfile().onSuccess {
             navigationHelper.navigateTo(
                 NavigateTo(CenterHome, R.id.centerSignInFragment)
             )

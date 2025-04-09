@@ -2,7 +2,6 @@ package com.idle.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.idle.analytics.error.ErrorLoggingHelper
 import com.idle.auth.R
 import com.idle.binding.EventHelper
 import com.idle.binding.MainEvent.ShowToast
@@ -13,16 +12,12 @@ import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.jobposting.SharedJobPostingInfo
 import com.idle.domain.model.profile.CenterManagerAccountStatus
-import com.idle.domain.repositorry.jobposting.JobPostingRepository
-import com.idle.domain.usecase.auth.GetAccessTokenUseCase
-import com.idle.domain.usecase.auth.GetUserTypeUseCase
-import com.idle.domain.usecase.chat.ConnectWebSocketUseCase
-import com.idle.domain.usecase.chat.DisconnectWebSocketUseCase
-import com.idle.domain.usecase.config.GetForceUpdateInfoUseCase
-import com.idle.domain.usecase.notification.ReadNotificationUseCase
-import com.idle.domain.usecase.profile.GetCenterStatusUseCase
-import com.idle.domain.usecase.profile.GetMyCenterProfileUseCase
-import com.idle.domain.usecase.profile.GetMyWorkerProfileUseCase
+import com.idle.domain.repositorry.ChatRepository
+import com.idle.domain.repositorry.ConfigRepository
+import com.idle.domain.repositorry.JobPostingRepository
+import com.idle.domain.repositorry.NotificationRepository
+import com.idle.domain.repositorry.ProfileRepository
+import com.idle.domain.repositorry.TokenRepository
 import com.idle.navigation.DeepLinkDestination.CenterHome
 import com.idle.navigation.DeepLinkDestination.CenterPending
 import com.idle.navigation.DeepLinkDestination.CenterRegister
@@ -41,19 +36,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val getForceUpdateInfoUseCase: GetForceUpdateInfoUseCase,
-    private val getAccessTokenUseCase: GetAccessTokenUseCase,
-    private val getMyUserRoleUseCase: GetUserTypeUseCase,
-    private val getMyCenterProfileUseCase: GetMyCenterProfileUseCase,
-    private val getMyWorkerProfileUseCase: GetMyWorkerProfileUseCase,
-    private val getCenterStatusUseCase: GetCenterStatusUseCase,
-    private val readNotificationUseCase: ReadNotificationUseCase,
+    private val configRepository: ConfigRepository,
+    private val tokenRepository: TokenRepository,
+    private val profileRepository: ProfileRepository,
+    private val notificationRepository: NotificationRepository,
     private val jobPostingRepository: JobPostingRepository,
-    private val connectWebSocketUseCase: ConnectWebSocketUseCase,
-    private val disconnectWebSocketUseCase: DisconnectWebSocketUseCase,
+    private val chatRepository: ChatRepository,
     private val errorHelper: ErrorHelper,
     private val eventHelper: EventHelper,
-    val errorLoggingHelper: ErrorLoggingHelper,
     val navigationHelper: com.idle.navigation.NavigationHelper,
 ) : ViewModel() {
     private val _navigationMenuType = MutableStateFlow(NavigationMenuType.HIDE)
@@ -73,11 +63,11 @@ class MainViewModel @Inject constructor(
     }
 
     internal fun connectWebSocket() = viewModelScope.launch {
-        connectWebSocketUseCase()
+        chatRepository.connectWebSocket()
     }
 
     internal fun disconnectWebSocket() = viewModelScope.launch {
-        disconnectWebSocketUseCase()
+        chatRepository.connectWebSocket()
     }
 
     internal fun setNavigationMenuType(navigationMenuType: NavigationMenuType) {
@@ -85,7 +75,7 @@ class MainViewModel @Inject constructor(
     }
 
     internal fun getForceUpdateInfo() = viewModelScope.launch {
-        getForceUpdateInfoUseCase().onSuccess {
+        configRepository.getForceUpdate().onSuccess {
             _forceUpdate.value = it
         }.onFailure { errorHelper.sendError(it) }
     }
@@ -98,7 +88,7 @@ class MainViewModel @Inject constructor(
         }
 
         if (userRole == UserType.WORKER.apiValue) {
-            getMyWorkerProfileUseCase().onFailure {
+            profileRepository.getMyWorkerProfile().onFailure {
                 return@launch
             }
         }
@@ -111,12 +101,13 @@ class MainViewModel @Inject constructor(
     }
 
     internal fun readNotification(notificationId: String) = viewModelScope.launch {
-        readNotificationUseCase(notificationId).onFailure { errorHelper.sendError(it) }
+        notificationRepository.readNotification(notificationId)
+            .onFailure { errorHelper.sendError(it) }
     }
 
     private suspend fun getAccessTokenAndUserRole(): Pair<String, String> = coroutineScope {
-        val accessTokenDeferred = async { getAccessTokenUseCase() }
-        val userRoleDeferred = async { getMyUserRoleUseCase() }
+        val accessTokenDeferred = async { tokenRepository.getAccessToken() }
+        val userRoleDeferred = async { profileRepository.getMyUserType() }
         accessTokenDeferred.await() to userRoleDeferred.await()
     }
 
@@ -132,7 +123,7 @@ class MainViewModel @Inject constructor(
     }
 
     private suspend fun getCenterStatus() =
-        getCenterStatusUseCase().onSuccess { centerStatusResponse ->
+        profileRepository.getCenterStatus().onSuccess { centerStatusResponse ->
             handleCenterStatus(centerStatusResponse.centerManagerAccountStatus)
         }
 
@@ -149,7 +140,7 @@ class MainViewModel @Inject constructor(
     }
 
     private fun handleApprovedCenterStatus() = viewModelScope.launch {
-        getMyCenterProfileUseCase().onSuccess {
+        profileRepository.getMyCenterProfile().onSuccess {
             navigationHelper.navigateTo(
                 com.idle.navigation.NavigationEvent.NavigateTo(CenterHome, R.id.authFragment)
             )
@@ -168,8 +159,6 @@ class MainViewModel @Inject constructor(
 
     private fun handleError() = viewModelScope.launch {
         errorHelper.errorEvent.collect { exception ->
-            errorLoggingHelper.logError(exception)
-
             when (exception) {
                 is HttpResponseException -> {
                     when (exception.apiErrorCode) {

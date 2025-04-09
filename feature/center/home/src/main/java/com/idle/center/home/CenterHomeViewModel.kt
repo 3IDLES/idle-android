@@ -7,11 +7,9 @@ import com.idle.binding.MainEvent
 import com.idle.binding.ToastType.SUCCESS
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.jobposting.CenterJobPosting
-import com.idle.domain.usecase.config.ShowNotificationCenterUseCase
-import com.idle.domain.usecase.jobposting.EndJobPostingUseCase
-import com.idle.domain.usecase.jobposting.GetJobPostingsCompletedUseCase
+import com.idle.domain.repositorry.JobPostingRepository
+import com.idle.domain.repositorry.NotificationRepository
 import com.idle.domain.usecase.jobposting.GetJobPostingsInProgressUseCase
-import com.idle.domain.usecase.notification.GetUnreadNotificationCountUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,11 +18,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CenterHomeViewModel @Inject constructor(
+    private val jobPostingRepository: JobPostingRepository,
+    private val notificationRepository: NotificationRepository,
     private val getJobPostingsInProgressUseCase: GetJobPostingsInProgressUseCase,
-    private val getJobPostingsCompletedUseCase: GetJobPostingsCompletedUseCase,
-    private val endJobPostingUseCase: EndJobPostingUseCase,
-    private val showNotificationCenterUseCase: ShowNotificationCenterUseCase,
-    private val getUnreadNotificationCountUseCase: GetUnreadNotificationCountUseCase,
     private val errorHelper: ErrorHelper,
     private val eventHelper: EventHelper,
     val navigationHelper: com.idle.navigation.NavigationHelper,
@@ -41,21 +37,8 @@ class CenterHomeViewModel @Inject constructor(
     private val _unreadNotificationCount = MutableStateFlow(0)
     val unreadNotificationCount = _unreadNotificationCount.asStateFlow()
 
-    private val _showNotificationCenter = MutableStateFlow(false)
-    val showNotificationCenter = _showNotificationCenter.asStateFlow()
-
-    init {
-        showNotificationCenter()
-    }
-
-    private fun showNotificationCenter() = viewModelScope.launch {
-        showNotificationCenterUseCase().onSuccess {
-            _showNotificationCenter.value = it
-        }
-    }
-
     internal fun getUnreadNotificationCount() = viewModelScope.launch {
-        getUnreadNotificationCountUseCase().onSuccess {
+        notificationRepository.getUnreadNotificationCount().onSuccess {
             _unreadNotificationCount.value = it
         }.onFailure { errorHelper.sendError(it) }
     }
@@ -76,13 +59,13 @@ class CenterHomeViewModel @Inject constructor(
     }
 
     internal fun getJobPostingsCompleted() = viewModelScope.launch {
-        getJobPostingsCompletedUseCase().onSuccess {
+        jobPostingRepository.getJobPostingsCompleted().onSuccess {
             _jobPostingsCompleted.value = it
         }.onFailure { errorHelper.sendError(it) }
     }
 
     internal fun endJobPosting(jobPostingId: String) = viewModelScope.launch {
-        endJobPostingUseCase(jobPostingId).onSuccess {
+        jobPostingRepository.endJobPosting(jobPostingId).onSuccess {
             val jobPostingsInProgress = _jobPostingsInProgress.value ?: emptyList()
             val jobPostingsCompleted = _jobPostingsCompleted.value ?: emptyList()
 

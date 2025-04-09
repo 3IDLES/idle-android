@@ -11,11 +11,7 @@ import com.idle.domain.model.jobposting.EditJobPostingDetail
 import com.idle.domain.model.jobposting.JobPostingStatus
 import com.idle.domain.model.jobposting.LifeAssistance
 import com.idle.domain.model.profile.CenterProfile
-import com.idle.domain.usecase.jobposting.DeleteJobPostingUseCase
-import com.idle.domain.usecase.jobposting.EndJobPostingUseCase
-import com.idle.domain.usecase.jobposting.GetApplicantsCountUseCase
-import com.idle.domain.usecase.jobposting.GetCenterJobPostingDetailUseCase
-import com.idle.domain.usecase.jobposting.UpdateJobPostingUseCase
+import com.idle.domain.repositorry.JobPostingRepository
 import com.idle.domain.usecase.profile.GetLocalMyCenterProfileUseCase
 import com.idle.job.posting.detail.R
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,11 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CenterJobPostingDetailViewModel @Inject constructor(
     private val getLocalMyCenterProfileUseCase: GetLocalMyCenterProfileUseCase,
-    private val getCenterJobPostingDetailUseCase: GetCenterJobPostingDetailUseCase,
-    private val getApplicantsCountUseCase: GetApplicantsCountUseCase,
-    private val updateJobPostingUseCase: UpdateJobPostingUseCase,
-    private val endJobPostingUseCase: EndJobPostingUseCase,
-    private val deleteJobPostingUseCase: DeleteJobPostingUseCase,
+    private val jobPostingRepository: JobPostingRepository,
     private val errorHelper: ErrorHelper,
     val eventHelper: EventHelper,
     val navigationHelper: com.idle.navigation.NavigationHelper,
@@ -59,13 +51,13 @@ class CenterJobPostingDetailViewModel @Inject constructor(
     }
 
     internal fun getCenterJobPostingDetail(jobPostingId: String) = viewModelScope.launch {
-        getCenterJobPostingDetailUseCase(jobPostingId)
+        jobPostingRepository.getCenterJobPostingDetail(jobPostingId)
             .onSuccess { _jobPostingDetail.value = it }
             .onFailure { errorHelper.sendError(it) }
     }
 
     internal fun getApplicantsCount(jobPostingId: String) = viewModelScope.launch {
-        getApplicantsCountUseCase(jobPostingId).onSuccess {
+        jobPostingRepository.getApplicantsCount(jobPostingId).onSuccess {
             _applicantsCount.value = it
         }.onFailure { errorHelper.sendError(it) }
     }
@@ -83,7 +75,7 @@ class CenterJobPostingDetailViewModel @Inject constructor(
                 return@launch
             }
 
-            updateJobPostingUseCase(
+            jobPostingRepository.updateJobPosting(
                 jobPostingId = _jobPostingDetail.value?.id ?: return@launch,
                 weekdays = editJobPostingDetail.weekdays.toList()
                     .sortedBy { it.ordinal },
@@ -110,7 +102,7 @@ class CenterJobPostingDetailViewModel @Inject constructor(
                 isExperiencePreferred = editJobPostingDetail.isExperiencePreferred,
                 applyMethod = editJobPostingDetail.applyMethod.toList()
                     .sortedBy { it.ordinal },
-                applyDeadlineType = editJobPostingDetail.applyDeadlineType,
+                applyDeadLineType = editJobPostingDetail.applyDeadlineType,
                 applyDeadline = editJobPostingDetail.applyDeadline.toString()
                     .ifBlank { null },
             ).onSuccess {
@@ -123,7 +115,7 @@ class CenterJobPostingDetailViewModel @Inject constructor(
         }
 
     internal fun endJobPosting(jobPostingId: String) = viewModelScope.launch {
-        endJobPostingUseCase(jobPostingId).onSuccess {
+        jobPostingRepository.endJobPosting(jobPostingId).onSuccess {
             _jobPostingDetail.value =
                 _jobPostingDetail.value?.copy(jobPostingStatus = JobPostingStatus.COMPLETED)
             eventHelper.sendEvent(
@@ -133,7 +125,7 @@ class CenterJobPostingDetailViewModel @Inject constructor(
     }
 
     internal fun deleteJobPosting(jobPostingId: String) = viewModelScope.launch {
-        deleteJobPostingUseCase(jobPostingId).onSuccess {
+        jobPostingRepository.deleteJobPosting(jobPostingId).onSuccess {
             navigationHelper.navigateTo(
                 com.idle.navigation.NavigationEvent.NavigateTo(
                     com.idle.navigation.DeepLinkDestination.CenterHome,

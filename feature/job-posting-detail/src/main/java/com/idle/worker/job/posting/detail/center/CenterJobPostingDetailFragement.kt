@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.navArgs
-import com.idle.analytics.businessmetric.TrackScreenViewEvent
+import com.idle.analytics.TrackScreenViewEvent
 import com.idle.binding.MainEvent
 import com.idle.center.job.edit.JobEditScreen
 import com.idle.compose.base.BaseComposeFragment

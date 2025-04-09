@@ -12,14 +12,8 @@ import com.idle.domain.model.jobposting.JobPosting
 import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.WorkerJobPosting
 import com.idle.domain.model.profile.WorkerProfile
-import com.idle.domain.repositorry.jobposting.JobPostingRepository
-import com.idle.domain.usecase.config.ShowNotificationCenterUseCase
-import com.idle.domain.usecase.jobposting.AddFavoriteJobPostingUseCase
-import com.idle.domain.usecase.jobposting.ApplyJobPostingUseCase
-import com.idle.domain.usecase.jobposting.GetCrawlingJobPostingsUseCase
-import com.idle.domain.usecase.jobposting.GetJobPostingsUseCase
-import com.idle.domain.usecase.jobposting.RemoveFavoriteJobPostingUseCase
-import com.idle.domain.usecase.notification.GetUnreadNotificationCountUseCase
+import com.idle.domain.repositorry.JobPostingRepository
+import com.idle.domain.repositorry.NotificationRepository
 import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
 import com.idle.navigation.DeepLinkDestination
 import com.idle.navigation.NavigationEvent
@@ -34,13 +28,7 @@ import javax.inject.Inject
 @HiltViewModel
 class WorkerHomeViewModel @Inject constructor(
     private val getLocalMyWorkerProfileUseCase: GetLocalMyWorkerProfileUseCase,
-    private val getJobPostingsUseCase: GetJobPostingsUseCase,
-    private val getCrawlingJobPostingsUseCase: GetCrawlingJobPostingsUseCase,
-    private val applyJobPostingUseCase: ApplyJobPostingUseCase,
-    private val addFavoriteJobPostingUseCase: AddFavoriteJobPostingUseCase,
-    private val removeFavoriteJobPostingUseCase: RemoveFavoriteJobPostingUseCase,
-    private val showNotificationCenterUseCase: ShowNotificationCenterUseCase,
-    private val getUnreadNotificationCountUseCase: GetUnreadNotificationCountUseCase,
+    private val notificationRepository: NotificationRepository,
     private val jobPostingRepository: JobPostingRepository,
     private val errorHelper: ErrorHelper,
     private val eventHelper: EventHelper,
@@ -56,9 +44,6 @@ class WorkerHomeViewModel @Inject constructor(
 
     private val _callType = MutableStateFlow<JobPostingCallType>(JobPostingCallType.IN_APP)
     val callType = _callType.asStateFlow()
-
-    private val _showNotificationCenter = MutableStateFlow(false)
-    val showNotificationCenter = _showNotificationCenter.asStateFlow()
 
     private val _unreadNotificationCount = MutableStateFlow(0)
     val unreadNotificationCount = _unreadNotificationCount.asStateFlow()
@@ -79,13 +64,13 @@ class WorkerHomeViewModel @Inject constructor(
     }
 
     internal fun getUnreadNotificationCount() = viewModelScope.launch {
-        getUnreadNotificationCountUseCase().onSuccess {
+        notificationRepository.getUnreadNotificationCount().onSuccess {
             _unreadNotificationCount.value = it
         }.onFailure { errorHelper.sendError(it) }
     }
 
     internal fun applyJobPosting(jobPostingId: String) = viewModelScope.launch {
-        applyJobPostingUseCase(
+        jobPostingRepository.applyJobPosting(
             jobPostingId = jobPostingId,
             applyMethod = ApplyMethod.APP
         ).onSuccess {
@@ -104,7 +89,7 @@ class WorkerHomeViewModel @Inject constructor(
         jobPostingId: String,
         jobPostingType: JobPostingType,
     ) = viewModelScope.launch {
-        addFavoriteJobPostingUseCase(
+        jobPostingRepository.addFavoriteJobPosting(
             jobPostingId = jobPostingId,
             jobPostingType = jobPostingType,
         ).onSuccess {
@@ -127,7 +112,7 @@ class WorkerHomeViewModel @Inject constructor(
     }
 
     internal fun removeFavoriteJobPosting(jobPostingId: String) = viewModelScope.launch {
-        removeFavoriteJobPostingUseCase(jobPostingId = jobPostingId).onSuccess {
+        jobPostingRepository.removeFavoriteJobPosting(jobPostingId = jobPostingId).onSuccess {
             eventHelper.sendEvent(MainEvent.ShowToast("즐겨찾기에서 제거되었어요", ToastType.SUCCESS))
 
             _jobPostings.value = _jobPostings.value?.map {
@@ -144,14 +129,6 @@ class WorkerHomeViewModel @Inject constructor(
                 }
             }
         }.onFailure { errorHelper.sendError(it) }
-    }
-
-    internal fun showNotificationCenter() = viewModelScope.launch {
-        launch {
-            showNotificationCenterUseCase().onSuccess {
-                _showNotificationCenter.value = it
-            }
-        }
     }
 
     internal fun getMyWorkerProfile() = viewModelScope.launch {
@@ -176,7 +153,7 @@ class WorkerHomeViewModel @Inject constructor(
     }
 
     private suspend fun fetchInAppJobPostings() {
-        getJobPostingsUseCase(next = next.value).onSuccess { (nextId, postings) ->
+        jobPostingRepository.getJobPostings(next = next.value).onSuccess { (nextId, postings) ->
             next.value = nextId
             if (nextId == null) {
                 _callType.value = JobPostingCallType.CRAWLING
@@ -190,13 +167,14 @@ class WorkerHomeViewModel @Inject constructor(
     }
 
     private suspend fun fetchCrawlingJobPostings() {
-        getCrawlingJobPostingsUseCase(next = next.value).onSuccess { (nextId, postings) ->
-            next.value = nextId
-            if (nextId == null) {
-                _callType.value = JobPostingCallType.END
-            }
-            _jobPostings.value = _jobPostings.value?.plus(postings) ?: postings
-        }.onFailure { errorHelper.sendError(it) }
+        jobPostingRepository.getCrawlingJobPostings(next = next.value)
+            .onSuccess { (nextId, postings) ->
+                next.value = nextId
+                if (nextId == null) {
+                    _callType.value = JobPostingCallType.END
+                }
+                _jobPostings.value = _jobPostings.value?.plus(postings) ?: postings
+            }.onFailure { errorHelper.sendError(it) }
     }
 }
 

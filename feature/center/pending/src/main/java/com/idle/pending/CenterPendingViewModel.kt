@@ -10,10 +10,8 @@ import com.idle.domain.model.error.ApiErrorCode
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.profile.CenterManagerAccountStatus
-import com.idle.domain.usecase.auth.LogoutCenterUseCase
-import com.idle.domain.usecase.auth.SendCenterVerificationRequestUseCase
-import com.idle.domain.usecase.profile.GetCenterStatusUseCase
-import com.idle.domain.usecase.profile.GetMyCenterProfileUseCase
+import com.idle.domain.repositorry.AuthRepository
+import com.idle.domain.repositorry.ProfileRepository
 import com.idle.navigation.DeepLinkDestination.CenterHome
 import com.idle.navigation.DeepLinkDestination.CenterRegister
 import com.idle.navigation.NavigationEvent
@@ -28,10 +26,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CenterPendingViewModel @Inject constructor(
-    private val logoutCenterUseCase: LogoutCenterUseCase,
-    private val sendCenterVerificationRequestUseCase: SendCenterVerificationRequestUseCase,
-    private val getCenterStatusUseCase: GetCenterStatusUseCase,
-    private val getMyCenterProfileUseCase: GetMyCenterProfileUseCase,
+    private val authRepository: AuthRepository,
+    private val profileRepository: ProfileRepository,
     private val errorHelper: ErrorHelper,
     private val eventHelper: EventHelper,
     private val navigationHelper: NavigationHelper,
@@ -50,7 +46,7 @@ class CenterPendingViewModel @Inject constructor(
     }
 
     internal fun logout() = viewModelScope.launch {
-        logoutCenterUseCase().onSuccess {
+        authRepository.logoutCenter().onSuccess {
             navigationHelper.navigateTo(
                 NavigationEvent.NavigateToAuthWithClearBackStack(
                     toastMsg = "로그아웃이 완료되었습니다.",
@@ -61,7 +57,7 @@ class CenterPendingViewModel @Inject constructor(
     }
 
     internal fun sendVerificationRequest() = viewModelScope.launch {
-        sendCenterVerificationRequestUseCase().onSuccess {
+        authRepository.sendCenterVerificationRequest().onSuccess {
             _status.value = CenterManagerAccountStatus.PENDING
             eventHelper.sendEvent(MainEvent.ShowToast("센터 인증 요청이 완료되었습니다.", SUCCESS))
         }.onFailure { errorHelper.sendError(it) }
@@ -78,7 +74,7 @@ class CenterPendingViewModel @Inject constructor(
     }
 
     private fun getCenterStatus() = viewModelScope.launch {
-        getCenterStatusUseCase().onSuccess {
+        profileRepository.getCenterStatus().onSuccess {
             when (it.centerManagerAccountStatus) {
                 CenterManagerAccountStatus.APPROVED -> {
                     handleApprovedCenterStatus()
@@ -91,7 +87,7 @@ class CenterPendingViewModel @Inject constructor(
     }
 
     private fun handleApprovedCenterStatus() = viewModelScope.launch {
-        getMyCenterProfileUseCase().onSuccess {
+        profileRepository.getMyCenterProfile().onSuccess {
             navigationHelper.navigateTo(
                 NavigationEvent.NavigateTo(CenterHome, R.id.centerPendingFragment)
             )

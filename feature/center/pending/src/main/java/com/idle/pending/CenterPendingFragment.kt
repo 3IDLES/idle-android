@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.navArgs
-import com.idle.analytics.businessmetric.TrackScreenViewEvent
+import com.idle.analytics.TrackScreenViewEvent
 import com.idle.center.pending.R
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable

@@ -11,9 +11,8 @@ import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.error.HttpResponseStatus
-import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
-import com.idle.domain.usecase.auth.GenerateNewPasswordUseCase
-import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
+import com.idle.domain.repositorry.AuthRepository
+import com.idle.domain.util.formatPhoneNumber
 import com.idle.signin.R
 import com.idle.signin.center.newpassword.NewPasswordStep.GENERATE_NEW_PASSWORD
 import com.idle.signin.center.newpassword.NewPasswordStep.PHONE_NUMBER
@@ -31,9 +30,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NewPasswordViewModel @Inject constructor(
-    private val sendPhoneNumberUseCase: SendPhoneNumberUseCase,
-    private val confirmAuthCodeUseCase: ConfirmAuthCodeUseCase,
-    private val generateNewPasswordUseCase: GenerateNewPasswordUseCase,
+    private val authRepository: AuthRepository,
     private val countDownTimer: CountDownTimer,
     private val errorHelper: ErrorHelper,
     private val eventHelper: EventHelper,
@@ -152,14 +149,14 @@ class NewPasswordViewModel @Inject constructor(
     }
 
     internal fun sendPhoneNumber() = viewModelScope.launch {
-        sendPhoneNumberUseCase(_phoneNumber.value)
+        authRepository.sendPhoneNumber(formatPhoneNumber(_phoneNumber.value))
             .onSuccess { startTimer() }
             .onFailure { eventHelper.sendEvent(MainEvent.ShowToast(it.message.toString())) }
     }
 
     internal fun confirmAuthCode() = viewModelScope.launch {
-        confirmAuthCodeUseCase(
-            _phoneNumber.value,
+        authRepository.confirmAuthCode(
+            formatPhoneNumber(_phoneNumber.value),
             this@NewPasswordViewModel._authCode.value
         ).onSuccess {
             cancelTimer()
@@ -183,9 +180,9 @@ class NewPasswordViewModel @Inject constructor(
             return@launch
         }
 
-        generateNewPasswordUseCase(
+        authRepository.generateNewPassword(
             newPassword = _newPassword.value,
-            phoneNumber = _phoneNumber.value
+            phoneNumber = formatPhoneNumber(_phoneNumber.value),
         ).onSuccess {
             navigationHelper.navigateTo(
                 com.idle.navigation.NavigationEvent.NavigateTo(

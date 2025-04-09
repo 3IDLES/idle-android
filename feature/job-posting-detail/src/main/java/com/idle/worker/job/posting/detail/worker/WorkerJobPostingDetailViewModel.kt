@@ -6,7 +6,7 @@ import com.idle.analytics.AnalyticsEvent
 import com.idle.analytics.AnalyticsEvent.PropertiesKeys.ACTION_NAME
 import com.idle.analytics.AnalyticsEvent.PropertiesKeys.SCREEN_NAME
 import com.idle.analytics.AnalyticsEvent.Types.ACTION
-import com.idle.analytics.businessmetric.AnalyticsHelper
+import com.idle.analytics.AnalyticsHelper
 import com.idle.binding.EventHelper
 import com.idle.binding.MainEvent
 import com.idle.binding.ToastType.SUCCESS
@@ -18,12 +18,8 @@ import com.idle.domain.model.jobposting.JobPosting
 import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.WorkerJobPostingDetail
 import com.idle.domain.model.profile.WorkerProfile
-import com.idle.domain.usecase.chat.GenerateChatRoomUseCase
-import com.idle.domain.usecase.jobposting.AddFavoriteJobPostingUseCase
-import com.idle.domain.usecase.jobposting.ApplyJobPostingUseCase
-import com.idle.domain.usecase.jobposting.GetCrawlingJobPostingsDetailUseCase
-import com.idle.domain.usecase.jobposting.GetWorkerJobPostingDetailUseCase
-import com.idle.domain.usecase.jobposting.RemoveFavoriteJobPostingUseCase
+import com.idle.domain.repositorry.ChatRepository
+import com.idle.domain.repositorry.JobPostingRepository
 import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
 import com.idle.navigation.DeepLinkDestination
 import com.idle.navigation.NavigationEvent
@@ -37,12 +33,8 @@ import javax.inject.Inject
 @HiltViewModel
 class WorkerJobPostingDetailViewModel @Inject constructor(
     private val getLocalMyWorkerProfileUseCase: GetLocalMyWorkerProfileUseCase,
-    private val getWorkerJobPostingDetailUseCase: GetWorkerJobPostingDetailUseCase,
-    private val getCrawlingJobPostingsDetailUseCase: GetCrawlingJobPostingsDetailUseCase,
-    private val applyJobPostingUseCase: ApplyJobPostingUseCase,
-    private val addFavoriteJobPostingUseCase: AddFavoriteJobPostingUseCase,
-    private val removeFavoriteJobPostingUseCase: RemoveFavoriteJobPostingUseCase,
-    private val generateChatRoomUseCase: GenerateChatRoomUseCase,
+    private val jobPostingRepository: JobPostingRepository,
+    private val chatRepository: ChatRepository,
     private val analyticsHelper: AnalyticsHelper,
     private val errorHelper: ErrorHelper,
     val eventHelper: EventHelper,
@@ -65,11 +57,15 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
         jobPostingType: String,
     ) = viewModelScope.launch {
         when (jobPostingType) {
-            JobPostingType.CAREMEET.name -> getWorkerJobPostingDetailUseCase(jobPostingId).onSuccess {
+            JobPostingType.CAREMEET.name -> jobPostingRepository.getWorkerJobPostingDetail(
+                jobPostingId
+            ).onSuccess {
                 _workerJobPostingDetail.value = it
             }.onFailure { errorHelper.sendError(it) }
 
-            JobPostingType.WORKNET.name -> getCrawlingJobPostingsDetailUseCase(jobPostingId).onSuccess {
+            JobPostingType.WORKNET.name -> jobPostingRepository.getCrawlingJobPostingDetail(
+                jobPostingId
+            ).onSuccess {
                 _workerJobPostingDetail.value = it
             }.onFailure { errorHelper.sendError(it) }
         }
@@ -77,7 +73,7 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
 
     internal fun applyJobPosting(jobPostingId: String, applyMethod: ApplyMethod) =
         viewModelScope.launch {
-            applyJobPostingUseCase(
+            jobPostingRepository.applyJobPosting(
                 jobPostingId = jobPostingId,
                 applyMethod = applyMethod,
             ).onSuccess {
@@ -105,7 +101,7 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
         jobPostingId: String,
         jobPostingType: JobPostingType,
     ) = viewModelScope.launch {
-        addFavoriteJobPostingUseCase(
+        jobPostingRepository.addFavoriteJobPosting(
             jobPostingId = jobPostingId,
             jobPostingType = jobPostingType,
         ).onSuccess {
@@ -131,7 +127,7 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
         jobPostingId: String,
         jobPostingType: JobPostingType,
     ) = viewModelScope.launch {
-        removeFavoriteJobPostingUseCase(jobPostingId = jobPostingId).onSuccess {
+        jobPostingRepository.removeFavoriteJobPosting(jobPostingId = jobPostingId).onSuccess {
             eventHelper.sendEvent(
                 MainEvent.ShowToast("즐겨찾기에서 제거되었어요.", SUCCESS)
             )
@@ -151,7 +147,7 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
     }
 
     internal fun generateChatRoom(opponentId: String) = viewModelScope.launch {
-        generateChatRoomUseCase(
+        chatRepository.generateChatRooms(
             userType = UserType.WORKER,
             opponentId = opponentId,
         ).onSuccess {

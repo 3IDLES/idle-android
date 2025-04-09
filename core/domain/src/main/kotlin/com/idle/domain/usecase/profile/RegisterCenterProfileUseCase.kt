@@ -1,7 +1,7 @@
 package com.idle.domain.usecase.profile
 
 import com.idle.domain.model.auth.UserType
-import com.idle.domain.repositorry.profile.ProfileRepository
+import com.idle.domain.repositorry.ProfileRepository
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject

@@ -1,7 +1,7 @@
 package com.idle.domain.usecase.profile
 
 import com.idle.domain.model.profile.CenterProfile
-import com.idle.domain.repositorry.profile.ProfileRepository
+import com.idle.domain.repositorry.ProfileRepository
 import javax.inject.Inject
 
 class GetLocalMyCenterProfileUseCase @Inject constructor(

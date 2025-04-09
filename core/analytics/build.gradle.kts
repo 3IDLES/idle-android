@@ -19,15 +19,6 @@ android {
         )
     }
 
-    buildTypes {
-        debug {
-            buildConfigField("String", "BUILD_TYPE", "\"DEBUG\"")
-        }
-        release {
-            buildConfigField("String", "BUILD_TYPE", "\"RELEASE\"")
-        }
-    }
-
     buildFeatures {
         buildConfig = true
     }

@@ -41,7 +41,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.idle.analytics.businessmetric.TrackScreenViewEvent
+import com.idle.analytics.TrackScreenViewEvent
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designresource.R
@@ -69,25 +69,18 @@ internal class CenterHomeFragment : BaseComposeFragment() {
             val jobPostingsInProgress by jobPostingsInProgress.collectAsStateWithLifecycle()
             val jobPostingsCompleted by jobPostingsCompleted.collectAsStateWithLifecycle()
             val unreadNotificationCount by unreadNotificationCount.collectAsStateWithLifecycle()
-            val showNotificationCenter by showNotificationCenter.collectAsStateWithLifecycle()
 
             LaunchedEffect(true) {
                 clearJobPostingStatus()
                 launch { getJobPostingsCompleted() }
                 launch { getJobPostingsInProgress() }
-            }
-
-            LaunchedEffect(showNotificationCenter) {
-                if (showNotificationCenter) {
-                    getUnreadNotificationCount()
-                }
+                launch { getUnreadNotificationCount() }
             }
 
             CenterHomeScreen(
                 recruitmentPostStatus = recruitmentPostStatus,
                 jobPostingsInProgresses = jobPostingsInProgress,
                 jobPostingsCompleted = jobPostingsCompleted,
-                showNotificationCenter = showNotificationCenter,
                 unreadNotificationCount = unreadNotificationCount,
                 setRecruitmentPostStatus = ::setRecruitmentPostStatus,
                 endJobPosting = ::endJobPosting,
@@ -108,7 +101,6 @@ internal fun CenterHomeScreen(
     recruitmentPostStatus: RecruitmentPostStatus,
     jobPostingsInProgresses: List<CenterJobPosting>?,
     jobPostingsCompleted: List<CenterJobPosting>?,
-    showNotificationCenter: Boolean,
     unreadNotificationCount: Int,
     setRecruitmentPostStatus: (RecruitmentPostStatus) -> Unit,
     endJobPosting: (String) -> Unit,
@@ -149,27 +141,25 @@ internal fun CenterHomeScreen(
                 title = stringResource(id = R.string.my_job_posting),
                 modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 48.dp, bottom = 8.dp),
                 rightComponent = {
-                    if (showNotificationCenter) {
-                        Box(
-                            modifier = Modifier
-                                .size(32.dp)
-                                .clickable { navigateTo(com.idle.navigation.DeepLinkDestination.Notification) },
-                        ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.ic_notification),
-                                contentDescription = null,
-                            )
+                    Box(
+                        modifier = Modifier
+                            .size(32.dp)
+                            .clickable { navigateTo(com.idle.navigation.DeepLinkDestination.Notification) },
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_notification),
+                            contentDescription = null,
+                        )
 
-                            if (unreadNotificationCount > 0) {
-                                Box(
-                                    modifier = Modifier
-                                        .align(Alignment.TopEnd)
-                                        .padding(top = 1.dp)
-                                        .clip(CircleShape)
-                                        .size(6.dp)
-                                        .background(CareTheme.colors.red),
-                                )
-                            }
+                        if (unreadNotificationCount > 0) {
+                            Box(
+                                modifier = Modifier
+                                    .align(Alignment.TopEnd)
+                                    .padding(top = 1.dp)
+                                    .clip(CircleShape)
+                                    .size(6.dp)
+                                    .background(CareTheme.colors.red),
+                            )
                         }
                     }
                 },

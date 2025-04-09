@@ -5,6 +5,8 @@ plugins {
     id("care.android.binding")
     id("com.google.firebase.crashlytics")
     alias(libs.plugins.androidx.navigation.safeargs)
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.baselineprofile)
 }
 
 android {
@@ -61,9 +63,11 @@ dependencies {
     implementation(projects.core.domain)
     implementation(projects.presentation)
     implementation(projects.core.analytics)
+    baselineProfile(projects.baselineprofile)
 
     implementation(libs.firebase.messaging)
     implementation(libs.kakao.common)
     implementation(libs.appsFlyer)
     implementation(libs.installerReferrer)
+    implementation(libs.androidx.profileinstaller)
 }

@@ -16,7 +16,7 @@ import com.idle.domain.model.jobposting.LifeAssistance
 import com.idle.domain.model.jobposting.MentalStatus
 import com.idle.domain.model.jobposting.PayType
 import com.idle.domain.model.profile.CenterProfile
-import com.idle.domain.usecase.jobposting.PostJobPostingUseCase
+import com.idle.domain.repositorry.JobPostingRepository
 import com.idle.domain.usecase.profile.GetLocalMyCenterProfileUseCase
 import com.idle.navigation.DeepLinkDestination.CenterJobPostingPostComplete
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -36,7 +36,7 @@ import javax.inject.Inject
 @HiltViewModel
 class JobPostingViewModel @Inject constructor(
     private val getLocalMyCenterProfileUseCase: GetLocalMyCenterProfileUseCase,
-    private val postJobPostingUseCase: PostJobPostingUseCase,
+    private val jobPostingRepository: JobPostingRepository,
     private val errorHelper: ErrorHelper,
     val eventHelper: EventHelper,
     val navigationHelper: com.idle.navigation.NavigationHelper,
@@ -310,7 +310,7 @@ class JobPostingViewModel @Inject constructor(
 
     internal fun postJobPosting() {
         viewModelScope.launch {
-            postJobPostingUseCase(
+            jobPostingRepository.postJobPosting(
                 weekdays = _weekDays.value.toList()
                     .sortedBy { it.ordinal },
                 startTime = _workStartTime.value,
