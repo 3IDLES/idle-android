@@ -1,5 +1,6 @@
 package com.idle.chatting_detail
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.domain.model.auth.UserType
@@ -109,17 +110,20 @@ class ChattingDetailViewModel @Inject constructor(
     internal fun subscribeChatMessage(userId: String) = viewModelScope.launch {
         chatRepository.subscribeChatMessage(userId)
             .catch {
+                Log.d("test", it.stackTraceToString())
                 errorHelper.sendError(it)
             }.collect { chatMessage ->
+                Log.d("test", chatMessage.toString())
+
                 _chatMessages.value = (_chatMessages.value ?: emptyList()) + chatMessage
             }
     }
 
     internal fun sendMessage(myUserType: UserType, roomId: String) = viewModelScope.launch {
         chatRepository.sendMessage(
-            chatRoomId = roomId,
+            chatroomId = roomId,
             receiverId = if (myUserType == UserType.CENTER) _workerProfile.value!!.workerId
-            else "1234",
+            else _workerProfile.value!!.workerId,
             senderName = if (myUserType == UserType.CENTER) _centerProfile.value!!.centerName
             else _workerProfile.value!!.workerName,
             content = _writingText.value,

@@ -8,7 +8,7 @@ import java.time.format.DateTimeFormatter
 @Serializable
 data class ChatMessageResponse(
     val id: String?,
-    val chatRoomId: String?,
+    val chatroomId: String?,
     val senderId: String?,
     val receiverId: String?,
     val content: String?,
@@ -17,7 +17,7 @@ data class ChatMessageResponse(
 ) {
     fun toVO() = ChatMessage(
         id = id ?: "-1",
-        roomId = chatRoomId ?: "-1",
+        roomId = chatroomId ?: "-1",
         senderId = senderId ?: "-1",
         receiverId = receiverId ?: "",
         content = content ?: "",

@@ -7,7 +7,6 @@ import com.idle.network.model.chat.SendChatMessageRequest
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 import kotlinx.serialization.json.Json
 import okio.IOException
 import org.hildan.krossbow.stomp.config.StompConfig
@@ -16,7 +15,6 @@ import org.hildan.krossbow.stomp.conversions.kxserialization.json.withJsonConver
 import org.hildan.krossbow.stomp.headers.StompSendHeaders
 import org.hildan.krossbow.stomp.headers.StompSubscribeHeaders
 import org.hildan.krossbow.stomp.stomp
-import org.hildan.krossbow.stomp.use
 import org.hildan.krossbow.websocket.WebSocketClient
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -59,18 +57,17 @@ class WebSocketDataSource @Inject constructor(
     }
 
     suspend fun subscribeChatMessage(userId: String): Flow<ChatMessageResponse> =
-        session?.subscribe(StompSubscribeHeaders(destination = "/sub/${userId}"))
-            ?.map { json.decodeFromString<ChatMessageResponse>(it.bodyAsText) }
-            ?: flow { throw IOException("웹소켓을 먼저 연결해주세요.") }
+        session?.subscribe(
+            StompSubscribeHeaders(destination = "/sub/${userId}"),
+            ChatMessageResponse.serializer()
+        ) ?: flow { throw IOException("웹소켓을 먼저 연결해주세요.") }
 
     suspend fun sendMessage(sendChatMessageRequest: SendChatMessageRequest): Result<Unit> =
         runCatching {
-            session?.use { s ->
-                s.convertAndSend(
-                    headers = StompSendHeaders(destination = "/pub/send"),
-                    body = sendChatMessageRequest,
-                    serializer = SendChatMessageRequest.serializer(),
-                )
-            }
+            session?.convertAndSend(
+                headers = StompSendHeaders(destination = "/pub/send"),
+                body = sendChatMessageRequest,
+                serializer = SendChatMessageRequest.serializer(),
+            )
         }
 }

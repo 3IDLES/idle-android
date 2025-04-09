@@ -77,13 +77,13 @@ class ChatRepositoryImpl @Inject constructor(
             }
 
     override suspend fun sendMessage(
-        chatRoomId: String,
+        chatroomId: String,
         receiverId: String,
         senderName: String,
         content: String,
     ): Result<Unit> = webSocketDataSource.sendMessage(
         SendChatMessageRequest(
-            chatRoomId = chatRoomId,
+            chatroomId = chatroomId,
             receiverId = receiverId,
             senderName = senderName,
             content = content,
