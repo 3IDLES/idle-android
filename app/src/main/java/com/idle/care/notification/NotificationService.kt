@@ -2,7 +2,7 @@ package com.idle.care.notification
 
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.idle.analytics.error.ErrorLoggingHelper
+import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.repositorry.auth.TokenRepository
 import com.idle.domain.repositorry.profile.ProfileRepository
 import dagger.hilt.android.AndroidEntryPoint
@@ -10,6 +10,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,13 +27,12 @@ class NotificationService : FirebaseMessagingService() {
     lateinit var notificationHandler: NotificationHandler
 
     @Inject
-    lateinit var errorLoggingHelper: ErrorLoggingHelper
+    lateinit var errorHelper: ErrorHelper
 
-    private val job = SupervisorJob()
     private val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
-        errorLoggingHelper.logError(throwable)
+        errorHelper.logError(throwable)
     }
-    private val scope = CoroutineScope(Dispatchers.IO + job + coroutineExceptionHandler)
+    private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob() + coroutineExceptionHandler)
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
@@ -63,6 +63,6 @@ class NotificationService : FirebaseMessagingService() {
 
     override fun onDestroy() {
         super.onDestroy()
-        job.cancel()
+        scope.cancel()
     }
 }

@@ -1,7 +1,6 @@
 package com.idle.analytics.businessmetric
 
 import android.util.Log
-import com.idle.analytics.AnalyticsEvent
 import javax.inject.Inject
 
 class DebugAnalyticsHelper @Inject constructor(

@@ -2,10 +2,10 @@ package com.idle.worker.job.posting.detail.worker
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.idle.analytics.AnalyticsEvent
-import com.idle.analytics.AnalyticsEvent.PropertiesKeys.ACTION_NAME
-import com.idle.analytics.AnalyticsEvent.PropertiesKeys.SCREEN_NAME
-import com.idle.analytics.AnalyticsEvent.Types.ACTION
+import com.idle.analytics.businessmetric.AnalyticsEvent
+import com.idle.analytics.businessmetric.AnalyticsEvent.PropertiesKeys.ACTION_NAME
+import com.idle.analytics.businessmetric.AnalyticsEvent.PropertiesKeys.SCREEN_NAME
+import com.idle.analytics.businessmetric.AnalyticsEvent.Types.ACTION
 import com.idle.analytics.businessmetric.AnalyticsHelper
 import com.idle.binding.EventHelper
 import com.idle.binding.MainEvent

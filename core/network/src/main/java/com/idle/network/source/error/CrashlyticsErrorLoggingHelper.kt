@@ -1,4 +1,4 @@
-package com.idle.analytics.error
+package com.idle.network.source.error
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import javax.inject.Inject

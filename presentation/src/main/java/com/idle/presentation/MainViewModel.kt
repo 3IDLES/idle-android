@@ -3,7 +3,6 @@ package com.idle.presentation
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.idle.analytics.error.ErrorLoggingHelper
 import com.idle.auth.R
 import com.idle.binding.EventHelper
 import com.idle.binding.MainEvent.ShowToast
@@ -46,7 +45,6 @@ class MainViewModel @Inject constructor(
     private val chattingRepository: ChattingRepository,
     private val errorHelper: ErrorHelper,
     private val eventHelper: EventHelper,
-    val errorLoggingHelper: ErrorLoggingHelper,
     val navigationHelper: com.idle.navigation.NavigationHelper,
 ) : ViewModel() {
     private val _navigationMenuType = MutableStateFlow(NavigationMenuType.HIDE)
@@ -167,8 +165,6 @@ class MainViewModel @Inject constructor(
 
     private fun handleError() = viewModelScope.launch {
         errorHelper.errorEvent.collect { exception ->
-            errorLoggingHelper.logError(exception)
-
             when (exception) {
                 is HttpResponseException -> {
                     when (exception.apiErrorCode) {
