@@ -1,6 +1,5 @@
 package com.idle.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.analytics.error.ErrorLoggingHelper
@@ -74,16 +73,11 @@ class MainViewModel @Inject constructor(
     }
 
     internal fun connectWebSocket() = viewModelScope.launch {
-        Log.d("test", "웹소켓 연결")
-        connectWebSocketUseCase().onFailure {
-            Log.d("test", it.stackTraceToString())
-        }
+        connectWebSocketUseCase()
     }
 
     internal fun disconnectWebSocket() = viewModelScope.launch {
-        Log.d("test", "웹소켓 연결해제")
-        disconnectWebSocketUseCase().onSuccess { }
-            .onFailure { }
+        disconnectWebSocketUseCase()
     }
 
     internal fun setNavigationMenuType(navigationMenuType: NavigationMenuType) {

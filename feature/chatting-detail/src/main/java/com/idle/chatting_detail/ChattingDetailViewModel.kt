@@ -7,6 +7,7 @@ import com.idle.domain.model.chat.ChatMessage
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.model.profile.WorkerProfile
+import com.idle.domain.repositorry.chatting.ChatRepository
 import com.idle.domain.usecase.chat.GetChatMessagesUseCase
 import com.idle.domain.usecase.chat.SubscribeChatMessageUseCase
 import com.idle.domain.usecase.profile.GetCenterProfileUseCase
@@ -18,6 +19,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,6 +31,7 @@ class ChattingDetailViewModel @Inject constructor(
     private val getWorkerProfileUseCase: GetWorkerProfileUseCase,
     private val getChatMessagesUseCase: GetChatMessagesUseCase,
     private val subscribeChatMessageUseCase: SubscribeChatMessageUseCase,
+    private val chatRepository: ChatRepository,
     private val errorHelper: ErrorHelper,
     val navigationHelper: com.idle.navigation.NavigationHelper,
 ) : ViewModel() {
@@ -110,10 +114,36 @@ class ChattingDetailViewModel @Inject constructor(
 
     internal fun subscribeChatMessage(userId: String) = viewModelScope.launch {
         subscribeChatMessageUseCase(userId)
-            .catch { errorHelper.sendError(it) }
-            .collect { chatMessage ->
+            .catch {
+                errorHelper.sendError(it)
+            }.collect { chatMessage ->
                 _chatMessages.value = (_chatMessages.value ?: emptyList()) + chatMessage
             }
+    }
+
+    internal fun sendMessage(myUserType: UserType, roomId: String) = viewModelScope.launch {
+        chatRepository.sendMessage(
+            chatRoomId = roomId,
+            receiverId = if (myUserType == UserType.CENTER) _workerProfile.value!!.workerId
+            else "1234",
+            senderName = if (myUserType == UserType.CENTER) _centerProfile.value!!.centerName
+            else _workerProfile.value!!.workerName,
+            content = _writingText.value,
+        ).onSuccess {
+            _chatMessages.value = (_chatMessages.value ?: emptyList()) + ChatMessage(
+                id = UUID.randomUUID().toString(),
+                roomId = roomId,
+                senderId = if (myUserType == UserType.CENTER) _centerProfile.value!!.centerId
+                else _workerProfile.value!!.workerId,
+                receiverId = if (myUserType == UserType.CENTER) _workerProfile.value!!.workerId
+                else _centerProfile.value!!.centerId,
+                content = _writingText.value,
+                createdAt = LocalDateTime.now(),
+                isRead = false,
+            )
+
+            _writingText.value = ""
+        }.onFailure { errorHelper.sendError(it) }
     }
 }
 

@@ -29,6 +29,7 @@ class ProfileRepositoryImplTest {
     private lateinit var profileRepository: ProfileRepositoryImpl
 
     private val centerProfile = CenterProfile(
+        centerId = "1",
         centerName = "Test Center",
         officeNumber = "010-1234-5678",
         roadNameAddress = "Address",
@@ -58,6 +59,7 @@ class ProfileRepositoryImplTest {
     )
 
     private val getCenterProfileResponse = GetCenterProfileResponse(
+        id = "1",
         centerName = "Test Center",
         officeNumber = "010-1234-5678",
         roadNameAddress = "Address",

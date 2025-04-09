@@ -1,6 +1,7 @@
 package com.idle.domain.model.profile
 
 data class CenterProfile(
+    val centerId: String,
     val centerName: String,
     val officeNumber: String,
     val roadNameAddress: String,

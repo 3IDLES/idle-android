@@ -39,6 +39,7 @@ import com.idle.chatting_detail.component.CareChatSenderTextBubbleWithImage
 import com.idle.chatting_detail.component.CareChatTextField
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
+import com.idle.compose.clickable
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.UserType
@@ -87,6 +88,12 @@ internal class ChattingDetailFragment : BaseComposeFragment() {
                             chattingRoomId
                         )
                     },
+                    sendMessage = {
+                        sendMessage(
+                            myUserType = receiverUserType,
+                            roomId = chattingRoomId
+                        )
+                    },
                     navigateTo = {
                         navigationHelper.navigateTo(
                             com.idle.navigation.NavigationEvent.NavigateTo(
@@ -112,6 +119,7 @@ internal fun ChattingDetailScreen(
     writingText: String,
     chatMessages: List<ChatMessage>,
     onWritingTextChange: (String) -> Unit,
+    sendMessage: () -> Unit,
     getChatMessages: () -> Unit,
     navigateTo: (com.idle.navigation.DeepLinkDestination) -> Unit,
     navigateUp: () -> Unit,
@@ -283,7 +291,9 @@ internal fun ChattingDetailScreen(
                 Image(
                     painter = painterResource(com.idle.designresource.R.drawable.ic_send_message),
                     contentDescription = "",
-                    modifier = Modifier.size(32.dp),
+                    modifier = Modifier
+                        .size(32.dp)
+                        .clickable(throttleTime = 1000L) { sendMessage() },
                 )
             }
         }

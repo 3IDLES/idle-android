@@ -1,5 +1,6 @@
 package com.idle.center.chatting
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.domain.model.auth.UserType
@@ -7,6 +8,7 @@ import com.idle.domain.model.chat.ChatRoom
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.usecase.chat.GetChatRoomListUseCase
 import com.idle.domain.usecase.chat.SubscribeChatMessageUseCase
+import com.idle.domain.usecase.profile.GetLocalMyCenterProfileUseCase
 import com.idle.domain.usecase.profile.GetWorkerProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,6 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CenterChattingViewModel @Inject constructor(
     private val getWorkerProfileUseCase: GetWorkerProfileUseCase,
+    private val getLocalMyCenterProfileUseCase: GetLocalMyCenterProfileUseCase,
     private val getChatRoomListUseCase: GetChatRoomListUseCase,
     private val subscribeChatMessageUseCase: SubscribeChatMessageUseCase,
     private val errorHelper: ErrorHelper,
@@ -34,7 +37,10 @@ class CenterChattingViewModel @Inject constructor(
         )
 
     internal fun subscribeChatMessage() = viewModelScope.launch {
-        subscribeChatMessageUseCase("").collect { chatMessage ->
+        val myCenterProfile = getLocalMyCenterProfileUseCase().getOrThrow()
+        Log.d("test", myCenterProfile.centerId)
+
+        subscribeChatMessageUseCase("1234").collect { chatMessage ->
             val updatedMap = LinkedHashMap(_chatRoomMap.value) // 기존 맵을 복사
             val roomId = chatMessage.roomId
             val chatRoom = updatedMap[roomId]

@@ -45,7 +45,7 @@ class ProfileRepositoryImpl @Inject constructor(
 
     override suspend fun getLocalMyCenterProfile(): Result<CenterProfile> = runCatching {
         val userInfoString = userInfoDataSource.userInfo.first()
-            .takeIf { it.isNotBlank() } ?: throw IllegalArgumentException("Missing UserInfo")
+            .takeIf { it.isNotBlank() } ?: throw NullPointerException("Missing UserInfo")
 
         val properties = userInfoString.removePrefix("CenterProfile(").removeSuffix(")")
             .split(", ")
@@ -56,19 +56,20 @@ class ProfileRepositoryImpl @Inject constructor(
 
         CenterProfile(
             centerName = properties["centerName"]
-                ?: throw IllegalArgumentException("Missing centerName"),
+                ?: throw NullPointerException("Missing centerName"),
+            centerId = properties["id"] ?: throw NullPointerException("Missing centerId"),
             officeNumber = properties["officeNumber"]
-                ?: throw IllegalArgumentException("Missing officeNumber"),
+                ?: throw NullPointerException("Missing officeNumber"),
             roadNameAddress = properties["roadNameAddress"]
-                ?: throw IllegalArgumentException("Missing roadNameAddress"),
+                ?: throw NullPointerException("Missing roadNameAddress"),
             lotNumberAddress = properties["lotNumberAddress"]
-                ?: throw IllegalArgumentException("Missing lotNumberAddress"),
+                ?: throw NullPointerException("Missing lotNumberAddress"),
             detailedAddress = properties["detailedAddress"]
-                ?: throw IllegalArgumentException("Missing detailedAddress"),
+                ?: throw NullPointerException("Missing detailedAddress"),
             longitude = properties["longitude"]?.toDoubleOrNull()
-                ?: throw NumberFormatException("Invalid longitude format"),
+                ?: throw NullPointerException("Invalid longitude format"),
             latitude = properties["latitude"]?.toDoubleOrNull()
-                ?: throw NumberFormatException("Invalid latitude format"),
+                ?: throw NullPointerException("Invalid latitude format"),
             introduce = properties["introduce"].takeIf { it != "null" },
             profileImageUrl = properties["profileImageUrl"].takeIf { it != "null" }
         )

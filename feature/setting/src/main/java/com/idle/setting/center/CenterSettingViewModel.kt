@@ -25,7 +25,9 @@ class CenterSettingViewModel @Inject constructor(
     val navigationHelper: com.idle.navigation.NavigationHelper,
 ) : ViewModel() {
     private val _centerProfile =
-        MutableStateFlow<CenterProfile>(CenterProfile("", "", "", "", "", 0.0, 0.0, "", ""))
+        MutableStateFlow<CenterProfile>(
+            CenterProfile("", "", "", "", "", "", 0.0, 0.0, "", "")
+        )
     val centerProfile = _centerProfile.asStateFlow()
 
     private val _centerSettingEvent = MutableSharedFlow<SettingEvent>()

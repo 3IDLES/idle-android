@@ -25,6 +25,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.hildan.krossbow.stomp.StompClient
+import org.hildan.krossbow.websocket.WebSocketClient
 import org.hildan.krossbow.websocket.okhttp.OkHttpWebSocketClient
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -86,9 +87,9 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun providesStompClient(
+    fun providesWebSocketClient(
         @WebSocketOkHttpClient okHttpClient: OkHttpClient
-    ): StompClient = StompClient(OkHttpWebSocketClient(okHttpClient))
+    ): WebSocketClient = OkHttpWebSocketClient(okHttpClient)
 
     @Singleton
     @Provides

@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GetCenterProfileResponse(
+    val id: String? = null,
     val centerName: String? = null,
     val officeNumber: String? = null,
     val roadNameAddress: String? = null,
@@ -16,6 +17,7 @@ data class GetCenterProfileResponse(
     val profileImageUrl: String? = null,
 ) {
     fun toVO(): CenterProfile = CenterProfile(
+        centerId = id ?: "",
         centerName = centerName ?: "",
         officeNumber = officeNumber ?: "",
         roadNameAddress = roadNameAddress ?: "",
