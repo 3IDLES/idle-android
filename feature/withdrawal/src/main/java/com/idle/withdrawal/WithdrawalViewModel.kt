@@ -12,10 +12,8 @@ import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.error.ApiErrorCode
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.error.HttpResponseException
-import com.idle.domain.usecase.auth.ConfirmAuthCodeUseCase
-import com.idle.domain.usecase.auth.SendPhoneNumberUseCase
-import com.idle.domain.usecase.auth.WithdrawalCenterUseCase
-import com.idle.domain.usecase.auth.WithdrawalWorkerUseCase
+import com.idle.domain.repositorry.auth.AuthRepository
+import com.idle.domain.util.formatPhoneNumber
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,10 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WithdrawalViewModel @Inject constructor(
-    private val sendPhoneNumberUseCase: SendPhoneNumberUseCase,
-    private val confirmAuthCodeUseCase: ConfirmAuthCodeUseCase,
-    private val withdrawalCenterUseCase: WithdrawalCenterUseCase,
-    private val withdrawalWorkerUseCase: WithdrawalWorkerUseCase,
+    private val authRepository: AuthRepository,
     private val countDownTimer: CountDownTimer,
     private val analyticsHelper: AnalyticsHelper,
     private val errorHelper: ErrorHelper,
@@ -92,7 +87,7 @@ class WithdrawalViewModel @Inject constructor(
     }
 
     internal fun sendPhoneNumber() = viewModelScope.launch {
-        sendPhoneNumberUseCase(_phoneNumber.value)
+        authRepository.sendPhoneNumber(formatPhoneNumber(_phoneNumber.value))
             .onSuccess { startTimer() }
             .onFailure { errorHelper.sendError(it) }
     }
@@ -139,7 +134,7 @@ class WithdrawalViewModel @Inject constructor(
     }
 
     internal fun confirmAuthCode() = viewModelScope.launch {
-        confirmAuthCodeUseCase(_phoneNumber.value, _authCode.value)
+        authRepository.confirmAuthCode(formatPhoneNumber(_phoneNumber.value), _authCode.value)
             .onSuccess {
                 cancelTimer()
                 _isConfirmAuthCode.value = true
@@ -155,7 +150,7 @@ class WithdrawalViewModel @Inject constructor(
     }
 
     private suspend fun withdrawalCenter() {
-        withdrawalCenterUseCase(
+        authRepository.withdrawalCenter(
             reason = _withdrawalReason.value
                 .sortedBy { it.ordinal }
                 .map { reason ->
@@ -186,7 +181,7 @@ class WithdrawalViewModel @Inject constructor(
     }
 
     private suspend fun withdrawalWorker() {
-        withdrawalWorkerUseCase(
+        authRepository.withdrawalWorker(
             _withdrawalReason.value
                 .sortedBy { it.ordinal }
                 .joinToString("|"),

@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.idle.analytics.businessmetric.AnalyticsHelper
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.profile.WorkerProfile
-import com.idle.domain.usecase.auth.LogoutWorkerUseCase
+import com.idle.domain.repositorry.auth.AuthRepository
 import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
 import com.idle.setting.SettingEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class WorkerSettingViewModel @Inject constructor(
     private val getLocalMyWorkerProfileUseCase: GetLocalMyWorkerProfileUseCase,
-    private val logoutWorkerUseCase: LogoutWorkerUseCase,
+    private val authRepository: AuthRepository,
     private val analyticsHelper: AnalyticsHelper,
     private val errorHelper: ErrorHelper,
     val navigationHelper: com.idle.navigation.NavigationHelper,
@@ -39,7 +39,7 @@ class WorkerSettingViewModel @Inject constructor(
     }
 
     fun logout() = viewModelScope.launch {
-        logoutWorkerUseCase().onSuccess {
+        authRepository.logoutWorker().onSuccess {
             analyticsHelper.setUserId(null)
             navigationHelper.navigateTo(
                 com.idle.navigation.NavigationEvent.NavigateToAuthWithClearBackStack(

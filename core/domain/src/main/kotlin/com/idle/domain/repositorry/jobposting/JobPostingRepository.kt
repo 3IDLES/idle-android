@@ -80,12 +80,12 @@ interface JobPostingRepository {
 
     suspend fun getJobPostings(
         next: String?,
-        limit: Int
+        limit: Int = 10,
     ): Result<Pair<String?, List<WorkerJobPosting>>>
 
     suspend fun getJobPostingsApplied(
         next: String?,
-        limit: Int
+        limit: Int = 10,
     ): Result<Pair<String?, List<WorkerJobPosting>>>
 
     suspend fun getMyFavoritesJobPostings(): Result<List<WorkerJobPosting>>
@@ -115,7 +115,7 @@ interface JobPostingRepository {
 
     suspend fun getCrawlingJobPostings(
         next: String?,
-        limit: Int
+        limit: Int = 10,
     ): Result<Pair<String?, List<CrawlingJobPosting>>>
 
     suspend fun getCrawlingJobPostingDetail(jobPostingId: String): Result<CrawlingJobPostingDetail>

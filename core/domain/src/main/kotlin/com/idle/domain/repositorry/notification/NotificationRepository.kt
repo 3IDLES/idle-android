@@ -5,7 +5,7 @@ import com.idle.domain.model.notification.Notification
 interface NotificationRepository {
     suspend fun getMyNotifications(
         next: String?,
-        limit: Int
+        limit: Int = 10,
     ): Result<Pair<String?, List<Notification>>>
 
     suspend fun readNotification(notificationId: String): Result<Unit>

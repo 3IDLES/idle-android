@@ -5,9 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.idle.domain.model.chatting.ChatRoom
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.profile.WorkerProfile
+import com.idle.domain.repositorry.chatting.ChattingRepository
+import com.idle.domain.repositorry.profile.ProfileRepository
 import com.idle.domain.usecase.chatting.GetChatRoomListUseCase
-import com.idle.domain.usecase.chatting.SubscribeChatMessageUseCase
-import com.idle.domain.usecase.profile.GetCenterProfileUseCase
 import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,10 +19,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WorkerChattingViewModel @Inject constructor(
+    private val profileRepository: ProfileRepository,
     private val getLocalMyWorkerProfileUseCase: GetLocalMyWorkerProfileUseCase,
-    private val getCenterProfileUseCase: GetCenterProfileUseCase,
     private val getChatRoomListUseCase: GetChatRoomListUseCase,
-    private val subscribeChatMessageUseCase: SubscribeChatMessageUseCase,
+    private val chattingRepository: ChattingRepository,
     private val errorHelper: ErrorHelper,
     val navigationHelper: com.idle.navigation.NavigationHelper,
 ) : ViewModel() {
@@ -46,7 +46,7 @@ class WorkerChattingViewModel @Inject constructor(
     }
 
     internal fun subscribeChatMessage() = viewModelScope.launch {
-        subscribeChatMessageUseCase().collect { chatMessage ->
+        chattingRepository.subscribeChatMessage().collect { chatMessage ->
             val updatedMap = LinkedHashMap(_chatRoomMap.value) // 기존 맵을 복사
             val roomId = chatMessage.roomId
             val chatRoom = updatedMap[roomId]
@@ -68,7 +68,7 @@ class WorkerChattingViewModel @Inject constructor(
                     createdAt = chatMessage.createdAt,
                     lastSentAt = chatMessage.createdAt,
                     unReadMessageCount = 1,
-                    profileImageUrl = getCenterProfileUseCase(chatMessage.senderId)
+                    profileImageUrl = profileRepository.getCenterProfile(chatMessage.senderId)
                         .map { it.profileImageUrl }
                         .getOrNull(),
                 )

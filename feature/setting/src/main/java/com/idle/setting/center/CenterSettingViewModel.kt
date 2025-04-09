@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.idle.analytics.businessmetric.AnalyticsHelper
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.profile.CenterProfile
-import com.idle.domain.usecase.auth.LogoutCenterUseCase
+import com.idle.domain.repositorry.auth.AuthRepository
 import com.idle.domain.usecase.profile.GetLocalMyCenterProfileUseCase
 import com.idle.setting.SettingEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CenterSettingViewModel @Inject constructor(
     private val getLocalMyCenterProfileUseCase: GetLocalMyCenterProfileUseCase,
-    private val logoutCenterUseCase: LogoutCenterUseCase,
+    private val authRepository: AuthRepository,
     private val analyticsHelper: AnalyticsHelper,
     private val errorHelper: ErrorHelper,
     val navigationHelper: com.idle.navigation.NavigationHelper,
@@ -42,7 +42,7 @@ class CenterSettingViewModel @Inject constructor(
     }
 
     fun logout() = viewModelScope.launch {
-        logoutCenterUseCase().onSuccess {
+        authRepository.logoutCenter().onSuccess {
             analyticsHelper.setUserId(null)
             navigationHelper.navigateTo(
                 com.idle.navigation.NavigationEvent.NavigateToAuthWithClearBackStack(
