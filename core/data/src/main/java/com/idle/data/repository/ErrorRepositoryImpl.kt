@@ -1,6 +1,6 @@
-package com.idle.data.repository.error
+package com.idle.data.repository
 
-import com.idle.domain.repositorry.error.ErrorRepository
+import com.idle.domain.repositorry.ErrorRepository
 import com.idle.network.source.error.ErrorLoggingHelper
 import javax.inject.Inject
 

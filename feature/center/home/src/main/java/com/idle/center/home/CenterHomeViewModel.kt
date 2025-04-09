@@ -7,8 +7,8 @@ import com.idle.binding.MainEvent
 import com.idle.binding.ToastType.SUCCESS
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.jobposting.CenterJobPosting
-import com.idle.domain.repositorry.jobposting.JobPostingRepository
-import com.idle.domain.repositorry.notification.NotificationRepository
+import com.idle.domain.repositorry.JobPostingRepository
+import com.idle.domain.repositorry.NotificationRepository
 import com.idle.domain.usecase.jobposting.GetJobPostingsInProgressUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

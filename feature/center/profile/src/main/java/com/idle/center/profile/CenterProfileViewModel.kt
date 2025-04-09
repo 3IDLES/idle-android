@@ -8,7 +8,7 @@ import com.idle.binding.MainEvent
 import com.idle.binding.ToastType.SUCCESS
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.profile.CenterProfile
-import com.idle.domain.repositorry.profile.ProfileRepository
+import com.idle.domain.repositorry.ProfileRepository
 import com.idle.domain.usecase.profile.GetLocalMyCenterProfileUseCase
 import com.idle.domain.usecase.profile.UpdateCenterProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel

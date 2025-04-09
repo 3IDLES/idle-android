@@ -44,8 +44,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.idle.analytics.businessmetric.LocalAnalyticsHelper
-import com.idle.analytics.businessmetric.TrackScreenViewEvent
+import com.idle.analytics.LocalAnalyticsHelper
+import com.idle.analytics.TrackScreenViewEvent
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designresource.R

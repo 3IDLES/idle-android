@@ -42,7 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
-import com.idle.analytics.businessmetric.LocalAnalyticsHelper
+import com.idle.analytics.LocalAnalyticsHelper
 import com.idle.binding.MainEvent
 import com.idle.center.job.edit.JobEditScreen
 import com.idle.center.jobposting.JobPostingStep.ADDRESS

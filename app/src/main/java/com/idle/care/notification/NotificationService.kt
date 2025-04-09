@@ -3,8 +3,8 @@ package com.idle.care.notification
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.idle.domain.model.error.ErrorHelper
-import com.idle.domain.repositorry.auth.TokenRepository
-import com.idle.domain.repositorry.profile.ProfileRepository
+import com.idle.domain.repositorry.TokenRepository
+import com.idle.domain.repositorry.ProfileRepository
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope

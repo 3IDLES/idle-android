@@ -4,9 +4,9 @@ import android.content.Context
 import com.amplitude.android.Amplitude
 import com.amplitude.android.Configuration
 import com.idle.analytics.BuildConfig
-import com.idle.analytics.businessmetric.AmplitudeAnalyticsHelper
-import com.idle.analytics.businessmetric.AnalyticsHelper
-import com.idle.analytics.businessmetric.DebugAnalyticsHelper
+import com.idle.analytics.AmplitudeAnalyticsHelper
+import com.idle.analytics.AnalyticsHelper
+import com.idle.analytics.DebugAnalyticsHelper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

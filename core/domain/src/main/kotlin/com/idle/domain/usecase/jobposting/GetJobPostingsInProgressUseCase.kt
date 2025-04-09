@@ -1,6 +1,6 @@
 package com.idle.domain.usecase.jobposting
 
-import com.idle.domain.repositorry.jobposting.JobPostingRepository
+import com.idle.domain.repositorry.JobPostingRepository
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject

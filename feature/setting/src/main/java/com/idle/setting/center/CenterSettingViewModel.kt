@@ -2,10 +2,10 @@ package com.idle.setting.center
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.idle.analytics.businessmetric.AnalyticsHelper
+import com.idle.analytics.AnalyticsHelper
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.profile.CenterProfile
-import com.idle.domain.repositorry.auth.AuthRepository
+import com.idle.domain.repositorry.AuthRepository
 import com.idle.domain.usecase.profile.GetLocalMyCenterProfileUseCase
 import com.idle.setting.SettingEvent
 import dagger.hilt.android.lifecycle.HiltViewModel

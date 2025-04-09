@@ -1,7 +1,7 @@
 package com.idle.domain.usecase.profile
 
 import com.idle.domain.model.profile.WorkerProfile
-import com.idle.domain.repositorry.profile.ProfileRepository
+import com.idle.domain.repositorry.ProfileRepository
 import javax.inject.Inject
 
 class GetLocalMyWorkerProfileUseCase @Inject constructor(

@@ -1,4 +1,4 @@
-package com.idle.analytics.businessmetric
+package com.idle.analytics
 
 class NoOpAnalyticsHelper : AnalyticsHelper() {
     override fun logEvent(event: AnalyticsEvent) = Unit

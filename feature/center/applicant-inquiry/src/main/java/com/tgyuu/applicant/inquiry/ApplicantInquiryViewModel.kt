@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.jobposting.Applicant
 import com.idle.domain.model.jobposting.JobPostingSummary
-import com.idle.domain.repositorry.jobposting.JobPostingRepository
+import com.idle.domain.repositorry.JobPostingRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

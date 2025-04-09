@@ -1,4 +1,4 @@
-package com.idle.data.repository.auth
+package com.idle.data.repository
 
 import com.idle.datastore.datasource.TokenDataSource
 import com.idle.network.di.TokenManager

@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.idle.domain.model.chatting.ChatRoom
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.profile.WorkerProfile
-import com.idle.domain.repositorry.chatting.ChattingRepository
-import com.idle.domain.repositorry.profile.ProfileRepository
+import com.idle.domain.repositorry.ChattingRepository
+import com.idle.domain.repositorry.ProfileRepository
 import com.idle.domain.usecase.chatting.GetChatRoomListUseCase
 import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel

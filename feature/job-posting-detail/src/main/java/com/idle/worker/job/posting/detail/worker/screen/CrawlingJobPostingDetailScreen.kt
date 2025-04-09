@@ -37,10 +37,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.net.toUri
-import com.idle.analytics.businessmetric.AnalyticsEvent
-import com.idle.analytics.businessmetric.AnalyticsEvent.PropertiesKeys.ACTION_NAME
-import com.idle.analytics.businessmetric.LocalAnalyticsHelper
-import com.idle.analytics.businessmetric.TrackScreenViewEvent
+import com.idle.analytics.AnalyticsEvent
+import com.idle.analytics.AnalyticsEvent.PropertiesKeys.ACTION_NAME
+import com.idle.analytics.LocalAnalyticsHelper
+import com.idle.analytics.TrackScreenViewEvent
 import com.idle.compose.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareCard

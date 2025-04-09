@@ -10,8 +10,8 @@ import com.idle.domain.model.error.ApiErrorCode
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.profile.CenterManagerAccountStatus
-import com.idle.domain.repositorry.auth.AuthRepository
-import com.idle.domain.repositorry.profile.ProfileRepository
+import com.idle.domain.repositorry.AuthRepository
+import com.idle.domain.repositorry.ProfileRepository
 import com.idle.navigation.DeepLinkDestination.CenterHome
 import com.idle.navigation.DeepLinkDestination.CenterRegister
 import com.idle.navigation.NavigationEvent

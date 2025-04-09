@@ -39,7 +39,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.navArgs
 import coil.compose.AsyncImage
-import com.idle.analytics.businessmetric.TrackScreenViewEvent
+import com.idle.analytics.TrackScreenViewEvent
 import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable

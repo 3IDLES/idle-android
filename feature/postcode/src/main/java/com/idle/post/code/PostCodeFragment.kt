@@ -18,7 +18,7 @@ import android.webkit.WebViewClient
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.idle.analytics.businessmetric.AnalyticsHelper
+import com.idle.analytics.AnalyticsHelper
 import com.idle.postcode.databinding.FragmentPostCodeBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers

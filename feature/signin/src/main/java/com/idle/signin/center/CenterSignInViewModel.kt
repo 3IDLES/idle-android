@@ -2,18 +2,18 @@ package com.idle.signin.center
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.idle.analytics.businessmetric.AnalyticsEvent
-import com.idle.analytics.businessmetric.AnalyticsEvent.PropertiesKeys.ACTION_NAME
-import com.idle.analytics.businessmetric.AnalyticsEvent.PropertiesKeys.ACTION_RESULT
-import com.idle.analytics.businessmetric.AnalyticsHelper
+import com.idle.analytics.AnalyticsEvent
+import com.idle.analytics.AnalyticsEvent.PropertiesKeys.ACTION_NAME
+import com.idle.analytics.AnalyticsEvent.PropertiesKeys.ACTION_RESULT
+import com.idle.analytics.AnalyticsHelper
 import com.idle.binding.EventHelper
 import com.idle.domain.model.error.ApiErrorCode
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.error.HttpResponseStatus
 import com.idle.domain.model.profile.CenterManagerAccountStatus
-import com.idle.domain.repositorry.auth.AuthRepository
-import com.idle.domain.repositorry.profile.ProfileRepository
+import com.idle.domain.repositorry.AuthRepository
+import com.idle.domain.repositorry.ProfileRepository
 import com.idle.navigation.DeepLinkDestination.CenterHome
 import com.idle.navigation.DeepLinkDestination.CenterPending
 import com.idle.navigation.DeepLinkDestination.CenterRegister

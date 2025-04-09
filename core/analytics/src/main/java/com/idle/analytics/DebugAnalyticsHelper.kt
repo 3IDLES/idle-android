@@ -1,4 +1,4 @@
-package com.idle.analytics.businessmetric
+package com.idle.analytics
 
 import android.util.Log
 import javax.inject.Inject

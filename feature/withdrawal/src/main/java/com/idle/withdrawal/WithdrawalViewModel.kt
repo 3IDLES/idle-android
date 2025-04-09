@@ -2,7 +2,7 @@ package com.idle.withdrawal
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.idle.analytics.businessmetric.AnalyticsHelper
+import com.idle.analytics.AnalyticsHelper
 import com.idle.binding.EventHelper
 import com.idle.binding.MainEvent
 import com.idle.domain.model.CountDownTimer
@@ -12,7 +12,7 @@ import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.error.ApiErrorCode
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.error.HttpResponseException
-import com.idle.domain.repositorry.auth.AuthRepository
+import com.idle.domain.repositorry.AuthRepository
 import com.idle.domain.util.formatPhoneNumber
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
