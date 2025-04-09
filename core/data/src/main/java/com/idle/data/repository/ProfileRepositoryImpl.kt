@@ -7,7 +7,6 @@ import android.net.Uri
 import android.os.Build
 import androidx.core.net.toUri
 import com.idle.datastore.datasource.UserInfoDataSource
-import com.idle.domain.model.auth.Gender
 import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.model.profile.CenterRegistrationStatus
@@ -43,36 +42,8 @@ class ProfileRepositoryImpl @Inject constructor(
                 Result.success(it)
             }
 
-    override suspend fun getLocalMyCenterProfile(): Result<CenterProfile> = runCatching {
-        val userInfoString = userInfoDataSource.userInfo.first()
-            .takeIf { it.isNotBlank() } ?: throw IllegalArgumentException("Missing UserInfo")
-
-        val properties = userInfoString.removePrefix("CenterProfile(").removeSuffix(")")
-            .split(", ")
-            .associate {
-                val (key, value) = it.split("=")
-                key to value
-            }
-
-        CenterProfile(
-            centerName = properties["centerName"]
-                ?: throw IllegalArgumentException("Missing centerName"),
-            officeNumber = properties["officeNumber"]
-                ?: throw IllegalArgumentException("Missing officeNumber"),
-            roadNameAddress = properties["roadNameAddress"]
-                ?: throw IllegalArgumentException("Missing roadNameAddress"),
-            lotNumberAddress = properties["lotNumberAddress"]
-                ?: throw IllegalArgumentException("Missing lotNumberAddress"),
-            detailedAddress = properties["detailedAddress"]
-                ?: throw IllegalArgumentException("Missing detailedAddress"),
-            longitude = properties["longitude"]?.toDoubleOrNull()
-                ?: throw NumberFormatException("Invalid longitude format"),
-            latitude = properties["latitude"]?.toDoubleOrNull()
-                ?: throw NumberFormatException("Invalid latitude format"),
-            introduce = properties["introduce"].takeIf { it != "null" },
-            profileImageUrl = properties["profileImageUrl"].takeIf { it != "null" }
-        )
-    }
+    override suspend fun getLocalMyCenterProfile(): Result<CenterProfile> =
+        userInfoDataSource.getLocalCenterProfile()
 
     override suspend fun getCenterProfile(centerId: String): Result<CenterProfile> =
         profileDataSource.getCenterProfile(centerId).mapCatching { it.toVO() }
@@ -84,40 +55,8 @@ class ProfileRepositoryImpl @Inject constructor(
                 Result.success(it)
             }
 
-    override suspend fun getLocalMyWorkerProfile(): Result<WorkerProfile> = runCatching {
-        val userInfoString = userInfoDataSource.userInfo.first()
-            .takeIf { it.isNotBlank() } ?: throw IllegalArgumentException("Missing UserInfo")
-
-        val properties = userInfoString.removePrefix("WorkerProfile(").removeSuffix(")")
-            .split(", ")
-            .associate {
-                val (key, value) = it.split("=")
-                key to value
-            }
-
-        WorkerProfile(
-            workerId = properties["workerId"]
-                ?: throw IllegalArgumentException("Missing workerId"),
-            workerName = properties["workerName"]
-                ?: throw IllegalArgumentException("Missing workerName"),
-            age = properties["age"]?.toInt() ?: throw NumberFormatException("Invalid age format"),
-            gender = Gender.create(properties["gender"]),
-            experienceYear = properties["experienceYear"]?.toIntOrNull(),
-            phoneNumber = properties["phoneNumber"]
-                ?: throw IllegalArgumentException("Missing phoneNumber"),
-            roadNameAddress = properties["roadNameAddress"]
-                ?: throw IllegalArgumentException("Missing roadNameAddress"),
-            lotNumberAddress = properties["lotNumberAddress"]
-                ?: throw IllegalArgumentException("Missing lotNumberAddress"),
-            longitude = properties["longitude"]
-                ?: throw IllegalArgumentException("Missing longitude"),
-            latitude = properties["latitude"] ?: throw IllegalArgumentException("Missing latitude"),
-            jobSearchStatus = JobSearchStatus.create(properties["jobSearchStatus"]),
-            introduce = properties["introduce"].takeIf { it != "null" },
-            speciality = properties["speciality"].takeIf { it != "null" },
-            profileImageUrl = properties["profileImageUrl"].takeIf { it != "null" },
-        )
-    }
+    override suspend fun getLocalMyWorkerProfile(): Result<WorkerProfile> =
+        userInfoDataSource.getLocalWorkerProfile()
 
     override suspend fun getWorkerProfile(workerId: String): Result<WorkerProfile> =
         profileDataSource.getWorkerProfile(workerId).mapCatching { it.toVo() }
