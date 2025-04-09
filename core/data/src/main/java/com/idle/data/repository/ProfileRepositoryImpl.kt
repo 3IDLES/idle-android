@@ -1,4 +1,4 @@
-package com.idle.data.repository.profile
+package com.idle.data.repository
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -14,7 +14,7 @@ import com.idle.domain.model.profile.CenterRegistrationStatus
 import com.idle.domain.model.profile.JobSearchStatus
 import com.idle.domain.model.profile.MIMEType
 import com.idle.domain.model.profile.WorkerProfile
-import com.idle.domain.repositorry.profile.ProfileRepository
+import com.idle.domain.repositorry.ProfileRepository
 import com.idle.network.model.profile.CallbackImageUploadRequest
 import com.idle.network.model.profile.RegisterCenterProfileRequest
 import com.idle.network.model.profile.UpdateCenterProfileRequest

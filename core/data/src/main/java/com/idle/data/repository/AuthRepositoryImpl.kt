@@ -1,12 +1,12 @@
-package com.idle.data.repository.auth
+package com.idle.data.repository
 
 import com.idle.datastore.datasource.TokenDataSource
 import com.idle.datastore.datasource.UserInfoDataSource
 import com.idle.domain.model.auth.BusinessRegistrationInfo
 import com.idle.domain.model.auth.UserType
-import com.idle.domain.repositorry.auth.AuthRepository
-import com.idle.domain.repositorry.auth.TokenRepository
-import com.idle.domain.repositorry.profile.ProfileRepository
+import com.idle.domain.repositorry.AuthRepository
+import com.idle.domain.repositorry.TokenRepository
+import com.idle.domain.repositorry.ProfileRepository
 import com.idle.network.model.auth.ConfirmAuthCodeRequest
 import com.idle.network.model.auth.GenerateNewPasswordRequest
 import com.idle.network.model.auth.SendPhoneRequest

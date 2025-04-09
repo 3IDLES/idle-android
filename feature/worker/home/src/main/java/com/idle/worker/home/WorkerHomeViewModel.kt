@@ -12,8 +12,8 @@ import com.idle.domain.model.jobposting.JobPosting
 import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.WorkerJobPosting
 import com.idle.domain.model.profile.WorkerProfile
-import com.idle.domain.repositorry.jobposting.JobPostingRepository
-import com.idle.domain.repositorry.notification.NotificationRepository
+import com.idle.domain.repositorry.JobPostingRepository
+import com.idle.domain.repositorry.NotificationRepository
 import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
 import com.idle.navigation.DeepLinkDestination
 import com.idle.navigation.NavigationEvent

@@ -1,4 +1,4 @@
-package com.idle.analytics.businessmetric
+package com.idle.analytics
 
 import com.amplitude.android.Amplitude
 import com.amplitude.core.events.BaseEvent

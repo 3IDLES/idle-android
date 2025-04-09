@@ -1,16 +1,16 @@
-package com.idle.analytics.businessmetric
+package com.idle.analytics
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.staticCompositionLocalOf
-import com.idle.analytics.businessmetric.AnalyticsEvent.PropertiesKeys.ACTION_NAME
-import com.idle.analytics.businessmetric.AnalyticsEvent.PropertiesKeys.ACTION_RESULT
-import com.idle.analytics.businessmetric.AnalyticsEvent.PropertiesKeys.BUTTON_ID
-import com.idle.analytics.businessmetric.AnalyticsEvent.PropertiesKeys.DURATION
-import com.idle.analytics.businessmetric.AnalyticsEvent.PropertiesKeys.SCREEN_NAME
-import com.idle.analytics.businessmetric.AnalyticsEvent.Types.ACTION
-import com.idle.analytics.businessmetric.AnalyticsEvent.Types.BUTTON_CLICK
-import com.idle.analytics.businessmetric.AnalyticsEvent.Types.SCREEN_VIEW
+import com.idle.analytics.AnalyticsEvent.PropertiesKeys.ACTION_NAME
+import com.idle.analytics.AnalyticsEvent.PropertiesKeys.ACTION_RESULT
+import com.idle.analytics.AnalyticsEvent.PropertiesKeys.BUTTON_ID
+import com.idle.analytics.AnalyticsEvent.PropertiesKeys.DURATION
+import com.idle.analytics.AnalyticsEvent.PropertiesKeys.SCREEN_NAME
+import com.idle.analytics.AnalyticsEvent.Types.ACTION
+import com.idle.analytics.AnalyticsEvent.Types.BUTTON_CLICK
+import com.idle.analytics.AnalyticsEvent.Types.SCREEN_VIEW
 
 abstract class AnalyticsHelper {
     abstract fun logEvent(event: AnalyticsEvent)

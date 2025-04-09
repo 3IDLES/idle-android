@@ -1,4 +1,4 @@
-package com.idle.domain.repositorry.logging
+package com.idle.domain.repositorry
 
 import javax.inject.Inject
 import javax.inject.Singleton

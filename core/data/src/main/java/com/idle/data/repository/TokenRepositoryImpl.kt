@@ -1,7 +1,7 @@
-package com.idle.data.repository.auth
+package com.idle.data.repository
 
 import com.idle.datastore.datasource.TokenDataSource
-import com.idle.domain.repositorry.auth.TokenRepository
+import com.idle.domain.repositorry.TokenRepository
 import com.idle.network.model.notification.DeleteFcmTokenRequest
 import com.idle.network.model.notification.PostFcmTokenRequest
 import com.idle.network.source.notification.NotificationDataSource

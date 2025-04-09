@@ -1,4 +1,4 @@
-package com.idle.domain.repositorry.jobposting
+package com.idle.domain.repositorry
 
 import com.idle.domain.model.auth.Gender
 import com.idle.domain.model.jobposting.Applicant

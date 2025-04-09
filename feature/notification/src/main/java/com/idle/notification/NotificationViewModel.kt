@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.notification.Notification
-import com.idle.domain.repositorry.notification.NotificationRepository
+import com.idle.domain.repositorry.NotificationRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

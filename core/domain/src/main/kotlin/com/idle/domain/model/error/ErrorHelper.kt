@@ -1,6 +1,6 @@
 package com.idle.domain.model.error
 
-import com.idle.domain.repositorry.error.ErrorRepository
+import com.idle.domain.repositorry.ErrorRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
 import kotlinx.coroutines.flow.receiveAsFlow

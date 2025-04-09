@@ -2,11 +2,11 @@ package com.idle.worker.job.posting.detail.worker
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.idle.analytics.businessmetric.AnalyticsEvent
-import com.idle.analytics.businessmetric.AnalyticsEvent.PropertiesKeys.ACTION_NAME
-import com.idle.analytics.businessmetric.AnalyticsEvent.PropertiesKeys.SCREEN_NAME
-import com.idle.analytics.businessmetric.AnalyticsEvent.Types.ACTION
-import com.idle.analytics.businessmetric.AnalyticsHelper
+import com.idle.analytics.AnalyticsEvent
+import com.idle.analytics.AnalyticsEvent.PropertiesKeys.ACTION_NAME
+import com.idle.analytics.AnalyticsEvent.PropertiesKeys.SCREEN_NAME
+import com.idle.analytics.AnalyticsEvent.Types.ACTION
+import com.idle.analytics.AnalyticsHelper
 import com.idle.binding.EventHelper
 import com.idle.binding.MainEvent
 import com.idle.binding.ToastType.SUCCESS
@@ -17,7 +17,7 @@ import com.idle.domain.model.jobposting.JobPosting
 import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.WorkerJobPostingDetail
 import com.idle.domain.model.profile.WorkerProfile
-import com.idle.domain.repositorry.jobposting.JobPostingRepository
+import com.idle.domain.repositorry.JobPostingRepository
 import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

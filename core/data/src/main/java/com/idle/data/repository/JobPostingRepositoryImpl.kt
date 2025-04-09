@@ -1,4 +1,4 @@
-package com.idle.data.repository.jobposting
+package com.idle.data.repository
 
 import com.idle.domain.model.auth.Gender
 import com.idle.domain.model.jobposting.Applicant
@@ -17,7 +17,7 @@ import com.idle.domain.model.jobposting.PayType
 import com.idle.domain.model.jobposting.SharedJobPostingInfo
 import com.idle.domain.model.jobposting.WorkerJobPosting
 import com.idle.domain.model.jobposting.WorkerJobPostingDetail
-import com.idle.domain.repositorry.jobposting.JobPostingRepository
+import com.idle.domain.repositorry.JobPostingRepository
 import com.idle.network.model.jobposting.ApplyJobPostingRequest
 import com.idle.network.model.jobposting.FavoriteJobPostingRequest
 import com.idle.network.model.jobposting.JobPostingRequest

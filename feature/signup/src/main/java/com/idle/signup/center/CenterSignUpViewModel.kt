@@ -13,8 +13,8 @@ import com.idle.domain.model.error.ApiErrorCode
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.error.HttpResponseStatus
-import com.idle.domain.repositorry.auth.AuthRepository
-import com.idle.domain.repositorry.logging.LoggingRepository
+import com.idle.domain.repositorry.AuthRepository
+import com.idle.domain.repositorry.LoggingRepository
 import com.idle.domain.util.formatBusinessRegistrationNumber
 import com.idle.domain.util.formatPhoneNumber
 import com.idle.navigation.NavigationHelper

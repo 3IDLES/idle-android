@@ -1,4 +1,4 @@
-package com.idle.domain.repositorry.auth
+package com.idle.domain.repositorry
 
 interface TokenRepository {
     suspend fun getAccessToken(): String

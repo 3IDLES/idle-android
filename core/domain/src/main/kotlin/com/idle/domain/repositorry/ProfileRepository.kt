@@ -1,4 +1,4 @@
-package com.idle.domain.repositorry.profile
+package com.idle.domain.repositorry
 
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.model.profile.CenterRegistrationStatus

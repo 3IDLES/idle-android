@@ -1,7 +1,7 @@
-package com.idle.data.repository.chatting
+package com.idle.data.repository
 
 import com.idle.domain.model.chatting.ChatMessage
-import com.idle.domain.repositorry.chatting.ChattingRepository
+import com.idle.domain.repositorry.ChattingRepository
 import com.idle.network.source.websocket.WebSocketDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull

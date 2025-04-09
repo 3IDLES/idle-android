@@ -23,8 +23,8 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.appsflyer.AppsFlyerLib
 import com.appsflyer.deeplink.DeepLinkResult
-import com.idle.analytics.businessmetric.AnalyticsEvent
-import com.idle.analytics.businessmetric.AnalyticsHelper
+import com.idle.analytics.AnalyticsEvent
+import com.idle.analytics.AnalyticsHelper
 import com.idle.auth.AuthFragmentDirections
 import com.idle.binding.MainEvent
 import com.idle.binding.ShareJobPostingInfo

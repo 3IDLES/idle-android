@@ -11,7 +11,7 @@ import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.error.HttpResponseStatus
-import com.idle.domain.repositorry.auth.AuthRepository
+import com.idle.domain.repositorry.AuthRepository
 import com.idle.domain.util.formatPhoneNumber
 import com.idle.signin.R
 import com.idle.signin.center.newpassword.NewPasswordStep.GENERATE_NEW_PASSWORD

@@ -11,7 +11,7 @@ import com.idle.domain.model.jobposting.EditJobPostingDetail
 import com.idle.domain.model.jobposting.JobPostingStatus
 import com.idle.domain.model.jobposting.LifeAssistance
 import com.idle.domain.model.profile.CenterProfile
-import com.idle.domain.repositorry.jobposting.JobPostingRepository
+import com.idle.domain.repositorry.JobPostingRepository
 import com.idle.domain.usecase.profile.GetLocalMyCenterProfileUseCase
 import com.idle.job.posting.detail.R
 import dagger.hilt.android.lifecycle.HiltViewModel

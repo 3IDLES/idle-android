@@ -37,8 +37,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.idle.analytics.businessmetric.LocalAnalyticsHelper
-import com.idle.analytics.businessmetric.TrackScreenViewEvent
+import com.idle.analytics.LocalAnalyticsHelper
+import com.idle.analytics.TrackScreenViewEvent
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.compose.clickable
 import com.idle.designresource.R

@@ -3,7 +3,7 @@ package com.idle.signup.worker
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.idle.analytics.businessmetric.AnalyticsHelper
+import com.idle.analytics.AnalyticsHelper
 import com.idle.binding.EventHelper
 import com.idle.domain.model.CountDownTimer
 import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
@@ -12,8 +12,8 @@ import com.idle.domain.model.auth.Gender
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.error.HttpResponseStatus
-import com.idle.domain.repositorry.auth.AuthRepository
-import com.idle.domain.repositorry.profile.ProfileRepository
+import com.idle.domain.repositorry.AuthRepository
+import com.idle.domain.repositorry.ProfileRepository
 import com.idle.domain.util.formatPhoneNumber
 import com.idle.navigation.DeepLinkDestination.SignUpComplete
 import com.idle.navigation.DeepLinkDestination.WorkerHome

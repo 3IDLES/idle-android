@@ -1,7 +1,7 @@
-package com.idle.data.repository.notification
+package com.idle.data.repository
 
 import com.idle.domain.model.notification.Notification
-import com.idle.domain.repositorry.notification.NotificationRepository
+import com.idle.domain.repositorry.NotificationRepository
 import com.idle.network.source.notification.NotificationDataSource
 import javax.inject.Inject
 

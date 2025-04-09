@@ -12,7 +12,7 @@ import android.view.WindowManager
 import androidx.core.net.toUri
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
-import com.idle.analytics.businessmetric.AnalyticsHelper
+import com.idle.analytics.AnalyticsHelper
 import com.idle.binding.repeatOnStarted
 import com.idle.domain.model.config.ForceUpdate
 import com.idle.presentation.databinding.FragmentForceUpdateBinding

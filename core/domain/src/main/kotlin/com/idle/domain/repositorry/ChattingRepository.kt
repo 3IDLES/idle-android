@@ -1,4 +1,4 @@
-package com.idle.domain.repositorry.chatting
+package com.idle.domain.repositorry
 
 import com.idle.domain.model.chatting.ChatMessage
 import kotlinx.coroutines.flow.Flow

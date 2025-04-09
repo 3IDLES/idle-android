@@ -1,4 +1,4 @@
-package com.idle.domain.repositorry.notification
+package com.idle.domain.repositorry
 
 import com.idle.domain.model.notification.Notification
 

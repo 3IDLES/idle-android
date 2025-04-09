@@ -1,7 +1,7 @@
 package com.idle.center.jobposting.complete
 
 import androidx.lifecycle.ViewModel
-import com.idle.domain.repositorry.logging.LoggingRepository
+import com.idle.domain.repositorry.LoggingRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

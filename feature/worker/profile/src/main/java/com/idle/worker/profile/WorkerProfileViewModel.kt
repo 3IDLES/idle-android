@@ -10,7 +10,7 @@ import com.idle.binding.ToastType
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.profile.JobSearchStatus
 import com.idle.domain.model.profile.WorkerProfile
-import com.idle.domain.repositorry.profile.ProfileRepository
+import com.idle.domain.repositorry.ProfileRepository
 import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
 import com.idle.domain.usecase.profile.UpdateWorkerProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
