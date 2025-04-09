@@ -18,6 +18,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -40,7 +41,7 @@ import com.idle.navigation.NavigationEvent.NavigateToAuthWithClearBackStack
 import com.idle.navigation.deepLinkNavigateTo
 import com.idle.presentation.databinding.ActivityMainBinding
 import com.idle.presentation.forceupdate.ForceUpdateFragment
-import com.idle.presentation.network.NetworkObserver
+import com.idle.presentation.network.NetworkMonitor
 import com.idle.presentation.network.NetworkState
 import com.kakao.sdk.common.util.KakaoCustomTabsClient
 import com.kakao.sdk.share.ShareClient
@@ -57,7 +58,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     @Inject
-    lateinit var networkObserver: NetworkObserver
+    lateinit var networkMonitor: NetworkMonitor
 
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper
@@ -99,11 +100,7 @@ class MainActivity : AppCompatActivity() {
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission(),
-    ) { isGranted: Boolean ->
-        if (isGranted) {
-            // FCM SDK (and your app) can post notifications.
-        }
-    }
+    ) { _ -> }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -132,8 +129,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        networkObserver.subscribeNetworkCallback()
-        if (networkObserver.networkState.value == NetworkState.CONNECTED) {
+        if (networkMonitor.networkState.value != NetworkState.NotConnected) {
             viewModel.connectWebSocket()
         }
     }
@@ -147,14 +143,6 @@ class MainActivity : AppCompatActivity() {
             onInit = viewModel::initializeUserSession,
             readNotification = viewModel::readNotification,
         )
-    }
-
-    override fun onPause() {
-        super.onPause()
-        networkObserver.unsubscribeNetworkCallback()
-        if (networkObserver.networkState.value == NetworkState.CONNECTED) {
-            viewModel.disconnectWebSocket()
-        }
     }
 
     private fun askNotificationPermission() {
@@ -181,7 +169,7 @@ class MainActivity : AppCompatActivity() {
     private fun observeViewModel() {
         viewModel.apply {
             repeatOnStarted {
-                networkObserver.networkState.collect { handleNetworkState(it) }
+                networkMonitor.networkState.collect { handleNetworkState(it) }
             }
             repeatOnStarted {
                 forceUpdate.collect { it?.let { showForceUpdateDialog(it) } }
@@ -199,7 +187,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleNetworkState(state: NetworkState) {
-        if (state == NetworkState.NOT_CONNECTED) {
+        if (state == NetworkState.NotConnected) {
             showNetworkDialog()
         } else {
             dismissNetworkDialog()
@@ -306,20 +294,20 @@ class MainActivity : AppCompatActivity() {
         binding.apply {
             when (menuType) {
                 NavigationMenuType.CENTER -> {
-                    if (mainBNVWorker.visibility == View.VISIBLE) slideDown(mainBNVWorker)
-                    if (mainBNVCenter.visibility != View.VISIBLE) slideUp(mainBNVCenter)
+                    if (mainBNVWorker.isVisible) slideDown(mainBNVWorker)
+                    if (!mainBNVCenter.isVisible) slideUp(mainBNVCenter)
                     mainBNVCenter.setupWithNavController(navController)
                 }
 
                 NavigationMenuType.WORKER -> {
-                    if (mainBNVCenter.visibility == View.VISIBLE) slideDown(mainBNVCenter)
-                    if (mainBNVWorker.visibility != View.VISIBLE) slideUp(mainBNVWorker)
+                    if (mainBNVCenter.isVisible) slideDown(mainBNVCenter)
+                    if (!mainBNVWorker.isVisible) slideUp(mainBNVWorker)
                     mainBNVWorker.setupWithNavController(navController)
                 }
 
                 NavigationMenuType.HIDE -> {
-                    if (mainBNVCenter.visibility == View.VISIBLE) slideDown(mainBNVCenter)
-                    if (mainBNVWorker.visibility == View.VISIBLE) slideDown(mainBNVWorker)
+                    if (mainBNVCenter.isVisible) slideDown(mainBNVCenter)
+                    if (mainBNVWorker.isVisible) slideDown(mainBNVWorker)
                 }
             }
         }
