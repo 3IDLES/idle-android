@@ -1,7 +1,7 @@
 package com.idle.presentation.di
 
 import android.content.Context
-import com.idle.presentation.network.NetworkObserver
+import com.idle.presentation.network.NetworkMonitor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,5 +17,5 @@ object AppModule {
     @Singleton
     fun provideNetworkObserver(
         @ApplicationContext context: Context,
-    ): NetworkObserver = NetworkObserver(context)
+    ): NetworkMonitor = NetworkMonitor(context)
 }
