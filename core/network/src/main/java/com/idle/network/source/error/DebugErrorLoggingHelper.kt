@@ -1,4 +1,4 @@
-package com.idle.analytics.error
+package com.idle.network.source.error
 
 import android.util.Log
 import javax.inject.Inject

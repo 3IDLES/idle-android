@@ -5,6 +5,7 @@ import com.idle.data.repository.auth.TokenManagerImpl
 import com.idle.data.repository.auth.TokenRepositoryImpl
 import com.idle.data.repository.chatting.ChattingRepositoryImpl
 import com.idle.data.repository.config.ConfigRepositoryImpl
+import com.idle.data.repository.error.ErrorRepositoryImpl
 import com.idle.data.repository.jobposting.JobPostingRepositoryImpl
 import com.idle.data.repository.notification.NotificationRepositoryImpl
 import com.idle.data.repository.profile.ProfileRepositoryImpl
@@ -12,6 +13,7 @@ import com.idle.domain.repositorry.auth.AuthRepository
 import com.idle.domain.repositorry.auth.TokenRepository
 import com.idle.domain.repositorry.chatting.ChattingRepository
 import com.idle.domain.repositorry.config.ConfigRepository
+import com.idle.domain.repositorry.error.ErrorRepository
 import com.idle.domain.repositorry.jobposting.JobPostingRepository
 import com.idle.domain.repositorry.notification.NotificationRepository
 import com.idle.domain.repositorry.profile.ProfileRepository
@@ -66,6 +68,12 @@ abstract class DataModule {
     abstract fun bindsChattingRepository(
         chattingRepositoryImpl: ChattingRepositoryImpl,
     ): ChattingRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindsErrorRepository(
+        errorRepositoryImpl: ErrorRepositoryImpl,
+    ): ErrorRepository
 
     @Binds
     @Singleton

@@ -4,7 +4,6 @@ import android.Manifest
 import android.animation.Animator
 import android.animation.ValueAnimator
 import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -24,7 +23,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.appsflyer.AppsFlyerLib
 import com.appsflyer.deeplink.DeepLinkResult
-import com.idle.analytics.AnalyticsEvent
+import com.idle.analytics.businessmetric.AnalyticsEvent
 import com.idle.analytics.businessmetric.AnalyticsHelper
 import com.idle.auth.AuthFragmentDirections
 import com.idle.binding.MainEvent
@@ -33,6 +32,7 @@ import com.idle.binding.repeatOnStarted
 import com.idle.designsystem.binding.component.dismissToast
 import com.idle.designsystem.binding.component.showToast
 import com.idle.domain.model.config.ForceUpdate
+import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.SharedJobPostingInfo
 import com.idle.navigation.NavigationEvent.NavigateTo
@@ -61,6 +61,10 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper
+
+    @Inject
+    lateinit var errorHelper: ErrorHelper
+
     private lateinit var forceUpdateFragment: ForceUpdateFragment
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
@@ -254,8 +258,8 @@ class MainActivity : AppCompatActivity() {
                     handleDeepLink(sharedJobPostingId, sharedJobPostingType)
                 }
 
-                DeepLinkResult.Status.NOT_FOUND -> viewModel.errorLoggingHelper.logError(Exception("AppsFlyer User Not Found"))
-                else -> viewModel.errorLoggingHelper.logError(Exception(deepLinkResult.error.toString()))
+                DeepLinkResult.Status.NOT_FOUND -> errorHelper.logError(Exception("AppsFlyer User Not Found"))
+                else -> errorHelper.logError(Exception(deepLinkResult.error.toString()))
             }
         }
     }
@@ -447,7 +451,7 @@ class MainActivity : AppCompatActivity() {
 
         if (ShareClient.instance.isKakaoTalkSharingAvailable(this)) {
             ShareClient.instance.shareDefault(this, jobPostingFeed) { result, error ->
-                if (error != null) viewModel.errorLoggingHelper.logError(Exception(error))
+                if (error != null) errorHelper.logError(Exception(error))
                 else result?.let { startActivity(it.intent) }
             }
         } else {
@@ -462,7 +466,7 @@ class MainActivity : AppCompatActivity() {
             try {
                 KakaoCustomTabsClient.open(this, url)
             } catch (e: ActivityNotFoundException) {
-                viewModel.errorLoggingHelper.logError(Exception(e))
+                errorHelper.logError(Exception(e))
             }
         }
     }

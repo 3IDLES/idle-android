@@ -2,15 +2,15 @@ package com.idle.analytics.businessmetric
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import com.idle.analytics.AnalyticsEvent
-import com.idle.analytics.AnalyticsEvent.PropertiesKeys.ACTION_NAME
-import com.idle.analytics.AnalyticsEvent.PropertiesKeys.ACTION_RESULT
-import com.idle.analytics.AnalyticsEvent.PropertiesKeys.BUTTON_ID
-import com.idle.analytics.AnalyticsEvent.PropertiesKeys.DURATION
-import com.idle.analytics.AnalyticsEvent.PropertiesKeys.SCREEN_NAME
-import com.idle.analytics.AnalyticsEvent.Types.ACTION
-import com.idle.analytics.AnalyticsEvent.Types.BUTTON_CLICK
-import com.idle.analytics.AnalyticsEvent.Types.SCREEN_VIEW
+import androidx.compose.runtime.staticCompositionLocalOf
+import com.idle.analytics.businessmetric.AnalyticsEvent.PropertiesKeys.ACTION_NAME
+import com.idle.analytics.businessmetric.AnalyticsEvent.PropertiesKeys.ACTION_RESULT
+import com.idle.analytics.businessmetric.AnalyticsEvent.PropertiesKeys.BUTTON_ID
+import com.idle.analytics.businessmetric.AnalyticsEvent.PropertiesKeys.DURATION
+import com.idle.analytics.businessmetric.AnalyticsEvent.PropertiesKeys.SCREEN_NAME
+import com.idle.analytics.businessmetric.AnalyticsEvent.Types.ACTION
+import com.idle.analytics.businessmetric.AnalyticsEvent.Types.BUTTON_CLICK
+import com.idle.analytics.businessmetric.AnalyticsEvent.Types.SCREEN_VIEW
 
 abstract class AnalyticsHelper {
     abstract fun logEvent(event: AnalyticsEvent)
@@ -66,10 +66,33 @@ abstract class AnalyticsHelper {
     )
 }
 
+val LocalAnalyticsHelper = staticCompositionLocalOf<AnalyticsHelper> {
+    NoOpAnalyticsHelper()
+}
+
 @Composable
 fun TrackScreenViewEvent(
     screenName: String,
     analyticsHelper: AnalyticsHelper = LocalAnalyticsHelper.current,
 ) = LaunchedEffect(Unit) {
     analyticsHelper.logScreenView(screenName)
+}
+
+data class AnalyticsEvent(
+    val type: String,
+    val properties: MutableMap<String, Any?>? = null,
+) {
+    object Types {
+        const val SCREEN_VIEW = "screen_view"
+        const val BUTTON_CLICK = "button_click"
+        const val ACTION = "action"
+    }
+
+    object PropertiesKeys {
+        const val SCREEN_NAME = "screen_name"
+        const val ACTION_NAME = "action_name"
+        const val ACTION_RESULT = "action_result"
+        const val BUTTON_ID = "button_id"
+        const val DURATION = "duration"
+    }
 }

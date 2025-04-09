@@ -2,7 +2,6 @@ package com.idle.analytics.businessmetric
 
 import com.amplitude.android.Amplitude
 import com.amplitude.core.events.BaseEvent
-import com.idle.analytics.AnalyticsEvent
 import javax.inject.Inject
 
 class AmplitudeAnalyticsHelper @Inject constructor(
