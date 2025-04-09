@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.jobposting.Applicant
 import com.idle.domain.model.jobposting.JobPostingSummary
-import com.idle.domain.usecase.jobposting.GetApplicantsInfoUseCase
+import com.idle.domain.repositorry.jobposting.JobPostingRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ApplicantInquiryViewModel @Inject constructor(
-    private val getApplicantsInfoUseCase: GetApplicantsInfoUseCase,
+    private val jobPostingRepository: JobPostingRepository,
     private val errorHelper: ErrorHelper,
     val navigationHelper: com.idle.navigation.NavigationHelper,
 ) : ViewModel() {
@@ -25,9 +25,10 @@ class ApplicantInquiryViewModel @Inject constructor(
     val applicants = _applicants.asStateFlow()
 
     suspend fun getApplicantsInfo(jobPostingId: String) = viewModelScope.launch {
-        getApplicantsInfoUseCase(jobPostingId).onSuccess { (jobPostingSummary, applicants) ->
-            _jobPostingSummary.value = jobPostingSummary
-            _applicants.value = applicants
-        }.onFailure { errorHelper.sendError(it) }
+        jobPostingRepository.getApplicants(jobPostingId)
+            .onSuccess { (jobPostingSummary, applicants) ->
+                _jobPostingSummary.value = jobPostingSummary
+                _applicants.value = applicants
+            }.onFailure { errorHelper.sendError(it) }
     }
 }

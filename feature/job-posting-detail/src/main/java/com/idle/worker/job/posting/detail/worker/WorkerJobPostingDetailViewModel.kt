@@ -17,11 +17,7 @@ import com.idle.domain.model.jobposting.JobPosting
 import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.WorkerJobPostingDetail
 import com.idle.domain.model.profile.WorkerProfile
-import com.idle.domain.usecase.jobposting.AddFavoriteJobPostingUseCase
-import com.idle.domain.usecase.jobposting.ApplyJobPostingUseCase
-import com.idle.domain.usecase.jobposting.GetCrawlingJobPostingsDetailUseCase
-import com.idle.domain.usecase.jobposting.GetWorkerJobPostingDetailUseCase
-import com.idle.domain.usecase.jobposting.RemoveFavoriteJobPostingUseCase
+import com.idle.domain.repositorry.jobposting.JobPostingRepository
 import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,11 +29,7 @@ import javax.inject.Inject
 @HiltViewModel
 class WorkerJobPostingDetailViewModel @Inject constructor(
     private val getLocalMyWorkerProfileUseCase: GetLocalMyWorkerProfileUseCase,
-    private val getWorkerJobPostingDetailUseCase: GetWorkerJobPostingDetailUseCase,
-    private val getCrawlingJobPostingsDetailUseCase: GetCrawlingJobPostingsDetailUseCase,
-    private val applyJobPostingUseCase: ApplyJobPostingUseCase,
-    private val addFavoriteJobPostingUseCase: AddFavoriteJobPostingUseCase,
-    private val removeFavoriteJobPostingUseCase: RemoveFavoriteJobPostingUseCase,
+    private val jobPostingRepository: JobPostingRepository,
     private val analyticsHelper: AnalyticsHelper,
     private val errorHelper: ErrorHelper,
     val eventHelper: EventHelper,
@@ -60,11 +52,15 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
         jobPostingType: String,
     ) = viewModelScope.launch {
         when (jobPostingType) {
-            JobPostingType.CAREMEET.name -> getWorkerJobPostingDetailUseCase(jobPostingId).onSuccess {
+            JobPostingType.CAREMEET.name -> jobPostingRepository.getWorkerJobPostingDetail(
+                jobPostingId
+            ).onSuccess {
                 _workerJobPostingDetail.value = it
             }.onFailure { errorHelper.sendError(it) }
 
-            JobPostingType.WORKNET.name -> getCrawlingJobPostingsDetailUseCase(jobPostingId).onSuccess {
+            JobPostingType.WORKNET.name -> jobPostingRepository.getCrawlingJobPostingDetail(
+                jobPostingId
+            ).onSuccess {
                 _workerJobPostingDetail.value = it
             }.onFailure { errorHelper.sendError(it) }
         }
@@ -72,7 +68,7 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
 
     internal fun applyJobPosting(jobPostingId: String, applyMethod: ApplyMethod) =
         viewModelScope.launch {
-            applyJobPostingUseCase(
+            jobPostingRepository.applyJobPosting(
                 jobPostingId = jobPostingId,
                 applyMethod = applyMethod,
             ).onSuccess {
@@ -100,7 +96,7 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
         jobPostingId: String,
         jobPostingType: JobPostingType,
     ) = viewModelScope.launch {
-        addFavoriteJobPostingUseCase(
+        jobPostingRepository.addFavoriteJobPosting(
             jobPostingId = jobPostingId,
             jobPostingType = jobPostingType,
         ).onSuccess {
@@ -126,7 +122,7 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
         jobPostingId: String,
         jobPostingType: JobPostingType,
     ) = viewModelScope.launch {
-        removeFavoriteJobPostingUseCase(jobPostingId = jobPostingId).onSuccess {
+        jobPostingRepository.removeFavoriteJobPosting(jobPostingId = jobPostingId).onSuccess {
             eventHelper.sendEvent(
                 MainEvent.ShowToast("즐겨찾기에서 제거되었어요.", SUCCESS)
             )

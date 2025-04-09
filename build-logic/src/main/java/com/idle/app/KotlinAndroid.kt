@@ -33,8 +33,8 @@ internal fun Project.configureKotlinAndroid() {
         }
 
         compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_17
-            targetCompatibility = JavaVersion.VERSION_17
+            sourceCompatibility = JavaVersion.VERSION_21
+            targetCompatibility = JavaVersion.VERSION_21
         }
 
         val libs = extensions.libs
@@ -54,7 +54,7 @@ internal fun Project.configureKotlinAndroid() {
 internal fun Project.configureKotlin() {
     tasks.withType<KotlinCompile>().configureEach {
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_17)
+            jvmTarget.set(JvmTarget.JVM_21)
 
             val warningsAsErrors: String? by project
             allWarningsAsErrors.set(warningsAsErrors.toBoolean())

@@ -50,6 +50,5 @@ class ConfigDataSource @Inject constructor(
 
     companion object Key {
         const val FORCE_UPDATE = "forceUpdate"
-        const val SHOW_NOTIFICATION_CENTER = "show_notification_center_AOS"
     }
 }

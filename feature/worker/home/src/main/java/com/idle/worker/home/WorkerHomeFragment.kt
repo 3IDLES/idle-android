@@ -76,16 +76,9 @@ internal class WorkerHomeFragment : BaseComposeFragment() {
             val jobPostings by jobPostings.collectAsStateWithLifecycle()
             val unreadNotificationCount by unreadNotificationCount.collectAsStateWithLifecycle()
             val callType by callType.collectAsStateWithLifecycle()
-            val showNotificationCenter by showNotificationCenter.collectAsStateWithLifecycle()
-
-            LaunchedEffect(showNotificationCenter) {
-                if (showNotificationCenter) {
-                    getUnreadNotificationCount()
-                }
-            }
 
             LifecycleEventEffect(Lifecycle.Event.ON_CREATE) {
-                showNotificationCenter()
+                getUnreadNotificationCount()
                 getMyWorkerProfile()
             }
 
@@ -94,7 +87,6 @@ internal class WorkerHomeFragment : BaseComposeFragment() {
                 workerJobPostings = jobPostings,
                 unreadNotificationCount = unreadNotificationCount,
                 callType = callType,
-                showNotificationCenter = showNotificationCenter,
                 getJobPostings = ::getJobPostings,
                 applyJobPosting = ::applyJobPosting,
                 addFavoriteJobPosting = ::addFavoriteJobPosting,
@@ -117,7 +109,6 @@ internal fun WorkerHomeScreen(
     workerJobPostings: List<JobPosting>?,
     unreadNotificationCount: Int,
     callType: JobPostingCallType,
-    showNotificationCenter: Boolean,
     getJobPostings: () -> Unit,
     applyJobPosting: (String) -> Unit,
     addFavoriteJobPosting: (String, JobPostingType) -> Unit,
@@ -196,26 +187,25 @@ internal fun WorkerHomeScreen(
                     )
                 },
                 rightComponent = {
-                    if (showNotificationCenter) {
-                        Box(modifier = Modifier
+                    Box(
+                        modifier = Modifier
                             .size(32.dp)
                             .clickable { navigateTo(com.idle.navigation.DeepLinkDestination.Notification) }
-                        ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.ic_notification),
-                                contentDescription = null,
-                            )
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_notification),
+                            contentDescription = null,
+                        )
 
-                            if (unreadNotificationCount > 0) {
-                                Box(
-                                    modifier = Modifier
-                                        .align(Alignment.TopEnd)
-                                        .padding(top = 1.dp)
-                                        .clip(CircleShape)
-                                        .size(6.dp)
-                                        .background(CareTheme.colors.red),
-                                )
-                            }
+                        if (unreadNotificationCount > 0) {
+                            Box(
+                                modifier = Modifier
+                                    .align(Alignment.TopEnd)
+                                    .padding(top = 1.dp)
+                                    .clip(CircleShape)
+                                    .size(6.dp)
+                                    .background(CareTheme.colors.red),
+                            )
                         }
                     }
                 },

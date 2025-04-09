@@ -12,12 +12,7 @@ import com.idle.domain.model.jobposting.JobPosting
 import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.WorkerJobPosting
 import com.idle.domain.model.profile.WorkerProfile
-import com.idle.domain.usecase.jobposting.AddFavoriteJobPostingUseCase
-import com.idle.domain.usecase.jobposting.ApplyJobPostingUseCase
-import com.idle.domain.usecase.jobposting.GetJobPostingsAppliedUseCase
-import com.idle.domain.usecase.jobposting.GetMyFavoritesCrawlingJobPostingsUseCase
-import com.idle.domain.usecase.jobposting.GetMyFavoritesJobPostingsUseCase
-import com.idle.domain.usecase.jobposting.RemoveFavoriteJobPostingUseCase
+import com.idle.domain.repositorry.jobposting.JobPostingRepository
 import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,12 +24,7 @@ import javax.inject.Inject
 @HiltViewModel
 class WorkerJobPostingViewModel @Inject constructor(
     private val getLocalMyWorkerProfileUseCase: GetLocalMyWorkerProfileUseCase,
-    private val getJobPostingsAppliedUseCase: GetJobPostingsAppliedUseCase,
-    private val getMyFavoritesJobPostingsUseCase: GetMyFavoritesJobPostingsUseCase,
-    private val getMyFavoritesCrawlingJobPostingsUseCase: GetMyFavoritesCrawlingJobPostingsUseCase,
-    private val applyJobPostingUseCase: ApplyJobPostingUseCase,
-    private val addFavoriteJobPostingUseCase: AddFavoriteJobPostingUseCase,
-    private val removeFavoriteJobPostingUseCase: RemoveFavoriteJobPostingUseCase,
+    private val jobPostingRepository: JobPostingRepository,
     private val errorHelper: ErrorHelper,
     private val eventHelper: EventHelper,
     val navigationHelper: com.idle.navigation.NavigationHelper,
@@ -86,15 +76,17 @@ class WorkerJobPostingViewModel @Inject constructor(
                 return@launch
             }
 
-            getJobPostingsAppliedUseCase(next = next.value).onSuccess { (nextId, postings) ->
-                next.value = nextId
+            jobPostingRepository.getJobPostingsApplied(next = next.value)
+                .onSuccess { (nextId, postings) ->
+                    next.value = nextId
 
-                if (nextId == null) {
-                    appliedJobPostingCallType = JobPostingCallType.END
-                }
+                    if (nextId == null) {
+                        appliedJobPostingCallType = JobPostingCallType.END
+                    }
 
-                _appliedJobPostings.value = _appliedJobPostings.value?.plus(postings) ?: postings
-            }.onFailure { errorHelper.sendError(it) }
+                    _appliedJobPostings.value =
+                        _appliedJobPostings.value?.plus(postings) ?: postings
+                }.onFailure { errorHelper.sendError(it) }
         } finally {
             isLoading = false
         }
@@ -106,19 +98,19 @@ class WorkerJobPostingViewModel @Inject constructor(
     }
 
     private suspend fun getFavoriteCareMeetJobPostings() {
-        getMyFavoritesJobPostingsUseCase().onSuccess { postings ->
+        jobPostingRepository.getMyFavoritesJobPostings().onSuccess { postings ->
             _favoriteJobPostings.value = _favoriteJobPostings.value?.plus(postings) ?: postings
         }.onFailure { errorHelper.sendError(it) }
     }
 
     private suspend fun getFavoriteCrawlingJobPostings() {
-        getMyFavoritesCrawlingJobPostingsUseCase().onSuccess { postings ->
+        jobPostingRepository.getMyFavoritesCrawlingJobPostings().onSuccess { postings ->
             _favoriteJobPostings.value = _favoriteJobPostings.value?.plus(postings) ?: postings
         }.onFailure { errorHelper.sendError(it) }
     }
 
     internal fun applyJobPosting(jobPostingId: String) = viewModelScope.launch {
-        applyJobPostingUseCase(
+        jobPostingRepository.applyJobPosting(
             jobPostingId = jobPostingId,
             applyMethod = ApplyMethod.APP
         ).onSuccess {
@@ -144,7 +136,7 @@ class WorkerJobPostingViewModel @Inject constructor(
         jobPostingId: String,
         jobPostingType: JobPostingType,
     ) = viewModelScope.launch {
-        addFavoriteJobPostingUseCase(
+        jobPostingRepository.addFavoriteJobPosting(
             jobPostingId = jobPostingId,
             jobPostingType = jobPostingType,
         ).onSuccess {
@@ -181,7 +173,7 @@ class WorkerJobPostingViewModel @Inject constructor(
     }
 
     internal fun removeFavoriteJobPosting(jobPostingId: String) = viewModelScope.launch {
-        removeFavoriteJobPostingUseCase(jobPostingId = jobPostingId).onSuccess {
+        jobPostingRepository.removeFavoriteJobPosting(jobPostingId = jobPostingId).onSuccess {
             eventHelper.sendEvent(MainEvent.ShowToast("즐겨찾기에서 제거했어요.", ToastType.SUCCESS))
 
             _appliedJobPostings.value = _appliedJobPostings.value?.map {

@@ -10,8 +10,8 @@ import com.idle.binding.ToastType
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.profile.JobSearchStatus
 import com.idle.domain.model.profile.WorkerProfile
+import com.idle.domain.repositorry.profile.ProfileRepository
 import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
-import com.idle.domain.usecase.profile.GetWorkerProfileUseCase
 import com.idle.domain.usecase.profile.UpdateWorkerProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,8 +21,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WorkerProfileViewModel @Inject constructor(
+    private val profileRepository: ProfileRepository,
     private val getLocalMyWorkerProfileUseCase: GetLocalMyWorkerProfileUseCase,
-    private val getWorkerProfileUseCase: GetWorkerProfileUseCase,
     private val updateWorkerProfileUseCase: UpdateWorkerProfileUseCase,
     private val errorHelper: ErrorHelper,
     private val eventHelper: EventHelper,
@@ -105,7 +105,7 @@ class WorkerProfileViewModel @Inject constructor(
     }
 
     internal fun getWorkerProfile(workerId: String) = viewModelScope.launch {
-        getWorkerProfileUseCase(workerId).onSuccess {
+        profileRepository.getWorkerProfile(workerId).onSuccess {
             _workerProfile.value = it
             _workerIntroduce.value = it.introduce ?: ""
             _specialty.value = it.speciality ?: ""
