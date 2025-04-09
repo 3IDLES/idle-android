@@ -1,6 +1,5 @@
 package com.idle.chatting_detail
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.domain.model.auth.UserType
@@ -13,6 +12,7 @@ import com.idle.domain.repositorry.ProfileRepository
 import com.idle.domain.usecase.profile.GetLocalMyCenterProfileUseCase
 import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
@@ -49,10 +49,10 @@ class ChattingDetailViewModel @Inject constructor(
         _writingText.value = text
     }
 
-    internal fun getUserProfile(
+    internal suspend fun getUserProfile(
         myUserType: UserType,
         senderId: String,
-    ) = viewModelScope.launch {
+    ) = coroutineScope {
         when (myUserType) {
             UserType.CENTER -> {
                 launch {
@@ -68,6 +68,7 @@ class ChattingDetailViewModel @Inject constructor(
                 }.onFailure {
                     errorHelper.sendError(it)
                 }
+
             }
 
             UserType.WORKER -> {
@@ -110,31 +111,33 @@ class ChattingDetailViewModel @Inject constructor(
     internal fun subscribeChatMessage(userId: String) = viewModelScope.launch {
         chatRepository.subscribeChatMessage(userId)
             .catch {
-                Log.d("test", it.stackTraceToString())
                 errorHelper.sendError(it)
             }.collect { chatMessage ->
-                Log.d("test", chatMessage.toString())
-
                 _chatMessages.value = (_chatMessages.value ?: emptyList()) + chatMessage
             }
     }
 
     internal fun sendMessage(myUserType: UserType, roomId: String) = viewModelScope.launch {
+        val receiverId = if (myUserType == UserType.CENTER) _workerProfile.value!!.workerId
+        else _workerProfile.value!!.workerId
+
+        val senderName = if (myUserType == UserType.CENTER) _centerProfile.value!!.centerName
+        else _workerProfile.value!!.workerName
+
+        val senderId = if (myUserType == UserType.CENTER) _centerProfile.value!!.centerId
+        else _workerProfile.value!!.workerId
+
         chatRepository.sendMessage(
             chatroomId = roomId,
-            receiverId = if (myUserType == UserType.CENTER) _workerProfile.value!!.workerId
-            else _workerProfile.value!!.workerId,
-            senderName = if (myUserType == UserType.CENTER) _centerProfile.value!!.centerName
-            else _workerProfile.value!!.workerName,
+            receiverId = receiverId,
+            senderName = senderName,
             content = _writingText.value,
         ).onSuccess {
             _chatMessages.value = (_chatMessages.value ?: emptyList()) + ChatMessage(
                 id = UUID.randomUUID().toString(),
                 roomId = roomId,
-                senderId = if (myUserType == UserType.CENTER) _centerProfile.value!!.centerId
-                else _workerProfile.value!!.workerId,
-                receiverId = if (myUserType == UserType.CENTER) _workerProfile.value!!.workerId
-                else _centerProfile.value!!.centerId,
+                senderId = senderId,
+                receiverId = receiverId,
                 content = _writingText.value,
                 createdAt = LocalDateTime.now(),
                 isRead = false,
@@ -142,6 +145,23 @@ class ChattingDetailViewModel @Inject constructor(
 
             _writingText.value = ""
         }.onFailure { errorHelper.sendError(it) }
+    }
+
+    internal suspend fun readMessage(roomId: String, myUserType: UserType) {
+        val opponentId = if (myUserType == UserType.CENTER) _workerProfile.value!!.workerId
+        else _centerProfile.value!!.centerId
+
+        val myId = if (myUserType == UserType.CENTER) _centerProfile.value!!.centerId
+        else _workerProfile.value!!.workerId
+
+        chatRepository.readMessage(
+            chatroomId = roomId,
+            opponentId = opponentId,
+        ).onSuccess {
+            _chatMessages.value = _chatMessages.value?.map {
+                if (it.receiverId == myId) it.copy(isRead = true) else it
+            }
+        }
     }
 }
 

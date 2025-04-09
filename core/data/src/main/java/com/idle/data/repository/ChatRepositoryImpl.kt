@@ -7,7 +7,8 @@ import com.idle.domain.repositorry.ChatRepository
 import com.idle.network.api.websocket.MAX_RETRY_ATTEMPTS
 import com.idle.network.api.websocket.WebSocketDataSource
 import com.idle.network.api.websocket.calculateBackoffTime
-import com.idle.network.model.chat.SendChatMessageRequest
+import com.idle.network.model.chat.ReadMessageRequest
+import com.idle.network.model.chat.SendMessageRequest
 import com.idle.network.source.chat.ChatDataSource
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -82,11 +83,19 @@ class ChatRepositoryImpl @Inject constructor(
         senderName: String,
         content: String,
     ): Result<Unit> = webSocketDataSource.sendMessage(
-        SendChatMessageRequest(
+        SendMessageRequest(
             chatroomId = chatroomId,
             receiverId = receiverId,
             senderName = senderName,
             content = content,
         )
     )
+
+    override suspend fun readMessage(chatroomId: String, opponentId: String): Result<Unit> =
+        webSocketDataSource.readMessage(
+            ReadMessageRequest(
+                chatroomId = chatroomId,
+                opponentId = opponentId,
+            )
+        )
 }

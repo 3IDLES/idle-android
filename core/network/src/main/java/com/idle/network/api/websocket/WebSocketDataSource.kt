@@ -3,7 +3,8 @@ package com.idle.network.api.websocket
 import com.idle.network.BuildConfig
 import com.idle.network.di.TokenManager
 import com.idle.network.model.chat.ChatMessageResponse
-import com.idle.network.model.chat.SendChatMessageRequest
+import com.idle.network.model.chat.ReadMessageRequest
+import com.idle.network.model.chat.SendMessageRequest
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -62,12 +63,20 @@ class WebSocketDataSource @Inject constructor(
             ChatMessageResponse.serializer()
         ) ?: flow { throw IOException("웹소켓을 먼저 연결해주세요.") }
 
-    suspend fun sendMessage(sendChatMessageRequest: SendChatMessageRequest): Result<Unit> =
+    suspend fun sendMessage(sendMessageRequest: SendMessageRequest): Result<Unit> =
         runCatching {
             session?.convertAndSend(
                 headers = StompSendHeaders(destination = "/pub/send"),
-                body = sendChatMessageRequest,
-                serializer = SendChatMessageRequest.serializer(),
+                body = sendMessageRequest,
+                serializer = SendMessageRequest.serializer(),
             )
         }
+
+    suspend fun readMessage(readMessageRequest: ReadMessageRequest): Result<Unit> = runCatching {
+        session?.convertAndSend(
+            headers = StompSendHeaders(destination = "/pub/read"),
+            body = readMessageRequest,
+            serializer = ReadMessageRequest.serializer(),
+        )
+    }
 }

@@ -28,8 +28,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -67,10 +65,11 @@ internal class ChattingDetailFragment : BaseComposeFragment() {
             val workerProfile by workerProfile.collectAsStateWithLifecycle()
             val centerProfile by centerProfile.collectAsStateWithLifecycle()
 
-            LifecycleEventEffect(Lifecycle.Event.ON_CREATE) {
+            LaunchedEffect(Unit) {
                 getUserProfile(myUserType = receiverUserType, senderId = senderId)
                 getChatMessages(myUserType = receiverUserType, chattingRoomId)
                 subscribeChatMessage(receiverId)
+                readMessage(roomId = chattingRoomId, myUserType = receiverUserType)
             }
 
             if (chatMessages != null && workerProfile != null && centerProfile != null) {

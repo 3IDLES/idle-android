@@ -23,4 +23,9 @@ interface ChatRepository {
         senderName: String,
         content: String,
     ): Result<Unit>
+
+    suspend fun readMessage(
+        chatroomId: String,
+        opponentId: String,
+    ): Result<Unit>
 }
