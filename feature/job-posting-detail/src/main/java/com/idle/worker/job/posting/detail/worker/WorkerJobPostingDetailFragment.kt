@@ -84,7 +84,7 @@ internal class WorkerJobPostingDetailFragment : BaseComposeFragment() {
                                 applyJobPosting = ::applyJobPosting,
                                 navigateTo = {
                                     navigationHelper.navigateTo(
-                                        com.idle.navigation.NavigationEvent.NavigateTo(it)
+                                        com.idle.navigation.NavigationEvent.To(it)
                                     )
                                 },
                                 shareJobPosting = {

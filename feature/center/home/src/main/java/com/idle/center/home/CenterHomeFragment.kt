@@ -86,7 +86,7 @@ internal class CenterHomeFragment : BaseComposeFragment() {
                 endJobPosting = ::endJobPosting,
                 navigateTo = {
                     navigationHelper.navigateTo(
-                        com.idle.navigation.NavigationEvent.NavigateTo(
+                        com.idle.navigation.NavigationEvent.To(
                             it
                         )
                     )

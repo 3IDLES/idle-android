@@ -152,7 +152,7 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
             opponentId = opponentId,
         ).onSuccess {
             navigationHelper.navigateTo(
-                NavigationEvent.NavigateTo(
+                NavigationEvent.To(
                     DeepLinkDestination.ChattingDetail(
                         chattingRoomId = it,
                         receiverId = _profile.value?.workerId ?: return@onSuccess,

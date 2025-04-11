@@ -360,7 +360,7 @@ class JobPostingViewModel @Inject constructor(
                 applyDeadline = _applyDeadline.value?.toString(),
             ).onSuccess {
                 navigationHelper.navigateTo(
-                    com.idle.navigation.NavigationEvent.NavigateTo(
+                    com.idle.navigation.NavigationEvent.To(
                         destination = CenterJobPostingPostComplete,
                         popUpTo = R.id.jobPostingPostFragment
                     )

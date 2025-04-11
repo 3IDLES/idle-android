@@ -185,7 +185,7 @@ class NewPasswordViewModel @Inject constructor(
             phoneNumber = formatPhoneNumber(_phoneNumber.value),
         ).onSuccess {
             navigationHelper.navigateTo(
-                com.idle.navigation.NavigationEvent.NavigateTo(
+                com.idle.navigation.NavigationEvent.To(
                     destination = com.idle.navigation.DeepLinkDestination.CenterSignIn("새 비밀번호를 발급하였습니다."),
                     popUpTo = R.id.newPasswordFragment,
                 )

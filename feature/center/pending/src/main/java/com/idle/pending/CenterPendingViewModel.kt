@@ -89,13 +89,13 @@ class CenterPendingViewModel @Inject constructor(
     private fun handleApprovedCenterStatus() = viewModelScope.launch {
         profileRepository.getMyCenterProfile().onSuccess {
             navigationHelper.navigateTo(
-                NavigationEvent.NavigateTo(CenterHome, R.id.centerPendingFragment)
+                NavigationEvent.To(CenterHome, R.id.centerPendingFragment)
             )
         }.onFailure {
             val error = it as HttpResponseException
             if (error.apiErrorCode == ApiErrorCode.CenterNotFound) {
                 navigationHelper.navigateTo(
-                    NavigationEvent.NavigateTo(
+                    NavigationEvent.To(
                         CenterRegister,
                         R.id.centerPendingFragment,
                     )

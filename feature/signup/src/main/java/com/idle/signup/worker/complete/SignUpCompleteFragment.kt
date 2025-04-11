@@ -39,7 +39,7 @@ class SignUpCompleteFragment : BaseComposeFragment() {
                 centerSignUpProcessStep = centerSignUpProcessStep,
                 navigateTo = {
                     navigationHelper.navigateTo(
-                        com.idle.navigation.NavigationEvent.NavigateTo(
+                        com.idle.navigation.NavigationEvent.To(
                             destination = it,
                             popUpTo = com.idle.signup.R.id.signUpCompleteFragment,
                         )

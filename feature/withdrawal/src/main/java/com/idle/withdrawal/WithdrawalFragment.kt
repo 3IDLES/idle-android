@@ -103,7 +103,7 @@ internal class WithdrawalFragment : BaseComposeFragment() {
                 withdrawal = { showDialog = true },
                 navigateToSetting = {
                     navigationHelper.navigateTo(
-                        com.idle.navigation.NavigationEvent.NavigateTo(
+                        com.idle.navigation.NavigationEvent.To(
                             destination = if (userType == UserType.CENTER) CenterSetting
                             else WorkerSetting,
                             popUpTo = com.idle.withdrawal.R.id.withdrawalFragment,

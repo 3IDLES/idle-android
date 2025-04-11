@@ -114,7 +114,7 @@ class MainViewModel @Inject constructor(
     private suspend fun navigateToDestination(userRole: String) {
         when (userRole) {
             UserType.WORKER.apiValue -> navigationHelper.navigateTo(
-                com.idle.navigation.NavigationEvent.NavigateTo(WorkerHome, R.id.authFragment)
+                com.idle.navigation.NavigationEvent.To(WorkerHome, R.id.authFragment)
             )
 
             UserType.CENTER.apiValue -> getCenterStatus()
@@ -131,7 +131,7 @@ class MainViewModel @Inject constructor(
         when (status) {
             CenterManagerAccountStatus.APPROVED -> handleApprovedCenterStatus()
             else -> navigationHelper.navigateTo(
-                com.idle.navigation.NavigationEvent.NavigateTo(
+                com.idle.navigation.NavigationEvent.To(
                     CenterPending(status.name),
                     R.id.authFragment
                 )
@@ -142,13 +142,13 @@ class MainViewModel @Inject constructor(
     private fun handleApprovedCenterStatus() = viewModelScope.launch {
         profileRepository.getMyCenterProfile().onSuccess {
             navigationHelper.navigateTo(
-                com.idle.navigation.NavigationEvent.NavigateTo(CenterHome, R.id.authFragment)
+                com.idle.navigation.NavigationEvent.To(CenterHome, R.id.authFragment)
             )
         }.onFailure {
             val error = it as HttpResponseException
             if (error.apiErrorCode == ApiErrorCode.CenterNotFound) {
                 navigationHelper.navigateTo(
-                    com.idle.navigation.NavigationEvent.NavigateTo(
+                    com.idle.navigation.NavigationEvent.To(
                         CenterRegister,
                         R.id.authFragment
                     )

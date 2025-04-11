@@ -127,7 +127,7 @@ class CenterJobPostingDetailViewModel @Inject constructor(
     internal fun deleteJobPosting(jobPostingId: String) = viewModelScope.launch {
         jobPostingRepository.deleteJobPosting(jobPostingId).onSuccess {
             navigationHelper.navigateTo(
-                com.idle.navigation.NavigationEvent.NavigateTo(
+                com.idle.navigation.NavigationEvent.To(
                     com.idle.navigation.DeepLinkDestination.CenterHome,
                     R.id.centerJobPostingDetailFragment
                 )

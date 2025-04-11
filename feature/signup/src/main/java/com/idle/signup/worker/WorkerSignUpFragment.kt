@@ -96,7 +96,7 @@ internal class WorkerSignUpFragment : BaseComposeFragment() {
                 signUpWorker = ::signUpWorker,
                 navigateToAuth = {
                     navigationHelper.navigateTo(
-                        com.idle.navigation.NavigationEvent.NavigateTo(
+                        com.idle.navigation.NavigationEvent.To(
                             destination = Auth,
                             popUpTo = com.idle.signup.R.id.workerSignUpFragment,
                         )

@@ -74,7 +74,7 @@ internal class AuthFragment : BaseComposeFragment() {
                 onUserRoleChanged = ::setUserRole,
                 navigateTo = {
                     navigationHelper.navigateTo(
-                        com.idle.navigation.NavigationEvent.NavigateTo(
+                        com.idle.navigation.NavigationEvent.To(
                             destination = it,
                             popUpTo = R.id.nav_auth
                         )

@@ -271,7 +271,7 @@ internal class JobPostingFragment : BaseComposeFragment() {
                         showSnackBar = { eventHelper.sendEvent(MainEvent.ShowToast(it)) },
                         navigateToHome = {
                             navigationHelper.navigateTo(
-                                com.idle.navigation.NavigationEvent.NavigateTo(
+                                com.idle.navigation.NavigationEvent.To(
                                     com.idle.navigation.DeepLinkDestination.CenterHome,
                                     com.idle.center.job.posting.post.R.id.jobPostingPostFragment
                                 )

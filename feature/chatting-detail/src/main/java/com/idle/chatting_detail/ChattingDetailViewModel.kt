@@ -1,6 +1,6 @@
 package com.idle.chatting_detail
 
-import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.domain.model.auth.UserType
@@ -14,6 +14,7 @@ import com.idle.domain.repositorry.ProfileRepository
 import com.idle.domain.usecase.chat.GetChatRoomMessageUseCase
 import com.idle.domain.usecase.profile.GetLocalMyCenterProfileUseCase
 import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
+import com.idle.navigation.NavigationHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,8 +31,22 @@ class ChattingDetailViewModel @Inject constructor(
     private val getChatRoomMessageUseCase: GetChatRoomMessageUseCase,
     private val chatRepository: ChatRepository,
     private val errorHelper: ErrorHelper,
-    val navigationHelper: com.idle.navigation.NavigationHelper,
+    val navigationHelper: NavigationHelper,
+    private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
+    private val chattingRoomId: String = requireNotNull(savedStateHandle["chattingRoomId"]) {
+        "chattingRoomId is missing in savedStateHandle"
+    }
+    private val senderId: String = requireNotNull(savedStateHandle["senderId"]) {
+        "senderId is missing in savedStateHandle"
+    }
+    val receiverUserType: UserType = UserType.create(
+        requireNotNull(savedStateHandle["receiverUserType"]) { "receiverUserType is missing" }
+    )
+    val receiverId: String = requireNotNull(savedStateHandle["receiverId"]) {
+        "receiverId is missing in savedStateHandle"
+    }
+
     private val _writingText = MutableStateFlow<String>("")
     val writingText = _writingText.asStateFlow()
 
@@ -45,17 +60,13 @@ class ChattingDetailViewModel @Inject constructor(
     val centerProfile = _centerProfile.asStateFlow()
 
     private val _callType = MutableStateFlow<MessageCallType>(MessageCallType.PAGING)
-    val callType = _callType.asStateFlow()
 
     internal fun setWritingText(text: String) {
         _writingText.value = text
     }
 
-    internal suspend fun getUserProfile(
-        myUserType: UserType,
-        senderId: String,
-    ) = coroutineScope {
-        when (myUserType) {
+    internal suspend fun getUserProfile() = coroutineScope {
+        when (receiverUserType) {
             UserType.CENTER -> {
                 launch {
                     profileRepository.getWorkerProfile(senderId).onSuccess {
@@ -92,15 +103,12 @@ class ChattingDetailViewModel @Inject constructor(
         }
     }
 
-    internal fun getChatMessages(
-        myUserType: UserType,
-        roomId: String,
-    ) = viewModelScope.launch {
+    internal fun getChatMessages() = viewModelScope.launch {
         if (_callType.value == MessageCallType.END) return@launch
 
         getChatRoomMessageUseCase(
-            userType = myUserType,
-            roomId = roomId,
+            userType = receiverUserType,
+            roomId = chattingRoomId,
             messageId = _chatMessages.value?.first()?.id,
         ).onSuccess { messages ->
             if (messages.size < 50) _callType.value = MessageCallType.END
@@ -109,15 +117,15 @@ class ChattingDetailViewModel @Inject constructor(
         }.onFailure { errorHelper.sendError(it) }
     }
 
-    internal fun subscribeChatMessage(userId: String) = viewModelScope.launch {
-        chatRepository.subscribeChatMessage(userId)
+    internal fun subscribeChatMessage() = viewModelScope.launch {
+        chatRepository.subscribeChatMessage(receiverId)
             .catch {
                 errorHelper.sendError(it)
             }.collect { message ->
-                Log.d("test", message.toString())
-
                 when (message) {
                     is ChatMessage -> {
+                        if (message.senderId != receiverId) readMessage()
+
                         _chatMessages.value = (_chatMessages.value ?: emptyList()) + message
                     }
 
@@ -130,15 +138,15 @@ class ChattingDetailViewModel @Inject constructor(
             }
     }
 
-    internal fun sendMessage(myUserType: UserType, roomId: String) = viewModelScope.launch {
-        val receiverId = if (myUserType == UserType.CENTER) _workerProfile.value!!.workerId
+    internal fun sendMessage() = viewModelScope.launch {
+        val receiverId = if (receiverUserType == UserType.CENTER) _workerProfile.value!!.workerId
         else _centerProfile.value!!.centerId
 
-        val senderName = if (myUserType == UserType.CENTER) _centerProfile.value!!.centerName
+        val senderName = if (receiverUserType == UserType.CENTER) _centerProfile.value!!.centerName
         else _workerProfile.value!!.workerName
 
         chatRepository.sendMessage(
-            chatroomId = roomId,
+            chatroomId = chattingRoomId,
             receiverId = receiverId,
             senderName = senderName,
             content = _writingText.value,
@@ -147,15 +155,15 @@ class ChattingDetailViewModel @Inject constructor(
         }.onFailure { errorHelper.sendError(it) }
     }
 
-    internal suspend fun readMessage(roomId: String, myUserType: UserType) {
-        val opponentId = if (myUserType == UserType.CENTER) _workerProfile.value!!.workerId
+    internal suspend fun readMessage() {
+        val opponentId = if (receiverUserType == UserType.CENTER) _workerProfile.value!!.workerId
         else _centerProfile.value!!.centerId
 
-        val myId = if (myUserType == UserType.CENTER) _centerProfile.value!!.centerId
+        val myId = if (receiverUserType == UserType.CENTER) _centerProfile.value!!.centerId
         else _workerProfile.value!!.workerId
 
         chatRepository.readMessage(
-            chatroomId = roomId,
+            chatroomId = chattingRoomId,
             opponentId = opponentId,
         ).onSuccess {
             _chatMessages.value = _chatMessages.value?.map {

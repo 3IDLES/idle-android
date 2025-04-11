@@ -53,12 +53,12 @@ class NavigationHelper @Inject constructor() {
 
                 val destinations = if (isColdStart) {
                     listOf(
-                        NavigationEvent.NavigateTo(CenterHome),
-                        NavigationEvent.NavigateTo(CenterJobDetail(jobPostingId)),
+                        NavigationEvent.To(CenterHome),
+                        NavigationEvent.To(CenterJobDetail(jobPostingId)),
                     )
                 } else {
                     listOf(
-                        NavigationEvent.NavigateTo(CenterJobDetail(jobPostingId)),
+                        NavigationEvent.To(CenterJobDetail(jobPostingId)),
                     )
                 }
 
@@ -75,8 +75,8 @@ class NavigationHelper @Inject constructor() {
                 }
 
                 val destinations = listOf(
-                    NavigationEvent.NavigateTo(DeepLinkDestination.WorkerHome),
-                    NavigationEvent.NavigateTo(
+                    NavigationEvent.To(DeepLinkDestination.WorkerHome),
+                    NavigationEvent.To(
                         WorkerJobDetail(
                             jobPostingId,
                             JobPostingType.CAREMEET.name
@@ -95,14 +95,14 @@ class NavigationHelper @Inject constructor() {
         val destinations = when (notification.notificationType) {
             APPLICANT -> {
                 (notification.notificationDetails as? NotificationContent.ApplicantNotification)?.let { content ->
-                    listOf(NavigationEvent.NavigateTo(CenterJobDetail(content.jobPostingId)))
+                    listOf(NavigationEvent.To(CenterJobDetail(content.jobPostingId)))
                 } ?: listOf()
             }
 
             NEW_JOB_POSTING -> {
                 (notification.notificationDetails as? NotificationContent.NewJobPostingNotification)?.let { content ->
                     listOf(
-                        NavigationEvent.NavigateTo(
+                        NavigationEvent.To(
                             WorkerJobDetail(
                                 content.jobPostingId,
                                 JobPostingType.CAREMEET.name
@@ -119,7 +119,7 @@ class NavigationHelper @Inject constructor() {
 }
 
 sealed class NavigationEvent {
-    data class NavigateTo(val destination: DeepLinkDestination, val popUpTo: Int? = null) :
+    data class To(val destination: DeepLinkDestination, val popUpTo: Int? = null) :
         NavigationEvent()
 
     data class NavigateToAuthWithClearBackStack(

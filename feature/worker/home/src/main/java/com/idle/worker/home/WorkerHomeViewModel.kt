@@ -143,7 +143,7 @@ class WorkerHomeViewModel @Inject constructor(
         val sharedJobPostingInfo = jobPostingRepository.sharedJobPostingInfo ?: return
 
         navigationHelper.navigateTo(
-            NavigationEvent.NavigateTo(
+            NavigationEvent.To(
                 DeepLinkDestination.WorkerJobDetail(
                     jobPostingId = sharedJobPostingInfo.jobPostingId,
                     jobPostingType = sharedJobPostingInfo.jobPostingType.name,

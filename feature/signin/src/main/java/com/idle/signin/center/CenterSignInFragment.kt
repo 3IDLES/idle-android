@@ -72,7 +72,7 @@ internal class CenterSignInFragment : BaseComposeFragment() {
                 signInCenter = ::signInCenter,
                 navigateToAuth = {
                     navigationHelper.navigateTo(
-                        com.idle.navigation.NavigationEvent.NavigateTo(
+                        com.idle.navigation.NavigationEvent.To(
                             destination = Auth,
                             popUpTo = com.idle.signin.R.id.centerSignInFragment
                         )
@@ -80,7 +80,7 @@ internal class CenterSignInFragment : BaseComposeFragment() {
                 },
                 navigateToNewPassword = {
                     navigationHelper.navigateTo(
-                        com.idle.navigation.NavigationEvent.NavigateTo(NewPassword)
+                        com.idle.navigation.NavigationEvent.To(NewPassword)
                     )
                 }
             )

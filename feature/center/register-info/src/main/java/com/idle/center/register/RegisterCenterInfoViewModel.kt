@@ -55,7 +55,7 @@ class RegisterCenterInfoViewModel @Inject constructor(
             imageFileUri = _centerProfileImageUri.value.toString(),
         ).onSuccess {
             navigationHelper.navigateTo(
-                com.idle.navigation.NavigationEvent.NavigateTo(
+                com.idle.navigation.NavigationEvent.To(
                     CenterRegisterComplete,
                     R.id.registerCenterInfoFragment
                 )

@@ -97,7 +97,7 @@ internal class CenterSignUpFragment : BaseComposeFragment() {
                 validateBusinessRegistrationNumber = ::validateBusinessRegistrationNumber,
                 navigateToAuth = {
                     navigationHelper.navigateTo(
-                        com.idle.navigation.NavigationEvent.NavigateTo(
+                        com.idle.navigation.NavigationEvent.To(
                             destination = Auth,
                             popUpTo = com.idle.signup.R.id.centerSignUpFragment,
                         )

@@ -36,7 +36,7 @@ import com.idle.domain.model.config.ForceUpdate
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.SharedJobPostingInfo
-import com.idle.navigation.NavigationEvent.NavigateTo
+import com.idle.navigation.NavigationEvent.To
 import com.idle.navigation.NavigationEvent.NavigateToAuthWithClearBackStack
 import com.idle.navigation.deepLinkNavigateTo
 import com.idle.presentation.databinding.ActivityMainBinding
@@ -223,7 +223,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun handleNavigationEvent(navigationEvent: com.idle.navigation.NavigationEvent) {
         when (navigationEvent) {
-            is NavigateTo -> navController.deepLinkNavigateTo(
+            is To -> navController.deepLinkNavigateTo(
                 context = this,
                 deepLinkDestination = navigationEvent.destination,
                 popUpTo = navigationEvent.popUpTo

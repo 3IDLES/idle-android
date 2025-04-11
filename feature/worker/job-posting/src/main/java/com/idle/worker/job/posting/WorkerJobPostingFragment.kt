@@ -90,7 +90,7 @@ internal class WorkerJobPostingFragment : BaseComposeFragment() {
                 removeFavoriteJobPosting = ::removeFavoriteJobPosting,
                 navigateTo = {
                     navigationHelper.navigateTo(
-                        com.idle.navigation.NavigationEvent.NavigateTo(
+                        com.idle.navigation.NavigationEvent.To(
                             it
                         )
                     )

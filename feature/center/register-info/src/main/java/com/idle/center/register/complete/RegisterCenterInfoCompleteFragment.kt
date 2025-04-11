@@ -41,7 +41,7 @@ internal class CenterRegisterCompleteFragment : BaseComposeFragment() {
                 CenterRegisterCompleteScreen(
                     navigateToCenterHome = {
                         navigationHelper.navigateTo(
-                            com.idle.navigation.NavigationEvent.NavigateTo(
+                            com.idle.navigation.NavigationEvent.To(
                                 CenterHome,
                                 R.id.registerCenterInfoCompleteFragment
                             )

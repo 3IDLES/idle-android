@@ -147,7 +147,7 @@ internal class CenterJobPostingDetailFragment : BaseComposeFragment() {
                                 deleteJobPosting = ::deleteJobPosting,
                                 navigateTo = {
                                     navigationHelper.navigateTo(
-                                        com.idle.navigation.NavigationEvent.NavigateTo(
+                                        com.idle.navigation.NavigationEvent.To(
                                             it
                                         )
                                     )

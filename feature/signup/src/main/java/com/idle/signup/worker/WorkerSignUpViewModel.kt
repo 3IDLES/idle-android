@@ -152,7 +152,7 @@ class WorkerSignUpViewModel @Inject constructor(
         ).onSuccess {
             profileRepository.getWorkerId().onSuccess { analyticsHelper.setUserId(it) }
             navigationHelper.navigateTo(
-                com.idle.navigation.NavigationEvent.NavigateTo(
+                com.idle.navigation.NavigationEvent.To(
                     WorkerHome,
                     R.id.workerSignUpFragment
                 )
@@ -187,7 +187,7 @@ class WorkerSignUpViewModel @Inject constructor(
         ).onSuccess {
             profileRepository.getWorkerId().onSuccess { analyticsHelper.setUserId(it) }
             navigationHelper.navigateTo(
-                com.idle.navigation.NavigationEvent.NavigateTo(
+                com.idle.navigation.NavigationEvent.To(
                     SignUpComplete,
                     R.id.workerSignUpFragment
                 )

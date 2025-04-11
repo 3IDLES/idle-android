@@ -17,7 +17,7 @@ import com.idle.domain.repositorry.ProfileRepository
 import com.idle.navigation.DeepLinkDestination.CenterHome
 import com.idle.navigation.DeepLinkDestination.CenterPending
 import com.idle.navigation.DeepLinkDestination.CenterRegister
-import com.idle.navigation.NavigationEvent.NavigateTo
+import com.idle.navigation.NavigationEvent.To
 import com.idle.signin.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -97,7 +97,7 @@ class CenterSignInViewModel @Inject constructor(
         when (status) {
             CenterManagerAccountStatus.APPROVED -> fetchAndNavigateToProfile()
             else -> navigationHelper.navigateTo(
-                NavigateTo(
+                To(
                     CenterPending(status.name),
                     R.id.centerSignInFragment
                 )
@@ -108,13 +108,13 @@ class CenterSignInViewModel @Inject constructor(
     private fun fetchAndNavigateToProfile() = viewModelScope.launch {
         profileRepository.getMyCenterProfile().onSuccess {
             navigationHelper.navigateTo(
-                NavigateTo(CenterHome, R.id.centerSignInFragment)
+                To(CenterHome, R.id.centerSignInFragment)
             )
         }.onFailure {
             val error = it as HttpResponseException
             if (error.apiErrorCode == ApiErrorCode.CenterNotFound) {
                 navigationHelper.navigateTo(
-                    NavigateTo(CenterRegister, R.id.centerSignInFragment)
+                    To(CenterRegister, R.id.centerSignInFragment)
                 )
             } else {
                 errorHelper.sendError(it)

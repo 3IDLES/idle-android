@@ -1,4 +1,4 @@
-package com.idle.chatting_detail.seeallchat
+package com.idle.see_all_chat
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize

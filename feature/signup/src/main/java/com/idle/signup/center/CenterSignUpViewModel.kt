@@ -251,7 +251,7 @@ class CenterSignUpViewModel @Inject constructor(
             ),
         ).onSuccess {
             navigationHelper.navigateTo(
-                com.idle.navigation.NavigationEvent.NavigateTo(
+                com.idle.navigation.NavigationEvent.To(
                     com.idle.navigation.DeepLinkDestination.CenterSignIn("회원가입을 성공하였습니다."),
                     R.id.centerSignUpFragment
                 )
