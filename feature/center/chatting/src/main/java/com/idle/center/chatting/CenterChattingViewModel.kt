@@ -1,10 +1,11 @@
 package com.idle.center.chatting
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.domain.model.auth.UserType
+import com.idle.domain.model.chat.ChatMessage
 import com.idle.domain.model.chat.ChatRoom
+import com.idle.domain.model.chat.ReadMessage
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.repositorry.ChatRepository
 import com.idle.domain.repositorry.ProfileRepository
@@ -36,40 +37,49 @@ class CenterChattingViewModel @Inject constructor(
 
     internal fun subscribeChatMessage() = viewModelScope.launch {
         val myCenterProfile = getLocalMyCenterProfileUseCase().getOrThrow()
-        Log.d("test", myCenterProfile.centerId)
-
-        chatRepository.subscribeChatMessage("1234").collect { chatMessage ->
-            val updatedMap = LinkedHashMap(_chatRoomMap.value) // 기존 맵을 복사
-            val roomId = chatMessage.roomId
-            val chatRoom = updatedMap[roomId]
-
-            if (chatRoom != null) {
-                // 기존 방이 있으면 업데이트 후 최상단으로 올리기 위해 제거 후 다시 추가
-                updatedMap.remove(roomId)
-                updatedMap[roomId] = chatRoom.copy(
-                    lastMessage = chatMessage.content,
-                    unReadMessageCount = chatRoom.unReadMessageCount + 1,
-                )
-            } else {
-                // 새로운 방이면 새로 생성 후 최상단에 추가
-                val opponentProfile = profileRepository.getWorkerProfile(chatMessage.senderId)
-                    .getOrNull() ?: return@collect
-
-                val newChatRoom = ChatRoom(
-                    id = roomId,
-                    lastMessage = chatMessage.content,
-                    myId = chatMessage.senderId,
-                    opponentId = chatMessage.senderId,
-                    opponentName = opponentProfile.workerName,
-                    lastMessageTime = chatMessage.createdAt,
-                    unReadMessageCount = 1,
-                    opponentProfileImageUrl = opponentProfile.profileImageUrl,
-                )
-                updatedMap[roomId] = newChatRoom
+        chatRepository.subscribeChatMessage(myCenterProfile.centerId).collect { message ->
+            when (message) {
+                is ChatMessage -> handleChatMessage(message)
+                is ReadMessage -> handleReadMessage(message)
             }
-
-            _chatRoomMap.value = updatedMap
         }
+    }
+
+    private suspend fun handleChatMessage(message: ChatMessage) {
+        val updatedMap = LinkedHashMap(_chatRoomMap.value) // 기존 맵을 복사
+        val roomId = message.roomId
+        val chatRoom = updatedMap[roomId]
+
+        if (chatRoom != null) {
+            // 기존 방이 있으면 업데이트 후 최상단으로 올리기 위해 제거 후 다시 추가
+            updatedMap.remove(roomId)
+            updatedMap[roomId] = chatRoom.copy(
+                lastMessage = message.content,
+                unReadMessageCount = chatRoom.unReadMessageCount + 1,
+            )
+        } else {
+            // 새로운 방이면 새로 생성 후 최상단에 추가
+            val opponentProfile = profileRepository.getWorkerProfile(message.senderId)
+                .getOrNull() ?: return
+
+            val newChatRoom = ChatRoom(
+                id = roomId,
+                lastMessage = message.content,
+                myId = message.senderId,
+                opponentId = message.senderId,
+                opponentName = opponentProfile.workerName,
+                lastMessageTime = message.createdAt,
+                unReadMessageCount = 1,
+                opponentProfileImageUrl = opponentProfile.profileImageUrl,
+            )
+            updatedMap[roomId] = newChatRoom
+        }
+
+        _chatRoomMap.value = updatedMap
+    }
+
+    private fun handleReadMessage(message: ReadMessage) {
+
     }
 
     internal fun getChatRoomList() = viewModelScope.launch {

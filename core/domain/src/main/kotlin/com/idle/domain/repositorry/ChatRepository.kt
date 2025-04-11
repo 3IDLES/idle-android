@@ -3,6 +3,7 @@ package com.idle.domain.repositorry
 import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.chat.ChatMessage
 import com.idle.domain.model.chat.ChatRoom
+import com.idle.domain.model.chat.Message
 import kotlinx.coroutines.flow.Flow
 
 interface ChatRepository {
@@ -16,7 +17,7 @@ interface ChatRepository {
     ): Result<List<ChatMessage>>
 
     suspend fun generateChatRooms(userType: UserType, opponentId: String): Result<String>
-    suspend fun subscribeChatMessage(userId: String): Flow<ChatMessage>
+    suspend fun subscribeChatMessage(userId: String): Flow<Message>
     suspend fun sendMessage(
         chatroomId: String,
         receiverId: String,

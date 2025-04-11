@@ -5,10 +5,12 @@ import com.idle.network.BuildConfig
 import com.idle.network.api.ChatApi
 import com.idle.network.di.TokenManager
 import com.idle.network.model.chat.ChatMessageResponse
+import com.idle.network.model.chat.ChatResponse
 import com.idle.network.model.chat.GenerateChatRoomResponse
 import com.idle.network.model.chat.GetChatRoomResponse
 import com.idle.network.model.chat.ReadMessageRequest
 import com.idle.network.model.chat.SendMessageRequest
+import com.idle.network.serializer.ChatResponseSerializer
 import com.idle.network.util.MAX_RETRY_ATTEMPTS
 import com.idle.network.util.MAX_WAIT_TIME
 import com.idle.network.util.calculateBackoffTime
@@ -32,6 +34,7 @@ class ChatDataSource @Inject constructor(
     private val chatApi: ChatApi,
     private val client: WebSocketClient,
     private val tokenManager: TokenManager,
+    private val chatResponseSerializer: ChatResponseSerializer,
     private val json: Json,
 ) {
     suspend fun getWorkerChatRooms(): Result<List<GetChatRoomResponse>> =
@@ -99,10 +102,10 @@ class ChatDataSource @Inject constructor(
         Result.failure(e)
     }
 
-    suspend fun subscribeChatMessage(userId: String): Flow<ChatMessageResponse> =
+    suspend fun subscribeChatMessage(userId: String): Flow<ChatResponse> =
         session?.subscribe(
             StompSubscribeHeaders(destination = "/sub/${userId}"),
-            ChatMessageResponse.serializer()
+            chatResponseSerializer,
         )?.map {
             Log.d("test", it.toString())
             it

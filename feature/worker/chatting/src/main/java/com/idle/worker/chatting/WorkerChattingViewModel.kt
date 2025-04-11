@@ -3,7 +3,9 @@ package com.idle.worker.chatting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.domain.model.auth.UserType
+import com.idle.domain.model.chat.ChatMessage
 import com.idle.domain.model.chat.ChatRoom
+import com.idle.domain.model.chat.ReadMessage
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.repositorry.ChatRepository
@@ -40,41 +42,52 @@ class WorkerChattingViewModel @Inject constructor(
         getLocalMyWorkerProfileUseCase().onSuccess { profile ->
             myProfile = profile
 
-            chatRepository.subscribeChatMessage(myProfile!!.workerId).collect { chatMessage ->
-                val updatedMap = LinkedHashMap(_chatRoomMap.value) // 기존 맵을 복사
-                val roomId = chatMessage.roomId
-                val chatRoom = updatedMap[roomId]
-
-                if (chatRoom != null) {
-                    // 기존 방이 있으면 업데이트 후 최상단으로 올리기 위해 제거 후 다시 추가
-                    updatedMap.remove(roomId)
-                    updatedMap[roomId] = chatRoom.copy(
-                        lastMessage = chatMessage.content,
-                        unReadMessageCount = chatRoom.unReadMessageCount + 1,
-                    )
-                } else {
-                    // 새로운 방이면 새로 생성 후 최상단에 추가
-                    val opponentProfile = profileRepository.getCenterProfile(chatMessage.senderId)
-                        .getOrNull() ?: return@collect
-
-                    val newChatRoom = ChatRoom(
-                        id = roomId,
-                        lastMessage = chatMessage.content,
-                        opponentId = chatMessage.senderId,
-                        opponentName = opponentProfile.centerName,
-                        myId = this@WorkerChattingViewModel.myProfile?.workerId ?: "",
-                        lastMessageTime = chatMessage.createdAt,
-                        unReadMessageCount = 1,
-                        opponentProfileImageUrl = opponentProfile.profileImageUrl,
-                    )
-                    updatedMap[roomId] = newChatRoom
+            chatRepository.subscribeChatMessage(myProfile!!.workerId).collect { message ->
+                when (message) {
+                    is ChatMessage -> handleNewChat(message)
+                    is ReadMessage -> handleReadMessage(message)
                 }
-                _chatRoomMap.value = updatedMap // StateFlow에 갱신된 맵 할당
             }
         }.onFailure {
             errorHelper.sendError(it)
             return@launch
         }
+    }
+
+    private suspend fun handleNewChat(chatMessage: ChatMessage) {
+        val updatedMap = LinkedHashMap(_chatRoomMap.value) // 기존 맵을 복사
+        val roomId = chatMessage.roomId
+        val chatRoom = updatedMap[roomId]
+
+        if (chatRoom != null) {
+            // 기존 방이 있으면 업데이트 후 최상단으로 올리기 위해 제거 후 다시 추가
+            updatedMap.remove(roomId)
+            updatedMap[roomId] = chatRoom.copy(
+                lastMessage = chatMessage.content,
+                unReadMessageCount = chatRoom.unReadMessageCount + 1,
+            )
+        } else {
+            // 새로운 방이면 새로 생성 후 최상단에 추가
+            val opponentProfile = profileRepository.getCenterProfile(chatMessage.senderId)
+                .getOrNull() ?: return
+
+            val newChatRoom = ChatRoom(
+                id = roomId,
+                lastMessage = chatMessage.content,
+                opponentId = chatMessage.senderId,
+                opponentName = opponentProfile.centerName,
+                myId = this@WorkerChattingViewModel.myProfile?.workerId ?: "",
+                lastMessageTime = chatMessage.createdAt,
+                unReadMessageCount = 1,
+                opponentProfileImageUrl = opponentProfile.profileImageUrl,
+            )
+            updatedMap[roomId] = newChatRoom
+        }
+        _chatRoomMap.value = updatedMap // StateFlow에 갱신된 맵 할당
+    }
+
+    private suspend fun handleReadMessage(message: ReadMessage) {
+
     }
 
     internal fun getChatRoomList() = viewModelScope.launch {

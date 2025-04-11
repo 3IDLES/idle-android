@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.chat.ChatMessage
+import com.idle.domain.model.chat.ReadMessage
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.model.profile.WorkerProfile
@@ -112,10 +113,20 @@ class ChattingDetailViewModel @Inject constructor(
         chatRepository.subscribeChatMessage(userId)
             .catch {
                 errorHelper.sendError(it)
-            }.collect { chatMessage ->
-                Log.d("test", chatMessage.toString())
+            }.collect { message ->
+                Log.d("test", message.toString())
 
-                _chatMessages.value = (_chatMessages.value ?: emptyList()) + chatMessage
+                when (message) {
+                    is ChatMessage -> {
+                        _chatMessages.value = (_chatMessages.value ?: emptyList()) + message
+                    }
+
+                    is ReadMessage -> {
+                        _chatMessages.value = _chatMessages.value?.map {
+                            if (it.receiverId == message.opponentId) it.copy(isRead = true) else it
+                        }
+                    }
+                }
             }
     }
 

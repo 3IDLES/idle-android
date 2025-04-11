@@ -3,6 +3,7 @@ package com.idle.data.repository
 import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.chat.ChatMessage
 import com.idle.domain.model.chat.ChatRoom
+import com.idle.domain.model.chat.Message
 import com.idle.domain.repositorry.ChatRepository
 import com.idle.network.model.chat.ReadMessageRequest
 import com.idle.network.model.chat.SendMessageRequest
@@ -62,7 +63,7 @@ class ChatRepositoryImpl @Inject constructor(
                 .getOrThrow()
         }
 
-    override suspend fun subscribeChatMessage(userId: String): Flow<ChatMessage> =
+    override suspend fun subscribeChatMessage(userId: String): Flow<Message> =
         chatDataSource.subscribeChatMessage(userId)
             .map { it.toVO() }
             .retryWhen { cause, attempt ->
