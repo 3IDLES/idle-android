@@ -10,7 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
@@ -54,9 +56,11 @@ internal fun ChattingDetailScreen(
         derivedStateOf { listState.firstVisibleItemIndex + listState.layoutInfo.visibleItemsInfo.size - 1 }
     }
     val isNearEnd = lastVisibleIndex >= chatMessages.size - 3
+    var initialLoad by remember { mutableStateOf(true) }
     LaunchedEffect(chatMessages.size) {
-        if (chatMessages.isNotEmpty() && isNearEnd) {
+        if (chatMessages.isNotEmpty() && (initialLoad || isNearEnd)) {
             listState.animateScrollToItem(chatMessages.size - 1)
+            initialLoad = false
         }
     }
 
