@@ -31,8 +31,8 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import com.idle.compose.clickable
-import com.idle.designsystem.compose.FLIP
+import com.idle.compose.ui.clickable
+import com.idle.compose.ui.FLIP
 import com.idle.designsystem.compose.foundation.CareTheme
 
 @Composable

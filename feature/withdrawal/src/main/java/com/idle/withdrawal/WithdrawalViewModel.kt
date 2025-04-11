@@ -166,7 +166,7 @@ class WithdrawalViewModel @Inject constructor(
         ).onSuccess {
             analyticsHelper.setUserId(null)
             navigationHelper.navigateTo(
-                com.idle.navigation.NavigationEvent.NavigateToAuthWithClearBackStack(
+                com.idle.navigation.NavigationEvent.ToAuthWithClearBackStack(
                     "회원탈퇴가 완료되었어요."
                 )
             )
@@ -188,7 +188,7 @@ class WithdrawalViewModel @Inject constructor(
         ).onSuccess {
             analyticsHelper.setUserId(null)
             navigationHelper.navigateTo(
-                com.idle.navigation.NavigationEvent.NavigateToAuthWithClearBackStack(
+                com.idle.navigation.NavigationEvent.ToAuthWithClearBackStack(
                     "회원탈퇴가 완료되었어요."
                 )
             )

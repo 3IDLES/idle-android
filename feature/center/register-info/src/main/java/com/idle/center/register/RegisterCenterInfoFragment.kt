@@ -22,7 +22,7 @@ import com.idle.center.register.step.CenterAddressScreen
 import com.idle.center.register.step.CenterInfoScreen
 import com.idle.center.register.step.CenterIntroduceScreen
 import com.idle.center.register.step.CenterRegisterSummaryScreen
-import com.idle.compose.addFocusCleaner
+import com.idle.compose.ui.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareProgressBar

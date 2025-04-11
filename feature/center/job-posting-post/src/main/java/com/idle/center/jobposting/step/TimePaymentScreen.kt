@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.idle.center.jobposting.JobPostingStep
 import com.idle.center.jobposting.JobPostingStep.TIME_PAYMENT
 import com.idle.center.jobposting.LogJobPostingStep
-import com.idle.compose.JobPostingBottomSheetType
+import com.idle.compose.ui.JobPostingBottomSheetType
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareChipBasic

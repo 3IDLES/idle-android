@@ -30,7 +30,7 @@ import coil.compose.AsyncImage
 import com.idle.center.register.LogRegistrationStep
 import com.idle.center.register.RegistrationStep
 import com.idle.center.register.RegistrationStep.SUMMARY
-import com.idle.compose.addFocusCleaner
+import com.idle.compose.ui.addFocusCleaner
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonMedium
 import com.idle.designsystem.compose.component.CareSubtitleTopBar

@@ -1,4 +1,4 @@
-package com.idle.compose
+package com.idle.compose.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures

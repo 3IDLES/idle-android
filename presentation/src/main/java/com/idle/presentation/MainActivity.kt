@@ -36,8 +36,10 @@ import com.idle.domain.model.config.ForceUpdate
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.SharedJobPostingInfo
+import com.idle.domain.model.notification.NotificationType
+import com.idle.navigation.DeepLinkDestination
 import com.idle.navigation.NavigationEvent.To
-import com.idle.navigation.NavigationEvent.NavigateToAuthWithClearBackStack
+import com.idle.navigation.NavigationEvent.ToAuthWithClearBackStack
 import com.idle.navigation.deepLinkNavigateTo
 import com.idle.presentation.databinding.ActivityMainBinding
 import com.idle.presentation.forceupdate.ForceUpdateFragment
@@ -112,10 +114,10 @@ class MainActivity : AppCompatActivity() {
         askNotificationPermission()
         setDestinationListener()
         observeViewModel()
-        handleDeepLinking()
+        handleDeferredDeepLink()
 
         viewModel.apply {
-            navigationHelper.handleFCMNavigate(
+            handleFCMNavigate(
                 isColdStart = true,
                 extras = intent?.extras ?: run {
                     initializeUserSession()
@@ -142,7 +144,7 @@ class MainActivity : AppCompatActivity() {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
 
-        viewModel.navigationHelper.handleFCMNavigate(
+        handleFCMNavigate(
             isColdStart = false,
             extras = intent?.extras ?: return,
             onInit = viewModel::initializeUserSession,
@@ -183,7 +185,7 @@ class MainActivity : AppCompatActivity() {
                 navigationMenuType.collect { this@MainActivity.setNavigationMenuType(it) }
             }
             repeatOnStarted {
-                eventFlow.collect { handleMainEvent(it) }
+                eventHelper.eventFlow.collect { handleMainEvent(it) }
             }
             repeatOnStarted {
                 navigationHelper.navigationFlow.collect { handleNavigationEvent(it) }
@@ -229,7 +231,7 @@ class MainActivity : AppCompatActivity() {
                 popUpTo = navigationEvent.popUpTo
             )
 
-            is NavigateToAuthWithClearBackStack -> navController.navigate(
+            is ToAuthWithClearBackStack -> navController.navigate(
                 AuthFragmentDirections.actionGlobalNavAuth(
                     toastMsg = navigationEvent.toastMsg,
                     toastType = navigationEvent.toastType
@@ -239,7 +241,7 @@ class MainActivity : AppCompatActivity() {
         dismissToast()
     }
 
-    private fun handleDeepLinking() {
+    private fun handleDeferredDeepLink() {
         AppsFlyerLib.getInstance().subscribeForDeepLink { deepLinkResult ->
             when (deepLinkResult.status) {
                 DeepLinkResult.Status.FOUND -> {
@@ -248,7 +250,14 @@ class MainActivity : AppCompatActivity() {
                     val sharedJobPostingType =
                         deepLinkResult.deepLink.getStringValue("deep_link_sub1")
 
-                    handleDeepLink(sharedJobPostingId, sharedJobPostingType)
+                    viewModel.setSharedJobPostingInfo(
+                        SharedJobPostingInfo(
+                            jobPostingId = sharedJobPostingId ?: return@subscribeForDeepLink,
+                            jobPostingType = JobPostingType.create(
+                                sharedJobPostingType ?: return@subscribeForDeepLink
+                            )
+                        )
+                    )
                 }
 
                 DeepLinkResult.Status.NOT_FOUND -> errorHelper.logError(Exception("AppsFlyer User Not Found"))
@@ -257,13 +266,74 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleDeepLink(sharedJobPostingId: String?, sharedJobPostingType: String?) {
-        viewModel.setSharedJobPostingInfo(
-            SharedJobPostingInfo(
-                jobPostingId = sharedJobPostingId ?: return,
-                jobPostingType = JobPostingType.create(sharedJobPostingType ?: return)
-            )
+    private fun handleFCMNavigate(
+        isColdStart: Boolean,
+        extras: Bundle?,
+        onInit: () -> Unit,
+        readNotification: (String) -> Unit,
+    ) {
+        val notificationId = extras?.getString(NotificationKeys.NOTIFICATION_ID) ?: run {
+            if (isColdStart) onInit()
+            return
+        }
+        readNotification(notificationId)
+
+        val notificationType = NotificationType.create(
+            extras.getString(NotificationKeys.NOTIFICATION_TYPE) ?: return
         )
+
+        when (notificationType) {
+            NotificationType.APPLICANT -> {
+                val jobPostingId = extras.getString(NotificationKeys.JOB_POSTING_ID) ?: run {
+                    if (isColdStart) {
+                        onInit()
+                        return
+                    }
+                    return
+                }
+
+                if (isColdStart) {
+                    // 초기 실행 시, 먼저 CenterHome으로 이동한 뒤 CenterJobDetail로 이동
+                    navController.deepLinkNavigateTo(
+                        deepLinkDestination = DeepLinkDestination.CenterHome,
+                        context = this
+                    )
+                    navController.deepLinkNavigateTo(
+                        deepLinkDestination = DeepLinkDestination.CenterJobDetail(jobPostingId),
+                        context = this
+                    )
+                } else {
+                    navController.deepLinkNavigateTo(
+                        deepLinkDestination = DeepLinkDestination.CenterJobDetail(jobPostingId),
+                        context = this
+                    )
+                }
+            }
+
+            NotificationType.NEW_JOB_POSTING -> {
+                val jobPostingId = extras.getString(NotificationKeys.JOB_POSTING_ID) ?: run {
+                    if (isColdStart) {
+                        onInit()
+                        return
+                    }
+                    return
+                }
+                // NEW_JOB_POSTING: WorkerHome 후 WorkerJobDetail로 이동
+                navController.deepLinkNavigateTo(
+                    deepLinkDestination = DeepLinkDestination.WorkerHome,
+                    context = this
+                )
+                navController.deepLinkNavigateTo(
+                    deepLinkDestination = DeepLinkDestination.WorkerJobDetail(
+                        jobPostingId,
+                        JobPostingType.CAREMEET.name
+                    ),
+                    context = this
+                )
+            }
+
+            NotificationType.UNKNOWN -> return
+        }
     }
 
     private fun showNetworkDialog() {
@@ -462,5 +532,11 @@ class MainActivity : AppCompatActivity() {
                 errorHelper.logError(Exception(e))
             }
         }
+    }
+
+    private object NotificationKeys {
+        const val NOTIFICATION_ID = "notificationId"
+        const val NOTIFICATION_TYPE = "notificationType"
+        const val JOB_POSTING_ID = "jobPostingId"
     }
 }

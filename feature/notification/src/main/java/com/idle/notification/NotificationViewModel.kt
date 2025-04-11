@@ -3,8 +3,14 @@ package com.idle.notification
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.domain.model.error.ErrorHelper
+import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.notification.Notification
+import com.idle.domain.model.notification.NotificationContent
+import com.idle.domain.model.notification.NotificationType
 import com.idle.domain.repositorry.NotificationRepository
+import com.idle.navigation.DeepLinkDestination
+import com.idle.navigation.NavigationEvent
+import com.idle.navigation.NavigationHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,7 +21,7 @@ import javax.inject.Inject
 class NotificationViewModel @Inject constructor(
     private val notificationRepository: NotificationRepository,
     private val errorHelper: ErrorHelper,
-    private val navigationHelper: com.idle.navigation.NavigationHelper,
+    private val navigationHelper: NavigationHelper,
 ) : ViewModel() {
     private val next = MutableStateFlow<String?>(null)
 
@@ -54,7 +60,33 @@ class NotificationViewModel @Inject constructor(
             }
         }
 
-        navigationHelper.handleNotificationNavigate(notification)
+        handleNotificationNavigate(notification)
+    }
+
+    private fun handleNotificationNavigate(notification: Notification) {
+        val destinations = when (notification.notificationType) {
+            NotificationType.APPLICANT -> {
+                (notification.notificationDetails as? NotificationContent.ApplicantNotification)
+                    ?.let { DeepLinkDestination.CenterJobDetail(it.jobPostingId) }
+                    ?.let { listOf(it) } ?: listOf()
+            }
+
+            NotificationType.NEW_JOB_POSTING -> {
+                (notification.notificationDetails as? NotificationContent.NewJobPostingNotification)
+                    ?.let {
+                        DeepLinkDestination.WorkerJobDetail(
+                            it.jobPostingId,
+                            JobPostingType.CAREMEET.name
+                        )
+                    }
+                    ?.let { listOf(it) } ?: listOf()
+            }
+
+            else -> listOf()
+        }
+        destinations.forEach { destination ->
+            navigationHelper.navigateTo(NavigationEvent.To(destination))
+        }
     }
 }
 

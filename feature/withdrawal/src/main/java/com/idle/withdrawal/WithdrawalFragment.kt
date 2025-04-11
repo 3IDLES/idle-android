@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.navArgs
-import com.idle.compose.addFocusCleaner
+import com.idle.compose.ui.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareDialog

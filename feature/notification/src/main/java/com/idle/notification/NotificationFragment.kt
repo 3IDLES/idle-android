@@ -33,7 +33,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import coil.compose.AsyncImage
 import com.idle.compose.base.BaseComposeFragment
-import com.idle.compose.clickable
+import com.idle.compose.ui.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.component.LoadingCircle

@@ -38,7 +38,7 @@ import androidx.navigation.fragment.navArgs
 import com.idle.analytics.TrackScreenViewEvent
 import com.idle.center.pending.R
 import com.idle.compose.base.BaseComposeFragment
-import com.idle.compose.clickable
+import com.idle.compose.ui.clickable
 import com.idle.designsystem.compose.component.CareButtonLarge
 import com.idle.designsystem.compose.component.CareDialog
 import com.idle.designsystem.compose.foundation.CareTheme

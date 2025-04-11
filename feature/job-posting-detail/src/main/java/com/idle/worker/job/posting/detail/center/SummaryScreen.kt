@@ -28,7 +28,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.idle.compose.clickable
+import com.idle.compose.ui.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareTag
 import com.idle.designsystem.compose.component.CareTextFieldLong

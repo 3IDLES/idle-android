@@ -15,7 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.idle.compose.clickable
+import com.idle.compose.ui.clickable
 import com.idle.designsystem.compose.foundation.CareTheme
 
 @Composable
