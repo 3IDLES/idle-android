@@ -1,4 +1,4 @@
-package com.idle.network.api.websocket
+package com.idle.network.util
 
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
 import kotlin.math.pow

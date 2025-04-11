@@ -4,12 +4,11 @@ import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.chat.ChatMessage
 import com.idle.domain.model.chat.ChatRoom
 import com.idle.domain.repositorry.ChatRepository
-import com.idle.network.api.websocket.MAX_RETRY_ATTEMPTS
-import com.idle.network.api.websocket.WebSocketDataSource
-import com.idle.network.api.websocket.calculateBackoffTime
 import com.idle.network.model.chat.ReadMessageRequest
 import com.idle.network.model.chat.SendMessageRequest
 import com.idle.network.source.chat.ChatDataSource
+import com.idle.network.util.MAX_RETRY_ATTEMPTS
+import com.idle.network.util.calculateBackoffTime
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -18,13 +17,12 @@ import java.io.IOException
 import javax.inject.Inject
 
 class ChatRepositoryImpl @Inject constructor(
-    private val webSocketDataSource: WebSocketDataSource,
     private val chatDataSource: ChatDataSource,
 ) : ChatRepository {
-    override suspend fun connectWebSocket(): Result<Unit> = webSocketDataSource.connectWebSocket()
+    override suspend fun connectWebSocket(): Result<Unit> = chatDataSource.connectWebSocket()
 
     override suspend fun disconnectWebSocket(): Result<Unit> =
-        webSocketDataSource.disconnectWebSocket()
+        chatDataSource.disconnectWebSocket()
 
     override suspend fun getChatRooms(userType: UserType): Result<List<ChatRoom>> =
         runCatching {
@@ -65,7 +63,7 @@ class ChatRepositoryImpl @Inject constructor(
         }
 
     override suspend fun subscribeChatMessage(userId: String): Flow<ChatMessage> =
-        webSocketDataSource.subscribeChatMessage(userId)
+        chatDataSource.subscribeChatMessage(userId)
             .map { it.toVO() }
             .retryWhen { cause, attempt ->
                 if (cause is IOException && attempt < MAX_RETRY_ATTEMPTS) {
@@ -82,7 +80,7 @@ class ChatRepositoryImpl @Inject constructor(
         receiverId: String,
         senderName: String,
         content: String,
-    ): Result<Unit> = webSocketDataSource.sendMessage(
+    ): Result<Unit> = chatDataSource.sendMessage(
         SendMessageRequest(
             chatroomId = chatroomId,
             receiverId = receiverId,
@@ -92,7 +90,7 @@ class ChatRepositoryImpl @Inject constructor(
     )
 
     override suspend fun readMessage(chatroomId: String, opponentId: String): Result<Unit> =
-        webSocketDataSource.readMessage(
+        chatDataSource.readMessage(
             ReadMessageRequest(
                 chatroomId = chatroomId,
                 opponentId = opponentId,

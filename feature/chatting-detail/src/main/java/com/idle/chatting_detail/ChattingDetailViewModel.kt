@@ -1,5 +1,6 @@
 package com.idle.chatting_detail
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.domain.model.auth.UserType
@@ -17,8 +18,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
-import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -68,7 +67,6 @@ class ChattingDetailViewModel @Inject constructor(
                 }.onFailure {
                     errorHelper.sendError(it)
                 }
-
             }
 
             UserType.WORKER -> {
@@ -113,13 +111,15 @@ class ChattingDetailViewModel @Inject constructor(
             .catch {
                 errorHelper.sendError(it)
             }.collect { chatMessage ->
+                Log.d("test", chatMessage.toString())
+
                 _chatMessages.value = (_chatMessages.value ?: emptyList()) + chatMessage
             }
     }
 
     internal fun sendMessage(myUserType: UserType, roomId: String) = viewModelScope.launch {
         val receiverId = if (myUserType == UserType.CENTER) _workerProfile.value!!.workerId
-        else _workerProfile.value!!.workerId
+        else _centerProfile.value!!.centerId
 
         val senderName = if (myUserType == UserType.CENTER) _centerProfile.value!!.centerName
         else _workerProfile.value!!.workerName
@@ -133,15 +133,15 @@ class ChattingDetailViewModel @Inject constructor(
             senderName = senderName,
             content = _writingText.value,
         ).onSuccess {
-            _chatMessages.value = (_chatMessages.value ?: emptyList()) + ChatMessage(
-                id = UUID.randomUUID().toString(),
-                roomId = roomId,
-                senderId = senderId,
-                receiverId = receiverId,
-                content = _writingText.value,
-                createdAt = LocalDateTime.now(),
-                isRead = false,
-            )
+//            _chatMessages.value = (_chatMessages.value ?: emptyList()) + ChatMessage(
+//                id = UUID.randomUUID().toString(),
+//                roomId = roomId,
+//                senderId = senderId,
+//                receiverId = receiverId,
+//                content = _writingText.value,
+//                createdAt = LocalDateTime.now(),
+//                isRead = false,
+//            )
 
             _writingText.value = ""
         }.onFailure { errorHelper.sendError(it) }
