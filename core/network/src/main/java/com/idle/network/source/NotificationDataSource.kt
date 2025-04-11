@@ -1,4 +1,4 @@
-package com.idle.network.source.notification
+package com.idle.network.source
 
 import com.idle.network.api.NotificationApi
 import com.idle.network.model.notification.DeleteFcmTokenRequest

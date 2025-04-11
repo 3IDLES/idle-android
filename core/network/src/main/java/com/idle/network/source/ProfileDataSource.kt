@@ -1,4 +1,4 @@
-package com.idle.network.source.profile
+package com.idle.network.source
 
 import com.idle.network.api.UserApi
 import com.idle.network.model.auth.GetWorkerIdResponse

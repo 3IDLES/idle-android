@@ -21,7 +21,7 @@ import com.idle.domain.repositorry.JobPostingRepository
 import com.idle.network.model.jobposting.ApplyJobPostingRequest
 import com.idle.network.model.jobposting.FavoriteJobPostingRequest
 import com.idle.network.model.jobposting.JobPostingRequest
-import com.idle.network.source.jobposting.JobPostingDataSource
+import com.idle.network.source.JobPostingDataSource
 import javax.inject.Inject
 
 class JobPostingRepositoryImpl @Inject constructor(

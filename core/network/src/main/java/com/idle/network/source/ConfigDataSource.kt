@@ -1,4 +1,4 @@
-package com.idle.network.source.remoteconfig
+package com.idle.network.source
 
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigValue

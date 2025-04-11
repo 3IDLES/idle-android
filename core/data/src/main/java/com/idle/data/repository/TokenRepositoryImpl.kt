@@ -4,7 +4,7 @@ import com.idle.datastore.datasource.TokenDataSource
 import com.idle.domain.repositorry.TokenRepository
 import com.idle.network.model.notification.DeleteFcmTokenRequest
 import com.idle.network.model.notification.PostFcmTokenRequest
-import com.idle.network.source.notification.NotificationDataSource
+import com.idle.network.source.NotificationDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext

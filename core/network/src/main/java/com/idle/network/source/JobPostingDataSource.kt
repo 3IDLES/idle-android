@@ -1,4 +1,4 @@
-package com.idle.network.source.jobposting
+package com.idle.network.source
 
 import com.idle.network.api.JobPostingApi
 import com.idle.network.model.jobposting.ApplyJobPostingRequest

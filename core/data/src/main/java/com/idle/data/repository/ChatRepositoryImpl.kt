@@ -6,7 +6,7 @@ import com.idle.domain.model.chat.ChatRoom
 import com.idle.domain.repositorry.ChatRepository
 import com.idle.network.model.chat.ReadMessageRequest
 import com.idle.network.model.chat.SendMessageRequest
-import com.idle.network.source.chat.ChatDataSource
+import com.idle.network.source.ChatDataSource
 import com.idle.network.util.MAX_RETRY_ATTEMPTS
 import com.idle.network.util.calculateBackoffTime
 import kotlinx.coroutines.delay

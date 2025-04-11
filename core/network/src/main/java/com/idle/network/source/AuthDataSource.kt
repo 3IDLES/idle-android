@@ -1,4 +1,4 @@
-package com.idle.network.source.auth
+package com.idle.network.source
 
 import com.google.firebase.messaging.FirebaseMessaging
 import com.idle.network.api.AuthApi

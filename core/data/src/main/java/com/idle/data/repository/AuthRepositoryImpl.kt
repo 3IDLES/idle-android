@@ -17,7 +17,7 @@ import com.idle.network.model.auth.SignUpWorkerRequest
 import com.idle.network.model.auth.WithdrawalCenterRequest
 import com.idle.network.model.auth.WithdrawalWorkerRequest
 import com.idle.network.model.token.TokenResponse
-import com.idle.network.source.auth.AuthDataSource
+import com.idle.network.source.AuthDataSource
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject

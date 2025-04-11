@@ -1,4 +1,4 @@
-package com.idle.network.source.chat
+package com.idle.network.source
 
 import android.util.Log
 import com.idle.network.BuildConfig
