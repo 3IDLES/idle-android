@@ -4,11 +4,9 @@ plugins {
 }
 
 android {
-    namespace = "com.idle.job.posting.detail"
+    namespace = "com.idle.center.applicant.inquiry"
 }
 
 dependencies {
-    implementation(projects.feature.centerJobPostingEdit)
-
     implementation(libs.coil.compose)
 }
