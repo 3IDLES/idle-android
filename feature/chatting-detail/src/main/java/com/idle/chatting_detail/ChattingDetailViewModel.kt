@@ -10,6 +10,7 @@ import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.repositorry.ChatRepository
 import com.idle.domain.repositorry.ProfileRepository
+import com.idle.domain.usecase.chat.GetChatRoomMessageUseCase
 import com.idle.domain.usecase.profile.GetLocalMyCenterProfileUseCase
 import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,6 +26,7 @@ class ChattingDetailViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
     private val getLocalMyWorkerProfileUseCase: GetLocalMyWorkerProfileUseCase,
     private val getLocalMyCenterProfileUseCase: GetLocalMyCenterProfileUseCase,
+    private val getChatRoomMessageUseCase: GetChatRoomMessageUseCase,
     private val chatRepository: ChatRepository,
     private val errorHelper: ErrorHelper,
     val navigationHelper: com.idle.navigation.NavigationHelper,
@@ -95,7 +97,7 @@ class ChattingDetailViewModel @Inject constructor(
     ) = viewModelScope.launch {
         if (_callType.value == MessageCallType.END) return@launch
 
-        chatRepository.getChatRoomMessages(
+        getChatRoomMessageUseCase(
             userType = myUserType,
             roomId = roomId,
             messageId = _chatMessages.value?.first()?.id,
@@ -124,25 +126,12 @@ class ChattingDetailViewModel @Inject constructor(
         val senderName = if (myUserType == UserType.CENTER) _centerProfile.value!!.centerName
         else _workerProfile.value!!.workerName
 
-        val senderId = if (myUserType == UserType.CENTER) _centerProfile.value!!.centerId
-        else _workerProfile.value!!.workerId
-
         chatRepository.sendMessage(
             chatroomId = roomId,
             receiverId = receiverId,
             senderName = senderName,
             content = _writingText.value,
         ).onSuccess {
-//            _chatMessages.value = (_chatMessages.value ?: emptyList()) + ChatMessage(
-//                id = UUID.randomUUID().toString(),
-//                roomId = roomId,
-//                senderId = senderId,
-//                receiverId = receiverId,
-//                content = _writingText.value,
-//                createdAt = LocalDateTime.now(),
-//                isRead = false,
-//            )
-
             _writingText.value = ""
         }.onFailure { errorHelper.sendError(it) }
     }
