@@ -42,7 +42,7 @@ class WorkerSettingViewModel @Inject constructor(
         authRepository.logoutWorker().onSuccess {
             analyticsHelper.setUserId(null)
             navigationHelper.navigateTo(
-                com.idle.navigation.NavigationEvent.NavigateToAuthWithClearBackStack(
+                com.idle.navigation.NavigationEvent.ToAuthWithClearBackStack(
                     toastMsg = "로그아웃이 완료되었습니다.",
                     toastType = "SUCCESS",
                 )

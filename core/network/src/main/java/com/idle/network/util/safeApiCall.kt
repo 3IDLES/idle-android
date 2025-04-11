@@ -16,6 +16,8 @@ internal inline fun <T> safeApiCall(apiCall: () -> Response<T>): Result<T> {
     }
 }
 
+private val json = Json { ignoreUnknownKeys = true }
+
 internal fun <T> Response<T>.onResponse(): Result<T> {
     if (isSuccessful) {
         body()?.let {
@@ -23,7 +25,6 @@ internal fun <T> Response<T>.onResponse(): Result<T> {
         } ?: return Result.success(Unit as T)
     } else {
         errorBody()?.let {
-            val json = Json { ignoreUnknownKeys = true }
             val errorResponse = json.decodeFromString<ErrorResponse>(it.string())
 
             return Result.failure(

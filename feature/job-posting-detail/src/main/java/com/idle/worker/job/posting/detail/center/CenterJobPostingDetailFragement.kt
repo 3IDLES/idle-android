@@ -33,7 +33,7 @@ import com.idle.analytics.TrackScreenViewEvent
 import com.idle.binding.MainEvent
 import com.idle.center.job.edit.JobEditScreen
 import com.idle.compose.base.BaseComposeFragment
-import com.idle.compose.clickable
+import com.idle.compose.ui.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareBottomSheetLayout
 import com.idle.designsystem.compose.component.CareButtonLarge

@@ -22,13 +22,12 @@ import com.idle.navigation.DeepLinkDestination.CenterHome
 import com.idle.navigation.DeepLinkDestination.CenterPending
 import com.idle.navigation.DeepLinkDestination.CenterRegister
 import com.idle.navigation.DeepLinkDestination.WorkerHome
+import com.idle.navigation.NavigationHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import java.io.IOException
 import java.net.SocketTimeoutException
@@ -43,20 +42,14 @@ class MainViewModel @Inject constructor(
     private val jobPostingRepository: JobPostingRepository,
     private val chatRepository: ChatRepository,
     private val errorHelper: ErrorHelper,
-    private val eventHelper: EventHelper,
-    val navigationHelper: com.idle.navigation.NavigationHelper,
+    internal val eventHelper: EventHelper,
+    internal val navigationHelper: NavigationHelper,
 ) : ViewModel() {
     private val _navigationMenuType = MutableStateFlow(NavigationMenuType.HIDE)
     val navigationMenuType = _navigationMenuType.asStateFlow()
 
     private val _forceUpdate = MutableStateFlow<ForceUpdate?>(null)
     val forceUpdate = _forceUpdate.asStateFlow()
-
-    val eventFlow = eventHelper.eventFlow
-        .shareIn(
-            scope = viewModelScope,
-            started = SharingStarted.Lazily,
-        )
 
     init {
         handleError()
@@ -168,7 +161,7 @@ class MainViewModel @Inject constructor(
                         ApiErrorCode.TokenNotFound,
                         ApiErrorCode.NotSupportUserTokenType ->
                             navigationHelper.navigateTo(
-                                com.idle.navigation.NavigationEvent.NavigateToAuthWithClearBackStack(
+                                com.idle.navigation.NavigationEvent.ToAuthWithClearBackStack(
                                     exception.print()
                                 )
                             )

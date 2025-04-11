@@ -18,7 +18,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import com.idle.chatting_detail.ui.component.ChattingBody
 import com.idle.chatting_detail.ui.component.ChattingInput
-import com.idle.compose.addFocusCleaner
+import com.idle.compose.ui.addFocusCleaner
 import com.idle.designsystem.compose.component.CareSubtitleTopBar
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.UserType

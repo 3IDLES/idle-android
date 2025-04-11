@@ -40,9 +40,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.navArgs
 import coil.compose.AsyncImage
 import com.idle.analytics.TrackScreenViewEvent
-import com.idle.compose.addFocusCleaner
+import com.idle.compose.ui.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
-import com.idle.compose.clickable
+import com.idle.compose.ui.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonRound
 import com.idle.designsystem.compose.component.CareStateAnimator

@@ -43,7 +43,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.idle.analytics.TrackScreenViewEvent
 import com.idle.compose.base.BaseComposeFragment
-import com.idle.compose.clickable
+import com.idle.compose.ui.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonCardMedium
 import com.idle.designsystem.compose.component.CareDialog

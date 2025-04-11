@@ -48,7 +48,7 @@ class CenterPendingViewModel @Inject constructor(
     internal fun logout() = viewModelScope.launch {
         authRepository.logoutCenter().onSuccess {
             navigationHelper.navigateTo(
-                NavigationEvent.NavigateToAuthWithClearBackStack(
+                NavigationEvent.ToAuthWithClearBackStack(
                     toastMsg = "로그아웃이 완료되었습니다.",
                     toastType = "SUCCESS"
                 )

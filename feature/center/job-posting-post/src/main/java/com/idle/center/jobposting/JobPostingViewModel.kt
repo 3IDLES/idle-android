@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.idle.binding.EventHelper
 import com.idle.binding.MainEvent
 import com.idle.center.job.posting.post.R
-import com.idle.compose.JobPostingBottomSheetType
+import com.idle.compose.ui.JobPostingBottomSheetType
 import com.idle.domain.model.auth.Gender
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.jobposting.ApplyDeadlineType

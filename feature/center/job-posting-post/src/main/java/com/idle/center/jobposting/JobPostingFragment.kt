@@ -53,9 +53,9 @@ import com.idle.center.jobposting.step.CustomerInformationScreen
 import com.idle.center.jobposting.step.CustomerRequirementScreen
 import com.idle.center.jobposting.step.JobPostingSummaryScreen
 import com.idle.center.jobposting.step.TimePaymentScreen
-import com.idle.compose.JobPostingBottomSheetType
-import com.idle.compose.addFocusCleaner
 import com.idle.compose.base.BaseComposeFragment
+import com.idle.compose.ui.JobPostingBottomSheetType
+import com.idle.compose.ui.addFocusCleaner
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareBottomSheetLayout
 import com.idle.designsystem.compose.component.CareButtonMedium

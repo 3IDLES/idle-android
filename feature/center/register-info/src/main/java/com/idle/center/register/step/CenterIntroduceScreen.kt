@@ -37,7 +37,7 @@ import coil.compose.AsyncImage
 import com.idle.center.register.LogRegistrationStep
 import com.idle.center.register.RegistrationStep
 import com.idle.center.register.RegistrationStep.INTRODUCE
-import com.idle.compose.clickable
+import com.idle.compose.ui.clickable
 import com.idle.designresource.R
 import com.idle.designsystem.compose.component.CareButtonMedium
 import com.idle.designsystem.compose.component.CareProgressBar

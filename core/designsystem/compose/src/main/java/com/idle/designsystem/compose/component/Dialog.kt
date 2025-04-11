@@ -20,7 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.idle.designsystem.compose.FLIP
+import com.idle.compose.ui.FLIP
 import com.idle.designsystem.compose.foundation.CareTheme
 
 @Composable
