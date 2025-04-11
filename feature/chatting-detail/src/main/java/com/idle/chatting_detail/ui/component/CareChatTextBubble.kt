@@ -1,4 +1,4 @@
-package com.idle.chatting_detail.component
+package com.idle.chatting_detail.ui.component
 
 import android.util.Log
 import androidx.compose.foundation.Image

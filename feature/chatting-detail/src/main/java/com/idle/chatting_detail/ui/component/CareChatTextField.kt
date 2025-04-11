@@ -1,4 +1,4 @@
-package com.idle.chatting_detail.component
+package com.idle.chatting_detail.ui.component
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border

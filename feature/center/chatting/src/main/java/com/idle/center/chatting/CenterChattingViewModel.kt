@@ -7,12 +7,14 @@ import com.idle.domain.model.chat.ChatMessage
 import com.idle.domain.model.chat.ChatRoom
 import com.idle.domain.model.chat.ReadMessage
 import com.idle.domain.model.error.ErrorHelper
+import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.repositorry.ChatRepository
 import com.idle.domain.repositorry.ProfileRepository
 import com.idle.domain.usecase.profile.GetLocalMyCenterProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -26,6 +28,9 @@ class CenterChattingViewModel @Inject constructor(
     private val errorHelper: ErrorHelper,
     val navigationHelper: com.idle.navigation.NavigationHelper,
 ) : ViewModel() {
+    private val _myProfile = MutableStateFlow<CenterProfile?>(null)
+    val myProfile = _myProfile.asStateFlow()
+
     private val _chatRoomMap = MutableStateFlow<LinkedHashMap<String, ChatRoom>>(LinkedHashMap())
     val chatRoomList = _chatRoomMap
         .map { it.values.toList() }
@@ -65,7 +70,6 @@ class CenterChattingViewModel @Inject constructor(
             val newChatRoom = ChatRoom(
                 id = roomId,
                 lastMessage = message.content,
-                myId = message.senderId,
                 opponentId = message.senderId,
                 opponentName = opponentProfile.workerName,
                 lastMessageTime = message.createdAt,

@@ -1,4 +1,4 @@
-package com.idle.chatting_detail
+package com.idle.chatting_detail.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize

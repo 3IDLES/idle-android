@@ -11,7 +11,6 @@ data class GetChatRoomResponse(
     val lastMessage: String = "",
     val lastMessageTime: String?,
     val count: Int = 0,
-    val myId: String = "",
     val opponentId: String = "",
     val opponentName: String = "",
     val opponentProfileImageUrl: String = "",
@@ -23,7 +22,6 @@ data class GetChatRoomResponse(
             LocalDateTime.parse(it, DateTimeFormatter.ISO_DATE_TIME)
         } ?: LocalDateTime.MIN,
         unReadMessageCount = count,
-        myId = myId,
         opponentName = opponentName,
         opponentId = opponentId,
         opponentProfileImageUrl = opponentProfileImageUrl,

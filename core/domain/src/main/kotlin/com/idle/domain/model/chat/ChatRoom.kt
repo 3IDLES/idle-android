@@ -4,7 +4,6 @@ import java.time.LocalDateTime
 
 data class ChatRoom(
     val id: String,
-    val myId: String,
     val opponentName: String,
     val opponentId: String,
     val lastMessage: String,

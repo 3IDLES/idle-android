@@ -44,8 +44,11 @@ import com.idle.designsystem.compose.component.LoadingCircle
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.chat.ChatRoom
+import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.util.formatRelativeDateTime
 import com.idle.domain.util.formatUnReadNumber
+import com.idle.navigation.DeepLinkDestination
+import com.idle.navigation.NavigationEvent
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -56,6 +59,7 @@ internal class WorkerChattingFragment : BaseComposeFragment() {
     override fun ComposeLayout() {
         fragmentViewModel.apply {
             val chatRoomList by chatRoomList.collectAsStateWithLifecycle()
+            val myProfile by myProfile.collectAsStateWithLifecycle()
 
             LaunchedEffect(Unit) {
                 getChatRoomList()
@@ -65,13 +69,8 @@ internal class WorkerChattingFragment : BaseComposeFragment() {
             if (chatRoomList != null) {
                 WorkerChattingScreen(
                     chatRoomList = chatRoomList,
-                    navigateTo = {
-                        navigationHelper.navigateTo(
-                            com.idle.navigation.NavigationEvent.To(
-                                it
-                            )
-                        )
-                    },
+                    myProfile = myProfile,
+                    navigateTo = { navigationHelper.navigateTo(NavigationEvent.To(it)) },
                 )
             } else {
                 // Todo : 스켈레톤 UI 혹은 스피너 로딩
@@ -83,7 +82,8 @@ internal class WorkerChattingFragment : BaseComposeFragment() {
 @Composable
 internal fun WorkerChattingScreen(
     chatRoomList: List<ChatRoom>?,
-    navigateTo: (com.idle.navigation.DeepLinkDestination) -> Unit,
+    myProfile: WorkerProfile?,
+    navigateTo: (DeepLinkDestination) -> Unit,
 ) {
     val listState = rememberLazyListState()
 
@@ -140,6 +140,7 @@ internal fun WorkerChattingScreen(
                         ) { chatRoom ->
                             ChatRoomItem(
                                 chatRoom = chatRoom,
+                                myProfile = myProfile,
                                 navigateTo = navigateTo,
                             )
                         }
@@ -161,7 +162,8 @@ internal fun WorkerChattingScreen(
 @Composable
 internal fun ChatRoomItem(
     chatRoom: ChatRoom,
-    navigateTo: (com.idle.navigation.DeepLinkDestination) -> Unit,
+    myProfile: WorkerProfile?,
+    navigateTo: (DeepLinkDestination) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val backgroundColor = if (chatRoom.unReadMessageCount > 0) {
@@ -177,9 +179,9 @@ internal fun ChatRoomItem(
             .background(backgroundColor)
             .clickable {
                 navigateTo(
-                    com.idle.navigation.DeepLinkDestination.ChattingDetail(
+                    DeepLinkDestination.ChattingDetail(
                         chattingRoomId = chatRoom.id,
-                        receiverId = chatRoom.myId,
+                        receiverId = myProfile!!.workerId,
                         receiverUserType = UserType.WORKER.apiValue,
                         senderId = chatRoom.opponentId,
                     )

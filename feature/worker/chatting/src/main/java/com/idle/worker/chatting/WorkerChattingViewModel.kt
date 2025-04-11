@@ -14,6 +14,7 @@ import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -27,7 +28,8 @@ class WorkerChattingViewModel @Inject constructor(
     private val errorHelper: ErrorHelper,
     val navigationHelper: com.idle.navigation.NavigationHelper,
 ) : ViewModel() {
-    private var myProfile: WorkerProfile? = null
+    private val _myProfile = MutableStateFlow<WorkerProfile?>(null)
+    val myProfile = _myProfile.asStateFlow()
 
     private val _chatRoomMap = MutableStateFlow<LinkedHashMap<String, ChatRoom>>(LinkedHashMap())
     val chatRoomList = _chatRoomMap
@@ -40,9 +42,9 @@ class WorkerChattingViewModel @Inject constructor(
 
     internal fun subscribeChatMessage() = viewModelScope.launch {
         getLocalMyWorkerProfileUseCase().onSuccess { profile ->
-            myProfile = profile
+            _myProfile.value = profile
 
-            chatRepository.subscribeChatMessage(myProfile!!.workerId).collect { message ->
+            chatRepository.subscribeChatMessage(_myProfile.value!!.workerId).collect { message ->
                 when (message) {
                     is ChatMessage -> handleNewChat(message)
                     is ReadMessage -> handleReadMessage(message)
@@ -76,7 +78,6 @@ class WorkerChattingViewModel @Inject constructor(
                 lastMessage = chatMessage.content,
                 opponentId = chatMessage.senderId,
                 opponentName = opponentProfile.centerName,
-                myId = this@WorkerChattingViewModel.myProfile?.workerId ?: "",
                 lastMessageTime = chatMessage.createdAt,
                 unReadMessageCount = 1,
                 opponentProfileImageUrl = opponentProfile.profileImageUrl,
