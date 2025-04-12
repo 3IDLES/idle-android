@@ -24,8 +24,7 @@ class LocalChatDataSource @Inject constructor(
         messagesDao.getMessages(
             roomId = roomId,
             lastMessageId = lastMessageId,
-        ).map(MessageEntity::toDomain)
-            .asReversed()
+        ).map(MessageEntity::toDomain).reversed()
 
     suspend fun insertChatRoom(myId: String, chatRoom: ChatRoom) = chatRoomsDao.insertChatRoom(
         ChatRoomEntity(

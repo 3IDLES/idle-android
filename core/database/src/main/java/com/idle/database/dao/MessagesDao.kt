@@ -15,8 +15,8 @@ interface MessagesDao {
         """
             SELECT * FROM message
             WHERE roomId = :roomId
-            AND (:lastMessageId IS NULL OR id > :lastMessageId) 
-            ORDER BY id ASC 
+            AND (:lastMessageId IS NULL OR id < :lastMessageId)
+            ORDER BY id DESC
             LIMIT :limit
         """
     )
