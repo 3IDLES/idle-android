@@ -43,13 +43,14 @@ import com.idle.designsystem.compose.component.CareHeadingTopBar
 import com.idle.designsystem.compose.component.LoadingCircle
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.UserType
-import com.idle.domain.model.chat.ChatRoom
+import com.idle.domain.model.chat.ChatRoomWithOpponentInfo
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.util.formatRelativeDateTime
 import com.idle.domain.util.formatUnReadNumber
 import com.idle.navigation.DeepLinkDestination
 import com.idle.navigation.NavigationEvent
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 internal class WorkerChattingFragment : BaseComposeFragment() {
@@ -62,8 +63,9 @@ internal class WorkerChattingFragment : BaseComposeFragment() {
             val myProfile by myProfile.collectAsStateWithLifecycle()
 
             LaunchedEffect(Unit) {
-                getChatRoomList()
-                subscribeChatMessage()
+                initProfile()
+                launch { getChatRoomList() }
+                launch { subscribeChatMessage() }
             }
 
             if (chatRoomList != null) {
@@ -81,7 +83,7 @@ internal class WorkerChattingFragment : BaseComposeFragment() {
 
 @Composable
 internal fun WorkerChattingScreen(
-    chatRoomList: List<ChatRoom>?,
+    chatRoomList: List<ChatRoomWithOpponentInfo>?,
     myProfile: WorkerProfile?,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
@@ -161,7 +163,7 @@ internal fun WorkerChattingScreen(
 
 @Composable
 internal fun ChatRoomItem(
-    chatRoom: ChatRoom,
+    chatRoom: ChatRoomWithOpponentInfo,
     myProfile: WorkerProfile?,
     navigateTo: (DeepLinkDestination) -> Unit,
     modifier: Modifier = Modifier,

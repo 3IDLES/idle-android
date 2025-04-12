@@ -14,7 +14,7 @@ import com.idle.domain.model.jobposting.WorkerJobPosting
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.repositorry.JobPostingRepository
 import com.idle.domain.repositorry.NotificationRepository
-import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
+import com.idle.domain.usecase.profile.GetMyWorkerProfileUseCase
 import com.idle.navigation.DeepLinkDestination
 import com.idle.navigation.NavigationEvent
 import com.idle.navigation.NavigationHelper
@@ -27,7 +27,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WorkerHomeViewModel @Inject constructor(
-    private val getLocalMyWorkerProfileUseCase: GetLocalMyWorkerProfileUseCase,
+    private val getMyWorkerProfileUseCase: GetMyWorkerProfileUseCase,
     private val notificationRepository: NotificationRepository,
     private val jobPostingRepository: JobPostingRepository,
     private val errorHelper: ErrorHelper,
@@ -132,7 +132,7 @@ class WorkerHomeViewModel @Inject constructor(
     }
 
     internal fun getMyWorkerProfile() = viewModelScope.launch {
-        getLocalMyWorkerProfileUseCase().onSuccess {
+        getMyWorkerProfileUseCase().onSuccess {
             _profile.value = it
         }.onFailure {
             eventHelper.sendEvent(MainEvent.ShowToast(it.message.toString()))

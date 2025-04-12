@@ -21,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,8 +35,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.idle.compose.base.BaseComposeFragment
@@ -45,12 +44,14 @@ import com.idle.designsystem.compose.component.LoadingCircle
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.chat.ChatRoom
+import com.idle.domain.model.chat.ChatRoomWithOpponentInfo
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.util.formatRelativeDateTime
 import com.idle.domain.util.formatUnReadNumber
 import com.idle.navigation.DeepLinkDestination
 import com.idle.navigation.NavigationEvent
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 internal class CenterChattingFragment : BaseComposeFragment() {
@@ -62,9 +63,10 @@ internal class CenterChattingFragment : BaseComposeFragment() {
             val chatRoomList by chatRoomList.collectAsStateWithLifecycle()
             val myProfile by myProfile.collectAsStateWithLifecycle()
 
-            LifecycleEventEffect(Lifecycle.Event.ON_CREATE) {
-                getChatRoomList()
-                subscribeChatMessage()
+            LaunchedEffect(Unit) {
+                initProfileData()
+                launch { getChatRoomList() }
+                launch { subscribeChatMessage() }
             }
 
             CenterChattingScreen(
@@ -80,7 +82,7 @@ internal class CenterChattingFragment : BaseComposeFragment() {
 
 @Composable
 internal fun CenterChattingScreen(
-    chatRoomList: List<ChatRoom>?,
+    chatRoomList: List<ChatRoomWithOpponentInfo>?,
     myProfile: CenterProfile?,
     navigateTo: (DeepLinkDestination) -> Unit,
 ) {
@@ -160,7 +162,7 @@ internal fun CenterChattingScreen(
 
 @Composable
 internal fun ChatRoomItem(
-    chatRoom: ChatRoom,
+    chatRoom: ChatRoomWithOpponentInfo,
     myProfile: CenterProfile?,
     navigateTo: (DeepLinkDestination) -> Unit,
     modifier: Modifier = Modifier,

@@ -6,7 +6,7 @@ import com.idle.analytics.AnalyticsHelper
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.repositorry.AuthRepository
-import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
+import com.idle.domain.usecase.profile.GetMyWorkerProfileUseCase
 import com.idle.setting.SettingEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WorkerSettingViewModel @Inject constructor(
-    private val getLocalMyWorkerProfileUseCase: GetLocalMyWorkerProfileUseCase,
+    private val getMyWorkerProfileUseCase: GetMyWorkerProfileUseCase,
     private val authRepository: AuthRepository,
     private val analyticsHelper: AnalyticsHelper,
     private val errorHelper: ErrorHelper,
@@ -33,7 +33,7 @@ class WorkerSettingViewModel @Inject constructor(
     }
 
     private fun getMyProfile() = viewModelScope.launch {
-        getLocalMyWorkerProfileUseCase().onSuccess {
+        getMyWorkerProfileUseCase().onSuccess {
             _workerProfile.value = it
         }.onFailure { errorHelper.sendError(it) }
     }

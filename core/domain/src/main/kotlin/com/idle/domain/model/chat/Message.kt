@@ -2,7 +2,7 @@ package com.idle.domain.model.chat
 
 import java.time.LocalDateTime
 
-interface Message
+sealed class Message
 
 data class ChatMessage(
     val id: String,
@@ -12,9 +12,9 @@ data class ChatMessage(
     val content: String,
     val createdAt: LocalDateTime,
     val isRead: Boolean,
-) : Message
+) : Message()
 
 data class ReadMessage(
     val opponentId: String,
     val chatroomId: String,
-) : Message
+) : Message()

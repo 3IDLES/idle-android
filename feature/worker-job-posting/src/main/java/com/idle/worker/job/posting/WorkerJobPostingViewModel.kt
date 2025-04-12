@@ -13,7 +13,7 @@ import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.WorkerJobPosting
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.repositorry.JobPostingRepository
-import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
+import com.idle.domain.usecase.profile.GetMyWorkerProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WorkerJobPostingViewModel @Inject constructor(
-    private val getLocalMyWorkerProfileUseCase: GetLocalMyWorkerProfileUseCase,
+    private val getMyWorkerProfileUseCase: GetMyWorkerProfileUseCase,
     private val jobPostingRepository: JobPostingRepository,
     private val errorHelper: ErrorHelper,
     private val eventHelper: EventHelper,
@@ -49,7 +49,7 @@ class WorkerJobPostingViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            getLocalMyWorkerProfileUseCase().onSuccess {
+            getMyWorkerProfileUseCase().onSuccess {
                 _profile.value = it
             }
         }
