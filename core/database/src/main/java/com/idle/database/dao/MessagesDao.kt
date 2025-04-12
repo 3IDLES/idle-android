@@ -9,11 +9,20 @@ import com.idle.database.model.MessageEntity
 @Dao
 interface MessagesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertMessages(vararg messages: MessageEntity)
+    suspend fun insertMessages(messages: MessageEntity)
 
-    @Query(value = "SELECT * FROM message")
-    suspend fun getMessages(): List<MessageEntity>
-
-    @Query(value = "DELETE FROM message")
-    suspend fun clearMessages()
+    @Query(
+        """
+            SELECT * FROM message
+            WHERE roomId = :roomId 
+            AND (:lastMessageId IS NULL OR id > :lastMessageId) 
+            ORDER BY id ASC 
+            LIMIT :limit
+        """
+    )
+    suspend fun getMessages(
+        roomId: String,
+        lastMessageId: String?,
+        limit: Int = 50
+    ): List<MessageEntity>
 }

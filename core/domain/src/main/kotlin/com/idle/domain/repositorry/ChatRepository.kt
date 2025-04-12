@@ -11,7 +11,6 @@ interface ChatRepository {
     suspend fun disconnectWebSocket(): Result<Unit>
     suspend fun getChatRooms(userType: UserType): Result<List<ChatRoom>>
     suspend fun getChatRoomMessages(
-        userType: UserType,
         roomId: String,
         messageId: String?,
     ): Result<List<ChatMessage>>

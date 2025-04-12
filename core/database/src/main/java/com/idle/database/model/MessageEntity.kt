@@ -2,11 +2,15 @@ package com.idle.database.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.idle.domain.model.chat.ChatMessage
 import java.time.LocalDateTime
 
-@Entity(tableName = "message")
+@Entity(
+    tableName = "message",
+    indices = [Index(value = ["roomId", "id"], unique = false)],
+)
 data class MessageEntity(
     @PrimaryKey
     @ColumnInfo(name = "id") val id: String,
@@ -17,7 +21,7 @@ data class MessageEntity(
     val createdAt: LocalDateTime,
     val isRead: Boolean,
 ) {
-    fun toDomain() = ChatMessage(
+    internal fun toDomain() = ChatMessage(
         id = id,
         roomId = roomId,
         senderId = senderId,
@@ -27,3 +31,13 @@ data class MessageEntity(
         isRead = isRead,
     )
 }
+
+internal fun ChatMessage.toMessageEntity() = MessageEntity(
+    id = id,
+    roomId = roomId,
+    senderId = senderId,
+    receiverId = receiverId,
+    content = content,
+    createdAt = createdAt,
+    isRead = isRead,
+)
