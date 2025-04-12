@@ -4,26 +4,27 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.chat.ChatMessage
-import com.idle.domain.model.chat.ChatRoom
+import com.idle.domain.model.chat.ChatRoomWithOpponentInfo
 import com.idle.domain.model.chat.ReadMessage
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.repositorry.ChatRepository
 import com.idle.domain.repositorry.ProfileRepository
-import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
+import com.idle.domain.usecase.chat.GetChatRoomsUseCase
+import com.idle.domain.usecase.profile.GetMyWorkerProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class WorkerChattingViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
-    private val getLocalMyWorkerProfileUseCase: GetLocalMyWorkerProfileUseCase,
+    private val getChatRoomsUseCase: GetChatRoomsUseCase,
+    private val getMyWorkerProfileUseCase: GetMyWorkerProfileUseCase,
     private val chatRepository: ChatRepository,
     private val errorHelper: ErrorHelper,
     val navigationHelper: com.idle.navigation.NavigationHelper,
@@ -31,7 +32,8 @@ class WorkerChattingViewModel @Inject constructor(
     private val _myProfile = MutableStateFlow<WorkerProfile?>(null)
     val myProfile = _myProfile.asStateFlow()
 
-    private val _chatRoomMap = MutableStateFlow<LinkedHashMap<String, ChatRoom>>(LinkedHashMap())
+    private val _chatRoomMap =
+        MutableStateFlow<LinkedHashMap<String, ChatRoomWithOpponentInfo>>(LinkedHashMap())
     val chatRoomList = _chatRoomMap
         .map { it.values.toList() }
         .stateIn(
@@ -40,19 +42,18 @@ class WorkerChattingViewModel @Inject constructor(
             initialValue = null,
         )
 
-    internal fun subscribeChatMessage() = viewModelScope.launch {
-        getLocalMyWorkerProfileUseCase().onSuccess { profile ->
+    internal suspend fun initProfile() {
+        getMyWorkerProfileUseCase().onSuccess { profile ->
             _myProfile.value = profile
+        }.onFailure { errorHelper.sendError(it) }
+    }
 
-            chatRepository.subscribeChatMessage(_myProfile.value!!.workerId).collect { message ->
-                when (message) {
-                    is ChatMessage -> handleNewChat(message)
-                    is ReadMessage -> handleReadMessage(message)
-                }
+    internal suspend fun subscribeChatMessage() {
+        chatRepository.subscribeChatMessage(_myProfile.value!!.workerId).collect { message ->
+            when (message) {
+                is ChatMessage -> handleNewChat(message)
+                is ReadMessage -> Unit
             }
-        }.onFailure {
-            errorHelper.sendError(it)
-            return@launch
         }
     }
 
@@ -73,27 +74,27 @@ class WorkerChattingViewModel @Inject constructor(
             val opponentProfile = profileRepository.getCenterProfile(chatMessage.senderId)
                 .getOrNull() ?: return
 
-            val newChatRoom = ChatRoom(
+            val newChatRoom = ChatRoomWithOpponentInfo(
                 id = roomId,
                 lastMessage = chatMessage.content,
                 opponentId = chatMessage.senderId,
-                opponentName = opponentProfile.centerName,
                 lastMessageTime = chatMessage.createdAt,
-                unReadMessageCount = 1,
+                opponentName = opponentProfile.centerName,
                 opponentProfileImageUrl = opponentProfile.profileImageUrl,
+                unReadMessageCount = 1,
             )
             updatedMap[roomId] = newChatRoom
         }
-        _chatRoomMap.value = updatedMap // StateFlow에 갱신된 맵 할당
+
+        _chatRoomMap.value = updatedMap
     }
 
-    private suspend fun handleReadMessage(message: ReadMessage) {
-
-    }
-
-    internal fun getChatRoomList() = viewModelScope.launch {
-        chatRepository.getChatRooms(UserType.WORKER).onSuccess {
-            _chatRoomMap.value = LinkedHashMap<String, ChatRoom>().apply {
+    internal suspend fun getChatRoomList() {
+        getChatRoomsUseCase(
+            userType = UserType.WORKER,
+            userId = _myProfile.value!!.workerId,
+        ).onSuccess {
+            _chatRoomMap.value = LinkedHashMap<String, ChatRoomWithOpponentInfo>().apply {
                 it.forEach { chatRoom -> put(chatRoom.id, chatRoom) }
             }
         }.onFailure { errorHelper.sendError(it) }

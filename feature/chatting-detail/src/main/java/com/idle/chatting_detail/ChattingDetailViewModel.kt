@@ -11,8 +11,8 @@ import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.repositorry.ChatRepository
 import com.idle.domain.repositorry.ProfileRepository
-import com.idle.domain.usecase.profile.GetLocalMyCenterProfileUseCase
-import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
+import com.idle.domain.usecase.profile.GetMyCenterProfileUseCase
+import com.idle.domain.usecase.profile.GetMyWorkerProfileUseCase
 import com.idle.navigation.NavigationHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.coroutineScope
@@ -25,8 +25,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ChattingDetailViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
-    private val getLocalMyWorkerProfileUseCase: GetLocalMyWorkerProfileUseCase,
-    private val getLocalMyCenterProfileUseCase: GetLocalMyCenterProfileUseCase,
+    private val getMyWorkerProfileUseCase: GetMyWorkerProfileUseCase,
+    private val getMyCenterProfileUseCase: GetMyCenterProfileUseCase,
     private val chatRepository: ChatRepository,
     private val errorHelper: ErrorHelper,
     val navigationHelper: NavigationHelper,
@@ -74,7 +74,7 @@ class ChattingDetailViewModel @Inject constructor(
                     }
                 }
 
-                getLocalMyCenterProfileUseCase().onSuccess {
+                getMyCenterProfileUseCase().onSuccess {
                     _centerProfile.value = it
                 }.onFailure {
                     errorHelper.sendError(it)
@@ -90,7 +90,7 @@ class ChattingDetailViewModel @Inject constructor(
                     }
                 }
 
-                getLocalMyWorkerProfileUseCase().onSuccess {
+                getMyWorkerProfileUseCase().onSuccess {
                     _workerProfile.value = it
                 }.onFailure {
                     errorHelper.sendError(it)

@@ -1,16 +1,12 @@
 package com.idle.database.dao
 
 import androidx.room.Dao
-import androidx.room.Embedded
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Relation
 import androidx.room.Transaction
 import com.idle.database.model.ChatRoomEntity
-import com.idle.database.model.MessageEntity
-import com.idle.domain.model.chat.ChatRoom
-import java.time.LocalDateTime
+import com.idle.database.model.ChatRoomWithMessages
 
 @Dao
 interface ChatRoomsDao {

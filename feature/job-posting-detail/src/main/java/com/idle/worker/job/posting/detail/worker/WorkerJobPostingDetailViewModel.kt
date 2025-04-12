@@ -20,7 +20,7 @@ import com.idle.domain.model.jobposting.WorkerJobPostingDetail
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.repositorry.ChatRepository
 import com.idle.domain.repositorry.JobPostingRepository
-import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
+import com.idle.domain.usecase.profile.GetMyWorkerProfileUseCase
 import com.idle.navigation.DeepLinkDestination
 import com.idle.navigation.NavigationEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,7 +32,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WorkerJobPostingDetailViewModel @Inject constructor(
-    private val getLocalMyWorkerProfileUseCase: GetLocalMyWorkerProfileUseCase,
+    private val getMyWorkerProfileUseCase: GetMyWorkerProfileUseCase,
     private val jobPostingRepository: JobPostingRepository,
     private val chatRepository: ChatRepository,
     private val analyticsHelper: AnalyticsHelper,
@@ -47,7 +47,7 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
     val workerJobPostingDetail = _workerJobPostingDetail.asStateFlow()
 
     internal fun getMyProfile() = viewModelScope.launch {
-        getLocalMyWorkerProfileUseCase().onSuccess {
+        getMyWorkerProfileUseCase().onSuccess {
             _profile.value = it
         }.onFailure { errorHelper.sendError(it) }
     }

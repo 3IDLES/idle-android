@@ -6,7 +6,7 @@ import com.idle.analytics.AnalyticsHelper
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.repositorry.AuthRepository
-import com.idle.domain.usecase.profile.GetLocalMyCenterProfileUseCase
+import com.idle.domain.usecase.profile.GetMyCenterProfileUseCase
 import com.idle.setting.SettingEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CenterSettingViewModel @Inject constructor(
-    private val getLocalMyCenterProfileUseCase: GetLocalMyCenterProfileUseCase,
+    private val getMyCenterProfileUseCase: GetMyCenterProfileUseCase,
     private val authRepository: AuthRepository,
     private val analyticsHelper: AnalyticsHelper,
     private val errorHelper: ErrorHelper,
@@ -38,7 +38,7 @@ class CenterSettingViewModel @Inject constructor(
     }
 
     private fun getMyProfile() = viewModelScope.launch {
-        getLocalMyCenterProfileUseCase().onSuccess {
+        getMyCenterProfileUseCase().onSuccess {
             _centerProfile.value = it
         }.onFailure { errorHelper.sendError(it) }
     }

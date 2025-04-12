@@ -9,7 +9,7 @@ import com.idle.binding.ToastType.SUCCESS
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.repositorry.ProfileRepository
-import com.idle.domain.usecase.profile.GetLocalMyCenterProfileUseCase
+import com.idle.domain.usecase.profile.GetMyCenterProfileUseCase
 import com.idle.domain.usecase.profile.UpdateCenterProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CenterProfileViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
-    private val getLocalMyCenterProfileUseCase: GetLocalMyCenterProfileUseCase,
+    private val getMyCenterProfileUseCase: GetMyCenterProfileUseCase,
     private val updateCenterProfileUseCase: UpdateCenterProfileUseCase,
     private val errorHelper: ErrorHelper,
     private val eventHelper: EventHelper,
@@ -63,7 +63,7 @@ class CenterProfileViewModel @Inject constructor(
     }
 
     internal fun getMyCenterProfile() = viewModelScope.launch {
-        getLocalMyCenterProfileUseCase().onSuccess {
+        getMyCenterProfileUseCase().onSuccess {
             _centerProfile.value = it
             _centerIntroduce.value = it.introduce ?: ""
             _centerOfficeNumber.value = it.officeNumber

@@ -9,3 +9,13 @@ data class ChatRoom(
     val lastMessageTime: LocalDateTime,
     val unReadMessageCount: Int,
 )
+
+data class ChatRoomWithOpponentInfo(
+    val id: String,
+    val opponentName: String,
+    val opponentId: String,
+    val lastMessage: String,
+    val lastMessageTime: LocalDateTime,
+    val unReadMessageCount: Int,
+    val opponentProfileImageUrl: String?,
+)

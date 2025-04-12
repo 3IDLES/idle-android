@@ -12,7 +12,7 @@ import com.idle.domain.model.jobposting.JobPostingStatus
 import com.idle.domain.model.jobposting.LifeAssistance
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.repositorry.JobPostingRepository
-import com.idle.domain.usecase.profile.GetLocalMyCenterProfileUseCase
+import com.idle.domain.usecase.profile.GetMyCenterProfileUseCase
 import com.idle.job.posting.detail.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,7 +22,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CenterJobPostingDetailViewModel @Inject constructor(
-    private val getLocalMyCenterProfileUseCase: GetLocalMyCenterProfileUseCase,
+    private val getMyCenterProfileUseCase: GetMyCenterProfileUseCase,
     private val jobPostingRepository: JobPostingRepository,
     private val errorHelper: ErrorHelper,
     val eventHelper: EventHelper,
@@ -45,7 +45,7 @@ class CenterJobPostingDetailViewModel @Inject constructor(
     }
 
     private fun getMyCenterProfile() = viewModelScope.launch {
-        getLocalMyCenterProfileUseCase().onSuccess {
+        getMyCenterProfileUseCase().onSuccess {
             _profile.value = it
         }.onFailure { errorHelper.sendError(it) }
     }
