@@ -27,15 +27,9 @@ class ChatRepositoryImpl @Inject constructor(
     override suspend fun disconnectWebSocket(): Result<Unit> =
         chatDataSource.disconnectWebSocket()
 
-    override suspend fun getChatRooms(userType: UserType): Result<List<ChatRoom>> =
-        runCatching {
-            val chatRoomsResponse = when (userType) {
-                UserType.WORKER -> chatDataSource.getWorkerChatRooms()
-                UserType.CENTER -> chatDataSource.getCenterChatRooms()
-            }.getOrThrow()
-
-            chatRoomsResponse.map { it.toVO() }
-        }
+    override suspend fun getChatRooms(userId: String): Result<List<ChatRoom>> = runCatching {
+        localChatDataSource.getChatRooms(userId)
+    }
 
     override suspend fun getChatRoomMessages(
         roomId: String,
@@ -62,9 +56,21 @@ class ChatRepositoryImpl @Inject constructor(
                 val message = it.toVO()
 
                 if (message is ChatMessage) {
+                    if (!localChatDataSource.isChatRoomExist(message.roomId)) {
+                        localChatDataSource.insertChatRoom(
+                            myId = userId,
+                            chatRoom = ChatRoom(
+                                id = message.roomId,
+                                opponentId = if (userId == message.senderId) message.receiverId else message.senderId,
+                                lastMessage = message.content,
+                                lastMessageTime = message.createdAt,
+                                unReadMessageCount = 1,
+                            )
+                        )
+                    }
+
                     localChatDataSource.insertMessages(message)
                 }
-
                 message
             }.retryWhen { cause, attempt ->
                 if (cause is IOException && attempt < MAX_RETRY_ATTEMPTS) {

@@ -9,12 +9,12 @@ import com.idle.database.model.MessageEntity
 @Dao
 interface MessagesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertMessages(messages: MessageEntity)
+    suspend fun insertMessage(messages: MessageEntity)
 
     @Query(
         """
             SELECT * FROM message
-            WHERE roomId = :roomId 
+            WHERE roomId = :roomId
             AND (:lastMessageId IS NULL OR id > :lastMessageId) 
             ORDER BY id ASC 
             LIMIT :limit

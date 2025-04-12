@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 interface ChatRepository {
     suspend fun connectWebSocket(): Result<Unit>
     suspend fun disconnectWebSocket(): Result<Unit>
-    suspend fun getChatRooms(userType: UserType): Result<List<ChatRoom>>
+    suspend fun getChatRooms(userId: String): Result<List<ChatRoom>>
     suspend fun getChatRoomMessages(
         roomId: String,
         messageId: String?,

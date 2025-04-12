@@ -1,6 +1,7 @@
 package com.idle.database.di
 
 import com.idle.database.CareDatabase
+import com.idle.database.dao.ChatRoomsDao
 import com.idle.database.dao.MessagesDao
 import dagger.Module
 import dagger.Provides
@@ -14,4 +15,9 @@ internal object DaosModule {
     fun providesMessagesDao(
         database: CareDatabase,
     ): MessagesDao = database.messagesDao()
+
+    @Provides
+    fun providesChatRoomsDao(
+        database: CareDatabase,
+    ): ChatRoomsDao = database.chatRoomsDao()
 }

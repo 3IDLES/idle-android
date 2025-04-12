@@ -2,6 +2,7 @@ package com.idle.database.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.idle.domain.model.chat.ChatMessage
@@ -10,6 +11,15 @@ import java.time.LocalDateTime
 @Entity(
     tableName = "message",
     indices = [Index(value = ["roomId", "id"], unique = false)],
+    foreignKeys = arrayOf(
+        ForeignKey(
+            entity = ChatRoomEntity::class,
+            parentColumns = arrayOf("id"),
+            childColumns = arrayOf("roomId"),
+            onDelete = ForeignKey.CASCADE,
+            onUpdate = ForeignKey.CASCADE,
+        )
+    )
 )
 data class MessageEntity(
     @PrimaryKey

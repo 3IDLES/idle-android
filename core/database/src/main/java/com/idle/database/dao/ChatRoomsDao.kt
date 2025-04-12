@@ -1,0 +1,40 @@
+package com.idle.database.dao
+
+import androidx.room.Dao
+import androidx.room.Embedded
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Relation
+import androidx.room.Transaction
+import com.idle.database.model.ChatRoomEntity
+import com.idle.database.model.MessageEntity
+import com.idle.domain.model.chat.ChatRoom
+import java.time.LocalDateTime
+
+@Dao
+interface ChatRoomsDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertChatRoom(chatRoom: ChatRoomEntity)
+
+    @Transaction
+    @Query(
+        """
+            SELECT * FROM chatRoom
+            WHERE myId = :userId
+            ORDER BY id ASC
+        """
+    )
+    suspend fun getChatRoomsWithMessages(userId: String): List<ChatRoomWithMessages>
+
+    @Query(
+        """
+            SELECT EXISTS(
+                SELECT 1
+                FROM chatRoom
+                WHERE id = :roomId
+            )
+        """
+    )
+    suspend fun isChatRoomExists(roomId: String): Boolean
+}
