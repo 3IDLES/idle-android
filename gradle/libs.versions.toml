@@ -21,6 +21,8 @@ androidxFragment = "1.8.4"
 androidxConstraintlayout = "2.1.4"
 # https://developer.android.com/jetpack/androidx/releases/core\
 androidxSplashscreen = "1.0.1"
+# https://developer.android.com/training/data-storage/room
+androidxRoom = "2.6.1"
 
 ## Compose
 # https://developer.android.com/develop/ui/compose/bom/bom-mapping
@@ -130,7 +132,8 @@ androidx-navigation-safeArgs = { module = "androidx.navigation:navigation-safe-a
 androidx-navigation-fragment = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "androidxNavigation" }
 androidx-navigation-ui = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "androidxNavigation" }
 androidx-datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "androidxDatastore" }
-
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "androidxRoom" }
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "androidxRoom" }
 androidx-lifecycle-runtimeCompose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
 androidx-lifecycle-viewModelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivity" }
