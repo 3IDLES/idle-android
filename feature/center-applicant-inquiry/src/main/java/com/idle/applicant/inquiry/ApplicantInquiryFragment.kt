@@ -1,4 +1,4 @@
-package com.tgyuu.applicant.inquiry
+package com.idle.applicant.inquiry
 
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.BorderStroke
@@ -47,6 +47,7 @@ import com.idle.domain.model.jobposting.JobPostingSummary
 import com.idle.domain.model.profile.JobSearchStatus.NO
 import com.idle.domain.model.profile.JobSearchStatus.UNKNOWN
 import com.idle.domain.model.profile.JobSearchStatus.YES
+import com.idle.navigation.DeepLinkDestination
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -85,7 +86,7 @@ internal class ApplicantInquiryFragment : BaseComposeFragment() {
 internal fun ApplicantInquiryScreen(
     jobPostingSummary: JobPostingSummary,
     applicants: List<Applicant>,
-    navigateTo: (com.idle.navigation.DeepLinkDestination) -> Unit
+    navigateTo: (DeepLinkDestination) -> Unit
 ) {
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
 
@@ -215,7 +216,7 @@ private fun RecruitInfoCard(jobPostingSummary: JobPostingSummary) {
 @Composable
 private fun WorkerProfileCard(
     applicant: Applicant,
-    navigateTo: (com.idle.navigation.DeepLinkDestination) -> Unit,
+    navigateTo: (DeepLinkDestination) -> Unit,
 ) {
     Card(
         shape = RoundedCornerShape(12.dp),
@@ -226,7 +227,7 @@ private fun WorkerProfileCard(
             disabledContentColor = CareTheme.colors.white000,
         ),
         border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),
-        onClick = { navigateTo(com.idle.navigation.DeepLinkDestination.WorkerProfile(applicant.carerId)) },
+        onClick = { navigateTo(DeepLinkDestination.WorkerProfile(applicant.carerId)) },
         modifier = Modifier.fillMaxWidth(),
     ) {
         Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
@@ -325,13 +326,7 @@ private fun WorkerProfileCard(
 
             CareButtonCardMedium(
                 text = "프로필 보기",
-                onClick = {
-                    navigateTo(
-                        com.idle.navigation.DeepLinkDestination.WorkerProfile(
-                            applicant.carerId
-                        )
-                    )
-                },
+                onClick = { navigateTo(DeepLinkDestination.WorkerProfile(applicant.carerId)) },
                 containerColor = CareTheme.colors.white000,
                 textColor = CareTheme.colors.gray300,
                 border = BorderStroke(width = 1.dp, color = CareTheme.colors.gray100),

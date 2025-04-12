@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/applicantInquiryFragment"
-        android:name="com.tgyuu.applicant.inquiry.ApplicantInquiryFragment"
+        android:name="com.idle.applicant.inquiry.ApplicantInquiryFragment"
         android:label="ApplicantInquiryFragment">
         <argument
             android:name="jobPostingId"

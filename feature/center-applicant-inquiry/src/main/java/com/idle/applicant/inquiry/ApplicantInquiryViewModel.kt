@@ -1,4 +1,4 @@
-package com.tgyuu.applicant.inquiry
+package com.idle.applicant.inquiry
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
