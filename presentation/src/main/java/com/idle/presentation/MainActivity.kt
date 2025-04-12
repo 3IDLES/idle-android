@@ -203,7 +203,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showForceUpdateDialog(info: ForceUpdate) {
-        val currentVersion = packageManager.getPackageInfo(packageName, 0).versionName
+        val currentVersion = packageManager.getPackageInfo(packageName, 0).versionName!!
         if (checkShouldUpdate(currentVersion, info.minVersion)) {
             forceUpdateFragment = ForceUpdateFragment(info).apply { isCancelable = false }
             forceUpdateFragment.show(supportFragmentManager, forceUpdateFragment.tag)

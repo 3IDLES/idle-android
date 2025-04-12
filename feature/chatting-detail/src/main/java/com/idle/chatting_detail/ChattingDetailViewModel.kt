@@ -11,7 +11,6 @@ import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.repositorry.ChatRepository
 import com.idle.domain.repositorry.ProfileRepository
-import com.idle.domain.usecase.chat.GetChatRoomMessageUseCase
 import com.idle.domain.usecase.profile.GetLocalMyCenterProfileUseCase
 import com.idle.domain.usecase.profile.GetLocalMyWorkerProfileUseCase
 import com.idle.navigation.NavigationHelper
@@ -28,7 +27,6 @@ class ChattingDetailViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
     private val getLocalMyWorkerProfileUseCase: GetLocalMyWorkerProfileUseCase,
     private val getLocalMyCenterProfileUseCase: GetLocalMyCenterProfileUseCase,
-    private val getChatRoomMessageUseCase: GetChatRoomMessageUseCase,
     private val chatRepository: ChatRepository,
     private val errorHelper: ErrorHelper,
     val navigationHelper: NavigationHelper,
@@ -106,8 +104,7 @@ class ChattingDetailViewModel @Inject constructor(
     internal fun getChatMessages() = viewModelScope.launch {
         if (_callType.value == MessageCallType.END) return@launch
 
-        getChatRoomMessageUseCase(
-            userType = receiverUserType,
+        chatRepository.getChatRoomMessages(
             roomId = chattingRoomId,
             messageId = _chatMessages.value?.first()?.id,
         ).onSuccess { messages ->

@@ -1,5 +1,6 @@
 package com.idle.data.repository
 
+import com.idle.database.source.LocalChatDataSource
 import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.chat.ChatMessage
 import com.idle.domain.model.chat.ChatRoom
@@ -19,6 +20,7 @@ import javax.inject.Inject
 
 class ChatRepositoryImpl @Inject constructor(
     private val chatDataSource: ChatDataSource,
+    private val localChatDataSource: LocalChatDataSource,
 ) : ChatRepository {
     override suspend fun connectWebSocket(): Result<Unit> = chatDataSource.connectWebSocket()
 
@@ -36,22 +38,13 @@ class ChatRepositoryImpl @Inject constructor(
         }
 
     override suspend fun getChatRoomMessages(
-        userType: UserType,
         roomId: String,
         messageId: String?,
     ): Result<List<ChatMessage>> = runCatching {
-        when (userType) {
-            UserType.WORKER -> chatDataSource.getWorkerChatRoomMessages(
-                roomId = roomId,
-                messageId = messageId,
-            )
-
-            UserType.CENTER -> chatDataSource.getCenterChatRoomMessages(
-                roomId = roomId,
-                messageId = messageId,
-            )
-        }.mapCatching { messages -> messages.map { it.toVO() } }
-            .getOrThrow()
+        localChatDataSource.getMessages(
+            roomId = roomId,
+            lastMessageId = messageId,
+        )
     }
 
     override suspend fun generateChatRooms(userType: UserType, opponentId: String): Result<String> =
@@ -65,8 +58,15 @@ class ChatRepositoryImpl @Inject constructor(
 
     override suspend fun subscribeChatMessage(userId: String): Flow<Message> =
         chatDataSource.subscribeChatMessage(userId)
-            .map { it.toVO() }
-            .retryWhen { cause, attempt ->
+            .map {
+                val message = it.toVO()
+
+                if (message is ChatMessage) {
+                    localChatDataSource.insertMessages(message)
+                }
+
+                message
+            }.retryWhen { cause, attempt ->
                 if (cause is IOException && attempt < MAX_RETRY_ATTEMPTS) {
                     connectWebSocket()
                     delay(calculateBackoffTime(attempt.toInt()))
