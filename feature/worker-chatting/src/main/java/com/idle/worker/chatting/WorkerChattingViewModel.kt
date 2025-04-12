@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -48,7 +49,7 @@ class WorkerChattingViewModel @Inject constructor(
         }.onFailure { errorHelper.sendError(it) }
     }
 
-    internal suspend fun subscribeChatMessage() {
+    internal fun subscribeChatMessage() = viewModelScope.launch {
         chatRepository.subscribeChatMessage(_myProfile.value!!.workerId).collect { message ->
             when (message) {
                 is ChatMessage -> handleNewChat(message)

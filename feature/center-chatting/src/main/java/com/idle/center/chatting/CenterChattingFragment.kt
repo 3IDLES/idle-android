@@ -43,7 +43,6 @@ import com.idle.designsystem.compose.component.CareHeadingTopBar
 import com.idle.designsystem.compose.component.LoadingCircle
 import com.idle.designsystem.compose.foundation.CareTheme
 import com.idle.domain.model.auth.UserType
-import com.idle.domain.model.chat.ChatRoom
 import com.idle.domain.model.chat.ChatRoomWithOpponentInfo
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.util.formatRelativeDateTime
@@ -66,7 +65,7 @@ internal class CenterChattingFragment : BaseComposeFragment() {
             LaunchedEffect(Unit) {
                 initProfileData()
                 launch { getChatRoomList() }
-                launch { subscribeChatMessage() }
+                subscribeChatMessage()
             }
 
             CenterChattingScreen(
