@@ -48,15 +48,6 @@ class CenterChattingViewModel @Inject constructor(
         getMyCenterProfileUseCase().onSuccess {
             _myProfile.value = it
         }.onFailure { errorHelper.sendError(it) }
-
-        chatRepository.loadChatRooms(
-            userId = _myProfile.value?.centerId ?: return,
-            userType = UserType.CENTER
-        ).onSuccess {
-            _chatRoomMap.value = LinkedHashMap<String, ChatRoomWithOpponentInfo>().apply {
-                it.forEach { chatRoom -> put(chatRoom.id, chatRoom) }
-            }
-        }
     }
 
     internal fun subscribeChatMessage() = viewModelScope.launch {
@@ -101,7 +92,7 @@ class CenterChattingViewModel @Inject constructor(
         _chatRoomMap.value = updatedMap
     }
 
-    internal suspend fun getChatRoomList() {
+    internal suspend fun retrieveChatRoomList() {
         getChatRoomsUseCase(
             userType = UserType.CENTER,
             userId = _myProfile.value?.centerId ?: return
@@ -110,5 +101,16 @@ class CenterChattingViewModel @Inject constructor(
                 it.forEach { chatRoom -> put(chatRoom.id, chatRoom) }
             }
         }.onFailure { errorHelper.sendError(it) }
+    }
+
+    internal suspend fun loadChatRoomList() {
+        chatRepository.loadChatRooms(
+            userId = _myProfile.value?.centerId ?: return,
+            userType = UserType.CENTER
+        ).onSuccess {
+            _chatRoomMap.value = LinkedHashMap<String, ChatRoomWithOpponentInfo>().apply {
+                it.forEach { chatRoom -> put(chatRoom.id, chatRoom) }
+            }
+        }
     }
 }

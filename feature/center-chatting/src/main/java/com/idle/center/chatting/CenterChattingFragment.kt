@@ -64,7 +64,10 @@ internal class CenterChattingFragment : BaseComposeFragment() {
 
             LaunchedEffect(Unit) {
                 initCenterChatting()
-                launch { getChatRoomList() }
+                launch {
+                    retrieveChatRoomList()
+                    loadChatRoomList()
+                }
                 launch { subscribeChatMessage() }
             }
 
