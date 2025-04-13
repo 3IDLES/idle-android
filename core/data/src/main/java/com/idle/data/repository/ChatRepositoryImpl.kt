@@ -5,6 +5,7 @@ import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.chat.ChatMessage
 import com.idle.domain.model.chat.ChatRoom
 import com.idle.domain.model.chat.Message
+import com.idle.domain.model.chat.ReadMessage
 import com.idle.domain.repositorry.ChatRepository
 import com.idle.network.model.chat.ReadMessageRequest
 import com.idle.network.model.chat.SendMessageRequest
@@ -96,21 +97,30 @@ class ChatRepositoryImpl @Inject constructor(
             .map {
                 val message = it.toVO()
 
-                if (message is ChatMessage) {
-                    if (!localChatDataSource.isChatRoomExist(message.roomId)) {
-                        localChatDataSource.insertChatRoom(
-                            myId = userId,
-                            chatRoom = ChatRoom(
-                                id = message.roomId,
-                                opponentId = if (userId == message.senderId) message.receiverId else message.senderId,
-                                lastMessage = message.content,
-                                lastMessageTime = message.createdAt,
-                                unReadMessageCount = 1,
+                when (message) {
+                    is ChatMessage -> {
+                        if (!localChatDataSource.isChatRoomExist(message.roomId)) {
+                            localChatDataSource.insertChatRoom(
+                                myId = userId,
+                                chatRoom = ChatRoom(
+                                    id = message.roomId,
+                                    opponentId = if (userId == message.senderId) message.receiverId else message.senderId,
+                                    lastMessage = message.content,
+                                    lastMessageTime = message.createdAt,
+                                    unReadMessageCount = 1,
+                                )
                             )
-                        )
+                        }
+
+                        localChatDataSource.insertMessages(message)
                     }
 
-                    localChatDataSource.insertMessages(message)
+                    is ReadMessage -> {
+                        localChatDataSource.readMessages(
+                            roomId = message.chatroomId,
+                            opponentId = userId,
+                        )
+                    }
                 }
                 message
             }.retryWhen { cause, attempt ->
@@ -143,5 +153,10 @@ class ChatRepositoryImpl @Inject constructor(
                 chatroomId = chatroomId,
                 opponentId = opponentId,
             )
-        )
+        ).onSuccess {
+            localChatDataSource.readMessages(
+                roomId = chatroomId,
+                opponentId = opponentId,
+            )
+        }
 }

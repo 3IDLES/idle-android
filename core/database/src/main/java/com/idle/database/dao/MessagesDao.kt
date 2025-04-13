@@ -15,7 +15,7 @@ interface MessagesDao {
         """
             SELECT * FROM message
             WHERE roomId = :roomId
-            AND (:lastMessageId IS NULL OR id < :lastMessageId)
+                AND (:lastMessageId IS NULL OR id < :lastMessageId)
             ORDER BY id DESC
             LIMIT :limit
         """
@@ -25,4 +25,18 @@ interface MessagesDao {
         lastMessageId: String?,
         limit: Int = 50
     ): List<MessageEntity>
+
+    @Query(
+        """
+            UPDATE message
+            SET isRead = 1
+            WHERE roomId = :roomId
+                AND receiverId = :opponentId
+                AND isRead = 0
+        """
+    )
+    suspend fun readMessages(
+        roomId: String,
+        opponentId: String,
+    )
 }

@@ -25,9 +25,9 @@ import javax.inject.Inject
 @HiltViewModel
 class ChattingDetailViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
+    private val chatRepository: ChatRepository,
     private val getMyWorkerProfileUseCase: GetMyWorkerProfileUseCase,
     private val getMyCenterProfileUseCase: GetMyCenterProfileUseCase,
-    private val chatRepository: ChatRepository,
     private val errorHelper: ErrorHelper,
     val navigationHelper: NavigationHelper,
     private val savedStateHandle: SavedStateHandle,
@@ -149,7 +149,9 @@ class ChattingDetailViewModel @Inject constructor(
             content = _writingText.value,
         ).onSuccess {
             _writingText.value = ""
-        }.onFailure { errorHelper.sendError(it) }
+        }.onFailure {
+            errorHelper.sendError(it)
+        }
     }
 
     internal suspend fun readMessage() {
