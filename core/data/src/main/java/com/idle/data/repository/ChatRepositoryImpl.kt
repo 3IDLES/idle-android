@@ -38,7 +38,6 @@ class ChatRepositoryImpl @Inject constructor(
                 UserType.WORKER -> chatDataSource.getWorkerChatRooms()
                 UserType.CENTER -> chatDataSource.getCenterChatRooms()
             }.getOrThrow()
-
             chatRoomsResponse.map {
                 it.toVO()
             }.map {
@@ -49,6 +48,14 @@ class ChatRepositoryImpl @Inject constructor(
                     lastMessageTime = it.lastMessageTime,
                     unReadMessageCount = it.unReadMessageCount,
                 )
+
+                if (it.unReadMessageCount > 0) {
+                    getChatRoomMessages(
+                        userType = userType,
+                        roomId = it.id,
+                        messageId = null,
+                    )
+                }
 
                 localChatDataSource.insertChatRoom(userId, chatRoom)
             }

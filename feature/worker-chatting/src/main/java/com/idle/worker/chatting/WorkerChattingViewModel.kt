@@ -1,5 +1,6 @@
 package com.idle.worker.chatting
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.domain.model.auth.UserType
@@ -58,6 +59,8 @@ class WorkerChattingViewModel @Inject constructor(
             userType = UserType.WORKER,
             userId = _myProfile.value?.workerId ?: return,
         ).onSuccess {
+            Log.d("test", it.toString())
+
             _chatRoomMap.value = LinkedHashMap<String, ChatRoomWithOpponentInfo>().apply {
                 it.forEach { chatRoom -> put(chatRoom.id, chatRoom) }
             }
