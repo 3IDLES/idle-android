@@ -104,7 +104,7 @@ class ChattingDetailViewModel @Inject constructor(
     internal fun getChatMessages() = viewModelScope.launch {
         if (_callType.value == MessageCallType.END) return@launch
 
-        chatRepository.getChatRoomMessages(
+        chatRepository.retrieveChatRoomMessages(
             roomId = chattingRoomId,
             messageId = _chatMessages.value?.first()?.id,
         ).onSuccess { messages ->
@@ -114,7 +114,7 @@ class ChattingDetailViewModel @Inject constructor(
         }.onFailure { errorHelper.sendError(it) }
     }
 
-    internal fun subscribeChatMessage() = viewModelScope.launch {
+    internal suspend fun subscribeChatMessage() {
         chatRepository.subscribeChatMessage(receiverId)
             .catch {
                 errorHelper.sendError(it)

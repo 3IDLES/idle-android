@@ -63,9 +63,9 @@ internal class WorkerChattingFragment : BaseComposeFragment() {
             val myProfile by myProfile.collectAsStateWithLifecycle()
 
             LaunchedEffect(Unit) {
-                initProfile()
+                initWorkerChatting()
                 launch { getChatRoomList() }
-                subscribeChatMessage()
+                launch { subscribeChatMessage() }
             }
 
             if (chatRoomList != null) {
