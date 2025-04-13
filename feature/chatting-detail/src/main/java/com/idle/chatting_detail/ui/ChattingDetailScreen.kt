@@ -59,7 +59,7 @@ internal fun ChattingDetailScreen(
     var initialLoad by remember { mutableStateOf(true) }
     LaunchedEffect(chatMessages.size) {
         if (chatMessages.isNotEmpty() && (initialLoad || isNearEnd)) {
-            listState.animateScrollToItem(chatMessages.size - 1)
+            listState.scrollToItem(index = chatMessages.size - 1)
             initialLoad = false
         }
     }
