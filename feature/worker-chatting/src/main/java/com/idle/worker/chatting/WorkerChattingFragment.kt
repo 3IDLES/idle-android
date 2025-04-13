@@ -64,7 +64,7 @@ internal class WorkerChattingFragment : BaseComposeFragment() {
 
             LaunchedEffect(Unit) {
                 initWorkerChatting()
-                launch { getChatRoomList() }
+                launch { retrieveChatRoomList() }
                 launch { subscribeChatMessage() }
             }
 

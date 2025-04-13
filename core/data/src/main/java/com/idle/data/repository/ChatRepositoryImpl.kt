@@ -4,6 +4,7 @@ import com.idle.database.source.LocalChatDataSource
 import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.chat.ChatMessage
 import com.idle.domain.model.chat.ChatRoom
+import com.idle.domain.model.chat.ChatRoomWithOpponentInfo
 import com.idle.domain.model.chat.Message
 import com.idle.domain.model.chat.ReadMessage
 import com.idle.domain.repositorry.ChatRepository
@@ -32,34 +33,18 @@ class ChatRepositoryImpl @Inject constructor(
         localChatDataSource.getChatRooms(userId)
     }
 
-    override suspend fun loadChatRooms(userId: String, userType: UserType): Result<Unit> =
-        runCatching {
-            val chatRoomsResponse = when (userType) {
-                UserType.WORKER -> chatDataSource.getWorkerChatRooms()
-                UserType.CENTER -> chatDataSource.getCenterChatRooms()
-            }.getOrThrow()
-            chatRoomsResponse.map {
-                it.toVO()
-            }.map {
-                val chatRoom = ChatRoom(
-                    id = it.id,
-                    opponentId = it.opponentId,
-                    lastMessage = it.lastMessage,
-                    lastMessageTime = it.lastMessageTime,
-                    unReadMessageCount = it.unReadMessageCount,
-                )
-
-                if (it.unReadMessageCount > 0) {
-                    getChatRoomMessages(
-                        userType = userType,
-                        roomId = it.id,
-                        messageId = null,
-                    )
-                }
-
-                localChatDataSource.insertChatRoom(userId, chatRoom)
-            }
+    override suspend fun loadChatRooms(
+        userId: String,
+        userType: UserType
+    ): Result<List<ChatRoomWithOpponentInfo>> = runCatching {
+        val chatRoomsResponse = when (userType) {
+            UserType.WORKER -> chatDataSource.getWorkerChatRooms()
+            UserType.CENTER -> chatDataSource.getCenterChatRooms()
+        }.getOrThrow()
+        chatRoomsResponse.map {
+            it.toVO()
         }
+    }
 
     override suspend fun getChatRoomMessages(
         userType: UserType,

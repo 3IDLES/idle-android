@@ -52,7 +52,11 @@ class CenterChattingViewModel @Inject constructor(
         chatRepository.loadChatRooms(
             userId = _myProfile.value?.centerId ?: return,
             userType = UserType.CENTER
-        )
+        ).onSuccess {
+            _chatRoomMap.value = LinkedHashMap<String, ChatRoomWithOpponentInfo>().apply {
+                it.forEach { chatRoom -> put(chatRoom.id, chatRoom) }
+            }
+        }
     }
 
     internal fun subscribeChatMessage() = viewModelScope.launch {
