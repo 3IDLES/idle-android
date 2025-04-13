@@ -14,7 +14,7 @@ class LocalChatDataSource @Inject constructor(
     private val messagesDao: MessagesDao,
     private val chatRoomsDao: ChatRoomsDao,
 ) {
-    suspend fun insertMessages(message: ChatMessage) =
+    suspend fun insertMessage(message: ChatMessage) =
         messagesDao.insertMessage(message.let(ChatMessage::toMessageEntity))
 
     suspend fun getMessages(
@@ -29,7 +29,10 @@ class LocalChatDataSource @Inject constructor(
     suspend fun readMessages(
         roomId: String,
         opponentId: String,
-    ) = messagesDao.readMessages(roomId, opponentId)
+    ): Unit = messagesDao.readMessages(roomId, opponentId)
+
+    suspend fun isMessageExist(roomId: String, messageId: String): Boolean =
+        messagesDao.isMessageExist(roomId, messageId)
 
     suspend fun insertChatRoom(myId: String, chatRoom: ChatRoom) = chatRoomsDao.insertChatRoom(
         ChatRoomEntity(
@@ -39,7 +42,7 @@ class LocalChatDataSource @Inject constructor(
         )
     )
 
-    suspend fun isChatRoomExist(roomId: String): Boolean = chatRoomsDao.isChatRoomExists(roomId)
+    suspend fun isChatRoomExist(roomId: String): Boolean = chatRoomsDao.isChatRoomExist(roomId)
 
     suspend fun getChatRooms(userId: String): List<ChatRoom> =
         chatRoomsDao.getChatRoomsWithMessages(userId)

@@ -32,5 +32,5 @@ interface ChatRoomsDao {
             )
         """
     )
-    suspend fun isChatRoomExists(roomId: String): Boolean
+    suspend fun isChatRoomExist(roomId: String): Boolean
 }

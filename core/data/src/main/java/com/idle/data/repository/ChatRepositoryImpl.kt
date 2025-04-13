@@ -54,33 +54,37 @@ class ChatRepositoryImpl @Inject constructor(
             }
         }
 
-    override suspend fun retrieveChatRoomMessages(
-        roomId: String,
-        messageId: String?,
-    ): Result<List<ChatMessage>> = runCatching {
-        localChatDataSource.getMessages(
-            roomId = roomId,
-            lastMessageId = messageId,
-        )
-    }
-
     override suspend fun getChatRoomMessages(
         userType: UserType,
         roomId: String,
         messageId: String?,
     ): Result<List<ChatMessage>> = runCatching {
-        when (userType) {
-            UserType.WORKER -> chatDataSource.getWorkerChatRoomMessages(
-                roomId = roomId,
-                messageId = messageId,
-            )
+        if (messageId == null ||
+            !localChatDataSource.isMessageExist(roomId = roomId, messageId = messageId)
+        ) {
+            // 웹소켓으로 얻지 못한 메세지가 있을경우 정합성을 위해 서버에서 호출
+            when (userType) {
+                UserType.WORKER -> chatDataSource.getWorkerChatRoomMessages(
+                    roomId = roomId,
+                    messageId = messageId,
+                )
 
-            UserType.CENTER -> chatDataSource.getCenterChatRoomMessages(
-                roomId = roomId,
-                messageId = messageId,
-            )
-        }.mapCatching { messages -> messages.map { it.toVO() } }
-            .getOrThrow()
+                UserType.CENTER -> chatDataSource.getCenterChatRoomMessages(
+                    roomId = roomId,
+                    messageId = messageId,
+                )
+            }.mapCatching { response ->
+                response.map {
+                    val message = it.toVO()
+                    localChatDataSource.insertMessage(message)
+                }
+            }.getOrThrow()
+        }
+
+        return@runCatching localChatDataSource.getMessages(
+            roomId = roomId,
+            lastMessageId = messageId,
+        )
     }
 
     override suspend fun generateChatRooms(userType: UserType, opponentId: String): Result<String> =
@@ -112,7 +116,7 @@ class ChatRepositoryImpl @Inject constructor(
                             )
                         }
 
-                        localChatDataSource.insertMessages(message)
+                        localChatDataSource.insertMessage(message)
                     }
 
                     is ReadMessage -> {

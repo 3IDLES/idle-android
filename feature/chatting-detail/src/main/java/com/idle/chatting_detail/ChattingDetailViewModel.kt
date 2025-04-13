@@ -104,11 +104,12 @@ class ChattingDetailViewModel @Inject constructor(
     internal fun getChatMessages() = viewModelScope.launch {
         if (_callType.value == MessageCallType.END) return@launch
 
-        chatRepository.retrieveChatRoomMessages(
+        chatRepository.getChatRoomMessages(
             roomId = chattingRoomId,
             messageId = _chatMessages.value?.first()?.id,
+            userType = receiverUserType,
         ).onSuccess { messages ->
-            if (messages.size < 50) _callType.value = MessageCallType.END
+            if (messages.isEmpty()) _callType.value = MessageCallType.END
 
             _chatMessages.value = messages.plus(_chatMessages.value ?: emptyList())
         }.onFailure { errorHelper.sendError(it) }
