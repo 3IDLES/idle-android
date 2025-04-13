@@ -4,8 +4,10 @@ import android.util.Log
 import com.idle.network.BuildConfig
 import com.idle.network.api.ChatApi
 import com.idle.network.di.TokenManager
+import com.idle.network.model.chat.ChatMessageResponse
 import com.idle.network.model.chat.ChatResponse
 import com.idle.network.model.chat.GenerateChatRoomResponse
+import com.idle.network.model.chat.GetChatRoomResponse
 import com.idle.network.model.chat.ReadMessageRequest
 import com.idle.network.model.chat.SendMessageRequest
 import com.idle.network.serializer.ChatResponseSerializer
@@ -35,6 +37,34 @@ class ChatDataSource @Inject constructor(
     private val chatResponseSerializer: ChatResponseSerializer,
     private val json: Json,
 ) {
+    suspend fun getWorkerChatRooms(): Result<List<GetChatRoomResponse>> =
+        safeApiCall { chatApi.getWorkerChatRooms() }
+
+    suspend fun getCenterChatRooms(): Result<List<GetChatRoomResponse>> =
+        safeApiCall { chatApi.getCenterChatRooms() }
+
+    suspend fun getWorkerChatRoomMessages(
+        roomId: String,
+        messageId: String?,
+    ): Result<List<ChatMessageResponse>> =
+        safeApiCall {
+            chatApi.getWorkerChatRoomMessages(
+                chatRoomId = roomId,
+                messageId = messageId
+            )
+        }
+
+    suspend fun getCenterChatRoomMessages(
+        roomId: String,
+        messageId: String?,
+    ): Result<List<ChatMessageResponse>> =
+        safeApiCall {
+            chatApi.getCenterChatRoomMessages(
+                chatRoomId = roomId,
+                messageId = messageId
+            )
+        }
+
     suspend fun generateWorkerChatRoom(opponentId: String): Result<GenerateChatRoomResponse> =
         safeApiCall { chatApi.generateWorkerChatRoom(opponentId) }
 

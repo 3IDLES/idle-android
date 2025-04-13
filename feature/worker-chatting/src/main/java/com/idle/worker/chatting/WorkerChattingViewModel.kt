@@ -18,7 +18,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -43,19 +42,25 @@ class WorkerChattingViewModel @Inject constructor(
             initialValue = null,
         )
 
-    internal suspend fun initProfile() {
+    internal suspend fun initWorkerChatting() {
         getMyWorkerProfileUseCase().onSuccess { profile ->
             _myProfile.value = profile
         }.onFailure { errorHelper.sendError(it) }
+
+        chatRepository.loadChatRooms(
+            userId = _myProfile.value?.workerId ?: return,
+            userType = UserType.WORKER,
+        )
     }
 
-    internal fun subscribeChatMessage() = viewModelScope.launch {
-        chatRepository.subscribeChatMessage(_myProfile.value!!.workerId).collect { message ->
-            when (message) {
-                is ChatMessage -> handleNewChat(message)
-                is ReadMessage -> Unit
+    internal suspend fun subscribeChatMessage() {
+        chatRepository.subscribeChatMessage(_myProfile.value?.workerId ?: return)
+            .collect { message ->
+                when (message) {
+                    is ChatMessage -> handleNewChat(message)
+                    is ReadMessage -> Unit
+                }
             }
-        }
     }
 
     private suspend fun handleNewChat(chatMessage: ChatMessage) {
@@ -93,7 +98,7 @@ class WorkerChattingViewModel @Inject constructor(
     internal suspend fun getChatRoomList() {
         getChatRoomsUseCase(
             userType = UserType.WORKER,
-            userId = _myProfile.value!!.workerId,
+            userId = _myProfile.value?.workerId ?: return,
         ).onSuccess {
             _chatRoomMap.value = LinkedHashMap<String, ChatRoomWithOpponentInfo>().apply {
                 it.forEach { chatRoom -> put(chatRoom.id, chatRoom) }

@@ -27,11 +27,33 @@ class ChatRepositoryImpl @Inject constructor(
     override suspend fun disconnectWebSocket(): Result<Unit> =
         chatDataSource.disconnectWebSocket()
 
-    override suspend fun getChatRooms(userId: String): Result<List<ChatRoom>> = runCatching {
+    override suspend fun retrieveChatRooms(userId: String): Result<List<ChatRoom>> = runCatching {
         localChatDataSource.getChatRooms(userId)
     }
 
-    override suspend fun getChatRoomMessages(
+    override suspend fun loadChatRooms(userId: String, userType: UserType): Result<Unit> =
+        runCatching {
+            val chatRoomsResponse = when (userType) {
+                UserType.WORKER -> chatDataSource.getWorkerChatRooms()
+                UserType.CENTER -> chatDataSource.getCenterChatRooms()
+            }.getOrThrow()
+
+            chatRoomsResponse.map {
+                it.toVO()
+            }.map {
+                val chatRoom = ChatRoom(
+                    id = it.id,
+                    opponentId = it.opponentId,
+                    lastMessage = it.lastMessage,
+                    lastMessageTime = it.lastMessageTime,
+                    unReadMessageCount = it.unReadMessageCount,
+                )
+
+                localChatDataSource.insertChatRoom(userId, chatRoom)
+            }
+        }
+
+    override suspend fun retrieveChatRoomMessages(
         roomId: String,
         messageId: String?,
     ): Result<List<ChatMessage>> = runCatching {
@@ -39,6 +61,25 @@ class ChatRepositoryImpl @Inject constructor(
             roomId = roomId,
             lastMessageId = messageId,
         )
+    }
+
+    override suspend fun getChatRoomMessages(
+        userType: UserType,
+        roomId: String,
+        messageId: String?,
+    ): Result<List<ChatMessage>> = runCatching {
+        when (userType) {
+            UserType.WORKER -> chatDataSource.getWorkerChatRoomMessages(
+                roomId = roomId,
+                messageId = messageId,
+            )
+
+            UserType.CENTER -> chatDataSource.getCenterChatRoomMessages(
+                roomId = roomId,
+                messageId = messageId,
+            )
+        }.mapCatching { messages -> messages.map { it.toVO() } }
+            .getOrThrow()
     }
 
     override suspend fun generateChatRooms(userType: UserType, opponentId: String): Result<String> =

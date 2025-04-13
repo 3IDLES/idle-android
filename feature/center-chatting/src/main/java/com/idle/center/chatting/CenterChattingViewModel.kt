@@ -44,23 +44,29 @@ class CenterChattingViewModel @Inject constructor(
             initialValue = null,
         )
 
-    internal suspend fun initProfileData() {
+    internal suspend fun initCenterChatting() {
         getMyCenterProfileUseCase().onSuccess {
             _myProfile.value = it
         }.onFailure { errorHelper.sendError(it) }
+
+        chatRepository.loadChatRooms(
+            userId = _myProfile.value?.centerId ?: return,
+            userType = UserType.CENTER
+        )
     }
 
     internal fun subscribeChatMessage() = viewModelScope.launch {
-        chatRepository.subscribeChatMessage(_myProfile.value!!.centerId).collect { message ->
-            when (message) {
-                is ChatMessage -> handleChatMessage(message)
-                is ReadMessage -> Unit
+        chatRepository.subscribeChatMessage(_myProfile.value?.centerId ?: return@launch)
+            .collect { message ->
+                when (message) {
+                    is ChatMessage -> handleChatMessage(message)
+                    is ReadMessage -> Unit
+                }
             }
-        }
     }
 
     private suspend fun handleChatMessage(message: ChatMessage) {
-        val updatedMap = LinkedHashMap(_chatRoomMap.value) // 기존 맵을 복사
+        val updatedMap = LinkedHashMap(_chatRoomMap.value)
         val roomId = message.roomId
         val chatRoom = updatedMap[roomId]
 
@@ -94,7 +100,7 @@ class CenterChattingViewModel @Inject constructor(
     internal suspend fun getChatRoomList() {
         getChatRoomsUseCase(
             userType = UserType.CENTER,
-            userId = _myProfile.value!!.centerId
+            userId = _myProfile.value?.centerId ?: return
         ).onSuccess {
             _chatRoomMap.value = LinkedHashMap<String, ChatRoomWithOpponentInfo>().apply {
                 it.forEach { chatRoom -> put(chatRoom.id, chatRoom) }

@@ -20,26 +20,25 @@ class GetChatRoomsUseCase @Inject constructor(
     suspend operator fun invoke(
         userType: UserType,
         userId: String,
-    ): Result<List<ChatRoomWithOpponentInfo>> = coroutineScope {
-        runCatching {
-            val chatRooms: List<ChatRoom> = chatRepository.getChatRooms(userId).getOrThrow()
+    ): Result<List<ChatRoomWithOpponentInfo>> = runCatching {
+        val chatRooms = chatRepository.retrieveChatRooms(userId).getOrThrow()
+
+        coroutineScope {
             val opponentProfiles = chatRooms.map { chatRoom ->
                 async {
                     when (userType) {
-                        UserType.CENTER -> profileRepository.getWorkerProfile(chatRoom.opponentId)
-                            .getOrThrow()
+                        UserType.CENTER ->
+                            profileRepository.getWorkerProfile(chatRoom.opponentId).getOrThrow()
 
-                        UserType.WORKER -> profileRepository.getCenterProfile(chatRoom.opponentId)
-                            .getOrThrow()
+                        UserType.WORKER ->
+                            profileRepository.getCenterProfile(chatRoom.opponentId).getOrThrow()
                     }
                 }
             }.awaitAll()
 
-            val roomsWithInfo = chatRooms.zip(opponentProfiles) { chatRoom, profile ->
+            chatRooms.zip(opponentProfiles) { chatRoom, profile ->
                 mapToRoomWithOpponentInfo(chatRoom, profile)
-            }
-
-            roomsWithInfo
+            }.sortedBy { it.lastMessageTime }
         }
     }
 
@@ -68,3 +67,4 @@ class GetChatRoomsUseCase @Inject constructor(
         )
     }
 }
+

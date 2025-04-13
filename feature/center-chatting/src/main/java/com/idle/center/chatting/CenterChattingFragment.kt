@@ -63,9 +63,9 @@ internal class CenterChattingFragment : BaseComposeFragment() {
             val myProfile by myProfile.collectAsStateWithLifecycle()
 
             LaunchedEffect(Unit) {
-                initProfileData()
+                initCenterChatting()
                 launch { getChatRoomList() }
-                subscribeChatMessage()
+                launch { subscribeChatMessage() }
             }
 
             CenterChattingScreen(
