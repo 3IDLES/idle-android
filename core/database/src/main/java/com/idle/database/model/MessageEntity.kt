@@ -16,8 +16,6 @@ import java.time.LocalDateTime
             entity = ChatRoomEntity::class,
             parentColumns = arrayOf("id"),
             childColumns = arrayOf("roomId"),
-            onDelete = ForeignKey.CASCADE,
-            onUpdate = ForeignKey.CASCADE,
         )
     )
 )
