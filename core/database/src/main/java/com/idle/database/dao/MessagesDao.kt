@@ -39,4 +39,19 @@ interface MessagesDao {
         roomId: String,
         opponentId: String,
     )
+
+    @Query(
+        """
+            SELECT EXISTS(
+                SELECT 1
+                FROM message
+                WHERE roomId = :roomId
+                AND id = :messageId
+            )
+        """
+    )
+    suspend fun isMessageExist(
+        roomId: String,
+        messageId: String,
+    ): Boolean
 }

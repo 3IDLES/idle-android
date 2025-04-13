@@ -53,6 +53,17 @@ class WorkerChattingViewModel @Inject constructor(
         )
     }
 
+    internal suspend fun getChatRoomList() {
+        getChatRoomsUseCase(
+            userType = UserType.WORKER,
+            userId = _myProfile.value?.workerId ?: return,
+        ).onSuccess {
+            _chatRoomMap.value = LinkedHashMap<String, ChatRoomWithOpponentInfo>().apply {
+                it.forEach { chatRoom -> put(chatRoom.id, chatRoom) }
+            }
+        }.onFailure { errorHelper.sendError(it) }
+    }
+
     internal suspend fun subscribeChatMessage() {
         chatRepository.subscribeChatMessage(_myProfile.value?.workerId ?: return)
             .collect { message ->
@@ -64,7 +75,7 @@ class WorkerChattingViewModel @Inject constructor(
     }
 
     private suspend fun handleNewChat(chatMessage: ChatMessage) {
-        val updatedMap = LinkedHashMap(_chatRoomMap.value) // 기존 맵을 복사
+        val updatedMap = LinkedHashMap(_chatRoomMap.value)
         val roomId = chatMessage.roomId
         val chatRoom = updatedMap[roomId]
 
@@ -93,16 +104,5 @@ class WorkerChattingViewModel @Inject constructor(
         }
 
         _chatRoomMap.value = updatedMap
-    }
-
-    internal suspend fun getChatRoomList() {
-        getChatRoomsUseCase(
-            userType = UserType.WORKER,
-            userId = _myProfile.value?.workerId ?: return,
-        ).onSuccess {
-            _chatRoomMap.value = LinkedHashMap<String, ChatRoomWithOpponentInfo>().apply {
-                it.forEach { chatRoom -> put(chatRoom.id, chatRoom) }
-            }
-        }.onFailure { errorHelper.sendError(it) }
     }
 }

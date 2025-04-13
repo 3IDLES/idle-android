@@ -13,11 +13,6 @@ interface ChatRepository {
     suspend fun retrieveChatRooms(userId: String): Result<List<ChatRoom>>
     suspend fun loadChatRooms(userId: String, userType: UserType): Result<Unit>
 
-    suspend fun retrieveChatRoomMessages(
-        roomId: String,
-        messageId: String?,
-    ): Result<List<ChatMessage>>
-
     suspend fun getChatRoomMessages(
         userType: UserType,
         roomId: String,
