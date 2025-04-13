@@ -12,7 +12,7 @@ import com.idle.network.model.chat.ReadMessageRequest
 import com.idle.network.model.chat.SendMessageRequest
 import com.idle.network.source.ChatDataSource
 import com.idle.network.util.MAX_RETRY_ATTEMPTS
-import com.idle.network.util.calculateBackoffTime
+import com.idle.network.util.calculateEqualJitter
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -122,7 +122,7 @@ class ChatRepositoryImpl @Inject constructor(
             }.retryWhen { cause, attempt ->
                 if (cause is IOException && attempt < MAX_RETRY_ATTEMPTS) {
                     connectWebSocket()
-                    delay(calculateBackoffTime(attempt.toInt()))
+                    delay(calculateEqualJitter(attempt.toInt()))
                     true
                 } else {
                     false
