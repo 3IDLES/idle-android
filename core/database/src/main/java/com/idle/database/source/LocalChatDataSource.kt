@@ -26,6 +26,11 @@ class LocalChatDataSource @Inject constructor(
             lastMessageId = lastMessageId,
         ).map(MessageEntity::toDomain).reversed()
 
+    suspend fun readMessages(
+        roomId: String,
+        opponentId: String,
+    ) = messagesDao.readMessages(roomId, opponentId)
+
     suspend fun insertChatRoom(myId: String, chatRoom: ChatRoom) = chatRoomsDao.insertChatRoom(
         ChatRoomEntity(
             id = chatRoom.id,
