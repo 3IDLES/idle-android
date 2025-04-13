@@ -46,15 +46,6 @@ class WorkerChattingViewModel @Inject constructor(
         getMyWorkerProfileUseCase().onSuccess { profile ->
             _myProfile.value = profile
         }.onFailure { errorHelper.sendError(it) }
-
-        chatRepository.loadChatRooms(
-            userId = _myProfile.value?.workerId ?: return,
-            userType = UserType.WORKER,
-        ).onSuccess {
-            _chatRoomMap.value = LinkedHashMap<String, ChatRoomWithOpponentInfo>().apply {
-                it.forEach { chatRoom -> put(chatRoom.id, chatRoom) }
-            }
-        }
     }
 
     internal suspend fun retrieveChatRoomList() {
@@ -66,6 +57,17 @@ class WorkerChattingViewModel @Inject constructor(
                 it.forEach { chatRoom -> put(chatRoom.id, chatRoom) }
             }
         }.onFailure { errorHelper.sendError(it) }
+    }
+
+    internal suspend fun loadChatRoomList() {
+        chatRepository.loadChatRooms(
+            userId = _myProfile.value?.workerId ?: return,
+            userType = UserType.WORKER,
+        ).onSuccess {
+            _chatRoomMap.value = LinkedHashMap<String, ChatRoomWithOpponentInfo>().apply {
+                it.forEach { chatRoom -> put(chatRoom.id, chatRoom) }
+            }
+        }
     }
 
     internal suspend fun subscribeChatMessage() {
