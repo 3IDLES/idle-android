@@ -11,7 +11,7 @@ fun LocalDateTime.formatRelativeDateTime(): String {
     val nowInSeoul = LocalDateTime.now(seoulZone)
 
     return when {
-        this.isAfter(nowInSeoul) -> "미래"
+        this.isAfter(nowInSeoul) -> ""
 
         ChronoUnit.HOURS.between(this, nowInSeoul) < 24 -> {
             // 하루 이내일 경우: "오후 XX시 XX분"
@@ -35,7 +35,7 @@ fun LocalDateTime.formatRelativeTimeDescription(): String {
     val currentTime = LocalDateTime.now(seoulZone)
 
     if (this.isAfter(currentTime)) {
-        return "미래"
+        return ""
     }
 
     val minutesDifference = ChronoUnit.MINUTES.between(this, currentTime)

@@ -11,7 +11,7 @@ class TimeUtilTest {
     private val seoulZone = ZoneId.of("Asia/Seoul")
 
     @Test
-    fun `현재보다 이후의 시간은 '미래'로 표기된다`() {
+    fun `현재보다 이후의 시간은 공백으로 표기된다`() {
         // Given
         val futureDateTime = LocalDateTime.now(seoulZone).plusDays(1)
 
@@ -19,7 +19,7 @@ class TimeUtilTest {
         val result = futureDateTime.formatRelativeDateTime()
 
         // Then
-        assertEquals("미래", result)
+        assertEquals("", result)
     }
 
     @Test
@@ -112,7 +112,7 @@ class TimeUtilTest {
     }
 
     @Test
-    fun `현재 시간 보다 이후의 시간은 미래라고 표기된다`() {
+    fun `현재 시간 보다 이후의 시간은 공백으로 표기된다`() {
         // Given
         val time = LocalDateTime.now(seoulZone).plusHours(2)
 
@@ -120,6 +120,6 @@ class TimeUtilTest {
         val result = time.formatRelativeTimeDescription()
 
         // Then
-        assertEquals("미래", result)
+        assertEquals("", result)
     }
 }

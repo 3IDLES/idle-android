@@ -1,5 +1,6 @@
 package com.idle.chatting_detail
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -128,6 +129,8 @@ class ChattingDetailViewModel @Inject constructor(
                     }
 
                     is ReadMessage -> {
+                        Log.d("Test", message.toString())
+
                         _chatMessages.value = _chatMessages.value?.map {
                             if (it.receiverId == message.opponentId) it.copy(isRead = true) else it
                         }
