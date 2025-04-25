@@ -1,6 +1,5 @@
 package com.idle.chatting_detail
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -44,6 +43,9 @@ class ChattingDetailViewModel @Inject constructor(
     )
     val receiverId: String = requireNotNull(savedStateHandle["receiverId"]) {
         "receiverId is missing in savedStateHandle"
+    }
+    private val fromJobPosting: Boolean = requireNotNull(savedStateHandle["fromJobPosting"]) {
+        "fromJobPosting is missing in savedStateHandle"
     }
 
     private val _writingText = MutableStateFlow<String>("")
@@ -97,40 +99,62 @@ class ChattingDetailViewModel @Inject constructor(
                     errorHelper.sendError(it)
                 }
             }
-
-            else -> Unit
         }
     }
 
-    internal fun getChatMessages() = viewModelScope.launch {
-        if (_callType.value == MessageCallType.END) return@launch
+    internal suspend fun getChatMessages() {
+        if (_callType.value == MessageCallType.END) return
 
-        chatRepository.getChatRoomMessages(
-            roomId = chattingRoomId,
-            messageId = _chatMessages.value?.first()?.id,
-            userType = receiverUserType,
-        ).onSuccess { messages ->
-            if (messages.isEmpty()) _callType.value = MessageCallType.END
+        val myId = when (receiverUserType) {
+            UserType.WORKER -> _workerProfile.value?.workerId ?: return
+            UserType.CENTER -> _centerProfile.value?.centerId ?: return
+        }
 
-            _chatMessages.value = messages.plus(_chatMessages.value ?: emptyList())
-        }.onFailure { errorHelper.sendError(it) }
+        if (fromJobPosting) {
+            chatRepository.retrieveChatRoomMessages(
+                roomId = chattingRoomId,
+                messageId = _chatMessages.value?.first()?.id,
+            ).onSuccess { messages ->
+                if (messages.isEmpty()) _callType.value = MessageCallType.END
+
+                _chatMessages.value = messages.plus(_chatMessages.value ?: emptyList())
+            }.onFailure {
+                errorHelper.sendError(it)
+            }
+        } else {
+            chatRepository.getChatRoomMessages(
+                roomId = chattingRoomId,
+                messageId = _chatMessages.value?.first()?.id,
+                userType = receiverUserType,
+                myId = myId,
+            ).onSuccess { messages ->
+                if (messages.isEmpty()) _callType.value = MessageCallType.END
+
+                _chatMessages.value = messages.plus(_chatMessages.value ?: emptyList())
+            }.onFailure {
+                errorHelper.sendError(it)
+            }
+        }
     }
 
     internal suspend fun subscribeChatMessage() {
-        chatRepository.subscribeChatMessage(receiverId)
+        val myId = when (receiverUserType) {
+            UserType.WORKER -> _workerProfile.value?.workerId ?: return
+            UserType.CENTER -> _centerProfile.value?.centerId ?: return
+        }
+
+        chatRepository.subscribeChatMessage(myId)
             .catch {
                 errorHelper.sendError(it)
             }.collect { message ->
                 when (message) {
                     is ChatMessage -> {
-                        if (message.senderId != receiverId) readMessage()
+                        if (message.senderId != myId) readMessage()
 
                         _chatMessages.value = (_chatMessages.value ?: emptyList()) + message
                     }
 
                     is ReadMessage -> {
-                        Log.d("Test", message.toString())
-
                         _chatMessages.value = _chatMessages.value?.map {
                             if (it.receiverId == message.opponentId) it.copy(isRead = true) else it
                         }
@@ -143,19 +167,22 @@ class ChattingDetailViewModel @Inject constructor(
         val receiverId = if (receiverUserType == UserType.CENTER) _workerProfile.value!!.workerId
         else _centerProfile.value!!.centerId
 
-        val senderName = if (receiverUserType == UserType.CENTER) _centerProfile.value!!.centerName
-        else _workerProfile.value!!.workerName
+        val myId = if (receiverUserType == UserType.CENTER) _centerProfile.value!!.centerId
+        else _workerProfile.value!!.workerId
+
+        val senderName =
+            if (receiverUserType == UserType.CENTER) _centerProfile.value!!.centerName
+            else _workerProfile.value!!.workerName
 
         chatRepository.sendMessage(
             chatroomId = chattingRoomId,
+            myId = myId,
             receiverId = receiverId,
             senderName = senderName,
             content = _writingText.value,
         ).onSuccess {
             _writingText.value = ""
-        }.onFailure {
-            errorHelper.sendError(it)
-        }
+        }.onFailure { errorHelper.sendError(it) }
     }
 
     internal suspend fun readMessage() {

@@ -97,9 +97,9 @@ class CenterChattingViewModel @Inject constructor(
             userType = UserType.CENTER,
             userId = _myProfile.value?.centerId ?: return
         ).onSuccess {
-            _chatRoomMap.value = LinkedHashMap<String, ChatRoomWithOpponentInfo>().apply {
-                it.forEach { chatRoom -> put(chatRoom.id, chatRoom) }
-            }
+            val newMap = LinkedHashMap<String, ChatRoomWithOpponentInfo>(_chatRoomMap.value)
+            it.forEach { chatRoom -> newMap[chatRoom.id] = chatRoom }
+            _chatRoomMap.value = newMap
         }.onFailure { errorHelper.sendError(it) }
     }
 
@@ -108,9 +108,9 @@ class CenterChattingViewModel @Inject constructor(
             userId = _myProfile.value?.centerId ?: return,
             userType = UserType.CENTER
         ).onSuccess {
-            _chatRoomMap.value = LinkedHashMap<String, ChatRoomWithOpponentInfo>().apply {
-                it.forEach { chatRoom -> put(chatRoom.id, chatRoom) }
-            }
+            val newMap = LinkedHashMap<String, ChatRoomWithOpponentInfo>(_chatRoomMap.value)
+            it.forEach { chatRoom -> newMap[chatRoom.id] = chatRoom }
+            _chatRoomMap.value = newMap
         }
     }
 }

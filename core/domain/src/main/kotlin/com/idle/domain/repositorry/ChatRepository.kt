@@ -17,16 +17,27 @@ interface ChatRepository {
         userType: UserType
     ): Result<List<ChatRoomWithOpponentInfo>>
 
-    suspend fun getChatRoomMessages(
-        userType: UserType,
+    suspend fun retrieveChatRoomMessages(
         roomId: String,
         messageId: String?,
     ): Result<List<ChatMessage>>
 
-    suspend fun generateChatRooms(userType: UserType, opponentId: String): Result<String>
+    suspend fun getChatRoomMessages(
+        userType: UserType,
+        roomId: String,
+        myId: String,
+        messageId: String?,
+    ): Result<List<ChatMessage>>
+
+    suspend fun generateChatRooms(
+        userType: UserType,
+        opponentId: String,
+    ): Result<String>
+
     suspend fun subscribeChatMessage(userId: String): Flow<Message>
     suspend fun sendMessage(
         chatroomId: String,
+        myId: String,
         receiverId: String,
         senderName: String,
         content: String,

@@ -1,5 +1,6 @@
 package com.idle.worker.chatting
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.domain.model.auth.UserType
@@ -53,9 +54,9 @@ class WorkerChattingViewModel @Inject constructor(
             userType = UserType.WORKER,
             userId = _myProfile.value?.workerId ?: return,
         ).onSuccess {
-            _chatRoomMap.value = LinkedHashMap<String, ChatRoomWithOpponentInfo>().apply {
-                it.forEach { chatRoom -> put(chatRoom.id, chatRoom) }
-            }
+            val newMap = LinkedHashMap<String, ChatRoomWithOpponentInfo>(_chatRoomMap.value)
+            it.forEach { chatRoom -> newMap[chatRoom.id] = chatRoom }
+            _chatRoomMap.value = newMap
         }.onFailure { errorHelper.sendError(it) }
     }
 
@@ -64,9 +65,9 @@ class WorkerChattingViewModel @Inject constructor(
             userId = _myProfile.value?.workerId ?: return,
             userType = UserType.WORKER,
         ).onSuccess {
-            _chatRoomMap.value = LinkedHashMap<String, ChatRoomWithOpponentInfo>().apply {
-                it.forEach { chatRoom -> put(chatRoom.id, chatRoom) }
-            }
+            val newMap = LinkedHashMap<String, ChatRoomWithOpponentInfo>(_chatRoomMap.value)
+            it.forEach { chatRoom -> newMap[chatRoom.id] = chatRoom }
+            _chatRoomMap.value = newMap
         }
     }
 

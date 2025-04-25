@@ -6,10 +6,10 @@ import androidx.core.net.toUri
 import androidx.navigation.NavController
 import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.NavOptions
+import com.idle.domain.model.auth.UserType
 import com.idle.navigation.DeepLinkDestination.Auth
 import com.idle.navigation.DeepLinkDestination.CenterSetting
 import com.idle.navigation.DeepLinkDestination.WorkerSetting
-import com.idle.domain.model.auth.UserType
 
 sealed class DeepLinkDestination(
     val addressRes: Int,
@@ -45,16 +45,18 @@ sealed class DeepLinkDestination(
 
     data class ChattingDetail(
         val chattingRoomId: String,
-        val receiverId: String,
+        val myId: String,
         val receiverUserType: String,
-        val senderId: String,
+        val opponentId: String,
+        val fromJobPosting: Boolean,
     ) : DeepLinkDestination(
         addressRes = R.string.chatting_detail_deeplink_url,
         params = mapOf(
             "chattingRoomId" to chattingRoomId,
-            "receiverId" to receiverId,
+            "receiverId" to myId,
             "receiverUserType" to receiverUserType,
-            "senderId" to senderId,
+            "senderId" to opponentId,
+            "fromJobPosting" to fromJobPosting,
         )
     )
 

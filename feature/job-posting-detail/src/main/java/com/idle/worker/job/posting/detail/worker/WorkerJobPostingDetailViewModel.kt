@@ -155,9 +155,10 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
                 NavigationEvent.To(
                     DeepLinkDestination.ChattingDetail(
                         chattingRoomId = it,
-                        receiverId = _profile.value?.workerId ?: return@onSuccess,
+                        myId = _profile.value?.workerId ?: return@onSuccess,
                         receiverUserType = UserType.WORKER.apiValue,
-                        senderId = opponentId,
+                        opponentId = opponentId,
+                        fromJobPosting = true,
                     )
                 )
             )

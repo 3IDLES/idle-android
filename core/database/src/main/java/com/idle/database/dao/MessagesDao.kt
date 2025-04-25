@@ -31,7 +31,7 @@ interface MessagesDao {
             UPDATE message
             SET isRead = 1
             WHERE roomId = :roomId
-                AND receiverId = :opponentId
+                AND senderId = :opponentId
                 AND isRead = 0
         """
     )

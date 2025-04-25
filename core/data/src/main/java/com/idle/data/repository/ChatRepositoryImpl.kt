@@ -46,9 +46,20 @@ class ChatRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun retrieveChatRoomMessages(
+        roomId: String,
+        messageId: String?
+    ): Result<List<ChatMessage>> = runCatching {
+        localChatDataSource.getMessages(
+            roomId = roomId,
+            lastMessageId = messageId,
+        )
+    }
+
     override suspend fun getChatRoomMessages(
         userType: UserType,
         roomId: String,
+        myId: String,
         messageId: String?,
     ): Result<List<ChatMessage>> = runCatching {
         if (messageId == null ||
@@ -68,6 +79,18 @@ class ChatRepositoryImpl @Inject constructor(
             }.mapCatching { response ->
                 response.map {
                     val message = it.toVO()
+                    if (!localChatDataSource.isChatRoomExist(message.roomId)) {
+                        localChatDataSource.insertChatRoom(
+                            myId = myId,
+                            chatRoom = ChatRoom(
+                                id = message.roomId,
+                                opponentId = if (myId == message.senderId) message.receiverId else message.senderId,
+                                lastMessage = message.content,
+                                lastMessageTime = message.createdAt,
+                                unReadMessageCount = 1,
+                            )
+                        )
+                    }
                     localChatDataSource.insertMessage(message)
                 }
             }.getOrThrow()
@@ -79,20 +102,23 @@ class ChatRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun generateChatRooms(userType: UserType, opponentId: String): Result<String> =
+    override suspend fun generateChatRooms(
+        userType: UserType,
+        opponentId: String
+    ): Result<String> =
         runCatching {
             when (userType) {
                 UserType.WORKER -> chatDataSource.generateWorkerChatRoom(opponentId)
                 UserType.CENTER -> chatDataSource.generateCenterChatRoom(opponentId)
-            }.mapCatching { it.toVO() }
-                .getOrThrow()
+            }.mapCatching {
+                it.toVO()
+            }.getOrThrow()
         }
 
     override suspend fun subscribeChatMessage(userId: String): Flow<Message> =
         chatDataSource.subscribeChatMessage(userId)
             .map {
                 val message = it.toVO()
-
                 when (message) {
                     is ChatMessage -> {
                         if (!localChatDataSource.isChatRoomExist(message.roomId)) {
@@ -131,6 +157,7 @@ class ChatRepositoryImpl @Inject constructor(
 
     override suspend fun sendMessage(
         chatroomId: String,
+        myId: String,
         receiverId: String,
         senderName: String,
         content: String,

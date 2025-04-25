@@ -21,6 +21,9 @@
         <argument
             android:name="senderId"
             app:argType="string" />
+        <argument
+            android:name="fromJobPosting"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/seeAllChatFragment"

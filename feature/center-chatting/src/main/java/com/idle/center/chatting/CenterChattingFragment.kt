@@ -50,7 +50,6 @@ import com.idle.domain.util.formatUnReadNumber
 import com.idle.navigation.DeepLinkDestination
 import com.idle.navigation.NavigationEvent
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 internal class CenterChattingFragment : BaseComposeFragment() {
@@ -64,11 +63,9 @@ internal class CenterChattingFragment : BaseComposeFragment() {
 
             LaunchedEffect(Unit) {
                 initCenterChatting()
-                launch {
-                    retrieveChatRoomList()
-                    loadChatRoomList()
-                }
-                launch { subscribeChatMessage() }
+                retrieveChatRoomList()
+                loadChatRoomList()
+                subscribeChatMessage()
             }
 
             CenterChattingScreen(
@@ -184,9 +181,10 @@ internal fun ChatRoomItem(
                 navigateTo(
                     DeepLinkDestination.ChattingDetail(
                         chattingRoomId = chatRoom.id,
-                        receiverId = myProfile!!.centerId,
-                        senderId = chatRoom.opponentId,
+                        myId = myProfile!!.centerId,
+                        opponentId = chatRoom.opponentId,
                         receiverUserType = UserType.WORKER.apiValue,
+                        fromJobPosting = false,
                     )
                 )
             },
