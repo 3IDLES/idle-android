@@ -46,16 +46,16 @@ sealed class DeepLinkDestination(
     data class ChattingDetail(
         val chattingRoomId: String,
         val myId: String,
-        val receiverUserType: String,
+        val myUserType: String,
         val opponentId: String,
         val fromJobPosting: Boolean,
     ) : DeepLinkDestination(
         addressRes = R.string.chatting_detail_deeplink_url,
         params = mapOf(
             "chattingRoomId" to chattingRoomId,
-            "receiverId" to myId,
-            "receiverUserType" to receiverUserType,
-            "senderId" to opponentId,
+            "myId" to myId,
+            "myUserType" to myUserType,
+            "opponentId" to opponentId,
             "fromJobPosting" to fromJobPosting,
         )
     )

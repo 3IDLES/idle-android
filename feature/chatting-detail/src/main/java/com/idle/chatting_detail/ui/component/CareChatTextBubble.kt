@@ -50,10 +50,8 @@ fun CareChatSenderTextBubbleWithImage(
         modifier = modifier.fillMaxWidth()
     ) {
         AsyncImage(
-            model = imageUrl
-                ?: painterResource(com.idle.designresource.R.drawable.ic_notification_placeholder),
-            placeholder =
-            painterResource(com.idle.designresource.R.drawable.ic_notification_placeholder),
+            model = imageUrl ?: com.idle.designresource.R.drawable.ic_notification_placeholder,
+            placeholder = painterResource(com.idle.designresource.R.drawable.ic_notification_placeholder),
             error = painterResource(com.idle.designresource.R.drawable.ic_notification_placeholder),
             onError = { Log.d("test", imageUrl.toString()) },
             contentDescription = null,

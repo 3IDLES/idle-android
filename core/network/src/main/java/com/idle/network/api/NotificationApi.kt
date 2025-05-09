@@ -14,21 +14,21 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface NotificationApi {
-    @POST("/api/v1/fcm/token")
+    @POST("api/v1/fcm/token")
     suspend fun postFCMToken(@Body postFcmTokenRequest: PostFcmTokenRequest): Response<Unit>
 
     @HTTP(method = "DELETE", path = "/api/v1/fcm/token", hasBody = true)
     suspend fun deleteFCMToken(@Body deleteFcmTokenRequest: DeleteFcmTokenRequest): Response<Unit>
 
-    @GET("/api/v1/notifications/my")
+    @GET("api/v1/notifications/my")
     suspend fun getMyNotifications(
         @Query("next") next: String?,
         @Query("limit") limit: Int,
     ): Response<GetMyNotificationResponse>
 
-    @PATCH("/api/v1/notifications/{notification-id}")
+    @PATCH("api/v1/notifications/{notification-id}")
     suspend fun readNotification(@Path("notification-id") notificationId: String): Response<Unit>
 
-    @GET("/api/v1/notifications/count")
+    @GET("api/v1/notifications/count")
     suspend fun getUnreadNotificationCount(): Response<GetUnreadNotificationCountResponse>
 }

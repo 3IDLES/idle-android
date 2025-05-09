@@ -1,5 +1,6 @@
 package com.idle.chatting_detail
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -35,14 +36,15 @@ class ChattingDetailViewModel @Inject constructor(
     private val chattingRoomId: String = requireNotNull(savedStateHandle["chattingRoomId"]) {
         "chattingRoomId is missing in savedStateHandle"
     }
-    private val senderId: String = requireNotNull(savedStateHandle["senderId"]) {
-        "senderId is missing in savedStateHandle"
+    private val opponentId: String = requireNotNull(savedStateHandle["opponentId"]) {
+        "opponentId is missing in savedStateHandle"
     }
-    val receiverUserType: UserType = UserType.create(
-        requireNotNull(savedStateHandle["receiverUserType"]) { "receiverUserType is missing" }
-    )
-    val receiverId: String = requireNotNull(savedStateHandle["receiverId"]) {
-        "receiverId is missing in savedStateHandle"
+    val myUserType: UserType =
+        UserType.create(
+            requireNotNull(savedStateHandle["myUserType"]) { "myUserType is missing" }
+        )
+    val myId: String = requireNotNull(savedStateHandle["myId"]) {
+        "myId is missing in savedStateHandle"
     }
     private val fromJobPosting: Boolean = requireNotNull(savedStateHandle["fromJobPosting"]) {
         "fromJobPosting is missing in savedStateHandle"
@@ -67,10 +69,10 @@ class ChattingDetailViewModel @Inject constructor(
     }
 
     internal suspend fun getUserProfile() = coroutineScope {
-        when (receiverUserType) {
+        when (myUserType) {
             UserType.CENTER -> {
                 launch {
-                    profileRepository.getWorkerProfile(senderId).onSuccess {
+                    profileRepository.getWorkerProfile(opponentId).onSuccess {
                         _workerProfile.value = it
                     }.onFailure {
                         errorHelper.sendError(it)
@@ -86,7 +88,7 @@ class ChattingDetailViewModel @Inject constructor(
 
             UserType.WORKER -> {
                 launch {
-                    profileRepository.getCenterProfile(senderId).onSuccess {
+                    profileRepository.getCenterProfile(opponentId).onSuccess {
                         _centerProfile.value = it
                     }.onFailure {
                         errorHelper.sendError(it)
@@ -105,11 +107,6 @@ class ChattingDetailViewModel @Inject constructor(
     internal suspend fun getChatMessages() {
         if (_callType.value == MessageCallType.END) return
 
-        val myId = when (receiverUserType) {
-            UserType.WORKER -> _workerProfile.value?.workerId ?: return
-            UserType.CENTER -> _centerProfile.value?.centerId ?: return
-        }
-
         if (fromJobPosting) {
             chatRepository.retrieveChatRoomMessages(
                 roomId = chattingRoomId,
@@ -125,7 +122,7 @@ class ChattingDetailViewModel @Inject constructor(
             chatRepository.getChatRoomMessages(
                 roomId = chattingRoomId,
                 messageId = _chatMessages.value?.first()?.id,
-                userType = receiverUserType,
+                userType = myUserType,
                 myId = myId,
             ).onSuccess { messages ->
                 if (messages.isEmpty()) _callType.value = MessageCallType.END
@@ -138,11 +135,6 @@ class ChattingDetailViewModel @Inject constructor(
     }
 
     internal suspend fun subscribeChatMessage() {
-        val myId = when (receiverUserType) {
-            UserType.WORKER -> _workerProfile.value?.workerId ?: return
-            UserType.CENTER -> _centerProfile.value?.centerId ?: return
-        }
-
         chatRepository.subscribeChatMessage(myId)
             .catch {
                 errorHelper.sendError(it)
@@ -150,7 +142,6 @@ class ChattingDetailViewModel @Inject constructor(
                 when (message) {
                     is ChatMessage -> {
                         if (message.senderId != myId) readMessage()
-
                         _chatMessages.value = (_chatMessages.value ?: emptyList()) + message
                     }
 
@@ -164,37 +155,30 @@ class ChattingDetailViewModel @Inject constructor(
     }
 
     internal fun sendMessage() = viewModelScope.launch {
-        val receiverId = if (receiverUserType == UserType.CENTER) _workerProfile.value!!.workerId
-        else _centerProfile.value!!.centerId
+        val senderName = if (myUserType == UserType.CENTER) _centerProfile.value!!.centerName
+        else _workerProfile.value!!.workerName
 
-        val myId = if (receiverUserType == UserType.CENTER) _centerProfile.value!!.centerId
-        else _workerProfile.value!!.workerId
-
-        val senderName =
-            if (receiverUserType == UserType.CENTER) _centerProfile.value!!.centerName
-            else _workerProfile.value!!.workerName
+        Log.d("test", "$myId $myUserType $chattingRoomId")
 
         chatRepository.sendMessage(
             chatroomId = chattingRoomId,
             myId = myId,
-            receiverId = receiverId,
+            receiverId = opponentId,
             senderName = senderName,
             content = _writingText.value,
+            userType = myUserType,
         ).onSuccess {
             _writingText.value = ""
         }.onFailure { errorHelper.sendError(it) }
     }
 
     internal suspend fun readMessage() {
-        val opponentId = if (receiverUserType == UserType.CENTER) _workerProfile.value!!.workerId
-        else _centerProfile.value!!.centerId
-
-        val myId = if (receiverUserType == UserType.CENTER) _centerProfile.value!!.centerId
-        else _workerProfile.value!!.workerId
+        Log.d("test", "$opponentId $myUserType $chattingRoomId")
 
         chatRepository.readMessage(
             chatroomId = chattingRoomId,
             opponentId = opponentId,
+            userType = myUserType,
         ).onSuccess {
             _chatMessages.value = _chatMessages.value?.map {
                 if (it.receiverId == myId) it.copy(isRead = true) else it

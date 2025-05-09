@@ -13,13 +13,13 @@
             android:name="chattingRoomId"
             app:argType="string" />
         <argument
-            android:name="receiverId"
+            android:name="myId"
             app:argType="string" />
         <argument
-            android:name="receiverUserType"
+            android:name="myUserType"
             app:argType="string" />
         <argument
-            android:name="senderId"
+            android:name="opponentId"
             app:argType="string" />
         <argument
             android:name="fromJobPosting"

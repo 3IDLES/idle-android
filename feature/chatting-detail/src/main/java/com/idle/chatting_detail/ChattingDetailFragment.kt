@@ -23,8 +23,8 @@ internal class ChattingDetailFragment : BaseComposeFragment() {
         val scope = rememberCoroutineScope()
 
         fragmentViewModel.apply {
-            val receiverUserType = receiverUserType
-            val receiverId = receiverId
+            val receiverUserType = myUserType
+            val receiverId = myId
 
             val writingText by writingText.collectAsStateWithLifecycle()
             val chatMessages by chatMessages.collectAsStateWithLifecycle()

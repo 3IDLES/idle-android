@@ -1,6 +1,7 @@
 package com.idle.network.source
 
 import android.util.Log
+import com.idle.domain.model.auth.UserType
 import com.idle.network.BuildConfig
 import com.idle.network.api.ChatApi
 import com.idle.network.di.TokenManager
@@ -111,18 +112,26 @@ class ChatDataSource @Inject constructor(
             it
         } ?: flow { throw IOException("웹소켓을 먼저 연결해주세요.") }
 
-    suspend fun sendMessage(sendMessageRequest: SendMessageRequest): Result<Unit> =
+    suspend fun sendMessage(
+        userType: UserType,
+        sendMessageRequest: SendMessageRequest
+    ): Result<Unit> =
         runCatching {
+            Log.d("test", "/pub/send/${userType.apiValue.lowercase()}")
+
             session?.convertAndSend(
-                headers = StompSendHeaders(destination = "/pub/send"),
+                headers = StompSendHeaders(destination = "/pub/send/${userType.apiValue.lowercase()}"),
                 body = sendMessageRequest,
                 serializer = SendMessageRequest.serializer(),
             )
         }
 
-    suspend fun readMessage(readMessageRequest: ReadMessageRequest): Result<Unit> = runCatching {
+    suspend fun readMessage(
+        userType: UserType,
+        readMessageRequest: ReadMessageRequest
+    ): Result<Unit> = runCatching {
         session?.convertAndSend(
-            headers = StompSendHeaders(destination = "/pub/read"),
+            headers = StompSendHeaders(destination = "/pub/read/${userType.apiValue.lowercase()}"),
             body = readMessageRequest,
             serializer = ReadMessageRequest.serializer(),
         )

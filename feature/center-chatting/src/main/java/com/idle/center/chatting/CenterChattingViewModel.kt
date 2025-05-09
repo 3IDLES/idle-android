@@ -15,10 +15,7 @@ import com.idle.domain.usecase.profile.GetMyCenterProfileUseCase
 import com.idle.navigation.NavigationHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -36,13 +33,9 @@ class CenterChattingViewModel @Inject constructor(
 
     private val _chatRoomMap =
         MutableStateFlow<LinkedHashMap<String, ChatRoomWithOpponentInfo>>(LinkedHashMap())
-    val chatRoomList = _chatRoomMap
-        .map { it.values.toList() }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.Lazily,
-            initialValue = null,
-        )
+
+    private val _chatRoomList = MutableStateFlow<List<ChatRoomWithOpponentInfo>?>(null)
+    val chatRoomList = _chatRoomList.asStateFlow()
 
     internal suspend fun initCenterChatting() {
         getMyCenterProfileUseCase().onSuccess {
@@ -90,6 +83,7 @@ class CenterChattingViewModel @Inject constructor(
         }
 
         _chatRoomMap.value = updatedMap
+        updateChatRoomListFromMap()
     }
 
     internal suspend fun retrieveChatRoomList() {
@@ -97,9 +91,12 @@ class CenterChattingViewModel @Inject constructor(
             userType = UserType.CENTER,
             userId = _myProfile.value?.centerId ?: return
         ).onSuccess {
-            val newMap = LinkedHashMap<String, ChatRoomWithOpponentInfo>(_chatRoomMap.value)
-            it.forEach { chatRoom -> newMap[chatRoom.id] = chatRoom }
+            val newMap = LinkedHashMap<String, ChatRoomWithOpponentInfo>().apply {
+                putAll(_chatRoomMap.value)
+                it.forEach { chatRoom -> this[chatRoom.id] = chatRoom }
+            }
             _chatRoomMap.value = newMap
+            updateChatRoomListFromMap()
         }.onFailure { errorHelper.sendError(it) }
     }
 
@@ -108,9 +105,16 @@ class CenterChattingViewModel @Inject constructor(
             userId = _myProfile.value?.centerId ?: return,
             userType = UserType.CENTER
         ).onSuccess {
-            val newMap = LinkedHashMap<String, ChatRoomWithOpponentInfo>(_chatRoomMap.value)
-            it.forEach { chatRoom -> newMap[chatRoom.id] = chatRoom }
+            val newMap = LinkedHashMap<String, ChatRoomWithOpponentInfo>().apply {
+                putAll(_chatRoomMap.value)
+                it.forEach { chatRoom -> this[chatRoom.id] = chatRoom }
+            }
             _chatRoomMap.value = newMap
+            updateChatRoomListFromMap()
         }
+    }
+
+    private fun updateChatRoomListFromMap() {
+        _chatRoomList.value = _chatRoomMap.value.values.toList()
     }
 }

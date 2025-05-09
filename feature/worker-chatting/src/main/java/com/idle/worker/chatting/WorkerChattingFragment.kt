@@ -187,7 +187,7 @@ internal fun ChatRoomItem(
                     DeepLinkDestination.ChattingDetail(
                         chattingRoomId = chatRoom.id,
                         myId = myProfile!!.workerId,
-                        receiverUserType = UserType.WORKER.apiValue,
+                        myUserType = UserType.WORKER.apiValue,
                         opponentId = chatRoom.opponentId,
                         fromJobPosting = false,
                     )

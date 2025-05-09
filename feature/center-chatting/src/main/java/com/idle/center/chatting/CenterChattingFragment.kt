@@ -71,9 +71,7 @@ internal class CenterChattingFragment : BaseComposeFragment() {
             CenterChattingScreen(
                 chatRoomList = chatRoomList,
                 myProfile = myProfile,
-                navigateTo = {
-                    navigationHelper.navigateTo(NavigationEvent.To(it))
-                },
+                navigateTo = { navigationHelper.navigateTo(NavigationEvent.To(it)) },
             )
         }
     }
@@ -183,7 +181,7 @@ internal fun ChatRoomItem(
                         chattingRoomId = chatRoom.id,
                         myId = myProfile!!.centerId,
                         opponentId = chatRoom.opponentId,
-                        receiverUserType = UserType.WORKER.apiValue,
+                        myUserType = UserType.CENTER.apiValue,
                         fromJobPosting = false,
                     )
                 )
