@@ -6,6 +6,7 @@ import com.idle.analytics.AnalyticsHelper
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.repositorry.AuthRepository
+import com.idle.domain.repositorry.ChatRepository
 import com.idle.domain.usecase.profile.GetMyWorkerProfileUseCase
 import com.idle.setting.SettingEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,6 +20,7 @@ import javax.inject.Inject
 class WorkerSettingViewModel @Inject constructor(
     private val getMyWorkerProfileUseCase: GetMyWorkerProfileUseCase,
     private val authRepository: AuthRepository,
+    private val chatRepository: ChatRepository,
     private val analyticsHelper: AnalyticsHelper,
     private val errorHelper: ErrorHelper,
     val navigationHelper: com.idle.navigation.NavigationHelper,
@@ -41,6 +43,7 @@ class WorkerSettingViewModel @Inject constructor(
     fun logout() = viewModelScope.launch {
         authRepository.logoutWorker().onSuccess {
             analyticsHelper.setUserId(null)
+            chatRepository.disconnectWebSocket()
             navigationHelper.navigateTo(
                 com.idle.navigation.NavigationEvent.ToAuthWithClearBackStack(
                     toastMsg = "로그아웃이 완료되었습니다.",
