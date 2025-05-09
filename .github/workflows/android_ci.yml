@@ -37,6 +37,8 @@ jobs:
       run: |
         echo "CARE_DEV_BASE_URL=${{ secrets.CARE_DEV_BASE_URL }}" >> local.properties
         echo "CARE_PROD_BASE_URL=${{ secrets.CARE_PROD_BASE_URL }}" >> local.properties
+        echo "CARE_DEV_WEBSOCKET_URL=${{ secrets.CARE_DEV_WEBSOCKET_URL }}" >> local.properties
+        echo "CARE_PROD_WEBSOCKET_URL=${{ secrets.CARE_PROD_WEBSOCKET_URL }}" >> local.properties
         echo "NAVER_BASE_URL=${{ secrets.NAVER_BASE_URL }}" >> local.properties
         echo "NAVER_CLIENT_ID=${{ secrets.NAVER_CLIENT_ID }}" >> local.properties
         echo "NAVER_CLIENT_SECRET=${{ secrets.NAVER_CLIENT_SECRET }}" >> local.properties
