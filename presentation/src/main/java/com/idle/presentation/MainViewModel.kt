@@ -22,6 +22,7 @@ import com.idle.navigation.DeepLinkDestination.CenterHome
 import com.idle.navigation.DeepLinkDestination.CenterPending
 import com.idle.navigation.DeepLinkDestination.CenterRegister
 import com.idle.navigation.DeepLinkDestination.WorkerHome
+import com.idle.navigation.NavigationEvent
 import com.idle.navigation.NavigationHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
@@ -112,9 +113,7 @@ class MainViewModel @Inject constructor(
 
     private suspend fun navigateToDestination(userRole: String) {
         when (userRole) {
-            UserType.WORKER.apiValue -> navigationHelper.navigateTo(
-                com.idle.navigation.NavigationEvent.To(WorkerHome, R.id.authFragment)
-            )
+            UserType.WORKER.apiValue -> navigationHelper.navigateTo(NavigationEvent.To(WorkerHome, R.id.authFragment))
 
             UserType.CENTER.apiValue -> getCenterStatus()
             else -> Unit
@@ -130,7 +129,7 @@ class MainViewModel @Inject constructor(
         when (status) {
             CenterManagerAccountStatus.APPROVED -> handleApprovedCenterStatus()
             else -> navigationHelper.navigateTo(
-                com.idle.navigation.NavigationEvent.To(
+                NavigationEvent.To(
                     CenterPending(status.name),
                     R.id.authFragment
                 )
@@ -140,14 +139,12 @@ class MainViewModel @Inject constructor(
 
     private fun handleApprovedCenterStatus() = viewModelScope.launch {
         profileRepository.getMyCenterProfile().onSuccess {
-            navigationHelper.navigateTo(
-                com.idle.navigation.NavigationEvent.To(CenterHome, R.id.authFragment)
-            )
+            navigationHelper.navigateTo(NavigationEvent.To(CenterHome, R.id.authFragment))
         }.onFailure {
             val error = it as HttpResponseException
             if (error.apiErrorCode == ApiErrorCode.CenterNotFound) {
                 navigationHelper.navigateTo(
-                    com.idle.navigation.NavigationEvent.To(
+                    NavigationEvent.To(
                         CenterRegister,
                         R.id.authFragment
                     )
@@ -169,7 +166,7 @@ class MainViewModel @Inject constructor(
                             disconnectWebSocket()
 
                             navigationHelper.navigateTo(
-                                com.idle.navigation.NavigationEvent.ToAuthWithClearBackStack(
+                                NavigationEvent.ToAuthWithClearBackStack(
                                     exception.print()
                                 )
                             )

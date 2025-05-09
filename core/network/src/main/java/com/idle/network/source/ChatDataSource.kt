@@ -92,6 +92,7 @@ class ChatDataSource @Inject constructor(
             connectionAttempts++
             connectWebSocket().getOrThrow()
         } else {
+            Log.d("test connect", throwable.stackTraceToString())
             throw throwable
         }
     }
@@ -100,6 +101,7 @@ class ChatDataSource @Inject constructor(
         session?.disconnect()
         Result.success(Unit)
     } catch (e: Exception) {
+        Log.d("test disconnect", e.stackTraceToString())
         Result.failure(e)
     }
 
