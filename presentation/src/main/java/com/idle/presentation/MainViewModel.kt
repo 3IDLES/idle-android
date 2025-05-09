@@ -56,6 +56,12 @@ class MainViewModel @Inject constructor(
     }
 
     internal fun connectWebSocket() = viewModelScope.launch {
+        val (accessToken, userRole) = getAccessTokenAndUserRole()
+
+        if (accessToken.isBlank() || userRole.isBlank()) {
+            return@launch
+        }
+
         chatRepository.connectWebSocket()
     }
 
