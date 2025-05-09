@@ -23,84 +23,84 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface JobPostingApi {
-    @POST("/api/v1/job-postings")
+    @POST("api/v1/job-postings")
     suspend fun postJobPosting(@Body jobPostingRequest: JobPostingRequest): Response<Unit>
 
-    @PATCH("/api/v1/job-postings/{job-posting-id}")
+    @PATCH("api/v1/job-postings/{job-posting-id}")
     suspend fun updateJobPosting(
         @Path("job-posting-id") jobPostingId: String,
         @Body jobPostingRequest: JobPostingRequest,
     ): Response<Unit>
 
-    @GET("/api/v1/job-postings/{job-posting-id}/center")
+    @GET("api/v1/job-postings/{job-posting-id}/center")
     suspend fun getJobPostingDetailCenter(
         @Path("job-posting-id") jobPostingId: String
     ): Response<GetCenterJobPostingDetailResponse>
 
-    @GET("/api/v1/job-postings")
+    @GET("api/v1/job-postings")
     suspend fun getJobPostings(
         @Query("next") next: String?,
         @Query("limit") limit: Int,
     ): Response<GetJobPostingsResponse>
 
-    @GET("/api/v1/job-postings/carer/my/applied")
+    @GET("api/v1/job-postings/carer/my/applied")
     suspend fun getJobPostingsApplied(
         @Query("next") next: String?,
         @Query("limit") limit: Int,
     ): Response<GetJobPostingsResponse>
 
-    @GET("/api/v1/job-postings/my/favorites")
+    @GET("api/v1/job-postings/my/favorites")
     suspend fun getMyFavoriteJobPostings(): Response<GetFavoriteJobPostingsResponse>
 
-    @GET("/api/v1/crawling-job-postings/my/favorites")
+    @GET("api/v1/crawling-job-postings/my/favorites")
     suspend fun getMyFavoriteCrawlingJobPostings(): Response<GetFavoriteCrawlingJobPostingsResponse>
 
-    @GET("/api/v1/job-postings/status/in-progress")
+    @GET("api/v1/job-postings/status/in-progress")
     suspend fun getJobPostingsInProgress(): Response<GetJobPostingsCenterResponse>
 
-    @GET("/api/v1/job-postings/status/completed")
+    @GET("api/v1/job-postings/status/completed")
     suspend fun getJobPostingsCompleted(): Response<GetJobPostingsCenterResponse>
 
-    @GET("/api/v1/job-postings/{job-posting-id}/applicant-count")
+    @GET("api/v1/job-postings/{job-posting-id}/applicant-count")
     suspend fun getApplicantCount(
         @Path("job-posting-id") jobPostingId: String
     ): Response<GetApplicantCountResponse>
 
-    @GET("/api/v1/job-postings/{job-posting-id}/carer")
+    @GET("api/v1/job-postings/{job-posting-id}/carer")
     suspend fun getJobPostingDetailWorker(
         @Path("job-posting-id") jobPostingId: String
     ): Response<GetWorkerJobPostingDetailResponse>
 
-    @GET("/api/v1/job-postings/{job-posting-id}/applicants")
+    @GET("api/v1/job-postings/{job-posting-id}/applicants")
     suspend fun getApplicants(
         @Path("job-posting-id") jobPostingId: String
     ): Response<GetApplicantsResponse>
 
-    @POST("/api/v1/applys")
+    @POST("api/v1/applys")
     suspend fun applyJobPosting(@Body applyJobPostingRequest: ApplyJobPostingRequest): Response<Unit>
 
-    @POST("/api/v1/job-postings/{job-posting-id}/favorites")
+    @POST("api/v1/job-postings/{job-posting-id}/favorites")
     suspend fun addFavoriteJobPosting(
         @Path("job-posting-id") jobPostingId: String,
         @Body favoriteJobPostingRequest: FavoriteJobPostingRequest,
     ): Response<Unit>
 
-    @DELETE("/api/v1/job-postings/{job-posting-id}/remove-favorites")
+    @DELETE("api/v1/job-postings/{job-posting-id}/remove-favorites")
     suspend fun removeFavoriteJobPosting(@Path("job-posting-id") jobPostingId: String): Response<Unit>
 
-    @PATCH("/api/v1/job-postings/{job-posting-id}/end")
+    @PATCH("api/v1/job-postings/{job-posting-id}/end")
     suspend fun endJobPosting(@Path("job-posting-id") jobPostingId: String): Response<Unit>
 
-    @DELETE("/api/v1/job-postings/{job-posting-id}")
+    @DELETE("api/v1/job-postings/{job-posting-id}")
     suspend fun deleteJobPosting(@Path("job-posting-id") jobPostingId: String): Response<Unit>
 
-    @GET("/api/v1/crawling-job-postings")
+    @GET("api/v1/crawling-job-postings")
     suspend fun getCrawlingJobPostings(
         @Query("next") next: String?,
         @Query("limit") limit: Int,
     ): Response<GetCrawlingJobPostingsResponse>
 
-    @GET("/api/v1/crawling-job-postings/{crawling-job-posting-id}")
+    @GET("api/v1/crawling-job-postings/{crawling-job-posting-id}")
     suspend fun getCrawlingJobPostingsDetail(
         @Path("crawling-job-posting-id") jobPostingId: String
     ): Response<GetCrawlingJobPostingDetailResponse>

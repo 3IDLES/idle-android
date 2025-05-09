@@ -13,7 +13,7 @@ data class GetChatRoomResponse(
     val count: Int = 0,
     val opponentId: String = "",
     val opponentName: String = "",
-    val opponentProfileImageUrl: String = "",
+    val opponentProfileImageUrl: String? = null,
 ) {
     fun toVO() = ChatRoomWithOpponentInfo(
         id = chatRoomId,

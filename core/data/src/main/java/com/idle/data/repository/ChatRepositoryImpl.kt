@@ -161,8 +161,10 @@ class ChatRepositoryImpl @Inject constructor(
         receiverId: String,
         senderName: String,
         content: String,
+        userType: UserType,
     ): Result<Unit> = chatDataSource.sendMessage(
-        SendMessageRequest(
+        userType = userType,
+        sendMessageRequest = SendMessageRequest(
             chatroomId = chatroomId,
             receiverId = receiverId,
             senderName = senderName,
@@ -170,9 +172,14 @@ class ChatRepositoryImpl @Inject constructor(
         )
     )
 
-    override suspend fun readMessage(chatroomId: String, opponentId: String): Result<Unit> =
+    override suspend fun readMessage(
+        chatroomId: String,
+        opponentId: String,
+        userType: UserType,
+    ): Result<Unit> =
         chatDataSource.readMessage(
-            ReadMessageRequest(
+            userType = userType,
+            readMessageRequest = ReadMessageRequest(
                 chatroomId = chatroomId,
                 opponentId = opponentId,
             )

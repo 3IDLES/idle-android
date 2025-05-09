@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.idle.compose.ui.clickable
@@ -20,6 +21,8 @@ fun ChattingInput(
     sendMessage: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val focusManager = LocalFocusManager.current
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -39,7 +42,10 @@ fun ChattingInput(
             contentDescription = "",
             modifier = Modifier
                 .size(32.dp)
-                .clickable(throttleTime = 1000L) { sendMessage() },
+                .clickable(throttleTime = 1000L) {
+                    sendMessage()
+                    focusManager.clearFocus()
+                },
         )
     }
 }

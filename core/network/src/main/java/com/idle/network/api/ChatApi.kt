@@ -10,25 +10,25 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ChatApi {
-    @GET("/api/v2/chat/carer/chatrooms")
+    @GET("api/v2/chat/carer/chatrooms")
     suspend fun getWorkerChatRooms(): Response<List<GetChatRoomResponse>>
 
-    @GET("/api/v2/chat/center/chatrooms")
+    @GET("api/v2/chat/center/chatrooms")
     suspend fun getCenterChatRooms(): Response<List<GetChatRoomResponse>>
 
-    @POST("/api/v2/chat/carer/chatrooms")
+    @POST("api/v2/chat/carer/chatrooms")
     suspend fun generateWorkerChatRoom(@Query("opponentId") opponentId: String): Response<GenerateChatRoomResponse>
 
-    @POST("/api/v2/chat/carer/chatrooms")
+    @POST("api/v2/chat/carer/chatrooms")
     suspend fun generateCenterChatRoom(@Query("opponentId") opponentId: String): Response<GenerateChatRoomResponse>
 
-    @GET("/api/v2/chat/carer/chatrooms/{chatroom-id}/messages")
+    @GET("api/v2/chat/carer/chatrooms/{chatroom-id}/messages")
     suspend fun getWorkerChatRoomMessages(
         @Path("chatroom-id") chatRoomId: String,
         @Query("message-id") messageId: String?,
     ): Response<List<ChatMessageResponse>>
 
-    @GET("/api/v2/chat/center/chatrooms/{chatroom-id}/messages")
+    @GET("api/v2/chat/center/chatrooms/{chatroom-id}/messages")
     suspend fun getCenterChatRoomMessages(
         @Path("chatroom-id") chatRoomId: String,
         @Query("message-id") messageId: String?,

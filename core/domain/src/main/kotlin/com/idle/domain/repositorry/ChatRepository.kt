@@ -41,10 +41,12 @@ interface ChatRepository {
         receiverId: String,
         senderName: String,
         content: String,
+        userType: UserType,
     ): Result<Unit>
 
     suspend fun readMessage(
         chatroomId: String,
         opponentId: String,
+        userType: UserType,
     ): Result<Unit>
 }
