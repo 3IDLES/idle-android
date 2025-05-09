@@ -13,6 +13,7 @@ import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.error.HttpResponseStatus
 import com.idle.domain.repositorry.AuthRepository
+import com.idle.domain.repositorry.ChatRepository
 import com.idle.domain.repositorry.ProfileRepository
 import com.idle.domain.util.formatPhoneNumber
 import com.idle.navigation.DeepLinkDestination.SignUpComplete
@@ -31,6 +32,7 @@ import javax.inject.Inject
 class WorkerSignUpViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
     private val authRepository: AuthRepository,
+    private val chatRepository: ChatRepository,
     private val countDownTimer: CountDownTimer,
     private val analyticsHelper: AnalyticsHelper,
     private val errorHelper: ErrorHelper,
@@ -151,6 +153,7 @@ class WorkerSignUpViewModel @Inject constructor(
             authCode = _workerAuthCode.value,
         ).onSuccess {
             profileRepository.getWorkerId().onSuccess { analyticsHelper.setUserId(it) }
+            chatRepository.connectWebSocket()
             navigationHelper.navigateTo(
                 com.idle.navigation.NavigationEvent.To(
                     WorkerHome,
@@ -186,6 +189,7 @@ class WorkerSignUpViewModel @Inject constructor(
             lotNumberAddress = _lotNumberAddress.value,
         ).onSuccess {
             profileRepository.getWorkerId().onSuccess { analyticsHelper.setUserId(it) }
+            chatRepository.connectWebSocket()
             navigationHelper.navigateTo(
                 com.idle.navigation.NavigationEvent.To(
                     SignUpComplete,

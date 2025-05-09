@@ -25,7 +25,7 @@ import javax.inject.Inject
 @HiltViewModel
 class WithdrawalViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    privaate val chatRepository: ChatRepository,
+    private val chatRepository: ChatRepository,
     private val countDownTimer: CountDownTimer,
     private val analyticsHelper: AnalyticsHelper,
     private val errorHelper: ErrorHelper,

@@ -13,6 +13,7 @@ import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.error.HttpResponseStatus
 import com.idle.domain.model.profile.CenterManagerAccountStatus
 import com.idle.domain.repositorry.AuthRepository
+import com.idle.domain.repositorry.ChatRepository
 import com.idle.domain.repositorry.ProfileRepository
 import com.idle.navigation.DeepLinkDestination.CenterHome
 import com.idle.navigation.DeepLinkDestination.CenterPending
@@ -28,6 +29,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CenterSignInViewModel @Inject constructor(
     private val authRepository: AuthRepository,
+    private val chatRepository: ChatRepository,
     private val profileRepository: ProfileRepository,
     private val analyticsHelper: AnalyticsHelper,
     private val errorHelper: ErrorHelper,
@@ -107,9 +109,8 @@ class CenterSignInViewModel @Inject constructor(
 
     private fun fetchAndNavigateToProfile() = viewModelScope.launch {
         profileRepository.getMyCenterProfile().onSuccess {
-            navigationHelper.navigateTo(
-                To(CenterHome, R.id.centerSignInFragment)
-            )
+            chatRepository.connectWebSocket()
+            navigationHelper.navigateTo(To(CenterHome, R.id.centerSignInFragment))
         }.onFailure {
             val error = it as HttpResponseException
             if (error.apiErrorCode == ApiErrorCode.CenterNotFound) {
