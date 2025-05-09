@@ -165,12 +165,15 @@ class MainViewModel @Inject constructor(
                         ApiErrorCode.TokenNotValid,
                         ApiErrorCode.TokenExpiredException,
                         ApiErrorCode.TokenNotFound,
-                        ApiErrorCode.NotSupportUserTokenType ->
+                        ApiErrorCode.NotSupportUserTokenType -> {
+                            disconnectWebSocket()
+
                             navigationHelper.navigateTo(
                                 com.idle.navigation.NavigationEvent.ToAuthWithClearBackStack(
                                     exception.print()
                                 )
                             )
+                        }
 
                         else -> eventHelper.sendEvent(ShowToast(exception.print()))
                     }
