@@ -13,7 +13,6 @@ import com.idle.domain.model.error.ApiErrorCode
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.repositorry.AuthRepository
-import com.idle.domain.repositorry.ChatRepository
 import com.idle.domain.util.formatPhoneNumber
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -25,7 +24,6 @@ import javax.inject.Inject
 @HiltViewModel
 class WithdrawalViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private val chatRepository: ChatRepository,
     private val countDownTimer: CountDownTimer,
     private val analyticsHelper: AnalyticsHelper,
     private val errorHelper: ErrorHelper,
@@ -167,7 +165,6 @@ class WithdrawalViewModel @Inject constructor(
             password = password.value
         ).onSuccess {
             analyticsHelper.setUserId(null)
-            chatRepository.disconnectWebSocket()
             navigationHelper.navigateTo(
                 com.idle.navigation.NavigationEvent.ToAuthWithClearBackStack(
                     "회원탈퇴가 완료되었어요."
@@ -190,7 +187,6 @@ class WithdrawalViewModel @Inject constructor(
                 .joinToString("|"),
         ).onSuccess {
             analyticsHelper.setUserId(null)
-            chatRepository.disconnectWebSocket()
             navigationHelper.navigateTo(
                 com.idle.navigation.NavigationEvent.ToAuthWithClearBackStack(
                     "회원탈퇴가 완료되었어요."

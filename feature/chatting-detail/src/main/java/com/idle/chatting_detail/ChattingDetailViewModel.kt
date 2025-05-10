@@ -134,7 +134,17 @@ class ChattingDetailViewModel @Inject constructor(
         }
     }
 
-    internal suspend fun subscribeChatMessage() {
+    internal fun connectWebsocket() = viewModelScope.launch {
+        chatRepository.connectWebSocket().onSuccess {
+            subscribeChatMessage()
+        }
+    }
+
+    internal fun disconnectWebsocket() = viewModelScope.launch {
+        chatRepository.disconnectWebSocket()
+    }
+
+    private suspend fun subscribeChatMessage() {
         chatRepository.subscribeChatMessage(myId)
             .catch {
                 errorHelper.sendError(it)

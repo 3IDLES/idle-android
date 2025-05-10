@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -71,7 +72,17 @@ class WorkerChattingViewModel @Inject constructor(
         }
     }
 
-    internal suspend fun subscribeChatMessage() {
+    internal fun connectWebsocket() = viewModelScope.launch {
+        chatRepository.connectWebSocket().onSuccess {
+            subscribeChatMessage()
+        }
+    }
+
+    internal fun disconnectWebsocket() = viewModelScope.launch {
+        chatRepository.disconnectWebSocket()
+    }
+
+    private suspend fun subscribeChatMessage() {
         chatRepository.subscribeChatMessage(_myProfile.value?.workerId ?: return)
             .collect { message ->
                 when (message) {

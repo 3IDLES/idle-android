@@ -6,7 +6,6 @@ import com.idle.analytics.AnalyticsHelper
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.repositorry.AuthRepository
-import com.idle.domain.repositorry.ChatRepository
 import com.idle.domain.usecase.profile.GetMyCenterProfileUseCase
 import com.idle.setting.SettingEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,15 +20,13 @@ import javax.inject.Inject
 class CenterSettingViewModel @Inject constructor(
     private val getMyCenterProfileUseCase: GetMyCenterProfileUseCase,
     private val authRepository: AuthRepository,
-    private val chatRepository: ChatRepository,
     private val analyticsHelper: AnalyticsHelper,
     private val errorHelper: ErrorHelper,
     val navigationHelper: com.idle.navigation.NavigationHelper,
 ) : ViewModel() {
-    private val _centerProfile =
-        MutableStateFlow<CenterProfile>(
-            CenterProfile("", "", "", "", "", "", 0.0, 0.0, "", "")
-        )
+    private val _centerProfile = MutableStateFlow<CenterProfile>(
+        CenterProfile("", "", "", "", "", "", 0.0, 0.0, "", "")
+    )
     val centerProfile = _centerProfile.asStateFlow()
 
     private val _centerSettingEvent = MutableSharedFlow<SettingEvent>()
@@ -48,7 +45,6 @@ class CenterSettingViewModel @Inject constructor(
     fun logout() = viewModelScope.launch {
         authRepository.logoutCenter().onSuccess {
             analyticsHelper.setUserId(null)
-            chatRepository.disconnectWebSocket()
             navigationHelper.navigateTo(
                 com.idle.navigation.NavigationEvent.ToAuthWithClearBackStack(
                     toastMsg = "로그아웃이 완료되었습니다.",

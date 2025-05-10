@@ -35,6 +35,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.idle.compose.base.BaseComposeFragment
@@ -65,7 +66,11 @@ internal class CenterChattingFragment : BaseComposeFragment() {
                 initCenterChatting()
                 retrieveChatRoomList()
                 loadChatRoomList()
-                subscribeChatMessage()
+            }
+
+            LifecycleStartEffect(fragmentViewModel) {
+                connectWebsocket()
+                onStopOrDispose { disconnectWebsocket() }
             }
 
             CenterChattingScreen(
