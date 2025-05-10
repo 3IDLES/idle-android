@@ -35,6 +35,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.idle.compose.base.BaseComposeFragment
@@ -50,7 +51,6 @@ import com.idle.domain.util.formatUnReadNumber
 import com.idle.navigation.DeepLinkDestination
 import com.idle.navigation.NavigationEvent
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 internal class WorkerChattingFragment : BaseComposeFragment() {
@@ -64,11 +64,13 @@ internal class WorkerChattingFragment : BaseComposeFragment() {
 
             LaunchedEffect(Unit) {
                 initWorkerChatting()
-                launch {
-                    retrieveChatRoomList()
-                    loadChatRoomList()
-                }
-                launch { subscribeChatMessage() }
+                retrieveChatRoomList()
+                loadChatRoomList()
+            }
+
+            LifecycleStartEffect(fragmentViewModel) {
+                connectWebsocket()
+                onStopOrDispose { disconnectWebsocket() }
             }
 
             if (chatRoomList != null) {

@@ -12,7 +12,6 @@ import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.error.HttpResponseException
 import com.idle.domain.model.jobposting.SharedJobPostingInfo
 import com.idle.domain.model.profile.CenterManagerAccountStatus
-import com.idle.domain.repositorry.ChatRepository
 import com.idle.domain.repositorry.ConfigRepository
 import com.idle.domain.repositorry.JobPostingRepository
 import com.idle.domain.repositorry.NotificationRepository
@@ -41,7 +40,6 @@ class MainViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
     private val notificationRepository: NotificationRepository,
     private val jobPostingRepository: JobPostingRepository,
-    private val chatRepository: ChatRepository,
     private val errorHelper: ErrorHelper,
     internal val eventHelper: EventHelper,
     internal val navigationHelper: NavigationHelper,
@@ -54,20 +52,6 @@ class MainViewModel @Inject constructor(
 
     init {
         handleError()
-    }
-
-    internal fun connectWebSocket() = viewModelScope.launch {
-        val (accessToken, userRole) = getAccessTokenAndUserRole()
-
-        if (accessToken.isBlank() || userRole.isBlank()) {
-            return@launch
-        }
-
-        chatRepository.connectWebSocket()
-    }
-
-    internal fun disconnectWebSocket() = viewModelScope.launch {
-        chatRepository.connectWebSocket()
     }
 
     internal fun setNavigationMenuType(navigationMenuType: NavigationMenuType) {
@@ -113,7 +97,12 @@ class MainViewModel @Inject constructor(
 
     private suspend fun navigateToDestination(userRole: String) {
         when (userRole) {
-            UserType.WORKER.apiValue -> navigationHelper.navigateTo(NavigationEvent.To(WorkerHome, R.id.authFragment))
+            UserType.WORKER.apiValue -> navigationHelper.navigateTo(
+                NavigationEvent.To(
+                    WorkerHome,
+                    R.id.authFragment
+                )
+            )
 
             UserType.CENTER.apiValue -> getCenterStatus()
             else -> Unit
@@ -163,8 +152,6 @@ class MainViewModel @Inject constructor(
                         ApiErrorCode.TokenExpiredException,
                         ApiErrorCode.TokenNotFound,
                         ApiErrorCode.NotSupportUserTokenType -> {
-                            disconnectWebSocket()
-
                             navigationHelper.navigateTo(
                                 NavigationEvent.ToAuthWithClearBackStack(
                                     exception.print()

@@ -43,7 +43,17 @@ class CenterChattingViewModel @Inject constructor(
         }.onFailure { errorHelper.sendError(it) }
     }
 
-    internal fun subscribeChatMessage() = viewModelScope.launch {
+    internal fun connectWebsocket() = viewModelScope.launch {
+        chatRepository.connectWebSocket().onSuccess {
+            subscribeChatMessage()
+        }
+    }
+
+    internal fun disconnectWebsocket() = viewModelScope.launch {
+        chatRepository.disconnectWebSocket()
+    }
+
+    private fun subscribeChatMessage() = viewModelScope.launch {
         chatRepository.subscribeChatMessage(_myProfile.value?.centerId ?: return@launch)
             .collect { message ->
                 when (message) {

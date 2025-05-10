@@ -129,18 +129,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        if (networkMonitor.networkState.value != NetworkState.NotConnected) {
-            viewModel.connectWebSocket()
-        }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        viewModel.disconnectWebSocket()
-    }
-
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
 

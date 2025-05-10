@@ -5,6 +5,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.idle.chatting_detail.ui.ChattingDetailLoadingScreen
@@ -34,9 +35,14 @@ internal class ChattingDetailFragment : BaseComposeFragment() {
             LaunchedEffect(Unit) {
                 getUserProfile()
                 getChatMessages()
-                subscribeChatMessage()
                 readMessage()
             }
+
+            LifecycleStartEffect(fragmentViewModel) {
+                connectWebsocket()
+                onStopOrDispose { disconnectWebsocket() }
+            }
+
 
             if (chatMessages != null && workerProfile != null && centerProfile != null) {
                 ChattingDetailScreen(
