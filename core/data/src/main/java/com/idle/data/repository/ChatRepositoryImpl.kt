@@ -42,7 +42,37 @@ class ChatRepositoryImpl @Inject constructor(
             UserType.CENTER -> chatDataSource.getCenterChatRooms()
         }.getOrThrow()
 
-        chatRoomsResponse.map { it.toVO() }
+        val chatRooms = chatRoomsResponse.map {
+            val chatRoom = it.toVO()
+
+            if (!localChatDataSource.isChatRoomExist(chatRoom.id, userId)) {
+                when (userType) {
+                    UserType.WORKER -> localChatDataSource.insertChatRoomByWorker(
+                        myId = userId,
+                        chatRoom = ChatRoom(
+                            id = chatRoom.id,
+                            opponentId = chatRoom.opponentId,
+                            lastMessage = chatRoom.lastMessage,
+                            lastMessageTime = chatRoom.lastMessageTime,
+                            unReadMessageCount = chatRoom.unReadMessageCount,
+                        )
+                    )
+
+                    UserType.CENTER -> localChatDataSource.insertChatRoomByCenter(
+                        myId = userId,
+                        chatRoom = ChatRoom(
+                            id = chatRoom.id,
+                            opponentId = chatRoom.opponentId,
+                            lastMessage = chatRoom.lastMessage,
+                            lastMessageTime = chatRoom.lastMessageTime,
+                            unReadMessageCount = chatRoom.unReadMessageCount,
+                        )
+                    )
+                }
+            }
+            chatRoom
+        }
+        chatRooms
     }
 
     override suspend fun retrieveChatRoomMessages(

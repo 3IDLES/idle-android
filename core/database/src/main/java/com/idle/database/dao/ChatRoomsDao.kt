@@ -7,21 +7,46 @@ import androidx.room.Query
 import androidx.room.Transaction
 import com.idle.database.model.ChatRoomEntity
 import com.idle.database.model.ChatRoomWithMessages
+import com.idle.database.model.MessageEntity
 
 @Dao
 interface ChatRoomsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertChatRoom(chatRoom: ChatRoomEntity)
 
-    @Transaction
     @Query(
         """
-            SELECT * FROM chatRoom
+            SELECT *
+            FROM chatRoom
             WHERE myId = :userId
             ORDER BY id ASC
         """
     )
-    suspend fun getChatRoomsWithMessages(userId: String): List<ChatRoomWithMessages>
+    suspend fun getChatRooms(userId: String): List<ChatRoomEntity>
+
+    @Query(
+        """
+            SELECT *
+            FROM message
+            WHERE myId = :userId
+            ORDER BY createdAt ASC
+        """
+    )
+    suspend fun getUserMessages(userId: String): List<MessageEntity>
+
+    @Transaction
+    suspend fun getChatRoomsWithMessages(userId: String): List<ChatRoomWithMessages> {
+        val rooms    = getChatRooms(userId)
+        val messages = getUserMessages(userId)
+            .groupBy { it.roomId }
+
+        return rooms.map { room ->
+            ChatRoomWithMessages(
+                chatRoom = room,
+                messages = messages[room.id] ?: emptyList()
+            )
+        }
+    }
 
     @Query(
         """

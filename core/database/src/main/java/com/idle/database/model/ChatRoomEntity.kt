@@ -3,6 +3,7 @@ package com.idle.database.model
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.Index
+import androidx.room.PrimaryKey
 import androidx.room.Relation
 import com.idle.domain.model.chat.ChatRoom
 import java.time.LocalDateTime
@@ -10,7 +11,7 @@ import java.time.LocalDateTime
 @Entity(
     tableName = "chatRoom",
     primaryKeys = ["id", "myId"],
-    indices = [Index(value = ["id"])],
+    indices = [Index(value = ["id", "myId"])],
 )
 data class ChatRoomEntity(
     val id: String,
@@ -21,11 +22,6 @@ data class ChatRoomEntity(
 data class ChatRoomWithMessages(
     @Embedded
     val chatRoom: ChatRoomEntity,
-
-    @Relation(
-        parentColumn = "id",
-        entityColumn = "roomId",
-    )
     val messages: List<MessageEntity>
 ) {
     fun toDomain() = ChatRoom(
