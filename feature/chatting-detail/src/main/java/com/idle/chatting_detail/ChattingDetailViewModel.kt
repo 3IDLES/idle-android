@@ -151,6 +151,7 @@ class ChattingDetailViewModel @Inject constructor(
                 when (message) {
                     is ChatMessage -> {
                         if (message.senderId != myId) readMessage()
+
                         _chatMessages.value = (_chatMessages.value ?: emptyList()) + message
                     }
 
