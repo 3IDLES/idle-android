@@ -54,7 +54,10 @@ class CenterChattingViewModel @Inject constructor(
     }
 
     private fun subscribeChatMessage() = viewModelScope.launch {
-        chatRepository.subscribeChatMessage(_myProfile.value?.centerId ?: return@launch)
+        chatRepository.subscribeChatMessage(
+            userId = _myProfile.value?.centerId ?: return@launch,
+            userType = UserType.CENTER,
+        )
             .collect { message ->
                 when (message) {
                     is ChatMessage -> handleChatMessage(message)
@@ -93,7 +96,7 @@ class CenterChattingViewModel @Inject constructor(
         }
 
         _chatRoomMap.value = updatedMap
-        updateChatRoomListFromMap()
+        _chatRoomList.value = _chatRoomMap.value.values.toList()
     }
 
     internal suspend fun retrieveChatRoomList() {
@@ -106,7 +109,7 @@ class CenterChattingViewModel @Inject constructor(
                 it.forEach { chatRoom -> this[chatRoom.id] = chatRoom }
             }
             _chatRoomMap.value = newMap
-            updateChatRoomListFromMap()
+            _chatRoomList.value = _chatRoomMap.value.values.toList()
         }.onFailure { errorHelper.sendError(it) }
     }
 
@@ -120,11 +123,7 @@ class CenterChattingViewModel @Inject constructor(
                 it.forEach { chatRoom -> this[chatRoom.id] = chatRoom }
             }
             _chatRoomMap.value = newMap
-            updateChatRoomListFromMap()
+            _chatRoomList.value = _chatRoomMap.value.values.toList()
         }
-    }
-
-    private fun updateChatRoomListFromMap() {
-        _chatRoomList.value = _chatRoomMap.value.values.toList()
     }
 }

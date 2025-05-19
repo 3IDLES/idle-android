@@ -67,4 +67,3 @@ class GetChatRoomsUseCase @Inject constructor(
         )
     }
 }
-

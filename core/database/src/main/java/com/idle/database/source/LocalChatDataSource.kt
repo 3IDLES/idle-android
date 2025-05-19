@@ -14,8 +14,8 @@ class LocalChatDataSource @Inject constructor(
     private val messagesDao: MessagesDao,
     private val chatRoomsDao: ChatRoomsDao,
 ) {
-    suspend fun insertMessage(message: ChatMessage) =
-        messagesDao.insertMessage(message.let(ChatMessage::toMessageEntity))
+    suspend fun insertMessage(message: ChatMessage, myId: String) =
+        messagesDao.insertMessage(message.toMessageEntity(myId))
 
     suspend fun getMessages(
         roomId: String,
@@ -31,20 +31,37 @@ class LocalChatDataSource @Inject constructor(
         opponentId: String,
     ): Unit = messagesDao.readMessages(roomId, opponentId)
 
-    suspend fun isMessageExist(roomId: String, messageId: String): Boolean =
-        messagesDao.isMessageExist(roomId, messageId)
+    suspend fun isMessageExist(roomId: String, myId: String, messageId: String): Boolean =
+        messagesDao.isMessageExist(
+            roomId = roomId,
+            myId = myId,
+            messageId = messageId,
+        )
 
-    suspend fun insertChatRoom(myId: String, chatRoom: ChatRoom) = chatRoomsDao.insertChatRoom(
-        ChatRoomEntity(
-            id = chatRoom.id,
-            opponentId = chatRoom.opponentId,
+    suspend fun insertChatRoomByWorker(myId: String, chatRoom: ChatRoom) =
+        chatRoomsDao.insertChatRoom(
+            ChatRoomEntity(
+                id = chatRoom.id,
+                opponentId = chatRoom.opponentId,
+                myId = myId,
+            )
+        )
+
+    suspend fun insertChatRoomByCenter(myId: String, chatRoom: ChatRoom) =
+        chatRoomsDao.insertChatRoom(
+            ChatRoomEntity(
+                id = chatRoom.id,
+                opponentId = myId,
+                myId = chatRoom.opponentId,
+            )
+        )
+
+    suspend fun isChatRoomExist(roomId: String, myId: String): Boolean =
+        chatRoomsDao.isChatRoomExist(
+            roomId = roomId,
             myId = myId,
         )
-    )
-
-    suspend fun isChatRoomExist(roomId: String): Boolean = chatRoomsDao.isChatRoomExist(roomId)
 
     suspend fun getChatRooms(userId: String): List<ChatRoom> =
-        chatRoomsDao.getChatRoomsWithMessages(userId)
-            .map(ChatRoomWithMessages::toDomain)
+        chatRoomsDao.getChatRoomsWithMessages(userId).map(ChatRoomWithMessages::toDomain)
 }

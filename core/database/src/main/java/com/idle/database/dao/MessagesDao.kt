@@ -47,10 +47,12 @@ interface MessagesDao {
                 FROM message
                 WHERE roomId = :roomId
                 AND id = :messageId
+                AND myId = :myId
             )
         """
     )
     suspend fun isMessageExist(
+        myId: String,
         roomId: String,
         messageId: String,
     ): Boolean

@@ -34,7 +34,11 @@ interface ChatRepository {
         opponentId: String,
     ): Result<String>
 
-    suspend fun subscribeChatMessage(userId: String): Flow<Message>
+    suspend fun subscribeChatMessage(
+        userId: String,
+        userType: UserType,
+    ): Flow<Message>
+
     suspend fun sendMessage(
         chatroomId: String,
         myId: String,

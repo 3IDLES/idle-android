@@ -1,6 +1,5 @@
 package com.idle.database.model
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
@@ -14,15 +13,15 @@ import java.time.LocalDateTime
     foreignKeys = arrayOf(
         ForeignKey(
             entity = ChatRoomEntity::class,
-            parentColumns = arrayOf("id"),
-            childColumns = arrayOf("roomId"),
+            parentColumns = ["id", "myId"],
+            childColumns = ["roomId", "myId"],
         )
     )
 )
 data class MessageEntity(
-    @PrimaryKey
-    @ColumnInfo(name = "id") val id: String,
+    @PrimaryKey val id: String,
     val roomId: String,
+    val myId: String,
     val senderId: String,
     val receiverId: String,
     val content: String,
@@ -40,8 +39,9 @@ data class MessageEntity(
     )
 }
 
-internal fun ChatMessage.toMessageEntity() = MessageEntity(
+internal fun ChatMessage.toMessageEntity(myId: String) = MessageEntity(
     id = id,
+    myId = myId,
     roomId = roomId,
     senderId = senderId,
     receiverId = receiverId,

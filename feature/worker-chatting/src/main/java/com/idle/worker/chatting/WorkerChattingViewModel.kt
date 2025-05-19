@@ -1,6 +1,5 @@
 package com.idle.worker.chatting
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.domain.model.auth.UserType
@@ -83,13 +82,15 @@ class WorkerChattingViewModel @Inject constructor(
     }
 
     private suspend fun subscribeChatMessage() {
-        chatRepository.subscribeChatMessage(_myProfile.value?.workerId ?: return)
-            .collect { message ->
-                when (message) {
-                    is ChatMessage -> handleNewChat(message)
-                    is ReadMessage -> Unit
-                }
+        chatRepository.subscribeChatMessage(
+            userId = _myProfile.value?.workerId ?: return,
+            userType = UserType.WORKER,
+        ).collect { message ->
+            when (message) {
+                is ChatMessage -> handleNewChat(message)
+                is ReadMessage -> Unit
             }
+        }
     }
 
     private suspend fun handleNewChat(chatMessage: ChatMessage) {

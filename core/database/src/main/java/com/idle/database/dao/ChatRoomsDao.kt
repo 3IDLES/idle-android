@@ -29,8 +29,9 @@ interface ChatRoomsDao {
                 SELECT 1
                 FROM chatRoom
                 WHERE id = :roomId
+                AND myId = :myId
             )
         """
     )
-    suspend fun isChatRoomExist(roomId: String): Boolean
+    suspend fun isChatRoomExist(roomId: String, myId: String): Boolean
 }

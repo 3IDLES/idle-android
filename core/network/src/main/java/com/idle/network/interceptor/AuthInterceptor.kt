@@ -33,11 +33,11 @@ class AuthInterceptor @Inject constructor(
             return false
         }
 
-        if (request.url.host.contains("/aws-caremeet-upload.s3.ap-northeast-2.amazonaws.com")) {
+        if (request.url.encodedPath.contains("/api/v1/auth/common/refresh")) {
             return false
         }
 
-        if (request.url.host.contains("/api/v1/auth/common/refresh")) {
+        if (request.url.host.contains("/aws-caremeet-upload.s3.ap-northeast-2.amazonaws.com")) {
             return false
         }
 
