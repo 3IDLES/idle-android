@@ -14,7 +14,7 @@ import com.idle.network.model.chat.SendMessageRequest
 import com.idle.network.serializer.ChatResponseSerializer
 import com.idle.network.util.MAX_RETRY_ATTEMPTS
 import com.idle.network.util.MAX_WAIT_TIME
-import com.idle.network.util.calculateEqualJitter
+import com.idle.network.util.calculateBackoffTime
 import com.idle.network.util.safeApiCall
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -87,7 +87,7 @@ class ChatDataSource @Inject constructor(
         connectionAttempts = 0
     }.recoverCatching { throwable ->
         if (connectionAttempts < MAX_RETRY_ATTEMPTS) {
-            val waitTime = minOf(calculateEqualJitter(connectionAttempts), MAX_WAIT_TIME)
+            val waitTime = minOf(calculateBackoffTime(connectionAttempts), MAX_WAIT_TIME)
             delay(waitTime)
             connectionAttempts++
             connectWebSocket().getOrThrow()
