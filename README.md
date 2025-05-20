@@ -102,20 +102,12 @@
   <tr>
     <td align="center"><b>FCM</b></td>
     <td align="center"><b>알림 센터</b></td>
+    <td align="center"><b>채팅</b></td>
   </tr>
     <tr>
     <td align="center"><img src="https://github.com/user-attachments/assets/10330ca2-e33c-4957-84c8-03ae8763f63f" width=200/></td>
     <td align="center"><img src="https://github.com/user-attachments/assets/4eb5cd91-706d-413c-92ca-3310df2d10e2" width=200/></td>
-  </tr>
-</table>
-<table>
-  <tr>
-    <td align="center"><b>시니어 타겟 글자 크기 커버 1</b></td>
-    <td align="center"><b>시니어 타겟 글자 크기 커버 2</b></td>
-  </tr>
-    <tr>
-    <td align="center"><img src="https://github.com/user-attachments/assets/671078c6-dd3d-4e8c-b155-99775bc5ab84" width=200/></td>
-    <td align="center"><img src="https://github.com/user-attachments/assets/3636a0af-7d66-4c7d-9b3b-aedda99b63f8" width=200/></td>
+    <td align="center"><img src="https://github.com/user-attachments/assets/d78e4fbb-083b-4da5-86d0-122290d7e491" width=200/></td>
   </tr>
 </table>
 
