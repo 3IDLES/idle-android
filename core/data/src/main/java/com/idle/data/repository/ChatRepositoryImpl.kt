@@ -46,29 +46,16 @@ class ChatRepositoryImpl @Inject constructor(
             val chatRoom = it.toVO()
 
             if (!localChatDataSource.isChatRoomExist(chatRoom.id, userId)) {
-                when (userType) {
-                    UserType.WORKER -> localChatDataSource.insertChatRoomByWorker(
-                        myId = userId,
-                        chatRoom = ChatRoom(
-                            id = chatRoom.id,
-                            opponentId = chatRoom.opponentId,
-                            lastMessage = chatRoom.lastMessage,
-                            lastMessageTime = chatRoom.lastMessageTime,
-                            unReadMessageCount = chatRoom.unReadMessageCount,
-                        )
+                localChatDataSource.insertChatRoom(
+                    myId = userId,
+                    chatRoom = ChatRoom(
+                        id = chatRoom.id,
+                        opponentId = chatRoom.opponentId,
+                        lastMessage = chatRoom.lastMessage,
+                        lastMessageTime = chatRoom.lastMessageTime,
+                        unReadMessageCount = chatRoom.unReadMessageCount,
                     )
-
-                    UserType.CENTER -> localChatDataSource.insertChatRoomByCenter(
-                        myId = userId,
-                        chatRoom = ChatRoom(
-                            id = chatRoom.id,
-                            opponentId = chatRoom.opponentId,
-                            lastMessage = chatRoom.lastMessage,
-                            lastMessageTime = chatRoom.lastMessageTime,
-                            unReadMessageCount = chatRoom.unReadMessageCount,
-                        )
-                    )
-                }
+                )
             }
             chatRoom
         }
@@ -77,10 +64,12 @@ class ChatRepositoryImpl @Inject constructor(
 
     override suspend fun retrieveChatRoomMessages(
         roomId: String,
+        myId: String,
         messageId: String?
     ): Result<List<ChatMessage>> = runCatching {
         localChatDataSource.getMessages(
             roomId = roomId,
+            myId = myId,
             lastMessageId = messageId,
         )
     }
@@ -109,29 +98,16 @@ class ChatRepositoryImpl @Inject constructor(
                 response.map {
                     val message = it.toVO()
                     if (!localChatDataSource.isChatRoomExist(message.roomId, myId)) {
-                        when (userType) {
-                            UserType.WORKER -> localChatDataSource.insertChatRoomByWorker(
-                                myId = myId,
-                                chatRoom = ChatRoom(
-                                    id = message.roomId,
-                                    opponentId = if (myId == message.senderId) message.receiverId else message.senderId,
-                                    lastMessage = message.content,
-                                    lastMessageTime = message.createdAt,
-                                    unReadMessageCount = 1,
-                                )
+                        localChatDataSource.insertChatRoom(
+                            myId = myId,
+                            chatRoom = ChatRoom(
+                                id = message.roomId,
+                                opponentId = if (myId == message.senderId) message.receiverId else message.senderId,
+                                lastMessage = message.content,
+                                lastMessageTime = message.createdAt,
+                                unReadMessageCount = 1,
                             )
-
-                            UserType.CENTER -> localChatDataSource.insertChatRoomByCenter(
-                                myId = myId,
-                                chatRoom = ChatRoom(
-                                    id = message.roomId,
-                                    opponentId = if (myId == message.senderId) message.receiverId else message.senderId,
-                                    lastMessage = message.content,
-                                    lastMessageTime = message.createdAt,
-                                    unReadMessageCount = 1,
-                                )
-                            )
-                        }
+                        )
                     }
                     localChatDataSource.insertMessage(message, myId)
                 }
@@ -140,6 +116,7 @@ class ChatRepositoryImpl @Inject constructor(
 
         return@runCatching localChatDataSource.getMessages(
             roomId = roomId,
+            myId = myId,
             lastMessageId = messageId,
         )
     }
@@ -168,29 +145,16 @@ class ChatRepositoryImpl @Inject constructor(
                                 myId = userId,
                             )
                         ) {
-                            when (userType) {
-                                UserType.WORKER -> localChatDataSource.insertChatRoomByWorker(
-                                    myId = userId,
-                                    chatRoom = ChatRoom(
-                                        id = message.roomId,
-                                        opponentId = if (userId == message.senderId) message.receiverId else message.senderId,
-                                        lastMessage = message.content,
-                                        lastMessageTime = message.createdAt,
-                                        unReadMessageCount = 1,
-                                    )
+                            localChatDataSource.insertChatRoom(
+                                myId = userId,
+                                chatRoom = ChatRoom(
+                                    id = message.roomId,
+                                    opponentId = if (userId == message.senderId) message.receiverId else message.senderId,
+                                    lastMessage = message.content,
+                                    lastMessageTime = message.createdAt,
+                                    unReadMessageCount = 1,
                                 )
-
-                                UserType.CENTER -> localChatDataSource.insertChatRoomByCenter(
-                                    myId = userId,
-                                    chatRoom = ChatRoom(
-                                        id = message.roomId,
-                                        opponentId = if (userId == message.senderId) message.receiverId else message.senderId,
-                                        lastMessage = message.content,
-                                        lastMessageTime = message.createdAt,
-                                        unReadMessageCount = 1,
-                                    )
-                                )
-                            }
+                            )
                         }
 
                         localChatDataSource.insertMessage(message, userId)
@@ -199,7 +163,8 @@ class ChatRepositoryImpl @Inject constructor(
                     is ReadMessage -> {
                         localChatDataSource.readMessages(
                             roomId = message.chatroomId,
-                            opponentId = message.opponentId,
+                            myId = userId,
+                            senderId = message.opponentId,
                         )
                     }
                 }
@@ -233,6 +198,7 @@ class ChatRepositoryImpl @Inject constructor(
 
     override suspend fun readMessage(
         chatroomId: String,
+        myId: String,
         opponentId: String,
         userType: UserType,
     ): Result<Unit> =
@@ -245,7 +211,8 @@ class ChatRepositoryImpl @Inject constructor(
         ).onSuccess {
             localChatDataSource.readMessages(
                 roomId = chatroomId,
-                opponentId = opponentId,
+                myId = myId,
+                senderId = opponentId,
             )
         }
 }

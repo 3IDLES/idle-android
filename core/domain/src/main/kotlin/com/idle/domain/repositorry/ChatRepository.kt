@@ -19,6 +19,7 @@ interface ChatRepository {
 
     suspend fun retrieveChatRoomMessages(
         roomId: String,
+        myId: String,
         messageId: String?,
     ): Result<List<ChatMessage>>
 
@@ -50,6 +51,7 @@ interface ChatRepository {
 
     suspend fun readMessage(
         chatroomId: String,
+        myId: String,
         opponentId: String,
         userType: UserType,
     ): Result<Unit>

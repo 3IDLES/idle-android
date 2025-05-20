@@ -109,6 +109,7 @@ class ChattingDetailViewModel @Inject constructor(
         if (fromJobPosting) {
             chatRepository.retrieveChatRoomMessages(
                 roomId = chatroomId,
+                myId = myId,
                 messageId = _chatMessages.value?.first()?.id,
             ).onSuccess { messages ->
                 if (messages.isEmpty()) _callType.value = MessageCallType.END
@@ -183,6 +184,7 @@ class ChattingDetailViewModel @Inject constructor(
     internal suspend fun readMessage() {
         chatRepository.readMessage(
             chatroomId = chatroomId,
+            myId = myId,
             opponentId = opponentId,
             userType = myUserType,
         ).onSuccess {

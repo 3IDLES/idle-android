@@ -3,8 +3,6 @@ package com.idle.database.model
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.Index
-import androidx.room.PrimaryKey
-import androidx.room.Relation
 import com.idle.domain.model.chat.ChatRoom
 import java.time.LocalDateTime
 

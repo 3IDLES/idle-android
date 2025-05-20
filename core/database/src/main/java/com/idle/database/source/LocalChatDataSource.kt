@@ -19,17 +19,20 @@ class LocalChatDataSource @Inject constructor(
 
     suspend fun getMessages(
         roomId: String,
+        myId: String,
         lastMessageId: String?
     ): List<ChatMessage> =
         messagesDao.getMessages(
             roomId = roomId,
+            myId = myId,
             lastMessageId = lastMessageId,
         ).map(MessageEntity::toDomain).reversed()
 
     suspend fun readMessages(
         roomId: String,
-        opponentId: String,
-    ): Unit = messagesDao.readMessages(roomId, opponentId)
+        myId: String,
+        senderId: String,
+    ): Unit = messagesDao.readMessages(roomId, myId, senderId)
 
     suspend fun isMessageExist(roomId: String, myId: String, messageId: String): Boolean =
         messagesDao.isMessageExist(
@@ -38,21 +41,12 @@ class LocalChatDataSource @Inject constructor(
             messageId = messageId,
         )
 
-    suspend fun insertChatRoomByWorker(myId: String, chatRoom: ChatRoom) =
+    suspend fun insertChatRoom(myId: String, chatRoom: ChatRoom) =
         chatRoomsDao.insertChatRoom(
             ChatRoomEntity(
                 id = chatRoom.id,
                 opponentId = chatRoom.opponentId,
                 myId = myId,
-            )
-        )
-
-    suspend fun insertChatRoomByCenter(myId: String, chatRoom: ChatRoom) =
-        chatRoomsDao.insertChatRoom(
-            ChatRoomEntity(
-                id = chatRoom.id,
-                opponentId = myId,
-                myId = chatRoom.opponentId,
             )
         )
 
