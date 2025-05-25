@@ -122,17 +122,21 @@ class ChatDataSource @Inject constructor(
         runCatching {
             Log.d("test", "/pub/send/${userType.apiValue.lowercase()}")
 
-            session?.convertAndSend(
+            val result = session?.convertAndSend(
                 headers = StompSendHeaders(destination = "/pub/send/${userType.apiValue.lowercase()}"),
                 body = sendMessageRequest,
                 serializer = SendMessageRequest.serializer(),
             )
+
+            Log.d("test", result.toString())
         }
 
     suspend fun readMessage(
         userType: UserType,
         readMessageRequest: ReadMessageRequest
     ): Result<Unit> = runCatching {
+        Log.d("test", "/pub/read/${userType.apiValue.lowercase()}")
+
         session?.convertAndSend(
             headers = StompSendHeaders(destination = "/pub/read/${userType.apiValue.lowercase()}"),
             body = readMessageRequest,

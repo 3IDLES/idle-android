@@ -1,6 +1,5 @@
 package com.idle.data.repository
 
-import android.util.Log
 import com.idle.database.source.LocalChatDataSource
 import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.chat.ChatMessage
@@ -96,8 +95,9 @@ class ChatRepositoryImpl @Inject constructor(
                     messageId = messageId,
                 )
             }.mapCatching { response ->
-                val messages = response.chatMessageResponse
+                val messages = response.chatMessageInfos
                 val readSequence = response.sequence
+
                 messages.lastOrNull()?.let {
                     localChatDataSource.readMessages(
                         roomId = roomId,
@@ -109,8 +109,6 @@ class ChatRepositoryImpl @Inject constructor(
 
                 messages.map {
                     val message = it.toVO()
-
-                    Log.d("test1", message.toString())
 
                     if (!localChatDataSource.isChatRoomExist(message.roomId, myId)) {
                         localChatDataSource.insertChatRoom(
@@ -125,14 +123,9 @@ class ChatRepositoryImpl @Inject constructor(
                         )
                     }
 
-                    Log.d("test2", message.toString())
-
-                    if (!localChatDataSource.hasMessagesAfterSequence(
-                            roomId = roomId,
-                            myId = myId,
-                            sequence = message.sequence,
-                        )
-                    ) {
+                    val maxSeq =
+                        localChatDataSource.getMaxLocalSequence(roomId, myId) ?: Int.MIN_VALUE
+                    if (message.sequence > maxSeq) {
                         localChatDataSource.insertMessage(message, myId)
                     }
                 }

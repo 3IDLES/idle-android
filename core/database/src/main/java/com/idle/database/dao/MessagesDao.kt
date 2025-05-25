@@ -64,18 +64,11 @@ interface MessagesDao {
 
     @Query(
         """
-        SELECT EXISTS(
-            SELECT 1
+            SELECT MAX(sequence)
             FROM message
             WHERE roomId = :roomId
-              AND myId   = :myId
-              AND sequence > :sequence
-        )
+            AND myId   = :myId
         """
     )
-    suspend fun hasMessagesAfterSequence(
-        roomId: String,
-        myId: String,
-        sequence: Int
-    ): Boolean
+    suspend fun getMaxLocalSequence(roomId: String, myId: String): Int?
 }
