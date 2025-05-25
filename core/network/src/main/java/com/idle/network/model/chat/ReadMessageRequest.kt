@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class ReadMessageRequest(
     val chatroomId: String,
     val opponentId: String,
-    val messageSequence: Int,
+    val sequence: Int,
 )
