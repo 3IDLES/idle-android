@@ -1,11 +1,9 @@
 package com.idle.network.source
 
-import android.util.Log
 import com.idle.domain.model.auth.UserType
 import com.idle.network.BuildConfig
 import com.idle.network.api.ChatApi
 import com.idle.network.di.TokenManager
-import com.idle.network.model.chat.ChatMessageResponse
 import com.idle.network.model.chat.ChatResponse
 import com.idle.network.model.chat.GenerateChatRoomResponse
 import com.idle.network.model.chat.GetChatMessageResponse
@@ -93,7 +91,6 @@ class ChatDataSource @Inject constructor(
             connectionAttempts++
             connectWebSocket().getOrThrow()
         } else {
-            Log.d("test connect", throwable.stackTraceToString())
             throw throwable
         }
     }
@@ -102,7 +99,6 @@ class ChatDataSource @Inject constructor(
         session?.disconnect()
         Result.success(Unit)
     } catch (e: Exception) {
-        Log.d("test disconnect", e.stackTraceToString())
         Result.failure(e)
     }
 
@@ -111,7 +107,6 @@ class ChatDataSource @Inject constructor(
             StompSubscribeHeaders(destination = "/sub/${userId}"),
             chatResponseSerializer,
         )?.map {
-            Log.d("test", it.toString())
             it
         } ?: flow { throw IOException("웹소켓을 먼저 연결해주세요.") }
 
@@ -120,23 +115,17 @@ class ChatDataSource @Inject constructor(
         sendMessageRequest: SendMessageRequest
     ): Result<Unit> =
         runCatching {
-            Log.d("test", "/pub/send/${userType.apiValue.lowercase()}")
-
             val result = session?.convertAndSend(
                 headers = StompSendHeaders(destination = "/pub/send/${userType.apiValue.lowercase()}"),
                 body = sendMessageRequest,
                 serializer = SendMessageRequest.serializer(),
             )
-
-            Log.d("test", result.toString())
         }
 
     suspend fun readMessage(
         userType: UserType,
         readMessageRequest: ReadMessageRequest
     ): Result<Unit> = runCatching {
-        Log.d("test", "/pub/read/${userType.apiValue.lowercase()}")
-
         session?.convertAndSend(
             headers = StompSendHeaders(destination = "/pub/read/${userType.apiValue.lowercase()}"),
             body = readMessageRequest,

@@ -107,28 +107,30 @@ class ChatRepositoryImpl @Inject constructor(
                     )
                 }
 
-                messages.map {
-                    val message = it.toVO()
+                messages
+                    .sortedBy { it.sequence }
+                    .map {
+                        val message = it.toVO()
 
-                    if (!localChatDataSource.isChatRoomExist(message.roomId, myId)) {
-                        localChatDataSource.insertChatRoom(
-                            myId = myId,
-                            chatRoom = ChatRoom(
-                                id = message.roomId,
-                                opponentId = if (myId == message.senderId) message.receiverId else message.senderId,
-                                lastMessage = message.content,
-                                lastMessageTime = message.createdAt,
-                                unReadMessageCount = 1,
+                        if (!localChatDataSource.isChatRoomExist(message.roomId, myId)) {
+                            localChatDataSource.insertChatRoom(
+                                myId = myId,
+                                chatRoom = ChatRoom(
+                                    id = message.roomId,
+                                    opponentId = if (myId == message.senderId) message.receiverId else message.senderId,
+                                    lastMessage = message.content,
+                                    lastMessageTime = message.createdAt,
+                                    unReadMessageCount = 1,
+                                )
                             )
-                        )
-                    }
+                        }
 
-                    val maxSeq =
-                        localChatDataSource.getMaxLocalSequence(roomId, myId) ?: Int.MIN_VALUE
-                    if (message.sequence > maxSeq) {
-                        localChatDataSource.insertMessage(message, myId)
+                        val maxSeq =
+                            localChatDataSource.getMaxLocalSequence(roomId, myId) ?: Int.MIN_VALUE
+                        if (message.sequence > maxSeq) {
+                            localChatDataSource.insertMessage(message, myId)
+                        }
                     }
-                }
             }.getOrThrow()
         }
 
