@@ -96,7 +96,7 @@ class ChatRepositoryImpl @Inject constructor(
                 )
             }.mapCatching { response ->
                 val messages = response.chatMessageResponse
-                val readSequence = response.opponentSequence
+                val readSequence = response.sequence
                 messages.lastOrNull()?.let {
                     localChatDataSource.readMessages(
                         roomId = roomId,
@@ -230,7 +230,7 @@ class ChatRepositoryImpl @Inject constructor(
             readMessageRequest = ReadMessageRequest(
                 chatroomId = chatroomId,
                 opponentId = opponentId,
-                messageSequence = sequence,
+                sequence = sequence,
             )
         ).onSuccess {
             localChatDataSource.readMessages(
