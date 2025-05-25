@@ -42,11 +42,10 @@ class LocalChatDataSource @Inject constructor(
             messageId = messageId,
         )
 
-    suspend fun hasMessagesAfterSequence(roomId: String, myId: String, sequence: Int): Boolean =
-        messagesDao.hasMessagesAfterSequence(
+    suspend fun getMaxLocalSequence(roomId: String, myId: String): Int? =
+        messagesDao.getMaxLocalSequence(
             roomId = roomId,
             myId = myId,
-            sequence = sequence,
         )
 
     suspend fun insertChatRoom(myId: String, chatRoom: ChatRoom) =
