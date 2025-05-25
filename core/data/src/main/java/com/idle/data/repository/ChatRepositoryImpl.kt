@@ -95,7 +95,18 @@ class ChatRepositoryImpl @Inject constructor(
                     messageId = messageId,
                 )
             }.mapCatching { response ->
-                response.map {
+                val messages = response.chatMessageResponse
+                val readSequence = response.opponentSequence
+                messages.lastOrNull()?.let {
+                    localChatDataSource.readMessages(
+                        roomId = roomId,
+                        myId = myId,
+                        senderId = it.senderId ?: return@let,
+                        sequence = readSequence,
+                    )
+                }
+
+                messages.map {
                     val message = it.toVO()
                     if (!localChatDataSource.isChatRoomExist(message.roomId, myId)) {
                         localChatDataSource.insertChatRoom(
@@ -109,7 +120,15 @@ class ChatRepositoryImpl @Inject constructor(
                             )
                         )
                     }
-                    localChatDataSource.insertMessage(message, myId)
+
+                    if (!localChatDataSource.hasMessagesAfterSequence(
+                            roomId = message.roomId,
+                            myId = myId,
+                            sequence = message.sequence,
+                        )
+                    ) {
+                        localChatDataSource.insertMessage(message, myId)
+                    }
                 }
             }.getOrThrow()
         }
@@ -138,6 +157,7 @@ class ChatRepositoryImpl @Inject constructor(
         chatDataSource.subscribeChatMessage(userId)
             .map {
                 val message = it.toVO()
+
                 when (message) {
                     is ChatMessage -> {
                         if (!localChatDataSource.isChatRoomExist(
@@ -165,9 +185,11 @@ class ChatRepositoryImpl @Inject constructor(
                             roomId = message.chatroomId,
                             myId = userId,
                             senderId = message.opponentId,
+                            sequence = message.sequence,
                         )
                     }
                 }
+
                 message
             }.retryWhen { cause, attempt ->
                 if (cause is IOException && attempt < MAX_RETRY_ATTEMPTS) {
@@ -201,18 +223,21 @@ class ChatRepositoryImpl @Inject constructor(
         myId: String,
         opponentId: String,
         userType: UserType,
+        sequence: Int,
     ): Result<Unit> =
         chatDataSource.readMessage(
             userType = userType,
             readMessageRequest = ReadMessageRequest(
                 chatroomId = chatroomId,
                 opponentId = opponentId,
+                messageSequence = sequence,
             )
         ).onSuccess {
             localChatDataSource.readMessages(
                 roomId = chatroomId,
                 myId = myId,
                 senderId = opponentId,
+                sequence = sequence,
             )
         }
 }

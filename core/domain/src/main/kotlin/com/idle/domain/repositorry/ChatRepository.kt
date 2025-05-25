@@ -54,5 +54,6 @@ interface ChatRepository {
         myId: String,
         opponentId: String,
         userType: UserType,
+        sequence: Int,
     ): Result<Unit>
 }

@@ -1,15 +1,14 @@
 package com.idle.database.dao
 
 import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Upsert
 import com.idle.database.model.MessageEntity
 
 @Dao
 interface MessagesDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertMessage(messages: MessageEntity)
+    @Upsert
+    suspend fun upsertMessage(messages: MessageEntity)
 
     @Query(
         """
@@ -25,7 +24,7 @@ interface MessagesDao {
         roomId: String,
         myId: String,
         lastMessageId: String?,
-        limit: Int = 50
+        limit: Int = 50,
     ): List<MessageEntity>
 
     @Query(
@@ -36,12 +35,14 @@ interface MessagesDao {
                 AND myId = :myId
                 AND senderId = :opponentId
                 AND isRead = 0
+                AND sequence <= :sequence
         """
     )
     suspend fun readMessages(
         roomId: String,
         myId: String,
         opponentId: String,
+        sequence: Int,
     )
 
     @Query(
@@ -59,5 +60,22 @@ interface MessagesDao {
         myId: String,
         roomId: String,
         messageId: String,
+    ): Boolean
+
+    @Query(
+        """
+        SELECT EXISTS(
+            SELECT 1
+            FROM message
+            WHERE roomId = :roomId
+              AND myId   = :myId
+              AND sequence > :sequence
+        )
+        """
+    )
+    suspend fun hasMessagesAfterSequence(
+        roomId: String,
+        myId: String,
+        sequence: Int
     ): Boolean
 }
