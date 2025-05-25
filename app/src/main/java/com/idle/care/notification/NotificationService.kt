@@ -3,8 +3,8 @@ package com.idle.care.notification
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.idle.domain.model.error.ErrorHelper
-import com.idle.domain.repositorry.TokenRepository
 import com.idle.domain.repositorry.ProfileRepository
+import com.idle.domain.repositorry.TokenRepository
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
@@ -40,10 +40,12 @@ class NotificationService : FirebaseMessagingService() {
         scope.launch {
             val userType = profileRepository.getMyUserType()
 
-            tokenRepository.postDeviceToken(
-                deviceToken = token,
-                userType = userType,
-            )
+            if (userType.isNotEmpty()) {
+                tokenRepository.postDeviceToken(
+                    deviceToken = token,
+                    userType = userType,
+                )
+            }
         }
     }
 
