@@ -93,9 +93,10 @@ class JobPostingDataSource @Inject constructor(
 
     suspend fun getCrawlingJobPostings(
         next: String?,
-        limit: Int
+        limit: Int,
+        distance: Int,
     ): Result<GetCrawlingJobPostingsResponse> =
-        safeApiCall { jobPostingApi.getCrawlingJobPostings(next = next, limit = limit) }
+        safeApiCall { jobPostingApi.getCrawlingJobPostings(next = next, limit = limit, distance = distance) }
 
     suspend fun getCrawlingJobPostingsDetail(
         jobPostingId: String

@@ -106,7 +106,6 @@ fun ChattingBody(
                     CareChatSenderTextBubble(
                         chatMessage = chatMessage,
                         isLast = isLast,
-                        isRead = isLast,
                         onSeeAllChatClicked = { navigateTo(DeepLinkDestination.SeeAllChat(it)) },
                         modifier = Modifier.padding(itemPadding),
                     )

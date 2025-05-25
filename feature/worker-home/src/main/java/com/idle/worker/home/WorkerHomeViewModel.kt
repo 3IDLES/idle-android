@@ -37,7 +37,8 @@ class WorkerHomeViewModel @Inject constructor(
     private val _profile = MutableStateFlow<WorkerProfile?>(null)
     val profile = _profile.asStateFlow()
 
-    private val next = MutableStateFlow<String?>(null)
+    private var nextCursorId: String? = null
+    private var nextDistance: Int = 15
 
     private val _jobPostings = MutableStateFlow<List<JobPosting>?>(null)
     val jobPostings = _jobPostings.asStateFlow()
@@ -153,28 +154,33 @@ class WorkerHomeViewModel @Inject constructor(
     }
 
     private suspend fun fetchInAppJobPostings() {
-        jobPostingRepository.getJobPostings(next = next.value).onSuccess { (nextId, postings) ->
-            next.value = nextId
-            if (nextId == null) {
-                _callType.value = JobPostingCallType.CRAWLING
-            }
-            _jobPostings.value = _jobPostings.value?.plus(postings) ?: postings
+        jobPostingRepository.getJobPostings(next = nextCursorId)
+            .onSuccess { (nextId, postings) ->
+                nextCursorId = nextId
+                if (nextId == null) {
+                    _callType.value = JobPostingCallType.CRAWLING
+                }
+                _jobPostings.value = _jobPostings.value?.plus(postings) ?: postings
 
-            if (_jobPostings.value?.isEmpty() != false) {
-                getJobPostings()
-            }
-        }.onFailure { errorHelper.sendError(it) }
+                if (_jobPostings.value?.isEmpty() != false) {
+                    getJobPostings()
+                }
+            }.onFailure { errorHelper.sendError(it) }
     }
 
     private suspend fun fetchCrawlingJobPostings() {
-        jobPostingRepository.getCrawlingJobPostings(next = next.value)
-            .onSuccess { (nextId, postings) ->
-                next.value = nextId
-                if (nextId == null) {
-                    _callType.value = JobPostingCallType.END
-                }
-                _jobPostings.value = _jobPostings.value?.plus(postings) ?: postings
-            }.onFailure { errorHelper.sendError(it) }
+        jobPostingRepository.getCrawlingJobPostings(
+            next = nextCursorId,
+            distance = nextDistance,
+        ).onSuccess { pageInfo ->
+            nextCursorId = pageInfo.nextCursor
+            nextDistance = pageInfo.nextDistance
+
+            if (pageInfo.nextCursor == null) {
+                _callType.value = JobPostingCallType.END
+            }
+            _jobPostings.value = _jobPostings.value?.plus(pageInfo.items) ?: pageInfo.items
+        }.onFailure { errorHelper.sendError(it) }
     }
 }
 

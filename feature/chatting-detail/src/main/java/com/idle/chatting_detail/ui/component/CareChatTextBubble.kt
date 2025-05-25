@@ -157,7 +157,6 @@ fun CareChatSenderTextBubble(
     chatMessage: ChatMessage,
     isLast: Boolean,
     modifier: Modifier = Modifier,
-    isRead: Boolean = false,
     onSeeAllChatClicked: (String) -> Unit = {},
 ) {
     Row(modifier = modifier.fillMaxWidth()) {
@@ -225,7 +224,7 @@ fun CareChatSenderTextBubble(
                     .align(Alignment.Bottom)
                     .padding(start = 6.dp),
             ) {
-                if (isRead) {
+                if (chatMessage.isRead) {
                     Text(
                         text = "읽음",
                         style = CareTheme.typography.caption1,
@@ -248,7 +247,6 @@ fun CareChatReceiverTextBubble(
     chatMessage: ChatMessage,
     isLast: Boolean,
     modifier: Modifier = Modifier,
-    isRead: Boolean = false,
     onSeeAllChatClicked: (String) -> Unit = {},
 ) {
     Row(
@@ -263,7 +261,7 @@ fun CareChatReceiverTextBubble(
                     .align(Alignment.Bottom)
                     .padding(end = 6.dp),
             ) {
-                if (isRead) {
+                if (chatMessage.isRead) {
                     Text(
                         text = "읽음",
                         style = CareTheme.typography.caption1,

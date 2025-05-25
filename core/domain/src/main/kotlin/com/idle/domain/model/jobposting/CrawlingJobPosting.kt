@@ -11,3 +11,9 @@ data class CrawlingJobPosting(
     val payInfo: String,
     val applyDeadline: String,
 ) : JobPosting(id, distance, jobPostingType, isFavorite)
+
+data class CrawlingJobPostingPage(
+    val nextCursor: String?,
+    val items: List<CrawlingJobPosting>,
+    val nextDistance: Int,
+)
