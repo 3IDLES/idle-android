@@ -8,6 +8,7 @@ import com.idle.network.di.TokenManager
 import com.idle.network.model.chat.ChatMessageResponse
 import com.idle.network.model.chat.ChatResponse
 import com.idle.network.model.chat.GenerateChatRoomResponse
+import com.idle.network.model.chat.GetChatMessageResponse
 import com.idle.network.model.chat.GetChatRoomResponse
 import com.idle.network.model.chat.ReadMessageRequest
 import com.idle.network.model.chat.SendMessageRequest
@@ -47,7 +48,7 @@ class ChatDataSource @Inject constructor(
     suspend fun getWorkerChatRoomMessages(
         roomId: String,
         messageId: String?,
-    ): Result<List<ChatMessageResponse>> =
+    ): Result<GetChatMessageResponse> =
         safeApiCall {
             chatApi.getWorkerChatRoomMessages(
                 chatRoomId = roomId,
@@ -58,7 +59,7 @@ class ChatDataSource @Inject constructor(
     suspend fun getCenterChatRoomMessages(
         roomId: String,
         messageId: String?,
-    ): Result<List<ChatMessageResponse>> =
+    ): Result<GetChatMessageResponse> =
         safeApiCall {
             chatApi.getCenterChatRoomMessages(
                 chatRoomId = roomId,

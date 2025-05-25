@@ -2,7 +2,7 @@ package com.idle.domain.model.chat
 
 import java.time.LocalDateTime
 
-sealed class Message
+sealed class Message(open val sequence: Int)
 
 data class ChatMessage(
     val id: String,
@@ -12,9 +12,11 @@ data class ChatMessage(
     val content: String,
     val createdAt: LocalDateTime,
     val isRead: Boolean,
-) : Message()
+    override val sequence: Int,
+) : Message(sequence)
 
 data class ReadMessage(
     val opponentId: String,
     val chatroomId: String,
-) : Message()
+    override val sequence: Int,
+) : Message(sequence)

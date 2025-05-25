@@ -1,7 +1,7 @@
 package com.idle.network.api
 
-import com.idle.network.model.chat.ChatMessageResponse
 import com.idle.network.model.chat.GenerateChatRoomResponse
+import com.idle.network.model.chat.GetChatMessageResponse
 import com.idle.network.model.chat.GetChatRoomResponse
 import retrofit2.Response
 import retrofit2.http.GET
@@ -26,11 +26,11 @@ interface ChatApi {
     suspend fun getWorkerChatRoomMessages(
         @Path("chatroom-id") chatRoomId: String,
         @Query("message-id") messageId: String?,
-    ): Response<List<ChatMessageResponse>>
+    ): Response<GetChatMessageResponse>
 
     @GET("api/v2/chat/center/chatrooms/{chatroom-id}/messages")
     suspend fun getCenterChatRoomMessages(
         @Path("chatroom-id") chatRoomId: String,
         @Query("message-id") messageId: String?,
-    ): Response<List<ChatMessageResponse>>
+    ): Response<GetChatMessageResponse>
 }

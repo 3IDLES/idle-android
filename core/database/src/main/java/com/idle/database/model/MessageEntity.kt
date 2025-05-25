@@ -9,7 +9,7 @@ import java.time.LocalDateTime
 
 @Entity(
     tableName = "message",
-    indices = [Index(value = ["roomId", "id"], unique = false)],
+    indices = [Index(value = ["roomId", "id", "sequence"], unique = true)],
     foreignKeys = arrayOf(
         ForeignKey(
             entity = ChatRoomEntity::class,
@@ -27,6 +27,7 @@ data class MessageEntity(
     val content: String,
     val createdAt: LocalDateTime,
     val isRead: Boolean,
+    val sequence: Int,
 ) {
     internal fun toDomain() = ChatMessage(
         id = id,
@@ -36,6 +37,7 @@ data class MessageEntity(
         content = content,
         createdAt = createdAt,
         isRead = isRead,
+        sequence = sequence,
     )
 }
 
@@ -48,4 +50,5 @@ internal fun ChatMessage.toMessageEntity(myId: String) = MessageEntity(
     content = content,
     createdAt = createdAt,
     isRead = isRead,
+    sequence = sequence,
 )

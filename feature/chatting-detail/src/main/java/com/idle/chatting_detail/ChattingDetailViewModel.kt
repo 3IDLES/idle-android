@@ -187,6 +187,7 @@ class ChattingDetailViewModel @Inject constructor(
             myId = myId,
             opponentId = opponentId,
             userType = myUserType,
+            sequence = _chatMessages.value?.lastOrNull()?.sequence ?: return
         ).onSuccess {
             _chatMessages.value = _chatMessages.value?.map {
                 if (it.receiverId == myId) it.copy(isRead = true) else it
