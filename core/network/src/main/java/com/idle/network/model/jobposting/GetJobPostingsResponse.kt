@@ -6,6 +6,7 @@ import com.idle.domain.model.jobposting.DayOfWeek
 import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.jobposting.PayType
 import com.idle.domain.model.jobposting.WorkerJobPosting
+import com.idle.domain.model.jobposting.WorkerJobPostingPage
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.time.LocalDate
@@ -18,8 +19,11 @@ data class GetJobPostingsResponse(
     val next: String?,
     val total: Int
 ) {
-    fun toVO(): Pair<String?, List<WorkerJobPosting>> =
-        next to workerJobPostingResponses.map { it.toVO() }
+    fun toVO(): WorkerJobPostingPage =
+        WorkerJobPostingPage(
+            nextCursor = next,
+            items = workerJobPostingResponses.map { it.toVO() },
+        )
 }
 
 @Serializable

@@ -35,7 +35,7 @@ class WorkerJobPostingViewModel @Inject constructor(
     private val _recruitmentPostStatus = MutableStateFlow(RecruitmentPostStatus.APPLY)
     val recruitmentPostStatus = _recruitmentPostStatus.asStateFlow()
 
-    private val next = MutableStateFlow<String?>(null)
+    private var nextCursorId: String? = null
 
     private val _appliedJobPostings = MutableStateFlow<List<JobPosting>?>(null)
     val appliedJobPostings = _appliedJobPostings.asStateFlow()
@@ -66,9 +66,7 @@ class WorkerJobPostingViewModel @Inject constructor(
     }
 
     internal fun getAppliedJobPostings() = viewModelScope.launch {
-        if (isLoading) {
-            return@launch
-        }
+        if (isLoading) return@launch
         isLoading = true
 
         try {
@@ -76,16 +74,16 @@ class WorkerJobPostingViewModel @Inject constructor(
                 return@launch
             }
 
-            jobPostingRepository.getJobPostingsApplied(next = next.value)
-                .onSuccess { (nextId, postings) ->
-                    next.value = nextId
+            jobPostingRepository.getJobPostingsApplied(next = nextCursorId)
+                .onSuccess { nextPage ->
+                    nextCursorId = nextPage.nextCursor
 
-                    if (nextId == null) {
+                    if (nextPage.nextCursor == null) {
                         appliedJobPostingCallType = JobPostingCallType.END
                     }
 
                     _appliedJobPostings.value =
-                        _appliedJobPostings.value?.plus(postings) ?: postings
+                        _appliedJobPostings.value?.plus(nextPage.items) ?: nextPage.items
                 }.onFailure { errorHelper.sendError(it) }
         } finally {
             isLoading = false
@@ -213,5 +211,5 @@ enum class RecruitmentPostStatus(val displayName: String) {
 }
 
 enum class JobPostingCallType {
-    IN_APP, CRAWLING, END
+    IN_APP, END
 }

@@ -8,6 +8,7 @@ import com.idle.domain.model.jobposting.CenterJobPosting
 import com.idle.domain.model.jobposting.CenterJobPostingDetail
 import com.idle.domain.model.jobposting.CrawlingJobPosting
 import com.idle.domain.model.jobposting.CrawlingJobPostingDetail
+import com.idle.domain.model.jobposting.CrawlingJobPostingPage
 import com.idle.domain.model.jobposting.DayOfWeek
 import com.idle.domain.model.jobposting.JobPostingSummary
 import com.idle.domain.model.jobposting.JobPostingType
@@ -17,6 +18,7 @@ import com.idle.domain.model.jobposting.PayType
 import com.idle.domain.model.jobposting.SharedJobPostingInfo
 import com.idle.domain.model.jobposting.WorkerJobPosting
 import com.idle.domain.model.jobposting.WorkerJobPostingDetail
+import com.idle.domain.model.jobposting.WorkerJobPostingPage
 import com.idle.domain.repositorry.JobPostingRepository
 import com.idle.network.model.jobposting.ApplyJobPostingRequest
 import com.idle.network.model.jobposting.FavoriteJobPostingRequest
@@ -151,7 +153,7 @@ class JobPostingRepositoryImpl @Inject constructor(
     override suspend fun getJobPostings(
         next: String?,
         limit: Int
-    ): Result<Pair<String?, List<WorkerJobPosting>>> = jobPostingDataSource.getJobPostings(
+    ): Result<WorkerJobPostingPage> = jobPostingDataSource.getJobPostings(
         next = next,
         limit = limit
     ).mapCatching { it.toVO() }
@@ -159,7 +161,7 @@ class JobPostingRepositoryImpl @Inject constructor(
     override suspend fun getJobPostingsApplied(
         next: String?,
         limit: Int
-    ): Result<Pair<String?, List<WorkerJobPosting>>> = jobPostingDataSource.getJobPostingsApplied(
+    ): Result<WorkerJobPostingPage> = jobPostingDataSource.getJobPostingsApplied(
         next = next,
         limit = limit
     ).mapCatching { it.toVO() }
@@ -213,8 +215,9 @@ class JobPostingRepositoryImpl @Inject constructor(
     override suspend fun getCrawlingJobPostings(
         next: String?,
         limit: Int,
-    ): Result<Pair<String?, List<CrawlingJobPosting>>> =
-        jobPostingDataSource.getCrawlingJobPostings(next, limit).mapCatching { it.toVO() }
+        distance: Int,
+    ): Result<CrawlingJobPostingPage> =
+        jobPostingDataSource.getCrawlingJobPostings(next, limit, distance).mapCatching { it.toVO() }
 
     override suspend fun getCrawlingJobPostingDetail(jobPostingId: String): Result<CrawlingJobPostingDetail> =
         jobPostingDataSource.getCrawlingJobPostingsDetail(jobPostingId).mapCatching { it.toVO() }

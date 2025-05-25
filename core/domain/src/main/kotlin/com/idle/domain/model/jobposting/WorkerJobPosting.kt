@@ -24,3 +24,8 @@ data class WorkerJobPosting(
     val applyDeadline: LocalDate,
     val applyTime: LocalDateTime?,
 ) : JobPosting(id, distance, jobPostingType, isFavorite)
+
+data class WorkerJobPostingPage(
+    val nextCursor: String?,
+    val items: List<WorkerJobPosting>,
+)

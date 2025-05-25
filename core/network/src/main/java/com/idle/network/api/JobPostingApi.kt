@@ -98,6 +98,7 @@ interface JobPostingApi {
     suspend fun getCrawlingJobPostings(
         @Query("next") next: String?,
         @Query("limit") limit: Int,
+        @Query("distance") distance: Int,
     ): Response<GetCrawlingJobPostingsResponse>
 
     @GET("api/v1/crawling-job-postings/{crawling-job-posting-id}")

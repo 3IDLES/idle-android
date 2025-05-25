@@ -8,6 +8,7 @@ import com.idle.domain.model.jobposting.CenterJobPosting
 import com.idle.domain.model.jobposting.CenterJobPostingDetail
 import com.idle.domain.model.jobposting.CrawlingJobPosting
 import com.idle.domain.model.jobposting.CrawlingJobPostingDetail
+import com.idle.domain.model.jobposting.CrawlingJobPostingPage
 import com.idle.domain.model.jobposting.DayOfWeek
 import com.idle.domain.model.jobposting.JobPostingSummary
 import com.idle.domain.model.jobposting.JobPostingType
@@ -17,6 +18,7 @@ import com.idle.domain.model.jobposting.PayType
 import com.idle.domain.model.jobposting.SharedJobPostingInfo
 import com.idle.domain.model.jobposting.WorkerJobPosting
 import com.idle.domain.model.jobposting.WorkerJobPostingDetail
+import com.idle.domain.model.jobposting.WorkerJobPostingPage
 
 interface JobPostingRepository {
     var sharedJobPostingInfo: SharedJobPostingInfo?
@@ -81,12 +83,12 @@ interface JobPostingRepository {
     suspend fun getJobPostings(
         next: String?,
         limit: Int = 10,
-    ): Result<Pair<String?, List<WorkerJobPosting>>>
+    ): Result<WorkerJobPostingPage>
 
     suspend fun getJobPostingsApplied(
         next: String?,
         limit: Int = 10,
-    ): Result<Pair<String?, List<WorkerJobPosting>>>
+    ): Result<WorkerJobPostingPage>
 
     suspend fun getMyFavoritesJobPostings(): Result<List<WorkerJobPosting>>
 
@@ -116,7 +118,8 @@ interface JobPostingRepository {
     suspend fun getCrawlingJobPostings(
         next: String?,
         limit: Int = 10,
-    ): Result<Pair<String?, List<CrawlingJobPosting>>>
+        distance: Int = 15,
+    ): Result<CrawlingJobPostingPage>
 
     suspend fun getCrawlingJobPostingDetail(jobPostingId: String): Result<CrawlingJobPostingDetail>
 }
