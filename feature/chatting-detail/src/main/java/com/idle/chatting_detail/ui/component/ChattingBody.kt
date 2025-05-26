@@ -10,6 +10,9 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -32,6 +35,22 @@ fun ChattingBody(
     navigateTo: (DeepLinkDestination) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val lastReadMyMessageId by remember(chatMessages) {
+        mutableStateOf(
+            chatMessages
+                .asReversed()
+                .firstOrNull { it.isRead && it.senderId != receiverId }?.id
+        )
+    }
+
+    val lastReadTheirMessageId by remember(chatMessages) {
+        mutableStateOf(
+            chatMessages
+                .asReversed()
+                .firstOrNull { it.isRead && it.senderId == receiverId }?.id
+        )
+    }
+
     LazyColumn(
         state = listState,
         modifier = modifier
@@ -69,10 +88,16 @@ fun ChattingBody(
 
             // 메시지 Bubble 결정
             val isMyMessage = receiverId == chatMessage.senderId
+            val showReadIndicator = when {
+                isMyMessage -> chatMessage.id == lastReadTheirMessageId
+                else -> chatMessage.id == lastReadMyMessageId
+            }
+
             if (isMyMessage) {
                 CareChatReceiverTextBubble(
                     chatMessage = chatMessage,
                     isLast = isLast,
+                    showReadIndicator = showReadIndicator,
                     onSeeAllChatClicked = {
                         navigateTo(
                             DeepLinkDestination.SeeAllChat(it)
@@ -99,6 +124,7 @@ fun ChattingBody(
                         },
                         chatMessage = chatMessage,
                         isLast = isLast,
+                        showReadIndicator = showReadIndicator,
                         onSeeAllChatClicked = { navigateTo(DeepLinkDestination.SeeAllChat(it)) },
                         modifier = Modifier.padding(itemPadding),
                     )
@@ -106,6 +132,7 @@ fun ChattingBody(
                     CareChatSenderTextBubble(
                         chatMessage = chatMessage,
                         isLast = isLast,
+                        showReadIndicator = showReadIndicator,
                         onSeeAllChatClicked = { navigateTo(DeepLinkDestination.SeeAllChat(it)) },
                         modifier = Modifier.padding(itemPadding),
                     )

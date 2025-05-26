@@ -42,7 +42,7 @@ fun CareChatSenderTextBubbleWithImage(
     chatMessage: ChatMessage,
     isLast: Boolean,
     modifier: Modifier = Modifier,
-    isRead: Boolean = false,
+    showReadIndicator: Boolean = false,
     onSeeAllChatClicked: (String) -> Unit = {},
 ) {
     Row(
@@ -126,22 +126,22 @@ fun CareChatSenderTextBubbleWithImage(
             }
         }
 
-        if (isLast) {
-            Column(
-                horizontalAlignment = Alignment.Start,
-                modifier = Modifier
-                    .padding(start = 6.dp)
-                    .wrapContentWidth()
-                    .align(Alignment.Bottom),
-            ) {
-                if (isRead) {
-                    Text(
-                        text = "읽음",
-                        style = CareTheme.typography.caption1,
-                        color = CareTheme.colors.orange500,
-                    )
-                }
+        Column(
+            horizontalAlignment = Alignment.Start,
+            modifier = Modifier
+                .padding(start = 6.dp)
+                .wrapContentWidth()
+                .align(Alignment.Bottom),
+        ) {
+            if (showReadIndicator) {
+                Text(
+                    text = "읽음",
+                    style = CareTheme.typography.caption1,
+                    color = CareTheme.colors.orange500,
+                )
+            }
 
+            if (isLast) {
                 Text(
                     text = chatMessage.createdAt.formatTimeToHourMinute24(),
                     style = CareTheme.typography.caption1,
@@ -156,6 +156,7 @@ fun CareChatSenderTextBubbleWithImage(
 fun CareChatSenderTextBubble(
     chatMessage: ChatMessage,
     isLast: Boolean,
+    showReadIndicator: Boolean,
     modifier: Modifier = Modifier,
     onSeeAllChatClicked: (String) -> Unit = {},
 ) {
@@ -216,22 +217,22 @@ fun CareChatSenderTextBubble(
             }
         }
 
-        if (isLast) {
-            Column(
-                verticalArrangement = Arrangement.Bottom,
-                horizontalAlignment = Alignment.Start,
-                modifier = Modifier
-                    .align(Alignment.Bottom)
-                    .padding(start = 6.dp),
-            ) {
-                if (chatMessage.isRead) {
-                    Text(
-                        text = "읽음",
-                        style = CareTheme.typography.caption1,
-                        color = CareTheme.colors.orange500,
-                    )
-                }
+        Column(
+            verticalArrangement = Arrangement.Bottom,
+            horizontalAlignment = Alignment.Start,
+            modifier = Modifier
+                .align(Alignment.Bottom)
+                .padding(start = 6.dp),
+        ) {
+            if (showReadIndicator) {
+                Text(
+                    text = "읽음",
+                    style = CareTheme.typography.caption1,
+                    color = CareTheme.colors.orange500,
+                )
+            }
 
+            if (isLast) {
                 Text(
                     text = chatMessage.createdAt.formatTimeToHourMinute24(),
                     style = CareTheme.typography.caption1,
@@ -246,6 +247,7 @@ fun CareChatSenderTextBubble(
 fun CareChatReceiverTextBubble(
     chatMessage: ChatMessage,
     isLast: Boolean,
+    showReadIndicator: Boolean,
     modifier: Modifier = Modifier,
     onSeeAllChatClicked: (String) -> Unit = {},
 ) {
@@ -253,22 +255,22 @@ fun CareChatReceiverTextBubble(
         horizontalArrangement = Arrangement.End,
         modifier = modifier.fillMaxWidth()
     ) {
-        if (isLast) {
-            Column(
-                verticalArrangement = Arrangement.Bottom,
-                horizontalAlignment = Alignment.End,
-                modifier = Modifier
-                    .align(Alignment.Bottom)
-                    .padding(end = 6.dp),
-            ) {
-                if (chatMessage.isRead) {
-                    Text(
-                        text = "읽음",
-                        style = CareTheme.typography.caption1,
-                        color = CareTheme.colors.orange500,
-                    )
-                }
+        Column(
+            verticalArrangement = Arrangement.Bottom,
+            horizontalAlignment = Alignment.End,
+            modifier = Modifier
+                .align(Alignment.Bottom)
+                .padding(end = 6.dp),
+        ) {
+            if (showReadIndicator) {
+                Text(
+                    text = "읽음",
+                    style = CareTheme.typography.caption1,
+                    color = CareTheme.colors.orange500,
+                )
+            }
 
+            if (isLast) {
                 Text(
                     text = chatMessage.createdAt.formatTimeToHourMinute24(),
                     style = CareTheme.typography.caption1,
