@@ -57,13 +57,12 @@ class CenterChattingViewModel @Inject constructor(
         chatRepository.subscribeChatMessage(
             userId = _myProfile.value?.centerId ?: return@launch,
             userType = UserType.CENTER,
-        )
-            .collect { message ->
-                when (message) {
-                    is ChatMessage -> handleChatMessage(message)
-                    is ReadMessage -> Unit
-                }
+        ).collect { message ->
+            when (message) {
+                is ChatMessage -> handleChatMessage(message)
+                is ReadMessage -> Unit
             }
+        }
     }
 
     private suspend fun handleChatMessage(message: ChatMessage) {

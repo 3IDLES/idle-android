@@ -28,6 +28,7 @@ interface ChatRepository {
         roomId: String,
         myId: String,
         messageId: String?,
+        unReadMessageCount: Int?,
     ): Result<List<ChatMessage>>
 
     suspend fun generateChatRooms(

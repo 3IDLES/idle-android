@@ -21,12 +21,11 @@ class LocalChatDataSource @Inject constructor(
         roomId: String,
         myId: String,
         lastMessageId: String?
-    ): List<ChatMessage> =
-        messagesDao.getMessages(
-            roomId = roomId,
-            myId = myId,
-            lastMessageId = lastMessageId,
-        ).map(MessageEntity::toDomain).reversed()
+    ): List<ChatMessage> = messagesDao.getMessages(
+        roomId = roomId,
+        myId = myId,
+        lastMessageId = lastMessageId,
+    ).map(MessageEntity::toDomain).reversed()
 
     suspend fun readMessages(
         roomId: String,

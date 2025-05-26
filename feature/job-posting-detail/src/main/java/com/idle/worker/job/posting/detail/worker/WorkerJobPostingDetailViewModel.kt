@@ -158,6 +158,7 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
                         myId = _profile.value?.workerId ?: return@onSuccess,
                         myUserType = UserType.WORKER.apiValue,
                         opponentId = opponentId,
+                        unReadMessageCount = -1,
                         fromJobPosting = true,
                     )
                 )

@@ -191,6 +191,7 @@ internal fun ChatRoomItem(
                         myId = myProfile!!.workerId,
                         myUserType = UserType.WORKER.apiValue,
                         opponentId = chatRoom.opponentId,
+                        unReadMessageCount = chatRoom.unReadMessageCount,
                         fromJobPosting = false,
                     )
                 )

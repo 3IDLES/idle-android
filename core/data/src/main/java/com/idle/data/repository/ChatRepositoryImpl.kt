@@ -79,59 +79,52 @@ class ChatRepositoryImpl @Inject constructor(
         roomId: String,
         myId: String,
         messageId: String?,
+        unReadMessageCount: Int?,
     ): Result<List<ChatMessage>> = runCatching {
         if (messageId == null || !localChatDataSource.isMessageExist(roomId, myId, messageId)) {
-            // 웹소켓으로 얻지 못한 메세지가 있을경우 정합성을 위해 서버에서 호출
-            when (userType) {
-                UserType.WORKER -> chatDataSource.getWorkerChatRoomMessages(
-                    roomId = roomId,
-                    messageId = messageId,
-                )
+            val response = when (userType) {
+                UserType.WORKER -> chatDataSource.getWorkerChatRoomMessages(roomId, messageId)
+                UserType.CENTER -> chatDataSource.getCenterChatRoomMessages(roomId, messageId)
+            }.getOrThrow()
 
-                UserType.CENTER -> chatDataSource.getCenterChatRoomMessages(
-                    roomId = roomId,
-                    messageId = messageId,
-                )
-            }.mapCatching { response ->
-                val messages = response.chatMessageInfos
+            val allMessages = response.chatMessageInfos
+                .sortedBy { it.sequence }
+                .map { it.toVO() }
 
-                messages
-                    .sortedBy { it.sequence }
-                    .forEach {
-                        val message = it.toVO()
+            val messagesToUse = unReadMessageCount?.let {
+                allMessages.takeLast(it)
+            } ?: allMessages
 
-                        if (!localChatDataSource.isChatRoomExist(message.roomId, myId)) {
-                            localChatDataSource.insertChatRoom(
-                                myId = myId,
-                                chatRoom = ChatRoom(
-                                    id = message.roomId,
-                                    opponentId = if (myId == message.senderId) message.receiverId else message.senderId,
-                                    lastMessage = message.content,
-                                    lastMessageTime = message.createdAt,
-                                    unReadMessageCount = 1,
-                                )
-                            )
-                        }
+            val maxSeq = localChatDataSource.getMaxLocalSequence(roomId, myId) ?: Int.MIN_VALUE
 
-                        val maxSeq =
-                            localChatDataSource.getMaxLocalSequence(roomId, myId) ?: Int.MIN_VALUE
-                        if (message.sequence > maxSeq) {
-                            localChatDataSource.insertMessage(message, myId)
-                        }
-                    }
-
-                val readSequence = response.sequence
-                messages.lastOrNull()?.let {
-                    localChatDataSource.readMessages(
-                        roomId = roomId,
+            messagesToUse.forEach { message ->
+                if (!localChatDataSource.isChatRoomExist(message.roomId, myId)) {
+                    localChatDataSource.insertChatRoom(
                         myId = myId,
-                        senderId = it.senderId ?: return@let,
-                        sequence = readSequence,
+                        chatRoom = ChatRoom(
+                            id = message.roomId,
+                            opponentId = if (myId == message.senderId) message.receiverId else message.senderId,
+                            lastMessage = message.content,
+                            lastMessageTime = message.createdAt,
+                            unReadMessageCount = 1,
+                        )
                     )
                 }
 
-                messages
-            }.getOrThrow()
+                if (message.sequence > maxSeq) {
+                    localChatDataSource.insertMessage(message, myId)
+                }
+            }
+
+            val readSequence = response.sequence
+            allMessages.lastOrNull()?.let {
+                localChatDataSource.readMessages(
+                    roomId = roomId,
+                    myId = myId,
+                    senderId = it.senderId,
+                    sequence = readSequence,
+                )
+            }
         }
 
         return@runCatching localChatDataSource.getMessages(
@@ -182,12 +175,14 @@ class ChatRepositoryImpl @Inject constructor(
                     }
 
                     is ReadMessage -> {
-                        localChatDataSource.readMessages(
-                            roomId = message.chatroomId,
-                            myId = userId,
-                            senderId = message.opponentId,
-                            sequence = message.sequence,
-                        )
+                        if (message.opponentId != userId) {
+                            localChatDataSource.readMessages(
+                                roomId = message.chatroomId,
+                                myId = userId,
+                                senderId = message.opponentId,
+                                sequence = message.sequence,
+                            )
+                        }
                     }
                 }
 
@@ -225,20 +220,19 @@ class ChatRepositoryImpl @Inject constructor(
         opponentId: String,
         userType: UserType,
         sequence: Int,
-    ): Result<Unit> =
-        chatDataSource.readMessage(
-            userType = userType,
-            readMessageRequest = ReadMessageRequest(
-                chatroomId = chatroomId,
-                opponentId = opponentId,
-                sequence = sequence,
-            )
-        ).onSuccess {
-            localChatDataSource.readMessages(
-                roomId = chatroomId,
-                myId = myId,
-                senderId = opponentId,
-                sequence = sequence,
-            )
-        }
+    ): Result<Unit> = chatDataSource.readMessage(
+        userType = userType,
+        readMessageRequest = ReadMessageRequest(
+            chatroomId = chatroomId,
+            opponentId = opponentId,
+            sequence = sequence,
+        )
+    ).onSuccess {
+        localChatDataSource.readMessages(
+            roomId = chatroomId,
+            myId = myId,
+            senderId = opponentId,
+            sequence = sequence,
+        )
+    }
 }

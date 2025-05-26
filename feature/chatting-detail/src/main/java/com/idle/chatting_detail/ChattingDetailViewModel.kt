@@ -38,12 +38,14 @@ class ChattingDetailViewModel @Inject constructor(
     private val opponentId: String = requireNotNull(savedStateHandle["opponentId"]) {
         "opponentId is missing in savedStateHandle"
     }
-    val myUserType: UserType =
-        UserType.create(
-            requireNotNull(savedStateHandle["myUserType"]) { "myUserType is missing" }
-        )
+    val myUserType: UserType = UserType.create(
+        requireNotNull(savedStateHandle["myUserType"]) { "myUserType is missing" }
+    )
     val myId: String = requireNotNull(savedStateHandle["myId"]) {
         "myId is missing in savedStateHandle"
+    }
+    private var unReadMessageCount: Int = requireNotNull(savedStateHandle["unReadMessageCount"]) {
+        "unReadMessageCount is missing in savedStateHandle"
     }
     private val fromJobPosting: Boolean = requireNotNull(savedStateHandle["fromJobPosting"]) {
         "fromJobPosting is missing in savedStateHandle"
@@ -124,8 +126,10 @@ class ChattingDetailViewModel @Inject constructor(
                 messageId = _chatMessages.value?.first()?.id,
                 userType = myUserType,
                 myId = myId,
+                unReadMessageCount = if (unReadMessageCount >= 0) unReadMessageCount else null,
             ).onSuccess { messages ->
                 if (messages.isEmpty()) _callType.value = MessageCallType.END
+                unReadMessageCount -= messages.size
 
                 _chatMessages.value = messages.plus(_chatMessages.value ?: emptyList())
             }.onFailure {
@@ -151,8 +155,8 @@ class ChattingDetailViewModel @Inject constructor(
             }.collect { message ->
                 when (message) {
                     is ChatMessage -> {
-                        if (message.senderId != myId) readMessage()
-
+                        if (message.senderId == myId) readMessage()
+                        readMessage()
                         _chatMessages.value = (_chatMessages.value ?: emptyList()) + message
                     }
 
@@ -182,12 +186,14 @@ class ChattingDetailViewModel @Inject constructor(
     }
 
     internal suspend fun readMessage() {
+        val lastOpponentMessageSequence = _chatMessages.value?.lastOrNull()?.sequence ?: return
+
         chatRepository.readMessage(
             chatroomId = chatroomId,
             myId = myId,
             opponentId = opponentId,
             userType = myUserType,
-            sequence = _chatMessages.value?.lastOrNull()?.sequence ?: return
+            sequence = lastOpponentMessageSequence
         ).onSuccess {
             _chatMessages.value = _chatMessages.value?.map {
                 if (it.receiverId == myId) it.copy(isRead = true) else it

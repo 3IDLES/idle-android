@@ -49,6 +49,7 @@ sealed class DeepLinkDestination(
         val myUserType: String,
         val opponentId: String,
         val fromJobPosting: Boolean,
+        val unReadMessageCount: Int
     ) : DeepLinkDestination(
         addressRes = R.string.chatting_detail_deeplink_url,
         params = mapOf(
@@ -57,6 +58,7 @@ sealed class DeepLinkDestination(
             "myUserType" to myUserType,
             "opponentId" to opponentId,
             "fromJobPosting" to fromJobPosting,
+            "unReadMessageCount" to unReadMessageCount,
         )
     )
 

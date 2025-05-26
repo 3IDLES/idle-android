@@ -187,6 +187,7 @@ internal fun ChatRoomItem(
                         myId = myProfile!!.centerId,
                         opponentId = chatRoom.opponentId,
                         myUserType = UserType.CENTER.apiValue,
+                        unReadMessageCount = chatRoom.unReadMessageCount,
                         fromJobPosting = false,
                     )
                 )

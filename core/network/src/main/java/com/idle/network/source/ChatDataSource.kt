@@ -18,7 +18,6 @@ import com.idle.network.util.safeApiCall
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 import kotlinx.serialization.json.Json
 import okio.IOException
 import org.hildan.krossbow.stomp.config.StompConfig
@@ -106,9 +105,7 @@ class ChatDataSource @Inject constructor(
         session?.subscribe(
             StompSubscribeHeaders(destination = "/sub/${userId}"),
             chatResponseSerializer,
-        )?.map {
-            it
-        } ?: flow { throw IOException("웹소켓을 먼저 연결해주세요.") }
+        ) ?: flow { throw IOException("웹소켓을 먼저 연결해주세요.") }
 
     suspend fun sendMessage(
         userType: UserType,
