@@ -69,7 +69,7 @@ jobs:
         run: ./gradlew bundleRelease --stacktrace
 
       - name: Upload AAB artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4   # ← 여기만 v3 → v4 로 변경
         with:
           name: app-release.aab
           path: app/build/outputs/bundle/release/app-release.aab
