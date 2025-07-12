@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.idle.binding.EventHelper
 import com.idle.binding.MainEvent
 import com.idle.binding.ToastType
+import com.idle.common.suspendRunCatching
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.jobposting.ApplyMethod
 import com.idle.domain.model.jobposting.CrawlingJobPosting
@@ -49,7 +50,9 @@ class WorkerJobPostingViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            getMyWorkerProfileUseCase().onSuccess {
+            suspendRunCatching {
+                getMyWorkerProfileUseCase()
+            }.onSuccess {
                 _profile.value = it
             }
         }
@@ -74,17 +77,18 @@ class WorkerJobPostingViewModel @Inject constructor(
                 return@launch
             }
 
-            jobPostingRepository.getJobPostingsApplied(next = nextCursorId)
-                .onSuccess { nextPage ->
-                    nextCursorId = nextPage.nextCursor
+            suspendRunCatching {
+                jobPostingRepository.getJobPostingsApplied(next = nextCursorId)
+            }.onSuccess { nextPage ->
+                nextCursorId = nextPage.nextCursor
 
-                    if (nextPage.nextCursor == null) {
-                        appliedJobPostingCallType = JobPostingCallType.END
-                    }
+                if (nextPage.nextCursor == null) {
+                    appliedJobPostingCallType = JobPostingCallType.END
+                }
 
-                    _appliedJobPostings.value =
-                        _appliedJobPostings.value?.plus(nextPage.items) ?: nextPage.items
-                }.onFailure { errorHelper.sendError(it) }
+                _appliedJobPostings.value =
+                    _appliedJobPostings.value?.plus(nextPage.items) ?: nextPage.items
+            }.onFailure { errorHelper.sendError(it) }
         } finally {
             isLoading = false
         }
@@ -96,22 +100,28 @@ class WorkerJobPostingViewModel @Inject constructor(
     }
 
     private suspend fun getFavoriteCareMeetJobPostings() {
-        jobPostingRepository.getMyFavoritesJobPostings().onSuccess { postings ->
+        suspendRunCatching {
+            jobPostingRepository.getMyFavoritesJobPostings()
+        }.onSuccess { postings ->
             _favoriteJobPostings.value = _favoriteJobPostings.value?.plus(postings) ?: postings
         }.onFailure { errorHelper.sendError(it) }
     }
 
     private suspend fun getFavoriteCrawlingJobPostings() {
-        jobPostingRepository.getMyFavoritesCrawlingJobPostings().onSuccess { postings ->
+        suspendRunCatching {
+            jobPostingRepository.getMyFavoritesCrawlingJobPostings()
+        }.onSuccess { postings ->
             _favoriteJobPostings.value = _favoriteJobPostings.value?.plus(postings) ?: postings
         }.onFailure { errorHelper.sendError(it) }
     }
 
     internal fun applyJobPosting(jobPostingId: String) = viewModelScope.launch {
-        jobPostingRepository.applyJobPosting(
-            jobPostingId = jobPostingId,
-            applyMethod = ApplyMethod.APP
-        ).onSuccess {
+        suspendRunCatching {
+            jobPostingRepository.applyJobPosting(
+                jobPostingId = jobPostingId,
+                applyMethod = ApplyMethod.APP
+            )
+        }.onSuccess {
             eventHelper.sendEvent(MainEvent.ShowToast("지원이 완료되었어요.", ToastType.SUCCESS))
 
             _appliedJobPostings.value = _appliedJobPostings.value?.map {
@@ -134,10 +144,12 @@ class WorkerJobPostingViewModel @Inject constructor(
         jobPostingId: String,
         jobPostingType: JobPostingType,
     ) = viewModelScope.launch {
-        jobPostingRepository.addFavoriteJobPosting(
-            jobPostingId = jobPostingId,
-            jobPostingType = jobPostingType,
-        ).onSuccess {
+        suspendRunCatching {
+            jobPostingRepository.addFavoriteJobPosting(
+                jobPostingId = jobPostingId,
+                jobPostingType = jobPostingType,
+            )
+        }.onSuccess {
             eventHelper.sendEvent(MainEvent.ShowToast("즐겨찾기에 추가되었어요.", ToastType.SUCCESS))
 
             _appliedJobPostings.value = _appliedJobPostings.value?.map {
@@ -171,7 +183,9 @@ class WorkerJobPostingViewModel @Inject constructor(
     }
 
     internal fun removeFavoriteJobPosting(jobPostingId: String) = viewModelScope.launch {
-        jobPostingRepository.removeFavoriteJobPosting(jobPostingId = jobPostingId).onSuccess {
+        suspendRunCatching {
+            jobPostingRepository.removeFavoriteJobPosting(jobPostingId = jobPostingId)
+        }.onSuccess {
             eventHelper.sendEvent(MainEvent.ShowToast("즐겨찾기에서 제거했어요.", ToastType.SUCCESS))
 
             _appliedJobPostings.value = _appliedJobPostings.value?.map {

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.idle.binding.EventHelper
 import com.idle.binding.MainEvent
 import com.idle.binding.ToastType.SUCCESS
+import com.idle.common.suspendRunCatching
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.jobposting.CenterJobPosting
 import com.idle.domain.repositorry.JobPostingRepository
@@ -38,7 +39,9 @@ class CenterHomeViewModel @Inject constructor(
     val unreadNotificationCount = _unreadNotificationCount.asStateFlow()
 
     internal fun getUnreadNotificationCount() = viewModelScope.launch {
-        notificationRepository.getUnreadNotificationCount().onSuccess {
+        suspendRunCatching {
+            notificationRepository.getUnreadNotificationCount()
+        }.onSuccess {
             _unreadNotificationCount.value = it
         }.onFailure { errorHelper.sendError(it) }
     }
@@ -53,19 +56,25 @@ class CenterHomeViewModel @Inject constructor(
     }
 
     internal fun getJobPostingsInProgress() = viewModelScope.launch {
-        getJobPostingsInProgressUseCase().onSuccess {
+        suspendRunCatching {
+            getJobPostingsInProgressUseCase()
+        }.onSuccess {
             _jobPostingsInProgress.value = it
         }.onFailure { errorHelper.sendError(it) }
     }
 
     internal fun getJobPostingsCompleted() = viewModelScope.launch {
-        jobPostingRepository.getJobPostingsCompleted().onSuccess {
+        suspendRunCatching {
+            jobPostingRepository.getJobPostingsCompleted()
+        }.onSuccess {
             _jobPostingsCompleted.value = it
         }.onFailure { errorHelper.sendError(it) }
     }
 
     internal fun endJobPosting(jobPostingId: String) = viewModelScope.launch {
-        jobPostingRepository.endJobPosting(jobPostingId).onSuccess {
+        suspendRunCatching {
+            jobPostingRepository.endJobPosting(jobPostingId)
+        }.onSuccess {
             val jobPostingsInProgress = _jobPostingsInProgress.value ?: emptyList()
             val jobPostingsCompleted = _jobPostingsCompleted.value ?: emptyList()
 

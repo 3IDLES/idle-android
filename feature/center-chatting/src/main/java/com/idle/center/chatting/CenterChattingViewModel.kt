@@ -2,6 +2,7 @@ package com.idle.center.chatting
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.idle.common.suspendRunCatching
 import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.chat.ChatMessage
 import com.idle.domain.model.chat.ChatRoomWithOpponentInfo
@@ -16,6 +17,7 @@ import com.idle.navigation.NavigationHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -38,26 +40,34 @@ class CenterChattingViewModel @Inject constructor(
     val chatRoomList = _chatRoomList.asStateFlow()
 
     internal suspend fun initCenterChatting() {
-        getMyCenterProfileUseCase().onSuccess {
+        suspendRunCatching {
+            getMyCenterProfileUseCase()
+        }.onSuccess {
             _myProfile.value = it
         }.onFailure { errorHelper.sendError(it) }
     }
 
     internal fun connectWebsocket() = viewModelScope.launch {
-        chatRepository.connectWebSocket().onSuccess {
+        suspendRunCatching {
+            chatRepository.connectWebSocket()
+        }.onSuccess {
             subscribeChatMessage()
         }
     }
 
     internal fun disconnectWebsocket() = viewModelScope.launch {
-        chatRepository.disconnectWebSocket()
+        suspendRunCatching {
+            chatRepository.disconnectWebSocket()
+        }
     }
 
     private fun subscribeChatMessage() = viewModelScope.launch {
         chatRepository.subscribeChatMessage(
             userId = _myProfile.value?.centerId ?: return@launch,
             userType = UserType.CENTER,
-        ).collect { message ->
+        ).catch {
+            errorHelper.sendError(it)
+        }.collect { message ->
             when (message) {
                 is ChatMessage -> handleChatMessage(message)
                 is ReadMessage -> Unit
@@ -79,8 +89,9 @@ class CenterChattingViewModel @Inject constructor(
             )
         } else {
             // 새로운 방이면 새로 생성 후 최상단에 추가
-            val opponentProfile = profileRepository.getWorkerProfile(message.senderId)
-                .getOrNull() ?: return
+            val opponentProfile = suspendRunCatching {
+                profileRepository.getWorkerProfile(message.senderId)
+            }.getOrNull() ?: return
 
             val newChatRoom = ChatRoomWithOpponentInfo(
                 id = roomId,
@@ -99,10 +110,14 @@ class CenterChattingViewModel @Inject constructor(
     }
 
     internal suspend fun retrieveChatRoomList() {
-        getChatRoomsUseCase(
-            userType = UserType.CENTER,
-            userId = _myProfile.value?.centerId ?: return
-        ).onSuccess {
+        val centerId = _myProfile.value?.centerId ?: return
+
+        suspendRunCatching {
+            getChatRoomsUseCase(
+                userType = UserType.CENTER,
+                userId = centerId,
+            )
+        }.onSuccess {
             val newMap = LinkedHashMap<String, ChatRoomWithOpponentInfo>().apply {
                 putAll(_chatRoomMap.value)
                 it.forEach { chatRoom -> this[chatRoom.id] = chatRoom }
@@ -113,13 +128,17 @@ class CenterChattingViewModel @Inject constructor(
     }
 
     internal suspend fun loadChatRoomList() {
-        chatRepository.loadChatRooms(
-            userId = _myProfile.value?.centerId ?: return,
-            userType = UserType.CENTER
-        ).onSuccess {
+        val centerId = _myProfile.value?.centerId ?: return
+
+        suspendRunCatching {
+            chatRepository.loadChatRooms(
+                userId = centerId,
+                userType = UserType.CENTER
+            )
+        }.onSuccess { response ->
             val newMap = LinkedHashMap<String, ChatRoomWithOpponentInfo>().apply {
                 putAll(_chatRoomMap.value)
-                it.forEach { chatRoom -> this[chatRoom.id] = chatRoom }
+                response.forEach { chatRoom -> this[chatRoom.id] = chatRoom }
             }
             _chatRoomMap.value = newMap
             _chatRoomList.value = _chatRoomMap.value.values.toList()

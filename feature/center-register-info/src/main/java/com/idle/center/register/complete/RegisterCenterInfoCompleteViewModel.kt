@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.EventHelper
 import com.idle.binding.MainEvent
+import com.idle.common.suspendRunCatching
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.usecase.profile.GetMyCenterProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,11 +24,13 @@ class RegisterCenterInfoCompleteViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            getMyCenterProfileUseCase()
-                .onSuccess { _centerProfile.value = it }
-                .onFailure {
-                    eventHelper.sendEvent(MainEvent.ShowToast(it.toString()))
-                }
+            suspendRunCatching {
+                getMyCenterProfileUseCase()
+            }.onSuccess {
+                _centerProfile.value = it
+            }.onFailure {
+                eventHelper.sendEvent(MainEvent.ShowToast(it.toString()))
+            }
         }
     }
 }

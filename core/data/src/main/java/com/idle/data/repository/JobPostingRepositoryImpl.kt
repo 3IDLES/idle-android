@@ -60,7 +60,7 @@ class JobPostingRepositoryImpl @Inject constructor(
         applyMethod: List<ApplyMethod>,
         applyDeadLineType: ApplyDeadlineType,
         applyDeadline: String?,
-    ): Result<Unit> = jobPostingDataSource.postJobPosting(
+    ) = jobPostingDataSource.postJobPosting(
         JobPostingRequest(
             weekdays = weekdays.map { it.name },
             startTime = startTime,
@@ -113,7 +113,7 @@ class JobPostingRepositoryImpl @Inject constructor(
         applyMethod: List<ApplyMethod>?,
         applyDeadLineType: ApplyDeadlineType,
         applyDeadline: String?,
-    ): Result<Unit> = jobPostingDataSource.updateJobPosting(
+    ) = jobPostingDataSource.updateJobPosting(
         jobPostingId = jobPostingId,
         jobPostingRequest = JobPostingRequest(
             weekdays = weekdays.map { it.name },
@@ -142,83 +142,77 @@ class JobPostingRepositoryImpl @Inject constructor(
         )
     )
 
-    override suspend fun getCenterJobPostingDetail(jobPostingId: String): Result<CenterJobPostingDetail> =
-        jobPostingDataSource.getCenterJobPostingDetail(jobPostingId)
-            .mapCatching { it.toVO() }
+    override suspend fun getCenterJobPostingDetail(jobPostingId: String): CenterJobPostingDetail =
+        jobPostingDataSource.getCenterJobPostingDetail(jobPostingId).toVO()
 
-    override suspend fun getWorkerJobPostingDetail(jobPostingId: String): Result<WorkerJobPostingDetail> =
-        jobPostingDataSource.getWorkerJobPostingDetail(jobPostingId)
-            .mapCatching { it.toVO() }
+    override suspend fun getWorkerJobPostingDetail(jobPostingId: String): WorkerJobPostingDetail =
+        jobPostingDataSource.getWorkerJobPostingDetail(jobPostingId).toVO()
 
     override suspend fun getJobPostings(
         next: String?,
         limit: Int
-    ): Result<WorkerJobPostingPage> = jobPostingDataSource.getJobPostings(
+    ): WorkerJobPostingPage = jobPostingDataSource.getJobPostings(
         next = next,
         limit = limit
-    ).mapCatching { it.toVO() }
+    ).toVO()
 
     override suspend fun getJobPostingsApplied(
         next: String?,
         limit: Int
-    ): Result<WorkerJobPostingPage> = jobPostingDataSource.getJobPostingsApplied(
+    ): WorkerJobPostingPage = jobPostingDataSource.getJobPostingsApplied(
         next = next,
         limit = limit
-    ).mapCatching { it.toVO() }
+    ).toVO()
 
-    override suspend fun getMyFavoritesJobPostings(): Result<List<WorkerJobPosting>> =
-        jobPostingDataSource.getMyFavoriteJobPostings()
-            .mapCatching { it.toVO() }
+    override suspend fun getMyFavoritesJobPostings(): List<WorkerJobPosting> =
+        jobPostingDataSource.getMyFavoriteJobPostings().toVO()
 
-    override suspend fun getMyFavoritesCrawlingJobPostings(): Result<List<CrawlingJobPosting>> =
-        jobPostingDataSource.getMyFavoriteCrawlingJobPostings()
-            .mapCatching { it.toVO() }
+    override suspend fun getMyFavoritesCrawlingJobPostings(): List<CrawlingJobPosting> =
+        jobPostingDataSource.getMyFavoriteCrawlingJobPostings().toVO()
 
-    override suspend fun getJobPostingsInProgress(): Result<List<CenterJobPosting>> =
-        jobPostingDataSource.getJobPostingsInProgress().mapCatching { it.toVO() }
+    override suspend fun getJobPostingsInProgress(): List<CenterJobPosting> =
+        jobPostingDataSource.getJobPostingsInProgress().toVO()
 
-    override suspend fun getJobPostingsCompleted(): Result<List<CenterJobPosting>> =
-        jobPostingDataSource.getJobPostingsCompleted().mapCatching { it.toVO() }
+    override suspend fun getJobPostingsCompleted(): List<CenterJobPosting> =
+        jobPostingDataSource.getJobPostingsCompleted().toVO()
 
-    override suspend fun getApplicantsCount(jobPostingId: String): Result<Int> =
-        jobPostingDataSource.getApplicantCount(jobPostingId).mapCatching { it.applicantCount }
+    override suspend fun getApplicantsCount(jobPostingId: String) =
+        jobPostingDataSource.getApplicantCount(jobPostingId).applicantCount
 
     override suspend fun applyJobPosting(
         jobPostingId: String,
         applyMethod: ApplyMethod,
-    ): Result<Unit> =
-        jobPostingDataSource.applyJobPosting(
-            ApplyJobPostingRequest(jobPostingId = jobPostingId, applyMethodType = applyMethod.name)
-        )
+    ) = jobPostingDataSource.applyJobPosting(
+        ApplyJobPostingRequest(jobPostingId = jobPostingId, applyMethodType = applyMethod.name)
+    )
 
     override suspend fun addFavoriteJobPosting(
         jobPostingId: String,
         jobPostingType: JobPostingType,
-    ): Result<Unit> =
-        jobPostingDataSource.addFavoriteJobPosting(
-            jobPostingId = jobPostingId,
-            favoriteJobPostingRequest = FavoriteJobPostingRequest(jobPostingType.name),
-        )
+    ) = jobPostingDataSource.addFavoriteJobPosting(
+        jobPostingId = jobPostingId,
+        favoriteJobPostingRequest = FavoriteJobPostingRequest(jobPostingType.name),
+    )
 
-    override suspend fun removeFavoriteJobPosting(jobPostingId: String): Result<Unit> =
+    override suspend fun removeFavoriteJobPosting(jobPostingId: String) =
         jobPostingDataSource.removeFavoriteJobPosting(jobPostingId = jobPostingId)
 
-    override suspend fun getApplicants(jobPostingId: String): Result<Pair<JobPostingSummary, List<Applicant>>> =
-        jobPostingDataSource.getApplicants(jobPostingId).mapCatching { it.toVO() }
+    override suspend fun getApplicants(jobPostingId: String): Pair<JobPostingSummary, List<Applicant>> =
+        jobPostingDataSource.getApplicants(jobPostingId).toVO()
 
-    override suspend fun endJobPosting(jobPostingId: String): Result<Unit> =
+    override suspend fun endJobPosting(jobPostingId: String) =
         jobPostingDataSource.endJobPosting(jobPostingId)
 
-    override suspend fun deleteJobPosting(jobPostingId: String): Result<Unit> =
+    override suspend fun deleteJobPosting(jobPostingId: String) =
         jobPostingDataSource.deleteJobPosting(jobPostingId)
 
     override suspend fun getCrawlingJobPostings(
         next: String?,
         limit: Int,
         distance: Int,
-    ): Result<CrawlingJobPostingPage> =
-        jobPostingDataSource.getCrawlingJobPostings(next, limit, distance).mapCatching { it.toVO() }
+    ): CrawlingJobPostingPage =
+        jobPostingDataSource.getCrawlingJobPostings(next, limit, distance).toVO()
 
-    override suspend fun getCrawlingJobPostingDetail(jobPostingId: String): Result<CrawlingJobPostingDetail> =
-        jobPostingDataSource.getCrawlingJobPostingsDetail(jobPostingId).mapCatching { it.toVO() }
+    override suspend fun getCrawlingJobPostingDetail(jobPostingId: String): CrawlingJobPostingDetail =
+        jobPostingDataSource.getCrawlingJobPostingsDetail(jobPostingId).toVO()
 }

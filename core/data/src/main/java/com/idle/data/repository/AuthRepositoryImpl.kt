@@ -5,8 +5,8 @@ import com.idle.datastore.datasource.UserInfoDataSource
 import com.idle.domain.model.auth.BusinessRegistrationInfo
 import com.idle.domain.model.auth.UserType
 import com.idle.domain.repositorry.AuthRepository
-import com.idle.domain.repositorry.TokenRepository
 import com.idle.domain.repositorry.ProfileRepository
+import com.idle.domain.repositorry.TokenRepository
 import com.idle.network.model.auth.ConfirmAuthCodeRequest
 import com.idle.network.model.auth.GenerateNewPasswordRequest
 import com.idle.network.model.auth.SendPhoneRequest
@@ -29,18 +29,21 @@ class AuthRepositoryImpl @Inject constructor(
     private val userInfoDataSource: UserInfoDataSource,
     private val tokenRepository: TokenRepository,
 ) : AuthRepository {
-    override suspend fun sendPhoneNumber(phoneNumber: String): Result<Unit> =
+    override suspend fun sendPhoneNumber(phoneNumber: String) {
         authDataSource.sendPhoneNumber(SendPhoneRequest(phoneNumber))
+    }
 
     override suspend fun confirmAuthCode(
         phoneNumber: String,
         authCode: String,
-    ): Result<Unit> = authDataSource.confirmAuthCode(
-        ConfirmAuthCodeRequest(
-            phoneNumber = phoneNumber,
-            authCode = authCode,
+    ) {
+        authDataSource.confirmAuthCode(
+            ConfirmAuthCodeRequest(
+                phoneNumber = phoneNumber,
+                authCode = authCode,
+            )
         )
-    )
+    }
 
     override suspend fun signUpCenter(
         identifier: String,
@@ -48,43 +51,38 @@ class AuthRepositoryImpl @Inject constructor(
         phoneNumber: String,
         managerName: String,
         businessRegistrationNumber: String
-    ): Result<Unit> = authDataSource.signUpCenter(
-        SignUpCenterRequest(
-            identifier = identifier,
-            password = password,
-            phoneNumber = phoneNumber,
-            managerName = managerName,
-            businessRegistrationNumber = businessRegistrationNumber,
+    ) {
+        authDataSource.signUpCenter(
+            SignUpCenterRequest(
+                identifier = identifier,
+                password = password,
+                phoneNumber = phoneNumber,
+                managerName = managerName,
+                businessRegistrationNumber = businessRegistrationNumber,
+            )
         )
-    )
+    }
 
-    override suspend fun signInCenter(identifier: String, password: String): Result<Unit> =
-        authDataSource.signInCenter(
+    override suspend fun signInCenter(identifier: String, password: String) {
+        val tokenResponse: TokenResponse = authDataSource.signInCenter(
             SignInCenterRequest(identifier = identifier, password = password)
-        ).fold(
-            onSuccess = { tokenResponse ->
-                coroutineScope {
-                    handleSignInSuccess(tokenResponse, UserType.CENTER.apiValue)
-
-                    val profile = profileRepository.getMyCenterProfile().getOrNull()
-                    if (profile != null) {
-                        userInfoDataSource.setUserInfo(profile.toString())
-                    }
-
-                    Result.success(Unit)
-                }
-            },
-            onFailure = { Result.failure(it) }
         )
+        coroutineScope {
+            handleSignInSuccess(tokenResponse, UserType.CENTER.apiValue)
+            val profile = profileRepository.getMyCenterProfile()
+            userInfoDataSource.setUserInfo(profile.toString())
+        }
+    }
 
-    override suspend fun validateIdentifier(identifier: String): Result<Unit> =
+    override suspend fun validateIdentifier(identifier: String) {
         authDataSource.validateIdentifier(identifier)
+    }
 
     override suspend fun validateBusinessRegistrationNumber(
         businessRegistrationNumber: String,
-    ): Result<BusinessRegistrationInfo> =
+    ): BusinessRegistrationInfo =
         authDataSource.validateBusinessRegistrationNumber(businessRegistrationNumber)
-            .mapCatching { it.toVO() }
+            .toVO()
 
     override suspend fun signUpWorker(
         name: String,
@@ -93,93 +91,79 @@ class AuthRepositoryImpl @Inject constructor(
         phoneNumber: String,
         roadNameAddress: String,
         lotNumberAddress: String,
-    ): Result<Unit> = authDataSource.signUpWorker(
-        SignUpWorkerRequest(
-            name = name,
-            birthYear = birthYear,
-            genderType = genderType,
-            phoneNumber = phoneNumber,
-            roadNameAddress = roadNameAddress,
-            lotNumberAddress = lotNumberAddress,
+    ) {
+        val tokenResponse: TokenResponse = authDataSource.signUpWorker(
+            SignUpWorkerRequest(
+                name = name,
+                birthYear = birthYear,
+                genderType = genderType,
+                phoneNumber = phoneNumber,
+                roadNameAddress = roadNameAddress,
+                lotNumberAddress = lotNumberAddress,
+            )
         )
-    ).fold(
-        onSuccess = { tokenResponse ->
-            coroutineScope {
-                handleSignInSuccess(tokenResponse, UserType.WORKER.apiValue)
-
-                val profile = profileRepository.getMyWorkerProfile().getOrNull()
-                if (profile != null) {
-                    userInfoDataSource.setUserInfo(profile.toString())
-                }
-
-                Result.success(Unit)
-            }
-        },
-        onFailure = { Result.failure(it) }
-    )
+        coroutineScope {
+            handleSignInSuccess(tokenResponse, UserType.WORKER.apiValue)
+            val profile = profileRepository.getMyWorkerProfile()
+            userInfoDataSource.setUserInfo(profile.toString())
+        }
+    }
 
     override suspend fun signInWorker(
         phoneNumber: String,
         authCode: String,
-    ): Result<Unit> = authDataSource.signInWorker(
-        SignInWorkerRequest(phoneNumber = phoneNumber, authCode = authCode)
-    ).fold(
-        onSuccess = { tokenResponse ->
-            coroutineScope {
-                handleSignInSuccess(tokenResponse, UserType.WORKER.apiValue)
-
-                val updatedProfile = profileRepository.getMyWorkerProfile().getOrNull()
-                if (updatedProfile != null) {
-                    userInfoDataSource.setUserInfo(updatedProfile.toString())
-                }
-
-                Result.success(Unit)
-            }
-        },
-        onFailure = { Result.failure(it) }
-    )
-
-    override suspend fun logoutWorker(): Result<Unit> {
-        tokenRepository.deleteDeviceToken(getDeviceToken())
-
-        return authDataSource.logoutWorker()
-            .onSuccess { clearUserData() }
+    ) {
+        val tokenResponse: TokenResponse = authDataSource.signInWorker(
+            SignInWorkerRequest(phoneNumber = phoneNumber, authCode = authCode)
+        )
+        coroutineScope {
+            handleSignInSuccess(tokenResponse, UserType.WORKER.apiValue)
+            val updatedProfile = profileRepository.getMyWorkerProfile()
+            userInfoDataSource.setUserInfo(updatedProfile.toString())
+        }
     }
 
-    override suspend fun logoutCenter(): Result<Unit> {
+    override suspend fun logoutWorker() {
         tokenRepository.deleteDeviceToken(getDeviceToken())
-
-        return authDataSource.logoutCenter()
-            .onSuccess { clearUserData() }
+        authDataSource.logoutWorker()
+        clearUserData()
     }
 
-    override suspend fun withdrawalCenter(reason: String, password: String): Result<Unit> {
+    override suspend fun logoutCenter() {
         tokenRepository.deleteDeviceToken(getDeviceToken())
+        authDataSource.logoutCenter()
+        clearUserData()
+    }
 
-        return authDataSource.withdrawalCenter(
+    override suspend fun withdrawalCenter(reason: String, password: String) {
+        tokenRepository.deleteDeviceToken(getDeviceToken())
+        authDataSource.withdrawalCenter(
             WithdrawalCenterRequest(reason = reason, password = password)
-        ).onSuccess { clearUserData() }
+        )
+        clearUserData()
     }
 
-    override suspend fun withdrawalWorker(reason: String): Result<Unit> {
+    override suspend fun withdrawalWorker(reason: String) {
         tokenRepository.deleteDeviceToken(getDeviceToken())
-
-        return authDataSource.withdrawalWorker(WithdrawalWorkerRequest(reason))
-            .onSuccess { clearUserData() }
+        authDataSource.withdrawalWorker(WithdrawalWorkerRequest(reason))
+        clearUserData()
     }
 
     override suspend fun generateNewPassword(
         newPassword: String,
         phoneNumber: String
-    ): Result<Unit> = authDataSource.generateNewPassword(
-        GenerateNewPasswordRequest(
-            newPassword = newPassword,
-            phoneNumber = phoneNumber
+    ) {
+        authDataSource.generateNewPassword(
+            GenerateNewPasswordRequest(
+                newPassword = newPassword,
+                phoneNumber = phoneNumber
+            )
         )
-    )
+    }
 
-    override suspend fun sendCenterVerificationRequest(): Result<Unit> =
+    override suspend fun sendCenterVerificationRequest() {
         authDataSource.sendCenterVerificationRequest()
+    }
 
     private suspend fun handleSignInSuccess(
         tokenResponse: TokenResponse,

@@ -34,51 +34,50 @@ class ProfileRepositoryImpl @Inject constructor(
 ) : ProfileRepository {
     override suspend fun getMyUserType() = userInfoDataSource.userType.first()
 
-    override suspend fun getMyCenterProfile(): Result<CenterProfile> =
-        profileDataSource.getMyCenterProfile()
-            .mapCatching { it.toVO() }
-            .onSuccess {
-                userInfoDataSource.setUserInfo(it.toString())
-                Result.success(it)
-            }
+    override suspend fun getMyCenterProfile(): CenterProfile {
+        val centerProfile = profileDataSource.getMyCenterProfile()
+            .toVO()
 
-    override suspend fun getLocalMyCenterProfile(): Result<CenterProfile> =
+        userInfoDataSource.setUserInfo(centerProfile.toString())
+        return centerProfile
+    }
+
+    override suspend fun getLocalMyCenterProfile(): CenterProfile =
         userInfoDataSource.getLocalCenterProfile()
 
-    override suspend fun getCenterProfile(centerId: String): Result<CenterProfile> =
-        profileDataSource.getCenterProfile(centerId).mapCatching { it.toVO() }
+    override suspend fun getCenterProfile(centerId: String): CenterProfile =
+        profileDataSource.getCenterProfile(centerId).toVO()
 
-    override suspend fun getMyWorkerProfile(): Result<WorkerProfile> =
-        profileDataSource.getMyWorkerProfile().mapCatching { it.toVo() }
-            .onSuccess {
-                userInfoDataSource.setUserInfo(it.toString())
-                Result.success(it)
-            }
+    override suspend fun getMyWorkerProfile(): WorkerProfile {
+        val workerProfile = profileDataSource.getMyWorkerProfile().toVo()
 
-    override suspend fun getLocalMyWorkerProfile(): Result<WorkerProfile> =
+        userInfoDataSource.setUserInfo(workerProfile.toString())
+        return workerProfile
+    }
+
+    override suspend fun getLocalMyWorkerProfile(): WorkerProfile =
         userInfoDataSource.getLocalWorkerProfile()
 
-    override suspend fun getWorkerProfile(workerId: String): Result<WorkerProfile> =
-        profileDataSource.getWorkerProfile(workerId).mapCatching { it.toVo() }
+    override suspend fun getWorkerProfile(workerId: String): WorkerProfile =
+        profileDataSource.getWorkerProfile(workerId).toVo()
 
     override suspend fun updateCenterProfile(
         officeNumber: String,
         introduce: String?,
-    ): Result<Unit> = profileDataSource.updateMyCenterProfile(
-        UpdateCenterProfileRequest(officeNumber = officeNumber, introduce = introduce)
-    ).onSuccess {
-        val updatedProfile = getMyCenterProfile().getOrNull()
-        if (updatedProfile != null) {
-            userInfoDataSource.setUserInfo(updatedProfile.toString())
-        }
+    ) {
+        profileDataSource.updateMyCenterProfile(
+            UpdateCenterProfileRequest(officeNumber = officeNumber, introduce = introduce)
+        )
+
+        val updatedProfile = getMyCenterProfile()
+        userInfoDataSource.setUserInfo(updatedProfile.toString())
     }
 
-    override suspend fun getWorkerId(): Result<String> = profileDataSource.getWorkerId()
-        .mapCatching { it.carerId }
+    override suspend fun getWorkerId(): String = profileDataSource.getWorkerId()
+        .carerId
 
-    override suspend fun getCenterStatus(): Result<CenterRegistrationStatus> =
-        profileDataSource.getCenterStatus()
-            .mapCatching { it.toVO() }
+    override suspend fun getCenterStatus(): CenterRegistrationStatus =
+        profileDataSource.getCenterStatus().toVO()
 
     override suspend fun updateWorkerProfile(
         experienceYear: Int?,
@@ -87,20 +86,20 @@ class ProfileRepositoryImpl @Inject constructor(
         jobSearchStatus: JobSearchStatus,
         introduce: String?,
         speciality: String
-    ): Result<Unit> = profileDataSource.updateWorkerProfile(
-        UpdateWorkerProfileRequest(
-            experienceYear = experienceYear,
-            roadNameAddress = roadNameAddress,
-            lotNumberAddress = lotNumberAddress,
-            jobSearchStatus = jobSearchStatus.name,
-            introduce = introduce,
-            speciality = speciality
+    ) {
+        profileDataSource.updateWorkerProfile(
+            UpdateWorkerProfileRequest(
+                experienceYear = experienceYear,
+                roadNameAddress = roadNameAddress,
+                lotNumberAddress = lotNumberAddress,
+                jobSearchStatus = jobSearchStatus.name,
+                introduce = introduce,
+                speciality = speciality
+            )
         )
-    ).onSuccess {
-        val updatedProfile = getMyWorkerProfile().getOrNull()
-        if (updatedProfile != null) {
-            userInfoDataSource.setUserInfo(updatedProfile.toString())
-        }
+
+        val updatedProfile = getMyWorkerProfile()
+        userInfoDataSource.setUserInfo(updatedProfile.toString())
     }
 
     override suspend fun registerCenterProfile(
@@ -110,7 +109,7 @@ class ProfileRepositoryImpl @Inject constructor(
         lotNumberAddress: String,
         officeNumber: String,
         roadNameAddress: String
-    ): Result<Unit> = profileDataSource.registerCenterProfile(
+    ) = profileDataSource.registerCenterProfile(
         RegisterCenterProfileRequest(
             centerName = centerName,
             detailedAddress = detailedAddress,
@@ -126,7 +125,7 @@ class ProfileRepositoryImpl @Inject constructor(
         imageFileUri: String,
         reqWidth: Int,
         reqHeight: Int
-    ): Result<Unit> = runCatching {
+    ) {
         val resizeImage = resizeImage(
             context = context,
             uri = imageFileUri.toUri(),
@@ -142,30 +141,30 @@ class ProfileRepositoryImpl @Inject constructor(
             val profileImageUploadUrlResponse = getProfileImageUploadUrl(
                 userType = userType,
                 imageFileExtension = imageFormat.name,
-            ).getOrThrow()
+            )
 
             uploadProfileImage(
                 uploadUrl = profileImageUploadUrlResponse.uploadUrl,
                 imageFileExtension = profileImageUploadUrlResponse.imageFileExtension,
                 imageInputStream = inputStream,
-            ).getOrThrow()
+            )
 
             callbackImageUpload(
                 userType = userType,
                 imageId = profileImageUploadUrlResponse.imageId,
                 imageFileExtension = profileImageUploadUrlResponse.imageFileExtension
-            ).getOrThrow()
+            )
 
             when (userType) {
                 UserType.CENTER.apiValue -> {
-                    val updatedProfile = getMyCenterProfile().getOrThrow()
+                    val updatedProfile = getMyCenterProfile()
                         .copy(profileImageUrl = imageFileUri)
 
                     userInfoDataSource.setUserInfo(updatedProfile.toString())
                 }
 
                 UserType.WORKER.apiValue -> {
-                    val updatedProfile = getMyWorkerProfile().getOrThrow()
+                    val updatedProfile = getMyWorkerProfile()
                         .copy(profileImageUrl = imageFileUri)
 
                     userInfoDataSource.setUserInfo(updatedProfile.toString())
@@ -237,14 +236,14 @@ class ProfileRepositoryImpl @Inject constructor(
     private suspend fun getProfileImageUploadUrl(
         userType: String,
         imageFileExtension: String
-    ): Result<UploadProfileImageUrlResponse> =
+    ): UploadProfileImageUrlResponse =
         profileDataSource.getProfileImageUploadUrl(userType, imageFileExtension)
 
     private suspend fun uploadProfileImage(
         uploadUrl: String,
         imageFileExtension: String,
         imageInputStream: InputStream,
-    ): Result<Unit> = profileDataSource.uploadProfileImage(
+    ) = profileDataSource.uploadProfileImage(
         uploadUrl = uploadUrl,
         imageFileExtension = imageFileExtension,
         imageInputStream = imageInputStream,
@@ -254,7 +253,7 @@ class ProfileRepositoryImpl @Inject constructor(
         userType: String,
         imageId: String,
         imageFileExtension: String
-    ): Result<Unit> = profileDataSource.callbackImageUpload(
+    ) = profileDataSource.callbackImageUpload(
         userType = userType,
         callbackImageUploadRequest = CallbackImageUploadRequest(
             imageId = imageId,

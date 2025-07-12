@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.analytics.AnalyticsHelper
 import com.idle.binding.EventHelper
+import com.idle.common.suspendRunCatching
 import com.idle.domain.model.CountDownTimer
 import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
@@ -113,9 +114,11 @@ class WorkerSignUpViewModel @Inject constructor(
     }
 
     internal fun sendPhoneNumber() = viewModelScope.launch {
-        authRepository.sendPhoneNumber(formatPhoneNumber(_workerPhoneNumber.value))
-            .onSuccess { startTimer() }
-            .onFailure { errorHelper.sendError(it) }
+        suspendRunCatching {
+            authRepository.sendPhoneNumber(formatPhoneNumber(_workerPhoneNumber.value))
+        }.onSuccess {
+            startTimer()
+        }.onFailure { errorHelper.sendError(it) }
     }
 
     private fun startTimer() {
@@ -146,11 +149,15 @@ class WorkerSignUpViewModel @Inject constructor(
     }
 
     internal fun confirmAuthCode() = viewModelScope.launch {
-        authRepository.signInWorker(
-            phoneNumber = formatPhoneNumber(_workerPhoneNumber.value),
-            authCode = _workerAuthCode.value,
-        ).onSuccess {
-            profileRepository.getWorkerId().onSuccess { analyticsHelper.setUserId(it) }
+        suspendRunCatching {
+            authRepository.signInWorker(
+                phoneNumber = formatPhoneNumber(_workerPhoneNumber.value),
+                authCode = _workerAuthCode.value,
+            )
+        }.onSuccess {
+            suspendRunCatching {
+                profileRepository.getWorkerId()
+            }.onSuccess { analyticsHelper.setUserId(it) }
             navigationHelper.navigateTo(
                 com.idle.navigation.NavigationEvent.To(
                     WorkerHome,
@@ -158,10 +165,12 @@ class WorkerSignUpViewModel @Inject constructor(
                 )
             )
         }.onFailure {
-            authRepository.confirmAuthCode(
-                formatPhoneNumber(_workerPhoneNumber.value),
-                _workerAuthCode.value
-            ).onSuccess {
+            suspendRunCatching {
+                authRepository.confirmAuthCode(
+                    formatPhoneNumber(_workerPhoneNumber.value),
+                    _workerAuthCode.value
+                )
+            }.onSuccess {
                 cancelTimer()
                 _isConfirmAuthCode.value = true
                 _signUpStep.value = WorkerSignUpStep.findStep(PHONE_NUMBER.step + 1)
@@ -177,15 +186,19 @@ class WorkerSignUpViewModel @Inject constructor(
     }
 
     internal fun signUpWorker() = viewModelScope.launch {
-        authRepository.signUpWorker(
-            name = _workerName.value,
-            birthYear = _birthYear.value.toIntOrNull() ?: return@launch,
-            genderType = _gender.value.name,
-            phoneNumber = formatPhoneNumber(_workerPhoneNumber.value),
-            roadNameAddress = _roadNameAddress.value,
-            lotNumberAddress = _lotNumberAddress.value,
-        ).onSuccess {
-            profileRepository.getWorkerId().onSuccess { analyticsHelper.setUserId(it) }
+        suspendRunCatching {
+            authRepository.signUpWorker(
+                name = _workerName.value,
+                birthYear = _birthYear.value.toIntOrNull() ?: return@suspendRunCatching,
+                genderType = _gender.value.name,
+                phoneNumber = formatPhoneNumber(_workerPhoneNumber.value),
+                roadNameAddress = _roadNameAddress.value,
+                lotNumberAddress = _lotNumberAddress.value,
+            )
+        }.onSuccess {
+            suspendRunCatching {
+                profileRepository.getWorkerId()
+            }.onSuccess { analyticsHelper.setUserId(it) }
             navigationHelper.navigateTo(
                 com.idle.navigation.NavigationEvent.To(
                     SignUpComplete,

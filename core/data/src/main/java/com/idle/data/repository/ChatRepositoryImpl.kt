@@ -24,27 +24,30 @@ class ChatRepositoryImpl @Inject constructor(
     private val chatDataSource: ChatDataSource,
     private val localChatDataSource: LocalChatDataSource,
 ) : ChatRepository {
-    override suspend fun connectWebSocket(): Result<Unit> = chatDataSource.connectWebSocket()
+    override suspend fun connectWebSocket() {
+        chatDataSource.connectWebSocket()
+    }
 
-    override suspend fun disconnectWebSocket(): Result<Unit> =
+    override suspend fun disconnectWebSocket() {
         chatDataSource.disconnectWebSocket()
+    }
 
-    override suspend fun retrieveChatRooms(userId: String): Result<List<ChatRoom>> = runCatching {
-        localChatDataSource.getChatRooms(userId)
+    override suspend fun retrieveChatRooms(userId: String): List<ChatRoom> {
+        return localChatDataSource.getChatRooms(userId)
     }
 
     override suspend fun loadChatRooms(
         userId: String,
         userType: UserType
-    ): Result<List<ChatRoomWithOpponentInfo>> = runCatching {
-        val chatRoomsResponse = when (userType) {
-            UserType.WORKER -> chatDataSource.getWorkerChatRooms()
-            UserType.CENTER -> chatDataSource.getCenterChatRooms()
-        }.getOrThrow()
+    ): List<ChatRoomWithOpponentInfo> {
+        val response = if (userType == UserType.WORKER) {
+            chatDataSource.getWorkerChatRooms()
+        } else {
+            chatDataSource.getCenterChatRooms()
+        }
 
-        val chatRooms = chatRoomsResponse.map {
-            val chatRoom = it.toVO()
-
+        return response.map { dto ->
+            val chatRoom = dto.toVO()
             if (!localChatDataSource.isChatRoomExist(chatRoom.id, userId)) {
                 localChatDataSource.insertChatRoom(
                     myId = userId,
@@ -53,24 +56,23 @@ class ChatRepositoryImpl @Inject constructor(
                         opponentId = chatRoom.opponentId,
                         lastMessage = chatRoom.lastMessage,
                         lastMessageTime = chatRoom.lastMessageTime,
-                        unReadMessageCount = chatRoom.unReadMessageCount,
+                        unReadMessageCount = chatRoom.unReadMessageCount
                     )
                 )
             }
             chatRoom
         }
-        chatRooms
     }
 
     override suspend fun retrieveChatRoomMessages(
         roomId: String,
         myId: String,
         messageId: String?
-    ): Result<List<ChatMessage>> = runCatching {
-        localChatDataSource.getMessages(
+    ): List<ChatMessage> {
+        return localChatDataSource.getMessages(
             roomId = roomId,
             myId = myId,
-            lastMessageId = messageId,
+            lastMessageId = messageId
         )
     }
 
@@ -79,20 +81,21 @@ class ChatRepositoryImpl @Inject constructor(
         roomId: String,
         myId: String,
         messageId: String?,
-        unReadMessageCount: Int?,
-    ): Result<List<ChatMessage>> = runCatching {
+        unReadMessageCount: Int?
+    ): List<ChatMessage> {
         if (messageId == null || !localChatDataSource.isMessageExist(roomId, myId, messageId)) {
-            val response = when (userType) {
-                UserType.WORKER -> chatDataSource.getWorkerChatRoomMessages(roomId, messageId)
-                UserType.CENTER -> chatDataSource.getCenterChatRoomMessages(roomId, messageId)
-            }.getOrThrow()
+            val response = if (userType == UserType.WORKER) {
+                chatDataSource.getWorkerChatRoomMessages(roomId, messageId)
+            } else {
+                chatDataSource.getCenterChatRoomMessages(roomId, messageId)
+            }
 
             val allMessages = response.chatMessageInfos
                 .sortedBy { it.sequence }
                 .map { it.toVO() }
 
-            val messagesToUse = unReadMessageCount?.let {
-                allMessages.takeLast(it)
+            val messagesToUse = unReadMessageCount?.let { count ->
+                allMessages.takeLast(count)
             } ?: allMessages
 
             val maxSeq = localChatDataSource.getMaxLocalSequence(roomId, myId) ?: Int.MIN_VALUE
@@ -106,7 +109,7 @@ class ChatRepositoryImpl @Inject constructor(
                             opponentId = if (myId == message.senderId) message.receiverId else message.senderId,
                             lastMessage = message.content,
                             lastMessageTime = message.createdAt,
-                            unReadMessageCount = 1,
+                            unReadMessageCount = 1
                         )
                     )
                 }
@@ -116,47 +119,46 @@ class ChatRepositoryImpl @Inject constructor(
                 }
             }
 
-            val readSequence = response.sequence
-            allMessages.lastOrNull()?.let {
-                localChatDataSource.readMessages(
-                    roomId = roomId,
-                    myId = myId,
-                    senderId = it.senderId,
-                    sequence = readSequence,
-                )
+            response.sequence.takeIf { it >= 0 }?.let { seq ->
+                allMessages.lastOrNull()?.let {
+                    localChatDataSource.readMessages(
+                        roomId = roomId,
+                        myId = myId,
+                        senderId = it.senderId,
+                        sequence = seq
+                    )
+                }
             }
         }
 
-        return@runCatching localChatDataSource.getMessages(
+        return localChatDataSource.getMessages(
             roomId = roomId,
             myId = myId,
-            lastMessageId = messageId,
+            lastMessageId = messageId
         )
     }
 
     override suspend fun generateChatRooms(
         userType: UserType,
-        opponentId: String,
-    ): Result<String> =
-        runCatching {
-            when (userType) {
-                UserType.WORKER -> chatDataSource.generateWorkerChatRoom(opponentId)
-                UserType.CENTER -> chatDataSource.generateCenterChatRoom(opponentId)
-            }.mapCatching {
-                it.toVO()
-            }.getOrThrow()
+        opponentId: String
+    ): String {
+        val dto = if (userType == UserType.WORKER) {
+            chatDataSource.generateWorkerChatRoom(opponentId)
+        } else {
+            chatDataSource.generateCenterChatRoom(opponentId)
         }
+        return dto.toVO()
+    }
 
-    override suspend fun subscribeChatMessage(userId: String, userType: UserType): Flow<Message> =
-        chatDataSource.subscribeChatMessage(userId)
-            .map {
-                val message = it.toVO()
-
+    override suspend fun subscribeChatMessage(userId: String, userType: UserType): Flow<Message> {
+        return chatDataSource.subscribeChatMessage(userId)
+            .map { response ->
+                val message = response.toVO()
                 when (message) {
                     is ChatMessage -> {
                         if (!localChatDataSource.isChatRoomExist(
                                 roomId = message.roomId,
-                                myId = userId,
+                                myId = userId
                             )
                         ) {
                             localChatDataSource.insertChatRoom(
@@ -166,28 +168,26 @@ class ChatRepositoryImpl @Inject constructor(
                                     opponentId = if (userId == message.senderId) message.receiverId else message.senderId,
                                     lastMessage = message.content,
                                     lastMessageTime = message.createdAt,
-                                    unReadMessageCount = 1,
+                                    unReadMessageCount = 1
                                 )
                             )
                         }
-
                         localChatDataSource.insertMessage(message, userId)
                     }
-
                     is ReadMessage -> {
                         if (message.opponentId != userId) {
                             localChatDataSource.readMessages(
                                 roomId = message.chatroomId,
                                 myId = userId,
                                 senderId = message.opponentId,
-                                sequence = message.sequence,
+                                sequence = message.sequence
                             )
                         }
                     }
                 }
-
                 message
-            }.retryWhen { cause, attempt ->
+            }
+            .retryWhen { cause, attempt ->
                 if (cause is IOException && attempt < MAX_RETRY_ATTEMPTS) {
                     connectWebSocket()
                     delay(calculateBackoffTime(attempt.toInt()))
@@ -196,6 +196,7 @@ class ChatRepositoryImpl @Inject constructor(
                     false
                 }
             }
+    }
 
     override suspend fun sendMessage(
         chatroomId: String,
@@ -203,36 +204,39 @@ class ChatRepositoryImpl @Inject constructor(
         receiverId: String,
         senderName: String,
         content: String,
-        userType: UserType,
-    ): Result<Unit> = chatDataSource.sendMessage(
-        userType = userType,
-        sendMessageRequest = SendMessageRequest(
-            chatroomId = chatroomId,
-            receiverId = receiverId,
-            senderName = senderName,
-            content = content,
+        userType: UserType
+    ) {
+        chatDataSource.sendMessage(
+            userType = userType,
+            sendMessageRequest = SendMessageRequest(
+                chatroomId = chatroomId,
+                receiverId = receiverId,
+                senderName = senderName,
+                content = content
+            )
         )
-    )
+    }
 
     override suspend fun readMessage(
         chatroomId: String,
         myId: String,
         opponentId: String,
         userType: UserType,
-        sequence: Int,
-    ): Result<Unit> = chatDataSource.readMessage(
-        userType = userType,
-        readMessageRequest = ReadMessageRequest(
-            chatroomId = chatroomId,
-            opponentId = opponentId,
-            sequence = sequence,
+        sequence: Int
+    ) {
+        chatDataSource.readMessage(
+            userType = userType,
+            readMessageRequest = ReadMessageRequest(
+                chatroomId = chatroomId,
+                opponentId = opponentId,
+                sequence = sequence
+            )
         )
-    ).onSuccess {
         localChatDataSource.readMessages(
             roomId = chatroomId,
             myId = myId,
             senderId = opponentId,
-            sequence = sequence,
+            sequence = sequence
         )
     }
 }

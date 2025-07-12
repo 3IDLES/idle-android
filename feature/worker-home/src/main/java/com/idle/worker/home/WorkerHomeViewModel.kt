@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.idle.binding.EventHelper
 import com.idle.binding.MainEvent
 import com.idle.binding.ToastType
+import com.idle.common.suspendRunCatching
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.jobposting.ApplyMethod
 import com.idle.domain.model.jobposting.CrawlingJobPosting
@@ -65,16 +66,20 @@ class WorkerHomeViewModel @Inject constructor(
     }
 
     internal fun getUnreadNotificationCount() = viewModelScope.launch {
-        notificationRepository.getUnreadNotificationCount().onSuccess {
+        suspendRunCatching {
+            notificationRepository.getUnreadNotificationCount()
+        }.onSuccess {
             _unreadNotificationCount.value = it
         }.onFailure { errorHelper.sendError(it) }
     }
 
     internal fun applyJobPosting(jobPostingId: String) = viewModelScope.launch {
-        jobPostingRepository.applyJobPosting(
-            jobPostingId = jobPostingId,
-            applyMethod = ApplyMethod.APP
-        ).onSuccess {
+        suspendRunCatching {
+            jobPostingRepository.applyJobPosting(
+                jobPostingId = jobPostingId,
+                applyMethod = ApplyMethod.APP
+            )
+        }.onSuccess {
             eventHelper.sendEvent(MainEvent.ShowToast("지원이 완료되었어요.", ToastType.SUCCESS))
 
             _jobPostings.value = _jobPostings.value?.map {
@@ -90,10 +95,12 @@ class WorkerHomeViewModel @Inject constructor(
         jobPostingId: String,
         jobPostingType: JobPostingType,
     ) = viewModelScope.launch {
-        jobPostingRepository.addFavoriteJobPosting(
-            jobPostingId = jobPostingId,
-            jobPostingType = jobPostingType,
-        ).onSuccess {
+        suspendRunCatching {
+            jobPostingRepository.addFavoriteJobPosting(
+                jobPostingId = jobPostingId,
+                jobPostingType = jobPostingType,
+            )
+        }.onSuccess {
             eventHelper.sendEvent(MainEvent.ShowToast("즐겨찾기에 추가되었어요.", ToastType.SUCCESS))
 
             _jobPostings.value = _jobPostings.value?.map {
@@ -113,7 +120,9 @@ class WorkerHomeViewModel @Inject constructor(
     }
 
     internal fun removeFavoriteJobPosting(jobPostingId: String) = viewModelScope.launch {
-        jobPostingRepository.removeFavoriteJobPosting(jobPostingId = jobPostingId).onSuccess {
+        suspendRunCatching {
+            jobPostingRepository.removeFavoriteJobPosting(jobPostingId = jobPostingId)
+        }.onSuccess {
             eventHelper.sendEvent(MainEvent.ShowToast("즐겨찾기에서 제거되었어요", ToastType.SUCCESS))
 
             _jobPostings.value = _jobPostings.value?.map {
@@ -133,7 +142,9 @@ class WorkerHomeViewModel @Inject constructor(
     }
 
     internal fun getMyWorkerProfile() = viewModelScope.launch {
-        getMyWorkerProfileUseCase().onSuccess {
+        suspendRunCatching {
+            getMyWorkerProfileUseCase()
+        }.onSuccess {
             _profile.value = it
         }.onFailure {
             eventHelper.sendEvent(MainEvent.ShowToast(it.message.toString()))
@@ -154,25 +165,28 @@ class WorkerHomeViewModel @Inject constructor(
     }
 
     private suspend fun fetchInAppJobPostings() {
-        jobPostingRepository.getJobPostings(next = nextCursorId)
-            .onSuccess { (nextId, postings) ->
-                nextCursorId = nextId
-                if (nextId == null) {
-                    _callType.value = JobPostingCallType.CRAWLING
-                }
-                _jobPostings.value = _jobPostings.value?.plus(postings) ?: postings
+        suspendRunCatching {
+            jobPostingRepository.getJobPostings(next = nextCursorId)
+        }.onSuccess { (nextId, postings) ->
+            nextCursorId = nextId
+            if (nextId == null) {
+                _callType.value = JobPostingCallType.CRAWLING
+            }
+            _jobPostings.value = _jobPostings.value?.plus(postings) ?: postings
 
-                if (_jobPostings.value?.isEmpty() != false) {
-                    getJobPostings()
-                }
-            }.onFailure { errorHelper.sendError(it) }
+            if (_jobPostings.value?.isEmpty() != false) {
+                getJobPostings()
+            }
+        }.onFailure { errorHelper.sendError(it) }
     }
 
     private suspend fun fetchCrawlingJobPostings() {
-        jobPostingRepository.getCrawlingJobPostings(
-            next = nextCursorId,
-            distance = nextDistance,
-        ).onSuccess { pageInfo ->
+        suspendRunCatching {
+            jobPostingRepository.getCrawlingJobPostings(
+                next = nextCursorId,
+                distance = nextDistance,
+            )
+        }.onSuccess { pageInfo ->
             nextCursorId = pageInfo.nextCursor
             nextDistance = pageInfo.nextDistance
 

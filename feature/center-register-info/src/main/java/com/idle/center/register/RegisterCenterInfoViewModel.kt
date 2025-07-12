@@ -5,6 +5,7 @@ import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.center.register.info.R
+import com.idle.common.suspendRunCatching
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.usecase.profile.RegisterCenterProfileUseCase
 import com.idle.navigation.DeepLinkDestination.CenterRegisterComplete
@@ -45,15 +46,17 @@ class RegisterCenterInfoViewModel @Inject constructor(
     val centerProfileImageUri = _centerProfileImageUri.asStateFlow()
 
     internal fun registerCenterProfile() = viewModelScope.launch {
-        registerCenterProfileUseCase(
-            centerName = _centerName.value,
-            detailedAddress = _centerDetailAddress.value,
-            introduce = _centerIntroduce.value,
-            lotNumberAddress = _lotNumberAddress.value,
-            officeNumber = _centerNumber.value,
-            roadNameAddress = _roadNameAddress.value,
-            imageFileUri = _centerProfileImageUri.value.toString(),
-        ).onSuccess {
+        suspendRunCatching {
+            registerCenterProfileUseCase(
+                centerName = _centerName.value,
+                detailedAddress = _centerDetailAddress.value,
+                introduce = _centerIntroduce.value,
+                lotNumberAddress = _lotNumberAddress.value,
+                officeNumber = _centerNumber.value,
+                roadNameAddress = _roadNameAddress.value,
+                imageFileUri = _centerProfileImageUri.value.toString(),
+            )
+        }.onSuccess {
             navigationHelper.navigateTo(
                 com.idle.navigation.NavigationEvent.To(
                     CenterRegisterComplete,

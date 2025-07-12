@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.idle.binding.EventHelper
 import com.idle.binding.MainEvent
 import com.idle.binding.ToastType
+import com.idle.common.suspendRunCatching
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.profile.JobSearchStatus
 import com.idle.domain.model.profile.WorkerProfile
@@ -92,7 +93,9 @@ class WorkerProfileViewModel @Inject constructor(
     }
 
     internal fun getMyWorkerProfile() = viewModelScope.launch {
-        getMyWorkerProfileUseCase().onSuccess {
+        suspendRunCatching {
+            getMyWorkerProfileUseCase()
+        }.onSuccess {
             _workerProfile.value = it
             _workerIntroduce.value = it.introduce ?: ""
             _specialty.value = it.speciality ?: ""
@@ -105,7 +108,9 @@ class WorkerProfileViewModel @Inject constructor(
     }
 
     internal fun getWorkerProfile(workerId: String) = viewModelScope.launch {
-        profileRepository.getWorkerProfile(workerId).onSuccess {
+        suspendRunCatching {
+            profileRepository.getWorkerProfile(workerId)
+        }.onSuccess {
             _workerProfile.value = it
             _workerIntroduce.value = it.introduce ?: ""
             _specialty.value = it.speciality ?: ""
@@ -126,15 +131,17 @@ class WorkerProfileViewModel @Inject constructor(
 
         _isUpdateLoading.value = true
 
-        updateWorkerProfileUseCase(
-            experienceYear = _experienceYear.value,
-            roadNameAddress = _roadNameAddress.value,
-            lotNumberAddress = _lotNumberAddress.value,
-            speciality = _specialty.value,
-            introduce = _workerIntroduce.value.ifBlank { null },
-            imageFileUri = _profileImageUri.value?.toString(),
-            jobSearchStatus = _jobSearchStatus.value,
-        ).onSuccess {
+        suspendRunCatching {
+            updateWorkerProfileUseCase(
+                experienceYear = _experienceYear.value,
+                roadNameAddress = _roadNameAddress.value,
+                lotNumberAddress = _lotNumberAddress.value,
+                speciality = _specialty.value,
+                introduce = _workerIntroduce.value.ifBlank { null },
+                imageFileUri = _profileImageUri.value?.toString(),
+                jobSearchStatus = _jobSearchStatus.value,
+            )
+        }.onSuccess {
             getMyWorkerProfile()
             eventHelper.sendEvent(
                 MainEvent.ShowToast(

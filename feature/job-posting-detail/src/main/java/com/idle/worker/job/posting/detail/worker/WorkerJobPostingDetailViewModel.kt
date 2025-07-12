@@ -10,6 +10,7 @@ import com.idle.analytics.AnalyticsHelper
 import com.idle.binding.EventHelper
 import com.idle.binding.MainEvent
 import com.idle.binding.ToastType.SUCCESS
+import com.idle.common.suspendRunCatching
 import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.jobposting.ApplyMethod
@@ -47,7 +48,9 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
     val workerJobPostingDetail = _workerJobPostingDetail.asStateFlow()
 
     internal fun getMyProfile() = viewModelScope.launch {
-        getMyWorkerProfileUseCase().onSuccess {
+        suspendRunCatching {
+            getMyWorkerProfileUseCase()
+        }.onSuccess {
             _profile.value = it
         }.onFailure { errorHelper.sendError(it) }
     }
@@ -57,15 +60,15 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
         jobPostingType: String,
     ) = viewModelScope.launch {
         when (jobPostingType) {
-            JobPostingType.CAREMEET.name -> jobPostingRepository.getWorkerJobPostingDetail(
-                jobPostingId
-            ).onSuccess {
+            JobPostingType.CAREMEET.name -> suspendRunCatching {
+                jobPostingRepository.getWorkerJobPostingDetail(jobPostingId)
+            }.onSuccess {
                 _workerJobPostingDetail.value = it
             }.onFailure { errorHelper.sendError(it) }
 
-            JobPostingType.WORKNET.name -> jobPostingRepository.getCrawlingJobPostingDetail(
-                jobPostingId
-            ).onSuccess {
+            JobPostingType.WORKNET.name -> suspendRunCatching {
+                jobPostingRepository.getCrawlingJobPostingDetail(jobPostingId)
+            }.onSuccess {
                 _workerJobPostingDetail.value = it
             }.onFailure { errorHelper.sendError(it) }
         }
@@ -73,10 +76,12 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
 
     internal fun applyJobPosting(jobPostingId: String, applyMethod: ApplyMethod) =
         viewModelScope.launch {
-            jobPostingRepository.applyJobPosting(
-                jobPostingId = jobPostingId,
-                applyMethod = applyMethod,
-            ).onSuccess {
+            suspendRunCatching {
+                jobPostingRepository.applyJobPosting(
+                    jobPostingId = jobPostingId,
+                    applyMethod = applyMethod,
+                )
+            }.onSuccess {
                 eventHelper.sendEvent(MainEvent.ShowToast("지원이 완료되었어요.", SUCCESS))
 
                 if (_workerJobPostingDetail.value?.jobPostingType == JobPostingType.CAREMEET) {
@@ -101,10 +106,12 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
         jobPostingId: String,
         jobPostingType: JobPostingType,
     ) = viewModelScope.launch {
-        jobPostingRepository.addFavoriteJobPosting(
-            jobPostingId = jobPostingId,
-            jobPostingType = jobPostingType,
-        ).onSuccess {
+        suspendRunCatching {
+            jobPostingRepository.addFavoriteJobPosting(
+                jobPostingId = jobPostingId,
+                jobPostingType = jobPostingType,
+            )
+        }.onSuccess {
             eventHelper.sendEvent(
                 MainEvent.ShowToast("즐겨찾기에 추가되었어요.", SUCCESS)
             )
@@ -127,7 +134,9 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
         jobPostingId: String,
         jobPostingType: JobPostingType,
     ) = viewModelScope.launch {
-        jobPostingRepository.removeFavoriteJobPosting(jobPostingId = jobPostingId).onSuccess {
+        suspendRunCatching {
+            jobPostingRepository.removeFavoriteJobPosting(jobPostingId = jobPostingId)
+        }.onSuccess {
             eventHelper.sendEvent(
                 MainEvent.ShowToast("즐겨찾기에서 제거되었어요.", SUCCESS)
             )
@@ -147,10 +156,12 @@ class WorkerJobPostingDetailViewModel @Inject constructor(
     }
 
     internal fun generateChatRoom(opponentId: String) = viewModelScope.launch {
-        chatRepository.generateChatRooms(
-            userType = UserType.WORKER,
-            opponentId = opponentId,
-        ).onSuccess {
+        suspendRunCatching {
+            chatRepository.generateChatRooms(
+                userType = UserType.WORKER,
+                opponentId = opponentId,
+            )
+        }.onSuccess {
             navigationHelper.navigateTo(
                 NavigationEvent.To(
                     DeepLinkDestination.ChattingDetail(

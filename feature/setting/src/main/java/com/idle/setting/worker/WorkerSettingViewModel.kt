@@ -3,6 +3,7 @@ package com.idle.setting.worker
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.analytics.AnalyticsHelper
+import com.idle.common.suspendRunCatching
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.repositorry.AuthRepository
@@ -33,13 +34,17 @@ class WorkerSettingViewModel @Inject constructor(
     }
 
     private fun getMyProfile() = viewModelScope.launch {
-        getMyWorkerProfileUseCase().onSuccess {
+        suspendRunCatching {
+            getMyWorkerProfileUseCase()
+        }.onSuccess {
             _workerProfile.value = it
         }.onFailure { errorHelper.sendError(it) }
     }
 
     fun logout() = viewModelScope.launch {
-        authRepository.logoutWorker().onSuccess {
+        suspendRunCatching {
+            authRepository.logoutWorker()
+        }.onSuccess {
             analyticsHelper.setUserId(null)
             navigationHelper.navigateTo(
                 com.idle.navigation.NavigationEvent.ToAuthWithClearBackStack(

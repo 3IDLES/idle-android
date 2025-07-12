@@ -3,6 +3,7 @@ package com.idle.setting.center
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.analytics.AnalyticsHelper
+import com.idle.common.suspendRunCatching
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.repositorry.AuthRepository
@@ -37,13 +38,17 @@ class CenterSettingViewModel @Inject constructor(
     }
 
     private fun getMyProfile() = viewModelScope.launch {
-        getMyCenterProfileUseCase().onSuccess {
+        suspendRunCatching {
+            getMyCenterProfileUseCase()
+        }.onSuccess {
             _centerProfile.value = it
         }.onFailure { errorHelper.sendError(it) }
     }
 
     fun logout() = viewModelScope.launch {
-        authRepository.logoutCenter().onSuccess {
+        suspendRunCatching {
+            authRepository.logoutCenter()
+        }.onSuccess {
             analyticsHelper.setUserId(null)
             navigationHelper.navigateTo(
                 com.idle.navigation.NavigationEvent.ToAuthWithClearBackStack(

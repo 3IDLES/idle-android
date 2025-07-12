@@ -13,7 +13,7 @@ import com.idle.network.model.auth.SignUpWorkerRequest
 import com.idle.network.model.auth.WithdrawalCenterRequest
 import com.idle.network.model.auth.WithdrawalWorkerRequest
 import com.idle.network.model.token.TokenResponse
-import com.idle.network.util.safeApiCall
+import com.idle.network.util.onResponse
 import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -25,48 +25,48 @@ class AuthDataSource @Inject constructor(
     private val authApi: AuthApi,
     private val firebaseMessaging: FirebaseMessaging,
 ) {
-    suspend fun sendPhoneNumber(sendPhoneRequest: SendPhoneRequest): Result<Unit> =
-        safeApiCall { authApi.sendPhoneNumber(sendPhoneRequest) }
+    suspend fun sendPhoneNumber(sendPhoneRequest: SendPhoneRequest): Unit =
+        authApi.sendPhoneNumber(sendPhoneRequest).onResponse()
 
-    suspend fun confirmAuthCode(confirmAuthCodeRequest: ConfirmAuthCodeRequest): Result<Unit> =
-        safeApiCall { authApi.confirmAuthCode(confirmAuthCodeRequest) }
+    suspend fun confirmAuthCode(confirmAuthCodeRequest: ConfirmAuthCodeRequest): Unit =
+        authApi.confirmAuthCode(confirmAuthCodeRequest).onResponse()
 
-    suspend fun signUpCenter(signUpCenterRequest: SignUpCenterRequest): Result<Unit> =
-        safeApiCall { authApi.signUpCenter(signUpCenterRequest) }
+    suspend fun signUpCenter(signUpCenterRequest: SignUpCenterRequest): Unit =
+        authApi.signUpCenter(signUpCenterRequest).onResponse()
 
-    suspend fun signInCenter(signInCenterRequest: SignInCenterRequest): Result<TokenResponse> =
-        safeApiCall { authApi.signInCenter(signInCenterRequest) }
+    suspend fun signInCenter(signInCenterRequest: SignInCenterRequest): TokenResponse =
+        authApi.signInCenter(signInCenterRequest).onResponse()
 
-    suspend fun signUpWorker(signUpWorkerRequest: SignUpWorkerRequest): Result<TokenResponse> =
-        safeApiCall { authApi.signUpWorker(signUpWorkerRequest) }
+    suspend fun signUpWorker(signUpWorkerRequest: SignUpWorkerRequest): TokenResponse =
+        authApi.signUpWorker(signUpWorkerRequest).onResponse()
 
-    suspend fun signInWorker(signInWorkerRequest: SignInWorkerRequest): Result<TokenResponse> =
-        safeApiCall { authApi.signInWorker(signInWorkerRequest) }
+    suspend fun signInWorker(signInWorkerRequest: SignInWorkerRequest): TokenResponse =
+        authApi.signInWorker(signInWorkerRequest).onResponse()
 
-    suspend fun logoutWorker(): Result<Unit> = safeApiCall { authApi.logoutWorker() }
+    suspend fun logoutWorker(): Unit = authApi.logoutWorker().onResponse()
 
-    suspend fun logoutCenter(): Result<Unit> = safeApiCall { authApi.logoutCenter() }
+    suspend fun logoutCenter(): Unit = authApi.logoutCenter().onResponse()
 
-    suspend fun withdrawalCenter(withdrawalCenterRequest: WithdrawalCenterRequest): Result<Unit> =
-        safeApiCall { authApi.withdrawalCenter(withdrawalCenterRequest) }
+    suspend fun withdrawalCenter(withdrawalCenterRequest: WithdrawalCenterRequest): Unit =
+        authApi.withdrawalCenter(withdrawalCenterRequest).onResponse()
 
-    suspend fun withdrawalWorker(withdrawalWorkerRequest: WithdrawalWorkerRequest): Result<Unit> =
-        safeApiCall { authApi.withdrawalWorker(withdrawalWorkerRequest) }
+    suspend fun withdrawalWorker(withdrawalWorkerRequest: WithdrawalWorkerRequest): Unit =
+        authApi.withdrawalWorker(withdrawalWorkerRequest).onResponse()
 
-    suspend fun validateIdentifier(identifier: String): Result<Unit> =
-        safeApiCall { authApi.validateIdentifier(identifier) }
+    suspend fun validateIdentifier(identifier: String): Unit =
+        authApi.validateIdentifier(identifier).onResponse()
 
     suspend fun validateBusinessRegistrationNumber(
         businessRegistrationNumber: String
-    ): Result<BusinessRegistrationResponse> =
-        safeApiCall { authApi.validateBusinessRegistrationNumber(businessRegistrationNumber) }
+    ): BusinessRegistrationResponse =
+        authApi.validateBusinessRegistrationNumber(businessRegistrationNumber).onResponse()
 
     suspend fun generateNewPassword(
         generateNewPasswordRequest: GenerateNewPasswordRequest
-    ): Result<Unit> = safeApiCall { authApi.generateNewPassword(generateNewPasswordRequest) }
+    ): Unit = authApi.generateNewPassword(generateNewPasswordRequest).onResponse()
 
-    suspend fun sendCenterVerificationRequest(): Result<Unit> =
-        safeApiCall { authApi.sendCenterVerificationRequest() }
+    suspend fun sendCenterVerificationRequest(): Unit =
+        authApi.sendCenterVerificationRequest().onResponse()
 
     suspend fun getDeviceToken(): String = suspendCancellableCoroutine { continuation ->
         firebaseMessaging.token.addOnCompleteListener { task ->

@@ -46,12 +46,16 @@ class CareAuthenticator @Inject constructor(
             return null
         }
 
-        val token = runBlocking {
-            lock.withLock {
-                authApi.get().refreshToken(RefreshTokenRequest(tokenManager.getRefreshToken()))
-                    .onResponse()
+        val token = try {
+            runBlocking {
+                lock.withLock {
+                    authApi.get().refreshToken(RefreshTokenRequest(tokenManager.getRefreshToken()))
+                        .onResponse()
+                }
             }
-        }.getOrNull() ?: return null
+        } catch (e: Exception) {
+            return null
+        }
 
         runBlocking {
             val job = launch { tokenManager.setRefreshToken(token.refreshToken) }

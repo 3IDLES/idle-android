@@ -9,10 +9,8 @@ import javax.inject.Inject
 class ConfigRepositoryImpl @Inject constructor(
     private val configDataSource: ConfigDataSource,
 ) : ConfigRepository {
-    override suspend fun getForceUpdate(): Result<ForceUpdate> = runCatching {
-        configDataSource.getReferenceType(
-            key = ConfigDataSource.FORCE_UPDATE,
-            defaultValue = ForceUpdateResponse(),
-        ).toVO()
-    }
+    override suspend fun getForceUpdate(): ForceUpdate = configDataSource.getReferenceType(
+        key = ConfigDataSource.FORCE_UPDATE,
+        defaultValue = ForceUpdateResponse(),
+    ).toVO()
 }

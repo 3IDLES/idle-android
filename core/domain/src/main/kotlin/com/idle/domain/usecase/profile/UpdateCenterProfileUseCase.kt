@@ -13,30 +13,28 @@ class UpdateCenterProfileUseCase @Inject constructor(
         officeNumber: String,
         introduce: String?,
         imageFileUri: String?,
-    ): Result<Unit> = runCatching {
-        coroutineScope {
-            val updateProfileJob = launch {
-                profileRepository.updateCenterProfile(
-                    officeNumber = officeNumber,
-                    introduce = introduce,
-                ).getOrThrow()
-            }
-
-            val updateProfileImageJob = imageFileUri?.let { uri ->
-                if (uri.startsWith("content://")) {
-                    launch {
-                        profileRepository.updateProfileImage(
-                            userType = UserType.CENTER.apiValue,
-                            imageFileUri = uri,
-                            reqWidth = 1340,
-                            reqHeight = 1016,
-                        ).getOrThrow()
-                    }
-                } else null
-            }
-
-            updateProfileJob.join()
-            updateProfileImageJob?.join()
+    ) = coroutineScope {
+        val updateProfileJob = launch {
+            profileRepository.updateCenterProfile(
+                officeNumber = officeNumber,
+                introduce = introduce,
+            )
         }
+
+        val updateProfileImageJob = imageFileUri?.let { uri ->
+            if (uri.startsWith("content://")) {
+                launch {
+                    profileRepository.updateProfileImage(
+                        userType = UserType.CENTER.apiValue,
+                        imageFileUri = uri,
+                        reqWidth = 1340,
+                        reqHeight = 1016,
+                    )
+                }
+            } else null
+        }
+
+        updateProfileJob.join()
+        updateProfileImageJob?.join()
     }
 }

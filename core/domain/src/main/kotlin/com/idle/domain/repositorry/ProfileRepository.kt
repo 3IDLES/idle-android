@@ -7,21 +7,15 @@ import com.idle.domain.model.profile.WorkerProfile
 
 interface ProfileRepository {
     suspend fun getMyUserType(): String
-
-    suspend fun getMyCenterProfile(): Result<CenterProfile>
-
-    suspend fun getLocalMyCenterProfile(): Result<CenterProfile>
-
-    suspend fun getCenterProfile(centerId: String): Result<CenterProfile>
-
-    suspend fun getMyWorkerProfile(): Result<WorkerProfile>
-
-    suspend fun getLocalMyWorkerProfile(): Result<WorkerProfile>
-
-    suspend fun getWorkerProfile(workerId: String): Result<WorkerProfile>
-
-    suspend fun updateCenterProfile(officeNumber: String, introduce: String?): Result<Unit>
-
+    suspend fun getMyCenterProfile(): CenterProfile
+    suspend fun getLocalMyCenterProfile(): CenterProfile
+    suspend fun getCenterProfile(centerId: String): CenterProfile
+    suspend fun getMyWorkerProfile(): WorkerProfile
+    suspend fun getLocalMyWorkerProfile(): WorkerProfile
+    suspend fun getWorkerProfile(workerId: String): WorkerProfile
+    suspend fun updateCenterProfile(officeNumber: String, introduce: String?)
+    suspend fun getWorkerId(): String
+    suspend fun getCenterStatus(): CenterRegistrationStatus
     suspend fun updateWorkerProfile(
         experienceYear: Int?,
         roadNameAddress: String,
@@ -29,7 +23,7 @@ interface ProfileRepository {
         jobSearchStatus: JobSearchStatus,
         introduce: String?,
         speciality: String,
-    ): Result<Unit>
+    )
 
     suspend fun registerCenterProfile(
         centerName: String,
@@ -38,16 +32,12 @@ interface ProfileRepository {
         lotNumberAddress: String,
         officeNumber: String,
         roadNameAddress: String,
-    ): Result<Unit>
+    )
 
     suspend fun updateProfileImage(
         userType: String,
         imageFileUri: String,
         reqWidth: Int,
         reqHeight: Int
-    ): Result<Unit>
-
-    suspend fun getWorkerId(): Result<String>
-
-    suspend fun getCenterStatus(): Result<CenterRegistrationStatus>
+    )
 }

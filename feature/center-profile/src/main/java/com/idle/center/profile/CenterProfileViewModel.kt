@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.idle.binding.EventHelper
 import com.idle.binding.MainEvent
 import com.idle.binding.ToastType.SUCCESS
+import com.idle.common.suspendRunCatching
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.repositorry.ProfileRepository
@@ -63,7 +64,9 @@ class CenterProfileViewModel @Inject constructor(
     }
 
     internal fun getMyCenterProfile() = viewModelScope.launch {
-        getMyCenterProfileUseCase().onSuccess {
+        suspendRunCatching {
+            getMyCenterProfileUseCase()
+        }.onSuccess {
             _centerProfile.value = it
             _centerIntroduce.value = it.introduce ?: ""
             _centerOfficeNumber.value = it.officeNumber
@@ -71,7 +74,9 @@ class CenterProfileViewModel @Inject constructor(
     }
 
     internal fun getCenterProfile(centerId: String) = viewModelScope.launch {
-        profileRepository.getCenterProfile(centerId).onSuccess {
+        suspendRunCatching {
+            profileRepository.getCenterProfile(centerId)
+        }.onSuccess {
             _centerProfile.value = it
             _centerIntroduce.value = it.introduce ?: ""
             _centerOfficeNumber.value = it.officeNumber
@@ -90,11 +95,13 @@ class CenterProfileViewModel @Inject constructor(
 
         _isUpdateLoading.value = true
 
-        updateCenterProfileUseCase(
-            officeNumber = _centerOfficeNumber.value,
-            introduce = _centerIntroduce.value.ifBlank { null },
-            imageFileUri = _profileImageUri.value?.toString(),
-        ).onSuccess {
+        suspendRunCatching {
+            updateCenterProfileUseCase(
+                officeNumber = _centerOfficeNumber.value,
+                introduce = _centerIntroduce.value.ifBlank { null },
+                imageFileUri = _profileImageUri.value?.toString(),
+            )
+        }.onSuccess {
             eventHelper.sendEvent(MainEvent.ShowToast("정보 수정이 완료되었어요.", SUCCESS))
             setEditState(false)
         }.onFailure {
