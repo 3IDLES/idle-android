@@ -6,6 +6,7 @@ import com.idle.binding.EventHelper
 import com.idle.binding.MainEvent
 import com.idle.binding.ToastType.SUCCESS
 import com.idle.center.pending.R
+import com.idle.common.suspendRunCatching
 import com.idle.domain.model.error.ApiErrorCode
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.error.HttpResponseException
@@ -46,7 +47,9 @@ class CenterPendingViewModel @Inject constructor(
     }
 
     internal fun logout() = viewModelScope.launch {
-        authRepository.logoutCenter().onSuccess {
+        suspendRunCatching {
+            authRepository.logoutCenter()
+        }.onSuccess {
             navigationHelper.navigateTo(
                 NavigationEvent.ToAuthWithClearBackStack(
                     toastMsg = "로그아웃이 완료되었습니다.",
@@ -57,7 +60,9 @@ class CenterPendingViewModel @Inject constructor(
     }
 
     internal fun sendVerificationRequest() = viewModelScope.launch {
-        authRepository.sendCenterVerificationRequest().onSuccess {
+        suspendRunCatching {
+            authRepository.sendCenterVerificationRequest()
+        }.onSuccess {
             _status.value = CenterManagerAccountStatus.PENDING
             eventHelper.sendEvent(MainEvent.ShowToast("센터 인증 요청이 완료되었습니다.", SUCCESS))
         }.onFailure { errorHelper.sendError(it) }
@@ -74,7 +79,9 @@ class CenterPendingViewModel @Inject constructor(
     }
 
     private fun getCenterStatus() = viewModelScope.launch {
-        profileRepository.getCenterStatus().onSuccess {
+        suspendRunCatching {
+            profileRepository.getCenterStatus()
+        }.onSuccess {
             when (it.centerManagerAccountStatus) {
                 CenterManagerAccountStatus.APPROVED -> {
                     handleApprovedCenterStatus()
@@ -87,7 +94,9 @@ class CenterPendingViewModel @Inject constructor(
     }
 
     private fun handleApprovedCenterStatus() = viewModelScope.launch {
-        profileRepository.getMyCenterProfile().onSuccess {
+        suspendRunCatching {
+            profileRepository.getMyCenterProfile()
+        }.onSuccess {
             navigationHelper.navigateTo(
                 NavigationEvent.To(CenterHome, R.id.centerPendingFragment)
             )

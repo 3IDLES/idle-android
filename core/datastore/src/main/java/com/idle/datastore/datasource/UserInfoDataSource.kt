@@ -37,7 +37,7 @@ class UserInfoDataSource @Inject constructor(
         dataStore.clear(USER_INFO)
     }
 
-    suspend fun getLocalCenterProfile(): Result<CenterProfile> = runCatching {
+    suspend fun getLocalCenterProfile(): CenterProfile {
         val userInfoString = userInfo.first().takeIf { it.isNotBlank() }
             ?: throw NullPointerException("Missing UserInfo")
 
@@ -54,7 +54,7 @@ class UserInfoDataSource @Inject constructor(
                 key to value
             }
 
-        CenterProfile(
+        return CenterProfile(
             centerId = properties["centerId"] ?: throw NullPointerException("Missing CenterId"),
             centerName = properties["centerName"]
                 ?: throw NullPointerException("Missing centerName"),
@@ -75,7 +75,7 @@ class UserInfoDataSource @Inject constructor(
         )
     }
 
-    suspend fun getLocalWorkerProfile(): Result<WorkerProfile> = runCatching {
+    suspend fun getLocalWorkerProfile(): WorkerProfile {
         val userInfoString = userInfo.first().takeIf { it.isNotBlank() }
             ?: throw NullPointerException("Missing UserInfo")
 
@@ -92,7 +92,7 @@ class UserInfoDataSource @Inject constructor(
                 key to value
             }
 
-        WorkerProfile(
+        return WorkerProfile(
             workerId = properties["workerId"] ?: throw NullPointerException("Missing workerId"),
             workerName = properties["workerName"]
                 ?: throw NullPointerException("Missing workerName"),

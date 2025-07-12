@@ -11,14 +11,13 @@ class NotificationRepositoryImpl @Inject constructor(
     override suspend fun getMyNotifications(
         next: String?,
         limit: Int
-    ): Result<Pair<String?, List<Notification>>> =
-        notificationDataSource.getMyNotifications(next = next, limit = limit)
-            .map { it.toVO() }
+    ): Pair<String?, List<Notification>> =
+        notificationDataSource.getMyNotifications(next = next, limit = limit).toVO()
 
-    override suspend fun readNotification(notificationId: String): Result<Unit> =
+    override suspend fun readNotification(notificationId: String) =
         notificationDataSource.readNotification(notificationId)
 
-    override suspend fun getUnreadNotificationCount(): Result<Int> =
+    override suspend fun getUnreadNotificationCount(): Int =
         notificationDataSource.getUnreadNotificationCount()
-            .mapCatching { it.unreadNotificationCount ?: 0 }
+            .unreadNotificationCount ?: 0
 }

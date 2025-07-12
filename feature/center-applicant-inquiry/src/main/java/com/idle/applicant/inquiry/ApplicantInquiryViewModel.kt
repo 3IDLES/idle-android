@@ -2,6 +2,7 @@ package com.idle.applicant.inquiry
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.idle.common.suspendRunCatching
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.jobposting.Applicant
 import com.idle.domain.model.jobposting.JobPostingSummary
@@ -25,10 +26,11 @@ class ApplicantInquiryViewModel @Inject constructor(
     val applicants = _applicants.asStateFlow()
 
     suspend fun getApplicantsInfo(jobPostingId: String) = viewModelScope.launch {
-        jobPostingRepository.getApplicants(jobPostingId)
-            .onSuccess { (jobPostingSummary, applicants) ->
-                _jobPostingSummary.value = jobPostingSummary
-                _applicants.value = applicants
-            }.onFailure { errorHelper.sendError(it) }
+        suspendRunCatching {
+            jobPostingRepository.getApplicants(jobPostingId)
+        }.onSuccess { (jobPostingSummary, applicants) ->
+            _jobPostingSummary.value = jobPostingSummary
+            _applicants.value = applicants
+        }.onFailure { errorHelper.sendError(it) }
     }
 }

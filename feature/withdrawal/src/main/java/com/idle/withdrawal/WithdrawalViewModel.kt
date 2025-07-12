@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.idle.analytics.AnalyticsHelper
 import com.idle.binding.EventHelper
 import com.idle.binding.MainEvent
+import com.idle.common.suspendRunCatching
 import com.idle.domain.model.CountDownTimer
 import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
@@ -87,9 +88,11 @@ class WithdrawalViewModel @Inject constructor(
     }
 
     internal fun sendPhoneNumber() = viewModelScope.launch {
-        authRepository.sendPhoneNumber(formatPhoneNumber(_phoneNumber.value))
-            .onSuccess { startTimer() }
-            .onFailure { errorHelper.sendError(it) }
+        suspendRunCatching {
+            authRepository.sendPhoneNumber(formatPhoneNumber(_phoneNumber.value))
+        }.onSuccess {
+            startTimer()
+        }.onFailure { errorHelper.sendError(it) }
     }
 
     internal fun setInconvenientReason(reason: String) {
@@ -134,12 +137,12 @@ class WithdrawalViewModel @Inject constructor(
     }
 
     internal fun confirmAuthCode() = viewModelScope.launch {
-        authRepository.confirmAuthCode(formatPhoneNumber(_phoneNumber.value), _authCode.value)
-            .onSuccess {
-                cancelTimer()
-                _isConfirmAuthCode.value = true
-            }
-            .onFailure { errorHelper.sendError(it) }
+        suspendRunCatching {
+            authRepository.confirmAuthCode(formatPhoneNumber(_phoneNumber.value), _authCode.value)
+        }.onSuccess {
+            cancelTimer()
+            _isConfirmAuthCode.value = true
+        }.onFailure { errorHelper.sendError(it) }
     }
 
     internal fun withdrawal(userType: UserType) = viewModelScope.launch {
@@ -150,20 +153,22 @@ class WithdrawalViewModel @Inject constructor(
     }
 
     private suspend fun withdrawalCenter() {
-        authRepository.withdrawalCenter(
-            reason = _withdrawalReason.value
-                .sortedBy { it.ordinal }
-                .map { reason ->
-                    when (reason) {
-                        WithdrawalReason.INCONVENIENT_PLATFORM_USE -> "${reason} : ${_inconvenientReason.value}"
-                        WithdrawalReason.USING_ANOTHER_PLATFORM -> "${reason} : ${_anotherPlatformReason.value}"
-                        WithdrawalReason.LACK_OF_DESIRED_FEATURES -> "${reason} : ${_lackFeaturesReason.value}"
-                        else -> reason
+        suspendRunCatching {
+            authRepository.withdrawalCenter(
+                reason = _withdrawalReason.value
+                    .sortedBy { it.ordinal }
+                    .map { reason ->
+                        when (reason) {
+                            WithdrawalReason.INCONVENIENT_PLATFORM_USE -> "${reason} : ${_inconvenientReason.value}"
+                            WithdrawalReason.USING_ANOTHER_PLATFORM -> "${reason} : ${_anotherPlatformReason.value}"
+                            WithdrawalReason.LACK_OF_DESIRED_FEATURES -> "${reason} : ${_lackFeaturesReason.value}"
+                            else -> reason
+                        }
                     }
-                }
-                .joinToString("|"),
-            password = password.value
-        ).onSuccess {
+                    .joinToString("|"),
+                password = password.value
+            )
+        }.onSuccess {
             analyticsHelper.setUserId(null)
             navigationHelper.navigateTo(
                 com.idle.navigation.NavigationEvent.ToAuthWithClearBackStack(
@@ -181,11 +186,13 @@ class WithdrawalViewModel @Inject constructor(
     }
 
     private suspend fun withdrawalWorker() {
-        authRepository.withdrawalWorker(
-            _withdrawalReason.value
-                .sortedBy { it.ordinal }
-                .joinToString("|"),
-        ).onSuccess {
+        suspendRunCatching {
+            authRepository.withdrawalWorker(
+                _withdrawalReason.value
+                    .sortedBy { it.ordinal }
+                    .joinToString("|"),
+            )
+        }.onSuccess {
             analyticsHelper.setUserId(null)
             navigationHelper.navigateTo(
                 com.idle.navigation.NavigationEvent.ToAuthWithClearBackStack(

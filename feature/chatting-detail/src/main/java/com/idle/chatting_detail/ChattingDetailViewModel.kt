@@ -3,6 +3,7 @@ package com.idle.chatting_detail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.idle.common.suspendRunCatching
 import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.chat.ChatMessage
 import com.idle.domain.model.chat.ReadMessage
@@ -73,14 +74,18 @@ class ChattingDetailViewModel @Inject constructor(
         when (myUserType) {
             UserType.CENTER -> {
                 launch {
-                    profileRepository.getWorkerProfile(opponentId).onSuccess {
+                    suspendRunCatching {
+                        profileRepository.getWorkerProfile(opponentId)
+                    }.onSuccess {
                         _workerProfile.value = it
                     }.onFailure {
                         errorHelper.sendError(it)
                     }
                 }
 
-                getMyCenterProfileUseCase().onSuccess {
+                suspendRunCatching {
+                    getMyCenterProfileUseCase()
+                }.onSuccess {
                     _centerProfile.value = it
                 }.onFailure {
                     errorHelper.sendError(it)
@@ -89,14 +94,18 @@ class ChattingDetailViewModel @Inject constructor(
 
             UserType.WORKER -> {
                 launch {
-                    profileRepository.getCenterProfile(opponentId).onSuccess {
+                    suspendRunCatching {
+                        profileRepository.getCenterProfile(opponentId)
+                    }.onSuccess {
                         _centerProfile.value = it
                     }.onFailure {
                         errorHelper.sendError(it)
                     }
                 }
 
-                getMyWorkerProfileUseCase().onSuccess {
+                suspendRunCatching {
+                    getMyWorkerProfileUseCase()
+                }.onSuccess {
                     _workerProfile.value = it
                 }.onFailure {
                     errorHelper.sendError(it)
@@ -109,11 +118,13 @@ class ChattingDetailViewModel @Inject constructor(
         if (_callType.value == MessageCallType.END) return
 
         if (fromJobPosting) {
-            chatRepository.retrieveChatRoomMessages(
-                roomId = chatroomId,
-                myId = myId,
-                messageId = _chatMessages.value?.first()?.id,
-            ).onSuccess { messages ->
+            suspendRunCatching {
+                chatRepository.retrieveChatRoomMessages(
+                    roomId = chatroomId,
+                    myId = myId,
+                    messageId = _chatMessages.value?.first()?.id,
+                )
+            }.onSuccess { messages ->
                 if (messages.isEmpty()) _callType.value = MessageCallType.END
 
                 _chatMessages.value = messages.plus(_chatMessages.value ?: emptyList())
@@ -121,13 +132,15 @@ class ChattingDetailViewModel @Inject constructor(
                 errorHelper.sendError(it)
             }
         } else {
-            chatRepository.getChatRoomMessages(
-                roomId = chatroomId,
-                messageId = _chatMessages.value?.first()?.id,
-                userType = myUserType,
-                myId = myId,
-                unReadMessageCount = if (unReadMessageCount >= 0) unReadMessageCount else null,
-            ).onSuccess { messages ->
+            suspendRunCatching {
+                chatRepository.getChatRoomMessages(
+                    roomId = chatroomId,
+                    messageId = _chatMessages.value?.first()?.id,
+                    userType = myUserType,
+                    myId = myId,
+                    unReadMessageCount = if (unReadMessageCount >= 0) unReadMessageCount else null,
+                )
+            }.onSuccess { messages ->
                 if (messages.isEmpty()) _callType.value = MessageCallType.END
                 unReadMessageCount -= messages.size
 
@@ -139,7 +152,9 @@ class ChattingDetailViewModel @Inject constructor(
     }
 
     internal fun connectWebsocket() = viewModelScope.launch {
-        chatRepository.connectWebSocket().onSuccess {
+        suspendRunCatching {
+            chatRepository.connectWebSocket()
+        }.onSuccess {
             subscribeChatMessage()
         }
     }
@@ -173,14 +188,16 @@ class ChattingDetailViewModel @Inject constructor(
         val senderName = if (myUserType == UserType.CENTER) _centerProfile.value!!.centerName
         else _workerProfile.value!!.workerName
 
-        chatRepository.sendMessage(
-            chatroomId = chatroomId,
-            myId = myId,
-            userType = myUserType,
-            receiverId = opponentId,
-            senderName = senderName,
-            content = _writingText.value,
-        ).onSuccess {
+        suspendRunCatching {
+            chatRepository.sendMessage(
+                chatroomId = chatroomId,
+                myId = myId,
+                userType = myUserType,
+                receiverId = opponentId,
+                senderName = senderName,
+                content = _writingText.value,
+            )
+        }.onSuccess {
             _writingText.value = ""
         }.onFailure { errorHelper.sendError(it) }
     }
@@ -188,13 +205,15 @@ class ChattingDetailViewModel @Inject constructor(
     internal suspend fun readMessage() {
         val lastOpponentMessageSequence = _chatMessages.value?.lastOrNull()?.sequence ?: return
 
-        chatRepository.readMessage(
-            chatroomId = chatroomId,
-            myId = myId,
-            opponentId = opponentId,
-            userType = myUserType,
-            sequence = lastOpponentMessageSequence
-        ).onSuccess {
+        suspendRunCatching {
+            chatRepository.readMessage(
+                chatroomId = chatroomId,
+                myId = myId,
+                opponentId = opponentId,
+                userType = myUserType,
+                sequence = lastOpponentMessageSequence
+            )
+        }.onSuccess {
             _chatMessages.value = _chatMessages.value?.map {
                 if (it.receiverId == myId) it.copy(isRead = true) else it
             }

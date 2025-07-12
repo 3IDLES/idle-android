@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.EventHelper
 import com.idle.binding.MainEvent
+import com.idle.common.suspendRunCatching
 import com.idle.domain.model.CountDownTimer
 import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
@@ -149,16 +150,20 @@ class NewPasswordViewModel @Inject constructor(
     }
 
     internal fun sendPhoneNumber() = viewModelScope.launch {
-        authRepository.sendPhoneNumber(formatPhoneNumber(_phoneNumber.value))
-            .onSuccess { startTimer() }
-            .onFailure { eventHelper.sendEvent(MainEvent.ShowToast(it.message.toString())) }
+        suspendRunCatching {
+            authRepository.sendPhoneNumber(formatPhoneNumber(_phoneNumber.value))
+        }.onSuccess {
+            startTimer()
+        }.onFailure { eventHelper.sendEvent(MainEvent.ShowToast(it.message.toString())) }
     }
 
     internal fun confirmAuthCode() = viewModelScope.launch {
-        authRepository.confirmAuthCode(
-            formatPhoneNumber(_phoneNumber.value),
-            this@NewPasswordViewModel._authCode.value
-        ).onSuccess {
+        suspendRunCatching {
+            authRepository.confirmAuthCode(
+                formatPhoneNumber(_phoneNumber.value),
+                this@NewPasswordViewModel._authCode.value
+            )
+        }.onSuccess {
             cancelTimer()
             _isConfirmAuthCode.value = true
             _newPasswordProcess.value = GENERATE_NEW_PASSWORD
@@ -180,10 +185,12 @@ class NewPasswordViewModel @Inject constructor(
             return@launch
         }
 
-        authRepository.generateNewPassword(
-            newPassword = _newPassword.value,
-            phoneNumber = formatPhoneNumber(_phoneNumber.value),
-        ).onSuccess {
+        suspendRunCatching {
+            authRepository.generateNewPassword(
+                newPassword = _newPassword.value,
+                phoneNumber = formatPhoneNumber(_phoneNumber.value),
+            )
+        }.onSuccess {
             navigationHelper.navigateTo(
                 com.idle.navigation.NavigationEvent.To(
                     destination = com.idle.navigation.DeepLinkDestination.CenterSignIn("새 비밀번호를 발급하였습니다."),

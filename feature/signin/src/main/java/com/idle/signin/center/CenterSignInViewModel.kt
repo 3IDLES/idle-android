@@ -7,6 +7,7 @@ import com.idle.analytics.AnalyticsEvent.PropertiesKeys.ACTION_NAME
 import com.idle.analytics.AnalyticsEvent.PropertiesKeys.ACTION_RESULT
 import com.idle.analytics.AnalyticsHelper
 import com.idle.binding.EventHelper
+import com.idle.common.suspendRunCatching
 import com.idle.domain.model.error.ApiErrorCode
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.error.HttpResponseException
@@ -62,33 +63,38 @@ class CenterSignInViewModel @Inject constructor(
     }
 
     internal fun signInCenter() = viewModelScope.launch {
-        authRepository.signInCenter(identifier = _centerId.value, password = _centerPassword.value)
-            .onSuccess {
-                analyticsHelper.setUserId(_centerId.value)
-                handleCenterLoginSuccess()
+        suspendRunCatching {
+            authRepository.signInCenter(
+                identifier = _centerId.value,
+                password = _centerPassword.value
+            )
+        }.onSuccess {
+            analyticsHelper.setUserId(_centerId.value)
+            handleCenterLoginSuccess()
+        }.onFailure {
+            if (it is HttpResponseException && it.status == HttpResponseStatus.Unauthorized) {
+                _isLoginError.value = true
+                return@launch
             }
-            .onFailure {
-                if (it is HttpResponseException && it.status == HttpResponseStatus.Unauthorized) {
-                    _isLoginError.value = true
-                    return@launch
-                }
 
-                errorHelper.sendError(it)
+            errorHelper.sendError(it)
 
-                analyticsHelper.logEvent(
-                    AnalyticsEvent(
-                        type = AnalyticsEvent.Types.ACTION,
-                        properties = mutableMapOf(
-                            ACTION_NAME to "center_login",
-                            ACTION_RESULT to false,
-                        )
+            analyticsHelper.logEvent(
+                AnalyticsEvent(
+                    type = AnalyticsEvent.Types.ACTION,
+                    properties = mutableMapOf(
+                        ACTION_NAME to "center_login",
+                        ACTION_RESULT to false,
                     )
                 )
-            }
+            )
+        }
     }
 
     private fun handleCenterLoginSuccess() = viewModelScope.launch {
-        profileRepository.getCenterStatus().onSuccess { centerStatusResponse ->
+        suspendRunCatching {
+            profileRepository.getCenterStatus()
+        }.onSuccess { centerStatusResponse ->
             navigateBasedOnCenterStatus(centerStatusResponse.centerManagerAccountStatus)
         }.onFailure { errorHelper.sendError(it) }
     }
@@ -106,7 +112,9 @@ class CenterSignInViewModel @Inject constructor(
     }
 
     private fun fetchAndNavigateToProfile() = viewModelScope.launch {
-        profileRepository.getMyCenterProfile().onSuccess {
+        suspendRunCatching {
+            profileRepository.getMyCenterProfile()
+        }.onSuccess {
             navigationHelper.navigateTo(To(CenterHome, R.id.centerSignInFragment))
         }.onFailure {
             val error = it as HttpResponseException

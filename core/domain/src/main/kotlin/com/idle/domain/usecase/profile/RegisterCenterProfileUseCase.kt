@@ -17,34 +17,32 @@ class RegisterCenterProfileUseCase @Inject constructor(
         officeNumber: String,
         roadNameAddress: String,
         imageFileUri: String?,
-    ) = runCatching {
-        coroutineScope {
-            val registerProfileJob = launch {
-                profileRepository.registerCenterProfile(
-                    centerName = centerName,
-                    detailedAddress = detailedAddress,
-                    introduce = introduce,
-                    lotNumberAddress = lotNumberAddress,
-                    officeNumber = officeNumber,
-                    roadNameAddress = roadNameAddress
-                ).getOrThrow()
-            }
-
-            val updateProfileImageJob = imageFileUri?.let { uri ->
-                if (uri.startsWith("content://")) {
-                    launch {
-                        profileRepository.updateProfileImage(
-                            userType = UserType.CENTER.apiValue,
-                            imageFileUri = uri,
-                            reqWidth = 1340,
-                            reqHeight = 1016,
-                        ).getOrThrow()
-                    }
-                } else null
-            }
-
-            registerProfileJob.join()
-            updateProfileImageJob?.join()
+    ) = coroutineScope {
+        val registerProfileJob = launch {
+            profileRepository.registerCenterProfile(
+                centerName = centerName,
+                detailedAddress = detailedAddress,
+                introduce = introduce,
+                lotNumberAddress = lotNumberAddress,
+                officeNumber = officeNumber,
+                roadNameAddress = roadNameAddress
+            )
         }
+
+        val updateProfileImageJob = imageFileUri?.let { uri ->
+            if (uri.startsWith("content://")) {
+                launch {
+                    profileRepository.updateProfileImage(
+                        userType = UserType.CENTER.apiValue,
+                        imageFileUri = uri,
+                        reqWidth = 1340,
+                        reqHeight = 1016,
+                    )
+                }
+            } else null
+        }
+
+        registerProfileJob.join()
+        updateProfileImageJob?.join()
     }
 }

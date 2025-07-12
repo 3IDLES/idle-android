@@ -7,9 +7,9 @@ import javax.inject.Inject
 class GetMyCenterProfileUseCase @Inject constructor(
     private val profileRepository: ProfileRepository
 ) {
-    suspend operator fun invoke(): Result<CenterProfile> {
-        return profileRepository.getLocalMyCenterProfile().recoverCatching {
-            profileRepository.getMyCenterProfile().getOrThrow()
-        }
+    suspend operator fun invoke(): CenterProfile = try {
+        profileRepository.getLocalMyCenterProfile()
+    } catch (e: Exception) {
+        profileRepository.getMyCenterProfile()
     }
 }

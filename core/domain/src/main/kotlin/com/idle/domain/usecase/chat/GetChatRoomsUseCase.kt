@@ -3,9 +3,6 @@ package com.idle.domain.usecase.chat
 import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.chat.ChatRoom
 import com.idle.domain.model.chat.ChatRoomWithOpponentInfo
-import com.idle.domain.model.profile.CenterProfile
-import com.idle.domain.model.profile.Profile
-import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.repositorry.ChatRepository
 import com.idle.domain.repositorry.ProfileRepository
 import kotlinx.coroutines.async
@@ -20,40 +17,39 @@ class GetChatRoomsUseCase @Inject constructor(
     suspend operator fun invoke(
         userType: UserType,
         userId: String,
-    ): Result<List<ChatRoomWithOpponentInfo>> = runCatching {
-        val chatRooms = chatRepository.retrieveChatRooms(userId).getOrThrow()
+    ): List<ChatRoomWithOpponentInfo> = coroutineScope {
+        // 로컬 저장소에서 채팅 방 목록 조회
+        val chatRooms: List<ChatRoom> = chatRepository.retrieveChatRooms(userId)
 
-        coroutineScope {
-            val opponentProfiles = chatRooms.map { chatRoom ->
-                async {
-                    when (userType) {
-                        UserType.CENTER ->
-                            profileRepository.getWorkerProfile(chatRoom.opponentId).getOrThrow()
+        val opponentProfiles = chatRooms.map { chatRoom ->
+            async {
+                when (userType) {
+                    UserType.CENTER ->
+                        profileRepository.getWorkerProfile(chatRoom.opponentId)
 
-                        UserType.WORKER ->
-                            profileRepository.getCenterProfile(chatRoom.opponentId).getOrThrow()
-                    }
+                    UserType.WORKER ->
+                        profileRepository.getCenterProfile(chatRoom.opponentId)
                 }
-            }.awaitAll()
+            }
+        }.awaitAll()
 
-            chatRooms.zip(opponentProfiles) { chatRoom, profile ->
-                mapToRoomWithOpponentInfo(chatRoom, profile)
-            }.sortedBy { it.lastMessageTime }
+        // 채팅 방과 상대 프로필을 결합하여 UI용 모델 생성
+        chatRooms.zip(opponentProfiles) { chatRoom, profile ->
+            mapToRoomWithOpponentInfo(chatRoom, profile)
         }
+            .sortedBy { it.lastMessageTime }
     }
 
     private fun mapToRoomWithOpponentInfo(
         chatRoom: ChatRoom,
-        profile: Profile,
+        profile: com.idle.domain.model.profile.Profile,
     ): ChatRoomWithOpponentInfo {
         val (opponentName, profileUrl) = when (profile) {
-            is WorkerProfile -> {
+            is com.idle.domain.model.profile.WorkerProfile ->
                 profile.workerName to profile.profileImageUrl
-            }
 
-            is CenterProfile -> {
+            is com.idle.domain.model.profile.CenterProfile ->
                 profile.centerName to profile.profileImageUrl
-            }
         }
 
         return ChatRoomWithOpponentInfo(

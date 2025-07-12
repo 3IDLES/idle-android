@@ -18,34 +18,32 @@ class UpdateWorkerProfileUseCase @Inject constructor(
         speciality: String,
         jobSearchStatus: JobSearchStatus,
         imageFileUri: String?,
-    ) = runCatching {
-        coroutineScope {
-            val updateProfileJob = launch {
-                profileRepository.updateWorkerProfile(
-                    experienceYear = experienceYear,
-                    roadNameAddress = roadNameAddress,
-                    lotNumberAddress = lotNumberAddress,
-                    jobSearchStatus = jobSearchStatus,
-                    introduce = introduce,
-                    speciality = speciality
-                ).getOrThrow()
-            }
-
-            val updateProfileImageJob = imageFileUri?.let { uri ->
-                if (uri.startsWith("content://")) {
-                    launch {
-                        profileRepository.updateProfileImage(
-                            userType = UserType.WORKER.apiValue,
-                            imageFileUri = uri,
-                            reqWidth = 384,
-                            reqHeight = 384,
-                        ).getOrThrow()
-                    }
-                } else null
-            }
-
-            updateProfileJob.join()
-            updateProfileImageJob?.join()
+    ) = coroutineScope {
+        val updateProfileJob = launch {
+            profileRepository.updateWorkerProfile(
+                experienceYear = experienceYear,
+                roadNameAddress = roadNameAddress,
+                lotNumberAddress = lotNumberAddress,
+                jobSearchStatus = jobSearchStatus,
+                introduce = introduce,
+                speciality = speciality
+            )
         }
+
+        val updateProfileImageJob = imageFileUri?.let { uri ->
+            if (uri.startsWith("content://")) {
+                launch {
+                    profileRepository.updateProfileImage(
+                        userType = UserType.WORKER.apiValue,
+                        imageFileUri = uri,
+                        reqWidth = 384,
+                        reqHeight = 384,
+                    )
+                }
+            } else null
+        }
+
+        updateProfileJob.join()
+        updateProfileImageJob?.join()
     }
 }

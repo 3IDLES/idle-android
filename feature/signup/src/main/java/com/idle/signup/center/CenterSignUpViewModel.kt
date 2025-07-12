@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idle.binding.EventHelper
 import com.idle.binding.MainEvent
+import com.idle.common.suspendRunCatching
 import com.idle.domain.model.CountDownTimer
 import com.idle.domain.model.CountDownTimer.Companion.SECONDS_PER_MINUTE
 import com.idle.domain.model.CountDownTimer.Companion.TICK_INTERVAL
@@ -208,29 +209,32 @@ class CenterSignUpViewModel @Inject constructor(
     }
 
     internal fun sendPhoneNumber() = viewModelScope.launch {
-        authRepository.sendPhoneNumber(formatPhoneNumber(_centerPhoneNumber.value))
-            .onSuccess { startTimer() }
-            .onFailure { errorHelper.sendError(it) }
+        suspendRunCatching {
+            authRepository.sendPhoneNumber(formatPhoneNumber(_centerPhoneNumber.value))
+        }.onSuccess {
+            startTimer()
+        }.onFailure { errorHelper.sendError(it) }
     }
 
     internal fun confirmAuthCode() = viewModelScope.launch {
-        authRepository.confirmAuthCode(
-            formatPhoneNumber(_centerPhoneNumber.value),
-            _centerAuthCode.value
-        )
-            .onSuccess {
-                cancelTimer()
-                _isConfirmAuthCode.value = true
+        suspendRunCatching {
+            authRepository.confirmAuthCode(
+                formatPhoneNumber(_centerPhoneNumber.value),
+                _centerAuthCode.value
+            )
+        }.onSuccess {
+            cancelTimer()
+            _isConfirmAuthCode.value = true
 
-                setCenterSignUpStep(CenterSignUpStep.BUSINESS_REGISTRATION)
-            }.onFailure {
-                if (it is HttpResponseException && it.status == HttpResponseStatus.BadRequest) {
-                    _isAuthCodeError.value = true
-                    return@launch
-                }
-
-                errorHelper.sendError(it)
+            setCenterSignUpStep(CenterSignUpStep.BUSINESS_REGISTRATION)
+        }.onFailure {
+            if (it is HttpResponseException && it.status == HttpResponseStatus.BadRequest) {
+                _isAuthCodeError.value = true
+                return@launch
             }
+
+            errorHelper.sendError(it)
+        }
     }
 
     internal fun signUpCenter() = viewModelScope.launch {
@@ -241,44 +245,49 @@ class CenterSignUpViewModel @Inject constructor(
             return@launch
         }
 
-        authRepository.signUpCenter(
-            identifier = _centerId.value,
-            password = _centerPassword.value,
-            phoneNumber = formatPhoneNumber(_centerPhoneNumber.value),
-            managerName = _centerName.value,
-            businessRegistrationNumber = formatBusinessRegistrationNumber(
-                _businessRegistrationNumber.value
-            ),
-        ).onSuccess {
+        suspendRunCatching {
+            authRepository.signUpCenter(
+                identifier = _centerId.value,
+                password = _centerPassword.value,
+                phoneNumber = formatPhoneNumber(_centerPhoneNumber.value),
+                managerName = _centerName.value,
+                businessRegistrationNumber = formatBusinessRegistrationNumber(
+                    _businessRegistrationNumber.value
+                ),
+            )
+        }.onSuccess {
             navigationHelper.navigateTo(
                 com.idle.navigation.NavigationEvent.To(
                     com.idle.navigation.DeepLinkDestination.CenterSignIn("회원가입을 성공하였습니다."),
                     R.id.centerSignUpFragment
                 )
             )
-        }
-            .onFailure { errorHelper.sendError(it) }
+        }.onFailure { errorHelper.sendError(it) }
     }
 
     internal fun validateIdentifier() = viewModelScope.launch {
         eventHelper.sendEvent(MainEvent.DismissToast)
 
-        authRepository.validateIdentifier(_centerId.value)
-            .onSuccess { _centerIdResult.value = true }
-            .onFailure {
-                if (it is HttpResponseException && it.apiErrorCode == ApiErrorCode.DuplicateIdentifier) {
-                    _centerIdResult.value = false
-                    return@onFailure
-                }
-
-                errorHelper.sendError(it)
+        suspendRunCatching {
+            authRepository.validateIdentifier(_centerId.value)
+        }.onSuccess {
+            _centerIdResult.value = true
+        }.onFailure {
+            if (it is HttpResponseException && it.apiErrorCode == ApiErrorCode.DuplicateIdentifier) {
+                _centerIdResult.value = false
+                return@onFailure
             }
+
+            errorHelper.sendError(it)
+        }
     }
 
     internal fun validateBusinessRegistrationNumber() = viewModelScope.launch {
-        authRepository.validateBusinessRegistrationNumber(
-            formatBusinessRegistrationNumber(_businessRegistrationNumber.value)
-        ).onSuccess {
+        suspendRunCatching {
+            authRepository.validateBusinessRegistrationNumber(
+                formatBusinessRegistrationNumber(_businessRegistrationNumber.value)
+            )
+        }.onSuccess {
             _businessRegistrationInfo.value = it
         }.onFailure { errorHelper.sendError(it) }
     }

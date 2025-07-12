@@ -1,7 +1,6 @@
 package com.idle.network.source
 
 import com.idle.domain.model.auth.UserType
-import com.idle.network.BuildConfig
 import com.idle.network.api.ChatApi
 import com.idle.network.di.TokenManager
 import com.idle.network.model.chat.ChatResponse
@@ -14,7 +13,7 @@ import com.idle.network.serializer.ChatResponseSerializer
 import com.idle.network.util.MAX_RETRY_ATTEMPTS
 import com.idle.network.util.MAX_WAIT_TIME
 import com.idle.network.util.calculateBackoffTime
-import com.idle.network.util.safeApiCall
+import com.idle.network.util.onResponse
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -36,95 +35,87 @@ class ChatDataSource @Inject constructor(
     private val chatResponseSerializer: ChatResponseSerializer,
     private val json: Json,
 ) {
-    suspend fun getWorkerChatRooms(): Result<List<GetChatRoomResponse>> =
-        safeApiCall { chatApi.getWorkerChatRooms() }
+    suspend fun getWorkerChatRooms(): List<GetChatRoomResponse> =
+        chatApi.getWorkerChatRooms().onResponse()
 
-    suspend fun getCenterChatRooms(): Result<List<GetChatRoomResponse>> =
-        safeApiCall { chatApi.getCenterChatRooms() }
+    suspend fun getCenterChatRooms(): List<GetChatRoomResponse> =
+        chatApi.getCenterChatRooms().onResponse()
 
     suspend fun getWorkerChatRoomMessages(
         roomId: String,
         messageId: String?,
-    ): Result<GetChatMessageResponse> =
-        safeApiCall {
-            chatApi.getWorkerChatRoomMessages(
-                chatRoomId = roomId,
-                messageId = messageId
-            )
-        }
+    ): GetChatMessageResponse =
+        chatApi.getWorkerChatRoomMessages(
+            chatRoomId = roomId,
+            messageId = messageId
+        ).onResponse()
 
     suspend fun getCenterChatRoomMessages(
         roomId: String,
         messageId: String?,
-    ): Result<GetChatMessageResponse> =
-        safeApiCall {
-            chatApi.getCenterChatRoomMessages(
-                chatRoomId = roomId,
-                messageId = messageId
-            )
-        }
+    ): GetChatMessageResponse =
+        chatApi.getCenterChatRoomMessages(
+            chatRoomId = roomId,
+            messageId = messageId
+        ).onResponse()
 
-    suspend fun generateWorkerChatRoom(opponentId: String): Result<GenerateChatRoomResponse> =
-        safeApiCall { chatApi.generateWorkerChatRoom(opponentId) }
+    suspend fun generateWorkerChatRoom(opponentId: String): GenerateChatRoomResponse =
+        chatApi.generateWorkerChatRoom(opponentId).onResponse()
 
-    suspend fun generateCenterChatRoom(opponentId: String): Result<GenerateChatRoomResponse> =
-        safeApiCall { chatApi.generateCenterChatRoom(opponentId) }
+    suspend fun generateCenterChatRoom(opponentId: String): GenerateChatRoomResponse =
+        chatApi.generateCenterChatRoom(opponentId).onResponse()
 
     private var session: StompSessionWithKxSerialization? = null
     private var connectionAttempts = 0
 
-    suspend fun connectWebSocket(): Result<Unit> = runCatching {
+    suspend fun connectWebSocket() {
         val accessToken = tokenManager.getAccessToken()
-
-        session = client.connect(
-            url = "${BuildConfig.CARE_WEBSOCKET_URL}/ws",
-            headers = mapOf("Authorization" to accessToken)
-        ).stomp(StompConfig())
-            .withJsonConversions(json)
-
-        connectionAttempts = 0
-    }.recoverCatching { throwable ->
-        if (connectionAttempts < MAX_RETRY_ATTEMPTS) {
-            val waitTime = minOf(calculateBackoffTime(connectionAttempts), MAX_WAIT_TIME)
-            delay(waitTime)
-            connectionAttempts++
-            connectWebSocket().getOrThrow()
-        } else {
-            throw throwable
+        try {
+            session = client.connect(
+                url = "${'$'}{BuildConfig.CARE_WEBSOCKET_URL}/ws",
+                headers = mapOf("Authorization" to accessToken)
+            ).stomp(StompConfig())
+                .withJsonConversions(json)
+            connectionAttempts = 0
+        } catch (e: Throwable) {
+            if (connectionAttempts < MAX_RETRY_ATTEMPTS) {
+                val waitTime = minOf(calculateBackoffTime(connectionAttempts), MAX_WAIT_TIME)
+                delay(waitTime)
+                connectionAttempts++
+                connectWebSocket()
+            } else {
+                throw e
+            }
         }
     }
 
-    suspend fun disconnectWebSocket(reason: String? = null): Result<Unit> = try {
+    suspend fun disconnectWebSocket() {
         session?.disconnect()
-        Result.success(Unit)
-    } catch (e: Exception) {
-        Result.failure(e)
     }
 
     suspend fun subscribeChatMessage(userId: String): Flow<ChatResponse> =
         session?.subscribe(
-            StompSubscribeHeaders(destination = "/sub/${userId}"),
+            StompSubscribeHeaders(destination = "/sub/${'$'}{userId}"),
             chatResponseSerializer,
         ) ?: flow { throw IOException("웹소켓을 먼저 연결해주세요.") }
 
     suspend fun sendMessage(
         userType: UserType,
         sendMessageRequest: SendMessageRequest
-    ): Result<Unit> =
-        runCatching {
-            val result = session?.convertAndSend(
-                headers = StompSendHeaders(destination = "/pub/send/${userType.apiValue.lowercase()}"),
-                body = sendMessageRequest,
-                serializer = SendMessageRequest.serializer(),
-            )
-        }
+    ) {
+        session?.convertAndSend(
+            headers = StompSendHeaders(destination = "/pub/send/${'$'}{userType.apiValue.lowercase()}"),
+            body = sendMessageRequest,
+            serializer = SendMessageRequest.serializer(),
+        )
+    }
 
     suspend fun readMessage(
         userType: UserType,
         readMessageRequest: ReadMessageRequest
-    ): Result<Unit> = runCatching {
+    ) {
         session?.convertAndSend(
-            headers = StompSendHeaders(destination = "/pub/read/${userType.apiValue.lowercase()}"),
+            headers = StompSendHeaders(destination = "/pub/read/${'$'}{userType.apiValue.lowercase()}"),
             body = readMessageRequest,
             serializer = ReadMessageRequest.serializer(),
         )

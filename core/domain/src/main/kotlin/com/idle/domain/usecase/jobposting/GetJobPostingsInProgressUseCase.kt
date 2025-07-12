@@ -9,16 +9,14 @@ class GetJobPostingsInProgressUseCase @Inject constructor(
     private val jobPostingRepository: JobPostingRepository,
 ) {
     suspend operator fun invoke() = coroutineScope {
-        val jobPosting = jobPostingRepository.getJobPostingsInProgress()
-        jobPosting.mapCatching { jobPostings ->
-            val deferredResults = jobPostings.map { jobPosting ->
-                async {
-                    val applicantCount = jobPostingRepository.getApplicantsCount(jobPosting.id).getOrThrow()
-                    jobPosting.copy(applicantCount = applicantCount)
-                }
+        val jobPostings = jobPostingRepository.getJobPostingsInProgress()
+        val deferredResults = jobPostings.map { posting ->
+            async {
+                val applicantCount = jobPostingRepository.getApplicantsCount(posting.id)
+                posting.copy(applicantCount = applicantCount)
             }
-
-            deferredResults.map { it.await() }
         }
+
+        deferredResults.map { it.await() }
     }
 }

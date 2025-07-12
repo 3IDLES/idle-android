@@ -2,6 +2,7 @@ package com.idle.notification
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.idle.common.suspendRunCatching
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.jobposting.JobPostingType
 import com.idle.domain.model.notification.Notification
@@ -35,7 +36,9 @@ class NotificationViewModel @Inject constructor(
             return@launch
         }
 
-        notificationRepository.getMyNotifications(next.value).onSuccess { (nextId, notifications) ->
+        suspendRunCatching {
+            notificationRepository.getMyNotifications(next.value)
+        }.onSuccess { (nextId, notifications) ->
             _myNotifications.value = _myNotifications.value?.plus(notifications) ?: notifications
             next.value = nextId
 
@@ -47,7 +50,9 @@ class NotificationViewModel @Inject constructor(
 
     internal fun onNotificationClick(notification: Notification) = viewModelScope.launch {
         launch {
-            notificationRepository.readNotification(notification.id).onSuccess {
+            suspendRunCatching {
+                notificationRepository.readNotification(notification.id)
+            }.onSuccess {
                 _myNotifications.value = _myNotifications.value?.map {
                     if (it.id == notification.id) {
                         notification.copy(isRead = true)

@@ -2,6 +2,7 @@ package com.idle.worker.chatting
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.idle.common.suspendRunCatching
 import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.chat.ChatMessage
 import com.idle.domain.model.chat.ChatRoomWithOpponentInfo
@@ -44,16 +45,22 @@ class WorkerChattingViewModel @Inject constructor(
         )
 
     internal suspend fun initWorkerChatting() {
-        getMyWorkerProfileUseCase().onSuccess { profile ->
+        suspendRunCatching {
+            getMyWorkerProfileUseCase()
+        }.onSuccess { profile ->
             _myProfile.value = profile
         }.onFailure { errorHelper.sendError(it) }
     }
 
     internal suspend fun retrieveChatRoomList() {
-        getChatRoomsUseCase(
-            userType = UserType.WORKER,
-            userId = _myProfile.value?.workerId ?: return,
-        ).onSuccess {
+        val workerId = _myProfile.value?.workerId ?: return
+
+        suspendRunCatching {
+            getChatRoomsUseCase(
+                userType = UserType.WORKER,
+                userId = workerId,
+            )
+        }.onSuccess {
             val newMap = LinkedHashMap<String, ChatRoomWithOpponentInfo>(_chatRoomMap.value)
             it.forEach { chatRoom -> newMap[chatRoom.id] = chatRoom }
             _chatRoomMap.value = newMap
@@ -61,10 +68,14 @@ class WorkerChattingViewModel @Inject constructor(
     }
 
     internal suspend fun loadChatRoomList() {
-        chatRepository.loadChatRooms(
-            userId = _myProfile.value?.workerId ?: return,
-            userType = UserType.WORKER,
-        ).onSuccess {
+        val workerId = _myProfile.value?.workerId ?: return
+
+        suspendRunCatching {
+            chatRepository.loadChatRooms(
+                userId = workerId,
+                userType = UserType.WORKER,
+            )
+        }.onSuccess {
             val newMap = LinkedHashMap<String, ChatRoomWithOpponentInfo>(_chatRoomMap.value)
             it.forEach { chatRoom -> newMap[chatRoom.id] = chatRoom }
             _chatRoomMap.value = newMap
@@ -72,7 +83,9 @@ class WorkerChattingViewModel @Inject constructor(
     }
 
     internal fun connectWebsocket() = viewModelScope.launch {
-        chatRepository.connectWebSocket().onSuccess {
+        suspendRunCatching {
+            chatRepository.connectWebSocket()
+        }.onSuccess {
             subscribeChatMessage()
         }
     }
@@ -107,8 +120,9 @@ class WorkerChattingViewModel @Inject constructor(
             )
         } else {
             // 새로운 방이면 새로 생성 후 최상단에 추가
-            val opponentProfile = profileRepository.getCenterProfile(chatMessage.senderId)
-                .getOrNull() ?: return
+            val opponentProfile = suspendRunCatching {
+                profileRepository.getCenterProfile(chatMessage.senderId)
+            }.getOrNull() ?: return
 
             val newChatRoom = ChatRoomWithOpponentInfo(
                 id = roomId,

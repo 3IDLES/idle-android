@@ -47,7 +47,7 @@ interface JobPostingRepository {
         applyMethod: List<ApplyMethod>,
         applyDeadLineType: ApplyDeadlineType,
         applyDeadline: String?,
-    ): Result<Unit>
+    )
 
     suspend fun updateJobPosting(
         jobPostingId: String,
@@ -74,52 +74,51 @@ interface JobPostingRepository {
         applyMethod: List<ApplyMethod>?,
         applyDeadLineType: ApplyDeadlineType,
         applyDeadline: String?,
-    ): Result<Unit>
+    )
 
-    suspend fun getCenterJobPostingDetail(jobPostingId: String): Result<CenterJobPostingDetail>
+    suspend fun getCenterJobPostingDetail(jobPostingId: String): CenterJobPostingDetail
 
-    suspend fun getWorkerJobPostingDetail(jobPostingId: String): Result<WorkerJobPostingDetail>
+    suspend fun getWorkerJobPostingDetail(jobPostingId: String): WorkerJobPostingDetail
 
     suspend fun getJobPostings(
         next: String?,
         limit: Int = 10,
-    ): Result<WorkerJobPostingPage>
+    ): WorkerJobPostingPage
 
     suspend fun getJobPostingsApplied(
         next: String?,
         limit: Int = 10,
-    ): Result<WorkerJobPostingPage>
+    ): WorkerJobPostingPage
 
-    suspend fun getMyFavoritesJobPostings(): Result<List<WorkerJobPosting>>
+    suspend fun getMyFavoritesJobPostings(): List<WorkerJobPosting>
 
-    suspend fun getMyFavoritesCrawlingJobPostings(): Result<List<CrawlingJobPosting>>
+    suspend fun getMyFavoritesCrawlingJobPostings(): List<CrawlingJobPosting>
 
-    suspend fun getJobPostingsInProgress(): Result<List<CenterJobPosting>>
+    suspend fun getJobPostingsInProgress(): List<CenterJobPosting>
 
-    suspend fun getJobPostingsCompleted(): Result<List<CenterJobPosting>>
+    suspend fun getJobPostingsCompleted(): List<CenterJobPosting>
 
-    suspend fun getApplicantsCount(jobPostingId: String): Result<Int>
+    suspend fun getApplicantsCount(jobPostingId: String): Int
 
-    suspend fun applyJobPosting(jobPostingId: String, applyMethod: ApplyMethod): Result<Unit>
+    suspend fun applyJobPosting(jobPostingId: String, applyMethod: ApplyMethod)
 
     suspend fun addFavoriteJobPosting(
         jobPostingId: String,
         jobPostingType: JobPostingType,
-    ): Result<Unit>
+    )
 
-    suspend fun removeFavoriteJobPosting(jobPostingId: String): Result<Unit>
+    suspend fun removeFavoriteJobPosting(jobPostingId: String)
 
-    suspend fun getApplicants(jobPostingId: String): Result<Pair<JobPostingSummary, List<Applicant>>>
+    suspend fun getApplicants(jobPostingId: String): Pair<JobPostingSummary, List<Applicant>>
 
-    suspend fun endJobPosting(jobPostingId: String): Result<Unit>
-
-    suspend fun deleteJobPosting(jobPostingId: String): Result<Unit>
+    suspend fun endJobPosting(jobPostingId: String)
+    suspend fun deleteJobPosting(jobPostingId: String)
 
     suspend fun getCrawlingJobPostings(
         next: String?,
         limit: Int = 10,
         distance: Int = 15,
-    ): Result<CrawlingJobPostingPage>
+    ): CrawlingJobPostingPage
 
-    suspend fun getCrawlingJobPostingDetail(jobPostingId: String): Result<CrawlingJobPostingDetail>
+    suspend fun getCrawlingJobPostingDetail(jobPostingId: String): CrawlingJobPostingDetail
 }

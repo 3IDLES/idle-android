@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.idle.auth.R
 import com.idle.binding.EventHelper
 import com.idle.binding.MainEvent.ShowToast
+import com.idle.common.suspendRunCatching
 import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.config.ForceUpdate
 import com.idle.domain.model.error.ApiErrorCode
@@ -59,7 +60,9 @@ class MainViewModel @Inject constructor(
     }
 
     internal fun getForceUpdateInfo() = viewModelScope.launch {
-        configRepository.getForceUpdate().onSuccess {
+        suspendRunCatching {
+            configRepository.getForceUpdate()
+        }.onSuccess {
             _forceUpdate.value = it
         }.onFailure { errorHelper.sendError(it) }
     }
@@ -72,7 +75,9 @@ class MainViewModel @Inject constructor(
         }
 
         if (userRole == UserType.WORKER.apiValue) {
-            profileRepository.getMyWorkerProfile().onFailure {
+            suspendRunCatching {
+                profileRepository.getMyWorkerProfile()
+            }.onFailure {
                 return@launch
             }
         }
@@ -85,8 +90,9 @@ class MainViewModel @Inject constructor(
     }
 
     internal fun readNotification(notificationId: String) = viewModelScope.launch {
-        notificationRepository.readNotification(notificationId)
-            .onFailure { errorHelper.sendError(it) }
+        suspendRunCatching {
+            notificationRepository.readNotification(notificationId)
+        }.onFailure { errorHelper.sendError(it) }
     }
 
     private suspend fun getAccessTokenAndUserRole(): Pair<String, String> = coroutineScope {
@@ -109,10 +115,11 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getCenterStatus() =
-        profileRepository.getCenterStatus().onSuccess { centerStatusResponse ->
-            handleCenterStatus(centerStatusResponse.centerManagerAccountStatus)
-        }
+    private suspend fun getCenterStatus() = suspendRunCatching {
+        profileRepository.getCenterStatus()
+    }.onSuccess { centerStatusResponse ->
+        handleCenterStatus(centerStatusResponse.centerManagerAccountStatus)
+    }
 
     private fun handleCenterStatus(status: CenterManagerAccountStatus) {
         when (status) {
@@ -127,7 +134,9 @@ class MainViewModel @Inject constructor(
     }
 
     private fun handleApprovedCenterStatus() = viewModelScope.launch {
-        profileRepository.getMyCenterProfile().onSuccess {
+        suspendRunCatching {
+            profileRepository.getMyCenterProfile()
+        }.onSuccess {
             navigationHelper.navigateTo(NavigationEvent.To(CenterHome, R.id.authFragment))
         }.onFailure {
             val error = it as HttpResponseException

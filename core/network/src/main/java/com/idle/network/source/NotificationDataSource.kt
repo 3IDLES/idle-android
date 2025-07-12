@@ -2,10 +2,10 @@ package com.idle.network.source
 
 import com.idle.network.api.NotificationApi
 import com.idle.network.model.notification.DeleteFcmTokenRequest
-import com.idle.network.model.notification.PostFcmTokenRequest
 import com.idle.network.model.notification.GetMyNotificationResponse
 import com.idle.network.model.notification.GetUnreadNotificationCountResponse
-import com.idle.network.util.safeApiCall
+import com.idle.network.model.notification.PostFcmTokenRequest
+import com.idle.network.util.onResponse
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -13,21 +13,21 @@ import javax.inject.Singleton
 class NotificationDataSource @Inject constructor(
     private val notificationApi: NotificationApi
 ) {
-    suspend fun postFCMToken(postFcmTokenRequest: PostFcmTokenRequest): Result<Unit> =
-        safeApiCall { notificationApi.postFCMToken(postFcmTokenRequest) }
+    suspend fun postFCMToken(postFcmTokenRequest: PostFcmTokenRequest): Unit =
+        notificationApi.postFCMToken(postFcmTokenRequest).onResponse()
 
-    suspend fun deleteFCMToken(deleteFcmTokenRequest: DeleteFcmTokenRequest): Result<Unit> =
-        safeApiCall { notificationApi.deleteFCMToken(deleteFcmTokenRequest) }
+    suspend fun deleteFCMToken(deleteFcmTokenRequest: DeleteFcmTokenRequest): Unit =
+        notificationApi.deleteFCMToken(deleteFcmTokenRequest).onResponse()
 
     suspend fun getMyNotifications(
         next: String?,
         limit: Int
-    ): Result<GetMyNotificationResponse> =
-        safeApiCall { notificationApi.getMyNotifications(next = next, limit = limit) }
+    ): GetMyNotificationResponse =
+        notificationApi.getMyNotifications(next = next, limit = limit).onResponse()
 
-    suspend fun readNotification(notificationId: String): Result<Unit> =
-        safeApiCall { notificationApi.readNotification(notificationId) }
+    suspend fun readNotification(notificationId: String): Unit =
+        notificationApi.readNotification(notificationId).onResponse()
 
-    suspend fun getUnreadNotificationCount(): Result<GetUnreadNotificationCountResponse> =
-        safeApiCall { notificationApi.getUnreadNotificationCount() }
+    suspend fun getUnreadNotificationCount(): GetUnreadNotificationCountResponse =
+        notificationApi.getUnreadNotificationCount().onResponse()
 }

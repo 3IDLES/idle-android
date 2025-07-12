@@ -7,9 +7,9 @@ import javax.inject.Inject
 class GetMyWorkerProfileUseCase @Inject constructor(
     private val profileRepository: ProfileRepository
 ) {
-    suspend operator fun invoke(): Result<WorkerProfile> {
-        return profileRepository.getLocalMyWorkerProfile().recoverCatching {
-            profileRepository.getMyWorkerProfile().getOrThrow()
-        }
+    suspend operator fun invoke(): WorkerProfile = try {
+        profileRepository.getLocalMyWorkerProfile()
+    } catch (e: Exception) {
+        profileRepository.getMyWorkerProfile()
     }
 }

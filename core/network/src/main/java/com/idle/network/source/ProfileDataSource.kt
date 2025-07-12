@@ -10,7 +10,7 @@ import com.idle.network.model.profile.RegisterCenterProfileRequest
 import com.idle.network.model.profile.UpdateCenterProfileRequest
 import com.idle.network.model.profile.UpdateWorkerProfileRequest
 import com.idle.network.model.profile.UploadProfileImageUrlResponse
-import com.idle.network.util.safeApiCall
+import com.idle.network.util.onResponse
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.InputStream
@@ -21,60 +21,54 @@ import javax.inject.Singleton
 class ProfileDataSource @Inject constructor(
     private val userApi: UserApi,
 ) {
-    suspend fun getMyCenterProfile(): Result<GetCenterProfileResponse> =
-        safeApiCall { userApi.getMyCenterProfile() }
+    suspend fun getMyCenterProfile(): GetCenterProfileResponse =
+        userApi.getMyCenterProfile().onResponse()
 
-    suspend fun updateMyCenterProfile(updateCenterProfileRequest: UpdateCenterProfileRequest): Result<Unit> =
-        safeApiCall { userApi.updateMyCenterProfile(updateCenterProfileRequest) }
+    suspend fun updateMyCenterProfile(updateCenterProfileRequest: UpdateCenterProfileRequest): Unit =
+        userApi.updateMyCenterProfile(updateCenterProfileRequest).onResponse()
 
-    suspend fun getCenterProfile(centerId: String): Result<GetCenterProfileResponse> =
-        safeApiCall { userApi.getCenterProfile(centerId) }
+    suspend fun getCenterProfile(centerId: String): GetCenterProfileResponse =
+        userApi.getCenterProfile(centerId).onResponse()
 
     suspend fun getProfileImageUploadUrl(
         userType: String,
         imageFileExtension: String
-    ): Result<UploadProfileImageUrlResponse> = safeApiCall {
-        userApi.getImageUploadUrl(userType, imageFileExtension)
-    }
+    ): UploadProfileImageUrlResponse =
+        userApi.getImageUploadUrl(userType, imageFileExtension).onResponse()
 
     suspend fun uploadProfileImage(
         uploadUrl: String,
         imageFileExtension: String,
         imageInputStream: InputStream,
-    ): Result<Unit> {
+    ) {
         val requestImage = imageInputStream.readBytes()
             .toRequestBody(imageFileExtension.toMediaTypeOrNull())
 
-        return safeApiCall {
-            userApi.uploadProfileImage(uploadUrl = uploadUrl, requestImage = requestImage)
-        }
+        userApi.uploadProfileImage(uploadUrl = uploadUrl, requestImage = requestImage)
+            .onResponse()
     }
 
     suspend fun callbackImageUpload(
         userType: String,
         callbackImageUploadRequest: CallbackImageUploadRequest,
-    ): Result<Unit> = safeApiCall {
-        userApi.callbackImageUpload(
-            userType = userType,
-            callbackImageUploadRequest = callbackImageUploadRequest
-        )
-    }
+    ): Unit = userApi.callbackImageUpload(
+        userType = userType,
+        callbackImageUploadRequest = callbackImageUploadRequest
+    ).onResponse()
 
-    suspend fun getMyWorkerProfile(): Result<GetWorkerProfileResponse> =
-        safeApiCall { userApi.getMyWorkerProfile() }
+    suspend fun getMyWorkerProfile(): GetWorkerProfileResponse =
+        userApi.getMyWorkerProfile().onResponse()
 
-    suspend fun getWorkerProfile(workerId: String): Result<GetWorkerProfileResponse> =
-        safeApiCall { userApi.getWorkerProfile(workerId) }
+    suspend fun getWorkerProfile(workerId: String): GetWorkerProfileResponse =
+        userApi.getWorkerProfile(workerId).onResponse()
 
-    suspend fun updateWorkerProfile(updateWorkerProfileRequest: UpdateWorkerProfileRequest): Result<Unit> =
-        safeApiCall { userApi.updateWorkerProfile(updateWorkerProfileRequest) }
+    suspend fun updateWorkerProfile(updateWorkerProfileRequest: UpdateWorkerProfileRequest): Unit =
+        userApi.updateWorkerProfile(updateWorkerProfileRequest).onResponse()
 
-    suspend fun registerCenterProfile(registerCenterProfileRequest: RegisterCenterProfileRequest): Result<Unit> =
-        safeApiCall { userApi.registerCenterProfile(registerCenterProfileRequest) }
+    suspend fun registerCenterProfile(registerCenterProfileRequest: RegisterCenterProfileRequest): Unit =
+        userApi.registerCenterProfile(registerCenterProfileRequest).onResponse()
 
-    suspend fun getWorkerId(): Result<GetWorkerIdResponse> =
-        safeApiCall { userApi.getWorkerId() }
+    suspend fun getWorkerId(): GetWorkerIdResponse = userApi.getWorkerId().onResponse()
 
-    suspend fun getCenterStatus(): Result<GetCenterStatusResponse> =
-        safeApiCall { userApi.getCenterStatus() }
+    suspend fun getCenterStatus(): GetCenterStatusResponse = userApi.getCenterStatus().onResponse()
 }

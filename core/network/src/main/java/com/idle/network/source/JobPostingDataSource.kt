@@ -14,7 +14,7 @@ import com.idle.network.model.jobposting.GetJobPostingsCenterResponse
 import com.idle.network.model.jobposting.GetJobPostingsResponse
 import com.idle.network.model.jobposting.GetWorkerJobPostingDetailResponse
 import com.idle.network.model.jobposting.JobPostingRequest
-import com.idle.network.util.safeApiCall
+import com.idle.network.util.onResponse
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -22,84 +22,79 @@ import javax.inject.Singleton
 class JobPostingDataSource @Inject constructor(
     private val jobPostingApi: JobPostingApi
 ) {
-    suspend fun postJobPosting(jobPostingRequest: JobPostingRequest): Result<Unit> =
-        safeApiCall { jobPostingApi.postJobPosting(jobPostingRequest) }
+    suspend fun postJobPosting(jobPostingRequest: JobPostingRequest): Unit =
+        jobPostingApi.postJobPosting(jobPostingRequest).onResponse()
 
     suspend fun updateJobPosting(
         jobPostingId: String,
         jobPostingRequest: JobPostingRequest
-    ): Result<Unit> = safeApiCall {
+    ): Unit =
         jobPostingApi.updateJobPosting(
             jobPostingId = jobPostingId,
             jobPostingRequest = jobPostingRequest
-        )
-    }
+        ).onResponse()
 
-    suspend fun getCenterJobPostingDetail(jobPostingId: String):
-            Result<GetCenterJobPostingDetailResponse> = safeApiCall {
-        jobPostingApi.getJobPostingDetailCenter(jobPostingId)
-    }
+    suspend fun getCenterJobPostingDetail(jobPostingId: String): GetCenterJobPostingDetailResponse =
+        jobPostingApi.getJobPostingDetailCenter(jobPostingId).onResponse()
 
-    suspend fun getWorkerJobPostingDetail(jobPostingId: String):
-            Result<GetWorkerJobPostingDetailResponse> = safeApiCall {
-        jobPostingApi.getJobPostingDetailWorker(jobPostingId)
-    }
+    suspend fun getWorkerJobPostingDetail(jobPostingId: String): GetWorkerJobPostingDetailResponse =
+        jobPostingApi.getJobPostingDetailWorker(jobPostingId).onResponse()
 
-    suspend fun getJobPostings(next: String?, limit: Int): Result<GetJobPostingsResponse> =
-        safeApiCall { jobPostingApi.getJobPostings(next = next, limit = limit) }
+    suspend fun getJobPostings(next: String?, limit: Int): GetJobPostingsResponse =
+        jobPostingApi.getJobPostings(next = next, limit = limit).onResponse()
 
-    suspend fun getJobPostingsApplied(next: String?, limit: Int): Result<GetJobPostingsResponse> =
-        safeApiCall { jobPostingApi.getJobPostingsApplied(next = next, limit = limit) }
+    suspend fun getJobPostingsApplied(next: String?, limit: Int): GetJobPostingsResponse =
+        jobPostingApi.getJobPostingsApplied(next = next, limit = limit).onResponse()
 
-    suspend fun getMyFavoriteJobPostings(): Result<GetFavoriteJobPostingsResponse> =
-        safeApiCall { jobPostingApi.getMyFavoriteJobPostings() }
+    suspend fun getMyFavoriteJobPostings(): GetFavoriteJobPostingsResponse =
+        jobPostingApi.getMyFavoriteJobPostings().onResponse()
 
-    suspend fun getMyFavoriteCrawlingJobPostings(): Result<GetFavoriteCrawlingJobPostingsResponse> =
-        safeApiCall { jobPostingApi.getMyFavoriteCrawlingJobPostings() }
+    suspend fun getMyFavoriteCrawlingJobPostings(): GetFavoriteCrawlingJobPostingsResponse =
+        jobPostingApi.getMyFavoriteCrawlingJobPostings().onResponse()
 
-    suspend fun getJobPostingsInProgress(): Result<GetJobPostingsCenterResponse> =
-        safeApiCall { jobPostingApi.getJobPostingsInProgress() }
+    suspend fun getJobPostingsInProgress(): GetJobPostingsCenterResponse =
+        jobPostingApi.getJobPostingsInProgress().onResponse()
 
-    suspend fun getJobPostingsCompleted(): Result<GetJobPostingsCenterResponse> =
-        safeApiCall { jobPostingApi.getJobPostingsCompleted() }
+    suspend fun getJobPostingsCompleted(): GetJobPostingsCenterResponse =
+        jobPostingApi.getJobPostingsCompleted().onResponse()
 
-    suspend fun getApplicantCount(jobPostingId: String): Result<GetApplicantCountResponse> =
-        safeApiCall { jobPostingApi.getApplicantCount(jobPostingId) }
+    suspend fun getApplicantCount(jobPostingId: String): GetApplicantCountResponse =
+        jobPostingApi.getApplicantCount(jobPostingId).onResponse()
 
-    suspend fun applyJobPosting(applyJobPostingRequest: ApplyJobPostingRequest): Result<Unit> =
-        safeApiCall { jobPostingApi.applyJobPosting(applyJobPostingRequest) }
+    suspend fun applyJobPosting(applyJobPostingRequest: ApplyJobPostingRequest): Unit =
+        jobPostingApi.applyJobPosting(applyJobPostingRequest).onResponse()
 
     suspend fun addFavoriteJobPosting(
         jobPostingId: String,
         favoriteJobPostingRequest: FavoriteJobPostingRequest,
-    ): Result<Unit> = safeApiCall {
+    ): Unit =
         jobPostingApi.addFavoriteJobPosting(
             jobPostingId = jobPostingId,
             favoriteJobPostingRequest = favoriteJobPostingRequest
-        )
-    }
+        ).onResponse()
 
-    suspend fun removeFavoriteJobPosting(jobPostingId: String): Result<Unit> =
-        safeApiCall { jobPostingApi.removeFavoriteJobPosting(jobPostingId) }
+    suspend fun removeFavoriteJobPosting(jobPostingId: String): Unit =
+        jobPostingApi.removeFavoriteJobPosting(jobPostingId).onResponse()
 
-    suspend fun getApplicants(jobPostingId: String): Result<GetApplicantsResponse> =
-        safeApiCall { jobPostingApi.getApplicants(jobPostingId) }
+    suspend fun getApplicants(jobPostingId: String): GetApplicantsResponse =
+        jobPostingApi.getApplicants(jobPostingId).onResponse()
 
-    suspend fun endJobPosting(jobPostingId: String): Result<Unit> =
-        safeApiCall { jobPostingApi.endJobPosting(jobPostingId) }
+    suspend fun endJobPosting(jobPostingId: String): Unit =
+        jobPostingApi.endJobPosting(jobPostingId).onResponse()
 
-    suspend fun deleteJobPosting(jobPostingId: String): Result<Unit> =
-        safeApiCall { jobPostingApi.deleteJobPosting(jobPostingId) }
+    suspend fun deleteJobPosting(jobPostingId: String): Unit =
+        jobPostingApi.deleteJobPosting(jobPostingId).onResponse()
 
     suspend fun getCrawlingJobPostings(
         next: String?,
         limit: Int,
         distance: Int,
-    ): Result<GetCrawlingJobPostingsResponse> =
-        safeApiCall { jobPostingApi.getCrawlingJobPostings(next = next, limit = limit, distance = distance) }
+    ): GetCrawlingJobPostingsResponse =
+        jobPostingApi.getCrawlingJobPostings(next = next, limit = limit, distance = distance)
+            .onResponse()
 
     suspend fun getCrawlingJobPostingsDetail(
         jobPostingId: String
-    ): Result<GetCrawlingJobPostingDetailResponse> =
-        safeApiCall { jobPostingApi.getCrawlingJobPostingsDetail(jobPostingId) }
+    ): GetCrawlingJobPostingDetailResponse =
+        jobPostingApi.getCrawlingJobPostingsDetail(jobPostingId).onResponse()
 }
