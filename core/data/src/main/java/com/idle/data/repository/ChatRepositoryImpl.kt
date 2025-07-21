@@ -48,8 +48,6 @@ class ChatRepositoryImpl @Inject constructor(
 
         return response.map { dto ->
             val chatRoom = dto.toVO()
-
-            // 로컬에 채팅방이 존재하지 않으면 채팅방을 개설
             if (!localChatDataSource.isChatRoomExist(chatRoom.id, userId)) {
                 localChatDataSource.insertChatRoom(
                     myId = userId,
@@ -70,11 +68,13 @@ class ChatRepositoryImpl @Inject constructor(
         roomId: String,
         myId: String,
         messageId: String?
-    ): List<ChatMessage> = localChatDataSource.getMessages(
-        roomId = roomId,
-        myId = myId,
-        lastMessageId = messageId
-    )
+    ): List<ChatMessage> {
+        return localChatDataSource.getMessages(
+            roomId = roomId,
+            myId = myId,
+            lastMessageId = messageId
+        )
+    }
 
     override suspend fun getChatRoomMessages(
         userType: UserType,
@@ -83,8 +83,6 @@ class ChatRepositoryImpl @Inject constructor(
         messageId: String?,
         unReadMessageCount: Int?
     ): List<ChatMessage> {
-        // Paging형식으로 동작, MessageId가 Null이라는 것은 가장 첫번째 페이징 호출이므로 서버 먼저 호출
-        // 서버에서 읽지않은 메세지를 받아오는데 만약 로컬에 해당 메시지가 이미 저장되어 있다면 로컬에서 가져옴
         if (messageId == null || !localChatDataSource.isMessageExist(roomId, myId, messageId)) {
             val response = if (userType == UserType.WORKER) {
                 chatDataSource.getWorkerChatRoomMessages(roomId, messageId)
@@ -92,13 +90,17 @@ class ChatRepositoryImpl @Inject constructor(
                 chatDataSource.getCenterChatRoomMessages(roomId, messageId)
             }
 
-            val messages = response.chatMessageInfos
+            val allMessages = response.chatMessageInfos
                 .sortedBy { it.sequence }
                 .map { it.toVO() }
 
+            val messagesToUse = unReadMessageCount?.let { count ->
+                allMessages.takeLast(count)
+            } ?: allMessages
+
             val maxSeq = localChatDataSource.getMaxLocalSequence(roomId, myId) ?: Int.MIN_VALUE
-            messages.forEach { message ->
-                // 만약 메시지를 저장할 채팅방이 존재하지 않으면 채팅방을 먼저 로컬에 생성
+
+            messagesToUse.forEach { message ->
                 if (!localChatDataSource.isChatRoomExist(message.roomId, myId)) {
                     localChatDataSource.insertChatRoom(
                         myId = myId,
@@ -112,20 +114,20 @@ class ChatRepositoryImpl @Inject constructor(
                     )
                 }
 
-                // 받아온 메시지 Sequence가 현재 로컬에 저장된 메시지 Sequence보다 클 경우, 로컬에 메시지 삽입
                 if (message.sequence > maxSeq) {
                     localChatDataSource.insertMessage(message, myId)
                 }
             }
 
-            // 메시지의 마지막 SequnceNumber까지 모두 읽음 처리
-            messages.lastOrNull()?.let {
-                localChatDataSource.readMessages(
-                    roomId = roomId,
-                    myId = myId,
-                    senderId = it.senderId,
-                    sequence = response.sequence,
-                )
+            response.sequence.takeIf { it >= 0 }?.let { seq ->
+                allMessages.lastOrNull()?.let {
+                    localChatDataSource.readMessages(
+                        roomId = roomId,
+                        myId = myId,
+                        senderId = it.senderId,
+                        sequence = seq
+                    )
+                }
             }
         }
 
@@ -152,10 +154,8 @@ class ChatRepositoryImpl @Inject constructor(
         return chatDataSource.subscribeChatMessage(userId)
             .map { response ->
                 val message = response.toVO()
-
                 when (message) {
                     is ChatMessage -> {
-                        // 만약 채팅 메시지를 수신했다면,
                         if (!localChatDataSource.isChatRoomExist(
                                 roomId = message.roomId,
                                 myId = userId
@@ -172,15 +172,11 @@ class ChatRepositoryImpl @Inject constructor(
                                 )
                             )
                         }
-
-                        // 로컬에 해당 메시지를 저장
                         localChatDataSource.insertMessage(message, userId)
                     }
 
                     is ReadMessage -> {
-                        // 상대방이 읽었다는 메시지를 수신했다면,
                         if (message.opponentId != userId) {
-                            // 해당 메시지를 읽음 처리
                             localChatDataSource.readMessages(
                                 roomId = message.chatroomId,
                                 myId = userId,
@@ -191,8 +187,8 @@ class ChatRepositoryImpl @Inject constructor(
                     }
                 }
                 message
-            }.retryWhen { cause, attempt ->
-                // 최대 5번까지 네트워크 연결 재시도
+            }
+            .retryWhen { cause, attempt ->
                 if (cause is IOException && attempt < MAX_RETRY_ATTEMPTS) {
                     connectWebSocket()
                     delay(calculateRetryTime(attempt.toInt()))
