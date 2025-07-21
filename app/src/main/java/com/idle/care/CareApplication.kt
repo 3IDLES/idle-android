@@ -1,12 +1,9 @@
 package com.idle.care
 
 import android.app.Application
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import com.appsflyer.AppsFlyerLib
 import com.appsflyer.attribution.AppsFlyerRequestListener
-import com.idle.care.notification.NotificationHandler.Companion.BACKGROUND_CHANNEL
-import com.idle.care.notification.NotificationHandler.Companion.BACKGROUND_DESCRIPTION
+import com.idle.care.notification.NotificationService.Companion.initNotification
 import com.idle.domain.model.error.ErrorHelper
 import com.kakao.sdk.common.KakaoSdk
 import dagger.hilt.android.HiltAndroidApp
@@ -22,22 +19,9 @@ class CareApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        initNotification()
+        initNotification(this)
         initKakao()
         initAppsFlyer()
-    }
-
-    private fun initNotification() {
-        val channel =
-            NotificationChannel(
-                BACKGROUND_CHANNEL,
-                BACKGROUND_CHANNEL,
-                NotificationManager.IMPORTANCE_DEFAULT
-            )
-        channel.description = BACKGROUND_DESCRIPTION
-
-        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.createNotificationChannel(channel)
     }
 
     private fun initKakao() {
