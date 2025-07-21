@@ -7,7 +7,7 @@ import com.idle.common.suspendRunCatching
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.repositorry.AuthRepository
-import com.idle.domain.usecase.profile.GetMyWorkerProfileUseCase
+import com.idle.domain.repositorry.ProfileRepository
 import com.idle.setting.SettingEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WorkerSettingViewModel @Inject constructor(
-    private val getMyWorkerProfileUseCase: GetMyWorkerProfileUseCase,
+    private val profileRepository: ProfileRepository,
     private val authRepository: AuthRepository,
     private val analyticsHelper: AnalyticsHelper,
     private val errorHelper: ErrorHelper,
@@ -35,7 +35,7 @@ class WorkerSettingViewModel @Inject constructor(
 
     private fun getMyProfile() = viewModelScope.launch {
         suspendRunCatching {
-            getMyWorkerProfileUseCase()
+            profileRepository.getMyWorkerProfile()
         }.onSuccess {
             _workerProfile.value = it
         }.onFailure { errorHelper.sendError(it) }

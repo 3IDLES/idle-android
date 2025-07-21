@@ -21,7 +21,9 @@ import com.idle.network.model.profile.UpdateWorkerProfileRequest
 import com.idle.network.model.profile.UploadProfileImageUrlResponse
 import com.idle.network.source.ProfileDataSource
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
@@ -35,43 +37,28 @@ class ProfileRepositoryImpl @Inject constructor(
     override suspend fun getMyUserType() = userInfoDataSource.userType.first()
 
     override suspend fun getMyCenterProfile(): CenterProfile {
-        val centerProfile = profileDataSource.getMyCenterProfile()
-            .toVO()
+        val localProfile = userInfoDataSource.getLocalCenterProfile()
+        if (localProfile != null) return localProfile
 
+        val centerProfile = profileDataSource.getMyCenterProfile().toVO()
         userInfoDataSource.setUserInfo(centerProfile.toString())
         return centerProfile
     }
-
-    override suspend fun getLocalMyCenterProfile(): CenterProfile =
-        userInfoDataSource.getLocalCenterProfile()
 
     override suspend fun getCenterProfile(centerId: String): CenterProfile =
         profileDataSource.getCenterProfile(centerId).toVO()
 
     override suspend fun getMyWorkerProfile(): WorkerProfile {
-        val workerProfile = profileDataSource.getMyWorkerProfile().toVo()
+        val localProfile = userInfoDataSource.getLocalWorkerProfile()
+        if (localProfile != null) return localProfile
 
+        val workerProfile = profileDataSource.getMyWorkerProfile().toVo()
         userInfoDataSource.setUserInfo(workerProfile.toString())
         return workerProfile
     }
 
-    override suspend fun getLocalMyWorkerProfile(): WorkerProfile =
-        userInfoDataSource.getLocalWorkerProfile()
-
     override suspend fun getWorkerProfile(workerId: String): WorkerProfile =
         profileDataSource.getWorkerProfile(workerId).toVo()
-
-    override suspend fun updateCenterProfile(
-        officeNumber: String,
-        introduce: String?,
-    ) {
-        profileDataSource.updateMyCenterProfile(
-            UpdateCenterProfileRequest(officeNumber = officeNumber, introduce = introduce)
-        )
-
-        val updatedProfile = getMyCenterProfile()
-        userInfoDataSource.setUserInfo(updatedProfile.toString())
-    }
 
     override suspend fun getWorkerId(): String = profileDataSource.getWorkerId()
         .carerId
@@ -79,27 +66,79 @@ class ProfileRepositoryImpl @Inject constructor(
     override suspend fun getCenterStatus(): CenterRegistrationStatus =
         profileDataSource.getCenterStatus().toVO()
 
+    override suspend fun updateCenterProfile(
+        officeNumber: String,
+        introduce: String?,
+        imageFileUri: String?,
+    ) {
+        coroutineScope {
+            val updateProfileJob = launch {
+                profileDataSource.updateMyCenterProfile(
+                    UpdateCenterProfileRequest(officeNumber = officeNumber, introduce = introduce)
+                )
+            }
+
+            val profileImageJob = imageFileUri?.let { uri ->
+                launch {
+                    if (uri.isContentUri()) {
+                        updateProfileImage(
+                            userType = UserType.CENTER.apiValue,
+                            imageFileUri = imageFileUri,
+                            reqWidth = 1340,
+                            reqHeight = 1016,
+                        )
+                    }
+                }
+            }
+
+            updateProfileJob.join()
+            profileImageJob?.join()
+            val updatedProfile = getMyCenterProfile()
+            userInfoDataSource.setUserInfo(updatedProfile.toString())
+        }
+    }
+
     override suspend fun updateWorkerProfile(
         experienceYear: Int?,
         roadNameAddress: String,
         lotNumberAddress: String,
         jobSearchStatus: JobSearchStatus,
         introduce: String?,
-        speciality: String
+        speciality: String,
+        imageFileUri: String?,
     ) {
-        profileDataSource.updateWorkerProfile(
-            UpdateWorkerProfileRequest(
-                experienceYear = experienceYear,
-                roadNameAddress = roadNameAddress,
-                lotNumberAddress = lotNumberAddress,
-                jobSearchStatus = jobSearchStatus.name,
-                introduce = introduce,
-                speciality = speciality
-            )
-        )
+        coroutineScope {
+            val updateProfileJob = launch {
+                profileDataSource.updateWorkerProfile(
+                    UpdateWorkerProfileRequest(
+                        experienceYear = experienceYear,
+                        roadNameAddress = roadNameAddress,
+                        lotNumberAddress = lotNumberAddress,
+                        jobSearchStatus = jobSearchStatus.name,
+                        introduce = introduce,
+                        speciality = speciality
+                    )
+                )
+            }
 
-        val updatedProfile = getMyWorkerProfile()
-        userInfoDataSource.setUserInfo(updatedProfile.toString())
+            val updateProfileImageJob = imageFileUri?.let { uri ->
+                if (uri.isContentUri()) {
+                    launch {
+                        updateProfileImage(
+                            userType = UserType.WORKER.apiValue,
+                            imageFileUri = uri,
+                            reqWidth = 384,
+                            reqHeight = 384,
+                        )
+                    }
+                } else null
+            }
+
+            updateProfileJob.join()
+            updateProfileImageJob?.join()
+            val updatedProfile = getMyWorkerProfile()
+            userInfoDataSource.setUserInfo(updatedProfile.toString())
+        }
     }
 
     override suspend fun registerCenterProfile(
@@ -108,19 +147,42 @@ class ProfileRepositoryImpl @Inject constructor(
         introduce: String,
         lotNumberAddress: String,
         officeNumber: String,
-        roadNameAddress: String
-    ) = profileDataSource.registerCenterProfile(
-        RegisterCenterProfileRequest(
-            centerName = centerName,
-            detailedAddress = detailedAddress,
-            introduce = introduce,
-            lotNumberAddress = lotNumberAddress,
-            officeNumber = officeNumber,
-            roadNameAddress = roadNameAddress,
-        )
-    )
+        roadNameAddress: String,
+        imageFileUri: String?
+    ) {
+        coroutineScope {
+            val registerProfileJob = launch {
+                profileDataSource.registerCenterProfile(
+                    RegisterCenterProfileRequest(
+                        centerName = centerName,
+                        detailedAddress = detailedAddress,
+                        introduce = introduce,
+                        lotNumberAddress = lotNumberAddress,
+                        officeNumber = officeNumber,
+                        roadNameAddress = roadNameAddress,
+                    )
+                )
+            }
 
-    override suspend fun updateProfileImage(
+            val profileImageJob = imageFileUri?.let { uri ->
+                launch {
+                    if (uri.isContentUri()) {
+                        updateProfileImage(
+                            userType = UserType.CENTER.apiValue,
+                            imageFileUri = imageFileUri,
+                            reqWidth = 1340,
+                            reqHeight = 1016,
+                        )
+                    }
+                }
+            }
+
+            registerProfileJob.join()
+            profileImageJob?.join()
+        }
+    }
+
+    private suspend fun updateProfileImage(
         userType: String,
         imageFileUri: String,
         reqWidth: Int,
@@ -260,4 +322,6 @@ class ProfileRepositoryImpl @Inject constructor(
             imageFileExtension = imageFileExtension,
         )
     )
+
+    private fun String?.isContentUri(): Boolean = this?.startsWith("content://") == true
 }

@@ -12,7 +12,6 @@ import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.repositorry.ChatRepository
 import com.idle.domain.repositorry.ProfileRepository
 import com.idle.domain.usecase.chat.GetChatRoomsUseCase
-import com.idle.domain.usecase.profile.GetMyWorkerProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -26,7 +25,6 @@ import javax.inject.Inject
 class WorkerChattingViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
     private val getChatRoomsUseCase: GetChatRoomsUseCase,
-    private val getMyWorkerProfileUseCase: GetMyWorkerProfileUseCase,
     private val chatRepository: ChatRepository,
     private val errorHelper: ErrorHelper,
     val navigationHelper: com.idle.navigation.NavigationHelper,
@@ -46,7 +44,7 @@ class WorkerChattingViewModel @Inject constructor(
 
     internal suspend fun initWorkerChatting() {
         suspendRunCatching {
-            getMyWorkerProfileUseCase()
+            profileRepository.getMyWorkerProfile()
         }.onSuccess { profile ->
             _myProfile.value = profile
         }.onFailure { errorHelper.sendError(it) }

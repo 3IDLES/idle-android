@@ -12,8 +12,6 @@ import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.profile.JobSearchStatus
 import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.repositorry.ProfileRepository
-import com.idle.domain.usecase.profile.GetMyWorkerProfileUseCase
-import com.idle.domain.usecase.profile.UpdateWorkerProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,8 +21,6 @@ import javax.inject.Inject
 @HiltViewModel
 class WorkerProfileViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
-    private val getMyWorkerProfileUseCase: GetMyWorkerProfileUseCase,
-    private val updateWorkerProfileUseCase: UpdateWorkerProfileUseCase,
     private val errorHelper: ErrorHelper,
     private val eventHelper: EventHelper,
 ) : ViewModel() {
@@ -94,7 +90,7 @@ class WorkerProfileViewModel @Inject constructor(
 
     internal fun getMyWorkerProfile() = viewModelScope.launch {
         suspendRunCatching {
-            getMyWorkerProfileUseCase()
+            profileRepository.getMyWorkerProfile()
         }.onSuccess {
             _workerProfile.value = it
             _workerIntroduce.value = it.introduce ?: ""
@@ -132,7 +128,7 @@ class WorkerProfileViewModel @Inject constructor(
         _isUpdateLoading.value = true
 
         suspendRunCatching {
-            updateWorkerProfileUseCase(
+            profileRepository.updateWorkerProfile(
                 experienceYear = _experienceYear.value,
                 roadNameAddress = _roadNameAddress.value,
                 lotNumberAddress = _lotNumberAddress.value,

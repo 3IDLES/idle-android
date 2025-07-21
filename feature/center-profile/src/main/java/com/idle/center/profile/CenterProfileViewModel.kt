@@ -10,8 +10,6 @@ import com.idle.common.suspendRunCatching
 import com.idle.domain.model.error.ErrorHelper
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.repositorry.ProfileRepository
-import com.idle.domain.usecase.profile.GetMyCenterProfileUseCase
-import com.idle.domain.usecase.profile.UpdateCenterProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,8 +19,6 @@ import javax.inject.Inject
 @HiltViewModel
 class CenterProfileViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
-    private val getMyCenterProfileUseCase: GetMyCenterProfileUseCase,
-    private val updateCenterProfileUseCase: UpdateCenterProfileUseCase,
     private val errorHelper: ErrorHelper,
     private val eventHelper: EventHelper,
 ) : ViewModel() {
@@ -65,7 +61,7 @@ class CenterProfileViewModel @Inject constructor(
 
     internal fun getMyCenterProfile() = viewModelScope.launch {
         suspendRunCatching {
-            getMyCenterProfileUseCase()
+            profileRepository.getMyCenterProfile()
         }.onSuccess {
             _centerProfile.value = it
             _centerIntroduce.value = it.introduce ?: ""
@@ -96,7 +92,7 @@ class CenterProfileViewModel @Inject constructor(
         _isUpdateLoading.value = true
 
         suspendRunCatching {
-            updateCenterProfileUseCase(
+            profileRepository.updateCenterProfile(
                 officeNumber = _centerOfficeNumber.value,
                 introduce = _centerIntroduce.value.ifBlank { null },
                 imageFileUri = _profileImageUri.value?.toString(),

@@ -13,7 +13,7 @@ import com.idle.domain.model.jobposting.JobPostingStatus
 import com.idle.domain.model.jobposting.LifeAssistance
 import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.repositorry.JobPostingRepository
-import com.idle.domain.usecase.profile.GetMyCenterProfileUseCase
+import com.idle.domain.repositorry.ProfileRepository
 import com.idle.job.posting.detail.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CenterJobPostingDetailViewModel @Inject constructor(
-    private val getMyCenterProfileUseCase: GetMyCenterProfileUseCase,
+    private val profileRepository: ProfileRepository,
     private val jobPostingRepository: JobPostingRepository,
     private val errorHelper: ErrorHelper,
     val eventHelper: EventHelper,
@@ -47,7 +47,7 @@ class CenterJobPostingDetailViewModel @Inject constructor(
 
     private fun getMyCenterProfile() = viewModelScope.launch {
         suspendRunCatching {
-            getMyCenterProfileUseCase()
+            profileRepository.getMyCenterProfile()
         }.onSuccess {
             _profile.value = it
         }.onFailure { errorHelper.sendError(it) }
@@ -89,14 +89,17 @@ class CenterJobPostingDetailViewModel @Inject constructor(
                     startTime = editJobPostingDetail.startTime,
                     endTime = editJobPostingDetail.endTime,
                     payType = editJobPostingDetail.payType,
-                    payAmount = editJobPostingDetail.payAmount.toIntOrNull() ?: return@suspendRunCatching,
+                    payAmount = editJobPostingDetail.payAmount.toIntOrNull()
+                        ?: return@suspendRunCatching,
                     roadNameAddress = editJobPostingDetail.roadNameAddress,
                     lotNumberAddress = editJobPostingDetail.lotNumberAddress,
                     clientName = editJobPostingDetail.clientName,
                     gender = editJobPostingDetail.gender,
-                    birthYear = editJobPostingDetail.birthYear.toIntOrNull() ?: return@suspendRunCatching,
+                    birthYear = editJobPostingDetail.birthYear.toIntOrNull()
+                        ?: return@suspendRunCatching,
                     weight = editJobPostingDetail.weight?.toIntOrNull(),
-                    careLevel = editJobPostingDetail.careLevel.toIntOrNull() ?: return@suspendRunCatching,
+                    careLevel = editJobPostingDetail.careLevel.toIntOrNull()
+                        ?: return@suspendRunCatching,
                     mentalStatus = editJobPostingDetail.mentalStatus,
                     disease = editJobPostingDetail.disease.ifBlank { null },
                     isMealAssistance = editJobPostingDetail.isMealAssistance,

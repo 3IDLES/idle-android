@@ -8,14 +8,17 @@ import com.idle.domain.model.profile.WorkerProfile
 interface ProfileRepository {
     suspend fun getMyUserType(): String
     suspend fun getMyCenterProfile(): CenterProfile
-    suspend fun getLocalMyCenterProfile(): CenterProfile
     suspend fun getCenterProfile(centerId: String): CenterProfile
     suspend fun getMyWorkerProfile(): WorkerProfile
-    suspend fun getLocalMyWorkerProfile(): WorkerProfile
     suspend fun getWorkerProfile(workerId: String): WorkerProfile
-    suspend fun updateCenterProfile(officeNumber: String, introduce: String?)
     suspend fun getWorkerId(): String
     suspend fun getCenterStatus(): CenterRegistrationStatus
+    suspend fun updateCenterProfile(
+        officeNumber: String,
+        introduce: String?,
+        imageFileUri: String?,
+    )
+
     suspend fun updateWorkerProfile(
         experienceYear: Int?,
         roadNameAddress: String,
@@ -23,6 +26,7 @@ interface ProfileRepository {
         jobSearchStatus: JobSearchStatus,
         introduce: String?,
         speciality: String,
+        imageFileUri: String?,
     )
 
     suspend fun registerCenterProfile(
@@ -32,12 +36,6 @@ interface ProfileRepository {
         lotNumberAddress: String,
         officeNumber: String,
         roadNameAddress: String,
-    )
-
-    suspend fun updateProfileImage(
-        userType: String,
-        imageFileUri: String,
-        reqWidth: Int,
-        reqHeight: Int
+        imageFileUri: String?,
     )
 }

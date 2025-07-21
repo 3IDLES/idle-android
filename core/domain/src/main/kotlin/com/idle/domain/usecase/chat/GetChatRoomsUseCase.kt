@@ -3,6 +3,9 @@ package com.idle.domain.usecase.chat
 import com.idle.domain.model.auth.UserType
 import com.idle.domain.model.chat.ChatRoom
 import com.idle.domain.model.chat.ChatRoomWithOpponentInfo
+import com.idle.domain.model.profile.CenterProfile
+import com.idle.domain.model.profile.Profile
+import com.idle.domain.model.profile.WorkerProfile
 import com.idle.domain.repositorry.ChatRepository
 import com.idle.domain.repositorry.ProfileRepository
 import kotlinx.coroutines.async
@@ -42,14 +45,11 @@ class GetChatRoomsUseCase @Inject constructor(
 
     private fun mapToRoomWithOpponentInfo(
         chatRoom: ChatRoom,
-        profile: com.idle.domain.model.profile.Profile,
+        profile: Profile,
     ): ChatRoomWithOpponentInfo {
         val (opponentName, profileUrl) = when (profile) {
-            is com.idle.domain.model.profile.WorkerProfile ->
-                profile.workerName to profile.profileImageUrl
-
-            is com.idle.domain.model.profile.CenterProfile ->
-                profile.centerName to profile.profileImageUrl
+            is WorkerProfile -> profile.workerName to profile.profileImageUrl
+            is CenterProfile -> profile.centerName to profile.profileImageUrl
         }
 
         return ChatRoomWithOpponentInfo(

@@ -12,7 +12,6 @@ import com.idle.domain.model.profile.CenterProfile
 import com.idle.domain.repositorry.ChatRepository
 import com.idle.domain.repositorry.ProfileRepository
 import com.idle.domain.usecase.chat.GetChatRoomsUseCase
-import com.idle.domain.usecase.profile.GetMyCenterProfileUseCase
 import com.idle.navigation.NavigationHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +22,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CenterChattingViewModel @Inject constructor(
-    private val getMyCenterProfileUseCase: GetMyCenterProfileUseCase,
     private val getChatRoomsUseCase: GetChatRoomsUseCase,
     private val profileRepository: ProfileRepository,
     private val chatRepository: ChatRepository,
@@ -41,7 +39,7 @@ class CenterChattingViewModel @Inject constructor(
 
     internal suspend fun initCenterChatting() {
         suspendRunCatching {
-            getMyCenterProfileUseCase()
+            profileRepository.getMyCenterProfile()
         }.onSuccess {
             _myProfile.value = it
         }.onFailure { errorHelper.sendError(it) }

@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         versionCode = 21
-        versionName = "1.2.6"
+        versionName = "1.2.7"
         targetSdk = 35
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

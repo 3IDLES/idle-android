@@ -19,7 +19,7 @@ class UserInfoDataSource @Inject constructor(
     @Named("userInfo") private val dataStore: DataStore<Preferences>
 ) {
     val userType: Flow<String> = dataStore.getValue(USER_TYPE, "")
-    val userInfo: Flow<String> = dataStore.getValue(USER_INFO, "")
+    private val userInfo: Flow<String> = dataStore.getValue(USER_INFO, "")
 
     suspend fun setUserType(userRole: String) {
         dataStore.setValue(USER_TYPE, userRole)
@@ -37,81 +37,76 @@ class UserInfoDataSource @Inject constructor(
         dataStore.clear(USER_INFO)
     }
 
-    suspend fun getLocalCenterProfile(): CenterProfile {
-        val userInfoString = userInfo.first().takeIf { it.isNotBlank() }
-            ?: throw NullPointerException("Missing UserInfo")
+    suspend fun getLocalCenterProfile(): CenterProfile? {
+        try {
+            val userInfoString = userInfo.first().takeIf { it.isNotBlank() }
+                ?: return null
 
-        if (!userInfoString.startsWith("CenterProfile(")) {
-            throw NullPointerException("Stored UserInfo is not a CenterProfile")
-        }
-
-        val properties = userInfoString
-            .removePrefix("CenterProfile(")
-            .removeSuffix(")")
-            .split(", ")
-            .associate {
-                val (key, value) = it.split("=")
-                key to value
+            if (!userInfoString.startsWith("CenterProfile(")) {
+                return null
             }
 
-        return CenterProfile(
-            centerId = properties["centerId"] ?: throw NullPointerException("Missing CenterId"),
-            centerName = properties["centerName"]
-                ?: throw NullPointerException("Missing centerName"),
-            officeNumber = properties["officeNumber"]
-                ?: throw NullPointerException("Missing officeNumber"),
-            roadNameAddress = properties["roadNameAddress"]
-                ?: throw NullPointerException("Missing roadNameAddress"),
-            lotNumberAddress = properties["lotNumberAddress"]
-                ?: throw NullPointerException("Missing lotNumberAddress"),
-            detailedAddress = properties["detailedAddress"]
-                ?: throw NullPointerException("Missing detailedAddress"),
-            longitude = properties["longitude"]?.toDoubleOrNull()
-                ?: throw NullPointerException("Invalid longitude format"),
-            latitude = properties["latitude"]?.toDoubleOrNull()
-                ?: throw NullPointerException("Invalid latitude format"),
-            introduce = properties["introduce"].takeIf { it != "null" },
-            profileImageUrl = properties["profileImageUrl"].takeIf { it != "null" },
-        )
+            val properties = userInfoString
+                .removePrefix("CenterProfile(")
+                .removeSuffix(")")
+                .split(", ")
+                .associate {
+                    val (key, value) = it.split("=")
+                    key to value
+                }
+
+            return CenterProfile(
+                centerId = properties["centerId"] ?: return null,
+                centerName = properties["centerName"] ?: return null,
+                officeNumber = properties["officeNumber"] ?: return null,
+                roadNameAddress = properties["roadNameAddress"] ?: return null,
+                lotNumberAddress = properties["lotNumberAddress"] ?: return null,
+                detailedAddress = properties["detailedAddress"] ?: return null,
+                longitude = properties["longitude"]?.toDoubleOrNull() ?: return null,
+                latitude = properties["latitude"]?.toDoubleOrNull() ?: return null,
+                introduce = properties["introduce"].takeIf { it != "null" },
+                profileImageUrl = properties["profileImageUrl"].takeIf { it != "null" },
+            )
+        } catch (e: Exception) {
+            return null
+        }
     }
 
-    suspend fun getLocalWorkerProfile(): WorkerProfile {
-        val userInfoString = userInfo.first().takeIf { it.isNotBlank() }
-            ?: throw NullPointerException("Missing UserInfo")
+    suspend fun getLocalWorkerProfile(): WorkerProfile? {
+        return try {
+            val userInfoString = userInfo.first()
+                .takeIf { it.isNotBlank() } ?: return null
 
-        if (!userInfoString.startsWith("WorkerProfile(")) {
-            throw NullPointerException("Stored UserInfo is not a WorkerProfile")
+            if (!userInfoString.startsWith("WorkerProfile(")) return null
+
+            val properties = userInfoString
+                .removePrefix("WorkerProfile(")
+                .removeSuffix(")")
+                .split(", ")
+                .associate {
+                    val (key, value) = it.split("=")
+                    key to value
+                }
+
+            WorkerProfile(
+                workerId = properties["workerId"] ?: return null,
+                workerName = properties["workerName"] ?: return null,
+                age = properties["age"]?.toIntOrNull() ?: return null,
+                gender = Gender.create(properties["gender"]),
+                experienceYear = properties["experienceYear"]?.toIntOrNull(),
+                phoneNumber = properties["phoneNumber"] ?: return null,
+                roadNameAddress = properties["roadNameAddress"] ?: return null,
+                lotNumberAddress = properties["lotNumberAddress"] ?: return null,
+                longitude = properties["longitude"] ?: return null,
+                latitude = properties["latitude"] ?: return null,
+                jobSearchStatus = JobSearchStatus.create(properties["jobSearchStatus"]),
+                introduce = properties["introduce"].takeIf { it != "null" },
+                speciality = properties["speciality"].takeIf { it != "null" },
+                profileImageUrl = properties["profileImageUrl"].takeIf { it != "null" }
+            )
+        } catch (e: Exception) {
+            null
         }
-
-        val properties = userInfoString
-            .removePrefix("WorkerProfile(")
-            .removeSuffix(")")
-            .split(", ")
-            .associate {
-                val (key, value) = it.split("=")
-                key to value
-            }
-
-        return WorkerProfile(
-            workerId = properties["workerId"] ?: throw NullPointerException("Missing workerId"),
-            workerName = properties["workerName"]
-                ?: throw NullPointerException("Missing workerName"),
-            age = properties["age"]?.toInt() ?: throw NullPointerException("Invalid age format"),
-            gender = Gender.create(properties["gender"]),
-            experienceYear = properties["experienceYear"]?.toIntOrNull(),
-            phoneNumber = properties["phoneNumber"]
-                ?: throw NullPointerException("Missing phoneNumber"),
-            roadNameAddress = properties["roadNameAddress"]
-                ?: throw NullPointerException("Missing roadNameAddress"),
-            lotNumberAddress = properties["lotNumberAddress"]
-                ?: throw NullPointerException("Missing lotNumberAddress"),
-            longitude = properties["longitude"] ?: throw NullPointerException("Missing longitude"),
-            latitude = properties["latitude"] ?: throw NullPointerException("Missing latitude"),
-            jobSearchStatus = JobSearchStatus.create(properties["jobSearchStatus"]),
-            introduce = properties["introduce"].takeIf { it != "null" },
-            speciality = properties["speciality"].takeIf { it != "null" },
-            profileImageUrl = properties["profileImageUrl"].takeIf { it != "null" }
-        )
     }
 
     companion object {

@@ -7,8 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.idle.center.register.info.R
 import com.idle.common.suspendRunCatching
 import com.idle.domain.model.error.ErrorHelper
-import com.idle.domain.usecase.profile.RegisterCenterProfileUseCase
+import com.idle.domain.repositorry.ProfileRepository
 import com.idle.navigation.DeepLinkDestination.CenterRegisterComplete
+import com.idle.navigation.NavigationHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,11 +18,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegisterCenterInfoViewModel @Inject constructor(
-    private val registerCenterProfileUseCase: RegisterCenterProfileUseCase,
+    private val profileRepository: ProfileRepository,
     private val errorHelper: ErrorHelper,
-    private val navigationHelper: com.idle.navigation.NavigationHelper,
+    private val navigationHelper: NavigationHelper,
 ) : ViewModel() {
-
     private val _registrationStep = MutableStateFlow(RegistrationStep.INFO)
     val registrationStep = _registrationStep.asStateFlow()
 
@@ -47,7 +47,7 @@ class RegisterCenterInfoViewModel @Inject constructor(
 
     internal fun registerCenterProfile() = viewModelScope.launch {
         suspendRunCatching {
-            registerCenterProfileUseCase(
+            profileRepository.registerCenterProfile(
                 centerName = _centerName.value,
                 detailedAddress = _centerDetailAddress.value,
                 introduce = _centerIntroduce.value,
