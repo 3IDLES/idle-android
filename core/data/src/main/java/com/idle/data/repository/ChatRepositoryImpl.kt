@@ -75,7 +75,6 @@ class ChatRepositoryImpl @Inject constructor(
         myId = myId,
         lastMessageId = messageId
     )
-
     override suspend fun getChatRoomMessages(
         userType: UserType,
         roomId: String,
@@ -152,7 +151,6 @@ class ChatRepositoryImpl @Inject constructor(
         return chatDataSource.subscribeChatMessage(userId)
             .map { response ->
                 val message = response.toVO()
-
                 when (message) {
                     is ChatMessage -> {
                         // 만약 채팅 메시지를 수신했다면,
@@ -176,7 +174,6 @@ class ChatRepositoryImpl @Inject constructor(
                         // 로컬에 해당 메시지를 저장
                         localChatDataSource.insertMessage(message, userId)
                     }
-
                     is ReadMessage -> {
                         // 상대방이 읽었다는 메시지를 수신했다면,
                         if (message.opponentId != userId) {

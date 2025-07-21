@@ -1,7 +1,6 @@
 package com.idle.network.source
 
 import com.idle.domain.model.auth.UserType
-import com.idle.network.BuildConfig
 import com.idle.network.api.ChatApi
 import com.idle.network.di.TokenManager
 import com.idle.network.model.chat.ChatResponse
@@ -93,7 +92,7 @@ class ChatDataSource @Inject constructor(
 
     suspend fun subscribeChatMessage(userId: String): Flow<ChatResponse> =
         session?.subscribe(
-            StompSubscribeHeaders(destination = "/sub/${userId}"),
+            StompSubscribeHeaders(destination = "/sub/${'$'}{userId}"),
             chatResponseSerializer,
         ) ?: flow { throw IOException("웹소켓을 먼저 연결해주세요.") }
 
