@@ -1,6 +1,7 @@
 package com.idle.network.source
 
 import com.idle.domain.model.auth.UserType
+import com.idle.network.BuildConfig
 import com.idle.network.api.ChatApi
 import com.idle.network.di.TokenManager
 import com.idle.network.model.chat.ChatResponse
@@ -11,8 +12,7 @@ import com.idle.network.model.chat.ReadMessageRequest
 import com.idle.network.model.chat.SendMessageRequest
 import com.idle.network.serializer.ChatResponseSerializer
 import com.idle.network.util.MAX_RETRY_ATTEMPTS
-import com.idle.network.util.MAX_WAIT_TIME
-import com.idle.network.util.calculateBackoffTime
+import com.idle.network.util.calculateRetryTime
 import com.idle.network.util.onResponse
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -44,20 +44,18 @@ class ChatDataSource @Inject constructor(
     suspend fun getWorkerChatRoomMessages(
         roomId: String,
         messageId: String?,
-    ): GetChatMessageResponse =
-        chatApi.getWorkerChatRoomMessages(
-            chatRoomId = roomId,
-            messageId = messageId
-        ).onResponse()
+    ): GetChatMessageResponse = chatApi.getWorkerChatRoomMessages(
+        chatRoomId = roomId,
+        messageId = messageId
+    ).onResponse()
 
     suspend fun getCenterChatRoomMessages(
         roomId: String,
         messageId: String?,
-    ): GetChatMessageResponse =
-        chatApi.getCenterChatRoomMessages(
-            chatRoomId = roomId,
-            messageId = messageId
-        ).onResponse()
+    ): GetChatMessageResponse = chatApi.getCenterChatRoomMessages(
+        chatRoomId = roomId,
+        messageId = messageId
+    ).onResponse()
 
     suspend fun generateWorkerChatRoom(opponentId: String): GenerateChatRoomResponse =
         chatApi.generateWorkerChatRoom(opponentId).onResponse()
@@ -72,14 +70,14 @@ class ChatDataSource @Inject constructor(
         val accessToken = tokenManager.getAccessToken()
         try {
             session = client.connect(
-                url = "${'$'}{BuildConfig.CARE_WEBSOCKET_URL}/ws",
+                url = "${BuildConfig.CARE_WEBSOCKET_URL}/ws",
                 headers = mapOf("Authorization" to accessToken)
             ).stomp(StompConfig())
                 .withJsonConversions(json)
             connectionAttempts = 0
         } catch (e: Throwable) {
             if (connectionAttempts < MAX_RETRY_ATTEMPTS) {
-                val waitTime = minOf(calculateBackoffTime(connectionAttempts), MAX_WAIT_TIME)
+                val waitTime = calculateRetryTime(connectionAttempts)
                 delay(waitTime)
                 connectionAttempts++
                 connectWebSocket()
@@ -95,16 +93,17 @@ class ChatDataSource @Inject constructor(
 
     suspend fun subscribeChatMessage(userId: String): Flow<ChatResponse> =
         session?.subscribe(
-            StompSubscribeHeaders(destination = "/sub/${'$'}{userId}"),
+            StompSubscribeHeaders(destination = "/sub/${userId}"),
             chatResponseSerializer,
         ) ?: flow { throw IOException("웹소켓을 먼저 연결해주세요.") }
+
 
     suspend fun sendMessage(
         userType: UserType,
         sendMessageRequest: SendMessageRequest
     ) {
         session?.convertAndSend(
-            headers = StompSendHeaders(destination = "/pub/send/${'$'}{userType.apiValue.lowercase()}"),
+            headers = StompSendHeaders(destination = "/pub/send/$${userType.apiValue.lowercase()}"),
             body = sendMessageRequest,
             serializer = SendMessageRequest.serializer(),
         )
@@ -115,7 +114,7 @@ class ChatDataSource @Inject constructor(
         readMessageRequest: ReadMessageRequest
     ) {
         session?.convertAndSend(
-            headers = StompSendHeaders(destination = "/pub/read/${'$'}{userType.apiValue.lowercase()}"),
+            headers = StompSendHeaders(destination = "/pub/read/$${userType.apiValue.lowercase()}"),
             body = readMessageRequest,
             serializer = ReadMessageRequest.serializer(),
         )
